@@ -1,24 +1,41 @@
-# Standard exclusions
+### Base set
+# Deployment
 *.md
-.git
-.github
-.idea
-.vscode
+.dockerignore
+.git/
+.gitignore
+.github/
+Containerfile
 Dockerfile
-CODE_OF_CONDUCT*
-CONTRIBUTING*
-LICENSE*
-SECURITY*
+openshift.*.y*ml
+docker-compose*.y*ml
 
-# Node exclusions
-dist
-node_modules
+# Node
+**/node_modules/
+.eslint*
+.prettier*
+nodemon*.json
+npm-debug.*
 
-# App-specific exclusions
-coverage
-cypress
-e2e
-migrations
-output
-test
-tests
+# Env
+.env
+.env.*
+
+# Generated
+**/.build/
+**/.dist/
+**/build/
+**/coverage/
+**/cypress/
+**/dist/
+**/test/
+**/target/
+*.sarif
+cypress.*
+jest.*
+
+# System
+.DS_Store
+.vscode
+.ps1
+thumbs.db
