@@ -6,6 +6,7 @@ import App from './App';
 import MainPage from './Views/MainPage/MainPage.tsx';
 import ExportPage from './Views/Export/ExportPage.tsx';
 
+// Test for openshift deployment
 const router = createBrowserRouter([
   {
     path: '/',
