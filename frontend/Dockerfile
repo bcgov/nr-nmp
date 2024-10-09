@@ -12,6 +12,7 @@ RUN groupadd --gid ${APP_USER} appGroup && \
 USER ${APP_USER}
 WORKDIR /app/
 COPY --chown=${APP_USER} . ./
+COPY vite.config.ts /app/
 RUN npm i && \
   npm run build
 
