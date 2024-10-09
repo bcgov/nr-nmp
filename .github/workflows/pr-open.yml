@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        package: [database]
+        package: [database, backend]
     timeout-minutes: 20
     steps:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
