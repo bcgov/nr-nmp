@@ -13,8 +13,6 @@ jobs:
   builds:
     name: Builds
     runs-on: ubuntu-22.04
-    # permissions:
-    #   packages: write
     strategy:
       matrix:
         package: [backend, database, frontend]
@@ -29,17 +27,11 @@ jobs:
           triggers: ('${{ matrix.package }}/')
 
   # https://github.com/bcgov/quickstart-openshift-helpers
-  # deploys:
-  #   name: Deploys
-  #   needs: [builds]
-  #   uses: bcgov/quickstart-openshift-helpers/.github/workflows/.deployer.yml@v0.6.1
-  #   secrets:
-  #     oc_namespace: ${{ secrets.OC_NAMESPACE }}
-  #     oc_token: ${{ secrets.OC_TOKEN }}
-  #   with:
-  #     triggers: ('backend/' 'frontend/' 'migrations/')
-  #     params:
-  #       --set global.secrets.persist=false
+  deploy:
+    name: Deploy
+    needs: [builds]
+    secrets: inherit
+    uses: ./.github/workflows/.deploy.yml
 
   # tests:
   #   name: Tests
@@ -49,12 +41,10 @@ jobs:
   #   with:
   #     target: ${{ github.event.number }}
 
-  # results:
-  #   name: PR Results
-  #   needs: [builds, deploys, tests]
-  #   if: always()
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - if: contains(needs.*.result, 'failure')
-  #       run: echo "At least one job has failed." && exit 1
-  #     - run: echo "Success!"
+  results:
+    name: PR Results
+    needs: [builds, deploy]
+    if: always()
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "Success!"
