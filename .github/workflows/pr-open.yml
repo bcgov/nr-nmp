@@ -12,12 +12,12 @@ jobs:
   # https://github.com/bcgov-nr/action-builder-ghcr
   builds:
     name: Builds
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       packages: write
     strategy:
       matrix:
-        package: [backend, frontend]
+        package: [backend, database, frontend]
     timeout-minutes: 20
     steps:
       - uses: bcgov-nr/action-builder-ghcr@v2.2.0
