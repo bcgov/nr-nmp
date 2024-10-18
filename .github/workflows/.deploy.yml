@@ -73,7 +73,9 @@ jobs:
           file: backend/openshift.deploy.yml
           overwrite: true
           parameters:
-            -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
+            -p NAME_SUFFIX=-dev-${{ inputs.target }}
+            -p IMAGE_TAG=${{ inputs.tag }}
+            -p TARGET=${{ inputs.target }}
           verification_path: /api/health
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
