@@ -11,7 +11,7 @@ parameters:
     required: true
   - name: DB_PORT
     required: true
-object:
+objects:
   - apiVersion: v1
     kind: Secret
     metadata:
