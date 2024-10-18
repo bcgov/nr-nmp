@@ -54,7 +54,8 @@ jobs:
           file: database/openshift.deploy.yml
           overwrite: false
           parameters:
-            -p TAG=${{ inputs.tag }} 
+            -p NAME_SUFFIX=-dev-${{ inputs.target }}
+            -p IMAGE_TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
 
   backend:
