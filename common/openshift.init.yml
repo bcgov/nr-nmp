@@ -3,6 +3,14 @@ kind: Template
 parameters:
   - name: NAME_SUFFIX
     required: true
+  - name: DB_PASSWORD
+    required: true
+  - name: DB_USER
+    required: true
+  - name: DB_NAME
+    required: true
+  - name: DB_PORT
+    required: true
 object:
   - apiVersion: v1
     kind: Secret
@@ -11,7 +19,7 @@ object:
       labels:
         app: ${APP}-${TARGET}
     stringData:
-      database-name: postgres
+      database-name: ${DB_NAME}
       database-password: ${DB_PASSWORD}
-      database-port: "5432"
-      database-user: postgres
+      database-port: ${DB_PORT}
+      database-user: ${DB_USER}
