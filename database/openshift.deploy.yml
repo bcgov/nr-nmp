@@ -132,17 +132,17 @@ objects:
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
-                      name: ${APP}-${TARGET}-${COMPONENT}
+                      name: nr-nmp-database${NAME_SUFFIX}
                       key: database-name
                 - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${APP}-${TARGET}-${COMPONENT}
+                      name: nr-nmp-database${NAME_SUFFIX}
                       key: database-password
                 - name: POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${APP}-${TARGET}-${COMPONENT}
+                      name: nr-nmp-database${NAME_SUFFIX}
                       key: database-user
               volumeMounts:
                 - name: ${APP}-${TARGET}-${COMPONENT}

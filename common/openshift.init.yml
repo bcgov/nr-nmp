@@ -15,7 +15,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: nr-nmp-pg12${NAME_SUFFIX}
+      name: nr-nmp-database${NAME_SUFFIX}
     stringData:
       database-name: ${DB_NAME}
       database-password: ${DB_PASSWORD}
