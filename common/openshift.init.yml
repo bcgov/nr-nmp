@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Template
 parameters:
-  # - name: NAME_SUFFIX
-    # required: true
+  - name: NAME_SUFFIX
+    required: true
   - name: DB_PASSWORD
     required: true
   - name: DB_USER
@@ -15,9 +15,7 @@ object:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: ${APP}-${TARGET}-${COMPONENT}
-      labels:
-        app: ${APP}-${TARGET}
+      name: nr-nmp-pg12${NAME_SUFFIX}
     stringData:
       database-name: ${DB_NAME}
       database-password: ${DB_PASSWORD}

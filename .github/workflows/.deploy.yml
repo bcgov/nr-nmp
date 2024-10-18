@@ -33,7 +33,7 @@ jobs:
           file: common/openshift.init.yml
           overwrite: true
           parameters:
-            -p NAME_SUFFIX=${{ inputs.target }}
+            -p NAME_SUFFIX=-dev-${{ inputs.target }}
             -p DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             -p DB_USER=${{ secrets.DB_USER }}
             -p DB_NAME=${{ secrets.DB_NAME }}
