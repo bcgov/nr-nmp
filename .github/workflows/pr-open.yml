@@ -29,7 +29,7 @@ jobs:
   # https://github.com/bcgov/quickstart-openshift-helpers
   deploys:
     name: Deploy
-    # needs: [builds]
+    needs: [builds]
     secrets: inherit
     uses: ./.github/workflows/.deploy.yml
 
