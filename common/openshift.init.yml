@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Template
 parameters:
-  - name: NAME_SUFFIX
-    required: true
+  # - name: NAME_SUFFIX
+    # required: true
   - name: DB_PASSWORD
     required: true
   - name: DB_USER
