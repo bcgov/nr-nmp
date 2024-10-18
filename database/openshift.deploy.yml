@@ -44,17 +44,17 @@ objects:
     spec:
       policyTypes:
         - Ingress
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      name: ${APP}-${TARGET}-${COMPONENT}
-      labels:
-        app: ${APP}-${TARGET}
-    stringData:
-      database-name: postgres
-      database-password: ${DB_PASSWORD}
-      database-port: "5432"
-      database-user: postgres
+  # - apiVersion: v1
+  #   kind: Secret
+  #   metadata:
+  #     name: ${APP}-${TARGET}-${COMPONENT}
+  #     labels:
+  #       app: ${APP}-${TARGET}
+  #   stringData:
+  #     database-name: postgres
+  #     database-password: ${DB_PASSWORD}
+  #     database-port: "5432"
+  #     database-user: postgres
   - kind: PersistentVolumeClaim
     apiVersion: v1
     metadata:
