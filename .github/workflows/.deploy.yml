@@ -37,6 +37,7 @@ jobs:
   
   database:
     name: Database
+    needs: [init]
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     steps:
