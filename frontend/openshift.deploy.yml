@@ -26,10 +26,10 @@ objects:
     spec:
       type: ClusterIP
       ports:
-        - port: 80
-          targetPort: 5173
+        - port: 3005
+          targetPort: 3000
           protocol: TCP
-          name: http-5173
+          name: http-3000
       selector:
         service: ${APP}-${TARGET}-${COMPONENT}
   - kind: Deployment
@@ -105,7 +105,7 @@ objects:
     spec:
       host: nr-nmp-${TARGET}.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: http-5173
+        targetPort: http-3000
       to:
         kind: Service
         name: ${APP}-${TARGET}-${COMPONENT}
