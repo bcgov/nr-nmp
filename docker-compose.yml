@@ -60,11 +60,8 @@ services:
 
   # Frontend
   frontend:
-    # build:
-    #   context: ./frontend
-    #   dockerfile: Dockerfile
     image: node:20.17.0
-    command: /bin/bash -c "cd ./frontend && npm install && npm run ${CMD:-dev}"
+    command: /bin/bash -c "cd ./app && npm install && npm run ${CMD:-dev}"
     container_name: nr-nmp-frontend
     depends_on:
       backend:
@@ -79,7 +76,7 @@ services:
       VITE_BACKEND_URL: http://localhost:3000/api
     healthcheck:
       test: curl --fail http://localhost:5173 || exit 1
-    ports: [5173:5173]
+    ports: ["5173:5173"]
     volumes: ["./frontend:/app", "/app/node_modules"]
 
   caddy:
@@ -94,7 +91,7 @@ services:
     ports: ["3005:3000"]
     volumes: ["./frontend/Caddyfile:/etc/caddy/Caddyfile"]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3005"]
     depends_on:
       backend:
         condition: service_healthy
