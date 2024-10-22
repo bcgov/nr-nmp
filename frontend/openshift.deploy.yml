@@ -26,10 +26,10 @@ objects:
     spec:
       type: ClusterIP
       ports:
-        - port: 80
-          targetPort: 5173
+        - port: 3005
+          targetPort: 3000
           protocol: TCP
-          name: http-5173
+          name: http-3000
       selector:
         service: ${APP}-${TARGET}-${COMPONENT}
   - kind: Deployment
@@ -69,26 +69,26 @@ objects:
                 - name: http
                   containerPort: 5173
                   protocol: TCP
-              readinessProbe:
-                httpGet:
-                  path: /
-                  port: http
-                  scheme: HTTP
-                initialDelaySeconds: 90
-                periodSeconds: 10
-                timeoutSeconds: 10
-                successThreshold: 3
-                failureThreshold: 30
-              livenessProbe:
-                successThreshold: 1
-                failureThreshold: 3
-                httpGet:
-                  path: /
-                  port: http
-                  scheme: HTTP
-                initialDelaySeconds: 15
-                periodSeconds: 30
-                timeoutSeconds: 5
+              # readinessProbe:
+              #   httpGet:
+              #     path: /
+              #     port: http
+              #     scheme: HTTP
+              #   initialDelaySeconds: 90
+              #   periodSeconds: 10
+              #   timeoutSeconds: 10
+              #   successThreshold: 3
+              #   failureThreshold: 30
+              # livenessProbe:
+              #   successThreshold: 1
+              #   failureThreshold: 3
+              #   httpGet:
+              #     path: /
+              #     port: http
+              #     scheme: HTTP
+              #   initialDelaySeconds: 15
+              #   periodSeconds: 30
+              #   timeoutSeconds: 5
               resources: # this is optional
                 limits:
                   cpu: 150m
@@ -105,7 +105,7 @@ objects:
     spec:
       host: nr-nmp-${TARGET}.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: http-5173
+        targetPort: http-3000
       to:
         kind: Service
         name: ${APP}-${TARGET}-${COMPONENT}
