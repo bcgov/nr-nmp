@@ -14,7 +14,7 @@ on:
         type: string
       target:
         description: Deployment target; e.g. PR number (omit), test or prod
-        default: ${{ github.event.number }}
+        default: -dev-${{ github.event.number }}
         required: false
         type: string
 
@@ -33,7 +33,7 @@ jobs:
           file: common/openshift.init.yml
           overwrite: true
           parameters:
-            -p NAME_SUFFIX=-dev-${{ inputs.target }}
+            -p NAME_SUFFIX=${{ inputs.target }}
             -p DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             -p DB_USER=${{ secrets.DB_USER }}
             -p DB_NAME=${{ secrets.DB_NAME }}
@@ -54,7 +54,7 @@ jobs:
           file: database/openshift.deploy.yml
           overwrite: false
           parameters:
-            -p NAME_SUFFIX=-dev-${{ inputs.target }}
+            -p NAME_SUFFIX=${{ inputs.target }}
             -p IMAGE_TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
 
@@ -73,7 +73,7 @@ jobs:
           file: backend/openshift.deploy.yml
           overwrite: true
           parameters:
-            -p NAME_SUFFIX=-dev-${{ inputs.target }}
+            -p NAME_SUFFIX=${{ inputs.target }}
             -p IMAGE_TAG=${{ inputs.tag }}
             -p TARGET=${{ inputs.target }}
           verification_path: /api/health
