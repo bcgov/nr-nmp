@@ -62,7 +62,7 @@ jobs:
     name: Trivy Security Scan
     if: ${{ ! github.event.pull_request.draft }}
     runs-on: ubuntu-22.04
-    timeout-minutes: 1
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - name: Run Trivy vulnerability scanner in repo mode
@@ -83,6 +83,7 @@ jobs:
   results:
     name: Analysis Results
     # needs: [tests, trivy]
+    needs: [trivy]
     if: always()
     runs-on: ubuntu-22.04
     steps:
