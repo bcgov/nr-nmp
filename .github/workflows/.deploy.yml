@@ -14,7 +14,7 @@ on:
         type: string
       target:
         description: Deployment target; e.g. PR number (omit), test or prod
-        default: dev-${{ github.event.number }}
+        default: ${{ github.event.number }}
         required: false
         type: string
 
