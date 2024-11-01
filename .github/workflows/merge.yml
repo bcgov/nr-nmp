@@ -44,7 +44,7 @@ jobs:
         tag: ${{ needs.init.outputs.pr }}
         target: test
 
-  # deploy-prod: test
+  # deploy-prod: Test
   #   name: Deploy (prod)
   #   needs: [deploy-test, vars]
   #   uses: bcgov/quickstart-openshift-helpers/.github/workflows/.deployer.yml@v0.6.1
