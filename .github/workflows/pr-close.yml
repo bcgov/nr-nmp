@@ -19,3 +19,5 @@ jobs:
     with:
       cleanup: label
       packages: database backend frontend
+      cleanup_name: nr-nmp-dev-${{ github.event.number }}
+
