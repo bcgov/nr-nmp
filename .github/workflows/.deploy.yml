@@ -21,6 +21,7 @@ on:
 jobs:
   init:
     name: Init
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Initialize
