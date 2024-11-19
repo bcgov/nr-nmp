@@ -1,5 +1,4 @@
 import StyledApp from './App.styles';
-import '@bcgov/bc-sans/css/BC_Sans.css';
 
 /**
  * @summary The root component of the application.
