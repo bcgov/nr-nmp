@@ -17,13 +17,6 @@ module.exports = {
   plugins: ['react-refresh', '@typescript-eslint', 'react', 'prettier'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-    'react/function-component-definition': [
-      'error',
-      {
-        namedComponents: 'arrow-function',
-        unnamedComponents: 'arrow-function',
-      },
-    ],
     'import/extensions': [
       'off',
       'ignorePackages',
