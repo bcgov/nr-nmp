@@ -33,6 +33,8 @@ export default function LandingPage() {
       const data = fr.result;
       if (data) {
         console.log(data.toString());
+        // The alert is temporary, will be removed once the data is being used
+        // eslint-disable-next-line no-alert
         alert(data.toString());
       }
     };
@@ -41,6 +43,8 @@ export default function LandingPage() {
   const newCalcHandler = () => {
     localStorage.clear();
     console.log('New Calculation');
+    // The alert is temporary, will be removed once the data is being used
+    // eslint-disable-next-line no-alert
     alert('New Calculation');
   };
   return (
