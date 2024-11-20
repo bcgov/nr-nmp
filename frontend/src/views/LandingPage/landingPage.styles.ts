@@ -60,3 +60,52 @@ export const StyledDivider = styled.div`
     }
   }
 `;
+
+export const StyledContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 265px;
+  max-height: 180px;
+  gap: 2px;
+  margin-top: 60px;
+  text-align: center;
+
+  h2 {
+    font: ${tokens.typographyBoldH6};
+  }
+
+  p {
+    font: ${tokens.typographyRegularSmallBody};
+    color: ${tokens.typographyColorSecondary};
+  }
+
+  @media (min-width: ${screenSizes.tablet}) {
+    top: 10vh;
+    max-width: 350px;
+    margin-top: 0;
+
+    h2 {
+      font: ${tokens.typographyBoldH5};
+    }
+
+    p {
+      font: ${tokens.typographyRegularBody};
+    }
+  }
+
+  @media (min-width: ${screenSizes.desktop}) {
+    max-width: 510px;
+    max-height: 270px;
+    gap: 2px;
+    text-align: center;
+
+    h2 {
+      font: ${tokens.typographyBoldH2};
+    }
+
+    p {
+      font: ${tokens.typographyRegularLargeBody};
+      color: ${tokens.typographyColorSecondary};
+    }
+  }
+`;

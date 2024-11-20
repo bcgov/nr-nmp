@@ -1,7 +1,13 @@
 /**
  * @summary The landing page for the application
  */
-import { Wrapper, ButtonWrapper, ViewContainer, StyledDivider } from './landingPage.styles';
+import {
+  Wrapper,
+  ButtonWrapper,
+  ViewContainer,
+  StyledDivider,
+  StyledContent,
+} from './landingPage.styles';
 import { Button } from '../../components/common';
 
 export default function LandingPage() {
@@ -25,13 +31,17 @@ export default function LandingPage() {
 
     fr.onload = () => {
       const data = fr.result;
-      if (data) console.log(data.toString());
+      if (data) {
+        console.log(data.toString());
+        alert(data.toString());
+      }
     };
   };
 
   const newCalcHandler = () => {
     localStorage.clear();
     console.log('New Calculation');
+    alert('New Calculation');
   };
   return (
     <ViewContainer>
@@ -65,6 +75,16 @@ export default function LandingPage() {
             hidden
           />
         </ButtonWrapper>
+        <StyledContent>
+          <p>
+            All information contained within the Nutrient Management Calculator is provided solely
+            &quot;as is&quot; at the user&apos;s own risk. Although every effort has been made to
+            ensure that the information contained in the Nutrient Management Calculator is accurate,
+            the Government of British Columbia assumes no legal liability or responsibility for the
+            completeness, accuracy, or usefulness of the information provided or any product
+            resulting from the use of the Nutrient Management Calculator.
+          </p>
+        </StyledContent>
       </Wrapper>
     </ViewContainer>
   );
