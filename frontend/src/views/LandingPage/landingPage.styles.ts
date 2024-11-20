@@ -1,86 +1,40 @@
 /**
- * @desc    Stylings for Landing Page
+ * Styling for LandingPage view
  */
-
 import styled from '@emotion/styled';
 import * as tokens from '@bcgov/design-tokens/js';
 import screenSizes from '../../constants/screenSizes';
 
-const StyledContent = styled.div`
+export const ViewContainer = styled.div`
+  background-color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
-  flex-direction: column;
-  max-width: 265px;
-  max-height: 180px;
-  gap: 2px;
-  margin-top: 60px;
-  text-align: center;
-
-  h2 {
-    font: ${tokens.typographyBoldH6};
-  }
-
-  p {
-    font: ${tokens.typographyRegularSmallBody};
-    color: ${tokens.typographyColorSecondary};
-  }
-
-  @media (min-width: ${screenSizes.tablet}) {
-    top: 10vh;
-    max-width: 350px;
-    margin-top: 0;
-
-    h2 {
-      font: ${tokens.typographyBoldH5};
-    }
-
-    p {
-      font: ${tokens.typographyRegularBody};
-    }
-  }
-
-  @media (min-width: ${screenSizes.desktop}) {
-    max-width: 510px;
-    max-height: 270px;
-    gap: 2px;
-    text-align: center;
-
-    h2 {
-      font: ${tokens.typographyBoldH2};
-    }
-
-    p {
-      font: ${tokens.typographyRegularLargeBody};
-      color: ${tokens.typographyColorSecondary};
-    }
-  }
-`;
-
-const StyledLandingButtonGroup = styled.div`
-  display: flex;
-  max-width: 375px;
-  max-height: 149px;
+  height: 100svh;
+  justify-content: center;
   width: 100%;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  label {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-  @media (min-width: ${screenSizes.tablet}) {
-    // top: 15vh;
-  }
+`;
 
-  @media (min-width: ${screenSizes.desktop}) {
-    max-width: 531px;
-    max-height: 197px;
-    height: 100%;
-    top: 10vh;
+export const Wrapper = styled.div`
+  height: 100%;
+  padding-top: 0;
+  justify-content: center;
+  display: flex;
+  box-content: content-box;
+  align-items: center;
+  flex-direction: column;
+  object-fit: scale-down;
+  @media (max-height: 570px) {
+    padding: 60pt 0;
   }
 `;
 
-const StyledDivider = styled.div`
+export const ButtonWrapper = styled.div`
+  padding: 5px;
+`;
+
+export const StyledDivider = styled.div`
   font-size: 18px;
   font-weight: 400;
   line-height: 30.61px;
@@ -106,15 +60,3 @@ const StyledDivider = styled.div`
     }
   }
 `;
-
-const StyledLandingContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  gap: 34px;
-  margin-top: auto;
-`;
-
-export { StyledContent, StyledLandingButtonGroup, StyledDivider, StyledLandingContainer };
