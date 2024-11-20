@@ -3,8 +3,8 @@
  * @author Dallas Richmond
  */
 import styled from '@emotion/styled';
+import screenSizes from '../../../constants/screenSizes';
 import typography from '../../../typography';
-import mq from '../../../constants/screensizes';
 
 export const HeaderWrapper = styled.header`
   background-color: #036;
@@ -19,7 +19,7 @@ export const HeaderWrapper = styled.header`
   position: fixed;
   width: 100%;
   left: 0;
-  @media (min-width: ${mq.tablet}) {
+  @media (min-width: ${screenSizes.tablet}) {
     justify-content: flex-start;
     padding: 2em;
   }
@@ -46,7 +46,7 @@ export const BannerRight = styled.div`
   display: flex;
   padding: 0 0.5em;
   margin: 0;
-  @media (min-width: ${mq.tablet}) {
+  @media (min-width: ${screenSizes.tablet}) {
     margin: 0 0 0 auto;
   }
 `;
@@ -63,7 +63,7 @@ export const Image = styled.img`
   position: relative;
   height: 100%;
   padding-right: 10px;
-  @media (max-width: ${mq.tablet}) {
+  @media (max-width: ${screenSizes.tablet}) {
     width: 100px;
     padding-right: 5px;
   }

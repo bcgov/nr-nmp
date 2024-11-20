@@ -1,4 +1,4 @@
 import Header from './Header/Header';
+import { Button } from './Button/Button';
 
-// eslint-disable-next-line import/prefer-default-export
-export { Header };
+export { Header, Button };
