@@ -21,7 +21,7 @@ export const HeaderWrapper = styled.header`
   left: 0;
   @media (min-width: ${screenSizes.tablet}) {
     justify-content: flex-start;
-    padding: 2em;
+    padding-left: 2em;
   }
   z-index: 2000;
 `;

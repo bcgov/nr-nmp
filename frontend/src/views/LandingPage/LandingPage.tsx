@@ -2,11 +2,11 @@
  * @summary The landing page for the application
  */
 import {
-  Wrapper,
   ButtonWrapper,
   ViewContainer,
   StyledDivider,
   StyledContent,
+  Card,
 } from './landingPage.styles';
 import { Button } from '../../components/common';
 
@@ -21,14 +21,11 @@ export default function LandingPage() {
 
   const saveFile = (e: any) => {
     const file = e.target.files[0];
-
     if (!isValidFile(file)) {
       return;
     }
-
     const fr = new FileReader();
     fr.readAsText(file);
-
     fr.onload = () => {
       const data = fr.result;
       if (data) {
@@ -47,9 +44,18 @@ export default function LandingPage() {
     // eslint-disable-next-line no-alert
     alert('New Calculation');
   };
+
   return (
     <ViewContainer>
-      <Wrapper>
+      <Card>
+        <StyledContent>
+          <h3>About the nutrient calculator</h3>
+          <p>
+            The Nutrient Management Calculator is a simple tool to help farmers maintain soil
+            nutritent levels, taking into consideration many different farm types. You can start a
+            new calculation or pick up where you left off by uploading an old .nmp file!
+          </p>
+        </StyledContent>
         <ButtonWrapper>
           <Button
             text="New Calculation"
@@ -79,17 +85,7 @@ export default function LandingPage() {
             hidden
           />
         </ButtonWrapper>
-        <StyledContent>
-          <p>
-            All information contained within the Nutrient Management Calculator is provided solely
-            &quot;as is&quot; at the user&apos;s own risk. Although every effort has been made to
-            ensure that the information contained in the Nutrient Management Calculator is accurate,
-            the Government of British Columbia assumes no legal liability or responsibility for the
-            completeness, accuracy, or usefulness of the information provided or any product
-            resulting from the use of the Nutrient Management Calculator.
-          </p>
-        </StyledContent>
-      </Wrapper>
+      </Card>
     </ViewContainer>
   );
 }
