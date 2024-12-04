@@ -79,11 +79,9 @@ export const StyledContent = styled.div`
   text-align: center;
 
   h2 {
-    font: ${tokens.typographyBoldH6};
   }
 
   p {
-    font: ${tokens.typographyRegularSmallBody};
     color: ${tokens.typographyColorSecondary};
   }
 
@@ -93,11 +91,9 @@ export const StyledContent = styled.div`
     margin-top: 0;
 
     h2 {
-      font: ${tokens.typographyBoldH5};
     }
 
     p {
-      font: ${tokens.typographyRegularBody};
     }
   }
 
@@ -108,11 +104,9 @@ export const StyledContent = styled.div`
     text-align: center;
 
     h2 {
-      font: ${tokens.typographyBoldH2};
     }
 
     p {
-      font: ${tokens.typographyRegularLargeBody};
       color: ${tokens.typographyColorSecondary};
     }
   }
