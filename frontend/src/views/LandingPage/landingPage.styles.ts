@@ -78,9 +78,6 @@ export const StyledContent = styled.div`
   margin-top: 60px;
   text-align: center;
 
-  h2 {
-  }
-
   p {
     color: ${tokens.typographyColorSecondary};
   }
@@ -89,12 +86,6 @@ export const StyledContent = styled.div`
     top: 10vh;
     max-width: 100%;
     margin-top: 0;
-
-    h2 {
-    }
-
-    p {
-    }
   }
 
   @media (min-width: ${screenSizes.desktop}) {
@@ -102,9 +93,6 @@ export const StyledContent = styled.div`
     max-height: 270px;
     gap: 2px;
     text-align: center;
-
-    h2 {
-    }
 
     p {
       color: ${tokens.typographyColorSecondary};
