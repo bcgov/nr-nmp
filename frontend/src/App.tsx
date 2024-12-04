@@ -1,5 +1,5 @@
 import StyledApp from './App.styles';
-import { Header } from './components/common';
+import { Header, Footer } from './components/common';
 import ViewRouter from './routes/ViewRouter';
 
 /**
@@ -10,6 +10,7 @@ function App() {
     <StyledApp>
       <Header />
       <ViewRouter />
+      <Footer />
     </StyledApp>
   );
 }

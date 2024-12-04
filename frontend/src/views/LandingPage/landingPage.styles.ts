@@ -6,7 +6,6 @@ import * as tokens from '@bcgov/design-tokens/js';
 import screenSizes from '../../constants/screenSizes';
 
 export const ViewContainer = styled.div`
-  background-color: white;
   position: absolute;
   top: 0;
   left: 0;
@@ -14,24 +13,32 @@ export const ViewContainer = styled.div`
   height: 100svh;
   justify-content: center;
   width: 100%;
+  align-items: center;
 `;
 
-export const Wrapper = styled.div`
-  height: 100%;
+export const Card = styled.div`
+  background-color: rgba(255, 255, 255, 0.8);
+  height: 500px;
+  width: 500px;
   padding-top: 0;
   justify-content: center;
-  display: flex;
-  box-content: content-box;
   align-items: center;
+  display: flex;
   flex-direction: column;
   object-fit: scale-down;
-  @media (max-height: 570px) {
-    padding: 60pt 0;
-  }
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
 `;
 
 export const ButtonWrapper = styled.div`
   padding: 5px;
+
+  button {
+    width: 400px;
+    height: 50px;
+  }
 `;
 
 export const StyledDivider = styled.div`
@@ -42,6 +49,7 @@ export const StyledDivider = styled.div`
   align-items: center;
   text-align: center;
   color: ${tokens.typographyColorPlaceholder};
+  width: 400px;
 
   &::before,
   &::after {
@@ -49,7 +57,7 @@ export const StyledDivider = styled.div`
     content: '';
     padding: 1px;
     background-color: ${tokens.typographyColorPlaceholder};
-    width: 145px;
+    width: 130px;
     margin: 5px;
   }
 
@@ -62,49 +70,31 @@ export const StyledDivider = styled.div`
 `;
 
 export const StyledContent = styled.div`
+  width: 400px;
   display: flex;
   flex-direction: column;
-  max-width: 265px;
   max-height: 180px;
   gap: 2px;
   margin-top: 60px;
   text-align: center;
 
-  h2 {
-    font: ${tokens.typographyBoldH6};
-  }
-
   p {
-    font: ${tokens.typographyRegularSmallBody};
     color: ${tokens.typographyColorSecondary};
   }
 
   @media (min-width: ${screenSizes.tablet}) {
     top: 10vh;
-    max-width: 350px;
+    max-width: 100%;
     margin-top: 0;
-
-    h2 {
-      font: ${tokens.typographyBoldH5};
-    }
-
-    p {
-      font: ${tokens.typographyRegularBody};
-    }
   }
 
   @media (min-width: ${screenSizes.desktop}) {
-    max-width: 510px;
+    max-width: 100%;
     max-height: 270px;
     gap: 2px;
     text-align: center;
 
-    h2 {
-      font: ${tokens.typographyBoldH2};
-    }
-
     p {
-      font: ${tokens.typographyRegularLargeBody};
       color: ${tokens.typographyColorSecondary};
     }
   }
