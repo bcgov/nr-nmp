@@ -1,12 +1,25 @@
 /**
  * @summary Reusable BC Gov Header Component
  */
+import { useSSO } from '@bcgov/citz-imb-sso-react';
 import logo from '/logo-banner.svg';
 // import { Link } from 'react-router-dom';
 
 import { HeaderWrapper, Heading, Banner, Image, StyledLink } from './header.styles';
+import { Button } from '../Button/Button';
+import { ButtonWrapper } from '../../../views/LandingPage/landingPage.styles';
 
 export default function Header() {
+  const { login, logout, isAuthenticated } = useSSO();
+
+  const handleLoginButton = () => {
+    if (isAuthenticated) {
+      logout();
+    } else {
+      login({ backendURL: 'http://localhost:3000', idpHint: 'idir', postLoginRedirectURL: '/' });
+    }
+  };
+
   return (
     <HeaderWrapper>
       <Banner>
@@ -17,6 +30,16 @@ export default function Header() {
         <StyledLink href="/">
           <Heading>Nutrient Management Calculator</Heading>
         </StyledLink>
+        <ButtonWrapper>
+          <Button
+            handleClick={handleLoginButton}
+            variant="secondary"
+            size="sm"
+            disabled={false}
+            text={isAuthenticated ? 'Logout' : 'Login'}
+            aria-label={isAuthenticated ? 'Logout' : 'Login'}
+          />
+        </ButtonWrapper>
       </Banner>
     </HeaderWrapper>
   );
