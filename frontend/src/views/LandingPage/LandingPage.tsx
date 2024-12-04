@@ -49,7 +49,7 @@ export default function LandingPage() {
     <ViewContainer>
       <Card>
         <StyledContent>
-          <h2>Nutrient Management Calculator</h2>
+          <h1>Nutrient Management Calculator</h1>
           <p>
             The Nutrient Management Calculator provides a starting point for the efficient use of
             fertilizer and manure on farms. This tool assists in you choosing the right rate and
