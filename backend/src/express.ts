@@ -13,7 +13,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
-import { protectedRoute, sso } from '@bcgov/citz-imb-sso-express';
+import { sso } from '@bcgov/citz-imb-sso-express';
 import swaggerConfig from './config/swaggerConfig';
 import * as routers from './routes/index';
 import * as middleware from './middleware';

@@ -14,9 +14,12 @@ export default function Header() {
 
   const handleLoginButton = () => {
     if (isAuthenticated) {
-      logout();
+      logout(import.meta.env.VITE_BACKEND_URL);
     } else {
-      login({ backendURL: 'http://localhost:3000', idpHint: 'idir', postLoginRedirectURL: '/' });
+      login({
+        backendURL: import.meta.env.VITE_BACKEND_URL,
+        idpHint: 'idir',
+      });
     }
   };
 

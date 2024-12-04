@@ -7,7 +7,7 @@ import App from './App.tsx';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <SSOProvider
-      backendURL="http://localhost:3000"
+      backendURL={import.meta.env.VITE_BACKEND_URL}
       idpHint="idir"
     >
       <BrowserRouter>
