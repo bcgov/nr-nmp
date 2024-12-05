@@ -6,16 +6,16 @@ import styled from '@emotion/styled';
 import screenSizes from '../../../constants/screenSizes';
 import typography from '../../../typography';
 
-export const HeaderWrapper = styled.header`
+export const FooterWrapper = styled.footer`
   background-color: #036;
-  border-bottom: 2px solid #fcba19;
+  border-top: 2px solid #fcba19;
   padding: 0;
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 65px;
-  top: 0;
+  bottom: 0;
   position: fixed;
   width: 100%;
   left: 0;
@@ -41,6 +41,7 @@ export const Banner = styled.div`
   align-items: center;
   margin: 0;
 `;
+
 export const BannerRight = styled.div`
   min-width: 35pt;
   display: flex;
@@ -57,6 +58,7 @@ export const BannerLeft = styled.div`
   padding: 0 0.5em;
   margin: 0;
 `;
+
 export const Image = styled.img`
   width: 175px;
   top: 10px;

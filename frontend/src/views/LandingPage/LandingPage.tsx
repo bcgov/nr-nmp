@@ -2,11 +2,11 @@
  * @summary The landing page for the application
  */
 import {
-  Wrapper,
   ButtonWrapper,
   ViewContainer,
   StyledDivider,
   StyledContent,
+  Card,
 } from './landingPage.styles';
 import { Button } from '../../components/common';
 
@@ -21,14 +21,11 @@ export default function LandingPage() {
 
   const saveFile = (e: any) => {
     const file = e.target.files[0];
-
     if (!isValidFile(file)) {
       return;
     }
-
     const fr = new FileReader();
     fr.readAsText(file);
-
     fr.onload = () => {
       const data = fr.result;
       if (data) {
@@ -47,15 +44,25 @@ export default function LandingPage() {
     // eslint-disable-next-line no-alert
     alert('New Calculation');
   };
+
   return (
     <ViewContainer>
-      <Wrapper>
+      <Card>
+        <StyledContent>
+          <h1>Nutrient Management Calculator</h1>
+          <p>
+            The Nutrient Management Calculator provides a starting point for the efficient use of
+            fertilizer and manure on farms. This tool assists in you choosing the right rate and
+            nutrient source for your crops. You can start a new calculation or pick up where you
+            left off by uploading an existing .nmp file.
+          </p>
+        </StyledContent>
         <ButtonWrapper>
           <Button
-            text="New Calculation"
+            text="Start a new calculation"
             size="lg"
             handleClick={newCalcHandler}
-            aria-label="New Calculation"
+            aria-label="Start a new calculation"
             variant="primary"
             disabled={false}
           />
@@ -64,9 +71,9 @@ export default function LandingPage() {
         <ButtonWrapper>
           <Button
             size="lg"
-            text="Load Existing File"
+            text="Upload an existing .nmp file"
             handleClick={handleUpload}
-            aria-label="Upload File"
+            aria-label="Upload an existing .nmp file"
             variant="primary"
             disabled={false}
           />
@@ -75,21 +82,11 @@ export default function LandingPage() {
             type="file"
             accept=".nmp, application/json"
             onChange={saveFile}
-            aria-label="Upload File"
+            aria-label="Upload an existing .nmp file"
             hidden
           />
         </ButtonWrapper>
-        <StyledContent>
-          <p>
-            All information contained within the Nutrient Management Calculator is provided solely
-            &quot;as is&quot; at the user&apos;s own risk. Although every effort has been made to
-            ensure that the information contained in the Nutrient Management Calculator is accurate,
-            the Government of British Columbia assumes no legal liability or responsibility for the
-            completeness, accuracy, or usefulness of the information provided or any product
-            resulting from the use of the Nutrient Management Calculator.
-          </p>
-        </StyledContent>
-      </Wrapper>
+      </Card>
     </ViewContainer>
   );
 }
