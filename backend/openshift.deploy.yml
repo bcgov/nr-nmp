@@ -28,8 +28,8 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        app: nr-nmp${NAME_SUFFIX}
-      name: nr-nmp-backend${NAME_SUFFIX}
+        app: ${APP}${NAME_SUFFIX}
+      name: ${APP}-${COMPONENT}${NAME_SUFFIX}
     spec:
       type: ClusterIP
       ports:
@@ -38,30 +38,30 @@ objects:
           protocol: TCP
           name: http-3000
       selector:
-        service: nr-nmp-backend${NAME_SUFFIX}
+        service: ${APP}-${COMPONENT}${NAME_SUFFIX}
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
-        app: nr-nmp${NAME_SUFFIX}
-        deployment: nr-nmp-backend${NAME_SUFFIX}
-      name: nr-nmp-backend${NAME_SUFFIX}
+        app: ${APP}${NAME_SUFFIX}
+        deployment: ${APP}-${COMPONENT}${NAME_SUFFIX}
+      name: ${APP}-${COMPONENT}${NAME_SUFFIX}
     spec:
       strategy:
         type: Recreate
       selector:
         matchLabels:
-          deployment: nr-nmp-backend${NAME_SUFFIX}
+          deployment: ${APP}-${COMPONENT}${NAME_SUFFIX}
       template:
         metadata:
           labels:
-            app: nr-nmp${NAME_SUFFIX}
-            deployment: nr-nmp-backend${NAME_SUFFIX}
-            service: nr-nmp-backend${NAME_SUFFIX}
+            app: ${APP}${NAME_SUFFIX}
+            deployment: ${APP}-${COMPONENT}${NAME_SUFFIX}
+            service: ${APP}-${COMPONENT}${NAME_SUFFIX}
         spec:
           containers:
-            - name: nr-nmp-backend${NAME_SUFFIX}
-              image: ghcr.io/bcgov/nr-nmp/backend:${IMAGE_TAG}
+            - name: ${APP}-${COMPONENT}${NAME_SUFFIX}
+              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${IMAGE_TAG}
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
@@ -83,6 +83,21 @@ objects:
                     secretKeyRef:
                       name: nr-nmp-database${NAME_SUFFIX}
                       key: database-user
+                - name: SSO_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: nr-nmp-keycloak
+                      key: SSO_CLIENT_ID
+                - name: SSO_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef: nr-nmp-keycloak
+                    key: SSO_CLIENT_SECRET
+                - name: SSO_REDIRECT_URL
+                  value: http://${APP}-${TARGET}-${COMPONENT}/auth/callback
+                - name: FRONTEND_URL
+                  value: http://${APP}-${TARGET}
+                - name: BACKEND_URL
+                  value: http://${APP}-${TARGET}-${COMPONENT}
               ports:
                 - containerPort: 3000
                   protocol: TCP
@@ -117,15 +132,15 @@ objects:
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: nr-nmp${NAME_SUFFIX}
-      name: nr-nmp-backend${NAME_SUFFIX}
+        app: ${APP}${NAME_SUFFIX}
+      name: ${APP}-${COMPONENT}${NAME_SUFFIX}
     spec:
-      host: nr-nmp-backend${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
+      host: ${APP}-${COMPONENT}${NAME_SUFFIX}.apps.silver.devops.gov.bc.ca
       port:
         targetPort: http-3000
       to:
         kind: Service
-        name: nr-nmp-backend${NAME_SUFFIX}
+        name: ${APP}-${COMPONENT}${NAME_SUFFIX}
         weight: 100
       tls:
         termination: edge
