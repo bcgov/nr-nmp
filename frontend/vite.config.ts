@@ -12,5 +12,8 @@ export default defineConfig(({ mode }) => {
       port: Number(env.VITE_PORT),
     },
     plugins: [react()],
+    define: {
+      __APP_ENV__: JSON.stringify(env.APP_ENV),
+    },
   };
 });
