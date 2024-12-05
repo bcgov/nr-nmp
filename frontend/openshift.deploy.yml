@@ -64,7 +64,7 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: VITE_BACKEND_URL
-                  value: http://${APP}-${TARGET}-backend/api
+                  value: http://${APP}-${TARGET}-backend
               ports:
                 - name: http
                   containerPort: 5173
