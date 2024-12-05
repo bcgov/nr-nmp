@@ -12,7 +12,7 @@ import { ButtonCont, ImageCont, TextCont, Image } from './navButton.styles';
 export type RoutingLinkProps = {
   path: string;
   text: string;
-  icon: string;
+  icon?: string;
   hex: string;
 };
 

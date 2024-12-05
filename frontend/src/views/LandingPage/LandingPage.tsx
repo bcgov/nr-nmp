@@ -1,6 +1,7 @@
 /**
  * @summary The landing page for the application
  */
+import { useNavigate } from 'react-router-dom';
 import {
   ButtonWrapper,
   ViewContainer,
@@ -11,6 +12,8 @@ import {
 import { Button } from '../../components/common';
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
   const handleUpload = () => {
     const upload = document.getElementById('fileUp');
     if (upload) upload.click();
@@ -33,16 +36,14 @@ export default function LandingPage() {
         // The alert is temporary, will be removed once the data is being used
         // eslint-disable-next-line no-alert
         alert(data.toString());
+        navigate('/farm-information');
       }
     };
   };
 
   const newCalcHandler = () => {
     localStorage.clear();
-    console.log('New Calculation');
-    // The alert is temporary, will be removed once the data is being used
-    // eslint-disable-next-line no-alert
-    alert('New Calculation');
+    navigate('/farm-information');
   };
 
   return (
