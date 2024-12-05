@@ -4,19 +4,20 @@
 import { useSSO } from '@bcgov/citz-imb-sso-react';
 import logo from '/logo-banner.svg';
 
+import { env } from '../../../env';
 import { HeaderWrapper, Heading, Banner, Image, StyledLink } from './header.styles';
 import { Button } from '../Button/Button';
 import { ButtonWrapper } from '../../../views/LandingPage/landingPage.styles';
 
 export default function Header() {
   const { login, logout, isAuthenticated } = useSSO();
-  console.info(import.meta.env.VITE_BACKEND_URL);
+
   const handleLoginButton = () => {
     if (isAuthenticated) {
-      logout(import.meta.env.VITE_BACKEND_URL);
+      logout(env.VITE_BACKEND_URL);
     } else {
       login({
-        backendURL: import.meta.env.VITE_BACKEND_URL,
+        backendURL: env.VITE_BACKEND_URL,
         idpHint: 'idir',
       });
     }

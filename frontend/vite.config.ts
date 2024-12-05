@@ -11,7 +11,25 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: Number(env.VITE_PORT),
     },
-    plugins: [react()],
+    plugins: [
+      {
+        name: 'build-html',
+        apply: 'build',
+        transformIndexHtml: (html) => ({
+          html,
+          tags: [
+            {
+              tag: 'script',
+              attrs: {
+                src: '/env.js',
+              },
+              injectTo: 'head',
+            },
+          ],
+        }),
+      },
+      react(),
+    ],
     define: {
       __APP_ENV__: JSON.stringify(env.APP_ENV),
     },
