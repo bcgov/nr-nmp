@@ -10,7 +10,7 @@ import { ButtonWrapper } from '../../../views/LandingPage/landingPage.styles';
 
 export default function Header() {
   const { login, logout, isAuthenticated } = useSSO();
-
+  console.info(import.meta.env.VITE_BACKEND_URL);
   const handleLoginButton = () => {
     if (isAuthenticated) {
       logout(import.meta.env.VITE_BACKEND_URL);
