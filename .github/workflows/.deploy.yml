@@ -83,7 +83,7 @@ jobs:
 
   frontend:
     name: Frontend
-    needs: [init, database]
+    needs: [init, database, backend]
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     steps:
