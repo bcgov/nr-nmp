@@ -90,8 +90,9 @@ objects:
                       key: SSO_CLIENT_ID
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
-                    secretKeyRef: nr-nmp-keycloak
-                    key: SSO_CLIENT_SECRET
+                    secretKeyRef:
+                      name: nr-nmp-keycloak
+                      key: SSO_CLIENT_SECRET
                 - name: SSO_REDIRECT_URL
                   value: http://${APP}-${TARGET}-${COMPONENT}/auth/callback
                 - name: FRONTEND_URL

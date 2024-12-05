@@ -74,8 +74,9 @@ objects:
                       key: SSO_CLIENT_ID
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
-                    secretKeyRef: nr-nmp-keycloak
-                    key: SSO_CLIENT_SECRET
+                    secretKeyRef:
+                      name: nr-nmp-keycloak
+                      key: SSO_CLIENT_SECRET
               ports:
                 - name: http
                   containerPort: 5173
