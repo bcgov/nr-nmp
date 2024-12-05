@@ -65,6 +65,8 @@ objects:
                   value: info
                 - name: VITE_BACKEND_URL
                   value: http://${APP}-${TARGET}-backend
+                - name: BACKEND_URL
+                  value: http://${APP}-${TARGET}-backend
                 - name: VITE_PORT
                   value: '5173'
                 - name: SSO_CLIENT_ID
