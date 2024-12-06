@@ -4,7 +4,7 @@
 import { useSSO } from '@bcgov/citz-imb-sso-react';
 import logo from '/logo-banner.svg';
 
-import { env } from '../../../env';
+import { env } from '@/env';
 import { HeaderWrapper, Heading, Banner, Image, StyledLink } from './header.styles';
 import { Button } from '../Button/Button';
 import { ButtonWrapper } from '../../../views/LandingPage/landingPage.styles';
