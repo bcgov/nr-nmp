@@ -91,11 +91,11 @@ objects:
                       name: nr-nmp-keycloak
                       key: SSO_CLIENT_SECRET
                 - name: SSO_REDIRECT_URL
-                  value: http://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/auth/callback
+                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/auth/callback
                 - name: FRONTEND_URL
-                  value: http://${APP}-${TARGET}.apps.silver.devops.gov.bc.ca
+                  value: https://${APP}-${TARGET}.apps.silver.devops.gov.bc.ca
                 - name: BACKEND_URL
-                  value: http://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
               ports:
                 - containerPort: 3000
                   protocol: TCP

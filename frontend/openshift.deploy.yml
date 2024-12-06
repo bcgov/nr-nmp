@@ -64,9 +64,9 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: VITE_BACKEND_URL
-                  value: http://${APP}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
+                  value: https://${APP}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
                 - name: BACKEND_URL
-                  value: http://${APP}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
+                  value: https://${APP}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
                 - name: VITE_PORT
                   value: '5173'
                 - name: SSO_CLIENT_ID
