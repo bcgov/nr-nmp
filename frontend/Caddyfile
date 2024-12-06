@@ -41,7 +41,9 @@
 		Feature-Policy "fullscreen 'self'; camera 'none'; microphone 'none'"
 	}
 	handle /env.js {
-		header Content-Type "text/javascript"
+		header {
+			Content-Type "text/javascript"
+		}
 		respond `window.config = {"VITE_BACKEND_URL":"{$VITE_BACKEND_URL}","VITE_PORT":"{$VITE_PORT}"};`
 	}
 }
