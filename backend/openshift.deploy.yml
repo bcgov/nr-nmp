@@ -91,7 +91,7 @@ objects:
                       name: nr-nmp-keycloak
                       key: SSO_CLIENT_SECRET
                 - name: SSO_REDIRECT_URL
-                  value: http://${APP}-${TARGET}-${COMPONENT}/auth/callback
+                  value: http://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/auth/callback
                 - name: FRONTEND_URL
                   value: http://${APP}-${TARGET}
                 - name: BACKEND_URL
