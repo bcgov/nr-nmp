@@ -93,9 +93,9 @@ objects:
                 - name: SSO_REDIRECT_URL
                   value: http://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/auth/callback
                 - name: FRONTEND_URL
-                  value: http://${APP}-${TARGET}
+                  value: http://${APP}-${TARGET}.apps.silver.devops.gov.bc.ca
                 - name: BACKEND_URL
-                  value: http://${APP}-${TARGET}-${COMPONENT}
+                  value: http://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
               ports:
                 - containerPort: 3000
                   protocol: TCP
