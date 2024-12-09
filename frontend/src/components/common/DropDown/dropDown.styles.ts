@@ -2,7 +2,6 @@
  * @summary Styling for Dropdown component
  */
 import styled from '@emotion/styled';
-import * as tokens from '@bcgov/design-tokens/js';
 
 export const DropdownWrapper = styled.div`
   display: flex;
@@ -14,7 +13,6 @@ export const DropdownWrapper = styled.div`
 export const StyledLabel = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
-  color: ${tokens.typographyColorPrimary};
   text-align: left;
 `;
 

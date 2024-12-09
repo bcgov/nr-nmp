@@ -2,7 +2,7 @@
  * @summary Reusable Checkbox Component
  */
 import React from 'react';
-import { CheckboxWrapper, StyledLabel, StyledInput } from './checkbox.styles';
+import { CheckboxWrapper, StyledLabel } from './checkbox.styles';
 
 interface CheckboxProps {
   label: string;
@@ -14,7 +14,7 @@ interface CheckboxProps {
 function Checkbox({ label, name, checked, onChange }: CheckboxProps) {
   return (
     <CheckboxWrapper>
-      <StyledInput
+      <input
         type="checkbox"
         name={name}
         checked={checked}

@@ -1,6 +1,6 @@
 // frontend/src/components/common/RadioButton/RadioButton.tsx
 import React from 'react';
-import { RadioButtonWrapper, StyledLabel, StyledInput } from './radioButton.styles';
+import { RadioButtonWrapper, StyledLabel } from './radioButton.styles';
 
 interface RadioButtonProps {
   label: string;
@@ -13,7 +13,7 @@ interface RadioButtonProps {
 function RadioButton({ label, name, value, checked, onChange }: RadioButtonProps) {
   return (
     <RadioButtonWrapper>
-      <StyledInput
+      <input
         type="radio"
         name={name}
         value={value}
