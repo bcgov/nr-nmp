@@ -1,3 +1,6 @@
+/**
+ * @summary Reusable Input Field Component
+ */
 import React from 'react';
 import { InputWrapper, StyledLabel, StyledInput } from './inputField.styles';
 

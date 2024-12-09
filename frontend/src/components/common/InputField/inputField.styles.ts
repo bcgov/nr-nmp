@@ -1,3 +1,6 @@
+/**
+ * @summary Styling for InputField component
+ */
 import styled from '@emotion/styled';
 import * as tokens from '@bcgov/design-tokens/js';
 

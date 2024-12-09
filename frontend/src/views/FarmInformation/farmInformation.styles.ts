@@ -1,5 +1,5 @@
 /**
- * Styling for FarmInformation view
+ * @summary Styling for FarmInformation view
  */
 import styled from '@emotion/styled';
 import screenSizes from '../../constants/screenSizes';
@@ -20,7 +20,7 @@ export const Card = styled.div`
   height: 500px;
   width: 1000px;
   padding-top: 0;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -72,4 +72,14 @@ export const InputFieldsContainer = styled.div`
   display: flex;
   width: 100%;
   gap: 16px;
+  margin-top: 100px;
+`;
+
+export const RadioButtonsContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
 `;

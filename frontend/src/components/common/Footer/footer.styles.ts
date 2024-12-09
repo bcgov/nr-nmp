@@ -1,6 +1,5 @@
 /**
- * @summary Styles for reusable Header component
- * @author Dallas Richmond
+ * @summary Styles for reusable Footer component
  */
 import styled from '@emotion/styled';
 import screenSizes from '../../../constants/screenSizes';
