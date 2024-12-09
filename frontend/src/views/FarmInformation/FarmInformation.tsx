@@ -30,10 +30,10 @@ export default function FarmInformation() {
   };
 
   const regionOptions = [
-    { value: '', label: 'Select a region' },
-    { value: 'bulkley-nechako', label: 'Bulkley-Nechako' },
-    { value: 'cariboo', label: 'Cariboo' },
-    { value: 'columbiaShuswap', label: 'Columbia Shuswap' },
+    { value: 0, label: 'Select a region' },
+    { value: 1, label: 'Bulkley-Nechako' },
+    { value: 2, label: 'Cariboo' },
+    { value: 3, label: 'Columbia Shuswap' },
   ];
 
   return (
