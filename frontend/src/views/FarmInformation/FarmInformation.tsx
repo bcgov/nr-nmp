@@ -12,19 +12,16 @@ import {
   SelectorContainer,
   RegionContainer,
 } from './farmInformation.styles';
-import InputField from '../../components/common/InputField/InputField';
-import RadioButton from '../../components/common/RadioButton/RadioButton';
-import Checkbox from '../../components/common/Checkbox/Checkbox';
-import Dropdown from '../../components/common/Dropdown/Dropdown';
+import { InputField, RadioButton, Checkbox, Dropdown } from '../../components/common';
 
 export default function FarmInformation() {
   const [formData, setFormData] = useState({
-    year: '',
-    farmName: '',
-    crops: '',
-    vegetables: false,
-    berries: false,
-    region: '',
+    Year: '',
+    FarmName: '',
+    FarmRegion: '',
+    Crops: 'false',
+    HasVegetables: false,
+    HasBerries: false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -51,16 +48,16 @@ export default function FarmInformation() {
           <InputField
             label="Year"
             type="text"
-            name="year"
-            value={formData.year}
+            name="Year"
+            value={formData.Year}
             onChange={handleChange}
             flex="0.5"
           />
           <InputField
             label="Farm Name"
             type="text"
-            name="farmName"
-            value={formData.farmName}
+            name="FarmName"
+            value={formData.FarmName}
             onChange={handleChange}
             flex="1"
           />
@@ -68,8 +65,8 @@ export default function FarmInformation() {
         <RegionContainer>
           <Dropdown
             label="Region"
-            name="region"
-            value={formData.region}
+            name="FarmRegion"
+            value={formData.FarmRegion}
             options={regionOptions}
             onChange={handleChange}
             flex="0.35"
@@ -79,32 +76,32 @@ export default function FarmInformation() {
           <span style={{ marginRight: '8px' }}>I have crops</span>
           <RadioButton
             label="Yes"
-            name="crops"
-            value="yes"
-            checked={formData.crops === 'yes'}
+            name="Crops"
+            value="true"
+            checked={formData.Crops === 'true'}
             onChange={handleChange}
           />
           <RadioButton
             label="No"
-            name="crops"
-            value="no"
-            checked={formData.crops === 'no'}
+            name="Crops"
+            value="false"
+            checked={formData.Crops === 'false'}
             onChange={handleChange}
           />
         </SelectorContainer>
-        {formData.crops === 'yes' && (
+        {formData.Crops === 'true' && (
           <SelectorContainer>
             <span style={{ marginRight: '8px' }}>Select your crops:</span>
             <Checkbox
               label="Vegetables"
-              name="vegetables"
-              checked={formData.vegetables}
+              name="HasVegetables"
+              checked={formData.HasVegetables}
               onChange={handleChange}
             />
             <Checkbox
               label="Berries"
-              name="berries"
-              checked={formData.berries}
+              name="HasBerries"
+              checked={formData.HasBerries}
               onChange={handleChange}
             />
           </SelectorContainer>
