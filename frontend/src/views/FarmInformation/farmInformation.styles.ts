@@ -67,3 +67,9 @@ export const Heading = styled.h2`
   display: contents;
   text-decoration: none;
 `;
+
+export const InputFieldsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 16px;
+`;
