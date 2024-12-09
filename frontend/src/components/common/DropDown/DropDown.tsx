@@ -10,7 +10,7 @@ interface DropdownProps {
   value: string;
   options: { value: string; label: string }[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  flex?: string; // Add this line
+  flex?: string;
 }
 
 function Dropdown({ label, name, value, options, onChange, flex }: DropdownProps) {
