@@ -3,7 +3,7 @@
  */
 import styled from '@emotion/styled';
 
-export const DropdownWrapper = styled.div`
+export const DropdownWrapper = styled.div<{ flex?: string }>`
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
