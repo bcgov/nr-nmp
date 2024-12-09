@@ -1,4 +1,3 @@
-/* eslint-disable react/function-component-definition */
 import React from 'react';
 import { InputWrapper, StyledLabel, StyledInput } from './inputField.styles';
 
@@ -8,33 +7,21 @@ interface InputFieldProps {
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  width?: string;
-  flex?: string; // Add this line
+  flex?: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
-  label,
-  type,
-  name,
-  value,
-  onChange,
-  width,
-  flex,
-}) => (
-  <InputWrapper
-    style={{ width }}
-    flex={flex}
-  >
-    {' '}
-    {/* Update this line */}
-    <StyledLabel htmlFor={name}>{label}</StyledLabel>
-    <StyledInput
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-    />
-  </InputWrapper>
-);
+function InputField({ label, type, name, value, onChange, flex }: InputFieldProps) {
+  return (
+    <InputWrapper flex={flex}>
+      <StyledLabel htmlFor={name}>{label}</StyledLabel>
+      <StyledInput
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+      />
+    </InputWrapper>
+  );
+}
 
 export default InputField;

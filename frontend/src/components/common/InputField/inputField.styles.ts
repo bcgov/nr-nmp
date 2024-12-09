@@ -12,6 +12,7 @@ export const StyledLabel = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   color: ${tokens.typographyColorPrimary};
+  text-align: left;
 `;
 
 export const StyledInput = styled.input`
