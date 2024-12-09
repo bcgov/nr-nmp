@@ -25,15 +25,15 @@ export default function FarmInformation() {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
   const regionOptions = [
-    { value: 0, label: 'Select a region' },
-    { value: 1, label: 'Bulkley-Nechako' },
-    { value: 2, label: 'Cariboo' },
-    { value: 3, label: 'Columbia Shuswap' },
+    { value: '0', label: 'Select a region' },
+    { value: '1', label: 'Bulkley-Nechako' },
+    { value: '2', label: 'Cariboo' },
+    { value: '3', label: 'Columbia Shuswap' },
   ];
 
   return (
