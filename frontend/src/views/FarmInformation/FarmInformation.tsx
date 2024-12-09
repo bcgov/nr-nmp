@@ -9,11 +9,13 @@ import {
   Banner,
   Heading,
   InputFieldsContainer,
-  RadioButtonsContainer,
+  SelectorContainer,
+  RegionContainer,
 } from './farmInformation.styles';
 import InputField from '../../components/common/InputField/InputField';
 import RadioButton from '../../components/common/RadioButton/RadioButton';
 import Checkbox from '../../components/common/Checkbox/Checkbox';
+import Dropdown from '../../components/common/Dropdown/Dropdown';
 
 export default function FarmInformation() {
   const [formData, setFormData] = useState({
@@ -22,12 +24,20 @@ export default function FarmInformation() {
     crops: '',
     vegetables: false,
     berries: false,
+    region: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
+
+  const regionOptions = [
+    { value: '', label: 'Select a region' },
+    { value: 'bulkley-nechako', label: 'Bulkley-Nechako' },
+    { value: 'cariboo', label: 'Cariboo' },
+    { value: 'columbiaShuswap', label: 'Columbia Shuswap' },
+  ];
 
   return (
     <ViewContainer>
@@ -55,7 +65,17 @@ export default function FarmInformation() {
             flex="1"
           />
         </InputFieldsContainer>
-        <RadioButtonsContainer>
+        <RegionContainer>
+          <Dropdown
+            label="Region"
+            name="region"
+            value={formData.region}
+            options={regionOptions}
+            onChange={handleChange}
+            flex="0.35"
+          />
+        </RegionContainer>
+        <SelectorContainer>
           <span style={{ marginRight: '8px' }}>I have crops</span>
           <RadioButton
             label="Yes"
@@ -71,9 +91,9 @@ export default function FarmInformation() {
             checked={formData.crops === 'no'}
             onChange={handleChange}
           />
-        </RadioButtonsContainer>
+        </SelectorContainer>
         {formData.crops === 'yes' && (
-          <RadioButtonsContainer>
+          <SelectorContainer>
             <span style={{ marginRight: '8px' }}>Select your crops:</span>
             <Checkbox
               label="Vegetables"
@@ -87,7 +107,7 @@ export default function FarmInformation() {
               checked={formData.berries}
               onChange={handleChange}
             />
-          </RadioButtonsContainer>
+          </SelectorContainer>
         )}
       </Card>
     </ViewContainer>

@@ -18,7 +18,7 @@ export const ViewContainer = styled.div`
 export const Card = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
   height: 500px;
-  width: 1000px;
+  width: 600px;
   padding-top: 0;
   justify-content: flex-start;
   align-items: center;
@@ -75,7 +75,16 @@ export const InputFieldsContainer = styled.div`
   margin-top: 100px;
 `;
 
-export const RadioButtonsContainer = styled.div`
+export const RegionContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+export const SelectorContainer = styled.div`
   display: flex;
   gap: 16px;
   margin-top: 16px;
