@@ -1,7 +1,9 @@
 /**
  * @summary The Farm Information page for the application
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { localStorageKeyExists } from '../../utils/AppLocalStorage';
+import constants from '../../constants/Constants';
 import {
   ViewContainer,
   Card,
@@ -18,11 +20,33 @@ export default function FarmInformation() {
   const [formData, setFormData] = useState({
     Year: '',
     FarmName: '',
-    FarmRegion: '',
+    FarmRegion: 0,
     Crops: 'false',
     HasVegetables: false,
     HasBerries: false,
   });
+
+  useEffect(() => {
+    if (localStorageKeyExists(constants.NMP_FILE_KEY)) {
+      const data = localStorage.getItem(constants.NMP_FILE_KEY);
+      if (data) {
+        try {
+          const parsedData = JSON.parse(data);
+          const secondParsedData = JSON.parse(parsedData);
+          setFormData({
+            Year: secondParsedData.farmDetails.Year || '',
+            FarmName: secondParsedData.farmDetails.FarmName || '',
+            FarmRegion: secondParsedData.farmDetails.FarmRegion || 0,
+            Crops: secondParsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
+            HasVegetables: secondParsedData.farmDetails.HasVegetables || false,
+            HasBerries: secondParsedData.farmDetails.HasBerries || false,
+          });
+        } catch (error) {
+          console.error('Error parsing JSON:', error);
+        }
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
@@ -30,10 +54,10 @@ export default function FarmInformation() {
   };
 
   const regionOptions = [
-    { value: '0', label: 'Select a region' },
-    { value: '1', label: 'Bulkley-Nechako' },
-    { value: '2', label: 'Cariboo' },
-    { value: '3', label: 'Columbia Shuswap' },
+    { value: 0, label: 'Select a region' },
+    { value: 1, label: 'Bulkley-Nechako' },
+    { value: 2, label: 'Cariboo' },
+    { value: 3, label: 'Columbia Shuswap' },
   ];
 
   return (
