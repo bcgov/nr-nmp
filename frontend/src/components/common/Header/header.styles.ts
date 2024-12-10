@@ -1,6 +1,5 @@
 /**
  * @summary Styles for reusable Header component
- * @author Dallas Richmond
  */
 import styled from '@emotion/styled';
 import screenSizes from '../../../constants/screenSizes';
@@ -41,6 +40,7 @@ export const Banner = styled.div`
   align-items: center;
   margin: 0;
 `;
+
 export const BannerRight = styled.div`
   min-width: 35pt;
   display: flex;
