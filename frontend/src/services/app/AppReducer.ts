@@ -9,7 +9,7 @@ export type AppAction = {
 
 // Initial settings state.
 export const initialState = {
-  nmpFile: {},
+  nmpFile: '',
 };
 
 /**
