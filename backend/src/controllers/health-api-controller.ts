@@ -1,6 +1,5 @@
 /**
- * @desc Simple health endpoint to check API status
- * @author GDamaso
+ * @dsummary Simple health endpoint to check API status
  */
 import { Response, Request } from 'express';
 

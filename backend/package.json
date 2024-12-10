@@ -42,6 +42,7 @@
     "typescript-eslint": "^7.8.0"
   },
   "dependencies": {
+    "@bcgov/citz-imb-sso-express": "^1.0.2",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
