@@ -2,6 +2,9 @@
  * @summary The landing page for the application
  */
 import { useNavigate } from 'react-router-dom';
+import constants from '../../constants/Constants';
+import useAppService from '../../services/app/useAppService';
+import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
 import {
   ButtonWrapper,
   ViewContainer,
@@ -12,6 +15,7 @@ import {
 import { Button } from '../../components/common';
 
 export default function LandingPage() {
+  const { setNMPFile } = useAppService();
   const navigate = useNavigate();
 
   const handleUpload = () => {
@@ -32,17 +36,15 @@ export default function LandingPage() {
     fr.onload = () => {
       const data = fr.result;
       if (data) {
+        setNMPFile(data);
         console.log(data.toString());
-        // The alert is temporary, will be removed once the data is being used
-        // eslint-disable-next-line no-alert
-        alert(data.toString());
         navigate('/farm-information');
       }
     };
   };
 
   const newCalcHandler = () => {
-    localStorage.clear();
+    deleteLocalStorageKey(constants.NMP_FILE_KEY);
     navigate('/farm-information');
   };
 
