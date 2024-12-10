@@ -37,7 +37,6 @@ export default function LandingPage() {
       const data = fr.result;
       if (data) {
         setNMPFile(data);
-        console.log(data.toString());
         navigate('/farm-information');
       }
     };

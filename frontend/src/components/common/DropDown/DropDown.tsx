@@ -2,13 +2,13 @@
  * @summary A reusable Dropdown component
  */
 import React from 'react';
-import { DropdownWrapper, StyledLabel, StyledSelect } from './dropDown.styles';
+import { DropdownWrapper, StyledLabel, StyledSelect } from './dropdown.styles';
 
 interface DropdownProps {
   label: string;
   name: string;
-  value: string;
-  options: { value: string; label: string }[];
+  value: number | string;
+  options: { value: number; label: string }[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   flex?: string;
 }

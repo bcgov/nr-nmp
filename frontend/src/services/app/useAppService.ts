@@ -18,8 +18,6 @@ const useAppService = () => {
      * @summary Set nmp to local storage and state
      */
     const setNMPFile = async (nmpFile: string | ArrayBuffer) => {
-      saveDataToLocalStorage(constants.NMP_FILE_KEY, nmpFile);
-      dispatch({ type: SET_NMP_FILE, payload: nmpFile });
       try {
         saveDataToLocalStorage(constants.NMP_FILE_KEY, nmpFile);
         dispatch({ type: SET_NMP_FILE, payload: nmpFile });
