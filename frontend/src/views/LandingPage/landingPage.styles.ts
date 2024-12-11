@@ -1,20 +1,9 @@
 /**
- * Styling for LandingPage view
+ * @summary Styling for LandingPage view
  */
 import styled from '@emotion/styled';
 import * as tokens from '@bcgov/design-tokens/js';
 import screenSizes from '../../constants/screenSizes';
-
-export const ViewContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  height: 100svh;
-  justify-content: center;
-  width: 100%;
-  align-items: center;
-`;
 
 export const Card = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
@@ -30,6 +19,7 @@ export const Card = styled.div`
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   padding: 20px;
   text-align: center;
+  position: relative;
 `;
 
 export const ButtonWrapper = styled.div`

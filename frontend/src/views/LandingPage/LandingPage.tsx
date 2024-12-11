@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import constants from '../../constants/Constants';
 import useAppService from '../../services/app/useAppService';
 import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
-import { ButtonWrapper, StyledDivider, StyledContent, Card } from './landingPage.styles';
-import { Button } from '../../components/common';
+import { ButtonWrapper, StyledDivider, StyledContent } from './landingPage.styles';
+import { Button, Card } from '../../components/common';
 
 export default function LandingPage() {
   const { setNMPFile } = useAppService();
@@ -42,7 +42,11 @@ export default function LandingPage() {
   };
 
   return (
-    <Card>
+    <Card
+      width="500px"
+      height="500px"
+      justifyContent="center"
+    >
       <StyledContent>
         <h1>Nutrient Management Calculator</h1>
         <p>

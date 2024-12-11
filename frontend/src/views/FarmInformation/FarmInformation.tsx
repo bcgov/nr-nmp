@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 import { localStorageKeyExists } from '../../utils/AppLocalStorage';
 import constants from '../../constants/Constants';
 import {
-  Card,
   CardHeader,
   Banner,
   Heading,
@@ -13,7 +12,7 @@ import {
   SelectorContainer,
   RegionContainer,
 } from './farmInformation.styles';
-import { InputField, RadioButton, Checkbox, Dropdown } from '../../components/common';
+import { InputField, RadioButton, Checkbox, Dropdown, Card } from '../../components/common';
 
 export default function FarmInformation() {
   const [formData, setFormData] = useState({
@@ -60,7 +59,11 @@ export default function FarmInformation() {
   ];
 
   return (
-    <Card>
+    <Card
+      height="500px"
+      width="600px"
+      justifyContent="flex-start"
+    >
       <CardHeader>
         <Banner>
           <Heading>Farm Information</Heading>
