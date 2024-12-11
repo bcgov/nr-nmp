@@ -70,7 +70,7 @@ objects:
                 - name: VITE_PORT
                   value: '5173'
                 - name: SSO_AUTH_SERVER_URL
-                  value: https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect
+                  value: ${{ vars.SSO_AUTH_SERVER_URL }}
                 - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
