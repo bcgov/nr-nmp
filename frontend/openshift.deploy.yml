@@ -69,9 +69,9 @@ objects:
                   value: https://${APP}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
                 - name: VITE_PORT
                   value: '5173'
-                - name: SSO_CLIENT_ID
                 - name: SSO_AUTH_SERVER_URL
                   value: https://dev.loginproxy.gov.bc.ca/auth/realms/standard/protocol/openid-connect
+                - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
                       name: nr-nmp-keycloak
