@@ -1,4 +1,4 @@
-import StyledApp from './App.styles';
+import { StyledApp, ViewContainer } from './App.styles';
 import { Header, Footer } from './components/common';
 import ViewRouter from './routes/ViewRouter';
 
@@ -9,7 +9,9 @@ function App() {
   return (
     <StyledApp>
       <Header />
-      <ViewRouter />
+      <ViewContainer>
+        <ViewRouter />
+      </ViewContainer>
       <Footer />
     </StyledApp>
   );
