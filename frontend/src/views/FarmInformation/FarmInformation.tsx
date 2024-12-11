@@ -5,8 +5,6 @@ import React, { useState, useEffect } from 'react';
 import { localStorageKeyExists } from '../../utils/AppLocalStorage';
 import constants from '../../constants/Constants';
 import {
-  ViewContainer,
-  Card,
   CardHeader,
   Banner,
   Heading,
@@ -14,7 +12,7 @@ import {
   SelectorContainer,
   RegionContainer,
 } from './farmInformation.styles';
-import { InputField, RadioButton, Checkbox, Dropdown } from '../../components/common';
+import { InputField, RadioButton, Checkbox, Dropdown, Card } from '../../components/common';
 
 export default function FarmInformation() {
   const [formData, setFormData] = useState({
@@ -61,76 +59,78 @@ export default function FarmInformation() {
   ];
 
   return (
-    <ViewContainer>
-      <Card>
-        <CardHeader>
-          <Banner>
-            <Heading>Farm Information</Heading>
-          </Banner>
-        </CardHeader>
-        <InputFieldsContainer>
-          <InputField
-            label="Year"
-            type="text"
-            name="Year"
-            value={formData.Year}
-            onChange={handleChange}
-            flex="0.5"
-          />
-          <InputField
-            label="Farm Name"
-            type="text"
-            name="FarmName"
-            value={formData.FarmName}
-            onChange={handleChange}
-            flex="1"
-          />
-        </InputFieldsContainer>
-        <RegionContainer>
-          <Dropdown
-            label="Region"
-            name="FarmRegion"
-            value={formData.FarmRegion}
-            options={regionOptions}
-            onChange={handleChange}
-            flex="0.35"
-          />
-        </RegionContainer>
+    <Card
+      height="500px"
+      width="600px"
+      justifyContent="flex-start"
+    >
+      <CardHeader>
+        <Banner>
+          <Heading>Farm Information</Heading>
+        </Banner>
+      </CardHeader>
+      <InputFieldsContainer>
+        <InputField
+          label="Year"
+          type="text"
+          name="Year"
+          value={formData.Year}
+          onChange={handleChange}
+          flex="0.5"
+        />
+        <InputField
+          label="Farm Name"
+          type="text"
+          name="FarmName"
+          value={formData.FarmName}
+          onChange={handleChange}
+          flex="1"
+        />
+      </InputFieldsContainer>
+      <RegionContainer>
+        <Dropdown
+          label="Region"
+          name="FarmRegion"
+          value={formData.FarmRegion}
+          options={regionOptions}
+          onChange={handleChange}
+          flex="0.35"
+        />
+      </RegionContainer>
+      <SelectorContainer>
+        <span style={{ marginRight: '8px' }}>I have crops</span>
+        <RadioButton
+          label="Yes"
+          name="Crops"
+          value="true"
+          checked={formData.Crops === 'true'}
+          onChange={handleChange}
+        />
+        <RadioButton
+          label="No"
+          name="Crops"
+          value="false"
+          checked={formData.Crops === 'false'}
+          onChange={handleChange}
+        />
+      </SelectorContainer>
+      {formData.Crops === 'true' && (
         <SelectorContainer>
-          <span style={{ marginRight: '8px' }}>I have crops</span>
-          <RadioButton
-            label="Yes"
-            name="Crops"
-            value="true"
-            checked={formData.Crops === 'true'}
+          <span style={{ marginRight: '8px' }}>Select your crops:</span>
+          <Checkbox
+            label="Vegetables"
+            name="HasVegetables"
+            checked={formData.HasVegetables}
             onChange={handleChange}
           />
-          <RadioButton
-            label="No"
-            name="Crops"
-            value="false"
-            checked={formData.Crops === 'false'}
+          <Checkbox
+            label="Berries"
+            name="HasBerries"
+            checked={formData.HasBerries}
             onChange={handleChange}
           />
         </SelectorContainer>
-        {formData.Crops === 'true' && (
-          <SelectorContainer>
-            <span style={{ marginRight: '8px' }}>Select your crops:</span>
-            <Checkbox
-              label="Vegetables"
-              name="HasVegetables"
-              checked={formData.HasVegetables}
-              onChange={handleChange}
-            />
-            <Checkbox
-              label="Berries"
-              name="HasBerries"
-              checked={formData.HasBerries}
-              onChange={handleChange}
-            />
-          </SelectorContainer>
-        )}
-      </Card>
-    </ViewContainer>
+      )}
+    </Card>
   );
 }

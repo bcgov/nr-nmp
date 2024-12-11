@@ -4,17 +4,6 @@
 import styled from '@emotion/styled';
 import screenSizes from '../../constants/screenSizes';
 
-export const ViewContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  height: 100svh;
-  justify-content: center;
-  width: 100%;
-  align-items: center;
-`;
-
 export const Card = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
   height: 500px;

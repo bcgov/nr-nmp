@@ -5,5 +5,6 @@ import InputField from './InputField/InputField';
 import RadioButton from './RadioButton/RadioButton';
 import Checkbox from './Checkbox/Checkbox';
 import Dropdown from './DropDown/DropDown';
+import Card from './Card/Card';
 
-export { Header, Button, Footer, InputField, RadioButton, Checkbox, Dropdown };
+export { Header, Button, Footer, InputField, RadioButton, Checkbox, Dropdown, Card };
