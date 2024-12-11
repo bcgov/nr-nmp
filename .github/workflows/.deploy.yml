@@ -76,6 +76,7 @@ jobs:
           parameters:
             -p IMAGE_TAG=${{ inputs.tag }}
             -p TARGET=${{ inputs.target }}
+            -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
           verification_path: /api/health
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
