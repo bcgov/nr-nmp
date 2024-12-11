@@ -20,6 +20,9 @@ parameters:
     description: Password for the PostgreSQL connection user.
     from: '[a-zA-Z0-9]{16}'
     generate: expression
+  - name: SSOAUTH
+    description: SSO Auth Server URL
+    required: true
 objects:
   - kind: Service
     apiVersion: v1
@@ -65,6 +68,8 @@ objects:
                   value: info
                 - name: POSTGRES_HOST
                   value: nr-nmp-database-${TARGET}
+                - name: SSO_AUTH_SERVER_URL
+                  value: ${SSOAUTH}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
