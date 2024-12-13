@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@bcgov/citz-imb-sso-express": "^1.0.2",
+    "@prisma/client": "^6.0.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -50,6 +51,7 @@
     "express": "^4.19.2",
     "morgan": "^1.10.0",
     "pg": "^8.11.5",
+    "prisma": "^6.0.1",
     "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
