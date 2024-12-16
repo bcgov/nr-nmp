@@ -64,6 +64,8 @@ jobs:
     needs: [init, database]
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
+    env:
+      DATABASE_URL: postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@${{ vars.OC_SERVER }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}
     steps:
       - name: Deploy Backend
         uses: bcgov-nr/action-deployer-openshift@v3.0.1
