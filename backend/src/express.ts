@@ -3,9 +3,7 @@
  * Any processing of Requests is done here before routing
  * to their target endpoints
  * @summary The file where middleware and routes are activated
- * @author GDamaso
  */
-import './db';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
@@ -34,7 +32,7 @@ app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(swaggerCo
 // Add the protectedRoute function to any endpoint routes in the Admin Portal
 
 // Routes
-app.use('/api', [routers.healthRouter, routers.developersRouter]);
+app.use('/api', [routers.healthRouter, routers.regionRouter]);
 
 // Integrate global error handler after routes to cover all ends.
 app.use(middleware.globalErrorHandler);
