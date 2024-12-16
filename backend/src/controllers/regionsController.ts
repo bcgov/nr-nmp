@@ -13,5 +13,4 @@ export const CreateRegion = async (req: Request, res: Response) => {
     },
   });
   res.status(201).send(region);
-//   might be res.json(region) instead of res.send(region)
 };
