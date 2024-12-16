@@ -23,6 +23,9 @@ parameters:
   - name: SSOAUTH
     description: SSO Auth Server URL
     required: true
+  - name: DB_URL
+    description: Database URL
+    required: true
 objects:
   - kind: Service
     apiVersion: v1
@@ -70,6 +73,8 @@ objects:
                   value: nr-nmp-database-${TARGET}
                 - name: SSO_AUTH_SERVER_URL
                   value: ${SSOAUTH}
+                - name: DATABASE_URL
+                  value: ${DB_URL}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
