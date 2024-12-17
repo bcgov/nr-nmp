@@ -105,6 +105,7 @@ objects:
                   value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
                 - name: DATABASE_URL
                   value: ${DATABASE_URL}
+              ports:
                 - containerPort: 3000
                   protocol: TCP
               readinessProbe:
