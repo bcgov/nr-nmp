@@ -18,8 +18,7 @@ parameters:
     required: true
   - name: DB_PASSWORD
     description: Password for the PostgreSQL connection user.
-    from: '[a-zA-Z0-9]{16}'
-    generate: expression
+    required: true
   - name: SSOAUTH
     description: SSO Auth Server URL
     required: true
@@ -102,7 +101,7 @@ objects:
                 - name: BACKEND_URL
                   value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
                 - name: DATABASE_URL
-                  value: postgresql://postgres:${DB_PASSWORD}@postgres:5432/postgres
+                  value: nr-nmp-database-${TARGET}://postgres:${DB_PASSWORD}@nr-nmp-database-${TARGET}:5432/postgres
               ports:
                 - containerPort: 3000
                   protocol: TCP
