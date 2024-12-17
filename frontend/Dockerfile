@@ -7,6 +7,9 @@ WORKDIR /app/
 # Copy package.json and package-lock.json first to leverage Docker cache
 COPY package*.json ./
 
+# Copy tgz necessary for dependencies
+COPY bcgov-citz-imb-sso-react-1.1.0-beta.tgz ./
+
 # Install dependencies
 RUN npm install
 
