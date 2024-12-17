@@ -101,6 +101,8 @@ objects:
                   value: https://${APP}-${TARGET}.apps.silver.devops.gov.bc.ca
                 - name: BACKEND_URL
                   value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+                - name: DATABASE_URL
+                  value: postgresql://postgres:${DB_PASSWORD}@postgres:5432/postgres
               ports:
                 - containerPort: 3000
                   protocol: TCP

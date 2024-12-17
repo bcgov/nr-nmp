@@ -64,8 +64,6 @@ jobs:
     needs: [init, database]
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
-    env:
-      DATABASE_URL: postgres://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@${{ vars.OC_SERVER }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}
     steps:
       - name: Deploy Backend
         uses: bcgov-nr/action-deployer-openshift@v3.0.1
@@ -79,6 +77,10 @@ jobs:
             -p IMAGE_TAG=${{ inputs.tag }}
             -p TARGET=${{ inputs.target }}
             -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
+            -p DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            -p DB_USER=${{ secrets.DB_USER }}
+            -p DB_NAME=${{ secrets.DB_NAME }}
+            -p DB_PORT=${{ secrets.DB_PORT }}
           verification_path: /api/health
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
