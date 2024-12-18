@@ -18,10 +18,12 @@ parameters:
     required: true
   - name: DB_PASSWORD
     description: Password for the PostgreSQL connection user.
-    from: '[a-zA-Z0-9]{16}'
-    generate: expression
+    required: true
   - name: SSOAUTH
     description: SSO Auth Server URL
+    required: true
+  - name: DATABASE_URL
+    description: Database URL
     required: true
 objects:
   - kind: Service
@@ -101,6 +103,8 @@ objects:
                   value: https://${APP}-${TARGET}.apps.silver.devops.gov.bc.ca
                 - name: BACKEND_URL
                   value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+                - name: DATABASE_URL
+                  value: ${DATABASE_URL}
               ports:
                 - containerPort: 3000
                   protocol: TCP
