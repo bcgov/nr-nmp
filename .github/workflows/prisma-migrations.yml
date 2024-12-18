@@ -1,17 +1,16 @@
 name: Prisma Migrations
 
 on:
-  push:
-    paths:
-      - 'backend/prisma/**'
-  pull_request:
-    paths:
-      - 'backend/prisma/**'
+  workflow_run:
+    workflows: [".deploy", "merge", "pr-open", "pr-close"] # Add the names of all the workflows that should run before this one
+    types:
+      - completed
 
 jobs:
   run-migrations:
     name: Run Prisma Migrations
     runs-on: ubuntu-22.04
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
