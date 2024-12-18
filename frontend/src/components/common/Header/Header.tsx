@@ -19,6 +19,7 @@ export default function Header() {
       login({
         backendURL: env.VITE_BACKEND_URL,
         idpHint: 'idir',
+        postLoginRedirectURL: '/admin',
       });
     }
   };
@@ -41,8 +42,8 @@ export default function Header() {
             variant="secondary"
             size="sm"
             disabled={false}
-            text={isAuthenticated ? 'Logout' : 'Login'}
-            aria-label={isAuthenticated ? 'Logout' : 'Login'}
+            text={isAuthenticated ? 'Logout' : 'Admin Login'}
+            aria-label={isAuthenticated ? 'Logout' : 'Admin Login'}
           />
         </ButtonWrapper>
       </Banner>
