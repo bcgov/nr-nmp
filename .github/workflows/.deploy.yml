@@ -82,6 +82,14 @@ jobs:
           verification_path: /api/health
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci  
+      - name: Run Prisma Migrations
+        run: |
+          cd backend
+          npx prisma migrate deploy
 
   frontend:
     name: Frontend
