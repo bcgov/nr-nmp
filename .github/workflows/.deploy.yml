@@ -87,6 +87,8 @@ jobs:
           cd backend
           npm ci  
       - name: Run Prisma Migrations
+        env:
+          DATABASE_URL: "postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@nr-nmp-database-${{ github.event.number }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}?schema=public"
         run: |
           cd backend
           npx prisma migrate deploy
