@@ -78,7 +78,7 @@ jobs:
             -p TARGET=${{ inputs.target }}
             -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
             -p DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-            -p DATABASE_URL="postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@nr-nmp-database-${{ inputs.target }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}?schema=public"
+            -p DATABASE_URL="postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@nr-nmp-database-${{ inputs.target }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}?schema=public&connect_timeout=300"
           verification_path: /api/health
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
