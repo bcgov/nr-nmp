@@ -2,8 +2,8 @@
  * @summary The Farm Information page for the application
  */
 import React, { useState, useEffect } from 'react';
-import { localStorageKeyExists } from '../../utils/AppLocalStorage';
-import constants from '../../constants/Constants';
+import useAppService from '@/services/app/useAppService';
+import NMPFile from '@/types/NMPFile';
 import {
   CardHeader,
   Banner,
@@ -11,10 +11,12 @@ import {
   InputFieldsContainer,
   SelectorContainer,
   RegionContainer,
+  ButtonWrapper,
 } from './farmInformation.styles';
-import { InputField, RadioButton, Checkbox, Dropdown, Card } from '../../components/common';
+import { InputField, RadioButton, Checkbox, Dropdown, Card, Button } from '../../components/common';
 
 export default function FarmInformation() {
+  const { state, setNMPFile } = useAppService();
   const [formData, setFormData] = useState({
     Year: '',
     FarmName: '',
@@ -25,26 +27,21 @@ export default function FarmInformation() {
   });
 
   useEffect(() => {
-    if (localStorageKeyExists(constants.NMP_FILE_KEY)) {
-      const data = localStorage.getItem(constants.NMP_FILE_KEY);
+    if (state.nmpFile) {
+      const data = state.nmpFile;
       if (data) {
-        try {
-          const parsedData = JSON.parse(data);
-          const secondParsedData = JSON.parse(parsedData);
-          setFormData({
-            Year: secondParsedData.farmDetails.Year || '',
-            FarmName: secondParsedData.farmDetails.FarmName || '',
-            FarmRegion: secondParsedData.farmDetails.FarmRegion || 0,
-            Crops: secondParsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
-            HasVegetables: secondParsedData.farmDetails.HasVegetables || false,
-            HasBerries: secondParsedData.farmDetails.HasBerries || false,
-          });
-        } catch (error) {
-          console.error('Error parsing JSON:', error);
-        }
+        const parsedData = JSON.parse(data);
+        setFormData({
+          Year: parsedData.farmDetails.Year || '',
+          FarmName: parsedData.farmDetails.FarmName || '',
+          FarmRegion: parsedData.farmDetails.FarmRegion || 0,
+          Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
+          HasVegetables: parsedData.farmDetails.HasVegetables || false,
+          HasBerries: parsedData.farmDetails.HasBerries || false,
+        });
       }
     }
-  }, []);
+  }, [state.nmpFile]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
@@ -57,6 +54,41 @@ export default function FarmInformation() {
     { value: 2, label: 'Cariboo' },
     { value: 3, label: 'Columbia Shuswap' },
   ];
+
+  const handleSubmit = () => {
+    const data = state.nmpFile;
+    let nmpFile: NMPFile;
+    if (data) {
+      try {
+        nmpFile = JSON.parse(data);
+
+        if (!nmpFile.farmDetails) {
+          nmpFile.farmDetails = {};
+        }
+        nmpFile.farmDetails.Year = formData.Year;
+        nmpFile.farmDetails.FarmName = formData.FarmName;
+        nmpFile.farmDetails.FarmRegion = formData.FarmRegion;
+        nmpFile.farmDetails.HasHorticulturalCrops = formData.Crops === 'true';
+        nmpFile.farmDetails.HasVegetables = formData.HasVegetables;
+        nmpFile.farmDetails.HasBerries = formData.HasBerries;
+      } catch (error) {
+        console.error('Failed to parse JSON data:', error);
+        return;
+      }
+    } else {
+      nmpFile = { farmDetails: {} };
+      nmpFile.farmDetails = {
+        Year: formData.Year,
+        FarmName: formData.FarmName,
+        FarmRegion: formData.FarmRegion,
+        HasHorticulturalCrops: formData.Crops === 'true',
+        HasVegetables: formData.HasVegetables,
+        HasBerries: formData.HasBerries,
+      };
+    }
+
+    setNMPFile(JSON.stringify(nmpFile));
+  };
 
   return (
     <Card
@@ -131,6 +163,18 @@ export default function FarmInformation() {
           />
         </SelectorContainer>
       )}
+      <ButtonWrapper>
+        <Button
+          text="Next"
+          size="lg"
+          handleClick={() => {
+            handleSubmit();
+          }}
+          aria-label="Next"
+          variant="primary"
+          disabled={false}
+        />
+      </ButtonWrapper>
     </Card>
   );
 }
