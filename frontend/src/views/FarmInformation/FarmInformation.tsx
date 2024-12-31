@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
+import defaultNMPFile from '../../constants/DefaultNMPFile';
 import {
   CardHeader,
   Banner,
@@ -56,36 +57,12 @@ export default function FarmInformation() {
   ];
 
   const handleSubmit = () => {
-    const data = state.nmpFile;
     let nmpFile: NMPFile;
-    if (data) {
-      try {
-        nmpFile = JSON.parse(data);
 
-        if (!nmpFile.farmDetails) {
-          nmpFile.farmDetails = {};
-        }
-        nmpFile.farmDetails.Year = formData.Year;
-        nmpFile.farmDetails.FarmName = formData.FarmName;
-        nmpFile.farmDetails.FarmRegion = formData.FarmRegion;
-        nmpFile.farmDetails.HasHorticulturalCrops = formData.Crops === 'true';
-        nmpFile.farmDetails.HasVegetables = formData.HasVegetables;
-        nmpFile.farmDetails.HasBerries = formData.HasBerries;
-      } catch (error) {
-        console.error('Failed to parse JSON data:', error);
-        return;
-      }
-    } else {
-      nmpFile = { farmDetails: {} };
-      nmpFile.farmDetails = {
-        Year: formData.Year,
-        FarmName: formData.FarmName,
-        FarmRegion: formData.FarmRegion,
-        HasHorticulturalCrops: formData.Crops === 'true',
-        HasVegetables: formData.HasVegetables,
-        HasBerries: formData.HasBerries,
-      };
-    }
+    if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
+    else nmpFile = defaultNMPFile;
+
+    nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
 
     setNMPFile(JSON.stringify(nmpFile));
   };
