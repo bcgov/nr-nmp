@@ -81,3 +81,13 @@ export const SelectorContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
 `;
+
+export const ButtonWrapper = styled.div`
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  button {
+    width: 120px;
+    height: 60px;
+  }
+`;
