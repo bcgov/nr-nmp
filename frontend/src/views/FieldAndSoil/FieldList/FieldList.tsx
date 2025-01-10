@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { Dropdown, InputField } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
-import { ListItemContainer } from './fieldList.styles';
+import ListItemContainer from './fieldList.styles';
 
 interface Field {
   FieldName: string;

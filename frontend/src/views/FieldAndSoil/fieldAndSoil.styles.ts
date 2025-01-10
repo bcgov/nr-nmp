@@ -31,24 +31,6 @@ export const Banner = styled.div`
   margin: 0;
 `;
 
-export const Heading = styled.h2`
-  color: #494949;
-  font-size: 16pt;
-  font-weight: 500;
-  min-width: 150px;
-  display: contents;
-  text-decoration: none;
-`;
-
-export const ListItemContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
 export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
   position: absolute;
   bottom: 16px;
@@ -57,19 +39,4 @@ export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
     width: 80px;
     height: 40px;
   }
-`;
-
-export const InfoBox = styled.div`
-  background-color: rgba(200, 200, 200, 0.3);
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-`;
-
-export const InfoBoxContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
 `;

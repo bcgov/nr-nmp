@@ -1,5 +1,5 @@
 /**
- * @summary The Field Information page for the application
+ * @summary The Field and Soil page for the application
  */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
