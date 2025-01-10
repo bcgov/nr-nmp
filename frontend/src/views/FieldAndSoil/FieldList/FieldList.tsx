@@ -135,7 +135,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           onChange={handleChange}
         />
         <InputField
-          label="Comment"
+          label="Comments (optional)"
           type="text"
           name="Comment"
           value={fieldFormData.Comment}

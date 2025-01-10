@@ -2,6 +2,7 @@
  * @summary The Field Information page for the application
  */
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
@@ -12,6 +13,7 @@ import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
 
 export default function FieldAndSoil() {
   const { state, setNMPFile } = useAppService();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [fields, setFields] = useState<
     {
@@ -62,6 +64,11 @@ export default function FieldAndSoil() {
     if (activeTab <= tabs.length) setActiveTab(activeTab + 1);
   };
 
+  const handlePrevious = () => {
+    if (activeTab > 0) setActiveTab(activeTab - 1);
+    else navigate('/farm-information');
+  };
+
   useEffect(() => {
     if (state.nmpFile) {
       const data = state.nmpFile;
@@ -91,7 +98,7 @@ export default function FieldAndSoil() {
         tabs={tabs}
         activeTab={activeTab}
       />
-      <ButtonWrapper>
+      <ButtonWrapper position="right">
         <Button
           text="Next"
           size="sm"
@@ -99,6 +106,18 @@ export default function FieldAndSoil() {
             handleNext();
           }}
           aria-label="Next"
+          variant="primary"
+          disabled={false}
+        />
+      </ButtonWrapper>
+      <ButtonWrapper position="left">
+        <Button
+          text="Back"
+          size="sm"
+          handleClick={() => {
+            handlePrevious();
+          }}
+          aria-label="Back"
           variant="primary"
           disabled={false}
         />

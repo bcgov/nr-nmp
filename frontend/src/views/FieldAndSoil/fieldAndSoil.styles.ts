@@ -49,10 +49,10 @@ export const ListItemContainer = styled.div`
   align-items: center;
 `;
 
-export const ButtonWrapper = styled.div`
+export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
   position: absolute;
   bottom: 16px;
-  right: 16px;
+  ${({ position }) => (position === 'left' ? 'left: 16px;' : 'right: 16px;')}
   button {
     width: 80px;
     height: 40px;
