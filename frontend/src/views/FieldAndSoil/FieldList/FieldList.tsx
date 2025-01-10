@@ -1,7 +1,7 @@
 /**
  * @summary This is the Field list Tab
  */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Dropdown, InputField } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
 import { ListItemContainer } from './fieldList.styles';
@@ -20,21 +20,23 @@ interface FieldListProps {
   setFields: (fields: Field[]) => void;
 }
 
+const initialFieldFormData = {
+  FieldName: '',
+  Area: '',
+  PreviousYearManureApplicationFrequency: '0',
+  Comment: '',
+  SoilTest: {},
+  Crops: [{}],
+};
+
 export default function FieldList({ fields, setFields }: FieldListProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [fieldformData, setFieldFormData] = useState({
-    FieldName: '',
-    Area: '',
-    PreviousYearManureApplicationFrequency: '0',
-    Comment: '',
-    SoilTest: {},
-    Crops: [{}],
-  });
+  const [fieldFormData, setFieldFormData] = useState<Field>(initialFieldFormData);
 
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFieldFormData({ ...fieldformData, [name]: value });
+    setFieldFormData({ ...fieldFormData, [name]: value });
   };
 
   const handleEdit = (index: number) => {
@@ -51,52 +53,47 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
   const handleSubmit = () => {
     if (editIndex !== null) {
       const updatedFields = fields.map((field, index) =>
-        index === editIndex ? fieldformData : field,
+        index === editIndex ? fieldFormData : field,
       );
       setFields(updatedFields);
       setEditIndex(null);
     } else {
-      setFields([...fields, fieldformData]);
+      setFields([...fields, fieldFormData]);
     }
-    setFieldFormData({
-      FieldName: '',
-      Area: '',
-      PreviousYearManureApplicationFrequency: '0',
-      Comment: '',
-      SoilTest: {},
-      Crops: [{}],
-    });
+    setFieldFormData(initialFieldFormData);
     setIsModalVisible(false);
   };
 
   const manureOptions = [
     { value: 0, label: 'Select' },
     { value: 1, label: 'No Manure in the last 2 years' },
-    { value: 2, label: 'Manure applied in 1 of the 2 years ' },
-    { value: 3, label: 'Manure applied in each of the 2 years ' },
+    { value: 2, label: 'Manure applied in 1 of the 2 years' },
+    { value: 3, label: 'Manure applied in each of the 2 years' },
   ];
 
   return (
     <div>
-      {fields.map((field, index) => (
-        <ListItemContainer key={field.FieldName}>
-          <p>Field Name: {field.FieldName}</p>
-          <p>Area: {field.Area}</p>
-          <p>Comment: {field.Comment}</p>
-          <button
-            type="button"
-            onClick={() => handleEdit(index)}
-          >
-            Edit
-          </button>
-          <button
-            type="button"
-            onClick={() => handleDelete(index)}
-          >
-            Delete
-          </button>
-        </ListItemContainer>
-      ))}
+      {fields
+        .filter((field) => field.FieldName.trim() !== '')
+        .map((field, index) => (
+          <ListItemContainer key={field.FieldName}>
+            <p>Field Name: {field.FieldName}</p>
+            <p>Area: {field.Area}</p>
+            <p>Comment: {field.Comment}</p>
+            <button
+              type="button"
+              onClick={() => handleEdit(index)}
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDelete(index)}
+            >
+              Delete
+            </button>
+          </ListItemContainer>
+        ))}
       <button
         type="button"
         onClick={() => setIsModalVisible(true)}
@@ -120,20 +117,20 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           label="Field Name"
           type="text"
           name="FieldName"
-          value={fieldformData.FieldName}
+          value={fieldFormData.FieldName}
           onChange={handleChange}
         />
         <InputField
           label="Area"
           type="text"
           name="Area"
-          value={fieldformData.Area.toString()}
+          value={fieldFormData.Area}
           onChange={handleChange}
         />
         <Dropdown
           label="Manure application in previous years"
           name="PreviousYearManureApplicationFrequency"
-          value={fieldformData.PreviousYearManureApplicationFrequency}
+          value={fieldFormData.PreviousYearManureApplicationFrequency}
           options={manureOptions}
           onChange={handleChange}
         />
@@ -141,7 +138,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           label="Comment"
           type="text"
           name="Comment"
-          value={fieldformData.Comment}
+          value={fieldFormData.Comment}
           onChange={handleChange}
         />
       </Modal>
