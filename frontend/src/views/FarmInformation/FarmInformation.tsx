@@ -35,7 +35,6 @@ export default function FarmInformation() {
       const data = state.nmpFile;
       if (data) {
         const parsedData = JSON.parse(data);
-        console.log(parsedData);
         setFormData({
           Year: parsedData.farmDetails.Year || '',
           FarmName: parsedData.farmDetails.FarmName || '',
@@ -64,7 +63,7 @@ export default function FarmInformation() {
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
 
     setNMPFile(JSON.stringify(nmpFile));
-    navigate('/field-list');
+    navigate('/field-and-soil');
   };
 
   return (
