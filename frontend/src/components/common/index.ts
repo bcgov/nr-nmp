@@ -6,5 +6,6 @@ import RadioButton from './RadioButton/RadioButton';
 import Checkbox from './Checkbox/Checkbox';
 import Dropdown from './DropDown/DropDown';
 import Card from './Card/Card';
+import Modal from './Modal/Modal';
 
-export { Header, Button, Footer, InputField, RadioButton, Checkbox, Dropdown, Card };
+export { Header, Button, Footer, InputField, RadioButton, Checkbox, Dropdown, Card, Modal };

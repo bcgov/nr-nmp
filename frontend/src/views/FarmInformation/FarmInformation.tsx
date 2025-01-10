@@ -2,9 +2,11 @@
  * @summary The Farm Information page for the application
  */
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '../../constants/DefaultNMPFile';
+import RegionOptions from '../../TempData/RegionOptions';
 import {
   CardHeader,
   Banner,
@@ -18,6 +20,7 @@ import { InputField, RadioButton, Checkbox, Dropdown, Card, Button } from '../..
 
 export default function FarmInformation() {
   const { state, setNMPFile } = useAppService();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Year: '',
     FarmName: '',
@@ -49,13 +52,6 @@ export default function FarmInformation() {
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
-  const regionOptions = [
-    { value: 0, label: 'Select a region' },
-    { value: 1, label: 'Bulkley-Nechako' },
-    { value: 2, label: 'Cariboo' },
-    { value: 3, label: 'Columbia Shuswap' },
-  ];
-
   const handleSubmit = () => {
     let nmpFile: NMPFile;
 
@@ -65,6 +61,7 @@ export default function FarmInformation() {
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
 
     setNMPFile(JSON.stringify(nmpFile));
+    navigate('/field-and-soil');
   };
 
   return (
@@ -101,7 +98,7 @@ export default function FarmInformation() {
           label="Region"
           name="FarmRegion"
           value={formData.FarmRegion}
-          options={regionOptions}
+          options={RegionOptions}
           onChange={handleChange}
           flex="0.35"
         />
@@ -143,7 +140,7 @@ export default function FarmInformation() {
       <ButtonWrapper>
         <Button
           text="Next"
-          size="lg"
+          size="sm"
           handleClick={() => {
             handleSubmit();
           }}
