@@ -100,9 +100,12 @@ objects:
                   protocol: TCP
               readinessProbe:
                 httpGet:
-                  path: /healthcheck
+                  path: /healthcheck/
                   port: 3000
                   scheme: HTTP
+                  httpHeaders:
+                  - name: host
+                    value: localhost
                 initialDelaySeconds: 90
                 periodSeconds: 15
                 timeoutSeconds: 10
@@ -112,9 +115,12 @@ objects:
                 successThreshold: 1
                 failureThreshold: 5
                 httpGet:
-                  path: /healthcheck
+                  path: /healthcheck/
                   port: 3000
                   scheme: HTTP
+                  httpHeaders:
+                  - name: host
+                    value: localhost
                 initialDelaySeconds: 15
                 periodSeconds: 30
                 timeoutSeconds: 5

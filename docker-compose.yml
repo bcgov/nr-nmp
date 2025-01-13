@@ -54,7 +54,7 @@ services:
       PORT: 3000
       <<: *postgres-vars
     healthcheck:
-     test: curl -L -I localhost:3000/healthcheck | grep 200
+     test: curl --fail http://localhost:3000 || exit 1
     ports: ["3000:3000"]
     # For debugging
     stdin_open: true
