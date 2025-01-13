@@ -1,3 +1,4 @@
+
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
@@ -16,9 +17,6 @@ parameters:
   - name: TARGET
     description: Deployment target; e.g. PR number, test or prod
     required: true
-  - name: DB_PASSWORD
-    description: Password for the PostgreSQL connection user.
-    from: '[a-zA-Z0-9]{16}'
     generate: expression
   - name: SSOAUTH
     description: SSO Auth Server URL
@@ -96,17 +94,13 @@ objects:
                       name: nr-nmp-keycloak
                       key: SSO_CLIENT_SECRET
                 - name: SSO_REDIRECT_URL
-                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/auth/callback
-                - name: FRONTEND_URL
-                  value: https://${APP}-${TARGET}.apps.silver.devops.gov.bc.ca
-                - name: BACKEND_URL
-                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
                 - containerPort: 3000
                   protocol: TCP
               readinessProbe:
                 httpGet:
-                  path: /api/health
+                  path: /healthcheck
                   port: 3000
                   scheme: HTTP
                 initialDelaySeconds: 90
@@ -118,7 +112,7 @@ objects:
                 successThreshold: 1
                 failureThreshold: 5
                 httpGet:
-                  path: /api/health
+                  path: /healthcheck
                   port: 3000
                   scheme: HTTP
                 initialDelaySeconds: 15
