@@ -2,8 +2,11 @@
  * @summary The Farm Information page for the application
  */
 import React, { useState, useEffect } from 'react';
-import { localStorageKeyExists } from '../../utils/AppLocalStorage';
-import constants from '../../constants/Constants';
+import { useNavigate } from 'react-router-dom';
+import useAppService from '@/services/app/useAppService';
+import NMPFile from '@/types/NMPFile';
+import defaultNMPFile from '../../constants/DefaultNMPFile';
+import RegionOptions from '../../TempData/RegionOptions';
 import {
   CardHeader,
   Banner,
@@ -11,10 +14,13 @@ import {
   InputFieldsContainer,
   SelectorContainer,
   RegionContainer,
+  ButtonWrapper,
 } from './farmInformation.styles';
-import { InputField, RadioButton, Checkbox, Dropdown, Card } from '../../components/common';
+import { InputField, RadioButton, Checkbox, Dropdown, Card, Button } from '../../components/common';
 
 export default function FarmInformation() {
+  const { state, setNMPFile } = useAppService();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Year: '',
     FarmName: '',
@@ -25,38 +31,38 @@ export default function FarmInformation() {
   });
 
   useEffect(() => {
-    if (localStorageKeyExists(constants.NMP_FILE_KEY)) {
-      const data = localStorage.getItem(constants.NMP_FILE_KEY);
+    if (state.nmpFile) {
+      const data = state.nmpFile;
       if (data) {
-        try {
-          const parsedData = JSON.parse(data);
-          const secondParsedData = JSON.parse(parsedData);
-          setFormData({
-            Year: secondParsedData.farmDetails.Year || '',
-            FarmName: secondParsedData.farmDetails.FarmName || '',
-            FarmRegion: secondParsedData.farmDetails.FarmRegion || 0,
-            Crops: secondParsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
-            HasVegetables: secondParsedData.farmDetails.HasVegetables || false,
-            HasBerries: secondParsedData.farmDetails.HasBerries || false,
-          });
-        } catch (error) {
-          console.error('Error parsing JSON:', error);
-        }
+        const parsedData = JSON.parse(data);
+        setFormData({
+          Year: parsedData.farmDetails.Year || '',
+          FarmName: parsedData.farmDetails.FarmName || '',
+          FarmRegion: parsedData.farmDetails.FarmRegion || 0,
+          Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
+          HasVegetables: parsedData.farmDetails.HasVegetables || false,
+          HasBerries: parsedData.farmDetails.HasBerries || false,
+        });
       }
     }
-  }, []);
+  }, [state.nmpFile]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
   };
 
-  const regionOptions = [
-    { value: 0, label: 'Select a region' },
-    { value: 1, label: 'Bulkley-Nechako' },
-    { value: 2, label: 'Cariboo' },
-    { value: 3, label: 'Columbia Shuswap' },
-  ];
+  const handleSubmit = () => {
+    let nmpFile: NMPFile;
+
+    if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
+    else nmpFile = defaultNMPFile;
+
+    nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
+
+    setNMPFile(JSON.stringify(nmpFile));
+    navigate('/field-and-soil');
+  };
 
   return (
     <Card
@@ -92,7 +98,7 @@ export default function FarmInformation() {
           label="Region"
           name="FarmRegion"
           value={formData.FarmRegion}
-          options={regionOptions}
+          options={RegionOptions}
           onChange={handleChange}
           flex="0.35"
         />
@@ -131,6 +137,18 @@ export default function FarmInformation() {
           />
         </SelectorContainer>
       )}
+      <ButtonWrapper>
+        <Button
+          text="Next"
+          size="sm"
+          handleClick={() => {
+            handleSubmit();
+          }}
+          aria-label="Next"
+          variant="primary"
+          disabled={false}
+        />
+      </ButtonWrapper>
     </Card>
   );
 }

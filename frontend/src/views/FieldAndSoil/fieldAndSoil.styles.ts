@@ -1,5 +1,5 @@
 /**
- * @summary Styling for FarmInformation view
+ * @summary Styling for FieldList view
  */
 import styled from '@emotion/styled';
 import screenSizes from '../../constants/screenSizes';
@@ -31,44 +31,10 @@ export const Banner = styled.div`
   margin: 0;
 `;
 
-export const Heading = styled.h2`
-  color: #494949;
-  font-size: 16pt;
-  font-weight: 500;
-  min-width: 150px;
-  display: contents;
-  text-decoration: none;
-`;
-
-export const InputFieldsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 16px;
-  margin-top: 100px;
-`;
-
-export const RegionContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-export const SelectorContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-export const ButtonWrapper = styled.div`
+export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
   position: absolute;
   bottom: 16px;
-  right: 16px;
+  ${({ position }) => (position === 'left' ? 'left: 16px;' : 'right: 16px;')}
   button {
     width: 80px;
     height: 40px;
