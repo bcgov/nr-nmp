@@ -84,7 +84,7 @@ export default function FieldAndSoil() {
       navigate('/calculate-nutrients');
     } else {
       setActiveTab(activeTab + 1);
-    }
+    };
   };
 
   const handlePrevious = () => {
