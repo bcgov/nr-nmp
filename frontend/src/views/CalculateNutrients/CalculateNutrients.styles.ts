@@ -40,17 +40,6 @@ export const Heading = styled.h2`
   text-decoration: none;
 `;
 
-export const Table = styled.div`
-`;
-
-export const TableWrapper = styled.div`
-  margin-top: 3em;
-`;
-
-export const TabWrapper = styled.div`
-  margin-left: 1em;
-`;
-
 export const InputFieldsContainer = styled.div`
   display: flex;
   width: 100%;
