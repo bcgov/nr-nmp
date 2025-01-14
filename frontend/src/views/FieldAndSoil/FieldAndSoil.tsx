@@ -72,7 +72,13 @@ export default function FieldAndSoil() {
     }
 
     setNMPFile(JSON.stringify(nmpFile));
-    if (activeTab <= tabs.length) setActiveTab(activeTab + 1);
+    
+    //if on the last tab navigate to calculate nutrients page
+    if (activeTab === tabs.length -1) {
+      navigate('/calculate-nutrients')
+    } else {
+      setActiveTab(activeTab + 1);
+    };
   };
 
   const handlePrevious = () => {
