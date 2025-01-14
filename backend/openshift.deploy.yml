@@ -33,7 +33,6 @@ objects:
       ports:
         - port: 3000
           targetPort: 3000
-          protocol: TCP
           name: http-3000
       selector:
         service: ${APP}-${TARGET}-${COMPONENT}
@@ -97,7 +96,6 @@ objects:
                   value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
                 - containerPort: 3000
-                  protocol: TCP
               readinessProbe:
                 httpGet:
                   path: /healthcheck/
