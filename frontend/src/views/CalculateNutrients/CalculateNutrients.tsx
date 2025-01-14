@@ -4,51 +4,50 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
-import NMPFile from '@/types/NMPFile';
-import defaultNMPFile from '@/constants/DefaultNMPFile';
-import { CardHeader, Banner, Heading, InputFieldsContainer, SelectorContainer, ButtonWrapper } from './CalculateNutrients.styles';
+import { CardHeader, Banner, Heading, Table, ButtonWrapper } from './CalculateNutrients.styles';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
-import { InputField, RadioButton, Checkbox, Dropdown, Card, Button } from '../../components/common';
+import { Card, Button } from '../../components/common';
+import FieldTable from '../CalculateNutrients/FieldTable'
 
 export default function CalculateNutrients() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [fields, setFields] = useState<
+  const [farmInfo, setFarmInfo] = useState<
     {
-      FieldName: string;
-      Crops: any[];
+      Fields: [
+        FieldName: string,
+        Id: number,
+        Crops: [
+          id: number,
+          cropId: string,
+          reqN: number,
+          reqP2o5: number,
+          reqK2o: number,
+          remN: number,
+          remP2o5: number,
+          remK2o: number,
+        ],
+      ],
     }[]
   >([]);
 
-  const tabs = fields && fields.length > 0 ? fields.map((field, index) => ({
-    id: field.FieldName,
+  //for each field create a tab with the field name and populate with its crops
+  //extra blank tab being created
+  const tabs = farmInfo ? farmInfo.map((field) => ({
+    id: field.Id,
     label: field.FieldName,
     content: (
-      <div key={field.FieldName} padding-top="3em">
-        <table>
-          <thead>
-            <tr>
-              <th>Crops</th>
-              <th>Agronomic (lb/ac)</th>
-              <th>Crop Removal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* {field.Crops.map((crop, cropIndex) => (
-              <tr key={cropIndex}>
-                <td>{crop.cropId}</td>
-                <td>{crop.agronomic}</td>
-                <td>{crop.cropRemoval}</td>
-              </tr>
-            ))} */}
-          </tbody>
-        </table>
-      </div>
+      <FieldTable
+        field={field}
+        farmInfo={farmInfo}
+        setFarmInfo={setFarmInfo}
+      />
     ),
   })) : [];
 
   const handleNext = () => {
+    //add next page in future ticket
     navigate('/')
   }
 
@@ -58,57 +57,35 @@ export default function CalculateNutrients() {
 
   useEffect(() => {
     if (state.nmpFile) {
-      const data = state.nmpFile;
-      if (data){
-        const parsedData = JSON.parse(data);
-        setFields(parsedData.years[0].Fields);
-      }
+      setFarmInfo(JSON.parse(state.nmpFile).years[0].Fields);
     }
-  }, [state.nmpFile]);
-
-  // const crops = fields.map((fields) =>
-  //   fields.Crops.map((crop) => ({
-  //     CropName: crop.cropId,
-  //   }))
-  // );
+  }, []);
 
   return (
     <Card
       height="500px"
       width="700px"
-      display="flex"
       justifyContent="flex-start"
     >
       <CardHeader>
         <Banner>
-          <Heading padding-right="1em">Calculate Nutrients</Heading>
+          <Heading>Calculate Nutrients</Heading>
             <TabOptions
               tabs={tabs}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
+              style="margin-left: 1em;"
             />
         </Banner>
       </CardHeader>
-      <ButtonWrapper position="Left">
-            <Button
-              text="Add Fertilizer"
-              size="sm"
-              handleClick={handleNext}
-              aria-label="Add Fertilizer"
-              variant="primary"
-              disabled={false}
-            />
-      </ButtonWrapper>
-      {/* <TabContentDisplay
-        tabs={tabs}
-        activeTab={activeTab}
-      /> */}
+      <Table>
       {tabs.length > 0 && (
         <TabContentDisplay
           tabs={tabs}
           activeTab={activeTab}
         />
       )}
+    </Table>
       <ButtonWrapper position="right">
         <Button
           text="Next"

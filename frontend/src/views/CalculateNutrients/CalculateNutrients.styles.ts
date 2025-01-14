@@ -38,6 +38,15 @@ export const Heading = styled.h2`
   min-width: 150px;
   display: contents;
   text-decoration: none;
+  padding-right: 1em;
+  margin-right: 1em;
+`;
+
+export const Table = styled.div`
+`;
+
+export const TableWrapper = styled.div`
+  margin-top: 3em;
 `;
 
 export const InputFieldsContainer = styled.div`
