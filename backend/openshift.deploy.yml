@@ -33,6 +33,7 @@ objects:
       ports:
         - port: 3000
           targetPort: 3000
+          protocol: TCP
           name: http-3000
       selector:
         service: ${APP}-${TARGET}-${COMPONENT}
@@ -96,32 +97,33 @@ objects:
                   value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
                 - containerPort: 3000
-              readinessProbe:
-                httpGet:
-                  path: /healthcheck/
-                  port: 3000
-                  scheme: HTTP
-                  httpHeaders:
-                  - name: host
-                    value: localhost
-                initialDelaySeconds: 90
-                periodSeconds: 15
-                timeoutSeconds: 10
-                successThreshold: 3
-                failureThreshold: 30
-              livenessProbe:
-                successThreshold: 1
-                failureThreshold: 5
-                httpGet:
-                  path: /healthcheck/
-                  port: 3000
-                  scheme: HTTP
-                  httpHeaders:
-                  - name: host
-                    value: localhost
-                initialDelaySeconds: 15
-                periodSeconds: 30
-                timeoutSeconds: 5
+                  protocol: TCP
+              # readinessProbe:
+              #   httpGet:
+              #     path: /healthcheck/
+              #     port: 3000
+              #     scheme: HTTP
+              #     httpHeaders:
+              #     - name: host
+              #       value: localhost
+              #   initialDelaySeconds: 90
+              #   periodSeconds: 15
+              #   timeoutSeconds: 10
+              #   successThreshold: 3
+              #   failureThreshold: 30
+              # livenessProbe:
+              #   successThreshold: 1
+              #   failureThreshold: 5
+              #   httpGet:
+              #     path: /healthcheck/
+              #     port: 3000
+              #     scheme: HTTP
+              #     httpHeaders:
+              #     - name: host
+              #       value: localhost
+              #   initialDelaySeconds: 15
+              #   periodSeconds: 30
+              #   timeoutSeconds: 5
               resources: # this is optional
                 limits:
                   cpu: 150m
