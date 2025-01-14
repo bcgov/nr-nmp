@@ -1,60 +1,15 @@
-# Welcome to QuackStack 'Better Berries' API 🚀
+# How to Debug
 
-## About the API
+The backend can be easily debugged in VSCode with the following:
 
-Our backend is a RESTful API written with TypeScript and the Express framework. It integrates with a PostgreSQL database and serves content to a React frontend. This API leverages OpenShift for cloud deployment and Docker for containerization.
+1. Ensure you have the Python and Python Debugger extensions installed in VSCode.
+2. Add `breakpoint()` into the code wherever you'd like the debugger to pause.
+3. In one terminal tab, run `docker compose up database`.
+4. In a new terminal tab, run `docker compose -d up backend`. This will compose the backend in the background.
+5. In the same terminal tab, run `docker attach {container id}`. You can find the container id in Docker Desktop. This command attaches stdin, stdout, and stderr to this terminal.
+6. In VSCode, go to the "Run and Debug" tab. In the top bar, click the green triangle next to "Attach (remote debug)".
+7. If debugging the API, run `docker compose up frontend` in a new terminal tab. Otherwise proceed to step 8.
+8. Open the localhost website and initiate whatever flow you're debugging. The website should pause at the breakpoint, and in the attached terminal tab you'll see the Pdb (Python debugger) interface.
+9. Debug away! (Pdb command guide at: https://docs.python.org/3/library/pdb.html#debugger-commands)
 
-Documentation is accessible through Swagger.
-
-## Running this API
-
-This Express API requires connection to this applications database to properly respond to requests. This projects docker-compose config will set things up automatically when running localy. There are default values set up for development.
-
-To run with docker compose with hot reload for development, run:
-`docker compose up -watch`
-
-## Accessing the API Documentation
-
-If running with docker compose:
-`http://localhost:3000/api/api-docs`
-
-_The OpenShift deploy is on its way and will be published soon._
-
-## Testing the API
-
-This API is tested with Jest framework.
-
-There are suites covering all endpoints. Each suite should test all response statuses and data to ensure proper behaviour of the API.
-
-A test suite for an endpoint should check for status and data to ensure no false positive responses are being created.
-The simplest test looks like:
-
-```typescript
-describe('Test the health path', () => {
-  test('returns status code 200 if healthy', async () => {
-    const res = await testRequest.get('/health');
-
-    expect(res.statusCode).toEqual(200);
-    expect(res.text).toBe('Better Berries API is healthy and ready!');
-  });
-});
-```
-
-To run the test suits, just run this command from this backend directory, while the application runs locally with docker compose:
-`npm run test`
-
-## Environment Variables
-
-Here's a summary of the essential environment variables:
-
-| Key                 | Example            | Description                                    |
-| ------------------- | ------------------ | ---------------------------------------------- |
-| `API_HOST`          | `'localhost'`      | Determines the hosting environment.            |
-| `API_PORT`          | `'3000'`           | Specifies the host API port.                   |
-| `POSTGRES_USER`     | `'dbUsr'`          | PostgreSQL username for database connections.  |
-| `POSTGRES_PASSWORD` | `'useASafePasswd'` | PostgreSQL password for database connections.  |
-| `POSTGRES_DATABASE` | `'dbName'`         | Name of the PostgreSQL database to connect to. |
-| `POSTGRES_HOST`     | `'localhost:1234'` | Address of the PostgreSQL host.                |
-| `POSTGRES_PORT`     | `'1234'`           | Port where PostgreSQL is exposed.              |
-
-Written by @GDamaso
+Note that this method of debugging relies on the `stdin_open` and `tty` being set to true in the docker-compose file.

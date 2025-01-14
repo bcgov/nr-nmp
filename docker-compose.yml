@@ -55,8 +55,11 @@ services:
       PORT: 3000
       <<: *postgres-vars
     healthcheck:
-      test: curl localhost:3000/api/health | grep 'NMP API is healthy and ready!'
-    ports: [3000:3000]
+     test: curl --fail http://localhost:3000 || exit 1
+    ports: ["3000:3000"]
+    # For debugging
+    stdin_open: true
+    tty: true
 
   # Frontend
   frontend:
@@ -66,12 +69,12 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: ./frontend
-    #       target: /app
-    #       ignore: [node_modules]
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore: [node_modules]
     env_file: .env
     environment:
       VITE_BACKEND_URL: http://localhost:3000
