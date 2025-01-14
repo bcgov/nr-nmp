@@ -21,3 +21,33 @@ objects:
       database-password: ${DB_PASSWORD}
       database-port: ${DB_PORT}
       database-user: ${DB_USER}
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: allow-from-openshift-ingress
+      labels:
+        template: openshift-test
+    spec:
+      ingress:
+        - from:
+            - namespaceSelector:
+                matchLabels:
+                  network.openshift.io/policy-group: ingress
+      policyTypes:
+        - Ingress
+  - apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: allow-same-namespace
+      labels:
+        template: nr-spar-backend-network-security-policy
+    spec:
+      podSelector: {}
+      ingress:
+        - from:
+          - namespaceSelector:
+              matchLabels:
+                environment: dev
+                name: fa23a0
+      policyTypes:
+        - Ingress
