@@ -4,14 +4,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
-import {
-  CardHeader,
-  Banner,
-  Heading,
-  Table,
-  ButtonWrapper,
-  TabWrapper,
-} from './CalculateNutrients.styles';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import { CardHeader, Banner, Heading, InputFieldsContainer, SelectorContainer, ButtonWrapper } from './CalculateNutrients.styles';
@@ -25,13 +17,6 @@ export default function CalculateNutrients() {
   const [fields, setFields] = useState<
     {
       FieldName: string;
-      Crops: any[];
-      FieldName: string;
-      Id: number;
-      Area: string;
-      PreviousYearManureApplicationFrequency: string;
-      Comment: string;
-      SoilTest: object;
       Crops: any[];
     }[]
   >([]);
@@ -189,7 +174,7 @@ export default function CalculateNutrients() {
   // extra blank tab being created
   const tabs = fields
     ? fields.map((field) => ({
-        id: field.Id.toString(),
+        id: field.Id,
         label: field.FieldName,
         content: (
           <FieldTable
@@ -198,12 +183,11 @@ export default function CalculateNutrients() {
           />
         ),
       }))
-    : [state];
+    : [];
 
   const handleNext = () => {
-    // add next page in future ticket
-    navigate('/');
-  };
+    navigate('/')
+  }
 
   const handlePrevious = () => {
     navigate('/field-and-soil');
@@ -211,7 +195,11 @@ export default function CalculateNutrients() {
 
   useEffect(() => {
     if (state.nmpFile) {
-      setFields(JSON.parse(state.nmpFile).years[0].Fields);
+      const data = state.nmpFile;
+      if (data){
+        const parsedData = JSON.parse(data);
+        setFields(parsedData.years[0].Fields);
+      }
     }
   }, [state.nmpFile]);
 
@@ -225,7 +213,7 @@ export default function CalculateNutrients() {
     <Card
       height="500px"
       width="700px"
-      justifyContent='flex-start'
+      justifyContent="flex-start"
     >
       <CardHeader>
         <Banner>
@@ -237,26 +225,14 @@ export default function CalculateNutrients() {
             />
         </Banner>
       </CardHeader>
-      <ButtonWrapper position="left">
-            <Button
-              text="Add Fertilizer"
-              size="sm"
-              handleClick={handleNext}
-              aria-label="Add Fertilizer"
-              variant="primary"
-              disabled={false}
-            />
-      </ButtonWrapper>
-      {/* <TabContentDisplay
-        tabs={tabs}
-        activeTab={activeTab}
-      /> */}
-      {tabs.length > 0 && (
-        <TabContentDisplay
-          tabs={tabs}
-          activeTab={activeTab}
-        />
-      )}
+      <Table>
+        {tabs.length > 0 && (
+          <TabContentDisplay
+            tabs={tabs}
+            activeTab={activeTab}
+          />
+        )}
+      </Table>
       <ButtonWrapper position="right">
         <Button
           text="Next"
