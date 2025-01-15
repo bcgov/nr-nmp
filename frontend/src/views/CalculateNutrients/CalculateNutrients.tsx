@@ -4,10 +4,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
-import { CardHeader, Banner, Heading, Table, ButtonWrapper } from './CalculateNutrients.styles';
+import { CardHeader, Banner, Heading, Table, ButtonWrapper, TabWrapper } from './CalculateNutrients.styles';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { Card, Button } from '../../components/common';
-import FieldTable from '../CalculateNutrients/FieldTable'
+import FieldTable from './FieldTable/FieldTable'
 
 export default function CalculateNutrients() {
   const { state, setNMPFile } = useAppService();
@@ -70,22 +70,23 @@ export default function CalculateNutrients() {
       <CardHeader>
         <Banner>
           <Heading>Calculate Nutrients</Heading>
-            <TabOptions
-              tabs={tabs}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              style="margin-left: 1em;"
-            />
         </Banner>
+        <TabWrapper>
+          <TabOptions
+            tabs={tabs}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        </TabWrapper>
       </CardHeader>
       <Table>
-      {tabs.length > 0 && (
-        <TabContentDisplay
-          tabs={tabs}
-          activeTab={activeTab}
-        />
-      )}
-    </Table>
+        {tabs.length > 0 && (
+          <TabContentDisplay
+            tabs={tabs}
+            activeTab={activeTab}
+          />
+        )}
+      </Table>
       <ButtonWrapper position="right">
         <Button
           text="Next"

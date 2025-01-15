@@ -3,16 +3,18 @@ import styled from '@emotion/styled';
 export const TabsWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 1em;
 `;
 
 export const Tab = styled.button<{ active: boolean }>`
   padding: 10px 20px;
   cursor: pointer;
-  background-color: ${({ active }) => (active ? '#036' : '#ccc')};
-  color: ${({ active }) => (active ? '#fff' : '#000')};
+  background-color: ${({ active }) => (active ? '#FFFFFF' : '#ccc')};
+  color: ${({ active }) => (active ? '#000' : '#000')};
   border: none;
-  border-bottom: ${({ active }) => (active ? '2px solid #fcba19' : 'none')};
-  border-radius: 5px;
+  border-top: ${({ active }) => (active ? '2px solid #fcba19' : 'none')};
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   height: 50px;
   &:hover {
     background-color: #036;
