@@ -6,7 +6,7 @@ import { Table, TableWrapper, InputFieldsContainer, SelectorContainer, ButtonWra
 import {InputField, Dropdown, Button} from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
 
-export default function FieldTable({ field, farmInfo, setFarmInfo }) {
+export default function FieldTable({ field, setFields }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const fertilizerOptions = [
@@ -18,11 +18,11 @@ export default function FieldTable({ field, farmInfo, setFarmInfo }) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFarmInfo(farmInfo.map((field: any) => ({ ...field, [name]: value })));
+    setFields(field.map((field) => ({ ...field, [name]: value })));
   };
 
   const handleSubmit = () => {
-    setFarmInfo({ ...farmInfo,});
+    setFields({ ...field,});
     setIsModalVisible(false);
   };
 
@@ -51,7 +51,7 @@ export default function FieldTable({ field, farmInfo, setFarmInfo }) {
           <Dropdown
             label="Fertilizer"
             name="Fertilizer"
-            value={field.Fertilizer}
+            // value={field.Fertilizer}
             options={fertilizerOptions}
             onChange={handleChange}
           />

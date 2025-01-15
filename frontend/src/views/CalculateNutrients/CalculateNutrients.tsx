@@ -4,7 +4,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
-import { CardHeader, Banner, Heading, Table, ButtonWrapper, TabWrapper } from './CalculateNutrients.styles';
+import {
+  CardHeader,
+  Banner,
+  Heading,
+  Table,
+  ButtonWrapper,
+  TabWrapper,
+} from './CalculateNutrients.styles';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { Card, Button } from '../../components/common';
 import FieldTable from './FieldTable/FieldTable'
@@ -13,43 +20,37 @@ export default function CalculateNutrients() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [farmInfo, setFarmInfo] = useState<
+  const [fields, setFields] = useState<
     {
-      Fields: [
-        FieldName: string,
-        Id: number,
-        Crops: [
-          id: number,
-          cropId: string,
-          reqN: number,
-          reqP2o5: number,
-          reqK2o: number,
-          remN: number,
-          remP2o5: number,
-          remK2o: number,
-        ],
-      ],
+      FieldName: string;
+      Id: number;
+      Area: string;
+      PreviousYearManureApplicationFrequency: string;
+      Comment: string;
+      SoilTest: object;
+      Crops: any[];
     }[]
   >([]);
 
-  //for each field create a tab with the field name and populate with its crops
-  //extra blank tab being created
-  const tabs = farmInfo ? farmInfo.map((field) => ({
-    id: field.Id,
-    label: field.FieldName,
-    content: (
-      <FieldTable
-        field={field}
-        farmInfo={farmInfo}
-        setFarmInfo={setFarmInfo}
-      />
-    ),
-  })) : [];
+  // for each field create a tab with the field name and populate with its crops
+  // extra blank tab being created
+  const tabs = fields
+    ? fields.map((field) => ({
+        id: field.Id,
+        label: field.FieldName,
+        content: (
+          <FieldTable
+            field={field}
+            setFields={setFields}
+          />
+        ),
+      }))
+    : [];
 
   const handleNext = () => {
-    //add next page in future ticket
-    navigate('/')
-  }
+    // add next page in future ticket
+    navigate('/');
+  };
 
   const handlePrevious = () => {
     navigate('/field-and-soil');
@@ -57,7 +58,7 @@ export default function CalculateNutrients() {
 
   useEffect(() => {
     if (state.nmpFile) {
-      setFarmInfo(JSON.parse(state.nmpFile).years[0].Fields);
+      setFields(JSON.parse(state.nmpFile).years[0].Fields);
     }
   }, []);
 
