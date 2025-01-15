@@ -2,11 +2,12 @@
  * @summary This is the Crops Tab
  */
 import { useState } from 'react';
-import { Modal, InputField } from '../../../components/common';
+import { Modal, InputField, Dropdown } from '../../../components/common';
 import { ListItemContainer } from './crops.styles';
 
 interface CropData {
   coverCropHarvested: null | string;
+  cropTypeId?: string;
   cropId: string;
   cropOther: null | string;
   crudeProtien: null | string;
@@ -45,9 +46,27 @@ interface FieldListProps {
   setFields: (fields: any[]) => void;
 }
 
+const cropTypes = [
+  {
+    value: 0,
+    label: 'Select',
+    crops: [{ value: 0, label: 'Select' }],
+  },
+  {
+    value: 1,
+    label: 'Forage',
+    crops: [
+      { value: 0, label: 'Select' },
+      { value: 1, label: 'Alfalfa or legume dominant stand (1 cut)' },
+      { value: 2, label: 'Alfalfa or legume dominant stand (1 cut)' },
+    ],
+  },
+];
+
 export default function Crops({ fields, setFields }: FieldListProps) {
   const [cropsData, setCropsData] = useState<CropData>({
     coverCropHarvested: null,
+    cropTypeId: '',
     cropId: '',
     cropOther: null,
     crudeProtien: null,
@@ -73,19 +92,25 @@ export default function Crops({ fields, setFields }: FieldListProps) {
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
+  const [filteredCrops, setFilteredCrops] = useState<{ value: number; label: string }[]>([]);
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setCropsData({ ...cropsData, [name]: value });
+
+    if (name === 'cropTypeId') {
+      const selectedCropType = cropTypes.find((type) => type.value === parseInt(value, 10));
+      setFilteredCrops(selectedCropType ? selectedCropType.crops : []);
+    }
   };
 
-  const handleEditSoilTest = (index: number) => {
+  const handleEditCrop = (index: number) => {
     setCurrentFieldIndex(index);
     setCropsData(fields[index].Crops[0] || cropsData);
     setIsModalVisible(true);
   };
 
-  const handleDeleteSoilTest = (index: number) => {
+  const handleDeleteCrop = (index: number) => {
     const updatedFields = fields.map((field, i) =>
       i === index ? { ...field, SoilTest: {} } : field,
     );
@@ -111,7 +136,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
             {Object.keys(field.Crops).length === 0 ? (
               <button
                 type="button"
-                onClick={() => handleEditSoilTest(index)}
+                onClick={() => handleEditCrop(index)}
               >
                 Add Crop
               </button>
@@ -119,21 +144,21 @@ export default function Crops({ fields, setFields }: FieldListProps) {
               <>
                 <button
                   type="button"
-                  onClick={() => handleEditSoilTest(index)}
+                  onClick={() => handleEditCrop(index)}
                 >
                   Add Crop
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleEditSoilTest(index)}
+                  onClick={() => handleEditCrop(index)}
                 >
-                  Edit Soil Test
+                  Edit Crop
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDeleteSoilTest(index)}
+                  onClick={() => handleDeleteCrop(index)}
                 >
-                  Delete Soil Test
+                  Delete Crop
                 </button>
               </>
             )}
@@ -154,11 +179,25 @@ export default function Crops({ fields, setFields }: FieldListProps) {
             </button>
           }
         >
+          <Dropdown
+            label="Crop Type"
+            name="cropTypeId"
+            value={cropsData.cropTypeId ?? ''}
+            options={cropTypes}
+            onChange={handleChange}
+          />
+          <Dropdown
+            label="Crop"
+            name="cropId"
+            value={cropsData.cropId}
+            options={filteredCrops}
+            onChange={handleChange}
+          />
           <InputField
-            label="NO3-N (ppm), nitrate-nitrogen"
-            type="number"
-            name="remK2o"
-            value={cropsData.remK2o?.toString() ?? ''}
+            label="Yield"
+            type="text"
+            name="yield"
+            value={cropsData.yield?.toString() || ''}
             onChange={handleChange}
           />
         </Modal>
