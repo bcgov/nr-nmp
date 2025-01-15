@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
+import fieldType from '@/types/fieldType';
 import {
   CardHeader,
   Banner,
@@ -20,26 +21,16 @@ export default function CalculateNutrients() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [fields, setFields] = useState<
-    {
-      FieldName: string;
-      Id: number;
-      Area: string;
-      PreviousYearManureApplicationFrequency: string;
-      Comment: string;
-      SoilTest: object;
-      Crops: any[];
-    }[]
-  >([]);
+  const [fields, setFields] = useState<fieldType[]>([]);
 
   // for each field create a tab with the field name and populate with its crops
-  // extra blank tab being created
   const tabs = fields
     ? fields.map((field) => ({
         id: field.Id,
         label: field.FieldName,
         content: (
           <FieldTable
+            key={field.Id}
             field={field}
             setFields={setFields}
           />
