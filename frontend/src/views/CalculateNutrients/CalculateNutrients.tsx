@@ -4,6 +4,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
+import {
+  CardHeader,
+  Banner,
+  Heading,
+  Table,
+  ButtonWrapper,
+  TabWrapper,
+} from './CalculateNutrients.styles';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import { CardHeader, Banner, Heading, InputFieldsContainer, SelectorContainer, ButtonWrapper } from './CalculateNutrients.styles';
@@ -17,6 +25,13 @@ export default function CalculateNutrients() {
   const [fields, setFields] = useState<
     {
       FieldName: string;
+      Crops: any[];
+      FieldName: string;
+      Id: number;
+      Area: string;
+      PreviousYearManureApplicationFrequency: string;
+      Comment: string;
+      SoilTest: object;
       Crops: any[];
     }[]
   >([]);
