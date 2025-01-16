@@ -1,0 +1,6 @@
+django>=5.1.4
+django-allauth>=65.3
+psycopg2-binary>=2.9
+python-dotenv>=1.0
+requests>=2.32
+debugpy>=1.8
