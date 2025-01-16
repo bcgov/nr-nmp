@@ -49,7 +49,7 @@ objects:
         - from:
           - namespaceSelector:
               matchLabels:
-                environment: dev
+                environment: ${TARGET}
                 name: fa23a0
       policyTypes:
         - Ingress
