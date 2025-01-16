@@ -3,6 +3,7 @@
  */
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import constants from '../../constants/Constants';
 import useAppService from '../../services/app/useAppService';
 import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
@@ -43,16 +44,23 @@ export default function LandingPage() {
     navigate('/farm-information');
   };
 
+  const fetchData = async () => {
+    const response = await axios.get('http://localhost:3000/api/croptypes/');
+    setResult(response.statusText);
+    console.log(response);
+  };
+
   useEffect(() => {
-    fetch('localhost:3000/api/croptypes/')
-      .then((response) => {
-        console.log(response);
-        setResult(response.statusText);
-      })
-      .catch((error) => {
-        setResult(error);
-      });
-  });
+    // fetch('http://localhost:3000/api/croptypes/')
+    //   .then((response) => {
+    //     console.log(response);
+    //     setResult(response.statusText);
+    //   })
+    //   .catch((error) => {
+    //     setResult(error);
+    //   });
+    fetchData();
+  }, []);
 
   return (
     <Card
