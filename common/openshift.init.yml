@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 parameters:
-  - name: NAME_SUFFIX
+  - name: TARGET
     required: true
   - name: DB_PASSWORD
     required: true
@@ -15,7 +15,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: nr-nmp-database${NAME_SUFFIX}
+      name: nr-nmp-database-${TARGET}
     stringData:
       database-name: ${DB_NAME}
       database-password: ${DB_PASSWORD}
@@ -47,7 +47,7 @@ objects:
         - from:
           - namespaceSelector:
               matchLabels:
-                environment: dev
+                environment: ${TARGET}
                 name: fa23a0
       policyTypes:
         - Ingress
