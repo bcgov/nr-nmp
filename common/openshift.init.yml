@@ -3,6 +3,8 @@ kind: Template
 parameters:
   - name: TARGET
     required: true
+  - name: ENV
+    required: true
   - name: DB_PASSWORD
     required: true
   - name: DB_USER
@@ -47,7 +49,7 @@ objects:
         - from:
           - namespaceSelector:
               matchLabels:
-                environment: ${TARGET}
+                environment: ${ENV}
                 name: fa23a0
       policyTypes:
         - Ingress
