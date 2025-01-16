@@ -2,6 +2,7 @@
  * @summary The landing page for the application
  */
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import constants from '../../constants/Constants';
 import useAppService from '../../services/app/useAppService';
 import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
@@ -11,6 +12,7 @@ import { Button, Card } from '../../components/common';
 export default function LandingPage() {
   const { setNMPFile } = useAppService();
   const navigate = useNavigate();
+  const [result, setResult] = useState<string>('');
 
   const handleUpload = () => {
     const upload = document.getElementById('fileUp');
@@ -41,6 +43,17 @@ export default function LandingPage() {
     navigate('/farm-information');
   };
 
+  useEffect(() => {
+    fetch('localhost:3000/api/croptypes/')
+      .then((response) => {
+        console.log(response);
+        setResult(response.statusText);
+      })
+      .catch((error) => {
+        setResult(error);
+      });
+  });
+
   return (
     <Card
       width="500px"
@@ -55,6 +68,7 @@ export default function LandingPage() {
           nutrient source for your crops. You can start a new calculation or pick up where you left
           off by uploading an existing .nmp file.
         </p>
+        {result && <p>{result}</p>}
       </StyledContent>
       <ButtonWrapper>
         <Button

@@ -1,5 +1,5 @@
 """
-URL configuration for nmp project.
+URL configuration for the project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -26,4 +26,5 @@ urlpatterns = [
     # TODO: make a better accounts/login page
     path('accounts/', include('allauth.urls')),
     path('healthcheck/', health_check, name='health_check'),
+    path('api/', include('apps.api.urls')),
 ]
