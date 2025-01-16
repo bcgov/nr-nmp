@@ -6,7 +6,7 @@ import { Table, TableWrapper, InputFieldsContainer, SelectorContainer, ButtonWra
 import {InputField, Dropdown, Button} from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
 
-export default function FieldTable({ field, setFields }) {
+export default function FieldTable({ key, field, setFields }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const fertilizerOptions = [

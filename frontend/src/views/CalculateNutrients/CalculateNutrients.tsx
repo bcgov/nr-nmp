@@ -26,7 +26,7 @@ export default function CalculateNutrients() {
   // for each field create a tab with the field name and populate with its crops
   const tabs = fields
     ? fields.map((field) => ({
-        id: field.Id,
+        id: field.FieldName,
         label: field.FieldName,
         content: (
           <FieldTable
@@ -49,9 +49,10 @@ export default function CalculateNutrients() {
 
   useEffect(() => {
     if (state.nmpFile) {
-      setFields(JSON.parse(state.nmpFile).years[0].Fields);
+      const parsedData = JSON.parse(state.nmpFile);
+      setFields(parsedData.years[0].Fields);
     }
-  }, []);
+  }, [state]);
 
   return (
     <Card
