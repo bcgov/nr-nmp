@@ -29,28 +29,37 @@ SECRET_KEY = 'django-insecure-y*-zsvc=qasr^th3%4m8zmt!t-s_2&yuzlyk^h1*%ufic+l_k5
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '.apps.silver.devops.gov.bc.ca']
+
+# Silence the system check that errors when the Id column is not a primary key
+SILENCED_SYSTEM_CHECKS = ['models.E004']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
+    # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third Party
+    'corsheaders',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.openid_connect',
     'allauth.usersessions',
     'rest_framework',
+
+    # Apps for this project
+    'apps.api',
+    'apps.crops',
 ]
 
 MIDDLEWARE = [
