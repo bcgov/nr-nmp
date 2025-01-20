@@ -36,7 +36,6 @@ jobs:
           overwrite: true
           parameters:
             -p TARGET=${{ inputs.target }}
-            -p ENV=${{inputs.environment}}
             -p DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             -p DB_USER=${{ secrets.DB_USER }}
             -p DB_NAME=${{ secrets.DB_NAME }}
