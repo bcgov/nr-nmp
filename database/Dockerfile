@@ -1,7 +1,8 @@
-FROM postgis/postgis:15-master
+FROM postgres:17
 
 # Copy startup scripts
-COPY db/entrypoint/* /docker-entrypoint-initdb.d/
+# Change trimmed_tables to seed_tables if you want to run the SQL there
+COPY db/trimmed_tables/*/* /docker-entrypoint-initdb.d/
 
 # User, port and Healthcheck
 USER postgres
