@@ -6,14 +6,12 @@ class CropTypes(models.Model):
     # Trying to add some fake primary key that doesn't exist in the table also errors
     # This composite key is only supported in an alpha build of Django
     # But even the alpha build doesn't support composite keys on the admin portal
-    # pk = models.CompositePrimaryKey('id', 'staticdataversionid')
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     covercrop = models.BooleanField()
     crudeproteinrequired = models.BooleanField()
     customcrop = models.BooleanField()
     modifynitrogen = models.BooleanField()
-    staticdataversionid = models.IntegerField()
 
     class Meta:
         managed = False
