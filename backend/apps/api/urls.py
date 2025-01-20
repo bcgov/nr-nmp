@@ -22,5 +22,5 @@ api_router = routers.DefaultRouter()
 api_router.register(r"", views.APIViewSet, basename="api")
 
 urlpatterns = [
-    path('croptypes/', views.APIViewSet.as_view({'get': 'dummy'}), name='dummy'),
+    path('croptypes/', views.APIViewSet.as_view({'get': 'cropTypes'}), name='cropTypes'),
 ]
