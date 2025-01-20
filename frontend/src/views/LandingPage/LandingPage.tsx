@@ -44,21 +44,27 @@ export default function LandingPage() {
     navigate('/farm-information');
   };
 
+  // Commenting out just to not mess with our branch versions
+  /*
   const fetchData = async () => {
     const response = await axios.get('http://localhost:3000/api/croptypes/');
     setResult(response.statusText);
-    console.log(response);
   };
+  */
+  const fetchData = async () => {
+    const response = await axios.get('http://localhost:3000/api/animals/');
+    if (response.status === 200) {
+      const { data } = response;
+      // eslint-disable-next-line no-undef
+      setResult(
+        (data as { name: string }[])
+          .map((obj) => (obj.name === 'Horse' ? 'Horses' : obj.name).toLowerCase())
+          .join(', '),
+      );
+    }
+  }
 
   useEffect(() => {
-    // fetch('http://localhost:3000/api/croptypes/')
-    //   .then((response) => {
-    //     console.log(response);
-    //     setResult(response.statusText);
-    //   })
-    //   .catch((error) => {
-    //     setResult(error);
-    //   });
     fetchData();
   }, []);
 
@@ -76,7 +82,7 @@ export default function LandingPage() {
           nutrient source for your crops. You can start a new calculation or pick up where you left
           off by uploading an existing .nmp file.
         </p>
-        {result && <p>{result}</p>}
+        {result && <p>Here is a list of animals: {result}</p>}
       </StyledContent>
       <ButtonWrapper>
         <Button
