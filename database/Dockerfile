@@ -1,7 +1,7 @@
-FROM postgis/postgis:15-master
+FROM postgres:17
 
 # Copy startup scripts
-COPY db/entrypoint/* /docker-entrypoint-initdb.d/
+COPY db/seed_tables/*/* /docker-entrypoint-initdb.d/
 
 # User, port and Healthcheck
 USER postgres
