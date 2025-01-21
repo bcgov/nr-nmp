@@ -36,7 +36,7 @@ export default function CalculateNutrients() {
           />
         ),
       }))
-    : [];
+    : [state];
 
   const handleNext = () => {
     // add next page in future ticket

@@ -18,6 +18,7 @@ services:
       context: ./database
       dockerfile: Dockerfile
     container_name: nr-nmp-db
+    restart: always
     environment:
       <<: *postgres-vars
     ports: [5432:5432]
@@ -39,17 +40,15 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    restart: always
     command: npm run ${CMD:-dev}
     container_name: nr-nmp-api
     depends_on:
       database:
         condition: service_healthy
-    develop:
-      watch:
-        - action: sync
-          path: ./backend/
-          target: app
-          ignore: [node_modules]
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     env_file: .env
     environment:
       LOG_LEVEL: info

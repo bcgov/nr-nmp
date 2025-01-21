@@ -2,7 +2,7 @@
  * @summary The Field and Soil page for the application
  */
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
@@ -74,8 +74,8 @@ export default function FieldAndSoil() {
     setNMPFile(JSON.stringify(nmpFile));
 
     // if on the last tab navigate to calculate nutrients page
-    if (activeTab === tabs.length -1) {
-      navigate('/calculate-nutrients')
+    if (activeTab === tabs.length - 1) {
+      navigate('/calculate-nutrients');
     } else {
       setActiveTab(activeTab + 1);
     }
