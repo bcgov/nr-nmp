@@ -1,7 +1,8 @@
 /**
  * @summary This is the Crops Tab
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Modal, InputField, Dropdown } from '../../../components/common';
 import { ListItemContainer } from './crops.styles';
 
@@ -126,6 +127,12 @@ export default function Crops({ fields, setFields }: FieldListProps) {
       setIsModalVisible(false);
     }
   };
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/croptypes/').then((response) => {
+      console.log(response);
+    });
+  }, []);
 
   return (
     <div>

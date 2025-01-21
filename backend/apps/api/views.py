@@ -10,3 +10,7 @@ class APIViewSet(viewsets.ViewSet):
         crop_types = CropTypes.objects.all()
         serializer = CropTypesSerializer(crop_types, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def crops(self, request, pk=None):
+        return Response(status=status.HTTP_200_OK)
