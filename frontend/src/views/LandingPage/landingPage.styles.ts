@@ -7,7 +7,7 @@ import screenSizes from '../../constants/screenSizes';
 
 export const Card = styled.div`
   background-color: rgba(255, 255, 255, 0.8);
-  height: 500px;
+  min-height: 500px;
   width: 500px;
   padding-top: 0;
   justify-content: center;
