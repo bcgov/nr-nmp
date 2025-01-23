@@ -2,7 +2,7 @@
  * @summary The Field and Soil page for the application
  */
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
@@ -72,7 +72,13 @@ export default function FieldAndSoil() {
     }
 
     setNMPFile(JSON.stringify(nmpFile));
-    if (activeTab <= tabs.length) setActiveTab(activeTab + 1);
+
+    // if on the last tab navigate to calculate nutrients page
+    if (activeTab === tabs.length -1) {
+      navigate('/calculate-nutrients')
+    } else {
+      setActiveTab(activeTab + 1);
+    }
   };
 
   const handlePrevious = () => {
@@ -82,14 +88,11 @@ export default function FieldAndSoil() {
 
   useEffect(() => {
     if (state.nmpFile) {
-      const data = state.nmpFile;
-      if (data) {
-        const parsedData = JSON.parse(data);
-        setFields(parsedData.years[0].Fields);
-      }
+      const parsedData = JSON.parse(state.nmpFile);
+      setFields(parsedData.years[0].Fields);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state]);
 
   return (
     <Card

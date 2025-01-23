@@ -7,6 +7,7 @@ import LandingPage from '../views/LandingPage/LandingPage';
 import FarmInformation from '../views/FarmInformation/FarmInformation';
 import AdminDashboard from '@/views/AdminDashboard/AdminDashboard';
 import FieldAndSoil from '@/views/FieldAndSoil/FieldAndSoil';
+import CalculateNutrients from '@/views/CalculateNutrients/CalculateNutrients';
 
 export default function ViewRouter() {
   return (
@@ -26,6 +27,10 @@ export default function ViewRouter() {
       <Route
         path="/field-and-soil"
         Component={FieldAndSoil}
+      />
+      <Route
+        path="/calculate-nutrients"
+        Component={CalculateNutrients}
       />
     </Routes>
   );
