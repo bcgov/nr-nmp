@@ -3,10 +3,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from apps.crops.models import CropTypes
 from apps.crops.serializers import CropTypesSerializer
-from apps.crops.models import Fertilizers
-from apps.crops.serializers import FertilizersSerializer
 from apps.animals.models import *
 from apps.animals.serializers import *
+from apps.fertilizers.models import *
+from apps.fertilizers.serializers import *
 
 class APIViewSet(viewsets.ViewSet):
 
