@@ -2,7 +2,9 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from apps.crops.models import CropTypes
+from apps.crops.models import Crops
 from apps.crops.serializers import CropTypesSerializer
+from apps.crops.serializers import CropsSerializer
 
 class APIViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['get'])
@@ -13,4 +15,6 @@ class APIViewSet(viewsets.ViewSet):
     
     @action(detail=True, methods=['get'])
     def crops(self, request, pk=None):
-        return Response(status=status.HTTP_200_OK)
+        crops = Crops.objects.all()
+        serializer = CropsSerializer(crops, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

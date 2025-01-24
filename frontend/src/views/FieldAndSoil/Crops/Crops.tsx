@@ -129,8 +129,8 @@ export default function Crops({ fields, setFields }: FieldListProps) {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/croptypes/').then((response) => {
-      console.log(response);
+    axios.get('http://localhost:3000/api/crops/').then((response) => {
+      console.log('HERE: ', response);
     });
   }, []);
 
