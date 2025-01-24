@@ -60,8 +60,11 @@ INSTALLED_APPS = [
     # Apps for this project
     'apps.crops',
     'apps.animals',
+<<<<<<< HEAD
     'apps.shared',
     'apps.fertilizers',
+=======
+>>>>>>> d20056c (feat: [NR-NMP-111] "I have animals" radio buttons (#146))
 ]
 
 MIDDLEWARE = [
