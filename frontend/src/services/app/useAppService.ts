@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useContext, useMemo } from 'react';
 import constants from '../../constants/Constants';
-import { AppContext } from '../../providers/AppProvider';
+import { AppContext } from '../../context/AppProvider';
 import AppActionType from './AppActions';
 import { saveDataToLocalStorage } from '../../utils/AppLocalStorage';
 

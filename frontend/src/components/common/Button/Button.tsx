@@ -22,7 +22,13 @@ export type ButtonProps = {
   text: string;
 };
 
-export function Button({ handleClick, variant, size = 'md', disabled = false, text }: ButtonProps) {
+export function Button({
+  handleClick = () => {},
+  variant,
+  size = 'md',
+  disabled = false,
+  text,
+}: ButtonProps) {
   return (
     <StyledButton
       onClick={handleClick}
@@ -35,7 +41,3 @@ export function Button({ handleClick, variant, size = 'md', disabled = false, te
     </StyledButton>
   );
 }
-
-Button.defaultProps = {
-  handleClick: () => {}, // Provide a default empty function
-};

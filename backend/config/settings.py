@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     # Apps for this project
     'apps.api',
     'apps.crops',
+    'apps.animals',
 ]
 
 MIDDLEWARE = [
