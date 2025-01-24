@@ -2,6 +2,7 @@
  * @summary The Farm Information page for the application
  */
 import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
@@ -18,6 +19,9 @@ import {
 import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/common';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { APICacheContext } from '@/context/APICacheContext';
+import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/common';
+import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
+import { APICacheContext } from '@/context/APICacheContext';
 
 export default function FarmInformation() {
   const { state, setNMPFile } = useAppService();
@@ -25,17 +29,16 @@ export default function FarmInformation() {
   const apiCache = useContext(APICacheContext);
 
   const [rawAnimalNames, setRawAnimalNames] = useState<string[]>([]);
-  const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
-  const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<{ [name: string]: any }>({
     Year: '',
     FarmName: '',
     FarmRegion: 0,
-    FarmSubRegion: null,
   });
 
+  // Flagging for potential issues if the state.nmpFile object can change
+  // This would trigger resets and state issues
   // Flagging for potential issues if the state.nmpFile object can change
   // This would trigger resets and state issues
   useEffect(() => {
@@ -45,17 +48,20 @@ export default function FarmInformation() {
         const parsedData = JSON.parse(data);
         // I wish there was a way to specifiy a list of properties to pull from
         // the parsedData or assign to the DefaultNMPFile value
+        // I wish there was a way to specifiy a list of properties to pull from
+        // the parsedData or assign to the DefaultNMPFile value
         setFormData({
           Year: parsedData.farmDetails.Year || '',
           FarmName: parsedData.farmDetails.FarmName || '',
           FarmRegion: parsedData.farmDetails.FarmRegion || 0,
-          FarmSubRegion: parsedData.farmDetails.FarmSubRegion || null,
           HasAnimals: parsedData.farmDetails.HasAnimals || false,
           HasDairyCows: parsedData.farmDetails.HasDairyCows || false,
           HasBeefCows: parsedData.farmDetails.HasBeefCows || false,
           HasPoultry: parsedData.farmDetails.HasPoultry || false,
+          Animals: [],
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
+          Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
         });
       }
@@ -73,30 +79,8 @@ export default function FarmInformation() {
         setRawAnimalNames(animalArray);
       }
     });
-    apiCache.callEndpoint('api/regions/').then((response) => {
-      const { data } = response;
-      const regions: { value: number; label: string }[] = (
-        data as { id: number; name: string }[]
-      ).map((row) => ({ value: row.id, label: row.name }));
-      setRegionOptions(regions);
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    const region = formData.FarmRegion;
-    if (region === 0) {
-      setSubregionOptions([]);
-      return;
-    }
-    apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
-      const { data } = response;
-      const subregions: { value: number; label: string }[] = (
-        data as { id: number; name: string }[]
-      ).map((row) => ({ value: row.id, label: row.name }));
-      setSubregionOptions(subregions);
-    });
-  }, [formData.FarmRegion, apiCache]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -159,8 +143,42 @@ export default function FarmInformation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawAnimalNames, handleChange]);
 
+  const animalRadioButtons: React.ReactNode | null = useMemo(() => {
+    if (rawAnimalNames.length === 0) {
+      return null;
+    }
+    const processedAnimalNames: string[] = rawAnimalNames.map((animal) => {
+      // Dumb processing to deal w/ one non-plural word in table
+      const pluralName = animal === 'Horse' ? 'Horses' : animal;
+      const asTitleCase: string = pluralName
+        .split(' ')
+        .map((word) => {
+          const titleCase = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+          // Another unfortunate string change to make table string compatible w/ the NMPFile
+          return titleCase === 'Cattle' ? 'Cows' : titleCase;
+        })
+        .join(' ');
+      return asTitleCase;
+    });
+    return (
+      <>
+        {processedAnimalNames.map((animal) => (
+          <YesNoRadioButtons
+            key={animal}
+            name={animal}
+            text={`I have ${animal.toLowerCase()}`}
+            handleYes={handleChange}
+            handleNo={handleChange}
+          />
+        ))}
+      </>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawAnimalNames, handleChange]);
+
   return (
     <Card
+      height="700px"
       height="700px"
       width="600px"
       justifyContent="flex-start"
@@ -194,16 +212,6 @@ export default function FarmInformation() {
           name="FarmRegion"
           value={formData.FarmRegion}
           options={regionOptions}
-          onChange={handleChange}
-          flex="0.35"
-        />
-      </RegionContainer>
-      <RegionContainer>
-        <Dropdown
-          label="Subregion"
-          name="FarmSubRegion"
-          value={formData.FarmSubRegion}
-          options={subregionOptions}
           onChange={handleChange}
           flex="0.35"
         />
