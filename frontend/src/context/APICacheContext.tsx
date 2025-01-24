@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import APICache from '@/utils/APICache';
+import APICache from '@/types/APICache';
 
 const cache = new APICache();
 const APICacheContext = createContext(cache);
