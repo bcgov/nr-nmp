@@ -18,11 +18,6 @@ class APIViewSet(viewsets.ViewSet):
         serializer = CropTypesSerializer(crop_types, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     @action(detail=True, methods=['get'])
-    def crops(self, request, pk=None):
-        crops = Crops.objects.all()
-        serializer = CropsSerializer(crops, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    @action(detail=True, methods=['get'])
     def animals(self, request, pk=None):
         animals = Animals.objects.all()
         serializer = AnimalsSerializer(animals, many=True)
