@@ -1,7 +1,7 @@
 /**
  * @summary The Farm Information page for the application
  */
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
@@ -74,17 +74,20 @@ export default function FarmInformation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
-    const setVal = type === 'checkbox' ? checked : value;
-    // If the element is a radio button intended to return a boolean, the value must be casted
-    if ((setVal === 'true' || setVal === 'false') && name !== 'Crops') {
-      // This is the easiest way to convert bool strings to bools in JS
-      setFormData({ ...formData, [name]: setVal === 'true' });
-    } else {
-      setFormData({ ...formData, [name]: setVal });
-    }
-  };
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { name, value, type, checked } = e.target as HTMLInputElement;
+      const setVal = type === 'checkbox' ? checked : value;
+      // If the element is a radio button intended to return a boolean, the value must be casted
+      if ((setVal === 'true' || setVal === 'false') && name !== 'Crops') {
+        // This is the easiest way to convert bool strings to bools in JS
+        setFormData({ ...formData, [name]: setVal === 'true' });
+      } else {
+        setFormData({ ...formData, [name]: setVal });
+      }
+    },
+    [formData, setFormData],
+  );
 
   const handleSubmit = () => {
     let nmpFile: NMPFile;
@@ -118,8 +121,8 @@ export default function FarmInformation() {
     return (
       <>
         {processedAnimalNames.map((animal) => (
-          // eslint-disable-next-line react/jsx-key
           <YesNoRadioButtons
+            key={animal}
             name={animal}
             text={`I have ${animal.toLowerCase()}`}
             handleYes={handleChange}
@@ -129,7 +132,7 @@ export default function FarmInformation() {
       </>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rawAnimalNames]);
+  }, [rawAnimalNames, handleChange]);
 
   return (
     <Card
