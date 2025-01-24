@@ -22,3 +22,6 @@ FROM temp_crops
 WHERE StaticDataVersionId=14;
 ALTER TABLE crops
 DROP COLUMN StaticDataVersionId;
+ALTER TABLE crops
+ADD CONSTRAINT fk_crop_type
+FOREIGN KEY (CropTypeId) REFERENCES crop_types(Id);
