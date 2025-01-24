@@ -23,4 +23,5 @@ api_router.register(r"", views.APIViewSet, basename="api")
 
 urlpatterns = [
     path('croptypes/', views.APIViewSet.as_view({'get': 'cropTypes'}), name='cropTypes'),
+    path('animals/', views.APIViewSet.as_view({'get': 'animals'}), name='animals'),
 ]
