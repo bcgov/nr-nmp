@@ -133,7 +133,7 @@ export default function FarmInformation() {
 
   return (
     <Card
-      height="500px"
+      height="700px"
       width="600px"
       justifyContent="flex-start"
     >
