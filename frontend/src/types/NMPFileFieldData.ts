@@ -1,6 +1,6 @@
-import CropData from './CropData';
+import CropData from './NMPFileCropData';
 
-interface Field {
+interface NMPFileFieldData {
   FieldName: string;
   Area: string;
   PreviousYearManureApplicationFrequency: string;
@@ -9,4 +9,4 @@ interface Field {
   Crops: CropData[];
 }
 
-export default Field;
+export default NMPFileFieldData;

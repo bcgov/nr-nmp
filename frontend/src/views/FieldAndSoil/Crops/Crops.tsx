@@ -5,21 +5,22 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal, InputField, Dropdown } from '../../../components/common';
 import { ListItemContainer } from './crops.styles';
-import CropData from '@/types/CropData';
-import Field from '@/types/FieldData';
-import defaultCropsData from '@/constants/DefaultCropsData';
+import NMPFileCropData from '@/types/NMPFileCropData';
+import NMPFileFieldData from '@/types/NMPFileFieldData';
+import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 
 interface FieldListProps {
-  fields: Field[];
+  fields: NMPFileFieldData[];
   setFields: (fields: any[]) => void;
 }
 
 export default function Crops({ fields, setFields }: FieldListProps) {
-  const [cropsData, setCropsData] = useState<CropData>(defaultCropsData);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
+  const [combinedCropsData, setCombinedCropsData] =
+    useState<NMPFileCropData>(defaultNMPFileCropsData);
   // const [filteredCrops, setFilteredCrops] = useState<{ value: number; label: string }[]>([]);
-  const [cropTypes, setCropTypes] = useState<
+  const [cropTypesDatabase, setCropTypesDatabase] = useState<
     {
       id: number;
       name: string;
@@ -29,7 +30,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
       modifynitrogen: boolean;
     }[]
   >([]);
-  const [crops, setCrops] = useState<
+  const [cropsDatabase, setCropsDatabase] = useState<
     {
       cropname: string;
       cropremovalfactork2o: number;
@@ -50,8 +51,8 @@ export default function Crops({ fields, setFields }: FieldListProps) {
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
-    setCropsData({ ...cropsData, [name]: value });
-    console.log('cropsData: ', cropsData);
+    setCombinedCropsData({ ...combinedCropsData, [name]: value });
+    console.log('cropsData: ', combinedCropsData);
     if (name === 'cropTypeId') {
       // const selectedCropType = crops.find((type) => type.value === parseInt(value, 10));
       // setFilteredCrops(selectedCropType ? selectedCropType.crops : []);
@@ -60,7 +61,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
 
   const handleEditCrop = (index: number) => {
     setCurrentFieldIndex(index);
-    setCropsData(fields[index].Crops[0] || cropsData);
+    setCombinedCropsData(fields[index].Crops[0] || combinedCropsData);
     setIsModalVisible(true);
   };
 
@@ -74,7 +75,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
   const handleSubmit = () => {
     if (currentFieldIndex !== null) {
       const updatedFields = fields.map((field, index) =>
-        index === currentFieldIndex ? { ...field, Crops: cropsData } : field,
+        index === currentFieldIndex ? { ...field, Crops: combinedCropsData } : field,
       );
       setFields(updatedFields);
       setIsModalVisible(false);
@@ -83,11 +84,11 @@ export default function Crops({ fields, setFields }: FieldListProps) {
 
   useEffect(() => {
     axios.get('http://localhost:3000/api/croptypes/').then((response) => {
-      setCropTypes(response.data);
+      setCropTypesDatabase(response.data);
     });
     axios.get('http://localhost:3000/api/crops/').then((response) => {
       console.log('CROPS: ', response.data);
-      setCrops(response.data);
+      setCropsDatabase(response.data);
     });
   }, []);
 
@@ -146,22 +147,22 @@ export default function Crops({ fields, setFields }: FieldListProps) {
           <Dropdown
             label="Crop Type"
             name="cropTypeId"
-            value={cropsData.cropTypeId ?? ''}
-            options={cropTypes.map((crop) => ({ value: crop.id, label: crop.name }))}
+            value={combinedCropsData.cropTypeId ?? ''}
+            options={cropTypesDatabase.map((crop) => ({ value: crop.id, label: crop.name }))}
             onChange={handleChange}
           />
           <Dropdown
             label="Crop"
             name="cropId"
-            value={cropsData.cropId ?? ''}
-            options={crops.map((crop) => ({ value: crop.id, label: crop.cropname }))}
+            value={combinedCropsData.cropId ?? ''}
+            options={cropsDatabase.map((crop) => ({ value: crop.id, label: crop.cropname }))}
             onChange={handleChange}
           />
           <InputField
             label="Yield"
             type="text"
             name="yield"
-            value={cropsData.yield?.toString() || ''}
+            value={combinedCropsData.yield?.toString() || ''}
             onChange={handleChange}
           />
         </Modal>
