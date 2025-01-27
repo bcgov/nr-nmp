@@ -85,6 +85,8 @@ export default function Crops({ fields, setFields }: FieldListProps) {
 
   useEffect(() => {
     axios.get('http://localhost:3000/api/croptypes/').then((response) => {
+      console.log(response.data);
+
       setCropTypesDatabase(response.data);
     });
     axios.get('http://localhost:3000/api/crops/').then((response) => {
@@ -165,6 +167,39 @@ export default function Crops({ fields, setFields }: FieldListProps) {
             value={combinedCropsData.yield?.toString() || ''}
             onChange={handleChange}
           />
+          {combinedCropsData.cropTypeId === 1 && (
+            <InputField
+              label="Crude Protein"
+              type="text"
+              name="crudeProtien"
+              value={combinedCropsData.crudeProtien?.toString() || ''}
+              onChange={handleChange}
+            />
+          )}
+          <Dropdown
+            label="Previous crop ploughed down (N credit)"
+            name="prevCropId"
+            value={combinedCropsData.prevCropId?.toString() || ''}
+            options={[]}
+            onChange={handleChange}
+          />
+          <span>
+            N credit (lb/ac)<div>TEST{combinedCropsData.crudeProtien}</div>
+          </span>
+          <span>
+            Crop Requirement (lb/ac)
+            <div>
+              N: {combinedCropsData.reqN} P2O5: {combinedCropsData.reqP2o5} K2O:
+              {combinedCropsData.reqK2o}
+            </div>
+          </span>
+          <span>
+            Nutrient Removal (lb/ac)
+            <div>
+              N: {combinedCropsData.remN} P2O5: {combinedCropsData.remP2o5} K2O:
+              {combinedCropsData.remK2o}
+            </div>
+          </span>
         </Modal>
       )}
     </div>

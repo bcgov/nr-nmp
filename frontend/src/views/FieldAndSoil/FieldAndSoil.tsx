@@ -74,9 +74,10 @@ export default function FieldAndSoil() {
         PreviousYearManureApplicationFrequency: field.PreviousYearManureApplicationFrequency,
         Comment: field.Comment,
         SoilTest: field.SoilTest,
+        Crops: field.Crops,
       }));
     }
-
+    console.log(nmpFile);
     setNMPFile(JSON.stringify(nmpFile));
     if (activeTab <= tabs.length) setActiveTab(activeTab + 1);
   };
