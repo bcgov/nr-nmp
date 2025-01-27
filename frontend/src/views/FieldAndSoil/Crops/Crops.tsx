@@ -19,7 +19,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
   const [combinedCropsData, setCombinedCropsData] =
     useState<NMPFileCropData>(defaultNMPFileCropsData);
-  // const [filteredCrops, setFilteredCrops] = useState<{ value: number; label: string }[]>([]);
+  const [filteredCrops, setFilteredCrops] = useState<{ value: number; label: string }[]>([]);
   const [cropTypesDatabase, setCropTypesDatabase] = useState<
     {
       id: number;
@@ -52,10 +52,11 @@ export default function Crops({ fields, setFields }: FieldListProps) {
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setCombinedCropsData({ ...combinedCropsData, [name]: value });
-    console.log('cropsData: ', combinedCropsData);
     if (name === 'cropTypeId') {
-      // const selectedCropType = crops.find((type) => type.value === parseInt(value, 10));
-      // setFilteredCrops(selectedCropType ? selectedCropType.crops : []);
+      const selectedCropType = cropsDatabase.filter(
+        (type) => type.croptypeid === parseInt(value, 10),
+      );
+      setFilteredCrops(selectedCropType.map((crop) => ({ value: crop.id, label: crop.cropname })));
     }
   };
 
@@ -87,7 +88,6 @@ export default function Crops({ fields, setFields }: FieldListProps) {
       setCropTypesDatabase(response.data);
     });
     axios.get('http://localhost:3000/api/crops/').then((response) => {
-      console.log('CROPS: ', response.data);
       setCropsDatabase(response.data);
     });
   }, []);
@@ -155,7 +155,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
             label="Crop"
             name="cropId"
             value={combinedCropsData.cropId ?? ''}
-            options={cropsDatabase.map((crop) => ({ value: crop.id, label: crop.cropname }))}
+            options={filteredCrops}
             onChange={handleChange}
           />
           <InputField
