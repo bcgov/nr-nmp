@@ -52,10 +52,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
-    console.log('Name: ', name);
-    console.log('Value: ', value);
     setCombinedCropsData({ ...combinedCropsData, [name]: value });
-    console.log('Combined Crops Data: ', combinedCropsData);
     if (name === 'cropTypeId') {
       const selectedCropType = cropsDatabase.filter(
         (type) => type.croptypeid === parseInt(value, 10),
@@ -89,8 +86,6 @@ export default function Crops({ fields, setFields }: FieldListProps) {
 
   useEffect(() => {
     axios.get('http://localhost:3000/api/croptypes/').then((response) => {
-      console.log(response.data);
-
       setCropTypesDatabase(response.data);
     });
     axios.get('http://localhost:3000/api/crops/').then((response) => {
