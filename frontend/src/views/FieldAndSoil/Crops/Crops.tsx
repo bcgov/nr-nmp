@@ -1,9 +1,10 @@
+/* eslint-disable eqeqeq */
 /**
  * @summary This is the Crops Tab
  */
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Modal, InputField, Dropdown } from '../../../components/common';
+import { Modal, InputField, Dropdown, RadioButton } from '../../../components/common';
 import { ListItemContainer } from './crops.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
@@ -51,7 +52,10 @@ export default function Crops({ fields, setFields }: FieldListProps) {
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
+    console.log('Name: ', name);
+    console.log('Value: ', value);
     setCombinedCropsData({ ...combinedCropsData, [name]: value });
+    console.log('Combined Crops Data: ', combinedCropsData);
     if (name === 'cropTypeId') {
       const selectedCropType = cropsDatabase.filter(
         (type) => type.croptypeid === parseInt(value, 10),
@@ -149,17 +153,26 @@ export default function Crops({ fields, setFields }: FieldListProps) {
           <Dropdown
             label="Crop Type"
             name="cropTypeId"
-            value={combinedCropsData.cropTypeId ?? ''}
+            value={combinedCropsData.cropTypeId || ''}
             options={cropTypesDatabase.map((crop) => ({ value: crop.id, label: crop.name }))}
             onChange={handleChange}
           />
           <Dropdown
             label="Crop"
             name="cropId"
-            value={combinedCropsData.cropId ?? ''}
+            value={combinedCropsData.cropId || ''}
             options={filteredCrops}
             onChange={handleChange}
           />
+          {combinedCropsData.cropTypeId == 6 && (
+            <InputField
+              label="Crop Description"
+              type="text"
+              name="cropOther"
+              value={combinedCropsData.cropOther || ''}
+              onChange={handleChange}
+            />
+          )}
           <InputField
             label="Yield"
             type="text"
@@ -167,7 +180,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
             value={combinedCropsData.yield?.toString() || ''}
             onChange={handleChange}
           />
-          {combinedCropsData.cropTypeId === 1 && (
+          {combinedCropsData.cropTypeId == 1 && (
             <InputField
               label="Crude Protein"
               type="text"
@@ -176,16 +189,39 @@ export default function Crops({ fields, setFields }: FieldListProps) {
               onChange={handleChange}
             />
           )}
-          <Dropdown
-            label="Previous crop ploughed down (N credit)"
-            name="prevCropId"
-            value={combinedCropsData.prevCropId?.toString() || ''}
-            options={[]}
-            onChange={handleChange}
-          />
-          <span>
-            N credit (lb/ac)<div>TEST{combinedCropsData.crudeProtien}</div>
-          </span>
+          {combinedCropsData.cropTypeId != 6 && (
+            <>
+              <Dropdown
+                label="Previous crop ploughed down (N credit)"
+                name="prevCropId"
+                value={combinedCropsData.prevCropId?.toString() || ''}
+                options={[]}
+                onChange={handleChange}
+              />
+              <span>
+                N credit (lb/ac)<div>TEST{combinedCropsData.crudeProtien}</div>
+              </span>
+            </>
+          )}
+          {combinedCropsData.cropTypeId == 2 && (
+            <>
+              <span style={{ marginRight: '8px' }}>Cover Crop Harvested?</span>
+              <RadioButton
+                label="Yes"
+                name="coverCropHarvested"
+                value="true"
+                checked={combinedCropsData.coverCropHarvested === 'true'}
+                onChange={handleChange}
+              />
+              <RadioButton
+                label="No"
+                name="coverCropHarvested"
+                value="false"
+                checked={combinedCropsData.coverCropHarvested === 'false'}
+                onChange={handleChange}
+              />
+            </>
+          )}
           <span>
             Crop Requirement (lb/ac)
             <div>
