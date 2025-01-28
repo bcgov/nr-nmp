@@ -77,7 +77,6 @@ export default function FieldAndSoil() {
         Crops: field.Crops,
       }));
     }
-    console.log(nmpFile);
     setNMPFile(JSON.stringify(nmpFile));
     if (activeTab <= tabs.length) setActiveTab(activeTab + 1);
   };
