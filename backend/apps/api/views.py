@@ -5,6 +5,9 @@ from apps.crops.models import CropTypes
 from apps.crops.models import Crops
 from apps.crops.serializers import CropTypesSerializer
 from apps.crops.serializers import CropsSerializer
+from apps.crops.models import Crops
+from apps.crops.serializers import CropTypesSerializer
+from apps.crops.serializers import CropsSerializer
 from apps.crops.serializers import CropTypesSerializer
 from apps.crops.models import Fertilizers
 from apps.crops.serializers import FertilizersSerializer
@@ -18,6 +21,11 @@ class APIViewSet(viewsets.ViewSet):
     def cropTypes(self, request, pk=None):
         crop_types = CropTypes.objects.all()
         serializer = CropTypesSerializer(crop_types, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    @action(detail=True, methods=['get'])
+    def crops(self, request, pk=None):
+        crops = Crops.objects.all()
+        serializer = CropsSerializer(crops, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     @action(detail=True, methods=['get'])
     def animals(self, request, pk=None):
