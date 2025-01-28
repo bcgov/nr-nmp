@@ -134,7 +134,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
       {isModalVisible && (
         <Modal
           isVisible={isModalVisible}
-          title="Edit Soil Test"
+          title="Edit Crop"
           onClose={() => setIsModalVisible(false)}
           footer={
             <button
