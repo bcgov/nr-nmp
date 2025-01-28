@@ -94,8 +94,10 @@ export default function Crops({ fields, setFields }: FieldListProps) {
       }
     });
     apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: any }) => {
-      const { data } = response;
-      setCropsDatabase(data);
+      if (response.status === 200) {
+        const { data } = response;
+        setCropsDatabase(data);
+      }
     });
   }, []);
 
