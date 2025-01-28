@@ -23,6 +23,11 @@ api_router.register(r"", views.APIViewSet, basename="api")
 
 urlpatterns = [
     path('croptypes/', views.APIViewSet.as_view({'get': 'cropTypes'}), name='cropTypes'),
+    path('crops/', views.APIViewSet.as_view({'get': 'crops'}), name='crops'),
     path('animals/', views.APIViewSet.as_view({'get': 'animals'}), name='animals'),
+<<<<<<< HEAD
     path('fertilizers/', views.APIViewSet.as_view({'get': 'fertilizers'}), name='fertilizers'),
 ] + api_router.urls
+=======
+]
+>>>>>>> e90cd60 (feat: [NMP-125] Crops Tab (#148))
