@@ -11,4 +11,3 @@ class CropsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Crops
         fields = '__all__'
-

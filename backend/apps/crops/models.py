@@ -11,7 +11,7 @@ class CropTypes(models.Model):
     class Meta:
         managed = False
         db_table = 'crop_types'
-
+        
 class Crops(models.Model):
     id = models.IntegerField(primary_key=True)
     cropname = models.CharField(max_length=100)
