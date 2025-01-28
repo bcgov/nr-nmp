@@ -38,6 +38,7 @@ type NMPFile = {
       Crops?: Array<{
         id?: number;
         cropId?: string;
+        cropTypeId?: number;
         cropOther?: string | null;
         yield?: number;
         reqN?: number;
