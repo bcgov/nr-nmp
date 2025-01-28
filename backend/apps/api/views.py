@@ -11,7 +11,6 @@ from apps.fertilizers.models import Fertilizers
 from apps.fertilizers.serializers import FertilizersSerializer
 
 class APIViewSet(viewsets.ViewSet):
-
     @action(detail=True, methods=['get'])
     def cropTypes(self, request, pk=None):
         crop_types = CropTypes.objects.all()
