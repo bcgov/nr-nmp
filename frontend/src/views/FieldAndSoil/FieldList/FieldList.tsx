@@ -5,19 +5,11 @@ import React, { useState } from 'react';
 import { Dropdown, InputField } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
 import ListItemContainer from './fieldList.styles';
-
-interface Field {
-  FieldName: string;
-  Area: string;
-  PreviousYearManureApplicationFrequency: string;
-  Comment: string;
-  SoilTest: object;
-  Crops: object[];
-}
+import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 interface FieldListProps {
-  fields: Field[];
-  setFields: (fields: Field[]) => void;
+  fields: NMPFileFieldData[];
+  setFields: (fields: NMPFileFieldData[]) => void;
 }
 
 const initialFieldFormData = {
@@ -32,7 +24,7 @@ const initialFieldFormData = {
 export default function FieldList({ fields, setFields }: FieldListProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [fieldFormData, setFieldFormData] = useState<Field>(initialFieldFormData);
+  const [fieldFormData, setFieldFormData] = useState<NMPFileFieldData>(initialFieldFormData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
