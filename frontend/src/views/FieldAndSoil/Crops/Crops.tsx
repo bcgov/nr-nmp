@@ -1,14 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 /**
  * @summary This is the Crops Tab
  */
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useContext } from 'react';
 import { Modal, InputField, Dropdown, RadioButton } from '../../../components/common';
 import { ListItemContainer } from './crops.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
+import { APICacheContext } from '@/context/APICacheContext';
 
 interface FieldListProps {
   fields: NMPFileFieldData[];
@@ -16,6 +17,7 @@ interface FieldListProps {
 }
 
 export default function Crops({ fields, setFields }: FieldListProps) {
+  const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
   const [combinedCropsData, setCombinedCropsData] =
@@ -85,11 +87,15 @@ export default function Crops({ fields, setFields }: FieldListProps) {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/croptypes/').then((response) => {
-      setCropTypesDatabase(response.data);
+    apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setCropTypesDatabase(data);
+      }
     });
-    axios.get('http://localhost:3000/api/crops/').then((response) => {
-      setCropsDatabase(response.data);
+    apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: any }) => {
+      const { data } = response;
+      setCropsDatabase(data);
     });
   }, []);
 
