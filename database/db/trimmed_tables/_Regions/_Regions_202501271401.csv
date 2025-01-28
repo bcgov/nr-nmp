@@ -1,0 +1,21 @@
+"id","name","soiltestphosphorousregioncd","soiltestpotassiumregioncd","locationid","sortorder"
+1,Bulkley-Nechako,2,3,1,1
+2,Northern Rockies,3,3,1,21
+3,Cariboo,1,2,1,2
+4,Central Kootenay,1,2,1,4
+5,Central Okanagan,1,2,1,12
+6,Columbia Shuswap,1,2,1,3
+9,East Kootenay,1,2,1,6
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8
+11,Fraser-Fort George,2,3,1,10
+12,Kitimat-Stikine,2,3,1,11
+13,Kootenay Boundary,1,2,1,7
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9
+16,North Okanagan,1,2,1,13
+17,Okanagan-Similkameen,1,2,1,14
+18,Peace River,3,3,1,15
+19,Squamish-Lilloeet,1,2,2,16
+20,Thompson-Nicola,1,2,1,19
+21,Vancouver Island,1,1,2,20
+22,Powell River / qathet Region,1,1,2,17
+23,Sunshine Coast,1,1,2,18
