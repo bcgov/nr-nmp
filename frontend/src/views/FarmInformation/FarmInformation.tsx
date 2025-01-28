@@ -2,7 +2,6 @@
  * @summary The Farm Information page for the application
  */
 import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
-import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
