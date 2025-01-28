@@ -8,6 +8,7 @@ import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import FieldList from './FieldList/FieldList';
 import SoilTests from './SoilTests/SoilTests';
+import Crops from './Crops/Crops';
 import { Card, Button } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
@@ -51,7 +52,12 @@ export default function FieldAndSoil() {
     {
       id: 'crops',
       label: 'Crops',
-      content: <div> </div>,
+      content: (
+        <Crops
+          fields={fields}
+          setFields={setFields}
+        />
+      ),
     },
   ];
 
@@ -68,9 +74,9 @@ export default function FieldAndSoil() {
         PreviousYearManureApplicationFrequency: field.PreviousYearManureApplicationFrequency,
         Comment: field.Comment,
         SoilTest: field.SoilTest,
+        Crops: field.Crops,
       }));
     }
-
     setNMPFile(JSON.stringify(nmpFile));
 
     // if on the last tab navigate to calculate nutrients page
