@@ -146,6 +146,20 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           </>
         }
       >
+        <InputField
+          label="Field Name"
+          type="text"
+          name="FieldName"
+          value={fieldFormData.FieldName}
+          onChange={handleChange}
+        />
+        <InputField
+          label="Area"
+          type="text"
+          name="Area"
+          value={fieldFormData.Area}
+          onChange={handleChange}
+        />
         <Dropdown
           label="Manure application in previous years"
           name="PreviousYearManureApplicationFrequency"

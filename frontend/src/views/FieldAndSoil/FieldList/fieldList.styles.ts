@@ -31,6 +31,8 @@ export const Header = styled.div`
   gap: 10px;
   font-weight: bold;
   margin-bottom: 10px;
+  border-bottom: 1px solid #ccc; // Add a border to separate the headers from the list items
+  padding-bottom: 10px; // Add some padding to the bottom for spacing
 `;
 
 export const Column = styled.div<{ align?: string }>`
