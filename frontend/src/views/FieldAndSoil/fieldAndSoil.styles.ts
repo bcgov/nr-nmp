@@ -9,7 +9,7 @@ export const CardHeader = styled.div`
   padding: 0;
   color: #fff;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   height: 65px;
   width: 100%;
@@ -20,7 +20,6 @@ export const CardHeader = styled.div`
   border-top-right-radius: 8px;
   @media (min-width: ${screenSizes.tablet}) {
     justify-content: flex-start;
-    padding-left: 2em;
   }
   z-index: 2000;
 `;
