@@ -2,9 +2,11 @@
  * @summary This is the Field list Tab
  */
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, InputField, Button } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
-import { ListItemContainer, ButtonWrapper } from './fieldList.styles';
+import { ListItemContainer, ButtonWrapper, Header, Column, ListItem } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 interface FieldListProps {
@@ -20,6 +22,13 @@ const initialFieldFormData = {
   SoilTest: {},
   Crops: [{}],
 };
+
+const manureOptions = [
+  { value: 0, label: 'Select' },
+  { value: 1, label: 'No Manure in the last 2 years' },
+  { value: 2, label: 'Manure applied in 1 of the 2 years' },
+  { value: 3, label: 'Manure applied in each of the 2 years' },
+];
 
 export default function FieldList({ fields, setFields }: FieldListProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -56,22 +65,24 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
     setIsModalVisible(false);
   };
 
-  const manureOptions = [
-    { value: 0, label: 'Select' },
-    { value: 1, label: 'No Manure in the last 2 years' },
-    { value: 2, label: 'Manure applied in 1 of the 2 years' },
-    { value: 3, label: 'Manure applied in each of the 2 years' },
-  ];
+  const filteredFields = fields.filter((field) => field.FieldName.trim() !== '');
 
   return (
     <div>
-      {fields
-        .filter((field) => field.FieldName.trim() !== '')
-        .map((field, index) => (
-          <ListItemContainer key={field.FieldName}>
-            <p>Field Name: {field.FieldName}</p>
-            <p>Area: {field.Area}</p>
-            <p>Comment: {field.Comment}</p>
+      {filteredFields.length > 0 && (
+        <Header>
+          <Column>Field Name</Column>
+          <Column>Area</Column>
+          <Column>Comments</Column>
+          <Column>Actions</Column>
+        </Header>
+      )}
+      {filteredFields.map((field, index) => (
+        <ListItemContainer key={field.FieldName}>
+          <ListItem>{field.FieldName}</ListItem>
+          <ListItem>{field.Area}</ListItem>
+          <ListItem>{field.Comment}</ListItem>
+          <div>
             <button
               type="button"
               onClick={() => handleEdit(index)}
@@ -82,10 +93,11 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
               type="button"
               onClick={() => handleDelete(index)}
             >
-              Delete
+              <FontAwesomeIcon icon={faTrash} />
             </button>
-          </ListItemContainer>
-        ))}
+          </div>
+        </ListItemContainer>
+      ))}
       <ButtonWrapper>
         <Button
           text="Add Field"
@@ -101,12 +113,28 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
         title={editIndex !== null ? 'Edit Field' : 'Add Field'}
         onClose={() => setIsModalVisible(false)}
         footer={
-          <button
-            type="button"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
+          <>
+            <ButtonWrapper>
+              <Button
+                text="Cancel"
+                handleClick={() => setIsModalVisible(false)}
+                aria-label="Cancel"
+                variant="secondary"
+                size="sm"
+                disabled={false}
+              />
+            </ButtonWrapper>
+            <ButtonWrapper>
+              <Button
+                text="Submit"
+                handleClick={handleSubmit}
+                aria-label="Submit"
+                variant="primary"
+                size="sm"
+                disabled={false}
+              />
+            </ButtonWrapper>
+          </>
         }
       >
         <InputField
