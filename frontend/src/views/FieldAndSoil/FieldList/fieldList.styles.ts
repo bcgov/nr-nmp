@@ -3,6 +3,10 @@
  */
 import styled from '@emotion/styled';
 
+export const ContentWrapper = styled.div`
+  margin-bottom: 130px;
+`;
+
 export const ListItemContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr auto;
@@ -29,11 +33,10 @@ export const Header = styled.div`
   margin-bottom: 10px;
 `;
 
-export const Column = styled.div`
-  text-align: center;
+export const Column = styled.div<{ align?: string }>`
+  text-align: ${({ align }) => (align === 'right' ? 'right' : 'left')};
 `;
 
-export const ListItem = styled.div`
-  flex: 1;
-  text-align: center;
+export const ListItem = styled.div<{ align?: string }>`
+  text-align: ${({ align }) => (align === 'right' ? 'right' : 'left')};
 `;

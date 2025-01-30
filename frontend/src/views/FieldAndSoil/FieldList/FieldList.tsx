@@ -6,7 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, InputField, Button } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
-import { ListItemContainer, ButtonWrapper, Header, Column, ListItem } from './fieldList.styles';
+import {
+  ListItemContainer,
+  ButtonWrapper,
+  Header,
+  Column,
+  ListItem,
+  ContentWrapper,
+} from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 interface FieldListProps {
@@ -69,45 +76,47 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
 
   return (
     <div>
-      {filteredFields.length > 0 && (
-        <Header>
-          <Column>Field Name</Column>
-          <Column>Area</Column>
-          <Column>Comments</Column>
-          <Column>Actions</Column>
-        </Header>
-      )}
-      {filteredFields.map((field, index) => (
-        <ListItemContainer key={field.FieldName}>
-          <ListItem>{field.FieldName}</ListItem>
-          <ListItem>{field.Area}</ListItem>
-          <ListItem>{field.Comment}</ListItem>
-          <div>
-            <button
-              type="button"
-              onClick={() => handleEdit(index)}
-            >
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDelete(index)}
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
-          </div>
-        </ListItemContainer>
-      ))}
-      <ButtonWrapper>
-        <Button
-          text="Add Field"
-          handleClick={() => setIsModalVisible(true)}
-          aria-label="Add Field"
-          variant="primary"
-          size="sm"
-          disabled={false}
-        />
-      </ButtonWrapper>
+      <ContentWrapper>
+        {filteredFields.length > 0 && (
+          <Header>
+            <Column>Field Name</Column>
+            <Column>Area</Column>
+            <Column>Comments</Column>
+            <Column align="right">Actions</Column>
+          </Header>
+        )}
+        {filteredFields.map((field, index) => (
+          <ListItemContainer key={field.FieldName}>
+            <ListItem>{field.FieldName}</ListItem>
+            <ListItem>{field.Area}</ListItem>
+            <ListItem>{field.Comment}</ListItem>
+            <ListItem align="right">
+              <button
+                type="button"
+                onClick={() => handleEdit(index)}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDelete(index)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            </ListItem>
+          </ListItemContainer>
+        ))}
+        <ButtonWrapper>
+          <Button
+            text="Add Field"
+            handleClick={() => setIsModalVisible(true)}
+            aria-label="Add Field"
+            variant="primary"
+            size="sm"
+            disabled={false}
+          />
+        </ButtonWrapper>
+      </ContentWrapper>
       <Modal
         isVisible={isModalVisible}
         title={editIndex !== null ? 'Edit Field' : 'Add Field'}
@@ -137,20 +146,6 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           </>
         }
       >
-        <InputField
-          label="Field Name"
-          type="text"
-          name="FieldName"
-          value={fieldFormData.FieldName}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Area"
-          type="text"
-          name="Area"
-          value={fieldFormData.Area}
-          onChange={handleChange}
-        />
         <Dropdown
           label="Manure application in previous years"
           name="PreviousYearManureApplicationFrequency"
