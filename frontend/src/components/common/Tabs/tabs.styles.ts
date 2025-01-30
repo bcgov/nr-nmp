@@ -12,11 +12,13 @@ export const Tab = styled.button<{ active: boolean }>`
   cursor: pointer;
   background-color: ${({ active }) => (active ? '#fff' : '#ccc')};
   color: ${({ active }) => (active ? '#000' : '#000')};
-  border: ${({ active }) => (active ? 'none' : '.5px solid #fff')};
+  border-bottom: ${({ active }) => (active ? 'none' : 'none')};
+  border-top: ${({ active }) => (active ? 'none' : '0.5px solid #fff')};
+  border-left: ${({ active }) => (active ? 'none' : '0.5px solid #fff')};
+  border-right: ${({ active }) => (active ? 'none' : '0.5px solid #fff')};
   border-radius: 5px 5px 0 0;
   height: ${({ active }) => (active ? '66px' : '40px')};
-  margin-top: ${({ active }) => (active ? '0' : '36px')};
-  // box-shadow: ${({ active }) => (active ? '0px -30px 50px rgba(0, 0, 0, 0.1)' : 'none')};
+  margin-top: ${({ active }) => (active ? '0' : '37px')};
   &:hover {
     background-color: #fff;
     color: #000;
