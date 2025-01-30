@@ -87,7 +87,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
               type="button"
               onClick={() => handleEdit(index)}
             >
-              Edit
+              <FontAwesomeIcon icon={faEdit} />
             </button>
             <button
               type="button"
