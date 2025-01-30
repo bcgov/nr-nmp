@@ -3,7 +3,7 @@
  */
 import styled from '@emotion/styled';
 
-const ListItemContainer = styled.div`
+export const ListItemContainer = styled.div`
   display: flex;
   gap: 16px;
   margin-top: 16px;
@@ -12,4 +12,11 @@ const ListItemContainer = styled.div`
   align-items: center;
 `;
 
-export default ListItemContainer;
+export const ButtonWrapper = styled.div`
+  bottom: 16px;
+  right: 16px;
+  button {
+    width: 100px;
+    height: 40px;
+  }
+`;

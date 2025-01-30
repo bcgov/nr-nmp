@@ -2,9 +2,9 @@
  * @summary This is the Field list Tab
  */
 import React, { useState } from 'react';
-import { Dropdown, InputField } from '../../../components/common';
+import { Dropdown, InputField, Button } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
-import ListItemContainer from './fieldList.styles';
+import { ListItemContainer, ButtonWrapper } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 interface FieldListProps {
@@ -86,12 +86,16 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
             </button>
           </ListItemContainer>
         ))}
-      <button
-        type="button"
-        onClick={() => setIsModalVisible(true)}
-      >
-        Add Field
-      </button>
+      <ButtonWrapper>
+        <Button
+          text="Add Field"
+          handleClick={() => setIsModalVisible(true)}
+          aria-label="Add Field"
+          variant="primary"
+          size="sm"
+          disabled={false}
+        />
+      </ButtonWrapper>
       <Modal
         isVisible={isModalVisible}
         title={editIndex !== null ? 'Edit Field' : 'Add Field'}
