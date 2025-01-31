@@ -3,6 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from apps.crops.models import CropTypes
 from apps.crops.serializers import CropTypesSerializer
+from apps.crops.models import Fertilizers
+from apps.crops.serializers import FertilizersSerializer
 from apps.animals.models import *
 from apps.animals.serializers import *
 
@@ -18,4 +20,10 @@ class APIViewSet(viewsets.ViewSet):
     def animals(self, request, pk=None):
         animals = Animals.objects.all()
         serializer = AnimalsSerializer(animals, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+                
+    @action(detail=True, methods=['get'])
+    def fertilizers(self, request, pk=None):
+        fertilizers = Fertilizers.objects.all()
+        serializer = FertilizersSerializer(fertilizers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
