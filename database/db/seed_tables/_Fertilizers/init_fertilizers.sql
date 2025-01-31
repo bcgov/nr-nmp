@@ -2,10 +2,10 @@ CREATE TABLE IF NOT EXISTS temp_fertilizers (
   Id INT NOT NULL,
   Name VARCHAR(100) NOT NULL,
   DryLiquid VARCHAR(100) NOT NULL,
-  Nitrogen INT NOT NULL,
-  Phosphorous INT NOT NULL,
-  Potassium INT NOT NULL,
-  SortNum INT NOT NULL,
+  Nitrogen FLOAT NOT NULL,
+  Phosphorous FLOAT NOT NULL,
+  Potassium FLOAT NOT NULL,
+  SortNum FLOAT NOT NULL,
   StaticDataVersionId INT NOT NULL,
   PRIMARY KEY (Id, StaticDataVersionId)
 );
