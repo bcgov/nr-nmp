@@ -41,8 +41,7 @@ export default function FarmInformation() {
       const data = state.nmpFile;
       if (data) {
         const parsedData = JSON.parse(data);
-        // I wish there was a way to specifiy a list of properties to pull from
-        // the parsedData or assign to the DefaultNMPFile value
+
         setFormData({
           Year: parsedData.farmDetails.Year || '',
           FarmName: parsedData.farmDetails.FarmName || '',

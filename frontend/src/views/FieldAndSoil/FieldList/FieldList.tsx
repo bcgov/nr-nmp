@@ -13,6 +13,7 @@ import {
   Column,
   ListItem,
   ContentWrapper,
+  ButtonContainer,
 } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
@@ -76,7 +77,17 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
 
   return (
     <div>
-      <ContentWrapper>
+      <ButtonContainer hasFields={filteredFields.length > 0}>
+        <Button
+          text="Add Field"
+          handleClick={() => setIsModalVisible(true)}
+          aria-label="Add Field"
+          variant="primary"
+          size="sm"
+          disabled={false}
+        />
+      </ButtonContainer>
+      <ContentWrapper hasFields={filteredFields.length > 0}>
         {filteredFields.length > 0 && (
           <Header>
             <Column>Field Name</Column>
@@ -106,16 +117,6 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
             </ListItem>
           </ListItemContainer>
         ))}
-        <ButtonWrapper>
-          <Button
-            text="Add Field"
-            handleClick={() => setIsModalVisible(true)}
-            aria-label="Add Field"
-            variant="primary"
-            size="sm"
-            disabled={false}
-          />
-        </ButtonWrapper>
       </ContentWrapper>
       <Modal
         isVisible={isModalVisible}
