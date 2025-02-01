@@ -6,8 +6,8 @@ class Fertilizers(models.Model):
     dryliquid = models.CharField(max_length=100)
     nitrogen = models.FloatField()
     phosphorous = models.FloatField()
-    potassium = models.models.FloatField()
-    sortnum = models.models.FloatField()
+    potassium = models.FloatField()
+    sortnum = models.FloatField()
 
     class Meta:
         managed = False

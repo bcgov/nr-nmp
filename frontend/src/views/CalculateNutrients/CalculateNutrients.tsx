@@ -1,5 +1,6 @@
 /**
  * @summary The calculate nutrients page for the application
+ * opens the fertilizerdetails modal
  */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +16,7 @@ import {
 } from './CalculateNutrients.styles';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { Card, Button } from '../../components/common';
-import FieldTable from './FieldTable/FieldTable'
+import FieldTable from './FieldTable/FieldTable';
 
 export default function CalculateNutrients() {
   const { state, setNMPFile } = useAppService();
