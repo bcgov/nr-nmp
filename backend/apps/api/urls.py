@@ -14,17 +14,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from django.views.generic.base import RedirectView
-from apps.admin.views import health_check
+from django.urls import path
+from rest_framework import routers
+from apps.api import views
+
+api_router = routers.DefaultRouter()
+api_router.register(r"", views.APIViewSet, basename="api")
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='accounts/login', permanent=True)),
-    # Note: we need a redirect for admin/login/?next=/admin/. TODO: make an apps/admin urls.py file
-    path('admin/', admin.site.urls),
-    # TODO: make a better accounts/login page
-    path('accounts/', include('allauth.urls')),
-    path('healthcheck/', health_check, name='health_check'),
-    path('api/', include('apps.api.urls')),
+    path('croptypes/', views.APIViewSet.as_view({'get': 'cropTypes'}), name='cropTypes'),
+    path('crops/', views.APIViewSet.as_view({'get': 'crops'}), name='crops'),
+    path('animals/', views.APIViewSet.as_view({'get': 'animals'}), name='animals'),
 ]

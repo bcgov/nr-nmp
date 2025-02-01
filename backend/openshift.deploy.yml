@@ -1,0 +1,150 @@
+
+apiVersion: template.openshift.io/v1
+kind: Template
+parameters:
+  - name: APP
+    description: Application name
+    value: nr-nmp
+  - name: COMPONENT
+    description: Component name
+    value: backend
+  - name: ORG
+    description: Organization name; e.g. bcgov or bcdevops
+    value: bcgov
+  - name: IMAGE_TAG
+    description: Image tag; e.g. PR number or latest
+    required: true
+  - name: TARGET
+    description: Deployment target; e.g. PR number, test or prod
+    required: true
+    generate: expression
+  - name: SSOAUTH
+    description: SSO Auth Server URL
+    required: true
+objects:
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP}-${TARGET}
+      name: ${APP}-${TARGET}-${COMPONENT}
+    spec:
+      type: ClusterIP
+      ports:
+        - port: 3000
+          targetPort: 3000
+          protocol: TCP
+          name: http-3000
+      selector:
+        service: ${APP}-${TARGET}-${COMPONENT}
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      labels:
+        app: ${APP}-${TARGET}
+        deployment: ${APP}-${TARGET}-${COMPONENT}
+      name: ${APP}-${TARGET}-${COMPONENT}
+    spec:
+      strategy:
+        type: Recreate
+      selector:
+        matchLabels:
+          deployment: ${APP}-${TARGET}-${COMPONENT}
+      template:
+        metadata:
+          labels:
+            app: ${APP}-${TARGET}
+            deployment: ${APP}-${TARGET}-${COMPONENT}
+            service: ${APP}-${TARGET}-${COMPONENT}
+        spec:
+          containers:
+            - name: ${APP}-${TARGET}-${COMPONENT}
+              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${IMAGE_TAG}
+              imagePullPolicy: Always
+              env:
+                - name: LOG_LEVEL
+                  value: info
+                - name: POSTGRES_HOST
+                  value: nr-nmp-database-${TARGET}
+                - name: SSO_AUTH_SERVER_URL
+                  value: ${SSOAUTH}
+                - name: POSTGRES_DB
+                  valueFrom:
+                    secretKeyRef:
+                      name: nr-nmp-database-${TARGET}
+                      key: database-name
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: nr-nmp-database-${TARGET}
+                      key: database-password
+                - name: POSTGRES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: nr-nmp-database-${TARGET}
+                      key: database-user
+                - name: SSO_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: nr-nmp-keycloak
+                      key: SSO_CLIENT_ID
+                - name: SSO_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: nr-nmp-keycloak
+                      key: SSO_CLIENT_SECRET
+                - name: SSO_REDIRECT_URL
+                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
+              ports:
+                - containerPort: 3000
+                  protocol: TCP
+              # readinessProbe:
+              #   httpGet:
+              #     path: /healthcheck/
+              #     port: 3000
+              #     scheme: HTTP
+              #     httpHeaders:
+              #     - name: host
+              #       value: localhost
+              #   initialDelaySeconds: 90
+              #   periodSeconds: 15
+              #   timeoutSeconds: 10
+              #   successThreshold: 3
+              #   failureThreshold: 30
+              # livenessProbe:
+              #   successThreshold: 1
+              #   failureThreshold: 5
+              #   httpGet:
+              #     path: /healthcheck/
+              #     port: 3000
+              #     scheme: HTTP
+              #     httpHeaders:
+              #     - name: host
+              #       value: localhost
+              #   initialDelaySeconds: 15
+              #   periodSeconds: 30
+              #   timeoutSeconds: 5
+              resources: # this is optional
+                limits:
+                  cpu: 150m
+                  memory: 150Mi
+                requests:
+                  cpu: 50m
+                  memory: 75Mi
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP}-${TARGET}
+      name: ${APP}-${TARGET}-${COMPONENT}
+    spec:
+      host: ${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+      port:
+        targetPort: http-3000
+      to:
+        kind: Service
+        name: ${APP}-${TARGET}-${COMPONENT}
+        weight: 100
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
