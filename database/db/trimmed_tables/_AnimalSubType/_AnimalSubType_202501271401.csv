@@ -1,0 +1,35 @@
+"id","name","liquidpergalperanimalperday","solidpergalperanimalperday","solidperpoundperanimalperday","solidliquidseparationpercentage","washwater","milkproduction","animalid","sortorder"
+1,"Cows (1300 lb), including Calves",0.0,8.983,60.046,0,0.0,0.0,1,0
+2,Backgrounding to Grass (400-600 lb),0.0,3.358,24.29,0,0.0,0.0,1,0
+3,Backgrounding to Feedlot (400-850 lb),0.0,3.985,28.616,0,0.0,0.0,1,0
+4,Calves (0 to 3 months old),1.849,2.906,15.541,10,0.0,0.0,2,6
+5,Calves (3 to 6 months old),3.699,5.812,31.082,10,0.0,0.0,2,5
+6,Heifers (6 to 15 months old),7.398,11.625,71.49,10,0.0,0.0,2,4
+7,Heifers (15 to 26 months old),12.946,20.079,123.482,10,0.0,0.0,2,3
+8,Dry Cow,18.494,28.534,205.992,10,0.0,0.0,2,2
+9,Milking Cow,19.815,30.647,221.251,10,5.0,72.3,2,1
+10,Ducks,0.0,0.04,0.141,0,0.0,0.0,6,0
+11,Goats,0.0,0.687,4.592,0,0.0,0.0,4,0
+12,Horse,0.0,14.954,78.002,0,0.0,0.0,5,0
+13,Pullets - Cage Housing,0.144,0.01,0.072,0,0.0,0.0,6,0
+14,Pullets - Floor Housing,0.288,0.016,0.054,0,0.0,0.0,6,0
+15,Layer,0.24,0.034,0.143,0,0.0,0.0,6,0
+16,Broiler Breeder Layer- Cage Housing,0.252,0.037,0.147,0,0.0,0.0,6,0
+17,Broiler Breeder Layer- Floor Housing,0.252,0.048,0.188,0,0.0,0.0,6,0
+18,Broiler Breeder Pullets,0.288,0.02,0.071,0,0.0,0.0,6,0
+19,Broiler Chicken (6.5 cycles),0.259,0.0172,0.0663,0,0.0,0.0,6,0
+20,Roaster Chicken,0.259,0.024,0.092,0,0.0,0.0,6,0
+21,Turkey Broiler,0.306,0.077,0.25,0,0.0,0.0,6,0
+22,Turkey Heavy Hen,0.306,0.108,0.354,0,0.0,0.0,6,0
+23,Turkey Heavy Tom,0.306,0.124,0.406,0,0.0,0.0,6,0
+24,Doe and Litter,0.0,0.188,1.003,0,0.0,0.0,7,0
+25, Ewe or Ram,0.0,1.11,6.676,0,0.0,0.0,8,0
+26,"Dry Sow, Boar, or Gilts",4.174,3.593,19.215,0,0.0,0.0,9,0
+27,Nursing Sow and Litter,6.209,0.0,0.0,0,0.0,0.0,9,0
+28,Nursery,0.661,0.0,0.0,0,0.0,0.0,9,0
+29,Grower,1.664,0.0,0.0,0,0.0,0.0,9,0
+30,Finisher,3.17,0.0,0.0,0,0.0,0.0,9,0
+31,Grower Finisher,2.668,0.0,0.0,0,0.0,0.0,9,0
+33,Finishing: Yearlings (850-1400 lb),0.0,7.477,50.0,0,0.0,0.0,1,0
+34,Finishing: Feeders (550-1250 lb),0.0,5.688,41.032,0,0.0,0.0,1,0
+35,Finishing: Short Keep (900-300 lb),0.0,7.47,54.0,0,0.0,0.0,1,0

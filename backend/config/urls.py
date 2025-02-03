@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # TODO: make a better accounts/login page
     path('accounts/', include('allauth.urls')),
-    path('healthcheck/', health_check, name='health_check'),
-    path('api/', include('apps.api.urls')),
+    path('healthcheck/', health_check),
+    path('api/', include('apps.animals.urls')),
+    path('api/', include('apps.crops.urls')),
+    path('api/', include('apps.shared.urls')),
 ]

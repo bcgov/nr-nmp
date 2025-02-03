@@ -1,0 +1,96 @@
+"id","name","annualprecipitation","annualprecipitationocttomar","regionid"
+1,Fort St. James,488,251,1
+2,Smithers,512,267,1
+3,Vanderhoof,496,244,1
+4,Saanichton,909,707,21
+5,Quesnel,542,253,3
+6,Williams Lake,450,194,3
+7,Castlegar,754,427,4
+8,Creston,630,357,4
+9,Kelowna,410,215,5
+10,Salmon Arm,668,364,6
+11,Comox,1180,917,21
+13,Cranbrook,382,161,9
+14,Fernie,1217,741,9
+15,Abbotsford,1876,1262,10
+16,Agassiz,1755,1223,10
+17,Chilliwack,1776,1230,10
+18,Hope,2142,1473,10
+19,Mission,1876,1262,10
+20,Delta,918,655,14
+21,Pitt Meadows,2253,1591,14
+22,Surrey,1354,957,14
+23,Prince George,556,262,11
+24,Hazelton,747,362,12
+25,Terrace,1160,809,12
+26,Grand Forks,510,250,13
+27,Nanaimo,846,620,21
+28,Enderby,480,253,16
+29,Vernon,445,222,16
+30,Keremos,326,152,17
+31,Penticton,333,146,17
+32,Princeton,358,196,17
+33,Dawson Creek,482,160,18
+34,Fort St. John,466,150,18
+35,Lillooet,369,219,19
+36,Pemberton,1060,783,19
+37,Kamloops,279,118,20
+38,Merritt,325,177,20
+39,Vavenby,474,221,20
+40,Metchosin,1010,803,21
+41,Campbell River,1605,1197,21
+42,Golden,488,260,6
+43,Grassy Plains,510,278,1
+44,"100 Mile house",475,208,3
+45,Anahim Lake,545,348,3
+46,Alexis Creek,338,149,3
+47,Grasmere,430,191,9
+48,Invermere,397,176,9
+49,McBride,591,294,11
+50,Lumby,478,216,16
+51,Chetwynd,521,220,18
+52,Cache Creek,284,127,20
+53,Fort Nelson,491,171,2
+54,Burns Lake,509,277,1
+55,Houston,440,231,1
+56,Salmo,692,367,4
+57,Nelson,803,490,4
+58,Nakusp,827,496,4
+59,Lake Country,385,191,5
+60,Peachland,335,172,5
+61,Kelowna,361,176,5
+62,Revelstoke,925,564,6
+63,Sicamous,627,334,6
+64,Mica Creek,1039,726,6
+65,Sparwood,630,346,9
+66,Haztic lake,1845,1288,14
+67,Aldergrove,1600,1119,14
+68,Langley City,1453,1026,14
+69,White Rock,1319,943,14
+70,Maple Ridge,1769,1247,14
+71,Grand Forks,500,266,13
+72,Beaverdell,437,228,13
+73,Rock Creek,379,180,13
+74,Trail,658,398,13
+75,Greenwood,498,270,13
+76,Cherryville,557,273,16
+77,Armstrong,472,241,16
+78,Ft. Nelson,505,167,2
+79,Summerland,325,157,17
+80,Oliver,299,147,17
+81,Osoyoos,304,163,17
+82,Powell River,1176,848,22
+83,Squamish,2154,1659,19
+84,Gibson,1459,1084,23
+85,Sechelt,1178,866,23
+86,Barriere,451,219,20
+87,Lytton,460,320,20
+88,Clinton,394,158,20
+89,Westwold,422,203,20
+90,Duncan,1191,954,21
+91,Port Alberni,2186,1735,21
+92,Parksville,1131,878,21
+93,Salt Spring Island,1010,779,21
+94,Mayne Island,876,653,21
+95,Pender Island,823,615,21
+96,Galiano Island,974,734,21

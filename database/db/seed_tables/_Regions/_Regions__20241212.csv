@@ -1,0 +1,255 @@
+Id,Name,SoilTestPhosphorousRegionCd,SoilTestPotassiumRegionCd,LocationId,SortNumber,StaticDataVersionId
+1,Bulkley-Nechako,2,3,1,1,1
+3,Cariboo,1,2,1,2,1
+5,Central Okanagan,1,2,1,12,1
+9,East Kootenay,1,2,1,6,1
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,1
+11,Fraser-Fort George,2,3,1,10,1
+12,Kitimat-Stikine,2,3,1,11,1
+13,Kootenay Boundary,1,2,1,7,1
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,1
+16,North Okanagan,1,2,1,13,1
+17,Okanagan-Similkameen,1,2,1,14,1
+18,Peace River,3,3,1,15,1
+19,Squamish-Lilloeet,1,2,2,16,1
+20,Thompson-Nicola,1,2,1,17,1
+21,Vancouver Island,1,1,2,18,1
+4,Central Kootenay,1,2,1,4,1
+6,Columbia Shuswap,1,2,1,3,1
+2,Northern Rockies,3,3,1,19,1
+2,Northern Rockies,3,3,1,19,2
+17,Okanagan-Similkameen,1,2,1,14,2
+6,Columbia Shuswap,1,2,1,3,2
+4,Central Kootenay,1,2,1,4,2
+21,Vancouver Island,1,1,2,18,2
+20,Thompson-Nicola,1,2,1,17,2
+19,Squamish-Lilloeet,1,2,2,16,2
+18,Peace River,3,3,1,15,2
+16,North Okanagan,1,2,1,13,2
+13,Kootenay Boundary,1,2,1,7,2
+1,Bulkley-Nechako,2,3,1,1,2
+3,Cariboo,1,2,1,2,2
+5,Central Okanagan,1,2,1,12,2
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,2
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,2
+11,Fraser-Fort George,2,3,1,10,2
+12,Kitimat-Stikine,2,3,1,11,2
+9,East Kootenay,1,2,1,6,2
+9,East Kootenay,1,2,1,6,3
+1,Bulkley-Nechako,2,3,1,1,3
+12,Kitimat-Stikine,2,3,1,11,3
+11,Fraser-Fort George,2,3,1,10,3
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,3
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,3
+5,Central Okanagan,1,2,1,12,3
+3,Cariboo,1,2,1,2,3
+13,Kootenay Boundary,1,2,1,7,3
+18,Peace River,3,3,1,15,3
+2,Northern Rockies,3,3,1,19,3
+17,Okanagan-Similkameen,1,2,1,14,3
+6,Columbia Shuswap,1,2,1,3,3
+16,North Okanagan,1,2,1,13,3
+21,Vancouver Island,1,1,2,18,3
+20,Thompson-Nicola,1,2,1,17,3
+19,Squamish-Lilloeet,1,2,2,16,3
+4,Central Kootenay,1,2,1,4,3
+4,Central Kootenay,1,2,1,4,4
+19,Squamish-Lilloeet,1,2,2,16,4
+16,North Okanagan,1,2,1,13,4
+6,Columbia Shuswap,1,2,1,3,4
+17,Okanagan-Similkameen,1,2,1,14,4
+18,Peace River,3,3,1,15,4
+3,Cariboo,1,2,1,2,4
+9,East Kootenay,1,2,1,6,4
+1,Bulkley-Nechako,2,3,1,1,4
+12,Kitimat-Stikine,2,3,1,11,4
+13,Kootenay Boundary,1,2,1,7,4
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,4
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,4
+5,Central Okanagan,1,2,1,12,4
+11,Fraser-Fort George,2,3,1,10,4
+22,Powell River / qathet Region,1,1,2,17,4
+21,Vancouver Island,1,1,2,20,4
+2,Northern Rockies,3,3,1,21,4
+23,Sunshine Coast,1,1,2,18,4
+20,Thompson-Nicola,1,2,1,19,4
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,5
+23,Sunshine Coast,1,1,2,18,5
+2,Northern Rockies,3,3,1,21,5
+21,Vancouver Island,1,1,2,20,5
+22,Powell River / qathet Region,1,1,2,17,5
+11,Fraser-Fort George,2,3,1,10,5
+5,Central Okanagan,1,2,1,12,5
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,5
+20,Thompson-Nicola,1,2,1,19,5
+13,Kootenay Boundary,1,2,1,7,5
+1,Bulkley-Nechako,2,3,1,1,5
+4,Central Kootenay,1,2,1,4,5
+19,Squamish-Lilloeet,1,2,2,16,5
+16,North Okanagan,1,2,1,13,5
+6,Columbia Shuswap,1,2,1,3,5
+12,Kitimat-Stikine,2,3,1,11,5
+18,Peace River,3,3,1,15,5
+3,Cariboo,1,2,1,2,5
+9,East Kootenay,1,2,1,6,5
+17,Okanagan-Similkameen,1,2,1,14,5
+4,Central Kootenay,1,2,1,4,6
+9,East Kootenay,1,2,1,6,6
+3,Cariboo,1,2,1,2,6
+18,Peace River,3,3,1,15,6
+12,Kitimat-Stikine,2,3,1,11,6
+6,Columbia Shuswap,1,2,1,3,6
+16,North Okanagan,1,2,1,13,6
+19,Squamish-Lilloeet,1,2,2,16,6
+17,Okanagan-Similkameen,1,2,1,14,6
+1,Bulkley-Nechako,2,3,1,1,6
+20,Thompson-Nicola,1,2,1,19,6
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,6
+23,Sunshine Coast,1,1,2,18,6
+2,Northern Rockies,3,3,1,21,6
+21,Vancouver Island,1,1,2,20,6
+13,Kootenay Boundary,1,2,1,7,6
+11,Fraser-Fort George,2,3,1,10,6
+5,Central Okanagan,1,2,1,12,6
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,6
+22,Powell River / qathet Region,1,1,2,17,6
+20,Thompson-Nicola,1,2,1,19,7
+23,Sunshine Coast,1,1,2,18,7
+2,Northern Rockies,3,3,1,21,7
+21,Vancouver Island,1,1,2,20,7
+22,Powell River / qathet Region,1,1,2,17,7
+11,Fraser-Fort George,2,3,1,10,7
+5,Central Okanagan,1,2,1,12,7
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,7
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,7
+13,Kootenay Boundary,1,2,1,7,7
+1,Bulkley-Nechako,2,3,1,1,7
+4,Central Kootenay,1,2,1,4,7
+19,Squamish-Lilloeet,1,2,2,16,7
+16,North Okanagan,1,2,1,13,7
+6,Columbia Shuswap,1,2,1,3,7
+12,Kitimat-Stikine,2,3,1,11,7
+18,Peace River,3,3,1,15,7
+3,Cariboo,1,2,1,2,7
+9,East Kootenay,1,2,1,6,7
+17,Okanagan-Similkameen,1,2,1,14,7
+17,Okanagan-Similkameen,1,2,1,14,8
+9,East Kootenay,1,2,1,6,8
+3,Cariboo,1,2,1,2,8
+18,Peace River,3,3,1,15,8
+12,Kitimat-Stikine,2,3,1,11,8
+6,Columbia Shuswap,1,2,1,3,8
+16,North Okanagan,1,2,1,13,8
+19,Squamish-Lilloeet,1,2,2,16,8
+4,Central Kootenay,1,2,1,4,8
+1,Bulkley-Nechako,2,3,1,1,8
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,8
+20,Thompson-Nicola,1,2,1,19,8
+23,Sunshine Coast,1,1,2,18,8
+2,Northern Rockies,3,3,1,21,8
+21,Vancouver Island,1,1,2,20,8
+13,Kootenay Boundary,1,2,1,7,8
+11,Fraser-Fort George,2,3,1,10,8
+5,Central Okanagan,1,2,1,12,8
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,8
+22,Powell River / qathet Region,1,1,2,17,8
+22,Powell River / qathet Region,1,1,2,17,9
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,9
+5,Central Okanagan,1,2,1,12,9
+11,Fraser-Fort George,2,3,1,10,9
+13,Kootenay Boundary,1,2,1,7,9
+21,Vancouver Island,1,1,2,20,9
+2,Northern Rockies,3,3,1,21,9
+23,Sunshine Coast,1,1,2,18,9
+20,Thompson-Nicola,1,2,1,19,9
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,9
+4,Central Kootenay,1,2,1,4,9
+17,Okanagan-Similkameen,1,2,1,14,9
+9,East Kootenay,1,2,1,6,9
+3,Cariboo,1,2,1,2,9
+18,Peace River,3,3,1,15,9
+1,Bulkley-Nechako,2,3,1,1,9
+6,Columbia Shuswap,1,2,1,3,9
+16,North Okanagan,1,2,1,13,9
+19,Squamish-Lilloeet,1,2,2,16,9
+12,Kitimat-Stikine,2,3,1,11,9
+12,Kitimat-Stikine,2,3,1,11,10
+19,Squamish-Lilloeet,1,2,2,16,10
+16,North Okanagan,1,2,1,13,10
+6,Columbia Shuswap,1,2,1,3,10
+1,Bulkley-Nechako,2,3,1,1,10
+18,Peace River,3,3,1,15,10
+3,Cariboo,1,2,1,2,10
+9,East Kootenay,1,2,1,6,10
+17,Okanagan-Similkameen,1,2,1,14,10
+4,Central Kootenay,1,2,1,4,10
+20,Thompson-Nicola,1,2,1,19,10
+22,Powell River / qathet Region,1,1,2,17,10
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,10
+5,Central Okanagan,1,2,1,12,10
+11,Fraser-Fort George,2,3,1,10,10
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,10
+21,Vancouver Island,1,1,2,20,10
+2,Northern Rockies,3,3,1,21,10
+23,Sunshine Coast,1,1,2,18,10
+13,Kootenay Boundary,1,2,1,7,10
+23,Sunshine Coast,1,1,2,18,12
+22,Powell River / qathet Region,1,1,2,17,12
+21,Vancouver Island,1,1,2,20,12
+20,Thompson-Nicola,1,2,1,19,12
+19,Squamish-Lilloeet,1,2,2,16,12
+18,Peace River,3,3,1,15,12
+17,Okanagan-Similkameen,1,2,1,14,12
+16,North Okanagan,1,2,1,13,12
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,12
+13,Kootenay Boundary,1,2,1,7,12
+11,Fraser-Fort George,2,3,1,10,12
+1,Bulkley-Nechako,2,3,1,1,12
+2,Northern Rockies,3,3,1,21,12
+3,Cariboo,1,2,1,2,12
+4,Central Kootenay,1,2,1,4,12
+12,Kitimat-Stikine,2,3,1,11,12
+6,Columbia Shuswap,1,2,1,3,12
+9,East Kootenay,1,2,1,6,12
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,12
+5,Central Okanagan,1,2,1,12,12
+1,Bulkley-Nechako,2,3,1,1,13
+2,Northern Rockies,3,3,1,21,13
+3,Cariboo,1,2,1,2,13
+4,Central Kootenay,1,2,1,4,13
+5,Central Okanagan,1,2,1,12,13
+6,Columbia Shuswap,1,2,1,3,13
+9,East Kootenay,1,2,1,6,13
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,13
+11,Fraser-Fort George,2,3,1,10,13
+12,Kitimat-Stikine,2,3,1,11,13
+13,Kootenay Boundary,1,2,1,7,13
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,13
+16,North Okanagan,1,2,1,13,13
+17,Okanagan-Similkameen,1,2,1,14,13
+18,Peace River,3,3,1,15,13
+19,Squamish-Lilloeet,1,2,2,16,13
+20,Thompson-Nicola,1,2,1,19,13
+21,Vancouver Island,1,1,2,20,13
+22,Powell River / qathet Region,1,1,2,17,13
+23,Sunshine Coast,1,1,2,18,13
+1,Bulkley-Nechako,2,3,1,1,14
+2,Northern Rockies,3,3,1,21,14
+3,Cariboo,1,2,1,2,14
+4,Central Kootenay,1,2,1,4,14
+5,Central Okanagan,1,2,1,12,14
+6,Columbia Shuswap,1,2,1,3,14
+9,East Kootenay,1,2,1,6,14
+10,"Fraser Valley, East (including Abbotsford/Mission)",1,1,2,8,14
+11,Fraser-Fort George,2,3,1,10,14
+12,Kitimat-Stikine,2,3,1,11,14
+13,Kootenay Boundary,1,2,1,7,14
+14,"Fraser Valley, West (Delta to Langley/Maple Ridge)",1,1,2,9,14
+16,North Okanagan,1,2,1,13,14
+17,Okanagan-Similkameen,1,2,1,14,14
+18,Peace River,3,3,1,15,14
+19,Squamish-Lilloeet,1,2,2,16,14
+20,Thompson-Nicola,1,2,1,19,14
+21,Vancouver Island,1,1,2,20,14
+22,Powell River / qathet Region,1,1,2,17,14
+23,Sunshine Coast,1,1,2,18,14
