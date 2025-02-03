@@ -22,7 +22,7 @@ class APIViewSet(viewsets.ViewSet):
         serializer = AnimalsSerializer(animals, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
                 
-    @action(detail=True, methods=['get'])
+    @action(detail=False, methods=['get'])
     def fertilizers(self, request, pk=None):
         fertilizers = Fertilizers.objects.all()
         serializer = FertilizersSerializer(fertilizers, many=True)
