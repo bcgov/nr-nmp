@@ -58,9 +58,9 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Apps for this project
-    'apps.api',
     'apps.crops',
     'apps.animals',
+    'apps.shared',
 ]
 
 MIDDLEWARE = [
