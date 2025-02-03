@@ -3,6 +3,10 @@
  */
 import styled from '@emotion/styled';
 
+export const CardContent = styled.div`
+  margin-bottom: 150px;
+`;
+
 export const ListItemContainer = styled.div`
   display: flex;
   gap: 16px;
@@ -16,14 +20,13 @@ export const InfoBox = styled.div`
   background-color: rgba(200, 200, 200, 0.3);
   padding: 10px;
   border-radius: 5px;
-  margin-top: 10px;
-  justify-content: center;
-`;
-
-export const InfoBoxContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  text-align: left;
+  margin: 15px 0 15px 0;
+  ul {
+    padding-left: 10px;
+    margin-top: 5px;
+  }
+  li {
+    margin-bottom: 2px;
+  }
 `;
