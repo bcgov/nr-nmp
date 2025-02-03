@@ -26,10 +26,15 @@ export default function FarmInformation() {
 
   const [rawAnimalNames, setRawAnimalNames] = useState<string[]>([]);
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
   const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
 =======
 >>>>>>> f2d4648 (feat: [NR-NMP-111] "I have animals" radio buttons (#146))
+=======
+  const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
+  const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
+>>>>>>> 885b602 (feat: [NR-NMP-149] Added regions and subregions (#150))
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<{ [name: string]: any }>({
@@ -37,9 +42,13 @@ export default function FarmInformation() {
     FarmName: '',
     FarmRegion: 0,
 <<<<<<< HEAD
+<<<<<<< HEAD
     FarmSubRegion: null,
 =======
 >>>>>>> f2d4648 (feat: [NR-NMP-111] "I have animals" radio buttons (#146))
+=======
+    FarmSubRegion: null,
+>>>>>>> 885b602 (feat: [NR-NMP-149] Added regions and subregions (#150))
   });
 
   // Flagging for potential issues if the state.nmpFile object can change
@@ -56,17 +65,24 @@ export default function FarmInformation() {
           FarmName: parsedData.farmDetails.FarmName || '',
           FarmRegion: parsedData.farmDetails.FarmRegion || 0,
 <<<<<<< HEAD
+<<<<<<< HEAD
           FarmSubRegion: parsedData.farmDetails.FarmSubRegion || null,
 =======
 >>>>>>> f2d4648 (feat: [NR-NMP-111] "I have animals" radio buttons (#146))
+=======
+          FarmSubRegion: parsedData.farmDetails.FarmSubRegion || null,
+>>>>>>> 885b602 (feat: [NR-NMP-149] Added regions and subregions (#150))
           HasAnimals: parsedData.farmDetails.HasAnimals || false,
           HasDairyCows: parsedData.farmDetails.HasDairyCows || false,
           HasBeefCows: parsedData.farmDetails.HasBeefCows || false,
           HasPoultry: parsedData.farmDetails.HasPoultry || false,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
           Animals: [],
 >>>>>>> f2d4648 (feat: [NR-NMP-111] "I have animals" radio buttons (#146))
+=======
+>>>>>>> 885b602 (feat: [NR-NMP-149] Added regions and subregions (#150))
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
@@ -87,6 +103,9 @@ export default function FarmInformation() {
       }
     });
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 885b602 (feat: [NR-NMP-149] Added regions and subregions (#150))
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
       const regions: { value: number; label: string }[] = (
@@ -112,11 +131,14 @@ export default function FarmInformation() {
     });
   }, [formData.FarmRegion, apiCache]);
 
+<<<<<<< HEAD
 =======
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 >>>>>>> f2d4648 (feat: [NR-NMP-111] "I have animals" radio buttons (#146))
+=======
+>>>>>>> 885b602 (feat: [NR-NMP-149] Added regions and subregions (#150))
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value, type, checked } = e.target as HTMLInputElement;
@@ -213,6 +235,19 @@ export default function FarmInformation() {
           name="FarmRegion"
           value={formData.FarmRegion}
           options={regionOptions}
+<<<<<<< HEAD
+=======
+          onChange={handleChange}
+          flex="0.35"
+        />
+      </RegionContainer>
+      <RegionContainer>
+        <Dropdown
+          label="Subregion"
+          name="FarmSubRegion"
+          value={formData.FarmSubRegion}
+          options={subregionOptions}
+>>>>>>> 885b602 (feat: [NR-NMP-149] Added regions and subregions (#150))
           onChange={handleChange}
           flex="0.35"
         />
