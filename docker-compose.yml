@@ -7,69 +7,22 @@ x-var:
 x-postgres-vars: &postgres-vars
   POSTGRES_DATABASE: postgres
   POSTGRES_HOST: nr-nmp-db
-  POSTGRES_PASSWORD: default
+  POSTGRES_PASSWORD: postgres
   POSTGRES_USER: *POSTGRES_USER
 
 name: nr-nmp
 services:
-  # DB
-  # database:
-  #   build:
-  #     context: ./database
-  #     dockerfile: Dockerfile
-  #   container_name: nr-nmp-db
-  #   environment:
-  #     <<: *postgres-vars
-  #   ports: [5432:5432]
-  #   healthcheck:
-  #     test: ["CMD", "pg_isready", "-U", *POSTGRES_USER]
-
-  # # PGAdmin
-  # pgadmin:
-  #   container_name: nr-nmp-pgadmin
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@qs.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   image: dpage/pgadmin4
-  #   ports: [5050:80]
-  #   profiles: ["pgadmin"]
-
-  # # Backend
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   container_name: nr-nmp-api
-  #   depends_on:
-  #     database:
-  #       condition: service_healthy
-  #   develop:
-  #    watch:
-  #      - action: sync
-  #        path: ./backend/
-  #        target: app
-  #   env_file: .env
-  #   environment:
-  #     LOG_LEVEL: info
-  #     PORT: 3000
-  #     <<: *postgres-vars
-  #   healthcheck:
-  #    test: curl --fail http://localhost:3000 || exit 1
-  #   ports: ["3000:3000"]
-  #   # For debugging
-  #   stdin_open: true
-  #   tty: true
-
   # Database
   database:
-    image: postgres:13
+    build:
+      context: ./database
+      dockerfile: Dockerfile
     container_name: nr-nmp-db
     volumes:
-      - ./backend/data/database:/var/lib/postgresql/data
+      - ./database/data/:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DATABASE=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      <<: *postgres-vars
+    ports: [5432:5432]
     healthcheck:
       test: ["CMD", "pg_isready", "-U", *POSTGRES_USER]
 

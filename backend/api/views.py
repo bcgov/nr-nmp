@@ -1,3 +1,4 @@
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from crops.models import CropTypes
@@ -7,4 +8,4 @@ from .serializers import CropTypesSerializer
 def crop_types(request):
     cropsTypes = CropTypes.objects.all()
     serializer = CropTypesSerializer(cropsTypes, many=True)
-    return Response({serializer.data})
+    return Response(serializer.data, status=status.HTTP_200_OK)
