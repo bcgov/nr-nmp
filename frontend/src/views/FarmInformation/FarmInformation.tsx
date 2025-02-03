@@ -28,12 +28,15 @@ export default function FarmInformation() {
   const apiCache = useContext(APICacheContext);
 
   const [rawAnimalNames, setRawAnimalNames] = useState<string[]>([]);
+  const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
+  const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<{ [name: string]: any }>({
     Year: '',
     FarmName: '',
     FarmRegion: 0,
+    FarmSubRegion: null,
   });
 
   // Flagging for potential issues if the state.nmpFile object can change
@@ -53,11 +56,11 @@ export default function FarmInformation() {
           Year: parsedData.farmDetails.Year || '',
           FarmName: parsedData.farmDetails.FarmName || '',
           FarmRegion: parsedData.farmDetails.FarmRegion || 0,
+          FarmSubRegion: parsedData.farmDetails.FarmSubRegion || null,
           HasAnimals: parsedData.farmDetails.HasAnimals || false,
           HasDairyCows: parsedData.farmDetails.HasDairyCows || false,
           HasBeefCows: parsedData.farmDetails.HasBeefCows || false,
           HasPoultry: parsedData.farmDetails.HasPoultry || false,
-          Animals: [],
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
@@ -78,8 +81,30 @@ export default function FarmInformation() {
         setRawAnimalNames(animalArray);
       }
     });
+    apiCache.callEndpoint('api/regions/').then((response) => {
+      const { data } = response;
+      const regions: { value: number; label: string }[] = (
+        data as { id: number; name: string }[]
+      ).map((row) => ({ value: row.id, label: row.name }));
+      setRegionOptions(regions);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const region = formData.FarmRegion;
+    if (region === 0) {
+      setSubregionOptions([]);
+      return;
+    }
+    apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
+      const { data } = response;
+      const subregions: { value: number; label: string }[] = (
+        data as { id: number; name: string }[]
+      ).map((row) => ({ value: row.id, label: row.name }));
+      setSubregionOptions(subregions);
+    });
+  }, [formData.FarmRegion, apiCache]);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -211,6 +236,16 @@ export default function FarmInformation() {
           name="FarmRegion"
           value={formData.FarmRegion}
           options={regionOptions}
+          onChange={handleChange}
+          flex="0.35"
+        />
+      </RegionContainer>
+      <RegionContainer>
+        <Dropdown
+          label="Subregion"
+          name="FarmSubRegion"
+          value={formData.FarmSubRegion}
+          options={subregionOptions}
           onChange={handleChange}
           flex="0.35"
         />
