@@ -1,0 +1,7 @@
+﻿Id,Name,CoverCrop,CrudeProteinRequired,CustomCrop,ModifyNitrogen
+1,Forage,FALSE,TRUE,FALSE,FALSE
+2,Cover crops,TRUE,FALSE,FALSE,FALSE
+4,Grains and oilseeds,FALSE,FALSE,FALSE,FALSE
+5,Field vegetables,FALSE,FALSE,FALSE,TRUE
+6,Other (not listed),FALSE,FALSE,TRUE,FALSE
+7,Berry,FALSE,FALSE,FALSE,FALSE
