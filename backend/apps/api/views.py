@@ -2,14 +2,11 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from apps.crops.models import CropTypes
-from apps.crops.models import Crops
-from apps.crops.serializers import CropTypesSerializer
-from apps.crops.serializers import CropsSerializer
 from apps.crops.serializers import CropTypesSerializer
 from apps.animals.models import *
 from apps.animals.serializers import *
-from apps.fertilizers.models import *
-from apps.fertilizers.serializers import *
+from apps.fertilizers.models import Fertilizers
+from apps.fertilizers.serializers import FertilizersSerializer
 
 class APIViewSet(viewsets.ViewSet):
 

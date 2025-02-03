@@ -28,14 +28,6 @@ export default function FieldTable({ key, field, setFields }) {
           isVisible={isModalVisible}
           title="Add Fertilizer"
           onClose={() => setIsModalVisible(false)}
-          // footer={
-          //   <button
-          //     type="button"
-          //     onClick={handleSubmit}
-          //   >
-          //     Submit
-          //   </button>
-          // }
         >
           <FertilizerDetails
             key={field.Id}
@@ -43,6 +35,7 @@ export default function FieldTable({ key, field, setFields }) {
             setFields={setFields}
           />
         </Modal>
+        {/* display fields.crops as a table */}
         <div key={key}>
           <table>
             <thead>
@@ -55,19 +48,19 @@ export default function FieldTable({ key, field, setFields }) {
             <tbody>
               <tr>
                 <th>Crops</th>
-                {/* {field.Crops.map((crop) => (
+                {field.Crops.map((crop) => (
                   <tr key={crop.id}>
                     <td>{crop.cropId}</td>
-                    //agronomic nutrients
+                    <td>agronomic nutrients</td>
                     <td>{crop.reqN}</td>
                     <td>{crop.reqP2o5}</td>
                     <td>{crop.reqK2o}</td>
-                    //crop removal nutrients
+                    <td>crop removal nutrients</td>
                     <td>{crop.remN}</td>
                     <td>{crop.remP2o5}</td>
                     <td>{crop.remK2o}</td>
                   </tr>
-                ))} */}
+                ))}
               </tr>
             </tbody>
           </table>
