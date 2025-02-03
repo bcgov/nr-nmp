@@ -60,6 +60,7 @@ objects:
             - name: ${APP}-${TARGET}-${COMPONENT}
               image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${IMAGE_TAG}
               imagePullPolicy: Always
+              command: ["/bin/bash", "/start.sh"]
               env:
                 - name: LOG_LEVEL
                   value: info

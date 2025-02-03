@@ -12,6 +12,9 @@ COPY ./requirements.txt /requirements.txt
 
 RUN python3 -m pip install -r requirements.txt
 
+COPY ./start.sh /
+RUN sed -i 's/\r$//g' /start.sh && chmod +x /start.sh
+
 CMD sh -c "python3 manage.py migrate && \
     python3 manage.py runserver 0.0.0.0:3000"
 
