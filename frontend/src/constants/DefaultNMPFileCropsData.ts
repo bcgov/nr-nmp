@@ -4,6 +4,8 @@ const defaultNMPFileCropsData: CropData = {
   id: 0,
   cropId: '',
   cropTypeId: 0,
+  cropName: '',
+  cropTypeName: '',
   cropOther: null,
   yield: 0,
   reqN: 0,
