@@ -23,21 +23,24 @@ export default function FarmInformation() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
-
-  const [rawAnimalNames, setRawAnimalNames] = useState<string[]>([]);
-  const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
-  const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
-
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<{ [name: string]: any }>({
     Year: '',
     FarmName: '',
     FarmRegion: 0,
     FarmSubRegion: null,
+    FarmAnimals: [],
   });
 
-  // Flagging for potential issues if the state.nmpFile object can change
-  // This would trigger resets and state issues
+  // Props for animal selections
+  const [hasAnimals, setHasAnimals] = useState<boolean>(false);
+  const [rawAnimalNames, setRawAnimalNames] = useState<{ [id: string]: string }>({});
+
+  // Props for region selections
+  const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
+  const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
+
+  // Flagging for potential state issues if the state.nmpFile object can change
   useEffect(() => {
     if (state.nmpFile) {
       const data = state.nmpFile;
@@ -50,10 +53,7 @@ export default function FarmInformation() {
           FarmName: parsedData.farmDetails.FarmName || '',
           FarmRegion: parsedData.farmDetails.FarmRegion || 0,
           FarmSubRegion: parsedData.farmDetails.FarmSubRegion || null,
-          HasAnimals: parsedData.farmDetails.HasAnimals || false,
-          HasDairyCows: parsedData.farmDetails.HasDairyCows || false,
-          HasBeefCows: parsedData.farmDetails.HasBeefCows || false,
-          HasPoultry: parsedData.farmDetails.HasPoultry || false,
+          FarmAnimals: parsedData.farmDetails.FarmAnimals || [],
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
@@ -69,10 +69,20 @@ export default function FarmInformation() {
     apiCache.callEndpoint('api/animals/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        const animalArray: string[] = (data as { name: string }[]).map((row) => row.name);
-        setRawAnimalNames(animalArray);
+        const animalDict: { [id: string]: string } = (
+          data as { id: string; name: string }[]
+        ).reduce(
+          (dict, row) => {
+            // eslint-disable-next-line no-param-reassign
+            dict[row.id] = row.name;
+            return dict;
+          },
+          {} as { [id: string]: string },
+        );
+        setRawAnimalNames(animalDict);
       }
     });
+
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
       const regions: { value: number; label: string }[] = (
@@ -113,6 +123,24 @@ export default function FarmInformation() {
     [formData, setFormData],
   );
 
+  const handleAnimalChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target as HTMLInputElement;
+      setFormData((prevData) => {
+        const currentAnimals: string[] = prevData.FarmAnimals;
+        let nextAnimals: string[];
+        if (value === 'true') {
+          // eslint-disable-next-line prettier/prettier
+        nextAnimals = currentAnimals.indexOf(name) === -1 ? currentAnimals.concat([name]) : currentAnimals;
+        } else {
+          nextAnimals = currentAnimals.filter((val) => val !== name);
+        }
+        return { ...prevData, FarmAnimals: nextAnimals };
+      });
+    },
+    [setFormData],
+  );
+
   const handleSubmit = () => {
     let nmpFile: NMPFile;
 
@@ -120,44 +148,43 @@ export default function FarmInformation() {
     else nmpFile = defaultNMPFile;
 
     console.log('nmpFile', nmpFile);
+    formData.FarmAnimals = formData.FarmAnimals.sort();
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
 
     setNMPFile(JSON.stringify(nmpFile));
-    navigate('/field-and-soil');
+
+    if (formData.FarmAnimals.length === 0) {
+      navigate('/field-and-soil');
+    } else {
+      navigate('/animals-and-manure');
+    }
   };
 
   const animalRadioButtons: React.ReactNode | null = useMemo(() => {
-    if (rawAnimalNames.length === 0) {
+    if (Object.keys(rawAnimalNames).length === 0) {
       return null;
     }
-    const processedAnimalNames: string[] = rawAnimalNames.map((animal) => {
-      // Dumb processing to deal w/ one non-plural word in table
-      const pluralName = animal === 'Horse' ? 'Horses' : animal;
+
+    const radioButtons = Object.entries(rawAnimalNames).map(([id, name]) => {
+      const pluralName = name === 'Horse' ? 'Horses' : name;
       const asTitleCase: string = pluralName
         .split(' ')
-        .map((word) => {
-          const titleCase = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-          // Another unfortunate string change to make table string compatible w/ the NMPFile
-          return titleCase === 'Cattle' ? 'Cows' : titleCase;
-        })
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
-      return asTitleCase;
+
+      return (
+        <YesNoRadioButtons
+          key={asTitleCase}
+          name={id}
+          text={`I have ${pluralName.toLowerCase()}`}
+          handleYes={handleAnimalChange}
+          handleNo={handleAnimalChange}
+        />
+      );
     });
-    return (
-      <>
-        {processedAnimalNames.map((animal) => (
-          <YesNoRadioButtons
-            key={animal}
-            name={animal}
-            text={`I have ${animal.toLowerCase()}`}
-            handleYes={handleChange}
-            handleNo={handleChange}
-          />
-        ))}
-      </>
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rawAnimalNames, handleChange]);
+
+    return radioButtons;
+  }, [rawAnimalNames, handleAnimalChange]);
 
   return (
     <Card
@@ -195,17 +222,13 @@ export default function FarmInformation() {
           value={formData.FarmRegion}
           options={regionOptions}
           onChange={handleChange}
-          flex="0.35"
         />
-      </RegionContainer>
-      <RegionContainer>
         <Dropdown
           label="Subregion"
           name="FarmSubRegion"
           value={formData.FarmSubRegion}
           options={subregionOptions}
           onChange={handleChange}
-          flex="0.35"
         />
       </RegionContainer>
       <YesNoRadioButtons
@@ -232,12 +255,12 @@ export default function FarmInformation() {
         </SelectorContainer>
       )}
       <YesNoRadioButtons
-        name="HasAnimals"
+        name=""
         text="I have animals"
-        handleYes={handleChange}
-        handleNo={handleChange}
+        handleYes={() => setHasAnimals(true)}
+        handleNo={() => setHasAnimals(false)}
       />
-      {formData.HasAnimals && animalRadioButtons}
+      {hasAnimals && animalRadioButtons}
       <ButtonWrapper>
         <Button
           text="Next"

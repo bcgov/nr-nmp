@@ -13,11 +13,7 @@ type NMPFile = {
     Manure?: any | null;
     HasSelectedFarmType?: boolean;
     ImportsManureCompost?: boolean;
-    HasAnimals?: boolean;
-    HasDairyCows?: boolean;
-    HasBeefCows?: boolean;
-    HasPoultry?: boolean;
-    HasMixedLiveStock?: boolean;
+    FarmAnimals?: string[];
     HasHorticulturalCrops?: boolean;
     HasBerries?: boolean;
     HasVegetables?: boolean;
