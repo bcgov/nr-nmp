@@ -28,7 +28,7 @@ const initialFieldFormData = {
   PreviousYearManureApplicationFrequency: '0',
   Comment: '',
   SoilTest: {},
-  Crops: [{}],
+  Crops: [],
 };
 
 const manureOptions = [

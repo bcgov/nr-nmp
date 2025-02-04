@@ -80,16 +80,16 @@ function Crops({ fields, setFields }: FieldListProps) {
           }
         : field,
     );
-    console.log('updatedFields', updatedFields);
     setFields(updatedFields);
   };
 
   const handleSubmit = () => {
     if (currentFieldIndex !== null) {
-      if (fields[currentFieldIndex].Crops.length === 0) {
+      if (fields[currentFieldIndex].Crops.length === 0 || currentCropIndex === 1) {
         const updatedFields = fields.map((field, index) =>
           index === currentFieldIndex ? { ...field, Crops: [combinedCropsData] } : field,
         );
+        console.log('updatedFields 1', updatedFields);
         setFields(updatedFields);
       } else {
         const updatedFields = fields.map((field, index) =>
@@ -106,6 +106,7 @@ function Crops({ fields, setFields }: FieldListProps) {
               }
             : field,
         );
+        console.log('updatedFields 2', updatedFields);
         setFields(updatedFields);
       }
       setIsModalVisible(false);
@@ -133,8 +134,7 @@ function Crops({ fields, setFields }: FieldListProps) {
         {fields.map((field, index) => (
           <ListItemContainer key={field.FieldName}>
             <ListItem>FieldName: {field.FieldName}</ListItem>
-            {(field.Crops.length === 1 && Object.keys(field.Crops[0]).length === 0) ||
-            field.Crops.length === 0 ? (
+            {field.Crops.length === 0 ? (
               <button
                 type="button"
                 onClick={() => {
@@ -146,38 +146,42 @@ function Crops({ fields, setFields }: FieldListProps) {
               </button>
             ) : (
               <>
-                <ListItem>CropType: {field.Crops[0].cropTypeId}</ListItem>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleEditCrop(index, 0);
-                  }}
-                  aria-label={`Add Crop to ${field.FieldName}`}
-                >
-                  Edit Crop
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleDeleteCrop(index, 0);
-                  }}
-                  aria-label={`Add Crop to ${field.FieldName}`}
-                >
-                  Delete Crop
-                </button>
+                {field.Crops.map((crop, cropIndex) => (
+                  <div key={crop.id}>
+                    <ListItem>CropName: {crop.cropName}</ListItem>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleEditCrop(index, cropIndex);
+                      }}
+                      aria-label={`Edit Crop ${crop.cropName}`}
+                    >
+                      Edit Crop
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleDeleteCrop(index, cropIndex);
+                      }}
+                      aria-label={`Delete Crop ${crop.cropName}`}
+                    >
+                      Delete Crop
+                    </button>
+                  </div>
+                ))}
+                {field.Crops.length < 2 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleEditCrop(index, field.Crops.length);
+                    }}
+                    aria-label={`Add Another Crop to ${field.FieldName}`}
+                  >
+                    Add Another Crop
+                  </button>
+                )}
               </>
             )}
-            {/* {field.Crops.length === 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  handleEditCrop(index, 0);
-                }}
-                aria-label={`Add Crop to ${field.FieldName}`}
-              >
-                Add Crop
-              </button>
-            )} */}
           </ListItemContainer>
         ))}
       </div>
