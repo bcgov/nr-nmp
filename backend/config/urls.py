@@ -28,5 +28,6 @@ urlpatterns = [
     path('healthcheck/', health_check),
     path('api/', include('apps.animals.urls')),
     path('api/', include('apps.crops.urls')),
+    path('api/', include('apps.fertilizers.urls')),
     path('api/', include('apps.shared.urls')),
 ]

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS temp_fertilizers (
+CREATE TABLE IF NOT EXISTS fertilizers (
   Id INT PRIMARY KEY,
   Name VARCHAR(100) NOT NULL,
   DryLiquid VARCHAR(100) NOT NULL,
@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS temp_fertilizers (
   Potassium FLOAT NOT NULL,
   SortNum FLOAT NOT NULL
 );
-\copy temp_fertilizers (Id, Name, DryLiquid, Nitrogen, Phosphorous, Potassium, SortNum, StaticDataVersionId) from 'docker-entrypoint-initdb.d/_Fertilizers__202501311344.csv' with header delimiter ',' CSV ;
+\copy fertilizers (Id, Name, DryLiquid, Nitrogen, Phosphorous, Potassium, SortNum) from 'docker-entrypoint-initdb.d/_Fertilizers_202501311344.csv' with header delimiter ',' CSV ;

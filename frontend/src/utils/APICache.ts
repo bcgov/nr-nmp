@@ -8,7 +8,9 @@ class APICache {
     if (cachedValue !== undefined && cachedValue.status === 200) {
       return cachedValue;
     }
-    const response = await axios.get(`http://localhost:3000/${endpoint}`);
+    const response = await axios.get(`http://localhost:3000/${endpoint}`, {
+      withCredentials: true,
+    });
     this.endpointCache[endpoint] = response;
     return response;
   }

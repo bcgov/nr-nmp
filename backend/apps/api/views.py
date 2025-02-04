@@ -5,12 +5,6 @@ from apps.crops.models import CropTypes
 from apps.crops.models import Crops
 from apps.crops.serializers import CropTypesSerializer
 from apps.crops.serializers import CropsSerializer
-from apps.crops.models import Crops
-from apps.crops.serializers import CropTypesSerializer
-from apps.crops.serializers import CropsSerializer
-from apps.crops.serializers import CropTypesSerializer
-from apps.crops.models import Fertilizers
-from apps.crops.serializers import FertilizersSerializer
 from apps.animals.models import *
 from apps.animals.serializers import *
 from apps.fertilizers.models import Fertilizers
@@ -32,7 +26,6 @@ class APIViewSet(viewsets.ViewSet):
         animals = Animals.objects.all()
         serializer = AnimalsSerializer(animals, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-                
     @action(detail=True, methods=['get'])
     def fertilizers(self, request, pk=None):
         fertilizers = Fertilizers.objects.all()
