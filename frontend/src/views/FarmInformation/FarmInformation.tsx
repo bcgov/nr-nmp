@@ -18,9 +18,6 @@ import {
 import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/common';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { APICacheContext } from '@/context/APICacheContext';
-import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/common';
-import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { APICacheContext } from '@/context/APICacheContext';
 
 export default function FarmInformation() {
   const { state, setNMPFile } = useAppService();
@@ -41,15 +38,11 @@ export default function FarmInformation() {
 
   // Flagging for potential issues if the state.nmpFile object can change
   // This would trigger resets and state issues
-  // Flagging for potential issues if the state.nmpFile object can change
-  // This would trigger resets and state issues
   useEffect(() => {
     if (state.nmpFile) {
       const data = state.nmpFile;
       if (data) {
         const parsedData = JSON.parse(data);
-        // I wish there was a way to specifiy a list of properties to pull from
-        // the parsedData or assign to the DefaultNMPFile value
         // I wish there was a way to specifiy a list of properties to pull from
         // the parsedData or assign to the DefaultNMPFile value
         setFormData({
@@ -63,7 +56,6 @@ export default function FarmInformation() {
           HasPoultry: parsedData.farmDetails.HasPoultry || false,
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
-          Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
         });
       }
@@ -167,42 +159,8 @@ export default function FarmInformation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawAnimalNames, handleChange]);
 
-  const animalRadioButtons: React.ReactNode | null = useMemo(() => {
-    if (rawAnimalNames.length === 0) {
-      return null;
-    }
-    const processedAnimalNames: string[] = rawAnimalNames.map((animal) => {
-      // Dumb processing to deal w/ one non-plural word in table
-      const pluralName = animal === 'Horse' ? 'Horses' : animal;
-      const asTitleCase: string = pluralName
-        .split(' ')
-        .map((word) => {
-          const titleCase = word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-          // Another unfortunate string change to make table string compatible w/ the NMPFile
-          return titleCase === 'Cattle' ? 'Cows' : titleCase;
-        })
-        .join(' ');
-      return asTitleCase;
-    });
-    return (
-      <>
-        {processedAnimalNames.map((animal) => (
-          <YesNoRadioButtons
-            key={animal}
-            name={animal}
-            text={`I have ${animal.toLowerCase()}`}
-            handleYes={handleChange}
-            handleNo={handleChange}
-          />
-        ))}
-      </>
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rawAnimalNames, handleChange]);
-
   return (
     <Card
-      height="700px"
       height="700px"
       width="600px"
       justifyContent="flex-start"
