@@ -9,7 +9,7 @@ import defaultNMPFile from '@/constants/DefaultNMPFile';
 import FieldList from './FieldList/FieldList';
 import SoilTests from './SoilTests/SoilTests';
 import Crops from './Crops/Crops';
-import { Card, Button, Modal } from '../../components/common';
+import { Card, Button } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
@@ -28,8 +28,6 @@ export default function FieldAndSoil() {
       Crops: NMPFileCropData[];
     }[]
   >([]);
-  const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
-  const [warningText, setWarningText] = useState('');
 
   const tabs = [
     {
@@ -65,21 +63,6 @@ export default function FieldAndSoil() {
   ];
 
   const handleNext = () => {
-    if (fields.length === 0) {
-      setWarningText('Please add a field to proceed.');
-      setIsWarningModalVisible(true);
-      return;
-    }
-
-    // fields.forEach((field) => {
-    //   if (Object.keys(field.SoilTest).length === 0) {
-    //     setWarningText(
-    //       'For fields without a soil test, very high soil P and K fertility and a pH of 6.0 will be assumed. Crop P and K requirements will be 0 on fields without a soil test.',
-    //     );
-    //     setIsWarningModalVisible(true);
-    //   }
-    // });
-
     let nmpFile: NMPFile;
 
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
@@ -140,7 +123,7 @@ export default function FieldAndSoil() {
           handleClick={handleNext}
           aria-label="Next"
           variant="primary"
-          disabled={false}
+          disabled={fields.length === 0}
         />
       </ButtonWrapper>
       <ButtonWrapper position="left">
@@ -153,23 +136,6 @@ export default function FieldAndSoil() {
           disabled={false}
         />
       </ButtonWrapper>
-      <Modal
-        isVisible={isWarningModalVisible}
-        title="Warning"
-        onClose={() => setIsWarningModalVisible(false)}
-        footer={
-          <Button
-            text="OK"
-            handleClick={() => setIsWarningModalVisible(false)}
-            aria-label="OK"
-            variant="primary"
-            size="sm"
-            disabled={false}
-          />
-        }
-      >
-        {warningText}
-      </Modal>
     </Card>
   );
 }
