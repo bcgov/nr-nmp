@@ -157,20 +157,19 @@ export default function FarmInformation() {
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
     else nmpFile = defaultNMPFile;
 
-<<<<<<< HEAD
-    console.log('nmpFile', nmpFile);
     formData.FarmAnimals = formData.FarmAnimals.sort();
-=======
->>>>>>> main
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
 
     setNMPFile(JSON.stringify(nmpFile));
 
+    navigate('/field-and-soil');
+    /*
     if (formData.FarmAnimals.length === 0) {
       navigate('/field-and-soil');
     } else {
       navigate('/animals-and-manure');
     }
+    */
   };
 
   const animalRadioButtons: React.ReactNode | null = useMemo(() => {
