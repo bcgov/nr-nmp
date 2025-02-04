@@ -14,6 +14,11 @@ import {
   FlexContainer,
   RightJustifiedText,
   Divider,
+  FlexRowContainer,
+  HeaderText,
+  ValueText,
+  ColumnContainer,
+  RowContainer,
 } from './crops.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
@@ -256,20 +261,42 @@ function Crops({ fields, setFields }: FieldListProps) {
               </FlexContainer>
             )}
             <Divider />
-            <span>
-              Crop Requirement (lb/ac)
-              <div>
-                N: {combinedCropsData.reqN} P2O5: {combinedCropsData.reqP2o5} K2O:
-                {combinedCropsData.reqK2o}
-              </div>
-            </span>
-            <span>
-              Nutrient Removal (lb/ac)
-              <div>
-                N: {combinedCropsData.remN} P2O5: {combinedCropsData.remP2o5} K2O:
-                {combinedCropsData.remK2o}
-              </div>
-            </span>
+            <FlexRowContainer>
+              <ColumnContainer>
+                <HeaderText>Crop Requirement (lb/ac)</HeaderText>
+                <RowContainer>
+                  <ColumnContainer>
+                    <HeaderText>N</HeaderText>
+                    <ValueText>{combinedCropsData.reqN}</ValueText>
+                  </ColumnContainer>
+                  <ColumnContainer>
+                    <HeaderText>P2O5</HeaderText>
+                    <ValueText>{combinedCropsData.reqP2o5}</ValueText>
+                  </ColumnContainer>
+                  <ColumnContainer>
+                    <HeaderText>K2O</HeaderText>
+                    <ValueText>{combinedCropsData.reqK2o}</ValueText>
+                  </ColumnContainer>
+                </RowContainer>
+              </ColumnContainer>
+              <ColumnContainer>
+                <HeaderText>Nutrient Removal (lb/ac)</HeaderText>
+                <RowContainer>
+                  <ColumnContainer>
+                    <HeaderText>N</HeaderText>
+                    <ValueText>{combinedCropsData.remN}</ValueText>
+                  </ColumnContainer>
+                  <ColumnContainer>
+                    <HeaderText>P2O5</HeaderText>
+                    <ValueText>{combinedCropsData.remP2o5}</ValueText>
+                  </ColumnContainer>
+                  <ColumnContainer>
+                    <HeaderText>K2O</HeaderText>
+                    <ValueText>{combinedCropsData.remK2o}</ValueText>
+                  </ColumnContainer>
+                </RowContainer>
+              </ColumnContainer>
+            </FlexRowContainer>
           </ModalContent>
         </Modal>
       )}

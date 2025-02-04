@@ -41,6 +41,7 @@ export const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 16px;
 `;
 
 export const FlexContainer = styled.div`
@@ -60,4 +61,31 @@ export const Divider = styled.hr`
   border: 0;
   border-top: 1px solid #ccc;
   margin: 16px 0;
+`;
+
+export const FlexRowContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+`;
+
+export const HeaderText = styled.span`
+  display: block;
+  margin-bottom: 4px;
+`;
+
+export const ValueText = styled.div`
+  margin-top: 4px;
+`;
+
+export const ColumnContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const RowContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 `;
