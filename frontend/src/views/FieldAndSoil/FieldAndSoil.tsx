@@ -92,6 +92,7 @@ export default function FieldAndSoil() {
     else navigate('/farm-information');
   };
 
+  // assumes only 1 year, edit
   useEffect(() => {
     if (state.nmpFile) {
       const parsedData = JSON.parse(state.nmpFile);
