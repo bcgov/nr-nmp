@@ -53,7 +53,6 @@ function Crops({ fields, setFields }: FieldListProps) {
     }[]
   >([]);
 
-  // Works
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setCombinedCropsData({ ...combinedCropsData, [name]: value });
@@ -73,29 +72,42 @@ function Crops({ fields, setFields }: FieldListProps) {
   };
 
   const handleDeleteCrop = (fieldIndex: number, cropIndex: number) => {
-    const updatedFields = fields.map((field, i) =>
-      i === fieldIndex ? { ...field, Crops: field.Crops.filter((_, j) => j !== cropIndex) } : field,
+    const updatedFields = fields.map((field, index) =>
+      index === fieldIndex
+        ? {
+            ...field,
+            Crops: field.Crops.filter((_, idx) => idx !== cropIndex),
+          }
+        : field,
     );
+    console.log('updatedFields', updatedFields);
     setFields(updatedFields);
   };
 
   const handleSubmit = () => {
     if (currentFieldIndex !== null) {
-      const updatedFields = fields.map((field, index) =>
-        index === currentFieldIndex
-          ? {
-              ...field,
-              Crops:
-                currentCropIndex !== null
-                  ? field.Crops.map((crop, cropIndex) =>
-                      cropIndex === currentCropIndex ? combinedCropsData : crop,
-                    )
-                  : [...field.Crops, combinedCropsData],
-            }
-          : field,
-      );
-      console.log('updatedFields', updatedFields);
-      setFields(updatedFields);
+      if (fields[currentFieldIndex].Crops.length === 0) {
+        const updatedFields = fields.map((field, index) =>
+          index === currentFieldIndex ? { ...field, Crops: [combinedCropsData] } : field,
+        );
+        setFields(updatedFields);
+      } else {
+        const updatedFields = fields.map((field, index) =>
+          index === currentFieldIndex
+            ? {
+                ...field,
+                Crops: field.Crops
+                  ? currentCropIndex !== null
+                    ? field.Crops.map((crop, cropIndex) =>
+                        cropIndex === currentCropIndex ? combinedCropsData : crop,
+                      )
+                    : [...field.Crops, combinedCropsData]
+                  : [combinedCropsData],
+              }
+            : field,
+        );
+        setFields(updatedFields);
+      }
       setIsModalVisible(false);
     }
   };
@@ -121,7 +133,8 @@ function Crops({ fields, setFields }: FieldListProps) {
         {fields.map((field, index) => (
           <ListItemContainer key={field.FieldName}>
             <ListItem>FieldName: {field.FieldName}</ListItem>
-            {Object.keys(field.Crops[0]).length === 0 ? (
+            {(field.Crops.length === 1 && Object.keys(field.Crops[0]).length === 0) ||
+            field.Crops.length === 0 ? (
               <button
                 type="button"
                 onClick={() => {
@@ -154,63 +167,19 @@ function Crops({ fields, setFields }: FieldListProps) {
                 </button>
               </>
             )}
-          </ListItemContainer>
-        ))}
-        {/* {fields.map((field, index) => (
-          <ListItemContainer key={field.FieldName}>
-            <p>Field Name: {field.FieldName}</p>
-            {field.Crops.length > 0 && (
-              <>
-                <ListItem>CropType: {field.Crops[0].cropTypeId}</ListItem>
-                <button
-                  type="button"
-                  onClick={() => handleEditCrop(index, 0)}
-                >
-                  Edit Crop
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteCrop(index, 0)}
-                >
-                  Delete Crop
-                </button>
-              </>
-            )}
-            {field.Crops.length === 1 && (
+            {/* {field.Crops.length === 0 && (
               <button
                 type="button"
-                onClick={() => handleEditCrop(index, 1)}
-              >
-                Add Another Crop
-              </button>
-            )}
-            {field.Crops.length === 2 && (
-              <>
-                <ListItem>CropType: {field.Crops[1].cropTypeId}</ListItem>
-                <button
-                  type="button"
-                  onClick={() => handleEditCrop(index, 1)}
-                >
-                  Edit Second Crop
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteCrop(index, 1)}
-                >
-                  Delete Second Crop
-                </button>
-              </>
-            )}
-            {field.Crops.length === 0 && (
-              <button
-                type="button"
-                onClick={() => handleEditCrop(index, 0)}
+                onClick={() => {
+                  handleEditCrop(index, 0);
+                }}
+                aria-label={`Add Crop to ${field.FieldName}`}
               >
                 Add Crop
               </button>
-            )}
+            )} */}
           </ListItemContainer>
-        ))} */}
+        ))}
       </div>
       {isModalVisible && (
         <Modal
