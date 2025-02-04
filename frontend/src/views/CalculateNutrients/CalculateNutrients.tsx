@@ -34,7 +34,7 @@ export default function CalculateNutrients() {
   // extra blank tab being created
   const tabs = fields
     ? fields.map((field: { Id: number; FieldName: string; }) => ({
-        id: field.Id,
+        id: field.Id.toString(),
         label: field.FieldName,
         content: (
           <FieldTable
