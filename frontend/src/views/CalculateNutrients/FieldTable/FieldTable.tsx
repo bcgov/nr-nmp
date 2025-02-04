@@ -40,9 +40,9 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
   };
 
   const handleSubmit = () => {
-    setFields((prevFields) =>
-      prevFields.map((f) => (f.Id === field.Id ? { ...f, Fertilizer: field.Fertilizer } : f)),
-    );
+    // setFields((prevFields) =>
+    //   prevFields.map((f) => (f.Id === field.Id ? { ...f, Fertilizer: field.Fertilizer } : f)),
+    // );
     setIsModalVisible(false);
   };
 
@@ -71,7 +71,7 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
           <Dropdown
             label="Fertilizer"
             name="Fertilizer"
-            value={field}
+            value=""
             options={fertilizerOptions}
             onChange={handleChange}
           />
