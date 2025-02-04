@@ -42,6 +42,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [fieldFormData, setFieldFormData] = useState<NMPFileFieldData>(initialFieldFormData);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -59,7 +60,36 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
     setFields(updatedFields);
   };
 
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!fieldFormData.FieldName.trim()) {
+      newErrors.FieldName = 'Field Name is required';
+    } else if (
+      fields.some(
+        (field, index) =>
+          field.FieldName.trim().toLowerCase() === fieldFormData.FieldName.trim().toLowerCase() &&
+          index !== editIndex,
+      )
+    ) {
+      newErrors.FieldName = 'Field Name must be unique';
+    }
+    if (!fieldFormData.Area.trim() || Number.isNaN(Number(fieldFormData.Area))) {
+      newErrors.Area = 'Area is required and must be a number';
+    }
+    if (fieldFormData.PreviousYearManureApplicationFrequency === '0') {
+      newErrors.PreviousYearManureApplicationFrequency =
+        'Please select a manure application frequency';
+    }
+    return newErrors;
+  };
+
   const handleSubmit = () => {
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setErrors({});
     if (editIndex !== null) {
       const updatedFields = fields.map((field, index) =>
         index === editIndex ? fieldFormData : field,
@@ -147,6 +177,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           </>
         }
       >
+        {errors.FieldName && <div style={{ color: 'red' }}>{errors.FieldName}</div>}
         <InputField
           label="Field Name"
           type="text"
@@ -154,6 +185,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           value={fieldFormData.FieldName}
           onChange={handleChange}
         />
+        {errors.Area && <div style={{ color: 'red' }}>{errors.Area}</div>}
         <InputField
           label="Area"
           type="text"
@@ -161,6 +193,9 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           value={fieldFormData.Area}
           onChange={handleChange}
         />
+        {errors.PreviousYearManureApplicationFrequency && (
+          <div style={{ color: 'red' }}>{errors.PreviousYearManureApplicationFrequency}</div>
+        )}
         <Dropdown
           label="Manure application in previous years"
           name="PreviousYearManureApplicationFrequency"
