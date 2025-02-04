@@ -10,6 +10,7 @@ export const ListItemContainer = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 16px;
 `;
 
 export const InfoBoxContainer = styled.div`
@@ -20,6 +21,43 @@ export const InfoBoxContainer = styled.div`
   gap: 10px;
 `;
 
-export const ListItem = styled.div<{ align?: string }>`
-  text-align: ${({ align }) => (align === 'right' ? 'right' : 'left')};
+export const ListItem = styled.div`
+  margin-bottom: 8px;
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+`;
+
+export const LeftJustifiedText = styled.span`
+  display: block;
+  text-align: left;
+  margin-top: 8px;
+`;
+
+export const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+export const FlexContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+`;
+
+export const RightJustifiedText = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const Divider = styled.hr`
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 16px 0;
 `;

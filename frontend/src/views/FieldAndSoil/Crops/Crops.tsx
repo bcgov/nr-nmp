@@ -4,8 +4,17 @@
  * @summary This is the Crops Tab
  */
 import { useState, useEffect, useContext } from 'react';
-import { Modal, InputField, Dropdown, RadioButton } from '../../../components/common';
-import { ListItemContainer, ListItem } from './crops.styles';
+import { Modal, InputField, Dropdown, RadioButton, Button } from '../../../components/common';
+import {
+  ListItemContainer,
+  ListItem,
+  ButtonWrapper,
+  LeftJustifiedText,
+  ModalContent,
+  FlexContainer,
+  RightJustifiedText,
+  Divider,
+} from './crops.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
@@ -157,103 +166,111 @@ function Crops({ fields, setFields }: FieldListProps) {
           title="Edit Crop"
           onClose={() => setIsModalVisible(false)}
           footer={
-            <button
-              type="button"
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
+            <ButtonWrapper>
+              <Button
+                text="Cancel"
+                handleClick={() => setIsModalVisible(false)}
+                aria-label="Cancel"
+                variant="secondary"
+                size="sm"
+                disabled={false}
+              />
+              <Button
+                text="Submit"
+                handleClick={handleSubmit}
+                aria-label="Submit"
+                variant="primary"
+                size="sm"
+                disabled={false}
+              />
+            </ButtonWrapper>
           }
         >
-          <Dropdown
-            label="Crop Type"
-            name="cropTypeId"
-            value={combinedCropsData.cropTypeId || ''}
-            options={cropTypesDatabase.map((cropType) => ({
-              value: cropType.id,
-              label: cropType.name,
-            }))}
-            onChange={handleChange}
-          />
-          <Dropdown
-            label="Crop"
-            name="cropId"
-            value={combinedCropsData.cropId || ''}
-            options={filteredCrops}
-            onChange={handleChange}
-          />
-          {combinedCropsData.cropTypeId == 6 && (
-            <InputField
-              label="Crop Description"
-              type="text"
-              name="cropOther"
-              value={combinedCropsData.cropOther || ''}
+          <ModalContent>
+            <Dropdown
+              label="Crop Type"
+              name="cropTypeId"
+              value={combinedCropsData.cropTypeId || ''}
+              options={cropTypesDatabase.map((cropType) => ({
+                value: cropType.id,
+                label: cropType.name,
+              }))}
               onChange={handleChange}
             />
-          )}
-          <InputField
-            label="Yield"
-            type="text"
-            name="yield"
-            value={combinedCropsData.yield?.toString() || ''}
-            onChange={handleChange}
-          />
-          {combinedCropsData.cropTypeId == 1 && (
-            <InputField
-              label="Crude Protein"
-              type="text"
-              name="crudeProtien"
-              value={combinedCropsData.crudeProtien?.toString() || ''}
+            <Dropdown
+              label="Crop"
+              name="cropId"
+              value={combinedCropsData.cropId || ''}
+              options={filteredCrops}
               onChange={handleChange}
             />
-          )}
-          {combinedCropsData.cropTypeId != 6 && (
-            <>
-              <Dropdown
-                label="Previous crop ploughed down (N credit)"
-                name="prevCropId"
-                value={combinedCropsData.prevCropId?.toString() || ''}
-                options={[]}
+            {combinedCropsData.cropTypeId == 6 && (
+              <InputField
+                label="Crop Description"
+                type="text"
+                name="cropOther"
+                value={combinedCropsData.cropOther || ''}
                 onChange={handleChange}
               />
-              <span>
-                N credit (lb/ac)<div>{combinedCropsData.crudeProtien}</div>
-              </span>
-            </>
-          )}
-          {combinedCropsData.cropTypeId == 2 && (
-            <>
-              <span style={{ marginRight: '8px' }}>Cover Crop Harvested?</span>
-              <RadioButton
-                label="Yes"
-                name="coverCropHarvested"
-                value="true"
-                checked={combinedCropsData.coverCropHarvested === 'true'}
+            )}
+            <InputField
+              label="Yield"
+              type="text"
+              name="yield"
+              value={combinedCropsData.yield?.toString() || ''}
+              onChange={handleChange}
+            />
+            {combinedCropsData.cropTypeId == 1 && (
+              <InputField
+                label="Crude Protein"
+                type="text"
+                name="crudeProtien"
+                value={combinedCropsData.crudeProtien?.toString() || ''}
                 onChange={handleChange}
               />
-              <RadioButton
-                label="No"
-                name="coverCropHarvested"
-                value="false"
-                checked={combinedCropsData.coverCropHarvested === 'false'}
-                onChange={handleChange}
-              />
-            </>
-          )}
-          <span>
-            Crop Requirement (lb/ac)
-            <div>
-              N: {combinedCropsData.reqN} P2O5: {combinedCropsData.reqP2o5} K2O:
-              {combinedCropsData.reqK2o}
-            </div>
-          </span>
-          <span>
-            Nutrient Removal (lb/ac)
-            <div>
-              N: {combinedCropsData.remN} P2O5: {combinedCropsData.remP2o5} K2O:
-              {combinedCropsData.remK2o}
-            </div>
-          </span>
+            )}
+            {combinedCropsData.cropTypeId != 6 && (
+              <FlexContainer>
+                <LeftJustifiedText>
+                  N credit (lb/ac)<div>{combinedCropsData.crudeProtien}</div>
+                </LeftJustifiedText>
+                {combinedCropsData.cropTypeId == 2 && (
+                  <RightJustifiedText>
+                    <span>Cover Crop Harvested?</span>
+                    <RadioButton
+                      label="Yes"
+                      name="coverCropHarvested"
+                      value="true"
+                      checked={combinedCropsData.coverCropHarvested === 'true'}
+                      onChange={handleChange}
+                    />
+                    <RadioButton
+                      label="No"
+                      name="coverCropHarvested"
+                      value="false"
+                      checked={combinedCropsData.coverCropHarvested === 'false'}
+                      onChange={handleChange}
+                    />
+                  </RightJustifiedText>
+                )}
+              </FlexContainer>
+            )}
+            <Divider />
+            <span>
+              Crop Requirement (lb/ac)
+              <div>
+                N: {combinedCropsData.reqN} P2O5: {combinedCropsData.reqP2o5} K2O:
+                {combinedCropsData.reqK2o}
+              </div>
+            </span>
+            <span>
+              Nutrient Removal (lb/ac)
+              <div>
+                N: {combinedCropsData.remN} P2O5: {combinedCropsData.remP2o5} K2O:
+                {combinedCropsData.remK2o}
+              </div>
+            </span>
+          </ModalContent>
         </Modal>
       )}
     </div>
