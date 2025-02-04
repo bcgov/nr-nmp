@@ -1,13 +1,51 @@
 /**
  * @summary The field table on the calculate nutrients page displays crops in the selected field
  */
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { TableWrapper } from '../CalculateNutrients.styles';
+import { Dropdown } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
 import FertilizerDetails from '../FertilizerDetails/FertilizerDetails';
 
-export default function FieldTable({ field, setFields }) {
+interface Field {
+  FieldName: string;
+  Id: number;
+  Area: string;
+  PreviousYearManureApplicationFrequency: string;
+  Comment: string;
+  SoilTest: object;
+  Crops: any[];
+}
+
+interface FieldTableProps {
+  field: Field;
+  setFields: React.Dispatch<React.SetStateAction<Field[]>>;
+}
+
+export default function FieldTable({ field, setFields }: FieldTableProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const fertilizerOptions = [
+    { value: 0, label: 'Dry Fertilizer' },
+    { value: 1, label: 'Dry Fertilizer (Custom)' },
+    { value: 2, label: 'Liquid Fertilizer' },
+    { value: 3, label: 'Liquid Fertilizer (Custom)' },
+  ];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFields((allFields) =>
+      allFields.map((f) => (f.Id === field.Id ? { ...f, [name]: value } : f)),
+    );
+  };
+
+  const handleSubmit = () => {
+    // setFields((prevFields) =>
+    //   prevFields.map((f) => (f.Id === field.Id ? { ...f, Fertilizer: field.Fertilizer } : f)),
+    // );
+    setIsModalVisible(false);
+  };
 
   return (
     <div>
