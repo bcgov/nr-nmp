@@ -80,8 +80,8 @@ export default function FieldAndSoil() {
     setNMPFile(JSON.stringify(nmpFile));
 
     // if on the last tab navigate to calculate nutrients page
-    if (activeTab === tabs.length -1) {
-      navigate('/calculate-nutrients')
+    if (activeTab === tabs.length - 1) {
+      navigate('/calculate-nutrients');
     } else {
       setActiveTab(activeTab + 1);
     }
@@ -112,6 +112,7 @@ export default function FieldAndSoil() {
             tabs={tabs}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            clickable={false}
           />
         </Banner>
       </CardHeader>
@@ -123,21 +124,17 @@ export default function FieldAndSoil() {
         <Button
           text="Next"
           size="sm"
-          handleClick={() => {
-            handleNext();
-          }}
+          handleClick={handleNext}
           aria-label="Next"
           variant="primary"
-          disabled={false}
+          disabled={fields.length === 0}
         />
       </ButtonWrapper>
       <ButtonWrapper position="left">
         <Button
           text="Back"
           size="sm"
-          handleClick={() => {
-            handlePrevious();
-          }}
+          handleClick={handlePrevious}
           aria-label="Back"
           variant="primary"
           disabled={false}

@@ -4,7 +4,6 @@ export const TabsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  margin-top: 1em;
   align-items: flex-end; // Align tabs to the bottom
 `;
 
@@ -20,10 +19,6 @@ export const Tab = styled.button<{ active: boolean }>`
   border-radius: 5px 5px 0 0;
   height: ${({ active }) => (active ? '66px' : '40px')};
   margin-top: ${({ active }) => (active ? '0' : '37px')};
-  &:hover {
-    background-color: #fff;
-    color: #000;
-  }
 `;
 
 export const TabContent = styled.div`

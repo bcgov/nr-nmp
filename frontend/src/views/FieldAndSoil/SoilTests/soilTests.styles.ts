@@ -57,3 +57,7 @@ export const Column = styled.div<{ align?: string }>`
 export const ListItem = styled.div<{ align?: string }>`
   text-align: ${({ align }) => (align === 'right' ? 'right' : 'left')};
 `;
+
+export const ErrorText = styled.div`
+  color: red;
+`;
