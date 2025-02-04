@@ -19,3 +19,7 @@ export const InfoBoxContainer = styled.div`
   align-items: center;
   gap: 10px;
 `;
+
+export const ListItem = styled.div<{ align?: string }>`
+  text-align: ${({ align }) => (align === 'right' ? 'right' : 'left')};
+`;

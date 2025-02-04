@@ -5,7 +5,7 @@
  */
 import { useState, useEffect, useContext } from 'react';
 import { Modal, InputField, Dropdown, RadioButton } from '../../../components/common';
-import { ListItemContainer } from './crops.styles';
+import { ListItemContainer, ListItem } from './crops.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
@@ -16,10 +16,11 @@ interface FieldListProps {
   setFields: (fields: any[]) => void;
 }
 
-export default function Crops({ fields, setFields }: FieldListProps) {
+function Crops({ fields, setFields }: FieldListProps) {
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
+  const [currentCropIndex, setCurrentCropIndex] = useState<number | null>(null);
   const [combinedCropsData, setCombinedCropsData] =
     useState<NMPFileCropData>(defaultNMPFileCropsData);
   const [filteredCrops, setFilteredCrops] = useState<{ value: number; label: string }[]>([]);
@@ -52,6 +53,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
     }[]
   >([]);
 
+  // Works
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setCombinedCropsData({ ...combinedCropsData, [name]: value });
@@ -63,15 +65,16 @@ export default function Crops({ fields, setFields }: FieldListProps) {
     }
   };
 
-  const handleEditCrop = (index: number) => {
-    setCurrentFieldIndex(index);
-    setCombinedCropsData(fields[index].Crops[0] || combinedCropsData);
+  const handleEditCrop = (fieldIndex: number, cropIndex: number) => {
+    setCurrentFieldIndex(fieldIndex);
+    setCurrentCropIndex(cropIndex);
+    setCombinedCropsData(fields[fieldIndex].Crops[cropIndex] || combinedCropsData);
     setIsModalVisible(true);
   };
 
-  const handleDeleteCrop = (index: number) => {
+  const handleDeleteCrop = (fieldIndex: number, cropIndex: number) => {
     const updatedFields = fields.map((field, i) =>
-      i === index ? { ...field, SoilTest: {} } : field,
+      i === fieldIndex ? { ...field, Crops: field.Crops.filter((_, j) => j !== cropIndex) } : field,
     );
     setFields(updatedFields);
   };
@@ -79,8 +82,19 @@ export default function Crops({ fields, setFields }: FieldListProps) {
   const handleSubmit = () => {
     if (currentFieldIndex !== null) {
       const updatedFields = fields.map((field, index) =>
-        index === currentFieldIndex ? { ...field, Crops: combinedCropsData } : field,
+        index === currentFieldIndex
+          ? {
+              ...field,
+              Crops:
+                currentCropIndex !== null
+                  ? field.Crops.map((crop, cropIndex) =>
+                      cropIndex === currentCropIndex ? combinedCropsData : crop,
+                    )
+                  : [...field.Crops, combinedCropsData],
+            }
+          : field,
       );
+      console.log('updatedFields', updatedFields);
       setFields(updatedFields);
       setIsModalVisible(false);
     }
@@ -106,38 +120,97 @@ export default function Crops({ fields, setFields }: FieldListProps) {
       <div>
         {fields.map((field, index) => (
           <ListItemContainer key={field.FieldName}>
-            <p>Field Name: {field.FieldName}</p>
-            {Object.keys(field.Crops).length === 1 ? (
+            <ListItem>FieldName: {field.FieldName}</ListItem>
+            {Object.keys(field.Crops[0]).length === 0 ? (
               <button
                 type="button"
-                onClick={() => handleEditCrop(index)}
+                onClick={() => {
+                  handleEditCrop(index, 0);
+                }}
+                aria-label={`Add Crop to ${field.FieldName}`}
               >
                 Add Crop
               </button>
             ) : (
               <>
+                <ListItem>CropType: {field.Crops[0].cropTypeId}</ListItem>
                 <button
                   type="button"
-                  onClick={() => handleEditCrop(index)}
+                  onClick={() => {
+                    handleEditCrop(index, 0);
+                  }}
+                  aria-label={`Add Crop to ${field.FieldName}`}
                 >
                   Edit Crop
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleDeleteCrop(index)}
+                  onClick={() => {
+                    handleDeleteCrop(index, 0);
+                  }}
+                  aria-label={`Add Crop to ${field.FieldName}`}
                 >
                   Delete Crop
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleEditCrop(index)}
-                >
-                  Add Another Crop
                 </button>
               </>
             )}
           </ListItemContainer>
         ))}
+        {/* {fields.map((field, index) => (
+          <ListItemContainer key={field.FieldName}>
+            <p>Field Name: {field.FieldName}</p>
+            {field.Crops.length > 0 && (
+              <>
+                <ListItem>CropType: {field.Crops[0].cropTypeId}</ListItem>
+                <button
+                  type="button"
+                  onClick={() => handleEditCrop(index, 0)}
+                >
+                  Edit Crop
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteCrop(index, 0)}
+                >
+                  Delete Crop
+                </button>
+              </>
+            )}
+            {field.Crops.length === 1 && (
+              <button
+                type="button"
+                onClick={() => handleEditCrop(index, 1)}
+              >
+                Add Another Crop
+              </button>
+            )}
+            {field.Crops.length === 2 && (
+              <>
+                <ListItem>CropType: {field.Crops[1].cropTypeId}</ListItem>
+                <button
+                  type="button"
+                  onClick={() => handleEditCrop(index, 1)}
+                >
+                  Edit Second Crop
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDeleteCrop(index, 1)}
+                >
+                  Delete Second Crop
+                </button>
+              </>
+            )}
+            {field.Crops.length === 0 && (
+              <button
+                type="button"
+                onClick={() => handleEditCrop(index, 0)}
+              >
+                Add Crop
+              </button>
+            )}
+          </ListItemContainer>
+        ))} */}
       </div>
       {isModalVisible && (
         <Modal
@@ -157,7 +230,10 @@ export default function Crops({ fields, setFields }: FieldListProps) {
             label="Crop Type"
             name="cropTypeId"
             value={combinedCropsData.cropTypeId || ''}
-            options={cropTypesDatabase.map((crop) => ({ value: crop.id, label: crop.name }))}
+            options={cropTypesDatabase.map((cropType) => ({
+              value: cropType.id,
+              label: cropType.name,
+            }))}
             onChange={handleChange}
           />
           <Dropdown
@@ -202,7 +278,7 @@ export default function Crops({ fields, setFields }: FieldListProps) {
                 onChange={handleChange}
               />
               <span>
-                N credit (lb/ac)<div>TEST{combinedCropsData.crudeProtien}</div>
+                N credit (lb/ac)<div>{combinedCropsData.crudeProtien}</div>
               </span>
             </>
           )}
@@ -244,3 +320,5 @@ export default function Crops({ fields, setFields }: FieldListProps) {
     </div>
   );
 }
+
+export default Crops;
