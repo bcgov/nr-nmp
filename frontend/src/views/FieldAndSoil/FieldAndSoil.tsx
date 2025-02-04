@@ -67,7 +67,6 @@ export default function FieldAndSoil() {
 
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
     else nmpFile = defaultNMPFile;
-    console.log(nmpFile);
     if (nmpFile.years && nmpFile.years.length > 0) {
       nmpFile.years[0].Fields = fields.map((field) => ({
         FieldName: field.FieldName,
