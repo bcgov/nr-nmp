@@ -43,6 +43,9 @@ export default function FieldTable({ field, setFields }) {
     // setFields((prevFields) =>
     //   prevFields.map((f) => (f.Id === field.Id ? { ...f, Fertilizer: field.Fertilizer } : f)),
     // );
+    // setFields((prevFields) =>
+    //   prevFields.map((f) => (f.Id === field.Id ? { ...f, Fertilizer: field.Fertilizer } : f)),
+    // );
     setIsModalVisible(false);
   };
 
@@ -61,13 +64,21 @@ export default function FieldTable({ field, setFields }) {
           isVisible={isModalVisible}
           title="Add Fertilizer"
           onClose={() => setIsModalVisible(false)}
+          footer={
+            <button
+              type="button"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          }
         >
-          <FertilizerDetails
-            key={field.Id}
-            field={field}
-            setFields={setFields}
-            isModalVisible={isModalVisible}
-            setIsModalVisible={setIsModalVisible}
+          <Dropdown
+            label="Fertilizer"
+            name="Fertilizer"
+            value={field}
+            options={fertilizerOptions}
+            onChange={handleChange}
           />
         </Modal>
 
