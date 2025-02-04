@@ -4,8 +4,13 @@
  * @summary This is the Crops Tab
  */
 import { useState, useEffect, useContext } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Modal, InputField, Dropdown, RadioButton, Button } from '../../../components/common';
 import {
+  ContentWrapper,
+  Header,
+  Column,
   ListItemContainer,
   ListItem,
   ButtonWrapper,
@@ -125,46 +130,57 @@ function Crops({ fields, setFields }: FieldListProps) {
 
   return (
     <div>
-      <div>
+      <ContentWrapper hasFields={fields.length > 0}>
+        <Header>
+          <Column>Field Name</Column>
+          <Column>Crop Name</Column>
+          <Column align="right">Actions</Column>
+        </Header>
         {fields.map((field, index) => (
           <ListItemContainer key={field.FieldName}>
-            <ListItem>FieldName: {field.FieldName}</ListItem>
+            <ListItem>{field.FieldName}</ListItem>
+            {field.Crops.length === 0 && <ListItem>None</ListItem>}
             {field.Crops.length === 0 ? (
-              <button
-                type="button"
-                onClick={() => {
-                  handleEditCrop(index);
-                }}
-                aria-label={`Add Crop to ${field.FieldName}`}
-              >
-                Add Crop
-              </button>
-            ) : (
-              <div>
-                <ListItem>CropName: {field.Crops[0].cropName}</ListItem>
-                <button
-                  type="button"
-                  onClick={() => {
+              <ListItem align="right">
+                <Button
+                  text="Add Crop"
+                  handleClick={() => {
                     handleEditCrop(index);
                   }}
-                  aria-label={`Edit Crop ${field.Crops[0].cropName}`}
-                >
-                  Edit Crop
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleDeleteCrop(index);
-                  }}
-                  aria-label={`Delete Crop ${field.Crops[0].cropName}`}
-                >
-                  Delete Crop
-                </button>
-              </div>
+                  aria-label={`Add Crop to ${field.FieldName}`}
+                  variant="primary"
+                  size="sm"
+                  disabled={false}
+                />
+              </ListItem>
+            ) : (
+              <>
+                <ListItem>{field.Crops[0].cropName}</ListItem>
+                <ListItem align="right">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleEditCrop(index);
+                    }}
+                    aria-label={`Edit Crop ${field.Crops[0].cropName}`}
+                  >
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleDeleteCrop(index);
+                    }}
+                    aria-label={`Delete Crop ${field.Crops[0].cropName}`}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </ListItem>
+              </>
             )}
           </ListItemContainer>
         ))}
-      </div>
+      </ContentWrapper>
       {isModalVisible && (
         <Modal
           isVisible={isModalVisible}

@@ -3,14 +3,26 @@
  */
 import styled from '@emotion/styled';
 
+export const ContentWrapper = styled.div<{ hasFields: boolean }>`
+  margin-bottom: 170px;
+`;
+
 export const ListItemContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  width: 100%;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 10px;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
+`;
+
+export const Header = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
 `;
 
 export const InfoBoxContainer = styled.div`
@@ -21,8 +33,8 @@ export const InfoBoxContainer = styled.div`
   gap: 10px;
 `;
 
-export const ListItem = styled.div`
-  margin-bottom: 8px;
+export const ListItem = styled.div<{ align?: string }>`
+  text-align: ${({ align }) => (align === 'right' ? 'right' : 'left')};
 `;
 
 export const ButtonWrapper = styled.div`
@@ -88,4 +100,18 @@ export const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+`;
+
+export const ButtonContainer = styled.div<{ hasFields: boolean }>`
+  display: flex;
+  justify-content: ${({ hasFields }) => (hasFields ? 'flex-end' : 'center')};
+  margin: 16px 0;
+  button {
+    width: 100px;
+    height: 40px;
+  }
+`;
+
+export const Column = styled.div<{ align?: string }>`
+  text-align: ${({ align }) => (align === 'right' ? 'right' : 'left')};
 `;
