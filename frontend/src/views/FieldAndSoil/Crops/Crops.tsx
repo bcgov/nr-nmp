@@ -225,6 +225,7 @@ function Crops({ fields, setFields }: FieldListProps) {
               options={filteredCrops}
               onChange={handleChange}
             />
+            {/* Each of these are a conditional render based on the cropTypeId of the select crop type */}
             {combinedCropsData.cropTypeId == 6 && (
               <InputField
                 label="Crop Description"
