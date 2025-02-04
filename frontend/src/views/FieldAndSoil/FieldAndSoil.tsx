@@ -2,7 +2,7 @@
  * @summary The Field and Soil page for the application
  */
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '@/constants/DefaultNMPFile';

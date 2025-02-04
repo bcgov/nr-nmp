@@ -4,7 +4,7 @@ import { TabsWrapper, Tab, TabContent } from './tabs.styles';
 interface TabProps {
   label: string;
   content: React.ReactNode;
-  id: string;
+  id: number;
 }
 
 interface TabsProps {

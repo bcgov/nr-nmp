@@ -1,7 +1,7 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TableWrapper } from '../CalculateNutrients.styles';
 import { Dropdown } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
@@ -51,7 +51,7 @@ export default function FieldTable({ field, setFields }) {
           <Dropdown
             label="Fertilizer"
             name="Fertilizer"
-            // value={field.Fertilizer}
+            value={field}
             options={fertilizerOptions}
             onChange={handleChange}
           />
