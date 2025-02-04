@@ -9,7 +9,7 @@ import defaultNMPFile from '@/constants/DefaultNMPFile';
 import FieldList from './FieldList/FieldList';
 import SoilTests from './SoilTests/SoilTests';
 import Crops from './Crops/Crops';
-import { Card, Button } from '../../components/common';
+import { Card, Button, Modal } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
@@ -28,6 +28,7 @@ export default function FieldAndSoil() {
       Crops: NMPFileCropData[];
     }[]
   >([]);
+  const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
 
   const tabs = [
     {
@@ -63,6 +64,11 @@ export default function FieldAndSoil() {
   ];
 
   const handleNext = () => {
+    if (fields.length === 0) {
+      setIsWarningModalVisible(true);
+      return;
+    }
+
     let nmpFile: NMPFile;
 
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
@@ -137,6 +143,23 @@ export default function FieldAndSoil() {
           disabled={false}
         />
       </ButtonWrapper>
+      <Modal
+        isVisible={isWarningModalVisible}
+        title="Warning"
+        onClose={() => setIsWarningModalVisible(false)}
+        footer={
+          <Button
+            text="OK"
+            handleClick={() => setIsWarningModalVisible(false)}
+            aria-label="OK"
+            variant="primary"
+            size="sm"
+            disabled={false}
+          />
+        }
+      >
+        Please add a field to proceed.
+      </Modal>
     </Card>
   );
 }
