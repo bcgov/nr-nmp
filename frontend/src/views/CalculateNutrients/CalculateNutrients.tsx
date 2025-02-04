@@ -8,18 +8,16 @@ import {
   CardHeader,
   Banner,
   Heading,
-  Table,
   ButtonWrapper,
-  TabWrapper,
 } from './CalculateNutrients.styles';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
-import { InputField, RadioButton, Checkbox, Dropdown, Card, Button } from '../../components/common';
+import { Card, Button } from '../../components/common';
+import FieldTable from './FieldTable/FieldTable';
 
 export default function CalculateNutrients() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [fields, setFields] = useState<
   const [fields, setFields] = useState<
     {
       FieldName: string;
@@ -35,7 +33,7 @@ export default function CalculateNutrients() {
   // for each field create a tab with the field name and populate with its crops
   // extra blank tab being created
   const tabs = fields
-    ? fields.map((field) => ({
+    ? fields.map((field: { Id: number; FieldName: string; }) => ({
         id: field.Id,
         label: field.FieldName,
         content: (
