@@ -29,6 +29,7 @@ export default function FieldAndSoil() {
     }[]
   >([]);
   const [isWarningModalVisible, setIsWarningModalVisible] = useState(false);
+  const [warningText, setWarningText] = useState('');
 
   const tabs = [
     {
@@ -65,9 +66,19 @@ export default function FieldAndSoil() {
 
   const handleNext = () => {
     if (fields.length === 0) {
+      setWarningText('Please add a field to proceed.');
       setIsWarningModalVisible(true);
       return;
     }
+
+    // fields.forEach((field) => {
+    //   if (Object.keys(field.SoilTest).length === 0) {
+    //     setWarningText(
+    //       'For fields without a soil test, very high soil P and K fertility and a pH of 6.0 will be assumed. Crop P and K requirements will be 0 on fields without a soil test.',
+    //     );
+    //     setIsWarningModalVisible(true);
+    //   }
+    // });
 
     let nmpFile: NMPFile;
 
@@ -158,7 +169,7 @@ export default function FieldAndSoil() {
           />
         }
       >
-        Please add a field to proceed.
+        {warningText}
       </Modal>
     </Card>
   );

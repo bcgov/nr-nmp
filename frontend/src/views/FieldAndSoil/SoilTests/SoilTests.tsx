@@ -62,6 +62,9 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     if (!soilTestData.valPH || Number.isNaN(Number(soilTestData.valPH))) {
       newErrors.valPH = 'pH is required and must be a number';
     }
+    if (Number(soilTestData.valPH) < 0 || Number(soilTestData.valPH) > 14) {
+      newErrors.valPH = 'pH must be between 0 and 14';
+    }
     return newErrors;
   };
 
