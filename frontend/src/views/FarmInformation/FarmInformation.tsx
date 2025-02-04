@@ -38,8 +38,6 @@ export default function FarmInformation() {
 
   // Flagging for potential issues if the state.nmpFile object can change
   // This would trigger resets and state issues
-  // Flagging for potential issues if the state.nmpFile object can change
-  // This would trigger resets and state issues
   useEffect(() => {
     if (state.nmpFile) {
       const data = state.nmpFile;
@@ -58,7 +56,6 @@ export default function FarmInformation() {
           HasPoultry: parsedData.farmDetails.HasPoultry || false,
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
-          Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
         });
       }
@@ -234,13 +231,6 @@ export default function FarmInformation() {
           />
         </SelectorContainer>
       )}
-      <YesNoRadioButtons
-        name="HasAnimals"
-        text="I have animals"
-        handleYes={handleChange}
-        handleNo={handleChange}
-      />
-      {formData.HasAnimals && animalRadioButtons}
       <YesNoRadioButtons
         name="HasAnimals"
         text="I have animals"
