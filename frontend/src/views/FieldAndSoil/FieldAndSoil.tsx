@@ -109,6 +109,7 @@ export default function FieldAndSoil() {
             tabs={tabs}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            clickable={false}
           />
         </Banner>
       </CardHeader>
@@ -120,9 +121,7 @@ export default function FieldAndSoil() {
         <Button
           text="Next"
           size="sm"
-          handleClick={() => {
-            handleNext();
-          }}
+          handleClick={handleNext}
           aria-label="Next"
           variant="primary"
           disabled={false}
@@ -132,9 +131,7 @@ export default function FieldAndSoil() {
         <Button
           text="Back"
           size="sm"
-          handleClick={() => {
-            handlePrevious();
-          }}
+          handleClick={handlePrevious}
           aria-label="Back"
           variant="primary"
           disabled={false}

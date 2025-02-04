@@ -11,9 +11,10 @@ interface TabsProps {
   tabs: TabProps[];
   activeTab: number;
   setActiveTab?: (index: number) => void;
+  clickable?: boolean;
 }
 
-export function TabOptions({ tabs, activeTab, setActiveTab }: TabsProps) {
+export function TabOptions({ tabs, activeTab, setActiveTab, clickable = true }: TabsProps) {
   return (
     <TabsWrapper>
       <div>
@@ -21,7 +22,7 @@ export function TabOptions({ tabs, activeTab, setActiveTab }: TabsProps) {
           <Tab
             key={tab.id}
             active={index === activeTab}
-            onClick={() => setActiveTab && setActiveTab(index)}
+            onClick={() => clickable && setActiveTab && setActiveTab(index)}
           >
             {tab.label}
           </Tab>
