@@ -94,7 +94,6 @@ export default function FarmInformation() {
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
     else nmpFile = defaultNMPFile;
 
-    console.log('nmpFile', nmpFile);
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
 
     setNMPFile(JSON.stringify(nmpFile));
