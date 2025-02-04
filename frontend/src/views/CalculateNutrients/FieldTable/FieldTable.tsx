@@ -22,7 +22,7 @@ interface FieldTableProps {
   setFields: React.Dispatch<React.SetStateAction<Field[]>>;
 }
 
-export default function FieldTable({ field, setFields }: FieldTableProps) {
+export default function FieldTable({ field, setFields }) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const fertilizerOptions = [

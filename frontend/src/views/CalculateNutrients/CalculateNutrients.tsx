@@ -15,7 +15,7 @@ import { Card, Button } from '../../components/common';
 import FieldTable from './FieldTable/FieldTable';
 
 export default function CalculateNutrients() {
-  const { state, setNMPFile } = useAppService();
+  const { state } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [fields, setFields] = useState<
@@ -33,7 +33,7 @@ export default function CalculateNutrients() {
   // for each field create a tab with the field name and populate with its crops
   // extra blank tab being created
   const tabs = fields
-    ? fields.map((field: { Id: number; FieldName: string; }) => ({
+    ? fields.map((field) => ({
         id: field.Id.toString(),
         label: field.FieldName,
         content: (
