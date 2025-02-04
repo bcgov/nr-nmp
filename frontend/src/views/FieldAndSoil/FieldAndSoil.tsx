@@ -12,6 +12,7 @@ import Crops from './Crops/Crops';
 import { Card, Button } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
+import NMPFileCropData from '@/types/NMPFileCropData';
 
 export default function FieldAndSoil() {
   const { state, setNMPFile } = useAppService();
@@ -24,7 +25,7 @@ export default function FieldAndSoil() {
       PreviousYearManureApplicationFrequency: string;
       Comment: string;
       SoilTest: object;
-      Crops: any[];
+      Crops: NMPFileCropData[];
     }[]
   >([]);
 
@@ -66,7 +67,6 @@ export default function FieldAndSoil() {
 
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
     else nmpFile = defaultNMPFile;
-
     if (nmpFile.years && nmpFile.years.length > 0) {
       nmpFile.years[0].Fields = fields.map((field) => ({
         FieldName: field.FieldName,

@@ -2,8 +2,18 @@
  * @summary This is the Soil Tests Tab
  */
 import { useState } from 'react';
-import { Dropdown, Modal, InputField } from '../../../components/common';
-import { InfoBox, ListItemContainer } from './soilTests.styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown, Modal, InputField, Button } from '../../../components/common';
+import {
+  InfoBox,
+  ListItemContainer,
+  ContentWrapper,
+  Header,
+  Column,
+  ListItem,
+  ButtonWrapper,
+} from './soilTests.styles';
 
 interface FieldListProps {
   fields: any[];
@@ -59,69 +69,104 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
 
   return (
     <div>
-      <InfoBox>
-        Do you have soil test from within the past 3 years?
-        <ul>
-          <li>Yes - Select the lab used (soil test methods)</li>
-          <li>No - Click Next</li>
-        </ul>
-      </InfoBox>
-      <Dropdown
-        label="Lab (Soil Test Method)"
-        name="SoilTest"
-        value={soilTestData.SoilTest}
-        options={soilTestOptions}
-        onChange={handleChange}
-      />
-      {soilTestData.SoilTest !== '1' && (
-        <div>
-          {fields.map((field, index) => (
-            <ListItemContainer key={field.FieldName}>
-              <p>Field Name: {field.FieldName}</p>
-              <p>Sampling Month: {field.SoilTest.sampleDate}</p>
-              <p>NO3-N (ppm): {field.SoilTest.valNO3H}</p>
-              <p>P (ppm): {field.SoilTest.ValP}</p>
-              <p>K (ppm): {field.SoilTest.valK}</p>
-              <p>pH: {field.SoilTest.valPH}</p>
-              {Object.keys(field.SoilTest).length === 0 ? (
-                <button
-                  type="button"
-                  onClick={() => handleEditSoilTest(index)}
-                >
-                  Add Soil Test Results
-                </button>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => handleEditSoilTest(index)}
-                  >
-                    Edit Soil Test
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteSoilTest(index)}
-                  >
-                    Delete Soil Test
-                  </button>
-                </>
-              )}
-            </ListItemContainer>
-          ))}
-        </div>
-      )}
+      <ContentWrapper hasFields={fields.length > 0}>
+        {soilTestData.SoilTest === '1' && (
+          <InfoBox>
+            Do you have soil test from within the past 3 years?
+            <ul>
+              <li>Yes - Select the lab used (soil test methods)</li>
+              <li>No - Click Next</li>
+            </ul>
+          </InfoBox>
+        )}
+        <Dropdown
+          label="Lab (Soil Test Method)"
+          name="SoilTest"
+          value={soilTestData.SoilTest}
+          options={soilTestOptions}
+          onChange={handleChange}
+        />
+        {soilTestData.SoilTest !== '1' && (
+          <div>
+            {fields.length > 0 && (
+              <Header>
+                <Column>Field Name</Column>
+                <Column>Sampling Month</Column>
+                <Column>NO3-N (ppm)</Column>
+                <Column>P (ppm)</Column>
+                <Column>K (ppm)</Column>
+                <Column>pH</Column>
+                <Column align="right">Actions</Column>
+              </Header>
+            )}
+            {fields.map((field, index) => (
+              <ListItemContainer key={field.FieldName}>
+                <ListItem>{field.FieldName}</ListItem>
+                <ListItem>{field.SoilTest.sampleDate}</ListItem>
+                <ListItem>{field.SoilTest.valNO3H}</ListItem>
+                <ListItem>{field.SoilTest.ValP}</ListItem>
+                <ListItem>{field.SoilTest.valK}</ListItem>
+                <ListItem>{field.SoilTest.valPH}</ListItem>
+                {Object.keys(field.SoilTest).length === 0 ? (
+                  <ListItem align="right">
+                    <Button
+                      text="Add Soil Test"
+                      handleClick={() => handleEditSoilTest(index)}
+                      aria-label="Add Soil Test Results"
+                      variant="primary"
+                      size="sm"
+                      disabled={false}
+                    />
+                  </ListItem>
+                ) : (
+                  <ListItem align="right">
+                    <button
+                      type="button"
+                      onClick={() => handleEditSoilTest(index)}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteSoilTest(index)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </ListItem>
+                )}
+              </ListItemContainer>
+            ))}
+          </div>
+        )}
+      </ContentWrapper>
       {isModalVisible && (
         <Modal
           isVisible={isModalVisible}
           title="Edit Soil Test"
           onClose={() => setIsModalVisible(false)}
           footer={
-            <button
-              type="button"
-              onClick={handleSubmit}
-            >
-              Submit
-            </button>
+            <>
+              <ButtonWrapper>
+                <Button
+                  text="Cancel"
+                  handleClick={() => setIsModalVisible(false)}
+                  aria-label="Cancel"
+                  variant="secondary"
+                  size="sm"
+                  disabled={false}
+                />
+              </ButtonWrapper>
+              <ButtonWrapper>
+                <Button
+                  text="Submit"
+                  handleClick={handleSubmit}
+                  aria-label="Submit"
+                  variant="primary"
+                  size="sm"
+                  disabled={false}
+                />
+              </ButtonWrapper>
+            </>
           }
         >
           <InputField

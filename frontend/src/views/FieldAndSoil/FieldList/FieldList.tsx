@@ -2,9 +2,19 @@
  * @summary This is the Field list Tab
  */
 import React, { useState } from 'react';
-import { Dropdown, InputField } from '../../../components/common';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown, InputField, Button } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
-import ListItemContainer from './fieldList.styles';
+import {
+  ListItemContainer,
+  ButtonWrapper,
+  Header,
+  Column,
+  ListItem,
+  ContentWrapper,
+  ButtonContainer,
+} from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 interface FieldListProps {
@@ -18,8 +28,15 @@ const initialFieldFormData = {
   PreviousYearManureApplicationFrequency: '0',
   Comment: '',
   SoilTest: {},
-  Crops: [{}],
+  Crops: [],
 };
+
+const manureOptions = [
+  { value: 0, label: 'Select' },
+  { value: 1, label: 'No Manure in the last 2 years' },
+  { value: 2, label: 'Manure applied in 1 of the 2 years' },
+  { value: 3, label: 'Manure applied in each of the 2 years' },
+];
 
 export default function FieldList({ fields, setFields }: FieldListProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -56,53 +73,78 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
     setIsModalVisible(false);
   };
 
-  const manureOptions = [
-    { value: 0, label: 'Select' },
-    { value: 1, label: 'No Manure in the last 2 years' },
-    { value: 2, label: 'Manure applied in 1 of the 2 years' },
-    { value: 3, label: 'Manure applied in each of the 2 years' },
-  ];
+  const filteredFields = fields.filter((field) => field.FieldName.trim() !== '');
 
   return (
     <div>
-      {fields
-        .filter((field) => field.FieldName.trim() !== '')
-        .map((field, index) => (
+      <ButtonContainer hasFields={filteredFields.length > 0}>
+        <Button
+          text="Add Field"
+          handleClick={() => setIsModalVisible(true)}
+          aria-label="Add Field"
+          variant="primary"
+          size="sm"
+          disabled={false}
+        />
+      </ButtonContainer>
+      <ContentWrapper hasFields={filteredFields.length > 0}>
+        {filteredFields.length > 0 && (
+          <Header>
+            <Column>Field Name</Column>
+            <Column>Area</Column>
+            <Column>Comments</Column>
+            <Column align="right">Actions</Column>
+          </Header>
+        )}
+        {filteredFields.map((field, index) => (
           <ListItemContainer key={field.FieldName}>
-            <p>Field Name: {field.FieldName}</p>
-            <p>Area: {field.Area}</p>
-            <p>Comment: {field.Comment}</p>
-            <button
-              type="button"
-              onClick={() => handleEdit(index)}
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDelete(index)}
-            >
-              Delete
-            </button>
+            <ListItem>{field.FieldName}</ListItem>
+            <ListItem>{field.Area}</ListItem>
+            <ListItem>{field.Comment}</ListItem>
+            <ListItem align="right">
+              <button
+                type="button"
+                onClick={() => handleEdit(index)}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDelete(index)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            </ListItem>
           </ListItemContainer>
         ))}
-      <button
-        type="button"
-        onClick={() => setIsModalVisible(true)}
-      >
-        Add Field
-      </button>
+      </ContentWrapper>
       <Modal
         isVisible={isModalVisible}
         title={editIndex !== null ? 'Edit Field' : 'Add Field'}
         onClose={() => setIsModalVisible(false)}
         footer={
-          <button
-            type="button"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
+          <>
+            <ButtonWrapper>
+              <Button
+                text="Cancel"
+                handleClick={() => setIsModalVisible(false)}
+                aria-label="Cancel"
+                variant="secondary"
+                size="sm"
+                disabled={false}
+              />
+            </ButtonWrapper>
+            <ButtonWrapper>
+              <Button
+                text="Submit"
+                handleClick={handleSubmit}
+                aria-label="Submit"
+                variant="primary"
+                size="sm"
+                disabled={false}
+              />
+            </ButtonWrapper>
+          </>
         }
       >
         <InputField
