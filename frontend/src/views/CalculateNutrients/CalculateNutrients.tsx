@@ -70,8 +70,7 @@ export default function CalculateNutrients() {
     <Card
       height="500px"
       width="700px"
-      display="flex"
-      justifyContent="flex-start"
+      justifyContent='flex-start'
     >
       <CardHeader>
         <Banner>
@@ -83,7 +82,7 @@ export default function CalculateNutrients() {
             />
         </Banner>
       </CardHeader>
-      <ButtonWrapper position="Left">
+      <ButtonWrapper position="left">
             <Button
               text="Add Fertilizer"
               size="sm"
