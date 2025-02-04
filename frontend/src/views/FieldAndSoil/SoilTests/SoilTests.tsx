@@ -31,6 +31,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     valNO3H: '',
     valPH: '',
   });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
@@ -42,6 +43,26 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setSoilTestData({ ...soilTestData, [name]: value });
+  };
+
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+    if (!soilTestData.sampleDate) {
+      newErrors.sampleDate = 'Sample Month is required';
+    }
+    if (!soilTestData.valNO3H || Number.isNaN(Number(soilTestData.valNO3H))) {
+      newErrors.valNO3H = 'NO3-N (ppm) is required and must be a number';
+    }
+    if (!soilTestData.ValP || Number.isNaN(Number(soilTestData.ValP))) {
+      newErrors.ValP = 'P (ppm) is required and must be a number';
+    }
+    if (!soilTestData.valK || Number.isNaN(Number(soilTestData.valK))) {
+      newErrors.valK = 'K (ppm) is required and must be a number';
+    }
+    if (!soilTestData.valPH || Number.isNaN(Number(soilTestData.valPH))) {
+      newErrors.valPH = 'pH is required and must be a number';
+    }
+    return newErrors;
   };
 
   const handleEditSoilTest = (index: number) => {
@@ -58,6 +79,12 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
   };
 
   const handleSubmit = () => {
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setErrors({});
     if (currentFieldIndex !== null) {
       const updatedFields = fields.map((field, index) =>
         index === currentFieldIndex ? { ...field, SoilTest: soilTestData } : field,
@@ -169,6 +196,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             </>
           }
         >
+          {errors.sampleDate && <div style={{ color: 'red' }}>{errors.sampleDate}</div>}
           <InputField
             label="Sample Month"
             type="month"
@@ -176,6 +204,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.sampleDate}
             onChange={handleChange}
           />
+          {errors.valNO3H && <div style={{ color: 'red' }}>{errors.valNO3H}</div>}
           <InputField
             label="NO3-N (ppm), nitrate-nitrogen"
             type="text"
@@ -183,6 +212,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.valNO3H}
             onChange={handleChange}
           />
+          {errors.ValP && <div style={{ color: 'red' }}>{errors.ValP}</div>}
           <InputField
             label="P (ppm), phosphorus"
             type="text"
@@ -190,6 +220,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.ValP}
             onChange={handleChange}
           />
+          {errors.valK && <div style={{ color: 'red' }}>{errors.valK}</div>}
           <InputField
             label="K (ppm), potassium"
             type="text"
@@ -197,6 +228,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.valK}
             onChange={handleChange}
           />
+          {errors.valPH && <div style={{ color: 'red' }}>{errors.valPH}</div>}
           <InputField
             label="pH"
             type="text"
