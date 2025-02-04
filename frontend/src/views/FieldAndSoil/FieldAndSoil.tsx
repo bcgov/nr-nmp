@@ -78,7 +78,13 @@ export default function FieldAndSoil() {
       }));
     }
     setNMPFile(JSON.stringify(nmpFile));
-    if (activeTab <= tabs.length) setActiveTab(activeTab + 1);
+
+    // if on the last tab navigate to calculate nutrients page
+    if (activeTab === tabs.length -1) {
+      navigate('/calculate-nutrients')
+    } else {
+      setActiveTab(activeTab + 1);
+    }
   };
 
   const handlePrevious = () => {
@@ -86,16 +92,14 @@ export default function FieldAndSoil() {
     else navigate('/farm-information');
   };
 
+  // assumes only 1 year, edit
   useEffect(() => {
     if (state.nmpFile) {
-      const data = state.nmpFile;
-      if (data) {
-        const parsedData = JSON.parse(data);
-        setFields(parsedData.years[0].Fields);
-      }
+      const parsedData = JSON.parse(state.nmpFile);
+      setFields(parsedData.years[0].Fields);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state]);
 
   return (
     <Card

@@ -4,6 +4,7 @@ export const TabsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  margin-top: 1em;
   align-items: flex-end; // Align tabs to the bottom
 `;
 
