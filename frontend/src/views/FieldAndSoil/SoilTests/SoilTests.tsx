@@ -13,6 +13,7 @@ import {
   Column,
   ListItem,
   ButtonWrapper,
+  ErrorText,
 } from './soilTests.styles';
 
 interface FieldListProps {
@@ -199,7 +200,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             </>
           }
         >
-          {errors.sampleDate && <div style={{ color: 'red' }}>{errors.sampleDate}</div>}
+          {errors.sampleDate && <ErrorText>{errors.sampleDate}</ErrorText>}
           <InputField
             label="Sample Month"
             type="month"
@@ -207,7 +208,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.sampleDate}
             onChange={handleChange}
           />
-          {errors.valNO3H && <div style={{ color: 'red' }}>{errors.valNO3H}</div>}
+          {errors.valNO3H && <ErrorText>{errors.valNO3H}</ErrorText>}
           <InputField
             label="NO3-N (ppm), nitrate-nitrogen"
             type="text"
@@ -215,7 +216,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.valNO3H}
             onChange={handleChange}
           />
-          {errors.ValP && <div style={{ color: 'red' }}>{errors.ValP}</div>}
+          {errors.ValP && <ErrorText>{errors.ValP}</ErrorText>}
           <InputField
             label="P (ppm), phosphorus"
             type="text"
@@ -223,7 +224,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.ValP}
             onChange={handleChange}
           />
-          {errors.valK && <div style={{ color: 'red' }}>{errors.valK}</div>}
+          {errors.valK && <ErrorText>{errors.valK}</ErrorText>}
           <InputField
             label="K (ppm), potassium"
             type="text"
@@ -231,7 +232,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             value={soilTestData.valK}
             onChange={handleChange}
           />
-          {errors.valPH && <div style={{ color: 'red' }}>{errors.valPH}</div>}
+          {errors.valPH && <ErrorText>{errors.valPH}</ErrorText>}
           <InputField
             label="pH"
             type="text"

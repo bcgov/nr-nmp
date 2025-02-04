@@ -80,8 +80,8 @@ export default function FieldAndSoil() {
     setNMPFile(JSON.stringify(nmpFile));
 
     // if on the last tab navigate to calculate nutrients page
-    if (activeTab === tabs.length -1) {
-      navigate('/calculate-nutrients')
+    if (activeTab === tabs.length - 1) {
+      navigate('/calculate-nutrients');
     } else {
       setActiveTab(activeTab + 1);
     }

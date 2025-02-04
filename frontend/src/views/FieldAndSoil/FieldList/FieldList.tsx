@@ -14,6 +14,7 @@ import {
   ListItem,
   ContentWrapper,
   ButtonContainer,
+  ErrorText,
 } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
@@ -177,7 +178,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           </>
         }
       >
-        {errors.FieldName && <div style={{ color: 'red' }}>{errors.FieldName}</div>}
+        {errors.FieldName && <ErrorText>{errors.FieldName}</ErrorText>}
         <InputField
           label="Field Name"
           type="text"
@@ -185,7 +186,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           value={fieldFormData.FieldName}
           onChange={handleChange}
         />
-        {errors.Area && <div style={{ color: 'red' }}>{errors.Area}</div>}
+        {errors.Area && <ErrorText>{errors.Area}</ErrorText>}
         <InputField
           label="Area"
           type="text"
@@ -194,7 +195,7 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           onChange={handleChange}
         />
         {errors.PreviousYearManureApplicationFrequency && (
-          <div style={{ color: 'red' }}>{errors.PreviousYearManureApplicationFrequency}</div>
+          <ErrorText>{errors.PreviousYearManureApplicationFrequency}</ErrorText>
         )}
         <Dropdown
           label="Manure application in previous years"
