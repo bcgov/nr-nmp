@@ -65,3 +65,7 @@ export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
     height: 40px;
   }
 `;
+
+export const TableWrapper = styled.div`
+  margin-top: 3em;
+`;
