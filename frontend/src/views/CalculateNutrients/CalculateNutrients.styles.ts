@@ -9,7 +9,7 @@ export const CardHeader = styled.div`
   padding: 0;
   color: #fff;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   height: 65px;
   width: 100%;
@@ -20,6 +20,7 @@ export const CardHeader = styled.div`
   border-top-right-radius: 8px;
   @media (min-width: ${screenSizes.tablet}) {
     justify-content: flex-start;
+    padding-left: 2em;
   }
   z-index: 2000;
 `;
@@ -30,6 +31,31 @@ export const Banner = styled.div`
   margin: 0;
 `;
 
+export const Heading = styled.h2`
+  color: #494949;
+  font-size: 16pt;
+  font-weight: 500;
+  min-width: 150px;
+  display: contents;
+  text-decoration: none;
+`;
+
+export const InputFieldsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  margin-top: 100px;
+`;
+
+export const SelectorContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
 export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
   position: absolute;
   bottom: 16px;
@@ -38,4 +64,8 @@ export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
     width: 80px;
     height: 40px;
   }
+`;
+
+export const TableWrapper = styled.div`
+  margin-top: 3em;
 `;

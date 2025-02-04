@@ -23,6 +23,7 @@ export default function FarmInformation() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<{ [name: string]: any }>({
     Year: '',
@@ -46,14 +47,20 @@ export default function FarmInformation() {
       const data = state.nmpFile;
       if (data) {
         const parsedData = JSON.parse(data);
-        // I wish there was a way to specifiy a list of properties to pull from
-        // the parsedData or assign to the DefaultNMPFile value
+
         setFormData({
           Year: parsedData.farmDetails.Year || '',
           FarmName: parsedData.farmDetails.FarmName || '',
           FarmRegion: parsedData.farmDetails.FarmRegion || 0,
           FarmSubRegion: parsedData.farmDetails.FarmSubRegion || null,
+<<<<<<< HEAD
           FarmAnimals: parsedData.farmDetails.FarmAnimals || [],
+=======
+          HasAnimals: parsedData.farmDetails.HasAnimals || false,
+          HasDairyCows: parsedData.farmDetails.HasDairyCows || false,
+          HasBeefCows: parsedData.farmDetails.HasBeefCows || false,
+          HasPoultry: parsedData.farmDetails.HasPoultry || false,
+>>>>>>> main
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
@@ -82,7 +89,10 @@ export default function FarmInformation() {
         setRawAnimalNames(animalDict);
       }
     });
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
       const regions: { value: number; label: string }[] = (
@@ -147,8 +157,11 @@ export default function FarmInformation() {
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
     else nmpFile = defaultNMPFile;
 
+<<<<<<< HEAD
     console.log('nmpFile', nmpFile);
     formData.FarmAnimals = formData.FarmAnimals.sort();
+=======
+>>>>>>> main
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
 
     setNMPFile(JSON.stringify(nmpFile));
@@ -222,7 +235,14 @@ export default function FarmInformation() {
           value={formData.FarmRegion}
           options={regionOptions}
           onChange={handleChange}
+<<<<<<< HEAD
         />
+=======
+          flex="0.35"
+        />
+      </RegionContainer>
+      <RegionContainer>
+>>>>>>> main
         <Dropdown
           label="Subregion"
           name="FarmSubRegion"

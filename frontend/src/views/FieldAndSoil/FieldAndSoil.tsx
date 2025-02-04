@@ -12,6 +12,7 @@ import Crops from './Crops/Crops';
 import { Card, Button } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
+import NMPFileCropData from '@/types/NMPFileCropData';
 
 export default function FieldAndSoil() {
   const { state, setNMPFile } = useAppService();
@@ -24,7 +25,7 @@ export default function FieldAndSoil() {
       PreviousYearManureApplicationFrequency: string;
       Comment: string;
       SoilTest: object;
-      Crops: any[];
+      Crops: NMPFileCropData[];
     }[]
   >([]);
 
@@ -66,7 +67,6 @@ export default function FieldAndSoil() {
 
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
     else nmpFile = defaultNMPFile;
-
     if (nmpFile.years && nmpFile.years.length > 0) {
       nmpFile.years[0].Fields = fields.map((field) => ({
         FieldName: field.FieldName,
@@ -78,7 +78,13 @@ export default function FieldAndSoil() {
       }));
     }
     setNMPFile(JSON.stringify(nmpFile));
-    if (activeTab <= tabs.length) setActiveTab(activeTab + 1);
+
+    // if on the last tab navigate to calculate nutrients page
+    if (activeTab === tabs.length - 1) {
+      navigate('/calculate-nutrients');
+    } else {
+      setActiveTab(activeTab + 1);
+    }
   };
 
   const handlePrevious = () => {
@@ -86,16 +92,14 @@ export default function FieldAndSoil() {
     else navigate('/farm-information');
   };
 
+  // assumes only 1 year, edit
   useEffect(() => {
     if (state.nmpFile) {
-      const data = state.nmpFile;
-      if (data) {
-        const parsedData = JSON.parse(data);
-        setFields(parsedData.years[0].Fields);
-      }
+      const parsedData = JSON.parse(state.nmpFile);
+      setFields(parsedData.years[0].Fields);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state]);
 
   return (
     <Card
@@ -108,6 +112,7 @@ export default function FieldAndSoil() {
             tabs={tabs}
             activeTab={activeTab}
             setActiveTab={setActiveTab}
+            clickable={false}
           />
         </Banner>
       </CardHeader>
@@ -119,21 +124,17 @@ export default function FieldAndSoil() {
         <Button
           text="Next"
           size="sm"
-          handleClick={() => {
-            handleNext();
-          }}
+          handleClick={handleNext}
           aria-label="Next"
           variant="primary"
-          disabled={false}
+          disabled={fields.length === 0}
         />
       </ButtonWrapper>
       <ButtonWrapper position="left">
         <Button
           text="Back"
           size="sm"
-          handleClick={() => {
-            handlePrevious();
-          }}
+          handleClick={handlePrevious}
           aria-label="Back"
           variant="primary"
           disabled={false}

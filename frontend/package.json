@@ -16,6 +16,8 @@
     "@bcgov/bc-sans": "^2.1.0",
     "@bcgov/design-tokens": "^3.1.1",
     "@emotion/styled": "^11.13.0",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

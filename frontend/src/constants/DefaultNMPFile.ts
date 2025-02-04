@@ -36,6 +36,8 @@ const defaultNMPFile: NMPFile = {
               id: 0,
               cropId: '',
               cropOther: null,
+              cropName: '',
+              cropTypeName: '',
               yield: 0,
               reqN: 0,
               stdN: 0,
