@@ -67,19 +67,6 @@ export default function FieldTable({ key, field, setFields }) {
             </thead>
             <tbody>
               <td>Crops</td>
-              {/* {field.Crops.map((crop) => (
-                <tr key={crop.id}>
-                  <td>{crop.cropId}</td>
-                  //agronomic nutrients
-                  <td>{crop.reqN}</td>
-                  <td>{crop.reqP2o5}</td>
-                  <td>{crop.reqK2o}</td>
-                  //crop removal nutrients
-                  <td>{crop.remN}</td>
-                  <td>{crop.remP2o5}</td>
-                  <td>{crop.remK2o}</td>
-                </tr>
-              ))} */}
             </tbody>
           </table>
         </div>
