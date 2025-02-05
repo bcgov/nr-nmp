@@ -4,14 +4,18 @@
 import { useContext, useEffect, useState } from 'react';
 import { Dropdown } from '../../../components/common';
 import handleChange from '@/utils/HandleChange';
-import defaultNMPFile from '@/constants/DefaultNMPFile';
 import { APICacheContext } from '@/context/APICacheContext';
 import FertilizerForm from '@/types/fertilizerDetails';
 
-export default function FertilizerDetails({ field, setFields, isModalVisible, setIsModalVisible }) {
+interface FertilizerType {
+  Id: number;
+  Name: string;
+  DryLiquid: string;
+  Custom: boolean;
+}
+
+export default function FertilizerDetails({ field, setFields, setIsModalVisible }) {
   const apiCache = useContext(APICacheContext);
-  // existing farm info
-  const [nmpFile, setNmpFile] = useState(defaultNMPFile);
 
   // var for info we are asking user for on this form
   const [fertilizerForm, setFertilizerForm] = useState<FertilizerForm>({
@@ -34,6 +38,17 @@ export default function FertilizerDetails({ field, setFields, isModalVisible, se
 
   // list of fertilizers and their nutrients based on fertilizer model
   const [fertilizerList, setFertilizerList] = useState<any[]>([]);
+  const [fertilizerTypes, setFertilizerTypes] = useState<FertilizerType[]>([]);
+
+  // Fetch fertilizer types data from the API
+  useEffect(() => {
+    apiCache.callEndpoint('api/fertilizer_type/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setFertilizerTypes(data);
+      }
+    });
+  }, []);
 
   // Fetch fertilizer data from the API
   useEffect(() => {
@@ -54,7 +69,7 @@ export default function FertilizerDetails({ field, setFields, isModalVisible, se
   // );
 
   // how to submit fertform data?
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setFields({ ...field, fertilizerForm });
     setIsModalVisible(false);
@@ -62,17 +77,15 @@ export default function FertilizerDetails({ field, setFields, isModalVisible, se
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Dropdown
           label="Fertilizer Type"
           name="Fertilizer Type"
           value={fertilizerForm.fertilizerTypeId}
-          options={[
-            { value: 0, label: 'Dry Fertilizer' },
-            { value: 1, label: 'Dry Fertilizer (Custom)' },
-            { value: 2, label: 'Liquid Fertilizer' },
-            { value: 3, label: 'Liquid Fertilizer (Custom)' },
-          ]}
+          options={fertilizerTypes.map((fertilizerType) => ({
+            value: fertilizerType.Id,
+            label: fertilizerType.Name,
+          }))}
           onChange={(e) => handleChange(e, setFertilizerForm)}
         />
         {/* Fertilizer dropdown based on type solid or liquid */}
@@ -128,12 +141,12 @@ export default function FertilizerDetails({ field, setFields, isModalVisible, se
             />
           </div>
         )}
-        <button
+        {/* <button
           type="submit"
           onClick={(e) => handleSubmit(e)}
         >
           Submit
-        </button>
+        </button> */}
       </form>
     </div>
   );
