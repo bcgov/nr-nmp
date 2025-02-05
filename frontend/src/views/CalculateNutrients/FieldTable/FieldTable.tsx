@@ -4,7 +4,6 @@
 import React from 'react';
 import { useState } from 'react';
 import { TableWrapper } from '../CalculateNutrients.styles';
-import { Dropdown } from '../../../components/common';
 import Modal from '@/components/common/Modal/Modal';
 import FertilizerDetails from '../FertilizerDetails/FertilizerDetails';
 
