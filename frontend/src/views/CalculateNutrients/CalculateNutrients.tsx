@@ -4,12 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
-import {
-  CardHeader,
-  Banner,
-  Heading,
-  ButtonWrapper,
-} from './CalculateNutrients.styles';
+import { CardHeader, Banner, Heading, ButtonWrapper } from './CalculateNutrients.styles';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { Card, Button } from '../../components/common';
 import FieldTable from './FieldTable/FieldTable';
@@ -21,7 +16,7 @@ export default function CalculateNutrients() {
   const [fields, setFields] = useState<
     {
       FieldName: string;
-      Id: number;
+      Id: string;
       Area: string;
       PreviousYearManureApplicationFrequency: string;
       Comment: string;
@@ -34,7 +29,7 @@ export default function CalculateNutrients() {
   // extra blank tab being created
   const tabs = fields
     ? fields.map((field) => ({
-        id: field.Id.toString(),
+        id: field.Id,
         label: field.FieldName,
         content: (
           <FieldTable
@@ -70,32 +65,28 @@ export default function CalculateNutrients() {
     <Card
       height="500px"
       width="700px"
-      justifyContent='flex-start'
+      justifyContent="flex-start"
     >
       <CardHeader>
         <Banner>
           <Heading padding-right="1em">Calculate Nutrients</Heading>
-            <TabOptions
-              tabs={tabs}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-            />
+          <TabOptions
+            tabs={tabs}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
         </Banner>
       </CardHeader>
       <ButtonWrapper position="left">
-            <Button
-              text="Add Fertilizer"
-              size="sm"
-              handleClick={handleNext}
-              aria-label="Add Fertilizer"
-              variant="primary"
-              disabled={false}
-            />
+        <Button
+          text="Add Fertilizer"
+          size="sm"
+          handleClick={handleNext}
+          aria-label="Add Fertilizer"
+          variant="primary"
+          disabled={false}
+        />
       </ButtonWrapper>
-      {/* <TabContentDisplay
-        tabs={tabs}
-        activeTab={activeTab}
-      /> */}
       {tabs.length > 0 && (
         <TabContentDisplay
           tabs={tabs}
