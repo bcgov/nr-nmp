@@ -2,7 +2,7 @@
  * @summary A reusable Dropdown component
  */
 import React from 'react';
-import { DropdownWrapper, StyledLabel, StyledSelect } from './dropDown.styles';
+import { DropdownWrapper, StyledLabel, StyledSelect } from './dropdown.styles';
 
 interface DropdownProps {
   label: string;
@@ -14,6 +14,16 @@ interface DropdownProps {
 }
 
 function Dropdown({ label, name, value, options, onChange, flex }: DropdownProps) {
+  const defaultOption = (
+    <option
+      key=""
+      value=""
+      style={{ display: 'none' }}
+      selected
+    >
+      --Select--
+    </option>
+  );
   return (
     <DropdownWrapper flex={flex}>
       <StyledLabel htmlFor={name}>{label}</StyledLabel>
@@ -22,14 +32,16 @@ function Dropdown({ label, name, value, options, onChange, flex }: DropdownProps
         value={value}
         onChange={onChange}
       >
-        {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-          >
-            {option.label}
-          </option>
-        ))}
+        {[defaultOption].concat(
+          options.map((option) => (
+            <option
+              key={option.value}
+              value={option.value}
+            >
+              {option.label}
+            </option>
+          )),
+        )}
       </StyledSelect>
     </DropdownWrapper>
   );
