@@ -28,16 +28,18 @@ export default function CalculateNutrients() {
   // for each field create a tab with the field name and populate with its crops
   // extra blank tab being created
   const tabs = fields
-    ? fields.map((field) => ({
-        id: field.Id,
-        label: field.FieldName,
-        content: (
-          <FieldTable
-            field={field}
-            setFields={setFields}
-          />
-        ),
-      }))
+    ? fields
+        .filter((field) => field && field.FieldName)
+        .map((field) => ({
+          id: String(field.Id),
+          label: field.FieldName,
+          content: (
+            <FieldTable
+              field={field}
+              setFields={setFields}
+            />
+          ),
+        }))
     : [];
 
   const handleNext = () => {
@@ -49,6 +51,7 @@ export default function CalculateNutrients() {
     navigate('/field-and-soil');
   };
 
+  // are there multiple years?
   useEffect(() => {
     if (state.nmpFile) {
       setFields(JSON.parse(state.nmpFile).years[0].Fields);

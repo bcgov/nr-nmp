@@ -45,11 +45,20 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
       SortNum: number;
     }[]
   >([]);
+  const [fertilizerForm, setFertilizerForm] = useState<
+    {
+      FieldId: string;
+      FertilizerType: string;
+      Fertilizer: string;
+    }[]
+  >([]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFields((allFields) =>
-      allFields.map((f) => (f.Id === field.Id ? { ...f, [name]: value } : f)),
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>, FieldId: number) => {
+    const selectedValue = event.target.value;
+    setFertilizerForm((prevState) =>
+      prevState.map((item) =>
+        item.FieldId === String(FieldId) ? { ...item, FertilizerType: selectedValue } : item,
+      ),
     );
   };
 
@@ -61,13 +70,13 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
   };
 
   useEffect(() => {
-    apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
         setFertilizerTypes(data);
       }
     });
-    apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/fertilizers/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
         setFertilizerOptions(data);
@@ -89,7 +98,7 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
               </tr>
             </thead>
             <tbody>
-              {/* for each crop in this field list the crops their nutrients and have a button to add fertlizer */}
+              {/* for each crop in this field list the crops their nutrients */}
               {field.Crops.map((crop) => (
                 <tr key={crop.cropId}>
                   <td>{crop.cropName}</td>
@@ -112,6 +121,7 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
             </tbody>
           </table>
         </div>
+        {/* fertilizer gets added to whole field */}
         {isModalVisible && (
           <Modal
             isVisible={isModalVisible}
@@ -138,16 +148,30 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
               </ButtonWrapper>
             }
           >
+            {/* create new fertilizer form */}
             <ModalContent>
               <Dropdown
                 label="Fertilizer"
                 name="Fertilizer"
-                value=""
+                value={
+                  fertilizerForm.find((item) => item.FieldId === field.Id)?.FertilizerType || ''
+                }
                 options={fertilizerTypes.map((type) => ({
                   value: type.Id,
                   label: type.Name,
                 }))}
-                onChange={handleChange}
+                onChange={(e) => handleChange(e, 1)}
+              />
+              {/* fertilizer dropdown filter based on type selection */}
+              <Dropdown
+                label="Fertilizer"
+                name="Fertilizer"
+                value={fertilizerForm.find((item) => item.FieldId === field.Id)?.Fertilizer || ''}
+                options={fertilizerOptions.map((type) => ({
+                  value: type.Id,
+                  label: type.Name,
+                }))}
+                onChange={(e) => handleChange(e, 1)}
               />
             </ModalContent>
           </Modal>
