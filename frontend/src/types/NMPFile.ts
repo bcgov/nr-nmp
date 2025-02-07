@@ -3,7 +3,7 @@
  */
 
 type NMPFile = {
-  farmDetails?: {
+  farmDetails: {
     Year?: string;
     FarmName?: string;
     FarmRegion?: number;
@@ -22,7 +22,7 @@ type NMPFile = {
     UserJourney?: number;
   };
   unsaved?: boolean;
-  years?: Array<{
+  years: Array<{
     Year?: string;
     Fields?: Array<{
       Id?: number;

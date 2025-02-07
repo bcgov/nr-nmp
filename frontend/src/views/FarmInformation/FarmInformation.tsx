@@ -18,6 +18,7 @@ import {
 import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/common';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { APICacheContext } from '@/context/APICacheContext';
+import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 
 export default function FarmInformation() {
   const { state, setNMPFile } = useAppService();
@@ -53,14 +54,7 @@ export default function FarmInformation() {
           FarmName: parsedData.farmDetails.FarmName || '',
           FarmRegion: parsedData.farmDetails.FarmRegion || 0,
           FarmSubRegion: parsedData.farmDetails.FarmSubRegion || null,
-<<<<<<< HEAD
           FarmAnimals: parsedData.farmDetails.FarmAnimals || [],
-=======
-          HasAnimals: parsedData.farmDetails.HasAnimals || false,
-          HasDairyCows: parsedData.farmDetails.HasDairyCows || false,
-          HasBeefCows: parsedData.farmDetails.HasBeefCows || false,
-          HasPoultry: parsedData.farmDetails.HasPoultry || false,
->>>>>>> main
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
           Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
@@ -89,10 +83,7 @@ export default function FarmInformation() {
         setRawAnimalNames(animalDict);
       }
     });
-<<<<<<< HEAD
 
-=======
->>>>>>> main
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
       const regions: { value: number; label: string }[] = (
@@ -159,17 +150,15 @@ export default function FarmInformation() {
 
     formData.FarmAnimals = formData.FarmAnimals.sort();
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
-
+    const year = { ...blankNMPFileYearData, Year: formData.Year };
+    nmpFile.years.push(year);
     setNMPFile(JSON.stringify(nmpFile));
 
-    navigate('/field-and-soil');
-    /*
     if (formData.FarmAnimals.length === 0) {
       navigate('/field-and-soil');
     } else {
       navigate('/animals-and-manure');
     }
-    */
   };
 
   const animalRadioButtons: React.ReactNode | null = useMemo(() => {
@@ -234,14 +223,7 @@ export default function FarmInformation() {
           value={formData.FarmRegion}
           options={regionOptions}
           onChange={handleChange}
-<<<<<<< HEAD
         />
-=======
-          flex="0.35"
-        />
-      </RegionContainer>
-      <RegionContainer>
->>>>>>> main
         <Dropdown
           label="Subregion"
           name="FarmSubRegion"

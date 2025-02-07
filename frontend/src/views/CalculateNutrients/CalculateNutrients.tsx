@@ -55,6 +55,8 @@ export default function CalculateNutrients() {
   };
 
   useEffect(() => {
+    // There shouldn't be a need to check. If there is no nmp file here
+    // an error needs to be given
     if (state.nmpFile) {
       setFields(JSON.parse(state.nmpFile).years[0].Fields);
     }
