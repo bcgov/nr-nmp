@@ -28,39 +28,81 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [fertilizerTypes, setFertilizerTypes] = useState<
     {
-      Id: number;
-      Name: string;
-      DryLiquid: string;
-      Custom: boolean;
+      id: number;
+      name: string;
+      dryliquid: string;
+      custom: boolean;
     }[]
   >([]);
   const [fertilizerOptions, setFertilizerOptions] = useState<
     {
-      Id: number;
-      Name: string;
-      DryLiquid: string;
-      Nitrogen: number;
-      Phosphorous: number;
-      Potassium: number;
-      SortNum: number;
+      id: number;
+      name: string;
+      dryliquid: string;
+      nitrogen: number;
+      phosphorous: number;
+      potassium: number;
+      sortnum: number;
     }[]
   >([]);
   const [fertilizerForm, setFertilizerForm] = useState<
+    { FieldId: string; FertilizerType: string; Fertilizer: string }[]
+  >([{ FieldId: field.Id, FertilizerType: '', Fertilizer: '' }]);
+  const [filteredFertilizers, setFilteredFertilizers] = useState<
     {
-      FieldId: string;
-      FertilizerType: string;
-      Fertilizer: string;
+      id: number;
+      name: string;
+      dryliquid: string;
+      nitrogen: number;
+      phosphorous: number;
+      potassium: number;
+      sortnum: number;
     }[]
-  >([]);
+  >(fertilizerOptions);
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>, FieldId: number) => {
-    const selectedValue = event.target.value;
+  const handleChange = (e: { target: { name: string; value: string } }) => {
+    const { name, value } = e.target;
     setFertilizerForm((prevState) =>
-      prevState.map((item) =>
-        item.FieldId === String(FieldId) ? { ...item, FertilizerType: selectedValue } : item,
-      ),
+      prevState.map((item) => (item.FieldId === field.Id ? { ...item, [name]: value } : item)),
     );
+    if (name === 'FertilizerType') {
+      // Filter the fertilizer options by FertilizerType id
+      const selectedFertilizerType = fertilizerTypes.find(
+        (type) => type.id === parseInt(value, 10),
+      );
+
+      if (selectedFertilizerType) {
+        const filtered = fertilizerOptions.filter(
+          (fertilizer) => fertilizer.dryliquid === selectedFertilizerType.dryliquid,
+        );
+
+        setFilteredFertilizers(filtered);
+      }
+    }
+
+    if (name === 'Fertilizer') {
+      const selectedFertilizer = fertilizerOptions.find((fert) => fert.id === parseInt(value, 10));
+      if (selectedFertilizer) {
+        setFertilizerForm((prevState) =>
+          prevState.map((item) =>
+            item.FieldId === field.Id
+              ? {
+                  ...item,
+                  Fertilizer: selectedFertilizer.name,
+                  Nitrogen: selectedFertilizer.nitrogen,
+                  Phosphorous: selectedFertilizer.phosphorous,
+                  Potassium: selectedFertilizer.potassium,
+                }
+              : item,
+          ),
+        );
+      }
+    }
   };
+
+  useEffect(() => {
+    console.log(fertilizerForm); // Log whenever the state changes
+  }, [fertilizerForm]);
 
   const handleSubmit = () => {
     // setFields((prevFields) =>
@@ -82,7 +124,7 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
         setFertilizerOptions(data);
       }
     });
-  }, []);
+  }, [apiCache]);
 
   return (
     <div>
@@ -151,27 +193,27 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
             {/* create new fertilizer form */}
             <ModalContent>
               <Dropdown
-                label="Fertilizer"
-                name="Fertilizer"
+                label="Fertilizer Type"
+                name="FertilizerType"
                 value={
                   fertilizerForm.find((item) => item.FieldId === field.Id)?.FertilizerType || ''
                 }
                 options={fertilizerTypes.map((type) => ({
-                  value: type.Id,
-                  label: type.Name,
+                  value: type.id,
+                  label: type.name,
                 }))}
-                onChange={(e) => handleChange(e, 1)}
+                onChange={(e) => handleChange(e)}
               />
               {/* fertilizer dropdown filter based on type selection */}
               <Dropdown
                 label="Fertilizer"
                 name="Fertilizer"
                 value={fertilizerForm.find((item) => item.FieldId === field.Id)?.Fertilizer || ''}
-                options={fertilizerOptions.map((type) => ({
-                  value: type.Id,
-                  label: type.Name,
+                options={filteredFertilizers.map((type) => ({
+                  value: type.id,
+                  label: type.name,
                 }))}
-                onChange={(e) => handleChange(e, 1)}
+                onChange={(e) => handleChange(e)}
               />
             </ModalContent>
           </Modal>
