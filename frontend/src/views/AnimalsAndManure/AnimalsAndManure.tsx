@@ -13,11 +13,7 @@ export default function AnimalsAndManure() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [disabledTooltip, setDisabledTooltip] = useState<string | undefined>(
-    'Please save your data.',
-  );
 
-  // TODO: Replace type with interface type
   const [formData, setFormData] = useState<AnimalsWorkflowData[][]>([[], [], []]);
 
   const tabs = [
@@ -26,7 +22,6 @@ export default function AnimalsAndManure() {
       label: 'Add Animals',
       content: (
         <AddAnimals
-          setDisabledTooltip={setDisabledTooltip}
           saveData={setFormData}
         />
       ),
@@ -54,15 +49,13 @@ export default function AnimalsAndManure() {
       const nmpFile: NMPFile = JSON.parse(state.nmpFile);
       // TODO: Add multi-year handling
       nmpFile.years[0].FarmAnimals = formData[0];
-      nmpFile.years[0].FarmManures = formData[1];
-      // Idk what corresponds with the calculate nutrients
+      // TODO: Copy the data of the other tabs
       setNMPFile(JSON.stringify(nmpFile));
 
       navigate('/field-and-soil');
     }
   };
 
-  // Do we want to save the information in the form to the file?
   const handlePrevious = () => {
     if (activeTab > 0) setActiveTab(activeTab - 1);
     else navigate('/farm-information');
@@ -94,8 +87,7 @@ export default function AnimalsAndManure() {
           }}
           aria-label="Next"
           variant="primary"
-          disabled={disabledTooltip !== undefined}
-          tooltip={disabledTooltip}
+          disabled={false}
         />
       </ButtonWrapper>
       <ButtonWrapper position="left">

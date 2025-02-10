@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -6,11 +7,19 @@ import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { ListItem, ListItemContainer } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import { AnimalData, BeefCattleData } from './types';
+import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
 
 interface BeefCattleSubtype {
   id: number;
   name: string;
   solidperpoundperanimalperday: number;
+}
+
+interface BeefCattleProps {
+  startData: Partial<BeefCattleData>;
+  saveData: (data: AnimalData, index: number) => void;
+  onDelete: (index: number) => void;
+  myIndex: number;
 }
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
@@ -19,13 +28,6 @@ const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
   }
   return { id: '1', ...data };
 };
-
-interface BeefCattleProps {
-  startData: Partial<BeefCattleData>;
-  saveData: (data: AnimalData, index: number) => void;
-  onDelete: (index: number) => void;
-  myIndex: number;
-}
 
 export default function BeefCattle({ startData, saveData, onDelete, myIndex }: BeefCattleProps) {
   const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
@@ -93,31 +95,40 @@ export default function BeefCattle({ startData, saveData, onDelete, myIndex }: B
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const { getToggleProps, getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
+    id: `beef-${myIndex}`,
+  });
+
   const handleSave = () => {
     saveData(formData, myIndex);
+    setExpanded(false);
   };
 
   return (
     <>
-      <ListItemContainer key={`beef-${myIndex}`}>
-        <ListItem>{selectedSubtypeName}</ListItem>
-        <ListItem>{`${manureInTons} ton${manureInTons === 1 ? '' : 's'}`}</ListItem>
-        <ListItem align="right">
-          <button
-            type="button"
-            onClick={() => {}}
-          >
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(myIndex)}
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </ListItem>
-      </ListItemContainer>
-      <div>
+      {!isExpanded ? (
+        <ListItemContainer key={`beef-${myIndex}`}>
+          <ListItem>{selectedSubtypeName}</ListItem>
+          <ListItem>{`${manureInTons} ton${manureInTons === 1 ? '' : 's'}`}</ListItem>
+          <ListItem align="right">
+            <button
+              type="button"
+              {...getToggleProps()}
+            >
+              <FontAwesomeIcon icon={faEdit} />
+            </button>
+            <button
+              type="button"
+              onClick={() => onDelete(myIndex)}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </ListItem>
+        </ListItemContainer>
+      ) : (
+        <div>Edit Animal</div>
+      )}
+      <div {...getCollapseProps()}>
         <Dropdown
           label="Cattle Type"
           name="animalSubtype"

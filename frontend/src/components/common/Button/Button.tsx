@@ -20,7 +20,6 @@ export type ButtonProps = {
   size: ButtonSizes;
   disabled: boolean;
   text: string;
-  tooltip?: string;
 };
 
 export function Button({
@@ -29,7 +28,6 @@ export function Button({
   size = 'md',
   disabled = false,
   text,
-  tooltip,
 }: ButtonProps) {
   return (
     <StyledButton
@@ -38,7 +36,6 @@ export function Button({
       size={size}
       disabled={disabled}
       value=""
-      title={tooltip}
     >
       {text}
     </StyledButton>

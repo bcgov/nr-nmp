@@ -10,11 +10,10 @@ import { FlexContainer, MarginWrapper } from './addAnimals.styles';
 import { Column, Header } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 
 interface AddAnimalsProps {
-  setDisabledTooltip: React.Dispatch<React.SetStateAction<string | undefined>>;
   saveData: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-export default function AddAnimals({ setDisabledTooltip, saveData }: AddAnimalsProps) {
+export default function AddAnimals({ saveData }: AddAnimalsProps) {
   const { state } = useAppService();
   const apiCache = useContext(APICacheContext);
   const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
@@ -39,8 +38,8 @@ export default function AddAnimals({ setDisabledTooltip, saveData }: AddAnimalsP
     [setFormData, saveData],
   );
 
-  // Avoid array deletions by setting index to null
   const handleDelete = (index: number) => {
+    // Avoid array deletions by setting index to null
     setFormData((prev) => {
       prev[index] = null;
       return prev;
