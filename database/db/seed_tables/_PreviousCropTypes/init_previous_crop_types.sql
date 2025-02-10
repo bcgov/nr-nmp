@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS temp_previous_crop_types (
   NitrogenCreditMetric INT NOT NULL,
   NitrogenCreditImperial INT NOT NULL,
   CropId INT NOT NULL,
-  CropTypeId INT NOT NULL,
+  CropTypeId INT,
   StaticDataVersionId INT NOT NULL,
   CropTypeStaticDataVersionId INT,
   PRIMARY KEY (Id, StaticDataVersionId)
