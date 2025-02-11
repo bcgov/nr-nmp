@@ -11,6 +11,12 @@ class FertilizersViewset(viewsets.ViewSet):
         fertilizer_types = FertilizerTypes.objects.all()
         serializer = FertilizerTypesSerializer(fertilizer_types, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def fertilizerUnits(self, request):
+        fertilizer_units = fertilizerUnits.objects.all()
+        serializer = fertilizerUnitsSerializer(fertilizer_units, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
     def fertilizers(self, request, pk=None):
