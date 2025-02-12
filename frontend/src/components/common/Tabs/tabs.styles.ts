@@ -7,9 +7,9 @@ export const TabsWrapper = styled.div`
   align-items: flex-end; // Align tabs to the bottom
 `;
 
-export const Tab = styled.button<{ active: boolean }>`
+export const Tab = styled.button<{ active: boolean; clickable: boolean }>`
   padding: 10px 20px;
-  cursor: pointer;
+  cursor: ${({ clickable }) => (clickable ? 'pointer' : 'default')};
   background-color: ${({ active }) => (active ? '#fff' : '#ccc')};
   color: ${({ active }) => (active ? '#000' : '#000')};
   border-bottom: ${({ active }) => (active ? 'none' : 'none')};

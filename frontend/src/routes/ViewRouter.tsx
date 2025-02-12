@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import LandingPage from '../views/LandingPage/LandingPage';
 import FarmInformation from '../views/FarmInformation/FarmInformation';
 import FieldAndSoil from '@/views/FieldAndSoil/FieldAndSoil';
+import AnimalsAndManure from '@/views/AnimalsAndManure/AnimalsAndManure';
 import CalculateNutrients from '@/views/CalculateNutrients/CalculateNutrients';
 
 export default function ViewRouter() {
@@ -26,6 +27,10 @@ export default function ViewRouter() {
       <Route
         path="/calculate-nutrients"
         Component={CalculateNutrients}
+      />
+      <Route
+        path="/animals-and-manure"
+        Component={AnimalsAndManure}
       />
     </Routes>
   );
