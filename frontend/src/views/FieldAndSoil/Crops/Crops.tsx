@@ -70,6 +70,17 @@ function Crops({ fields, setFields }: FieldListProps) {
       yieldcd: number;
     }[]
   >([]);
+  const [previousCropDatabase, setPreviousCropDatabase] = useState<
+    {
+      id: number;
+      previouscropcode: number;
+      name: string;
+      nitrogencreditmetric: number;
+      nitrogencreditimperial: number;
+      cropid: number;
+      croptypeid: number;
+    }[]
+  >([]);
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -126,6 +137,14 @@ function Crops({ fields, setFields }: FieldListProps) {
         setCropsDatabase(data);
       }
     });
+    apiCache
+      .callEndpoint('api/previouscropstypes/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setPreviousCropDatabase(data);
+        }
+      });
   }, []);
 
   return (
