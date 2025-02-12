@@ -138,7 +138,7 @@ function Crops({ fields, setFields }: FieldListProps) {
       }
     });
     apiCache
-      .callEndpoint('api/previouscropstypes/')
+      .callEndpoint('api/previouscroptypes/')
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           const { data } = response;
