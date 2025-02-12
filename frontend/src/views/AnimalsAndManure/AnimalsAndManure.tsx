@@ -20,11 +20,7 @@ export default function AnimalsAndManure() {
     {
       id: 'add-animals',
       label: 'Add Animals',
-      content: (
-        <AddAnimals
-          saveData={setFormData}
-        />
-      ),
+      content: <AddAnimals saveData={setFormData} />,
     },
     {
       id: 'manure-and-imports',

@@ -8,6 +8,8 @@ import NMPFile from '@/types/NMPFile';
 import BeefCattle from './BeefCattle';
 import { FlexContainer, MarginWrapper } from './addAnimals.styles';
 import { Column, Header } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
+import defaultNMPFile from '@/constants/DefaultNMPFile';
+import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 
 interface AddAnimalsProps {
   saveData: React.Dispatch<React.SetStateAction<any[]>>;
@@ -53,10 +55,19 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
 
   // Init data & elems on first render
   useEffect(() => {
+    // Uncomment once we cache session state
+    /*
     if (!state.nmpFile) {
       throw new Error('NMP file has entered bad state in AddAnimals. (can be caused by refresh)');
     }
     const nmpFile: NMPFile = JSON.parse(state.nmpFile);
+    */
+    let nmpFile: NMPFile;
+    if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
+    else {
+      nmpFile = { ...defaultNMPFile };
+      nmpFile.years.push({ ...blankNMPFileYearData });
+    }
     let data = nmpFile.years[0].FarmAnimals;
     if (data === undefined || data.length === 0) {
       data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id }));
@@ -71,6 +82,7 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
           // eslint-disable-next-line react/no-array-index-key
           key={`a-${index}`}
           startData={d}
+          startExpanded={index === 0}
           saveData={handleSave}
           onDelete={handleDelete}
           myIndex={index}

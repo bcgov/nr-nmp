@@ -146,7 +146,7 @@ export default function FarmInformation() {
     let nmpFile: NMPFile;
 
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
-    else nmpFile = defaultNMPFile;
+    else nmpFile = { ...defaultNMPFile };
 
     formData.FarmAnimals = formData.FarmAnimals.sort();
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };

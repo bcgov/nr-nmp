@@ -17,6 +17,7 @@ interface BeefCattleSubtype {
 
 interface BeefCattleProps {
   startData: Partial<BeefCattleData>;
+  startExpanded?: boolean;
   saveData: (data: AnimalData, index: number) => void;
   onDelete: (index: number) => void;
   myIndex: number;
@@ -29,7 +30,13 @@ const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
   return { id: '1', ...data };
 };
 
-export default function BeefCattle({ startData, saveData, onDelete, myIndex }: BeefCattleProps) {
+export default function BeefCattle({
+  startData,
+  startExpanded = false,
+  saveData,
+  onDelete,
+  myIndex,
+}: BeefCattleProps) {
   const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
   const apiCache = useContext(APICacheContext);
 
@@ -97,6 +104,7 @@ export default function BeefCattle({ startData, saveData, onDelete, myIndex }: B
 
   const { getToggleProps, getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
     id: `beef-${myIndex}`,
+    defaultExpanded: startExpanded,
   });
 
   const handleSave = () => {

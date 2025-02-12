@@ -1,5 +1,8 @@
 const blankNMPFileYearData = {
   Year: '',
+  Fields: [],
+  // Keeping these properties to show what used to be stored in the NMP file
+  /*
   Fields: [
     {
       Id: 0,
@@ -56,6 +59,7 @@ const blankNMPFileYearData = {
       GrowingAnimalDailyFeedRequirementId: 0,
     },
   ],
+  */
   FarmAnimals: [],
   FarmManures: [],
   GeneratedManures: [],
