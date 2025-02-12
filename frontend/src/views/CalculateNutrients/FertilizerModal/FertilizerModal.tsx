@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown, InputField } from '@/components/common';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
-import { ValueText } from '@/views/FieldAndSoil/Crops/crops.styles';
 
 interface Field {
   FieldName: string;
@@ -60,8 +59,6 @@ export default function FertilizerModal({
   const [filteredFertilizers, setFilteredFertilizers] = useState(fertilizerOptions);
   const [applUnit, setApplUnit] = useState('');
   const [densityUnits, setDensityUnits] = useState('');
-  const [applRate, setApplRate] = useState('');
-  const [density, setDensity] = useState('');
 
   const densityOptions = [
     { value: 0, label: 'kg/US Gallon' },
@@ -70,66 +67,80 @@ export default function FertilizerModal({
     { value: 3, label: 'lb/imp. gallon' },
   ];
 
-  // Function to get the conversion coefficient for the selected fertilizer unit
-  const getConversionCoefficient = (unitId: number) => {
-    const unit = fertilizerUnits.find((fUnit) => fUnit.id === unitId);
-    return unit ? unit.conversiontoimperialgallonsperacre : 1; // Default to 1 if unit not found
-  };
-
-  // Apply conversions based on selected application unit and density unit
-  const applyConversions = () => {
-    let convertedApplRate = parseFloat(applRate);
-    let convertedDensity = parseFloat(density);
-
-    const applUnitCoef = getConversionCoefficient(Number(applUnit));
-
-    // Convert application rate and density to the default unit for calc is lb/ac for dry ferts, imp. gall/ac for liquid
-    switch (applUnit) {
-      case 'kg/ha':
-        convertedApplRate *= applUnitCoef;
-        break;
-      case 'lb/1000ft2':
-        convertedApplRate *= applUnitCoef;
-        break;
-      case 'L/ac':
-        convertedApplRate *= applUnitCoef;
-        break;
-      case 'US gallons/ac':
-        convertedApplRate *= applUnitCoef;
-        break;
-      default:
-        break;
-    }
-
-    // Convert density units if applicable (for liquid fertilizers)
-    if (fertilizerForm.fertilizerType === '3' || fertilizerForm.fertilizerType === '4') {
-      switch (densityUnits) {
-        case 'kg/US Gallon':
-          convertedDensity *= 2.20462; // Kilograms to pounds
-          convertedDensity /= 1.20095; // US Gallons to Imperial Gallons
+  // apply conversions on change of application rate and density
+  useEffect(() => {
+    // fx to get the conversion coefficient for the selected fertilizer unit
+    const getConversionCoefficient = (unitId: number) => {
+      const unit = fertilizerUnits.find((fUnit) => fUnit.id === unitId);
+      return unit ? unit.conversiontoimperialgallonsperacre : 1;
+    };
+    // apply conversions based on selected application unit and density unit
+    const applyConversions = () => {
+      let convertedApplRate = fertilizerForm.applicationRate;
+      let convertedDensity = fertilizerForm.liquidDensity;
+      const applUnitCoef = getConversionCoefficient(Number(applUnit));
+      // Convert application rate and density to the default unit for calc is lb/ac for dry ferts, imp. gall/ac for liquid
+      switch (applUnit) {
+        case 'kg/ha':
+          convertedApplRate *= applUnitCoef;
           break;
-        case 'kg/L':
-          convertedDensity *= 2.20462; // Kilograms to pounds
-          convertedDensity /= 0.264172; // Liters to Imperial Gallons
+        case 'lb/1000ft2':
+          convertedApplRate *= applUnitCoef;
           break;
-        case 'lb/US gallon':
-          convertedDensity /= 1.20095; // US Gallons to Imperial Gallons
+        case 'L/ac':
+          convertedApplRate *= applUnitCoef;
+          break;
+        case 'US gallons/ac':
+          convertedApplRate *= applUnitCoef;
           break;
         default:
           break;
       }
+      // Convert density units if applicable (for liquid fertilizers)
+      if (fertilizerForm.fertilizerType === '3' || fertilizerForm.fertilizerType === '4') {
+        switch (densityUnits) {
+          case 'kg/US Gallon':
+            convertedDensity *= 2.20462; // Kilograms to pounds
+            convertedDensity /= 1.20095; // US Gallons to Imperial Gallons
+            break;
+          case 'kg/L':
+            convertedDensity *= 2.20462; // Kilograms to pounds
+            convertedDensity /= 0.264172; // Liters to Imperial Gallons
+            break;
+          case 'lb/US gallon':
+            convertedDensity /= 1.20095; // US Gallons to Imperial Gallons
+            break;
+          default:
+            break;
+        }
+        // Adjust application rate based on converted density
+        convertedApplRate *= convertedDensity;
+      }
+  
+      // Only update state if the values have changed
+      if (
+        convertedApplRate !== fertilizerForm.applicationRate ||
+        convertedDensity !== fertilizerForm.liquidDensity
+      ) {
+        setFertilizerForm((prevState) => ({
+          ...prevState,
+          applicationRate: convertedApplRate,
+          liquidDensity: convertedDensity,
+        }));
+      }
+    };
 
-      // Adjust application rate based on converted density
-      convertedApplRate *= convertedDensity;
+    if (fertilizerForm.fertilizerType && applUnit && densityUnits) {
+      applyConversions();
     }
-
-    // Update the application rate in the form state after conversion
-    setFertilizerForm((prevState) => ({
-      ...prevState,
-      applicationRate: convertedApplRate,
-      liquidDensity: convertedDensity,
-    }));
-  };
+  }, [
+    fertilizerForm.applicationRate,
+    fertilizerForm.liquidDensity,
+    applUnit,
+    densityUnits,
+    fertilizerUnits,
+    fertilizerForm.fertilizerType,
+  ]);
 
   // filters fertilizer based on selected type id
   useEffect(() => {
@@ -154,7 +165,6 @@ export default function FertilizerModal({
       ...prevState,
       [name]: value,
     }));
-    applyConversions();
   };
 
   return (
@@ -185,8 +195,8 @@ export default function FertilizerModal({
           label="Application Rate"
           type="text"
           name="applicationRate"
-          value={applRate}
-          onChange={handleChange}
+          value={String(fertilizerForm.applicationRate || '')}
+          onChange={(e) => handleChange(e)}
           flex="0.5"
         />
         <Dropdown
@@ -207,8 +217,8 @@ export default function FertilizerModal({
               label="Density"
               type="text"
               name="liquidDensity"
-              value={density}
-              onChange={handleChange}
+              value={String(fertilizerForm.liquidDensity || '')}
+              onChange={(e) => handleChange(e)}
               flex="0.5"
             />
             <Dropdown

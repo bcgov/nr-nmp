@@ -1,7 +1,7 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ButtonWrapper, TableWrapper } from '../CalculateNutrients.styles';
 import { Button, Modal } from '@/components/common';
