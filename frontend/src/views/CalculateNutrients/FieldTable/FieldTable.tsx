@@ -2,11 +2,10 @@
  * @summary The field table on the calculate nutrients page
  */
 import React, { useContext, useEffect, useState } from 'react';
-import { ButtonWrapper, TableWrapper } from '../CalculateNutrients.styles';
-import Modal from '@/components/common/Modal/Modal';
-import { Button, Dropdown } from '@/components/common';
-import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { APICacheContext } from '@/context/APICacheContext';
+import { ButtonWrapper, TableWrapper } from '../CalculateNutrients.styles';
+import { Button, Modal } from '@/components/common';
+import FertilizerModal from '../FertilizerModal/FertilizerModal';
 
 interface Field {
   FieldName: string;
@@ -20,12 +19,13 @@ interface Field {
 
 interface FieldTableProps {
   field: Field;
-  setFields: React.Dispatch<React.SetStateAction<Field[]>>;
 }
 
-export default function FieldTable({ field, setFields }: FieldTableProps) {
+// fieldtable displays all the crops in one field tab and has the option to add fertilizer with a modal
+export default function FieldTable({ field }: FieldTableProps) {
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  // variables for dropdowns fert types, options, filtered options
   const [fertilizerTypes, setFertilizerTypes] = useState<
     {
       id: number;
@@ -45,65 +45,16 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
       sortnum: number;
     }[]
   >([]);
-  const [fertilizerForm, setFertilizerForm] = useState<
-    { FieldId: string; FertilizerType: string; Fertilizer: string }[]
-  >([{ FieldId: field.Id, FertilizerType: '', Fertilizer: '' }]);
-  const [filteredFertilizers, setFilteredFertilizers] = useState<
+  const [fertilizerUnits, setFertilizerUnits] = useState<
     {
       id: number;
       name: string;
       dryliquid: string;
-      nitrogen: number;
-      phosphorous: number;
-      potassium: number;
-      sortnum: number;
+      conversiontoimperialgallonsperacre: number;
     }[]
-  >(fertilizerOptions);
+  >([]);
 
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    const { name, value } = e.target;
-    setFertilizerForm((prevState) =>
-      prevState.map((item) => (item.FieldId === field.Id ? { ...item, [name]: value } : item)),
-    );
-    if (name === 'FertilizerType') {
-      // Filter the fertilizer options by FertilizerType id
-      const selectedFertilizerType = fertilizerTypes.find(
-        (type) => type.id === parseInt(value, 10),
-      );
-
-      if (selectedFertilizerType) {
-        const filtered = fertilizerOptions.filter(
-          (fertilizer) => fertilizer.dryliquid === selectedFertilizerType.dryliquid,
-        );
-
-        setFilteredFertilizers(filtered);
-      }
-    }
-
-    if (name === 'Fertilizer') {
-      const selectedFertilizer = fertilizerOptions.find((fert) => fert.id === parseInt(value, 10));
-      if (selectedFertilizer) {
-        setFertilizerForm((prevState) =>
-          prevState.map((item) =>
-            item.FieldId === field.Id
-              ? {
-                  ...item,
-                  Fertilizer: selectedFertilizer.name,
-                  Nitrogen: selectedFertilizer.nitrogen,
-                  Phosphorous: selectedFertilizer.phosphorous,
-                  Potassium: selectedFertilizer.potassium,
-                }
-              : item,
-          ),
-        );
-      }
-    }
-  };
-
-  useEffect(() => {
-    console.log(fertilizerForm); // Log whenever the state changes
-  }, [fertilizerForm]);
-
+  // what happens on submit?
   const handleSubmit = () => {
     // setFields((prevFields) =>
     //   prevFields.map((f) => (f.Id === field.Id ? { ...f, Fertilizer: field.Fertilizer } : f)),
@@ -111,6 +62,7 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
     setIsModalVisible(false);
   };
 
+  // get fertilizer types, names, and conversion units
   useEffect(() => {
     apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
@@ -122,6 +74,12 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
       if (response.status === 200) {
         const { data } = response;
         setFertilizerOptions(data);
+      }
+    });
+    apiCache.callEndpoint('api/fertilizerunits/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setFertilizerUnits(data);
       }
     });
   }, [apiCache]);
@@ -190,32 +148,13 @@ export default function FieldTable({ field, setFields }: FieldTableProps) {
               </ButtonWrapper>
             }
           >
-            {/* create new fertilizer form */}
-            <ModalContent>
-              <Dropdown
-                label="Fertilizer Type"
-                name="FertilizerType"
-                value={
-                  fertilizerForm.find((item) => item.FieldId === field.Id)?.FertilizerType || ''
-                }
-                options={fertilizerTypes.map((type) => ({
-                  value: type.id,
-                  label: type.name,
-                }))}
-                onChange={(e) => handleChange(e)}
-              />
-              {/* fertilizer dropdown filter based on type selection */}
-              <Dropdown
-                label="Fertilizer"
-                name="Fertilizer"
-                value={fertilizerForm.find((item) => item.FieldId === field.Id)?.Fertilizer || ''}
-                options={filteredFertilizers.map((type) => ({
-                  value: type.id,
-                  label: type.name,
-                }))}
-                onChange={(e) => handleChange(e)}
-              />
-            </ModalContent>
+            <FertilizerModal
+              field={field}
+              fertilizerUnits={fertilizerUnits}
+              fertilizerTypes={fertilizerTypes}
+              fertilizerOptions={fertilizerOptions}
+              setIsModalVisible={setIsModalVisible}
+            />
           </Modal>
         )}
       </TableWrapper>

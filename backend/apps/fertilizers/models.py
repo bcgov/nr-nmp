@@ -14,9 +14,9 @@ class FertilizerUnits(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     dryliquid = models.CharField(max_length=100)
-    conversiontoimperialgallonsperacre = models.DECIMAL(10, 9)
-    farmrequirednutrientsstdunitsconversion = models.DECIMAL(10, 9)
-    farmrequirednutrientsstdunitsareaconversion = models.DECIMAL(12, 9)
+    conversiontoimperialgallonsperacre = models.FloatField()
+    farmrequirednutrientsstdunitsconversion = models.FloatField()
+    farmrequirednutrientsstdunitsareaconversion = models.FloatField()
 
     class Meta:
         managed = False

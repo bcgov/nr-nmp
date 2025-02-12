@@ -33,12 +33,7 @@ export default function CalculateNutrients() {
         .map((field) => ({
           id: String(field.Id),
           label: field.FieldName,
-          content: (
-            <FieldTable
-              field={field}
-              setFields={setFields}
-            />
-          ),
+          content: <FieldTable field={field} />,
         }))
     : [];
 
