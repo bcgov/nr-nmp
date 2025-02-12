@@ -4,12 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
-import {
-  CardHeader,
-  Banner,
-  Heading,
-  ButtonWrapper,
-} from './CalculateNutrients.styles';
+import { CardHeader, Banner, Heading, ButtonWrapper } from './CalculateNutrients.styles';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { Card, Button } from '../../components/common';
 import FieldTable from './FieldTable/FieldTable';
@@ -55,6 +50,8 @@ export default function CalculateNutrients() {
   };
 
   useEffect(() => {
+    // There shouldn't be a need to check. If there is no nmp file here
+    // an error needs to be given
     if (state.nmpFile) {
       setFields(JSON.parse(state.nmpFile).years[0].Fields);
     }
@@ -70,27 +67,27 @@ export default function CalculateNutrients() {
     <Card
       height="500px"
       width="700px"
-      justifyContent='flex-start'
+      justifyContent="flex-start"
     >
       <CardHeader>
         <Banner>
           <Heading padding-right="1em">Calculate Nutrients</Heading>
-            <TabOptions
-              tabs={tabs}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-            />
+          <TabOptions
+            tabs={tabs}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
         </Banner>
       </CardHeader>
       <ButtonWrapper position="left">
-            <Button
-              text="Add Fertilizer"
-              size="sm"
-              handleClick={handleNext}
-              aria-label="Add Fertilizer"
-              variant="primary"
-              disabled={false}
-            />
+        <Button
+          text="Add Fertilizer"
+          size="sm"
+          handleClick={handleNext}
+          aria-label="Add Fertilizer"
+          variant="primary"
+          disabled={false}
+        />
       </ButtonWrapper>
       {/* <TabContentDisplay
         tabs={tabs}

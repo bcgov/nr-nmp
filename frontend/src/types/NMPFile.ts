@@ -3,7 +3,7 @@
  */
 
 type NMPFile = {
-  farmDetails?: {
+  farmDetails: {
     Year?: string;
     FarmName?: string;
     FarmRegion?: number;
@@ -13,11 +13,7 @@ type NMPFile = {
     Manure?: any | null;
     HasSelectedFarmType?: boolean;
     ImportsManureCompost?: boolean;
-    HasAnimals?: boolean;
-    HasDairyCows?: boolean;
-    HasBeefCows?: boolean;
-    HasPoultry?: boolean;
-    HasMixedLiveStock?: boolean;
+    FarmAnimals?: string[];
     HasHorticulturalCrops?: boolean;
     HasBerries?: boolean;
     HasVegetables?: boolean;
@@ -26,7 +22,7 @@ type NMPFile = {
     UserJourney?: number;
   };
   unsaved?: boolean;
-  years?: Array<{
+  years: Array<{
     Year?: string;
     Fields?: Array<{
       Id?: number;
