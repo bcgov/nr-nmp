@@ -60,6 +60,8 @@ jobs:
             -p DB_USER=${{ secrets.DB_USER }}
             -p DB_NAME=${{ secrets.DB_NAME }}
             -p DB_PORT=${{ secrets.DB_PORT }}
+            -p SSO_CLIENT_ID=${{ vars.SSO_CLIENT_ID }}
+            -p SSO_CLIENT_SECRET=${{ secrets.SSO_CLIENT_SECRET }}
   
   deploy:
     name: Deploy

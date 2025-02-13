@@ -90,12 +90,12 @@ objects:
                 - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: ${REPO}-keycloak
+                      name: ${REPO}-backend-${TARGET}
                       key: SSO_CLIENT_ID
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: ${REPO}-keycloak
+                      name: ${REPO}-backend-${TARGET}
                       key: SSO_CLIENT_SECRET
                 - name: SSO_REDIRECT_URL
                   value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
