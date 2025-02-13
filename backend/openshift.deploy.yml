@@ -102,22 +102,22 @@ objects:
               ports:
                 - name: container-port
                   containerPort: 3000
-              readinessProbe:
-                httpGet:
-                  path: /healthcheck/
-                  port: container-port
-              livenessProbe:
-                httpGet:
-                  path: /healthcheck/
-                  port: container-port
-              startupProbe:
-                tcpSocket:
-                  port: container-port
-                failureThreshold: 5
-                initialDelaySeconds: 90
-                periodSeconds: 15
-                timeoutSeconds: 10
-                failureThreshold: 30
+              # readinessProbe:
+              #   httpGet:
+              #     path: /healthcheck/
+              #     port: container-port
+              # livenessProbe:
+              #   httpGet:
+              #     path: /healthcheck/
+              #     port: container-port
+              # startupProbe:
+              #   tcpSocket:
+              #     port: container-port
+              #   failureThreshold: 5
+              #   initialDelaySeconds: 90
+              #   periodSeconds: 15
+              #   timeoutSeconds: 10
+              #   failureThreshold: 30
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}
