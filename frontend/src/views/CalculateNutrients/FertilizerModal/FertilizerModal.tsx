@@ -138,7 +138,6 @@ export default function FertilizerModal({
     } else if (name === 'fertilizerId' || name === 'fertilizerType') {
       numericValue = parseInt(value, 10);
     }
-    console.log(fertilizerForm);
     // should I be using nmpfile for this instead of fertilizerform?
     setFertilizerForm((prevState) => ({
       ...prevState,
