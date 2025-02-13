@@ -22,6 +22,7 @@ export function TabOptions({ tabs, activeTab, setActiveTab, clickable = true }: 
           <Tab
             key={tab.id}
             active={index === activeTab}
+            clickable={clickable}
             onClick={() => clickable && setActiveTab && setActiveTab(index)}
           >
             {tab.label}

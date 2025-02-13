@@ -13,6 +13,7 @@ import { Card, Button } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
 import NMPFileCropData from '@/types/NMPFileCropData';
+import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 
 export default function FieldAndSoil() {
   const { state, setNMPFile } = useAppService();
@@ -65,9 +66,14 @@ export default function FieldAndSoil() {
   const handleNext = () => {
     let nmpFile: NMPFile;
 
+    // There shouldn't be a need to check here. If the user reached this page without
+    // an nmp file being saved to the state, it is an error
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
-    else nmpFile = defaultNMPFile;
-    if (nmpFile.years && nmpFile.years.length > 0) {
+    else {
+      nmpFile = { ...defaultNMPFile };
+      nmpFile.years.push({ ...blankNMPFileYearData });
+    }
+    if (nmpFile.years.length > 0) {
       nmpFile.years[0].Fields = fields.map((field) => ({
         FieldName: field.FieldName,
         Area: parseFloat(field.Area),

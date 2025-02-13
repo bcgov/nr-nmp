@@ -44,7 +44,7 @@ export const InputFieldsContainer = styled.div`
   display: flex;
   width: 100%;
   gap: 16px;
-  margin-top: 100px;
+  margin-top: 77px;
 `;
 
 export const RegionContainer = styled.div`

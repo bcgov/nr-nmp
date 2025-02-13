@@ -25,6 +25,7 @@ export const CardWrapper = styled.div<CardWrapperProps>`
   text-align: center;
   position: relative;
   justify-content: ${(props) => props.justifyContent};
+  overflow: auto;
 `;
 
 export default CardWrapper;
