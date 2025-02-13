@@ -8,37 +8,20 @@ import { CardHeader, Banner, Heading, ButtonWrapper } from './CalculateNutrients
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { Card, Button } from '../../components/common';
 import FieldTable from './FieldTable/FieldTable';
+import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 export default function CalculateNutrients() {
   const { state } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
-  const [fields, setFields] = useState<
-    {
-      FieldName: string;
-      Id: number;
-      Area: string;
-      PreviousYearManureApplicationFrequency: string;
-      Comment: string;
-      SoilTest: object;
-      Crops: any[];
-    }[]
-  >([]);
+  const [fields, setFields] = useState<NMPFileFieldData[]>([]);
 
   // for each field create a tab with the field name and populate with its crops
-  // extra blank tab being created
-  const tabs = fields
-    ? fields.map((field) => ({
-        id: field.Id.toString(),
-        label: field.FieldName,
-        content: (
-          <FieldTable
-            field={field}
-            setFields={setFields}
-          />
-        ),
-      }))
-    : [];
+  const tabs = fields.map((field) => ({
+    id: field.FieldName,
+    label: field.FieldName,
+    content: <FieldTable field={field} />,
+  }));
 
   const handleNext = () => {
     // add next page in future ticket
@@ -49,19 +32,14 @@ export default function CalculateNutrients() {
     navigate('/field-and-soil');
   };
 
+  // are there multiple years?
   useEffect(() => {
     // There shouldn't be a need to check. If there is no nmp file here
     // an error needs to be given
     if (state.nmpFile) {
       setFields(JSON.parse(state.nmpFile).years[0].Fields);
     }
-  }, [state.nmpFile]);
-
-  // const crops = fields.map((fields) =>
-  //   fields.Crops.map((crop) => ({
-  //     CropName: crop.cropId,
-  //   }))
-  // );
+  }, [state]);
 
   return (
     <Card
@@ -89,10 +67,6 @@ export default function CalculateNutrients() {
           disabled={false}
         />
       </ButtonWrapper>
-      {/* <TabContentDisplay
-        tabs={tabs}
-        activeTab={activeTab}
-      /> */}
       {tabs.length > 0 && (
         <TabContentDisplay
           tabs={tabs}
