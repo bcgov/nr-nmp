@@ -100,34 +100,25 @@ objects:
                 - name: SSO_REDIRECT_URL
                   value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
-                - containerPort: 3000
+                - container-port: 3000
                   protocol: TCP
-              # readinessProbe:
-              #   httpGet:
-              #     path: /healthcheck/
-              #     port: 3000
-              #     scheme: HTTP
-              #     httpHeaders:
-              #     - name: host
-              #       value: localhost
-              #   initialDelaySeconds: 90
-              #   periodSeconds: 15
-              #   timeoutSeconds: 10
-              #   successThreshold: 3
-              #   failureThreshold: 30
-              # livenessProbe:
-              #   successThreshold: 1
-              #   failureThreshold: 5
-              #   httpGet:
-              #     path: /healthcheck/
-              #     port: 3000
-              #     scheme: HTTP
-              #     httpHeaders:
-              #     - name: host
-              #       value: localhost
-              #   initialDelaySeconds: 15
-              #   periodSeconds: 30
-              #   timeoutSeconds: 5
+              readinessProbe:
+                httpGet:
+                  path: /healthcheck/
+                  port: container-port
+              livenessProbe:
+                httpGet:
+                  path: /healthcheck/
+                  port: container-port
+              startupProbe:
+                tcpSocket:
+                  port: container-port
+                failureThreshold: 45
+                initialDelaySeconds: 90
+                periodSeconds: 15
+                timeoutSeconds: 10
+                successThreshold: 3
+                failureThreshold: 30
               resources: # this is optional
                 requests:
                   cpu: ${CPU_REQUEST}

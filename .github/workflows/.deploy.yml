@@ -96,7 +96,7 @@ jobs:
           oc_token: ${{ secrets.OC_TOKEN }}
           overwrite: false
           parameters:
-            -p IMAGE_TAG=${{ inputs.tag }} 
+            -p TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
             -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
             -p CPU_REQUEST=${{ inputs.db-cpu-request }}
