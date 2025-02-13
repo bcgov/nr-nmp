@@ -81,6 +81,7 @@ jobs:
             parameters:
               -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
               -p CPU_REQUEST=${{ inputs.backend-cpu-request }}
+            verification_path: /healthcheck/
           - name: frontend
             overwrite: true
             parameters:
@@ -99,3 +100,4 @@ jobs:
             -p TARGET=${{ inputs.target }}
             -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
             -p CPU_REQUEST=${{ inputs.db-cpu-request }}
+          verification_path: ${{ matrix.verification_path }}
