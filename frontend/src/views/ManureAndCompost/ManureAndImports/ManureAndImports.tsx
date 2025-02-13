@@ -55,7 +55,7 @@ const unitsSolidDropdownOptions = [
 const UnitsLiquidDropdownOptions = [
   { label: 'US Gallons', value: 1 },
   { label: 'Imperial Gallons', value: 2 },
-  { label: 'Liters', value: 3 },
+  { label: 'Cubic Meters', value: 3 },
 ];
 
 export default function ManureAndImports({ manures, setManures }: ManureAndImportsProps) {
@@ -96,14 +96,33 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
       return;
     }
     setErrors({});
+
+    let annualAmountUSGallonsVolume = 0;
+    if (manureFormData.Units === 1) {
+      // US Gallons
+      annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1;
+    } else if (manureFormData.Units === 2) {
+      // Imperial Gallons
+      annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1.2;
+    } else if (manureFormData.Units === 3) {
+      // Cubic Meters
+      annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 264.172;
+    }
+
+    const updatedManureFormData = {
+      ...manureFormData,
+      AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
+      AnnualAmountDisplayVolume: annualAmountUSGallonsVolume.toString(),
+    };
+
     if (editIndex !== null) {
       const updatedManures = manures.map((manure, index) =>
-        index === editIndex ? manureFormData : manure,
+        index === editIndex ? updatedManureFormData : manure,
       );
       setManures(updatedManures);
       setEditIndex(null);
     } else {
-      setManures([...manures, manureFormData]);
+      setManures([...manures, updatedManureFormData]);
     }
     setManureFormData(initialManureFormData);
     setIsModalVisible(false);
