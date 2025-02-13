@@ -23,6 +23,21 @@ on:
         default: "128Mi"
         required: false
         type: string
+      db-cpu-request:
+        description: Database CPU request; e.g. 50m
+        default: "50m"
+        required: false
+        type: string
+      backend-cpu-request:
+        description: Backend CPU request; e.g. 50m
+        default: "50m"
+        required: false
+        type: string
+      frontend-cpu-request:
+        description: Frontend CPU request; e.g. 50m
+        default: "50m"
+        required: false
+        type: string
 
 jobs:
   init:
@@ -65,6 +80,7 @@ jobs:
             -p IMAGE_TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
             -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
+            -p CPU_REQUEST=${{ inputs.db-cpu-request }}
 
   backend:
     name: Backend
@@ -84,6 +100,7 @@ jobs:
             -p IMAGE_TAG=${{ inputs.tag }}
             -p TARGET=${{ inputs.target }}
             -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
+            -p CPU_REQUEST=${{ inputs.backend-cpu-request }}
           verification_path: /healthcheck/
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
@@ -105,3 +122,4 @@ jobs:
           parameters:
             -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
             -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
+            -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
