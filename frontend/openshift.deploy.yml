@@ -81,12 +81,12 @@ objects:
                 - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
+                      name: ${REPO}-keycloak
                       key: SSO_CLIENT_ID
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
+                      name: ${REPO}-keycloak
                       key: SSO_CLIENT_SECRET
               ports:
                 - name: http

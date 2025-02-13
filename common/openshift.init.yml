@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Template
 parameters:
+  - name: REPO
+    value: nr-nmp
   - name: TARGET
     required: true
   - name: ENV
@@ -17,7 +19,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: nr-nmp-database-${TARGET}
+      name: ${REPO}-database-${TARGET}
     stringData:
       database-name: ${DB_NAME}
       database-password: ${DB_PASSWORD}

@@ -69,33 +69,33 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: POSTGRES_HOST
-                  value: nr-nmp-database-${TARGET}
+                  value: ${REPO}-database-${TARGET}
                 - name: SSO_AUTH_SERVER_URL
                   value: ${SSOAUTH}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-database-${TARGET}
+                      name: ${REPO}-database-${TARGET}
                       key: database-name
                 - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-database-${TARGET}
+                      name: ${REPO}-database-${TARGET}
                       key: database-password
                 - name: POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-database-${TARGET}
+                      name: ${REPO}-database-${TARGET}
                       key: database-user
                 - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
+                      name: ${REPO}-keycloak
                       key: SSO_CLIENT_ID
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
+                      name: ${REPO}-keycloak
                       key: SSO_CLIENT_SECRET
                 - name: SSO_REDIRECT_URL
                   value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
