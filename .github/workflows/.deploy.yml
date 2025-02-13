@@ -18,6 +18,11 @@ on:
         default: ${{ github.event.number }}
         required: false
         type: string
+      db-pvc-size:
+        description: Database PVC size; e.g. 1Gi
+        default: "128Mi"
+        required: false
+        type: string
 
 jobs:
   init:
@@ -59,6 +64,7 @@ jobs:
           parameters:
             -p IMAGE_TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
+            -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
 
   backend:
     name: Backend
