@@ -31,7 +31,7 @@ objects:
     kind: Secret
     metadata:
       app: ${REPO}-${TARGET}
-      name: ${REPO}-backend-${TARGET}
+      name: ${REPO}-${TARGET}-backend
     stringData:
       sso-client-id: ${SSO_CLIENT_ID}
       sso-client-secret: ${SSO_CLIENT_SECRET}
