@@ -2,21 +2,13 @@
  * @summary The field table on the calculate nutrients page
  */
 import React, { useEffect, useState } from 'react';
-import { Dropdown, InputField } from '@/components/common';
+import { Button, Dropdown, InputField } from '@/components/common';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
-
-interface Field {
-  FieldName: string;
-  Id: string;
-  Area: string;
-  PreviousYearManureApplicationFrequency: string;
-  Comment: string;
-  SoilTest: object;
-  Crops: any[];
-}
+import NMPFileFieldData from '@/types/NMPFileFieldData';
+import Crops from '@/views/FieldAndSoil/Crops/Crops';
 
 interface FertilizerModalProps {
-  field: Field;
+  field: NMPFileFieldData;
   fertilizerUnits: {
     id: number;
     name: string;
@@ -50,15 +42,17 @@ export default function FertilizerModal({
   setIsModalVisible,
 }: FertilizerModalProps) {
   const [fertilizerForm, setFertilizerForm] = useState({
-    fieldId: field.Id,
-    fertilizerType: '',
-    fertilizer: '',
-    applicationRate: 0,
-    liquidDensity: 0,
+    fieldName: field.FieldName,
+    fertilizerType: 0,
+    fertilizerId: 0,
+    applicationRate: 1,
+    applUnit: 1,
+    liquidDensity: 1,
+    densityUnits: 0,
+    availableNutrients: { N: 0, P: 0, K: 0 },
+    nutrientsStillRequired: { N: 0, P: 0, K: 0 },
   });
   const [filteredFertilizers, setFilteredFertilizers] = useState(fertilizerOptions);
-  const [applUnit, setApplUnit] = useState('');
-  const [densityUnits, setDensityUnits] = useState('');
 
   const densityOptions = [
     { value: 0, label: 'kg/US Gallon' },
@@ -67,103 +61,91 @@ export default function FertilizerModal({
     { value: 3, label: 'lb/imp. gallon' },
   ];
 
-  // apply conversions on change of application rate and density
-  useEffect(() => {
-    // fx to get the conversion coefficient for the selected fertilizer unit
-    const getConversionCoefficient = (unitId: number) => {
-      const unit = fertilizerUnits.find((fUnit) => fUnit.id === unitId);
-      return unit ? unit.conversiontoimperialgallonsperacre : 1;
-    };
-    // apply conversions based on selected application unit and density unit
-    const applyConversions = () => {
-      let convertedApplRate = fertilizerForm.applicationRate;
-      let convertedDensity = fertilizerForm.liquidDensity;
-      const applUnitCoef = getConversionCoefficient(Number(applUnit));
-      // Convert application rate and density to the default unit for calc is lb/ac for dry ferts, imp. gall/ac for liquid
-      switch (applUnit) {
-        case 'kg/ha':
-          convertedApplRate *= applUnitCoef;
-          break;
-        case 'lb/1000ft2':
-          convertedApplRate *= applUnitCoef;
-          break;
-        case 'L/ac':
-          convertedApplRate *= applUnitCoef;
-          break;
-        case 'US gallons/ac':
-          convertedApplRate *= applUnitCoef;
-          break;
-        default:
-          break;
-      }
-      // Convert density units if applicable (for liquid fertilizers)
-      if (fertilizerForm.fertilizerType === '3' || fertilizerForm.fertilizerType === '4') {
-        switch (densityUnits) {
-          case 'kg/US Gallon':
-            convertedDensity *= 2.20462; // Kilograms to pounds
-            convertedDensity /= 1.20095; // US Gallons to Imperial Gallons
-            break;
-          case 'kg/L':
-            convertedDensity *= 2.20462; // Kilograms to pounds
-            convertedDensity /= 0.264172; // Liters to Imperial Gallons
-            break;
-          case 'lb/US gallon':
-            convertedDensity /= 1.20095; // US Gallons to Imperial Gallons
-            break;
-          default:
-            break;
-        }
-        // Adjust application rate based on converted density
-        convertedApplRate *= convertedDensity;
-      }
-  
-      // Only update state if the values have changed
-      if (
-        convertedApplRate !== fertilizerForm.applicationRate ||
-        convertedDensity !== fertilizerForm.liquidDensity
-      ) {
-        setFertilizerForm((prevState) => ({
-          ...prevState,
-          applicationRate: convertedApplRate,
-          liquidDensity: convertedDensity,
-        }));
-      }
-    };
-
-    if (fertilizerForm.fertilizerType && applUnit && densityUnits) {
-      applyConversions();
-    }
-  }, [
-    fertilizerForm.applicationRate,
-    fertilizerForm.liquidDensity,
-    applUnit,
-    densityUnits,
-    fertilizerUnits,
-    fertilizerForm.fertilizerType,
-  ]);
-
   // filters fertilizer based on selected type id
   useEffect(() => {
     const selectedFertilizerType = fertilizerTypes.find(
-      (type) => type.id === parseInt(fertilizerForm.fertilizerType, 10),
+      (type) => type.id === fertilizerForm.fertilizerType,
     );
 
     if (selectedFertilizerType) {
       const filtered = fertilizerOptions.filter(
         (fertilizer) => fertilizer.dryliquid === selectedFertilizerType.dryliquid,
       );
-
       setFilteredFertilizers(filtered);
     }
   }, [fertilizerForm.fertilizerType, fertilizerTypes, fertilizerOptions]);
 
+  // Calculate available nutrients and nutrients still required for the year
+  const calculateFieldBalances = () => {
+    let fertN = 0;
+    let fertP = 0;
+    let fertK = 0;
+    // calculate available nutrients (agronomic balance + fertilizer)
+    field.Crops?.forEach((crop) => {
+      fertN += crop.reqN ?? 0;
+      fertP += crop.reqP2o5 ?? 0;
+      fertK += crop.reqK2o ?? 0;
+    });
+    // find fertilizer nutrients by matching id's
+    const selectedFertilizer = fertilizerOptions.find(
+      (fertilizer) => fertilizer.id === fertilizerForm.fertilizerId,
+    );
+    if (selectedFertilizer) {
+      fertN += selectedFertilizer.nitrogen;
+      fertP += selectedFertilizer.phosphorous;
+      fertK += selectedFertilizer.potassium;
+    }
+    const availableNutrients = {
+      N: fertN,
+      P: fertP,
+      K: fertK,
+    };
+    // Calculate crop removal values
+    const cropRemoval =
+      field.Crops?.map((crop) => ({
+        N: crop?.remN ?? 0,
+        P: crop?.remP2o5 ?? 0,
+        K: crop?.remK2o ?? 0,
+      })) ?? [];
+    // Nutrients still required (if negative, set to 0)
+    const nutrientsStillRequired = {
+      N: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.N, 0) - availableNutrients.N, 0),
+      P: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.P, 0)- availableNutrients.P, 0),
+      K: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.K, 0) - availableNutrients.K, 0),
+    };
+    setFertilizerForm((prevForm) => ({
+      ...prevForm,
+      availableNutrients,
+      nutrientsStillRequired,
+    }));
+  };
+
+  // fx to get the conversion coefficient for the selected fertilizer unit
+  // const getConversionCoefficient = (unitId: number) => {
+  //   const unit = fertilizerUnits.find((fUnit) => fUnit.id === unitId);
+  //   return unit ? unit.conversiontoimperialgallonsperacre : 1;
+  // };
+
+  // triggers converting values and calculate function and populates calculated values
+  const handleCalculate = () => {
+    calculateFieldBalances();
+  };
+
+  // Handle field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-
+    // convert number inputs to floats or ints
+    let numericValue = Number(value);
+    if (name === 'applicationRate' || name === 'liquidDensity') {
+      numericValue = parseFloat(value);
+    } else if (name === 'fertilizerId' || name === 'fertilizerType') {
+      numericValue = parseInt(value, 10);
+    }
+    console.log(fertilizerForm);
     // should I be using nmpfile for this instead of fertilizerform?
     setFertilizerForm((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: numericValue,
     }));
   };
 
@@ -174,17 +156,17 @@ export default function FertilizerModal({
         <Dropdown
           label="Fertilizer Type"
           name="fertilizerType"
-          value={fertilizerForm.fertilizerType || ''}
+          value={fertilizerForm.fertilizerType}
           options={fertilizerTypes.map((type) => ({
             value: type.id,
             label: type.name,
           }))}
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
         />
         <Dropdown
-          label="Fertilizer"
-          name="fertilizer"
-          value={fertilizerForm.fertilizer || ''}
+          label="fertilizerId"
+          name="fertilizerId"
+          value={fertilizerForm.fertilizerId || 0}
           options={filteredFertilizers.map((fertilizer) => ({
             value: fertilizer.id,
             label: fertilizer.name,
@@ -193,16 +175,16 @@ export default function FertilizerModal({
         />
         <InputField
           label="Application Rate"
-          type="text"
+          type="number"
           name="applicationRate"
-          value={String(fertilizerForm.applicationRate || '')}
+          value={fertilizerForm.applicationRate}
           onChange={(e) => handleChange(e)}
           flex="0.5"
         />
         <Dropdown
           label="Appl Units"
-          name="applUnits"
-          value={applUnit}
+          name="applUnit"
+          value={fertilizerForm.applUnit}
           options={fertilizerUnits
             .filter((unit) => [3, 4, 5, 6].includes(unit.id))
             .map((unit) => ({
@@ -211,25 +193,54 @@ export default function FertilizerModal({
             }))}
           onChange={(e) => handleChange(e)}
         />
-        {fertilizerForm.fertilizerType === '3' && (
+        {(fertilizerForm.fertilizerType === 3 || 4) && (
           <>
             <InputField
               label="Density"
-              type="text"
+              type="number"
               name="liquidDensity"
-              value={String(fertilizerForm.liquidDensity || '')}
+              value={fertilizerForm.liquidDensity}
               onChange={(e) => handleChange(e)}
               flex="0.5"
             />
             <Dropdown
               label="Density Units"
-              name="liquidDensityUnits"
-              value={densityUnits}
+              name="densityUnits"
+              value={fertilizerForm.densityUnits}
               options={densityOptions}
               onChange={(e) => handleChange(e)}
             />
           </>
         )}
+        <div>
+          <h3>Available Nutrients (lb/ac)</h3>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <h4>N</h4>
+                  <p>{fertilizerForm.availableNutrients.N}</p>
+                </td>
+                <td>
+                  <h4>P2O5</h4>
+                  <p>{fertilizerForm.availableNutrients.P}</p>
+                </td>
+                <td>
+                  <h4>k2O</h4>
+                  <p>{fertilizerForm.availableNutrients.K}</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <Button
+          text="Calculate"
+          handleClick={handleCalculate}
+          aria-label="Calculate"
+          variant="primary"
+          size="sm"
+          disabled={false}
+        />
       </ModalContent>
     </div>
   );

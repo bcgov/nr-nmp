@@ -6,19 +6,10 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { ButtonWrapper, TableWrapper } from '../CalculateNutrients.styles';
 import { Button, Modal } from '@/components/common';
 import FertilizerModal from '../FertilizerModal/FertilizerModal';
-
-interface Field {
-  FieldName: string;
-  Id: string;
-  Area: string;
-  PreviousYearManureApplicationFrequency: string;
-  Comment: string;
-  SoilTest: object;
-  Crops: any[];
-}
+import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 interface FieldTableProps {
-  field: Field;
+  field: NMPFileFieldData;
 }
 
 // fieldtable displays all the crops in one field tab and has the option to add fertilizer with a modal
@@ -87,7 +78,7 @@ export default function FieldTable({ field }: FieldTableProps) {
   return (
     <div>
       <TableWrapper>
-        <div key={field.Id}>
+        <div key={field.FieldName}>
           <table>
             <thead>
               <tr>
