@@ -88,31 +88,25 @@ objects:
                     secretKeyRef:
                       name: ${REPO}-keycloak
                       key: SSO_CLIENT_SECRET
+
               ports:
-                - name: http
+                - name: container-port
                   containerPort: 5173
-                  protocol: TCP
-              # readinessProbe:
-              #   httpGet:
-              #     path: /
-              #     port: http
-              #     scheme: HTTP
-              #   initialDelaySeconds: 90
-              #   periodSeconds: 10
-              #   timeoutSeconds: 10
-              #   successThreshold: 3
-              #   failureThreshold: 30
-              # livenessProbe:
-              #   successThreshold: 1
-              #   failureThreshold: 3
-              #   httpGet:
-              #     path: /
-              #     port: http
-              #     scheme: HTTP
-              #   initialDelaySeconds: 15
-              #   periodSeconds: 30
-              #   timeoutSeconds: 5
-              resources: # this is optional
+              readinessProbe:
+                httpGet:
+                  port: container-port
+              livenessProbe:
+                httpGet:
+                  port: container-port
+              startupProbe:
+                tcpSocket:
+                  port: container-port
+                failureThreshold: 5
+                initialDelaySeconds: 90
+                periodSeconds: 15
+                timeoutSeconds: 10
+                failureThreshold: 30
+              resources:
                 requests:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}

@@ -113,13 +113,12 @@ objects:
               startupProbe:
                 tcpSocket:
                   port: container-port
-                failureThreshold: 45
+                failureThreshold: 5
                 initialDelaySeconds: 90
                 periodSeconds: 15
                 timeoutSeconds: 10
-                successThreshold: 3
                 failureThreshold: 30
-              resources: # this is optional
+              resources:
                 requests:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
