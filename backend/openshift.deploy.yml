@@ -91,12 +91,12 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       name: ${REPO}-${TARGET}-backend
-                      key: SSO_CLIENT_ID
+                      key: sso-client-id
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
                       name: ${REPO}-${TARGET}-backend
-                      key: SSO_CLIENT_SECRET
+                      key: sso-client-secret
                 - name: SSO_REDIRECT_URL
                   value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
