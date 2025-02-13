@@ -69,23 +69,23 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: POSTGRES_HOST
-                  value: ${REPO}-database-${TARGET}
+                  value: ${REPO}-${TARGET}-database
                 - name: SSO_AUTH_SERVER_URL
                   value: ${SSO_AUTH_SERVER_URL}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
-                      name: ${REPO}-database-${TARGET}
+                      name: ${REPO}-${TARGET}-database
                       key: database-name
                 - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: ${REPO}-database-${TARGET}
+                      name: ${REPO}-${TARGET}-database
                       key: database-password
                 - name: POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
-                      name: ${REPO}-database-${TARGET}
+                      name: ${REPO}-${TARGET}-database
                       key: database-user
                 - name: SSO_CLIENT_ID
                   valueFrom:

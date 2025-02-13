@@ -23,7 +23,8 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: ${REPO}-database-${TARGET}
+      app: ${REPO}-${TARGET}
+      name: ${REPO}-${TARGET}-database
     stringData:
       database-name: ${DB_NAME}
       database-password: ${DB_PASSWORD}
@@ -32,6 +33,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
+      app: ${REPO}-${TARGET}
       name: ${REPO}-backend-${TARGET}
     stringData:
       sso-client-id: ${SSO_CLIENT_ID}
