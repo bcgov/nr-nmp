@@ -19,7 +19,7 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
-    def previousCropsTypes(self, request):
-        previous_crops_types = PreviousCropsTypes.objects.all()
-        serializer = PreviousCropsTypesSerializer(previous_crops_types, many=True)
+    def previousCropTypes(self, request):
+        previous_crops_types = PreviousCropTypes.objects.all()
+        serializer = PreviousCropTypesSerializer(previous_crops_types, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -32,15 +32,15 @@ class Crops(models.Model):
         managed = False
         db_table = 'crops'
 
-class PreviousCropsTypes(models.Model):
-    id = models.IntegerField(blank=True, null=True)
-    previouscropcode = models.IntegerField(blank=True, null=True)
-    name = models.CharField(max_length=100, blank=True, null=True)
-    nitrogencreditmetric = models.IntegerField(blank=True, null=True)
-    nitrogencreditimperial = models.IntegerField(blank=True, null=True)
-    cropid = models.IntegerField(blank=True, null=True)
+class PreviousCropTypes(models.Model):
+    id = models.IntegerField()
+    previouscropcode = models.IntegerField()
+    name = models.CharField(max_length=100)
+    nitrogencreditmetric = models.IntegerField()
+    nitrogencreditimperial = models.IntegerField()
+    cropid = models.IntegerField()
     croptypeid = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'previous_crops_types'
+        db_table = 'previous_crop_types'

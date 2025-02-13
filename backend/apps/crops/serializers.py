@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import CropTypes
 from .models import Crops
-from .models import PreviousCropsTypes
+from .models import PreviousCropTypes
 
 class CropTypesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,7 +13,7 @@ class CropsSerializer(serializers.ModelSerializer):
         model = Crops
         fields = '__all__'
 
-class PreviousCropsTypesSerializer(serializers.ModelSerializer):
+class PreviousCropTypesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PreviousCropsTypes
+        model = PreviousCropTypes
         fields = '__all__'

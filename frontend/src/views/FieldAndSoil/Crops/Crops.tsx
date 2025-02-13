@@ -84,20 +84,25 @@ function Crops({ fields, setFields }: FieldListProps) {
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
-    setCombinedCropsData({ ...combinedCropsData, [name]: value });
+    setCombinedCropsData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
     if (name === 'cropTypeId') {
       const selectedCropType = cropsDatabase.filter(
         (type) => type.croptypeid === parseInt(value, 10),
       );
       setFilteredCrops(selectedCropType.map((crop) => ({ value: crop.id, label: crop.cropname })));
     }
+
     if (name === 'cropId') {
       const selectedCrop = cropsDatabase.find((crop) => crop.id === parseInt(value, 10));
-      setCombinedCropsData({
-        ...combinedCropsData,
+      setCombinedCropsData((prevData) => ({
+        ...prevData,
         cropName: selectedCrop?.cropname,
         reqN: selectedCrop?.nitrogenrecommendationpoundperacre,
-      });
+      }));
     }
   };
 
@@ -245,6 +250,20 @@ function Crops({ fields, setFields }: FieldListProps) {
               onChange={handleChange}
             />
             {/* Each of these are a conditional render based on the cropTypeId of the select crop type */}
+            {combinedCropsData.cropTypeId != 6 && (
+              <Dropdown
+                label="Previous crop ploughed down (N credit)"
+                name="prevCropId"
+                value={combinedCropsData.prevCropId || ''}
+                options={previousCropDatabase
+                  .filter((crop) => crop.cropid === Number(combinedCropsData.cropId))
+                  .map((crop) => ({
+                    value: crop.id,
+                    label: crop.name,
+                  }))}
+                onChange={handleChange}
+              />
+            )}
             {combinedCropsData.cropTypeId == 6 && (
               <InputField
                 label="Crop Description"
