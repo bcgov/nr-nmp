@@ -19,6 +19,10 @@ parameters:
   - name: SSOAUTH
     description: SSO Auth Server URL
     required: true
+  - name: CPU_REQUEST
+    value: 50m
+  - name: MEMORY_REQUEST
+    value: 175Mi
 objects:
   - kind: Service
     apiVersion: v1
@@ -110,8 +114,8 @@ objects:
               #   timeoutSeconds: 5
               resources: # this is optional
                 requests:
-                  cpu: 50m
-                  memory: 175Mi
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:

@@ -19,6 +19,10 @@ parameters:
   - name: DB_PVC_SIZE
     description: Database PVC size; e.g. 1Gi
     value: 128Mi
+  - name: CPU_REQUEST
+    value: 50m
+  - name: MEMORY_REQUEST
+    value: 150Mi
 objects:
   - kind: PersistentVolumeClaim
     apiVersion: v1
@@ -68,8 +72,8 @@ objects:
                   protocol: TCP
               resources:
                 requests:
-                  cpu: 50m
-                  memory: 150Mi
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
               readinessProbe:
                 exec:
                   command:
