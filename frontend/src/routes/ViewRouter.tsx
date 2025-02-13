@@ -8,6 +8,7 @@ import FarmInformation from '../views/FarmInformation/FarmInformation';
 import FieldAndSoil from '@/views/FieldAndSoil/FieldAndSoil';
 import AnimalsAndManure from '@/views/AnimalsAndManure/AnimalsAndManure';
 import CalculateNutrients from '@/views/CalculateNutrients/CalculateNutrients';
+import ManureAndCompost from '@/views/ManureAndCompost/ManureAndCompost';
 
 export default function ViewRouter() {
   return (
@@ -23,6 +24,10 @@ export default function ViewRouter() {
       <Route
         path="/field-and-soil"
         Component={FieldAndSoil}
+      />
+      <Route
+        path="/manure-and-compost"
+        Component={ManureAndCompost}
       />
       <Route
         path="/calculate-nutrients"
