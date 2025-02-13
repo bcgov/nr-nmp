@@ -3,40 +3,39 @@ name: .Deploys
 on:
   workflow_call:
     inputs:
+      ### Required
+      # Nothing! Only `secrets: inherit` is required
+
+      ### Typical / recommended
       environment:
         description: GitHub environment; e.g. PR number (omit), TEST or PROD
         default: "dev"
-        required: false
         type: string
       tag: 
         description: Image tag; e.g. PR number or latest
         default: ${{ github.event.number }}
-        required: false
         type: string
       target:
         description: Deployment target; e.g. PR number (omit), test or prod
         default: ${{ github.event.number }}
-        required: false
         type: string
+
+      ### Optional / per-environment
       db-pvc-size:
         description: Database PVC size; e.g. 1Gi
         default: "128Mi"
-        required: false
         type: string
       db-cpu-request:
         description: Database CPU request; e.g. 50m
         default: "50m"
-        required: false
         type: string
       backend-cpu-request:
         description: Backend CPU request; e.g. 50m
         default: "50m"
-        required: false
         type: string
       frontend-cpu-request:
         description: Frontend CPU request; e.g. 50m
         default: "50m"
-        required: false
         type: string
 
 jobs:
@@ -62,16 +61,37 @@ jobs:
             -p DB_NAME=${{ secrets.DB_NAME }}
             -p DB_PORT=${{ secrets.DB_PORT }}
   
-  database:
-    name: Database
-    needs: [init]
+  deploy:
+    name: Deploy
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-22.04
+    needs: [init]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        name: [database, backend, frontend]
+        include:
+          - name: database
+            overwrite: false
+            parameters:
+              -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
+              -p CPU_REQUEST=${{ inputs.db-cpu-request }}
+          - name: backend
+            overwrite: true
+            parameters:
+              -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
+              -p CPU_REQUEST=${{ inputs.backend-cpu-request }}
+          - name: frontend
+            overwrite: true
+            parameters:
+              -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
+              -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
     steps:
       - name: Deploy Database
         uses: bcgov-nr/action-deployer-openshift@v3.1.0
         with:
-          oc_namespace: ${{ secrets.OC_NAMESPACE }}
+          file: ${{ matrix.name }}/openshift.deploy.yml
+          oc_namespace: ${{ vars.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
           file: database/openshift.deploy.yml
@@ -121,5 +141,7 @@ jobs:
           overwrite: true
           parameters:
             -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
-            -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
-            -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
+            ${{ matrix.parameters }}
+          verification_path: ${{ matrix.verification_path }}
+          verification_retry_attempts: 5
+          verification_retry_seconds: 20

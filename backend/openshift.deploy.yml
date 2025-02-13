@@ -11,7 +11,7 @@ parameters:
   - name: ORG
     description: Organization name; e.g. bcgov or bcdevops
     value: bcgov
-  - name: IMAGE_TAG
+  - name: TAG
     description: Image tag; e.g. PR number or latest
     required: true
   - name: TARGET
@@ -63,7 +63,7 @@ objects:
         spec:
           containers:
             - name: ${APP}-${TARGET}-${COMPONENT}
-              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${IMAGE_TAG}
+              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
