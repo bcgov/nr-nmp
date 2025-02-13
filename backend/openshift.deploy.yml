@@ -100,8 +100,8 @@ objects:
                 - name: SSO_REDIRECT_URL
                   value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
-                - container-port: 3000
-                  protocol: TCP
+                - name: container-port
+                  containerPort: 3000
               readinessProbe:
                 httpGet:
                   path: /healthcheck/
