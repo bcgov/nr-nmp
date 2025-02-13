@@ -87,7 +87,6 @@ jobs:
           - name: frontend
             overwrite: true
             parameters:
-              -p SSO_AUTH_SERVER_URL=${{ vars.SSO_AUTH_SERVER_URL }}
               -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
     steps:
       - uses: bcgov-nr/action-deployer-openshift@v3.1.0
