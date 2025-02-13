@@ -16,6 +16,7 @@ jobs:
     with:
       markdown_links: |
         - [Frontend](https://${{ github.event.repository.name }}-${{ github.event.number }}.apps.silver.devops.gov.bc.ca)
+        - [Backend](https://${{ github.event.repository.name }}-${{ github.event.number }}-backend.apps.silver.devops.gov.bc.ca)/healthcheck/
 
   results:
     name: Validate Results
