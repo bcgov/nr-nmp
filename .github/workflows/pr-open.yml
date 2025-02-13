@@ -32,6 +32,11 @@ jobs:
     needs: [builds]
     secrets: inherit
     uses: ./.github/workflows/.deploy.yml
+    with:
+      db-pvc-size: 64Mi
+      db-cpu-request: 30m
+      backend-cpu-request: 30m
+      frontend-cpu-request: 30m
 
   # tests:
   #   name: Tests

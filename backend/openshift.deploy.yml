@@ -2,8 +2,8 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
-  - name: APP
-    description: Application name
+  - name: REPO
+    description: Repository name
     value: nr-nmp
   - name: COMPONENT
     description: Component name
@@ -11,23 +11,27 @@ parameters:
   - name: ORG
     description: Organization name; e.g. bcgov or bcdevops
     value: bcgov
-  - name: IMAGE_TAG
+  - name: TAG
     description: Image tag; e.g. PR number or latest
     required: true
   - name: TARGET
     description: Deployment target; e.g. PR number, test or prod
     required: true
     generate: expression
-  - name: SSOAUTH
+  - name: SSO_AUTH_SERVER_URL
     description: SSO Auth Server URL
     required: true
+  - name: CPU_REQUEST
+    value: 50m
+  - name: MEMORY_REQUEST
+    value: 75Mi
 objects:
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
       type: ClusterIP
       ports:
@@ -36,114 +40,99 @@ objects:
           protocol: TCP
           name: http-3000
       selector:
-        service: ${APP}-${TARGET}-${COMPONENT}
+        service: ${REPO}-${TARGET}-${COMPONENT}
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-        deployment: ${APP}-${TARGET}-${COMPONENT}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+        deployment: ${REPO}-${TARGET}-${COMPONENT}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
       strategy:
-        type: Recreate
+        type: RollingUpdate
       selector:
         matchLabels:
-          deployment: ${APP}-${TARGET}-${COMPONENT}
+          deployment: ${REPO}-${TARGET}-${COMPONENT}
       template:
         metadata:
           labels:
-            app: ${APP}-${TARGET}
-            deployment: ${APP}-${TARGET}-${COMPONENT}
-            service: ${APP}-${TARGET}-${COMPONENT}
+            app: ${REPO}-${TARGET}
+            deployment: ${REPO}-${TARGET}-${COMPONENT}
+            service: ${REPO}-${TARGET}-${COMPONENT}
         spec:
           containers:
-            - name: ${APP}-${TARGET}-${COMPONENT}
-              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${IMAGE_TAG}
+            - name: ${REPO}-${TARGET}-${COMPONENT}
+              image: ghcr.io/${ORG}/${REPO}/${COMPONENT}:${TAG}
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
                   value: info
                 - name: POSTGRES_HOST
-                  value: nr-nmp-database-${TARGET}
+                  value: ${REPO}-${TARGET}-database
                 - name: SSO_AUTH_SERVER_URL
-                  value: ${SSOAUTH}
+                  value: ${SSO_AUTH_SERVER_URL}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-database-${TARGET}
+                      name: ${REPO}-${TARGET}-database
                       key: database-name
                 - name: POSTGRES_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-database-${TARGET}
+                      name: ${REPO}-${TARGET}-database
                       key: database-password
                 - name: POSTGRES_USER
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-database-${TARGET}
+                      name: ${REPO}-${TARGET}-database
                       key: database-user
                 - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
-                      key: SSO_CLIENT_ID
+                      name: ${REPO}-${TARGET}-backend
+                      key: sso-client-id
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
-                      key: SSO_CLIENT_SECRET
+                      name: ${REPO}-${TARGET}-backend
+                      key: sso-client-secret
                 - name: SSO_REDIRECT_URL
-                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
+                  value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
-                - containerPort: 3000
-                  protocol: TCP
-              # readinessProbe:
-              #   httpGet:
-              #     path: /healthcheck/
-              #     port: 3000
-              #     scheme: HTTP
-              #     httpHeaders:
-              #     - name: host
-              #       value: localhost
-              #   initialDelaySeconds: 90
-              #   periodSeconds: 15
-              #   timeoutSeconds: 10
-              #   successThreshold: 3
-              #   failureThreshold: 30
-              # livenessProbe:
-              #   successThreshold: 1
-              #   failureThreshold: 5
-              #   httpGet:
-              #     path: /healthcheck/
-              #     port: 3000
-              #     scheme: HTTP
-              #     httpHeaders:
-              #     - name: host
-              #       value: localhost
-              #   initialDelaySeconds: 15
-              #   periodSeconds: 30
-              #   timeoutSeconds: 5
-              resources: # this is optional
-                limits:
-                  cpu: 150m
-                  memory: 150Mi
+                - name: container-port
+                  containerPort: 3000
+              readinessProbe:
+                tcpSocket:
+                  port: container-port
+              livenessProbe:
+                tcpSocket:
+                  port: container-port
+              startupProbe:
+                tcpSocket:
+                  port: container-port
+                failureThreshold: 5
+                initialDelaySeconds: 15
+                periodSeconds: 15
+                timeoutSeconds: 10
+                failureThreshold: 30
+              resources:
                 requests:
-                  cpu: 50m
-                  memory: 75Mi
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
-      host: ${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+      host: ${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
       port:
         targetPort: http-3000
       to:
         kind: Service
-        name: ${APP}-${TARGET}-${COMPONENT}
+        name: ${REPO}-${TARGET}-${COMPONENT}
         weight: 100
       tls:
         termination: edge
