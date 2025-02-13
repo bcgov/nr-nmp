@@ -50,7 +50,7 @@ objects:
       name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
       strategy:
-        type: Recreate
+        type: RollingUpdate
       selector:
         matchLabels:
           deployment: ${REPO}-${TARGET}-${COMPONENT}
