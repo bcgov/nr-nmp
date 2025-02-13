@@ -2,8 +2,8 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
-  - name: APP
-    description: Application name
+  - name: REPO
+    description: Repository name
     value: nr-nmp
   - name: COMPONENT
     description: Component name
@@ -30,8 +30,8 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
       type: ClusterIP
       ports:
@@ -40,30 +40,30 @@ objects:
           protocol: TCP
           name: http-3000
       selector:
-        service: ${APP}-${TARGET}-${COMPONENT}
+        service: ${REPO}-${TARGET}-${COMPONENT}
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-        deployment: ${APP}-${TARGET}-${COMPONENT}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+        deployment: ${REPO}-${TARGET}-${COMPONENT}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
       strategy:
         type: Recreate
       selector:
         matchLabels:
-          deployment: ${APP}-${TARGET}-${COMPONENT}
+          deployment: ${REPO}-${TARGET}-${COMPONENT}
       template:
         metadata:
           labels:
-            app: ${APP}-${TARGET}
-            deployment: ${APP}-${TARGET}-${COMPONENT}
-            service: ${APP}-${TARGET}-${COMPONENT}
+            app: ${REPO}-${TARGET}
+            deployment: ${REPO}-${TARGET}-${COMPONENT}
+            service: ${REPO}-${TARGET}-${COMPONENT}
         spec:
           containers:
-            - name: ${APP}-${TARGET}-${COMPONENT}
-              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
+            - name: ${REPO}-${TARGET}-${COMPONENT}
+              image: ghcr.io/${ORG}/${REPO}/${COMPONENT}:${TAG}
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
@@ -98,7 +98,7 @@ objects:
                       name: nr-nmp-keycloak
                       key: SSO_CLIENT_SECRET
                 - name: SSO_REDIRECT_URL
-                  value: https://${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
+                  value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:
                 - containerPort: 3000
                   protocol: TCP
@@ -136,15 +136,15 @@ objects:
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
-      host: ${APP}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
+      host: ${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca
       port:
         targetPort: http-3000
       to:
         kind: Service
-        name: ${APP}-${TARGET}-${COMPONENT}
+        name: ${REPO}-${TARGET}-${COMPONENT}
         weight: 100
       tls:
         termination: edge

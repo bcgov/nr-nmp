@@ -1,8 +1,8 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
-  - name: APP
-    description: Application name
+  - name: REPO
+    description: Repository name
     value: nr-nmp
   - name: COMPONENT
     description: Component name
