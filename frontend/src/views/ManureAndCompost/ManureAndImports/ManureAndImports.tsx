@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
-import { Button, Modal, InputField } from '@/components/common';
+import { Button, Modal, InputField, Dropdown } from '@/components/common';
 import {
   ContentWrapper,
   ButtonContainer,
@@ -30,7 +30,7 @@ const initialManureFormData: NMPFileImportedManureData = {
   AnnualAmountDisplayVolume: '',
   AnnualAmountDisplayWeight: '',
   Units: 0,
-  Moisture: '',
+  Moisture: '50',
   StandardSolidMoisture: 0,
   IsMaterialStored: false,
   ManureId: '',
@@ -39,6 +39,24 @@ const initialManureFormData: NMPFileImportedManureData = {
   AssignedToStoredSystem: false,
   AssignedWithNutrientAnalysis: false,
 };
+
+const manureTypeOptions = [
+  { label: 'Liquid', value: 1 },
+  { label: 'Solid', value: 2 },
+];
+
+const unitsSolidDropdownOptions = [
+  { label: 'Tons', value: 1 },
+  { label: 'Cubic Yards', value: 2 },
+  { label: 'Cubic Meters', value: 3 },
+  { label: 'Tonnes', value: 4 },
+];
+
+const UnitsLiquidDropdownOptions = [
+  { label: 'US Gallons', value: 1 },
+  { label: 'Imperial Gallons', value: 2 },
+  { label: 'Liters', value: 3 },
+];
 
 export default function ManureAndImports({ manures, setManures }: ManureAndImportsProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -106,15 +124,21 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
       <ContentWrapper hasManure={manures.length > 0}>
         {manures.length > 0 && (
           <Header>
-            <Column>Material Name</Column>
-            <Column>Manure Type</Column>
-            <Column>Annual Amount</Column>
+            <Column>Material Type</Column>
+            <Column>Annual Amount (Volume)</Column>
+            <Column>Annual Amount (Weight)</Column>
+            <Column>Stored</Column>
             <Column align="right">Actions</Column>
           </Header>
         )}
         {manures.map((manure, index) => (
           <ListItemContainer key={manure.MaterialName}>
-            <ListItem>{manure.MaterialName}</ListItem>
+            <ListItem>
+              {manure.MaterialName} {manure.ManureTypeName}
+            </ListItem>
+            <ListItem>{manure.AnnualAmountDisplayVolume}</ListItem>
+            <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
+            <ListItem>{manure.IsMaterialStored ? 'Yes' : 'No'}</ListItem>
             <ListItem align="right">
               <button
                 type="button"
@@ -169,6 +193,40 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           value={manureFormData.MaterialName || ''}
           onChange={handleChange}
         />
+        <Dropdown
+          label="Manure Type"
+          name="ManureTypeName"
+          value={manureFormData.ManureTypeName || ''}
+          options={manureTypeOptions}
+          onChange={handleChange}
+        />
+        <InputField
+          label="Amount per year"
+          type="text"
+          name="AnnualAmount"
+          value={(manureFormData.AnnualAmount ?? 0).toString() || ''}
+          onChange={handleChange}
+        />
+        <Dropdown
+          label="(Units)"
+          name="Units"
+          value={manureFormData.Units || ''}
+          options={
+            manureFormData.ManureTypeName === '1'
+              ? UnitsLiquidDropdownOptions
+              : unitsSolidDropdownOptions
+          }
+          onChange={handleChange}
+        />
+        {manureFormData.ManureTypeName === '2' && (
+          <InputField
+            label="Moisture (%)"
+            type="text"
+            name="Moisture"
+            value={manureFormData.Moisture || ''}
+            onChange={handleChange}
+          />
+        )}
       </Modal>
     </div>
   );

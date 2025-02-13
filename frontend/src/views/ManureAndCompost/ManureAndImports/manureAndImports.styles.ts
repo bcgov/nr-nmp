@@ -9,7 +9,7 @@ export const ContentWrapper = styled.div<{ hasManure: boolean }>`
 
 export const ListItemContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
   margin-bottom: 10px;
@@ -58,7 +58,7 @@ export const ButtonContainer = styled.div<{ hasManure: boolean }>`
 
 export const Header = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
   gap: 10px;
   font-weight: bold;
   margin-bottom: 10px;
