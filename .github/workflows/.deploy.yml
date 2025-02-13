@@ -101,3 +101,5 @@ jobs:
             -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
             -p CPU_REQUEST=${{ inputs.db-cpu-request }}
           verification_path: ${{ matrix.verification_path }}
+          verification_retry_attempts: "5"
+          verification_retry_seconds: "15"
