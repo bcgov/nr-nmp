@@ -13,8 +13,6 @@ parameters:
     required: true
   - name: DB_NAME
     required: true
-  - name: DB_PORT
-    required: true
   - name: SSO_CLIENT_ID
     required: true
   - name: SSO_CLIENT_SECRET
@@ -28,7 +26,6 @@ objects:
     stringData:
       database-name: ${DB_NAME}
       database-password: ${DB_PASSWORD}
-      database-port: ${DB_PORT}
       database-user: ${DB_USER}
   - apiVersion: v1
     kind: Secret
