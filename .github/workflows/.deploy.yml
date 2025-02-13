@@ -95,11 +95,7 @@ jobs:
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
           overwrite: false
-          parameters:
-            -p TAG=${{ inputs.tag }} 
-            -p TARGET=${{ inputs.target }}
-            -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
-            -p CPU_REQUEST=${{ inputs.db-cpu-request }}
+          parameters: -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
           verification_path: ${{ matrix.verification_path }}
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
