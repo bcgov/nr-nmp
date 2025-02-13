@@ -52,6 +52,7 @@ services:
     environment:
       LOG_LEVEL: info
       PORT: 3000
+      SSO_REDIRECT_URL: http://localhost:3000/auth/callback
       <<: *postgres-vars
     healthcheck:
      test: curl --fail http://localhost:3000 || exit 1
@@ -74,7 +75,6 @@ services:
           path: ./frontend
           target: /app
           ignore: [node_modules]
-    env_file: .env
     environment:
       VITE_BACKEND_URL: http://localhost:3000
     healthcheck:
