@@ -144,7 +144,6 @@ export default function FieldTable({ field }: FieldTableProps) {
               fertilizerUnits={fertilizerUnits}
               fertilizerTypes={fertilizerTypes}
               fertilizerOptions={fertilizerOptions}
-              setIsModalVisible={setIsModalVisible}
             />
           </Modal>
         )}

@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-import Crops from '@/views/FieldAndSoil/Crops/Crops';
 
 interface FertilizerModalProps {
   field: NMPFileFieldData;
@@ -30,7 +29,6 @@ interface FertilizerModalProps {
     potassium: number;
     sortnum: number;
   }[];
-  setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // fieldtable displays this crops in one field tab and has the option to add fertilizer with a modal
@@ -39,7 +37,6 @@ export default function FertilizerModal({
   fertilizerUnits,
   fertilizerTypes,
   fertilizerOptions,
-  setIsModalVisible,
 }: FertilizerModalProps) {
   const [fertilizerForm, setFertilizerForm] = useState({
     fieldName: field.FieldName,
