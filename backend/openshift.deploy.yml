@@ -18,7 +18,7 @@ parameters:
     description: Deployment target; e.g. PR number, test or prod
     required: true
     generate: expression
-  - name: SSOAUTH
+  - name: SSO_AUTH_SERVER_URL
     description: SSO Auth Server URL
     required: true
   - name: CPU_REQUEST
@@ -71,7 +71,7 @@ objects:
                 - name: POSTGRES_HOST
                   value: ${REPO}-database-${TARGET}
                 - name: SSO_AUTH_SERVER_URL
-                  value: ${SSOAUTH}
+                  value: ${SSO_AUTH_SERVER_URL}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:

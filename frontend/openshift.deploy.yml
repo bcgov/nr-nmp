@@ -16,9 +16,6 @@ parameters:
   - name: TARGET
     description: Deployment target; e.g. PR number, test or prod
     required: true
-  - name: SSOAUTH
-    description: SSO Auth Server URL
-    required: true
   - name: CPU_REQUEST
     value: 50m
   - name: MEMORY_REQUEST
@@ -76,8 +73,6 @@ objects:
                   value: https://${REPO}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
                 - name: VITE_PORT
                   value: '5173'
-                - name: SSO_AUTH_SERVER_URL
-                  value: ${SSOAUTH}
                 - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:

@@ -81,13 +81,13 @@ jobs:
           - name: backend
             overwrite: true
             parameters:
-              -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
+              -p SSO_AUTH_SERVER_URL=${{ vars.SSO_AUTH_SERVER_URL }}
               -p CPU_REQUEST=${{ inputs.backend-cpu-request }}
             verification_path: /healthcheck/
           - name: frontend
             overwrite: true
             parameters:
-              -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
+              -p SSO_AUTH_SERVER_URL=${{ vars.SSO_AUTH_SERVER_URL }}
               -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
     steps:
       - uses: bcgov-nr/action-deployer-openshift@v3.1.0
