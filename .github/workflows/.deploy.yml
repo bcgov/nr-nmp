@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Initialize
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        uses: bcgov-nr/action-deployer-openshift@v3.1.0
         with:
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Deploy Database
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        uses: bcgov-nr/action-deployer-openshift@v3.1.0
         with:
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Deploy Backend
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        uses: bcgov-nr/action-deployer-openshift@v3.1.0
         with:
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Deploy Frontend
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        uses: bcgov-nr/action-deployer-openshift@v3.1.0
         with:
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
