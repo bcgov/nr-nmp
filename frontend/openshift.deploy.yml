@@ -109,9 +109,6 @@ objects:
               #   periodSeconds: 30
               #   timeoutSeconds: 5
               resources: # this is optional
-                limits:
-                  cpu: 150m
-                  memory: 250Mi
                 requests:
                   cpu: 50m
                   memory: 175Mi

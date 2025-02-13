@@ -67,9 +67,6 @@ objects:
                 requests:
                   cpu: 50m
                   memory: 150Mi
-                limits:
-                  cpu: 115m
-                  memory: 250Mi
               readinessProbe:
                 exec:
                   command:
