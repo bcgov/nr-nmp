@@ -24,7 +24,7 @@ export default function ManureAndCompost() {
     {
       id: 'nutrient-analysis',
       label: 'Nutrient Analysis',
-      content: <NutrientAnalysis />,
+      content: <NutrientAnalysis manures={manures} />,
     },
   ];
 
