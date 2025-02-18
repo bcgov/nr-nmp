@@ -98,13 +98,15 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     setErrors({});
 
     let annualAmountUSGallonsVolume = 0;
-    if (manureFormData.Units === 1) {
+    const units = parseInt(manureFormData.Units as unknown as string, 10);
+
+    if (units === 1) {
       // US Gallons
       annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1;
-    } else if (manureFormData.Units === 2) {
+    } else if (units === 2) {
       // Imperial Gallons
       annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1.2;
-    } else if (manureFormData.Units === 3) {
+    } else if (units === 3) {
       // Cubic Meters
       annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 264.172;
     }
