@@ -86,20 +86,19 @@ objects:
               ports:
                 - name: container-port
                   containerPort: 5173
-              readinessProbe:
-                tcpSocket:
-                  port: container-port
-              livenessProbe:
-                tcpSocket:
-                  port: container-port
-              startupProbe:
-                tcpSocket:
-                  port: container-port
-                failureThreshold: 5
-                initialDelaySeconds: 90
-                periodSeconds: 15
-                timeoutSeconds: 10
-                failureThreshold: 30
+              # readinessProbe:
+              #   tcpSocket:
+              #     port: container-port
+              # livenessProbe:
+              #   tcpSocket:
+              #     port: container-port
+              # startupProbe:
+              #   tcpSocket:
+              #     port: container-port
+              #   failureThreshold: 5
+              #   initialDelaySeconds: 90
+              #   periodSeconds: 15
+              #   timeoutSeconds: 10
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}

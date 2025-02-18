@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { env } from '@/env';
 
 class APICache {
   private endpointCache: { [endpoint: string]: AxiosResponse } = {};
@@ -8,7 +9,7 @@ class APICache {
     if (cachedValue !== undefined && cachedValue.status === 200) {
       return cachedValue;
     }
-    const response = await axios.get(`http://localhost:3000/${endpoint}`);
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/${endpoint}`);
     this.endpointCache[endpoint] = response;
     return response;
   }
