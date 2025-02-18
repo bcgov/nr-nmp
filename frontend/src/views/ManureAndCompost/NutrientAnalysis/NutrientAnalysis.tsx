@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
-import { Dropdown, InputField, Button } from '../../../components/common';
+import { Dropdown, InputField, Button, Modal, RadioButton } from '../../../components/common';
 import {
   ContentWrapper,
   Column,
@@ -14,20 +14,11 @@ import {
   ListItem,
   ButtonContainer,
   Header,
+  ButtonWrapper,
 } from './nutrientAnalsysis.styles';
-
-// modal has "Source of Material" dropdown which maps manures input
-// material type dropdown is this a db to get?
-// radio button "Book Value" and "Lab Analysis" auto sleected based on material type
-
-// Book value
-
-// Lab Analysis
-// material name Custom - material tye here
-// turns nutrient values into inputs
-
-// Moisture, N, NH4-N, P, K
-// N03-N for lab analysis
+import { ModalContent } from '@/components/common/Modal/modal.styles';
+import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
+import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
 
 interface ManureListProps {
   manures: NMPFileImportedManureData[];
@@ -44,7 +35,14 @@ interface NutrientAnalysisForm {
 export default function NutrientAnalysis({ manures }: ManureListProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [nutrientAnalysisFormData, setNutrientAnalysisFormData] = useState<NutrientAnalysisForm[]>([]);
+  const [nutrientAnalysisFormData, setNutrientAnalysisFormData] = useState<NutrientAnalysisForm[]>(
+    [],
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNutrientAnalysisFormData({ ...nutrientAnalysisFormData, [name]: value });
+  };
 
   const handleEdit = (index: number) => {
     setNutrientAnalysisFormData(nutrientAnalysisFormData[index]); // Fix here
@@ -55,6 +53,10 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
   const handleDelete = (index: number) => {
     const updatedAnalysis = nutrientAnalysisFormData.filter((_, i) => i !== index);
     setNutrientAnalysisFormData(updatedAnalysis);
+  };
+
+  const handleSubmit = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -103,8 +105,78 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
           size="sm"
           disabled={manures.length === 0}
           text="Add a Nutrient Analysis"
+          handleClick={() => setIsModalVisible(true)}
         />
       </ButtonContainer>
+      <Modal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        title="Add Nutrient Analysis"
+        footer={
+          <>
+            <ButtonWrapper>
+              <Button
+                text="Cancel"
+                handleClick={() => setIsModalVisible(false)}
+                aria-label="Cancel"
+                variant="secondary"
+                size="sm"
+                disabled={false}
+              />
+            </ButtonWrapper>
+            <ButtonWrapper>
+              <Button
+                text="Submit"
+                handleClick={handleSubmit}
+                aria-label="Submit"
+                variant="primary"
+                size="sm"
+                disabled={false}
+              />
+            </ButtonWrapper>
+          </>
+        }
+      >
+        <div />
+        <DropdownWrapper>
+          {/* // modal has "Source of Material" dropdown which maps manures input */}
+          {/* <Dropdown
+            label="Source of Material"
+            name="Source of Material"
+            value={nutrientAnalysisFormData.MaterialType}
+            options={[]}
+            onChange={handleChange}
+          /> */}
+          {/* // material type dropdown is this a db to get? */}
+          <Dropdown
+            label="Material Type"
+            name="MaterialType"
+            value={nutrientAnalysisFormData.MaterialType}
+            options={[]}
+            onChange={handleChange}
+          />
+        </DropdownWrapper>
+        <RadioButtonWrapper>
+          {/* // radio button "Book Value" and "Lab Analysis" auto sleected based on material type */}
+          <RadioButton
+            label={''}
+            name={''}
+            value={''}
+            checked={false}
+            onChange={handleChange}
+          />
+        </RadioButtonWrapper>
+        {/* 
+          // Book value
+
+          // Lab Analysis
+          // material name Custom - material tye here
+          // turns nutrient values into inputs
+
+          // Moisture, N, NH4-N, P, K
+          // N03-N for lab analysis
+        */}
+      </Modal>
     </div>
   );
 }

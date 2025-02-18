@@ -17,7 +17,6 @@ services:
     build:
       context: ./database
       dockerfile: Dockerfile
-    image: postgres:17
     container_name: nr-nmp-db
     environment:
       <<: *postgres-vars
