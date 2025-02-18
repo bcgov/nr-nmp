@@ -17,7 +17,7 @@ services:
     build:
       context: ./database
       dockerfile: Dockerfile
-    image: postgres:17
+    # Don't put an image: prop here, it breaks the local
     container_name: nr-nmp-db
     environment:
       <<: *postgres-vars
