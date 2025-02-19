@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS manures (
   SolidLiquid VARCHAR(100) NOT NULL,
   Moisture VARCHAR(100) NOT NULL,
   Nitrogen FLOAT NOT NULL,
-  Ammonia NUMERIC(12, 2),
+  Ammonia FLOAT NOT NULL,
   Phosphorous FLOAT NOT NULL,
   Potassium FLOAT NOT NULL,
   DryMatterId INT NOT NULL,
