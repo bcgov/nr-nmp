@@ -2,7 +2,7 @@
  * @summary The nutrient analysis tab on the manure page for the application
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { Dropdown, InputField, RadioButton } from '@/components/common';
@@ -11,23 +11,7 @@ import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.
 
 interface CombinedProps {
   manures: NMPFileImportedManureData[];
-  manureData: {
-    id: number;
-    name: string;
-    manureclass: string;
-    solidliquid: string;
-    moisture: string;
-    nitrogen: number;
-    ammonia: number;
-    phosphorous: number;
-    potassium: number;
-    drymatterid: number;
-    nmineralizationid: number;
-    sortnum: number;
-    cubicyardconversion: number;
-    nitrate: number;
-    defaultsolidmoisture: number | null;
-  }[];
+  manureData: NMPFileImportedManureData[];
 }
 
 export default function AnalysisModal({ manures, manureData }: CombinedProps) {
@@ -51,7 +35,6 @@ export default function AnalysisModal({ manures, manureData }: CombinedProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setAnalysisForm({ ...analysisForm, [name]: value });
-    console.log(manureData);
     console.log(manures);
     console.log(analysisForm);
   };
@@ -82,7 +65,7 @@ export default function AnalysisModal({ manures, manureData }: CombinedProps) {
               value={analysisForm.MaterialType}
               options={manureData.map((manure) => ({
                 value: manure.id,
-                label: manure.name,
+                label: manure.MaterialName,
               }))}
               onChange={handleChange}
             />
