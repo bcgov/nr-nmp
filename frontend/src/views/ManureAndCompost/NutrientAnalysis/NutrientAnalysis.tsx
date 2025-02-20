@@ -29,18 +29,35 @@ interface ManureListProps {
   manures: NMPFileImportedManureData[];
 }
 
+interface ManureType {
+  id: number;
+  name: string;
+  manureClass: string;
+  solidLiquid: string;
+  moisture: number;
+  nitrogen: number;
+  ammonia: number;
+  phosphorous: number;
+  potassium: number;
+  dryMatterId: number;
+  nMineralizationId: number;
+  sortNum: number;
+  cubicYardConversion: number;
+  nitrate: number;
+  defaultSolidMoisture: number;
+}
+
 export default function NutrientAnalysis({ manures }: ManureListProps) {
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   // manure types data from db
-  const [manureTypesData, setManureTypesData] = useState<NMPFileImportedManureData[]>([]);
+  const [manureTypesData, setManureTypesData] = useState<ManureType[]>([]);
   // an array of objects to hold nutrient analysis form data
   // for each manuresource user can create nutrient analysis' objects
   const [nutrientAnalysisFormData, setNutrientAnalysisFormData] = useState<
     {
       ManureSource: string;
-      ManureName: string;
       MaterialType: string;
       BookLab: string;
       MaterialName: string;
@@ -50,7 +67,6 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState({
     ManureSource: '',
-    ManureName: '',
     MaterialType: '',
     BookLab: '',
     MaterialName: '',
@@ -119,7 +135,15 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
     setEditIndex(null); // Reset editIndex after submitting
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  //   const { name, value } = e.target;
+  //   setAnalysisForm({ ...analysisForm, [name]: value });
+  //   console.log(manureTypesData);
+  //   console.log(manures);
+  //   console.log(analysisForm);
+  // };
+
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setAnalysisForm({ ...analysisForm, [name]: value });
     console.log(manureTypesData);
@@ -224,17 +248,15 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
           {/* // modal has "Source of Material" dropdown which maps manures input using a mock value replace when manure tab is completed */}
           <Dropdown
             label="Source of Material"
-            name="Source of Material"
-            value={analysisForm.ManureName}
-            options={[
-              ...mockImportedManures.map((manure) => ({
-                value: manure.Id,
-                label: manure.Name,
-              })),
-            ]}
+            name="ManureSource"
+            value={analysisForm.ManureSource}
+            options={mockImportedManures.map((manure) => ({
+              value: manure.Name,
+              label: manure.Name,
+            }))}
             onChange={handleChange}
           />
-          {manures.length > 0 && (
+          {mockImportedManures.length > 0 && (
             <>
               <DropdownWrapper>
                 <Dropdown
@@ -242,8 +264,8 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                   name="MaterialType"
                   value={analysisForm.MaterialType}
                   options={manureTypesData.map((manure) => ({
-                    value: manure.id,
-                    label: manure.MaterialName,
+                    value: manure.name,
+                    label: manure.name,
                   }))}
                   onChange={handleChange}
                 />
@@ -286,6 +308,38 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                   <div>
                     <span>Moisture (%)</span>
                     <div>{analysisForm.Nutrients.Moisture}</div>
+                  </div>
+                  <div>
+                    <span>N (%)</span>
+                    <div>{analysisForm.Nutrients.N}</div>
+                  </div>
+                  <div>
+                    <span>NH4-N (ppm)</span>
+                    <div>{analysisForm.Nutrients.NH4N}</div>
+                  </div>
+                  <div>
+                    <span>P (%)</span>
+                    <div>{analysisForm.Nutrients.P}</div>
+                  </div>
+                  <div>
+                    <span>K (%)</span>
+                    <div>{analysisForm.Nutrients.K}</div>
+                  </div>
+                </>
+              )}
+              {analysisForm.BookLab === 'lab' && (
+                <>
+                  <div>
+                    <span>Moisture (%)</span>
+                    <div>
+                      <InputField
+                        label="Moisture"
+                        type="text"
+                        name="moisture"
+                        value={analysisForm.Nutrients.Moisture}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
                   <div>
                     <span>N (%)</span>

@@ -33,11 +33,11 @@ export default function ManureAndCompost() {
     if (state.nmpFile) {
       nmpFile = JSON.parse(state.nmpFile);
     }
-    if (nmpFile && nmpFile.years.length > 0 && manures.length > 0) {
-      nmpFile.years[0].ImportedManures = manures.map((manure) => ({
-        ...manure,
-      }));
-    }
+    // if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
+    //   nmpFile.years[0].ImportedManures = manures.map((manure) => ({
+    //     ...manure,
+    //   }));
+    // }
     setNMPFile(JSON.stringify(nmpFile));
 
     // if on the last tab navigate to calculate nutrients page
@@ -57,9 +57,8 @@ export default function ManureAndCompost() {
   useEffect(() => {
     if (state.nmpFile) {
       const parsedData = JSON.parse(state.nmpFile);
-      setManures(parsedData.years[0].Fields);
+      // setManures(parsedData.ImportedManures);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   return (
