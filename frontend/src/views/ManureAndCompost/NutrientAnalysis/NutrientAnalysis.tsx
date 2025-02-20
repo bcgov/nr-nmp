@@ -2,12 +2,12 @@
  * @summary The nutrient analysis tab on the manure page for the application
  */
 
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { APICacheContext } from '@/context/APICacheContext';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
-import { Dropdown, InputField, Button, Modal, RadioButton } from '../../../components/common';
+import { Button, Dropdown, InputField, Modal, RadioButton } from '../../../components/common';
 import {
   ContentWrapper,
   Column,
@@ -21,6 +21,9 @@ import {
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
 import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
+import { ModalContent } from '@/components/common/Modal/modal.styles';
+import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
+import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
 
 interface ManureListProps {
   manures: NMPFileImportedManureData[];
@@ -30,29 +33,109 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [nutrientAnalysisFormData, setNutrientAnalysisFormData] = useState<NutrientAnalysisForm[]>(
-    [],
-  );
+  // manure types data from db
+  const [manureTypesData, setManureTypesData] = useState<NMPFileImportedManureData[]>([]);
+  // an array of objects to hold nutrient analysis form data
+  // for each manuresource user can create nutrient analysis' objects
+  const [nutrientAnalysisFormData, setNutrientAnalysisFormData] = useState<
+    {
+      ManureSource: string;
+      ManureName: string;
+      MaterialType: string;
+      BookLab: string;
+      MaterialName: string;
+      Nutrients: { Moisture: number; N: number; NH4N: number; P: number; K: number };
+    }[]
+  >([]);
+  // for each manuresource user can create nutrient analysis' objects
+  const [analysisForm, setAnalysisForm] = useState({
+    ManureSource: '',
+    ManureName: '',
+    MaterialType: '',
+    BookLab: '',
+    MaterialName: '',
+    Nutrients: { Moisture: 0, N: 0, NH4N: 0, P: 0, K: 0 },
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setNutrientAnalysisFormData({ ...nutrientAnalysisFormData, [name]: value });
-  };
+  const mockImportedManures = [
+    {
+      Id: 1,
+      Name: 'Manure A',
+      ManureClass: 'Class 1',
+      SolidLiquid: 'Solid',
+      Moisture: '10',
+      Nitrogen: 5,
+      Ammonia: 1.2,
+      Phosphorous: 2.3,
+      Potassium: 3.4,
+      DryMatterId: 100,
+      NMineralizationId: 200,
+      SortNum: 1,
+      CubicYardConversion: 1.1,
+      Nitrate: 0.5,
+      StaticDataVersionId: 1,
+      DefaultSolidMoisture: 8,
+    },
+    {
+      Id: 2,
+      Name: 'Manure B',
+      ManureClass: 'Class 2',
+      SolidLiquid: 'Liquid',
+      Moisture: '15',
+      Nitrogen: 4,
+      Ammonia: 0.9,
+      Phosphorous: 1.7,
+      Potassium: 2.1,
+      DryMatterId: 101,
+      NMineralizationId: 201,
+      SortNum: 2,
+      CubicYardConversion: 1.2,
+      Nitrate: 0.3,
+      StaticDataVersionId: 2,
+      DefaultSolidMoisture: 7,
+    },
+  ];
 
   const handleEdit = (index: number) => {
-    setNutrientAnalysisFormData(nutrientAnalysisFormData[index]); // Fix here
     setEditIndex(index);
+    setAnalysisForm(nutrientAnalysisFormData[index]); // Pre-fill the form with the existing analysis data
     setIsModalVisible(true);
   };
 
   const handleDelete = (index: number) => {
-    const updatedAnalysis = nutrientAnalysisFormData.filter((_, i) => i !== index);
-    setNutrientAnalysisFormData(updatedAnalysis);
+    setNutrientAnalysisFormData((prevState) => prevState.filter((_, i) => i !== index));
   };
 
   const handleSubmit = () => {
+    // If editing, update the existing analysis; if adding, push the new data
+    if (editIndex !== null) {
+      const updatedFormData = [...nutrientAnalysisFormData];
+      updatedFormData[editIndex] = analysisForm;
+      setNutrientAnalysisFormData(updatedFormData);
+    } else {
+      setNutrientAnalysisFormData([...nutrientAnalysisFormData, analysisForm]);
+    }
     setIsModalVisible(false);
+    setEditIndex(null); // Reset editIndex after submitting
   };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setAnalysisForm({ ...analysisForm, [name]: value });
+    console.log(manureTypesData);
+    console.log(manures);
+    console.log(analysisForm);
+  };
+
+  // get manure types
+  useEffect(() => {
+    apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setManureTypesData(data);
+      }
+    });
+  }, [apiCache]);
 
   return (
     <div>
@@ -81,13 +164,13 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
             <ListItem align="right">
               <button
                 type="button"
-                onClick={() => handleEdit()}
+                onClick={() => handleEdit(index)}
               >
                 <FontAwesomeIcon icon={faEdit} />
               </button>
               <button
                 type="button"
-                onClick={() => handleDelete()}
+                onClick={() => handleDelete(index)}
               >
                 <FontAwesomeIcon icon={faTrash} />
               </button>
@@ -95,20 +178,23 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
           </ListItemContainer>
         ))}
       </ContentWrapper>
-      <ButtonContainer>
-        {/* button to add a nutrient analysis if there are manures to add it to */}
-        <Button
-          variant="default"
-          size="sm"
-          disabled={manures.length === 0}
-          text="Add a Nutrient Analysis"
-          handleClick={() => setIsModalVisible(true)}
-        />
-      </ButtonContainer>
+      {mockImportedManures.length > 0 && (
+        <ButtonContainer>
+          {/* button to add a nutrient analysis if there are manures to add it to */}
+          {/* add a new nutrient analysis */}
+          <Button
+            variant="primary"
+            size="sm"
+            disabled={mockImportedManures.length === 0}
+            text="Add Nutrient Analysis"
+            handleClick={() => setIsModalVisible(true)}
+          />
+        </ButtonContainer>
+      )}
       <Modal
         isVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
-        title="Add Nutrient Analysis"
+        title={editIndex !== null ? 'Edit Field' : 'Add a Nutrient Analysis'}
         footer={
           <>
             <ButtonWrapper>
@@ -134,45 +220,94 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
           </>
         }
       >
-        <div />
-        <DropdownWrapper>
-          {/* // modal has "Source of Material" dropdown which maps manures input */}
-          {/* <Dropdown
+        <ModalContent>
+          {/* // modal has "Source of Material" dropdown which maps manures input using a mock value replace when manure tab is completed */}
+          <Dropdown
             label="Source of Material"
             name="Source of Material"
-            value={nutrientAnalysisFormData.MaterialType}
-            options={[]}
-            onChange={handleChange}
-          /> */}
-          {/* // material type dropdown is this a db to get? */}
-          <Dropdown
-            label="Material Type"
-            name="MaterialType"
-            value={nutrientAnalysisFormData.MaterialType}
-            options={[]}
+            value={analysisForm.ManureName}
+            options={[
+              ...mockImportedManures.map((manure) => ({
+                value: manure.Id,
+                label: manure.Name,
+              })),
+            ]}
             onChange={handleChange}
           />
-        </DropdownWrapper>
-        <RadioButtonWrapper>
-          {/* // radio button "Book Value" and "Lab Analysis" auto sleected based on material type */}
-          <RadioButton
-            label={''}
-            name={''}
-            value={''}
-            checked={false}
-            onChange={handleChange}
-          />
-        </RadioButtonWrapper>
-        {/* 
-          // Book value
-
-          // Lab Analysis
-          // material name Custom - material tye here
-          // turns nutrient values into inputs
-
-          // Moisture, N, NH4-N, P, K
-          // N03-N for lab analysis
-        */}
+          {manures.length > 0 && (
+            <>
+              <DropdownWrapper>
+                <Dropdown
+                  label="Material Type"
+                  name="MaterialType"
+                  value={analysisForm.MaterialType}
+                  options={manureTypesData.map((manure) => ({
+                    value: manure.id,
+                    label: manure.MaterialName,
+                  }))}
+                  onChange={handleChange}
+                />
+              </DropdownWrapper>
+              <RadioButtonWrapper>
+                {/* // radio button "Book Value" and "Lab Analysis" */}
+                <RadioButton
+                  label="Book Value"
+                  name="booklab"
+                  value="book"
+                  checked={analysisForm.BookLab === 'book'}
+                  onChange={handleChange}
+                />
+                <RadioButton
+                  label="Lab Analysis"
+                  name="booklab"
+                  value="lab"
+                  checked={analysisForm.BookLab === 'lab'}
+                  onChange={handleChange}
+                />
+              </RadioButtonWrapper>
+              {/* // Lab Analysis
+            // material name Custom - material type here as default?
+            // turns nutrient values into inputs */}
+              {analysisForm.BookLab === 'lab' && (
+                <InputField
+                  label="Material Name"
+                  type="text"
+                  name="materialName"
+                  value={`Custom - ${analysisForm.MaterialName}`}
+                  onChange={handleChange}
+                />
+              )}
+              {/* 
+            // Book value
+            // Moisture, N, NH4-N, P, K
+          */}
+              {analysisForm.BookLab === 'book' && (
+                <>
+                  <div>
+                    <span>Moisture (%)</span>
+                    <div>{analysisForm.Nutrients.Moisture}</div>
+                  </div>
+                  <div>
+                    <span>N (%)</span>
+                    <div>{analysisForm.Nutrients.N}</div>
+                  </div>
+                  <div>
+                    <span>NH4-N (ppm)</span>
+                    <div>{analysisForm.Nutrients.NH4N}</div>
+                  </div>
+                  <div>
+                    <span>P (%)</span>
+                    <div>{analysisForm.Nutrients.P}</div>
+                  </div>
+                  <div>
+                    <span>K (%)</span>
+                    <div>{analysisForm.Nutrients.K}</div>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </ModalContent>
       </Modal>
     </div>
   );
