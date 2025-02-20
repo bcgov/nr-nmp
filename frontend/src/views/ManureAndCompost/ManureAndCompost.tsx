@@ -44,6 +44,7 @@ export default function ManureAndCompost() {
       }));
     }
     setNMPFile(JSON.stringify(nmpFile));
+    console.log('nmpFile', nmpFile);
 
     // if on the last tab navigate to calculate nutrients page
     if (activeTab === tabs.length - 1) {
