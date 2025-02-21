@@ -10,3 +10,10 @@ class SolidMaterialsConversionFactorsViewset(viewsets.ViewSet):
         solid_materials_conversion_factors = SolidMaterialsConversionFactors.objects.all()
         serializer = SolidMaterialsConversionFactorsSerializer(solid_materials_conversion_factors, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def liquidMaterialsConversionFactors(self, request):
+        liquid_materials_conversion_factors = LiquidMaterialsConversionFactors.objects.all()
+        serializer = LiquidMaterialsConversionFactorsSerializer(liquid_materials_conversion_factors, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
