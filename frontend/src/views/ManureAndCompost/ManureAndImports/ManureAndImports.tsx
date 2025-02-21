@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import { Button, Modal, InputField, Dropdown } from '@/components/common';
+import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import {
   ContentWrapper,
   ButtonContainer,
@@ -96,6 +97,11 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
       return;
     }
     setErrors({});
+
+    console.log(
+      'CalcTest: ',
+      (manureFormData.AnnualAmount ?? 0) * getDensityFactoredConversionUsingMoisture(50, '1.10231'),
+    );
 
     let annualAmountUSGallonsVolume = 0;
     const units = parseInt(manureFormData.Units as unknown as string, 10);

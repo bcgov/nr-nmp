@@ -53,7 +53,7 @@ export function getDensity(moistureWholePercent: number): number {
 
 export function getDensityFactoredConversion(density: number, conversionFactor: string): number {
   const parsedExpression = conversionFactor.replace(/density/gi, density.toString());
-  const conversion = math.evaluate(parsedExpression);
+  const conversion = evaluate(parsedExpression);
   return conversion;
 }
 
