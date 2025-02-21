@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS temp_crop_types (
   PRIMARY KEY (Id, StaticDataVersionId)
 );
 \copy temp_crop_types (Id, Name, CoverCrop, CrudeProteinRequired, CustomCrop, ModifyNitrogen, StaticDataVersionId) from 'docker-entrypoint-initdb.d/_CropTypes__20241212.csv' with header delimiter ',' CSV ;
-SELECT * INTO crops_types
+SELECT * INTO crop_types
 FROM temp_crop_types
 WHERE StaticDataVersionId=14;
-ALTER TABLE crops_types
+ALTER TABLE crop_types
 DROP COLUMN StaticDataVersionId;
