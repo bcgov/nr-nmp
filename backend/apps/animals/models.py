@@ -24,3 +24,13 @@ class AnimalSubtype(models.Model):
     class Meta:
         managed = False
         db_table = 'animal_subtype'
+
+class Breed(models.Model):
+    id = models.IntegerField(primary_key=True)
+    breedname = models.CharField(max_length=100)
+    animalid = models.IntegerField()
+    breedmanurefactor = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'breed'
