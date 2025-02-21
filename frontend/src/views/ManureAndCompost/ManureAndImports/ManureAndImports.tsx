@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable object-shorthand */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -50,7 +52,7 @@ const manureTypeOptions = [
   { label: 'Solid', value: 2 },
 ];
 
-const DefaultLiquidManureConversionFactors: LiquidManureConversionFactors = {
+const DefaultSolidManureConversionFactors: SolidManureConversionFactors = {
   id: 0,
   inputunit: 0,
   inputunitname: '',
@@ -59,7 +61,7 @@ const DefaultLiquidManureConversionFactors: LiquidManureConversionFactors = {
   metrictonsoutput: '',
 };
 
-const DefaultSolidManureConversionFactors: SolidManureConversionFactors = {
+const DefaultLiquidManureConversionFactors: LiquidManureConversionFactors = {
   id: 0,
   inputunit: 0,
   inputunitname: '',
@@ -82,6 +84,8 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    console.log('name: ', name);
+    console.log('value: ', value);
     setManureFormData({ ...manureFormData, [name]: value });
   };
 
@@ -116,25 +120,51 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
       'CalcTest: ',
       (manureFormData.AnnualAmount ?? 0) * getDensityFactoredConversionUsingMoisture(50, '1.10231'),
     );
-
     let annualAmountUSGallonsVolume = 0;
-    const units = parseInt(manureFormData.Units as unknown as string, 10);
+    let annualAmountCubicYardsVolume = 0;
+    let annualAmountCubicMetersVolume = 0;
 
-    if (units === 1) {
-      // US Gallons
-      annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1;
-    } else if (units === 2) {
-      // Imperial Gallons
-      annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1.2;
-    } else if (units === 3) {
-      // Cubic Meters
-      annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 264.172;
+    if (manureFormData.ManureTypeName === '1') {
+      const units = parseInt(manureFormData.Units as unknown as string, 10);
+
+      if (units === 3) {
+        // US Gallons
+        annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1;
+      } else if (units === 1) {
+        // Imperial Gallons
+        annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1.2;
+      } else if (units === 2) {
+        // Cubic Meters
+        annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 264.172;
+      }
+    } else {
+      const solidManureConversionFactor = solidManureDropdownOptions.find(
+        (item) => item.inputunit == manureFormData.Units,
+      );
+      console.log('solidManureConversionFactor: ', solidManureDropdownOptions);
+      console.log('manureFormData: ', manureFormData.Units);
+      annualAmountCubicMetersVolume =
+        (manureFormData.AnnualAmount ?? 0) *
+        getDensityFactoredConversionUsingMoisture(
+          Number(manureFormData.Moisture),
+          solidManureConversionFactor?.cubicmetersoutput || '',
+        );
+
+      annualAmountCubicYardsVolume =
+        (manureFormData.AnnualAmount ?? 0) *
+        getDensityFactoredConversionUsingMoisture(
+          Number(manureFormData.Moisture),
+          solidManureConversionFactor?.cubicyardsoutput || '',
+        );
     }
 
     const updatedManureFormData = {
       ...manureFormData,
       AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
+      AnnualAmountCubicYardsVolume: annualAmountCubicYardsVolume,
+      AnnualAmountCubicMetersVolume: annualAmountCubicMetersVolume,
       AnnualAmountDisplayVolume: annualAmountUSGallonsVolume.toString(),
+      AnnualAmountDisplayWeight: annualAmountCubicMetersVolume.toString(),
     };
 
     if (editIndex !== null) {
@@ -275,7 +305,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
             name="Units"
             value={manureFormData.Units || ''}
             options={liquidManureDropdownOptions.map((manure) => ({
-              value: manure.id ?? 0,
+              value: manure.inputunit ?? 0,
               label: manure.inputunitname ?? '',
             }))}
             onChange={handleChange}
@@ -286,7 +316,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
             name="Units"
             value={manureFormData.Units || ''}
             options={solidManureDropdownOptions.map((manure) => ({
-              value: manure.id ?? 0,
+              value: manure.inputunit ?? 0,
               label: manure.inputunitname ?? '',
             }))}
             onChange={handleChange}
