@@ -84,8 +84,6 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log('name: ', name);
-    console.log('value: ', value);
     setManureFormData({ ...manureFormData, [name]: value });
   };
 
@@ -116,56 +114,58 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     }
     setErrors({});
 
-    console.log(
-      'CalcTest: ',
-      (manureFormData.AnnualAmount ?? 0) * getDensityFactoredConversionUsingMoisture(50, '1.10231'),
-    );
-    let annualAmountUSGallonsVolume = 0;
-    let annualAmountCubicYardsVolume = 0;
-    let annualAmountCubicMetersVolume = 0;
+    let updatedManureFormData = {};
 
     if (manureFormData.ManureTypeName === '1') {
-      const units = parseInt(manureFormData.Units as unknown as string, 10);
+      const liquidManureConversionFactor = liquidManureDropdownOptions.find(
+        (item) => item.inputunit == manureFormData.Units,
+      );
 
-      if (units === 3) {
-        // US Gallons
-        annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1;
-      } else if (units === 1) {
-        // Imperial Gallons
-        annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 1.2;
-      } else if (units === 2) {
-        // Cubic Meters
-        annualAmountUSGallonsVolume = (manureFormData.AnnualAmount ?? 0) * 264.172;
-      }
+      const annualAmountUSGallonsVolume =
+        (manureFormData.AnnualAmount ?? 0) *
+        (liquidManureConversionFactor?.usgallonsoutput
+          ? parseFloat(liquidManureConversionFactor.usgallonsoutput)
+          : 0);
+
+      updatedManureFormData = {
+        ...manureFormData,
+        AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
+        AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10).toString()} U.S. gallons`,
+      };
     } else {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
         (item) => item.inputunit == manureFormData.Units,
       );
-      console.log('solidManureConversionFactor: ', solidManureDropdownOptions);
-      console.log('manureFormData: ', manureFormData.Units);
-      annualAmountCubicMetersVolume =
+
+      const annualAmountCubicMetersVolume =
         (manureFormData.AnnualAmount ?? 0) *
         getDensityFactoredConversionUsingMoisture(
           Number(manureFormData.Moisture),
           solidManureConversionFactor?.cubicmetersoutput || '',
         );
 
-      annualAmountCubicYardsVolume =
+      const annualAmountCubicYardsVolume =
         (manureFormData.AnnualAmount ?? 0) *
         getDensityFactoredConversionUsingMoisture(
           Number(manureFormData.Moisture),
           solidManureConversionFactor?.cubicyardsoutput || '',
         );
-    }
 
-    const updatedManureFormData = {
-      ...manureFormData,
-      AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
-      AnnualAmountCubicYardsVolume: annualAmountCubicYardsVolume,
-      AnnualAmountCubicMetersVolume: annualAmountCubicMetersVolume,
-      AnnualAmountDisplayVolume: annualAmountUSGallonsVolume.toString(),
-      AnnualAmountDisplayWeight: annualAmountCubicMetersVolume.toString(),
-    };
+      const annualAmountTonsWeight =
+        (manureFormData.AnnualAmount ?? 0) *
+        getDensityFactoredConversionUsingMoisture(
+          Number(manureFormData.Moisture),
+          solidManureConversionFactor?.metrictonsoutput || '',
+        );
+
+      updatedManureFormData = {
+        ...manureFormData,
+        AnnualAmountCubicYardsVolume: annualAmountCubicYardsVolume,
+        AnnualAmountCubicMetersVolume: annualAmountCubicMetersVolume,
+        AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10).toString()} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10).toString()} m³)`,
+        AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10).toString()} tons`,
+      };
+    }
 
     if (editIndex !== null) {
       const updatedManures = manures.map((manure, index) =>
@@ -187,7 +187,6 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
         if (response.status === 200) {
           const { data } = response;
           setLiquidManureDropdownOptions(data);
-          console.log('response.data: ', response.data);
         }
       });
     apiCache
@@ -196,7 +195,6 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
         if (response.status === 200) {
           const { data } = response;
           setSolidManureDropdownOptions(data);
-          console.log('response.data: ', response.data);
         }
       });
   }, []);

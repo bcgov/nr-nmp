@@ -1,38 +1,3 @@
-// public decimal GetDensityFactoredConversionUsingMoisture(decimal moistureWholePercent, string conversionFactor)
-// {
-//     var moisterPercentDecimal = Convert.ToDouble(moistureWholePercent / 100);
-//     var density = GetDensity(moistureWholePercent);
-
-//     return GetDenisityFactoredConversion(density, conversionFactor);
-// }
-
-// public decimal GetDenisityFactoredConversion(decimal density, string conversionFactor)
-// {
-//     var parsedExpression = conversionFactor.Replace("density", density.ToString(), StringComparison.CurrentCultureIgnoreCase);
-//     var conversion = Convert.ToDecimal(new DataTable().Compute(parsedExpression, null));
-
-//     return conversion;
-// }
-
-// public decimal GetDensity(decimal moistureWholePercent)
-// {
-//     var moisturePercentDecimal = Convert.ToDouble(moistureWholePercent / 100);
-//     if (moistureWholePercent < 40)
-//     {
-//         return .27m;
-//     }
-//     else if (moistureWholePercent >= 40 && moistureWholePercent <= 82)
-//     {
-//         var result = (7.9386 * Math.Pow(moisturePercentDecimal, 3)) - (16.43 * Math.Pow(moisturePercentDecimal, 2)) +
-//                      (11.993 * moisturePercentDecimal) - 2.3975;
-
-//         return Convert.ToDecimal(result);
-//     }
-//     else
-//     {
-//         return 0.837m;
-//     }
-// }
 import { evaluate } from 'mathjs';
 
 export function getDensity(moistureWholePercent: number): number {
