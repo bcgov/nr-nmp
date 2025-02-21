@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
+import LiquidManureConversionFactors from '@/types/LiquidManureConversionFactors';
+import SolidManureConversionFactors from '@/types/SolidManureConversionFactors';
 import { Button, Modal, InputField, Dropdown } from '@/components/common';
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import {
@@ -14,6 +17,7 @@ import {
   ListItem,
   ListItemContainer,
 } from './manureAndImports.styles';
+import { APICacheContext } from '@/context/APICacheContext';
 
 interface ManureAndImportsProps {
   manures: NMPFileImportedManureData[];
@@ -46,23 +50,33 @@ const manureTypeOptions = [
   { label: 'Solid', value: 2 },
 ];
 
-const unitsSolidDropdownOptions = [
-  { label: 'Tons', value: 1 },
-  { label: 'Cubic Yards', value: 2 },
-  { label: 'Cubic Meters', value: 3 },
-  { label: 'Tonnes', value: 4 },
-];
+const DefaultLiquidManureConversionFactors: LiquidManureConversionFactors = {
+  id: 0,
+  inputunit: 0,
+  inputunitname: '',
+  cubicyardsoutput: '',
+  cubicmetersoutput: '',
+  metrictonsoutput: '',
+};
 
-const UnitsLiquidDropdownOptions = [
-  { label: 'US Gallons', value: 1 },
-  { label: 'Imperial Gallons', value: 2 },
-  { label: 'Cubic Meters', value: 3 },
-];
+const DefaultSolidManureConversionFactors: SolidManureConversionFactors = {
+  id: 0,
+  inputunit: 0,
+  inputunitname: '',
+  usgallonsoutput: '',
+};
 
 export default function ManureAndImports({ manures, setManures }: ManureAndImportsProps) {
+  const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
+    SolidManureConversionFactors[]
+  >([DefaultSolidManureConversionFactors]);
+  const [liquidManureDropdownOptions, setLiquidManureDropdownOptions] = useState<
+    LiquidManureConversionFactors[]
+  >([DefaultLiquidManureConversionFactors]);
   const [manureFormData, setManureFormData] =
     useState<NMPFileImportedManureData>(initialManureFormData);
 
@@ -135,6 +149,27 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     setManureFormData(initialManureFormData);
     setIsModalVisible(false);
   };
+
+  useEffect(() => {
+    apiCache
+      .callEndpoint('api/liquidmaterialsconversionfactors/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setLiquidManureDropdownOptions(data);
+          console.log('response.data: ', response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/solidmaterialsconversionfactors/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setSolidManureDropdownOptions(data);
+          console.log('response.data: ', response.data);
+        }
+      });
+  }, []);
 
   return (
     <div>
@@ -234,17 +269,29 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           value={(manureFormData.AnnualAmount ?? 0).toString() || ''}
           onChange={handleChange}
         />
-        <Dropdown
-          label="(Units)"
-          name="Units"
-          value={manureFormData.Units || ''}
-          options={
-            manureFormData.ManureTypeName === '1'
-              ? UnitsLiquidDropdownOptions
-              : unitsSolidDropdownOptions
-          }
-          onChange={handleChange}
-        />
+        {manureFormData.ManureTypeName === '1' ? (
+          <Dropdown
+            label="(Units)"
+            name="Units"
+            value={manureFormData.Units || ''}
+            options={liquidManureDropdownOptions.map((manure) => ({
+              value: manure.id ?? 0,
+              label: manure.inputunitname ?? '',
+            }))}
+            onChange={handleChange}
+          />
+        ) : (
+          <Dropdown
+            label="(Units)"
+            name="Units"
+            value={manureFormData.Units || ''}
+            options={solidManureDropdownOptions.map((manure) => ({
+              value: manure.id ?? 0,
+              label: manure.inputunitname ?? '',
+            }))}
+            onChange={handleChange}
+          />
+        )}
         {manureFormData.ManureTypeName === '2' && (
           <InputField
             label="Moisture (%)"
