@@ -16,14 +16,18 @@ import {
   ButtonContainer,
   Header,
   ButtonWrapper,
-  ButtonWrapper,
+  NutrientContent,
+  NutrientInputField,
 } from './nutrientAnalsysis.styles';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
 import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
-import { ModalContent } from '@/components/common/Modal/modal.styles';
-import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
-import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
+import {
+  ColumnContainer,
+  HeaderText,
+  RowContainer,
+  ValueText,
+} from '@/views/FieldAndSoil/Crops/crops.styles';
 
 interface ManureListProps {
   manures: NMPFileImportedManureData[];
@@ -122,30 +126,42 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
     setNutrientAnalysisFormData((prevState) => prevState.filter((_, i) => i !== index));
   };
 
+  // submits to nutrient analysis form data and clears modal analysis form
   const handleSubmit = () => {
-    // If editing, update the existing analysis; if adding, push the new data
-    if (editIndex !== null) {
-      const updatedFormData = [...nutrientAnalysisFormData];
-      updatedFormData[editIndex] = analysisForm;
-      setNutrientAnalysisFormData(updatedFormData);
-    } else {
-      setNutrientAnalysisFormData([...nutrientAnalysisFormData, analysisForm]);
-    }
+    setNutrientAnalysisFormData((prevState) => {
+      // if editing an entry then updates that entry
+      if (editIndex !== null) {
+        return prevState.map((item, index) => (index === editIndex ? { ...analysisForm } : item));
+      }
+      // else add this new entry
+      return [...prevState, { ...analysisForm }];
+    });
     setIsModalVisible(false);
-    setEditIndex(null); // Reset editIndex after submitting
+    // reset analysis form
+    setAnalysisForm({
+      ManureSource: '',
+      MaterialType: '',
+      BookLab: '',
+      MaterialName: '',
+      Nutrients: { Moisture: 0, N: 0, NH4N: 0, P: 0, K: 0 },
+    });
+    // resets index
+    setEditIndex(null);
   };
 
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  //   const { name, value } = e.target;
-  //   setAnalysisForm({ ...analysisForm, [name]: value });
-  //   console.log(manureTypesData);
-  //   console.log(manures);
-  //   console.log(analysisForm);
-  // };
-
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setAnalysisForm({ ...analysisForm, [name]: value });
+
+    setAnalysisForm((prevForm) => ({
+      ...prevForm,
+      [name]:
+        name in prevForm.Nutrients
+          ? {
+              ...prevForm.Nutrients,
+              [name]: Number(value), // Convert string to number for nutrients
+            }
+          : value,
+    }));
     console.log(manureTypesData);
     console.log(manures);
     console.log(analysisForm);
@@ -224,7 +240,16 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
             <ButtonWrapper>
               <Button
                 text="Cancel"
-                handleClick={() => setIsModalVisible(false)}
+                handleClick={() => {
+                  setIsModalVisible(false);
+                  setAnalysisForm({
+                    ManureSource: '',
+                    MaterialType: '',
+                    BookLab: '',
+                    MaterialName: '',
+                    Nutrients: { Moisture: 0, N: 0, NH4N: 0, P: 0, K: 0 },
+                  });
+                }}
                 aria-label="Cancel"
                 variant="secondary"
                 size="sm"
@@ -274,14 +299,14 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                 {/* // radio button "Book Value" and "Lab Analysis" */}
                 <RadioButton
                   label="Book Value"
-                  name="booklab"
+                  name="BookLab"
                   value="book"
                   checked={analysisForm.BookLab === 'book'}
                   onChange={handleChange}
                 />
                 <RadioButton
                   label="Lab Analysis"
-                  name="booklab"
+                  name="BookLab"
                   value="lab"
                   checked={analysisForm.BookLab === 'lab'}
                   onChange={handleChange}
@@ -295,7 +320,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                   label="Material Name"
                   type="text"
                   name="materialName"
-                  value={`Custom - ${analysisForm.MaterialName}`}
+                  value={`Custom - ${analysisForm.MaterialType}`}
                   onChange={handleChange}
                 />
               )}
@@ -304,60 +329,90 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
             // Moisture, N, NH4-N, P, K
           */}
               {analysisForm.BookLab === 'book' && (
-                <>
-                  <div>
-                    <span>Moisture (%)</span>
-                    <div>{analysisForm.Nutrients.Moisture}</div>
-                  </div>
-                  <div>
-                    <span>N (%)</span>
-                    <div>{analysisForm.Nutrients.N}</div>
-                  </div>
-                  <div>
-                    <span>NH4-N (ppm)</span>
-                    <div>{analysisForm.Nutrients.NH4N}</div>
-                  </div>
-                  <div>
-                    <span>P (%)</span>
-                    <div>{analysisForm.Nutrients.P}</div>
-                  </div>
-                  <div>
-                    <span>K (%)</span>
-                    <div>{analysisForm.Nutrients.K}</div>
-                  </div>
-                </>
+                <NutrientContent>
+                  <ColumnContainer>
+                    <RowContainer>
+                      <ColumnContainer>
+                        <HeaderText>Moisture (%)</HeaderText>
+                        <ValueText>{analysisForm.Nutrients.Moisture}</ValueText>
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>N (%)</HeaderText>
+                        <ValueText>{analysisForm.Nutrients.N}</ValueText>
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>NH4-N (%)</HeaderText>
+                        <ValueText>{analysisForm.Nutrients.NH4N}</ValueText>
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>P (%)</HeaderText>
+                        <ValueText>{analysisForm.Nutrients.P}</ValueText>
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>K (%)</HeaderText>
+                        <ValueText>{analysisForm.Nutrients.K}</ValueText>
+                      </ColumnContainer>
+                    </RowContainer>
+                  </ColumnContainer>
+                </NutrientContent>
               )}
               {analysisForm.BookLab === 'lab' && (
-                <>
-                  <div>
-                    <span>Moisture (%)</span>
-                    <div>
-                      <InputField
-                        label="Moisture"
-                        type="text"
-                        name="moisture"
-                        value={analysisForm.Nutrients.Moisture}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <span>N (%)</span>
-                    <div>{analysisForm.Nutrients.N}</div>
-                  </div>
-                  <div>
-                    <span>NH4-N (ppm)</span>
-                    <div>{analysisForm.Nutrients.NH4N}</div>
-                  </div>
-                  <div>
-                    <span>P (%)</span>
-                    <div>{analysisForm.Nutrients.P}</div>
-                  </div>
-                  <div>
-                    <span>K (%)</span>
-                    <div>{analysisForm.Nutrients.K}</div>
-                  </div>
-                </>
+                <NutrientContent>
+                  <ColumnContainer>
+                    <RowContainer>
+                      <ColumnContainer>
+                        <HeaderText>Moisture (%)</HeaderText>
+                        <NutrientInputField
+                          label=""
+                          type="number"
+                          name="Moisture"
+                          value={analysisForm.Nutrients.Moisture}
+                          onChange={handleChange}
+                        />
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>N (%)</HeaderText>
+                        <NutrientInputField
+                          label=""
+                          type="text"
+                          name="N"
+                          value={analysisForm.Nutrients.N}
+                          onChange={handleChange}
+                        />
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>NH4-N (%)</HeaderText>
+                        <NutrientInputField
+                          label=""
+                          type="text"
+                          name="NH4N"
+                          value={analysisForm.Nutrients.NH4N}
+                          onChange={handleChange}
+                        />
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>P (%)</HeaderText>
+                        <NutrientInputField
+                          label=""
+                          type="text"
+                          name="P"
+                          value={analysisForm.Nutrients.P}
+                          onChange={handleChange}
+                        />
+                      </ColumnContainer>
+                      <ColumnContainer>
+                        <HeaderText>K (%)</HeaderText>
+                        <NutrientInputField
+                          label=""
+                          type="text"
+                          name="K"
+                          value={analysisForm.Nutrients.K}
+                          onChange={handleChange}
+                        />
+                      </ColumnContainer>
+                    </RowContainer>
+                  </ColumnContainer>
+                </NutrientContent>
               )}
             </>
           )}

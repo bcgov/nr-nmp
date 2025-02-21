@@ -2,9 +2,21 @@
  * @summary Styling for NutrientAnalysis view
  */
 import styled from '@emotion/styled';
+import { StyledInput } from '@/components/common/InputField/inputField.styles';
 
 export const ContentWrapper = styled.div<{ hasAnalysis: boolean }>`
   margin-bottom: ${({ hasAnalysis }) => (hasAnalysis ? '170px' : '0')};
+`;
+
+export const NutrientContent = styled.div`
+  display: grid;
+  justify-items: stretch;
+  height: 20px;
+  margin-top: 1em;
+`;
+
+export const NutrientInputField = styled(StyledInput)`
+  width: 6em;
 `;
 
 export const ButtonWrapper = styled.div`
