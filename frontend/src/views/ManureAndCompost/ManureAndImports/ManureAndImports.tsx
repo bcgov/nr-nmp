@@ -4,9 +4,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
-import LiquidManureConversionFactors from '@/types/LiquidManureConversionFactors';
-import SolidManureConversionFactors from '@/types/SolidManureConversionFactors';
+import { APICacheContext } from '@/context/APICacheContext';
+import {
+  NMPFileImportedManureData,
+  LiquidManureConversionFactors,
+  SolidManureConversionFactors,
+} from '@/types';
+import {
+  DefaultSolidManureConversionFactors,
+  DefaultLiquidManureConversionFactors,
+  DefaultManureFormData,
+} from '@/constants';
 import { Button, Modal, InputField, Dropdown } from '@/components/common';
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import {
@@ -19,54 +27,17 @@ import {
   ListItem,
   ListItemContainer,
 } from './manureAndImports.styles';
-import { APICacheContext } from '@/context/APICacheContext';
 
 interface ManureAndImportsProps {
   manures: NMPFileImportedManureData[];
   setManures: (manures: NMPFileImportedManureData[]) => void;
 }
 
-const initialManureFormData: NMPFileImportedManureData = {
-  MaterialName: '',
-  ManureTypeName: '',
-  AnnualAmount: 0,
-  AnnualAmountUSGallonsVolume: 0,
-  AnnualAmountCubicYardsVolume: 0,
-  AnnualAmountCubicMetersVolume: 0,
-  AnnualAmountTonsWeight: 0,
-  AnnualAmountDisplayVolume: '',
-  AnnualAmountDisplayWeight: '',
-  Units: 0,
-  Moisture: '50',
-  StandardSolidMoisture: 0,
-  IsMaterialStored: false,
-  ManureId: '',
-  ManagedManureName: '',
-  ManureType: 0,
-  AssignedToStoredSystem: false,
-  AssignedWithNutrientAnalysis: false,
-};
-
 const manureTypeOptions = [
+  { label: 'Select', value: 0 },
   { label: 'Liquid', value: 1 },
   { label: 'Solid', value: 2 },
 ];
-
-const DefaultSolidManureConversionFactors: SolidManureConversionFactors = {
-  id: 0,
-  inputunit: 0,
-  inputunitname: '',
-  cubicyardsoutput: '',
-  cubicmetersoutput: '',
-  metrictonsoutput: '',
-};
-
-const DefaultLiquidManureConversionFactors: LiquidManureConversionFactors = {
-  id: 0,
-  inputunit: 0,
-  inputunitname: '',
-  usgallonsoutput: '',
-};
 
 export default function ManureAndImports({ manures, setManures }: ManureAndImportsProps) {
   const apiCache = useContext(APICacheContext);
@@ -80,7 +51,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     LiquidManureConversionFactors[]
   >([DefaultLiquidManureConversionFactors]);
   const [manureFormData, setManureFormData] =
-    useState<NMPFileImportedManureData>(initialManureFormData);
+    useState<NMPFileImportedManureData>(DefaultManureFormData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -132,7 +103,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
         AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
         AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10).toString()} U.S. gallons`,
       };
-    } else {
+    } else if (manureFormData.ManureTypeName === '2') {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
         (item) => item.inputunit == manureFormData.Units,
       );
@@ -176,7 +147,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     } else {
       setManures([...manures, updatedManureFormData]);
     }
-    setManureFormData(initialManureFormData);
+    setManureFormData(DefaultManureFormData);
     setIsModalVisible(false);
   };
 
