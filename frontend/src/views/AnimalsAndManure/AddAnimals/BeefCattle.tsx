@@ -8,6 +8,7 @@ import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioB
 import { ListItem, ListItemContainer } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import { AnimalData, BeefCattleData } from './types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
+import { FlexRowContainer } from './addAnimals.styles';
 
 interface BeefCattleSubtype {
   id: number;
@@ -137,38 +138,42 @@ export default function BeefCattle({
         <div>Edit Animal</div>
       )}
       <div {...getCollapseProps()}>
-        <Dropdown
-          label="Cattle Type"
-          name="animalSubtype"
-          value={formData.subtype || ''}
-          options={subtypeOptions}
-          onChange={handleSubtypeChange}
-        />
-        <InputField
-          label="Average Animal Number on Farm"
-          type="text"
-          name="animalsPerFarm"
-          value={formData.animalsPerFarm?.toString() || ''}
-          onChange={handleInputChange}
-        />
-        <YesNoRadioButtons
-          name="yes-no"
-          text="Do you pile or collect manure from these animals?"
-          handleYes={() => setShowCollectionDays(true)}
-          handleNo={() => {
-            setShowCollectionDays(false);
-            setFormData((prev) => ({ ...prev, collectionDays: undefined }));
-          }}
-        />
-        {showCollectionDays && (
+        <FlexRowContainer>
+          <Dropdown
+            label="Cattle Type"
+            name="animalSubtype"
+            value={formData.subtype || ''}
+            options={subtypeOptions}
+            onChange={handleSubtypeChange}
+          />
           <InputField
-            label="How long is the manure collected?"
+            label="Average Animal Number on Farm"
             type="text"
-            name="daysCollected"
-            value={formData.daysCollected?.toString() || ''}
+            name="animalsPerFarm"
+            value={formData.animalsPerFarm?.toString() || ''}
             onChange={handleInputChange}
           />
-        )}
+        </FlexRowContainer>
+        <FlexRowContainer>
+          <YesNoRadioButtons
+            name="yes-no"
+            text="Do you pile or collect manure from these animals?"
+            handleYes={() => setShowCollectionDays(true)}
+            handleNo={() => {
+              setShowCollectionDays(false);
+              setFormData((prev) => ({ ...prev, collectionDays: undefined }));
+            }}
+          />
+          {showCollectionDays && (
+            <InputField
+              label="How long is the manure collected?"
+              type="text"
+              name="daysCollected"
+              value={formData.daysCollected?.toString() || ''}
+              onChange={handleInputChange}
+            />
+          )}
+        </FlexRowContainer>
         <Button
           text="Submit"
           handleClick={handleSave}
