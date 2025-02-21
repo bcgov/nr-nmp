@@ -22,7 +22,7 @@
     "react": "^18.3.1",
     "react-collapsed": "^4.2.0",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0",
+    "react-router-dom": "^7.0.0",
     "typography": "^0.16.24"
   },
   "devDependencies": {
@@ -44,6 +44,6 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3",
-    "vite": "^5.4.11"
+    "vite": "^6.0.0"
   }
 }

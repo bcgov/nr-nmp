@@ -3,20 +3,39 @@ name: .Deploys
 on:
   workflow_call:
     inputs:
+      ### Required
+      # Nothing! Only `secrets: inherit` is required
+
+      ### Typical / recommended
       environment:
         description: GitHub environment; e.g. PR number (omit), TEST or PROD
         default: "dev"
-        required: false
         type: string
       tag: 
         description: Image tag; e.g. PR number or latest
         default: ${{ github.event.number }}
-        required: false
         type: string
       target:
         description: Deployment target; e.g. PR number (omit), test or prod
         default: ${{ github.event.number }}
-        required: false
+        type: string
+
+      ### Optional / per-environment
+      db-pvc-size:
+        description: Database PVC size; e.g. 1Gi
+        default: "128Mi"
+        type: string
+      db-cpu-request:
+        description: Database CPU request; e.g. 50m
+        default: "50m"
+        type: string
+      backend-cpu-request:
+        description: Backend CPU request; e.g. 50m
+        default: "50m"
+        type: string
+      frontend-cpu-request:
+        description: Frontend CPU request; e.g. 50m
+        default: "50m"
         type: string
 
 jobs:
@@ -26,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Initialize
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+        uses: bcgov-nr/action-deployer-openshift@v3.2.0
         with:
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
@@ -40,62 +59,46 @@ jobs:
             -p DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             -p DB_USER=${{ secrets.DB_USER }}
             -p DB_NAME=${{ secrets.DB_NAME }}
-            -p DB_PORT=${{ secrets.DB_PORT }}
+            -p SSO_CLIENT_ID=${{ vars.SSO_CLIENT_ID }}
+            -p SSO_CLIENT_SECRET=${{ secrets.SSO_CLIENT_SECRET }}
   
-  database:
-    name: Database
+  deploy:
+    name: Deploy
+    environment: ${{ inputs.environment }}
     needs: [init]
-    environment: ${{ inputs.environment }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        name: [database, backend, frontend]
+        include:
+          - name: database
+            overwrite: false
+            parameters:
+              -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
+              -p CPU_REQUEST=${{ inputs.db-cpu-request }}
+          - name: backend
+            overwrite: true
+            parameters:
+              -p SSO_AUTH_SERVER_URL=${{ vars.SSO_AUTH_SERVER_URL }}
+              -p CPU_REQUEST=${{ inputs.backend-cpu-request }}
+            verification_path: /healthcheck/
+          - name: frontend
+            overwrite: true
+            parameters:
+              -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
     steps:
-      - name: Deploy Database
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
+      - uses: bcgov-nr/action-deployer-openshift@v3.2.0
         with:
+          file: ${{ matrix.name }}/openshift.deploy.yml
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
-          file: database/openshift.deploy.yml
           overwrite: false
-          parameters:
-            -p IMAGE_TAG=${{ inputs.tag }} 
+          parameters: 
+            -p TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
-
-  backend:
-    name: Backend
-    needs: [init, database]
-    environment: ${{ inputs.environment }}
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Deploy Backend
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
-        with:
-          oc_namespace: ${{ secrets.OC_NAMESPACE }}
-          oc_server: ${{ vars.OC_SERVER }}
-          oc_token: ${{ secrets.OC_TOKEN }}
-          file: backend/openshift.deploy.yml
-          overwrite: true
-          parameters:
-            -p IMAGE_TAG=${{ inputs.tag }}
-            -p TARGET=${{ inputs.target }}
-            -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}
-          verification_path: /healthcheck/
+            ${{ matrix.parameters }}
+          verification_path: ${{ matrix.verification_path }}
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
-
-  frontend:
-    name: Frontend
-    needs: [init, database, backend]
-    environment: ${{ inputs.environment }}
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Deploy Frontend
-        uses: bcgov-nr/action-deployer-openshift@v3.0.1
-        with:
-          oc_namespace: ${{ secrets.OC_NAMESPACE }}
-          oc_server: ${{ vars.OC_SERVER }}
-          oc_token: ${{ secrets.OC_TOKEN }}
-          file: frontend/openshift.deploy.yml
-          overwrite: true
-          parameters:
-            -p TAG=${{ inputs.tag }} -p TARGET=${{ inputs.target }}
-            -p SSOAUTH=${{ vars.SSO_AUTH_SERVER_URL }}

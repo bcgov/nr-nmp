@@ -17,6 +17,7 @@ services:
     build:
       context: ./database
       dockerfile: Dockerfile
+    # Don't put an image: prop here, it breaks the local
     container_name: nr-nmp-db
     environment:
       <<: *postgres-vars
@@ -52,6 +53,7 @@ services:
     environment:
       LOG_LEVEL: info
       PORT: 3000
+      SSO_REDIRECT_URL: http://localhost:3000/auth/callback
       <<: *postgres-vars
     healthcheck:
      test: curl --fail http://localhost:3000 || exit 1
@@ -62,7 +64,7 @@ services:
 
   # Frontend
   frontend:
-    image: node:20.17.0
+    image: node:20.18.2
     command: /bin/bash -c "cd ./app && npm install && npm run ${CMD:-dev}"
     container_name: nr-nmp-frontend
     depends_on:
@@ -74,7 +76,6 @@ services:
           path: ./frontend
           target: /app
           ignore: [node_modules]
-    env_file: .env
     environment:
       VITE_BACKEND_URL: http://localhost:3000
     healthcheck:

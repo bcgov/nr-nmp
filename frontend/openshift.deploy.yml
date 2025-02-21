@@ -1,8 +1,8 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
-  - name: APP
-    description: Application name
+  - name: REPO
+    description: Repository name
     value: nr-nmp
   - name: COMPONENT
     description: Component name
@@ -16,16 +16,17 @@ parameters:
   - name: TARGET
     description: Deployment target; e.g. PR number, test or prod
     required: true
-  - name: SSOAUTH
-    description: SSO Auth Server URL
-    required: true
+  - name: CPU_REQUEST
+    value: 50m
+  - name: MEMORY_REQUEST
+    value: 175Mi
 objects:
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
       type: ClusterIP
       ports:
@@ -34,30 +35,30 @@ objects:
           protocol: TCP
           name: http-3000
       selector:
-        service: ${APP}-${TARGET}-${COMPONENT}
+        service: ${REPO}-${TARGET}-${COMPONENT}
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-        deployment: ${APP}-${TARGET}-${COMPONENT}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+        deployment: ${REPO}-${TARGET}-${COMPONENT}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
       strategy:
-        type: Recreate
+        type: RollingUpdate
       selector:
         matchLabels:
-          deployment: ${APP}-${TARGET}-${COMPONENT}
+          deployment: ${REPO}-${TARGET}-${COMPONENT}
       template:
         metadata:
           labels:
-            app: ${APP}-${TARGET}
-            deployment: ${APP}-${TARGET}-${COMPONENT}
-            service: ${APP}-${TARGET}-${COMPONENT}
+            app: ${REPO}-${TARGET}
+            deployment: ${REPO}-${TARGET}-${COMPONENT}
+            service: ${REPO}-${TARGET}-${COMPONENT}
         spec:
           containers:
-            - name: ${APP}-${TARGET}-${COMPONENT}
-              image: ghcr.io/${ORG}/${APP}/${COMPONENT}:${TAG}
+            - name: ${REPO}-${TARGET}-${COMPONENT}
+              image: ghcr.io/${ORG}/${REPO}/${COMPONENT}:${TAG}
               # TODO: be more specific when giving permissions
               securityContext:
                 capabilities:
@@ -67,67 +68,54 @@ objects:
                 - name: LOG_LEVEL
                   value: info
                 - name: VITE_BACKEND_URL
-                  value: https://${APP}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
+                  value: https://${REPO}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
                 - name: BACKEND_URL
-                  value: https://${APP}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
+                  value: https://${REPO}-${TARGET}-backend.apps.silver.devops.gov.bc.ca
                 - name: VITE_PORT
                   value: '5173'
-                - name: SSO_AUTH_SERVER_URL
-                  value: ${SSOAUTH}
                 - name: SSO_CLIENT_ID
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
-                      key: SSO_CLIENT_ID
+                      name: ${REPO}-${TARGET}-backend
+                      key: sso-client-id
                 - name: SSO_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
-                      name: nr-nmp-keycloak
-                      key: SSO_CLIENT_SECRET
+                      name: ${REPO}-${TARGET}-backend
+                      key: sso-client-secret
               ports:
-                - name: http
+                - name: container-port
                   containerPort: 5173
-                  protocol: TCP
               # readinessProbe:
-              #   httpGet:
-              #     path: /
-              #     port: http
-              #     scheme: HTTP
-              #   initialDelaySeconds: 90
-              #   periodSeconds: 10
-              #   timeoutSeconds: 10
-              #   successThreshold: 3
-              #   failureThreshold: 30
+              #   tcpSocket:
+              #     port: container-port
               # livenessProbe:
-              #   successThreshold: 1
-              #   failureThreshold: 3
-              #   httpGet:
-              #     path: /
-              #     port: http
-              #     scheme: HTTP
-              #   initialDelaySeconds: 15
-              #   periodSeconds: 30
-              #   timeoutSeconds: 5
-              resources: # this is optional
-                limits:
-                  cpu: 150m
-                  memory: 250Mi
+              #   tcpSocket:
+              #     port: container-port
+              # startupProbe:
+              #   tcpSocket:
+              #     port: container-port
+              #   failureThreshold: 5
+              #   initialDelaySeconds: 90
+              #   periodSeconds: 15
+              #   timeoutSeconds: 10
+              resources:
                 requests:
-                  cpu: 50m
-                  memory: 175Mi
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: ${APP}-${TARGET}
-      name: ${APP}-${TARGET}-${COMPONENT}
+        app: ${REPO}-${TARGET}
+      name: ${REPO}-${TARGET}-${COMPONENT}
     spec:
-      host: ${APP}-${TARGET}.apps.silver.devops.gov.bc.ca
+      host: ${REPO}-${TARGET}.apps.silver.devops.gov.bc.ca
       port:
         targetPort: http-3000
       to:
         kind: Service
-        name: ${APP}-${TARGET}-${COMPONENT}
+        name: ${REPO}-${TARGET}-${COMPONENT}
         weight: 100
       tls:
         termination: edge

@@ -12,13 +12,13 @@ jobs:
   # https://github.com/bcgov-nr/action-builder-ghcr
   builds:
     name: Builds
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         package: [database, backend, frontend]
     timeout-minutes: 20
     steps:
-      - uses: bcgov-nr/action-builder-ghcr@v2.2.0
+      - uses: bcgov-nr/action-builder-ghcr@v2.3.0
         with:
           keep_versions: 50
           package: ${{ matrix.package }}
@@ -32,6 +32,11 @@ jobs:
     needs: [builds]
     secrets: inherit
     uses: ./.github/workflows/.deploy.yml
+    with:
+      db-pvc-size: 64Mi
+      db-cpu-request: 30m
+      backend-cpu-request: 30m
+      frontend-cpu-request: 30m
 
   # tests:
   #   name: Tests
@@ -45,6 +50,6 @@ jobs:
     name: PR Results
     needs: [builds, deploys]
     if: always()
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - run: echo "Success!"

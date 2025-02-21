@@ -1,7 +1,7 @@
+import NMPFileImportedManureData from './NMPFileImportedManureData';
 /**
  * @summary Type definition for NMP File
  */
-
 type NMPFile = {
   farmDetails: {
     Year?: string;
@@ -80,7 +80,7 @@ type NMPFile = {
     FarmAnimals?: any[];
     FarmManures?: any[];
     GeneratedManures?: any[];
-    ImportedManures?: any[];
+    ImportedManures?: NMPFileImportedManureData[];
     SeparatedSolidManures?: any[];
     ManureStorageSystems?: any[];
   }>;
