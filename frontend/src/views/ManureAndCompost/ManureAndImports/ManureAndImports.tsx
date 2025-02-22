@@ -195,7 +195,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
         {manures.map((manure, index) => (
           <ListItemContainer key={manure.MaterialName}>
             <ListItem>
-              {manure.MaterialName} {manure.ManureTypeName}
+              {manure.MaterialName} {manure.ManureTypeName === '1' ? '(Liquid)' : '(Solid)'}
             </ListItem>
             <ListItem>{manure.AnnualAmountDisplayVolume}</ListItem>
             <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
