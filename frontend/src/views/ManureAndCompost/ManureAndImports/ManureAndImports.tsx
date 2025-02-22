@@ -199,7 +199,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     <div>
       <ButtonContainer hasManure={manures.length > 0}>
         <Button
-          text="Add Imported Manure"
+          text="Add Manure"
           handleClick={() => setIsModalVisible(true)}
           aria-label="Add Imported Manure"
           variant="primary"

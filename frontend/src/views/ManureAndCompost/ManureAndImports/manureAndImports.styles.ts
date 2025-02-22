@@ -51,8 +51,8 @@ export const ButtonContainer = styled.div<{ hasManure: boolean }>`
   justify-content: ${({ hasManure }) => (hasManure ? 'flex-end' : 'center')};
   margin: 16px 0;
   button {
-    width: 130px;
-    height: 50px;
+    width: 110px;
+    height: 40px;
   }
 `;
 
