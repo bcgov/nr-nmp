@@ -73,7 +73,32 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     const newErrors: { [key: string]: string } = {};
     if (!manureFormData.MaterialName?.trim()) {
       newErrors.FieldName = 'Field Name is required';
+    } else if (
+      manures.some(
+        (manure, index) =>
+          manure.MaterialName?.trim().toLowerCase() ===
+            (manureFormData.MaterialName ?? '').trim().toLowerCase() && index !== editIndex,
+      )
+    ) {
+      newErrors.FieldName = 'Material Name must be unique';
     }
+
+    if (!manureFormData.ManureTypeName || manureFormData.ManureTypeName === '0') {
+      newErrors.ManureTypeName = 'Manure Type is required';
+    }
+
+    if (!manureFormData.AnnualAmount || manureFormData.AnnualAmount <= 0) {
+      newErrors.AnnualAmount = 'Annual Amount is required';
+    }
+
+    if (!manureFormData.Units) {
+      newErrors.Units = 'Units is required';
+    }
+
+    if (manureFormData.ManureTypeName === '2' && !manureFormData.Moisture) {
+      newErrors.Moisture = 'Moisture is required';
+    }
+
     return newErrors;
   };
 
@@ -254,6 +279,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           value={manureFormData.MaterialName || ''}
           onChange={handleChange}
         />
+        {errors.ManureTypeName && <ErrorText>{errors.ManureTypeName}</ErrorText>}
         <Dropdown
           label="Manure Type"
           name="ManureTypeName"
@@ -261,6 +287,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           options={manureTypeOptions}
           onChange={handleChange}
         />
+        {errors.AnnualAmount && <ErrorText>{errors.AnnualAmount}</ErrorText>}
         <InputField
           label="Amount per year"
           type="text"
@@ -269,36 +296,46 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           onChange={handleChange}
         />
         {manureFormData.ManureTypeName === '1' ? (
-          <Dropdown
-            label="(Units)"
-            name="Units"
-            value={manureFormData.Units || ''}
-            options={liquidManureDropdownOptions.map((manure) => ({
-              value: manure.inputunit ?? 0,
-              label: manure.inputunitname ?? '',
-            }))}
-            onChange={handleChange}
-          />
+          <>
+            {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
+            <Dropdown
+              label="(Units)"
+              name="Units"
+              value={manureFormData.Units || ''}
+              options={liquidManureDropdownOptions.map((manure) => ({
+                value: manure.inputunit ?? 0,
+                label: manure.inputunitname ?? '',
+              }))}
+              onChange={handleChange}
+            />
+          </>
         ) : (
-          <Dropdown
-            label="(Units)"
-            name="Units"
-            value={manureFormData.Units || ''}
-            options={solidManureDropdownOptions.map((manure) => ({
-              value: manure.inputunit ?? 0,
-              label: manure.inputunitname ?? '',
-            }))}
-            onChange={handleChange}
-          />
+          <>
+            {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
+
+            <Dropdown
+              label="(Units)"
+              name="Units"
+              value={manureFormData.Units || ''}
+              options={solidManureDropdownOptions.map((manure) => ({
+                value: manure.inputunit ?? 0,
+                label: manure.inputunitname ?? '',
+              }))}
+              onChange={handleChange}
+            />
+          </>
         )}
         {manureFormData.ManureTypeName === '2' && (
-          <InputField
-            label="Moisture (%)"
-            type="text"
-            name="Moisture"
-            value={manureFormData.Moisture || ''}
-            onChange={handleChange}
-          />
+          <>
+            {errors.Moisture && <ErrorText>{errors.Moisture}</ErrorText>}
+            <InputField
+              label="Moisture (%)"
+              type="text"
+              name="Moisture"
+              value={manureFormData.Moisture || ''}
+              onChange={handleChange}
+            />
+          </>
         )}
       </Modal>
     </div>
