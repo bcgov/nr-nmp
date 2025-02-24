@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(Animals)
 admin.site.register(AnimalSubtype)
+admin.site.register(Breed)
