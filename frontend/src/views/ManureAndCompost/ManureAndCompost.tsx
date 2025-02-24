@@ -19,7 +19,12 @@ export default function ManureAndCompost() {
     {
       id: 'manure-imports',
       label: 'Manure and Imports',
-      content: <ManureAndImports />,
+      content: (
+        <ManureAndImports
+          manures={manures}
+          setManures={setManures}
+        />
+      ),
     },
     {
       id: 'nutrient-analysis',
