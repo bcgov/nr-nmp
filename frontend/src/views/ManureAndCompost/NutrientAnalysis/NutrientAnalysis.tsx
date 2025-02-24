@@ -18,10 +18,10 @@ import {
   ButtonWrapper,
   NutrientContent,
   NutrientInputField,
+  NutrientRadioWrapper,
 } from './nutrientAnalsysis.styles';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
-import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
 import {
   ColumnContainer,
   HeaderText,
@@ -65,7 +65,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
       MaterialType: string;
       BookLab: string;
       MaterialName: string;
-      Nutrients: { Moisture: number; N: number; NH4N: number; P: number; K: number };
+      Nutrients: { Moisture: string; N: number; NH4N: number; P: number; K: number };
     }[]
   >([]);
   // for each manuresource user can create nutrient analysis' objects
@@ -74,7 +74,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
     MaterialType: '',
     BookLab: '',
     MaterialName: '',
-    Nutrients: { Moisture: 0, N: 0, NH4N: 0, P: 0, K: 0 },
+    Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
   });
 
   const mockImportedManures = [
@@ -143,7 +143,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
       MaterialType: '',
       BookLab: '',
       MaterialName: '',
-      Nutrients: { Moisture: 0, N: 0, NH4N: 0, P: 0, K: 0 },
+      Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
     });
     // resets index
     setEditIndex(null);
@@ -152,20 +152,84 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    setAnalysisForm((prevForm) => ({
-      ...prevForm,
-      [name]:
-        name in prevForm.Nutrients
-          ? {
-              ...prevForm.Nutrients,
-              [name]: Number(value), // Convert string to number for nutrients
-            }
-          : value,
-    }));
-    console.log(manureTypesData);
-    console.log(manures);
-    console.log(analysisForm);
+    setAnalysisForm((prevForm) => {
+      // update nutrients and material type when type is changed
+      if (name === 'MaterialType') {
+        const updatedMaterialName =
+          prevForm.MaterialName === '' ||
+          prevForm.MaterialName !== `Custom - ${prevForm.MaterialType}`
+            ? `Custom - ${value}`
+            : prevForm.MaterialName;
+        const selectedManure = manureTypesData.find((manure) => manure.name === value) || {
+          moisture: '0',
+          nitrogen: 0,
+          ammonia: 0,
+          phosphorous: 0,
+          potassium: 0,
+        };
+
+        return {
+          ...prevForm,
+          MaterialType: value,
+          MaterialName: updatedMaterialName,
+          Nutrients: {
+            Moisture: selectedManure.moisture != null ? String(selectedManure.moisture) : '',
+            N: selectedManure.nitrogen ?? 0,
+            NH4N: selectedManure.ammonia ?? 0,
+            P: selectedManure.phosphorous ?? 0,
+            K: selectedManure.potassium ?? 0,
+          },
+        };
+      }
+
+      // reset nutrient values when book value is selected
+      if (name === 'BookLab' && prevForm.BookLab !== value) {
+        const selectedManure = manureTypesData.find(
+          (manure) => manure.name === prevForm.MaterialType,
+        ) || {
+          moisture: '',
+          nitrogen: 0,
+          ammonia: 0,
+          phosphorous: 0,
+          potassium: 0,
+        };
+        return {
+          ...prevForm,
+          BookLab: value,
+          Nutrients: {
+            Moisture: selectedManure.moisture != null ? String(selectedManure.moisture) : '',
+            N: selectedManure.nitrogen || 0,
+            NH4N: selectedManure.ammonia ?? 0,
+            P: selectedManure.phosphorous ?? 0,
+            K: selectedManure.potassium ?? 0,
+          },
+        };
+      }
+
+      // update nutrients if changed
+      if (name in prevForm.Nutrients) {
+        return {
+          ...prevForm,
+          Nutrients: {
+            ...prevForm.Nutrients,
+            [name]: value === '' ? '' : Number(value),
+          },
+        };
+      }
+
+      return {
+        ...prevForm,
+        [name]: value,
+      };
+    });
   };
+
+  // delete these before pushing
+  useEffect(() => {
+    console.log('Updated manue types:', manureTypesData);
+    console.log('Updated mannures', manures);
+    console.log('Updated AnalysisForm:', analysisForm);
+  }, [analysisForm, manureTypesData, manures]);
 
   // get manure types
   useEffect(() => {
@@ -247,7 +311,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                     MaterialType: '',
                     BookLab: '',
                     MaterialName: '',
-                    Nutrients: { Moisture: 0, N: 0, NH4N: 0, P: 0, K: 0 },
+                    Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
                   });
                 }}
                 aria-label="Cancel"
@@ -295,7 +359,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                   onChange={handleChange}
                 />
               </DropdownWrapper>
-              <RadioButtonWrapper>
+              <NutrientRadioWrapper>
                 {/* // radio button "Book Value" and "Lab Analysis" */}
                 <RadioButton
                   label="Book Value"
@@ -311,7 +375,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                   checked={analysisForm.BookLab === 'lab'}
                   onChange={handleChange}
                 />
-              </RadioButtonWrapper>
+              </NutrientRadioWrapper>
               {/* // Lab Analysis
             // material name Custom - material type here as default?
             // turns nutrient values into inputs */}
@@ -319,14 +383,13 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                 <InputField
                   label="Material Name"
                   type="text"
-                  name="materialName"
-                  value={`Custom - ${analysisForm.MaterialType}`}
+                  name="MaterialName"
+                  value={analysisForm.MaterialName}
                   onChange={handleChange}
                 />
               )}
               {/* 
-            // Book value
-            // Moisture, N, NH4-N, P, K
+            // Book value shows moisture, N, NH4-N, P, K from manure
           */}
               {analysisForm.BookLab === 'book' && (
                 <NutrientContent>
@@ -361,10 +424,9 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                   <ColumnContainer>
                     <RowContainer>
                       <ColumnContainer>
-                        <HeaderText>Moisture (%)</HeaderText>
+                        <HeaderText>Moisture</HeaderText>
                         <NutrientInputField
-                          label=""
-                          type="number"
+                          type="text"
                           name="Moisture"
                           value={analysisForm.Nutrients.Moisture}
                           onChange={handleChange}
@@ -373,8 +435,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                       <ColumnContainer>
                         <HeaderText>N (%)</HeaderText>
                         <NutrientInputField
-                          label=""
-                          type="text"
+                          type="number"
                           name="N"
                           value={analysisForm.Nutrients.N}
                           onChange={handleChange}
@@ -383,8 +444,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                       <ColumnContainer>
                         <HeaderText>NH4-N (%)</HeaderText>
                         <NutrientInputField
-                          label=""
-                          type="text"
+                          type="number"
                           name="NH4N"
                           value={analysisForm.Nutrients.NH4N}
                           onChange={handleChange}
@@ -393,8 +453,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                       <ColumnContainer>
                         <HeaderText>P (%)</HeaderText>
                         <NutrientInputField
-                          label=""
-                          type="text"
+                          type="number"
                           name="P"
                           value={analysisForm.Nutrients.P}
                           onChange={handleChange}
@@ -403,8 +462,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                       <ColumnContainer>
                         <HeaderText>K (%)</HeaderText>
                         <NutrientInputField
-                          label=""
-                          type="text"
+                          type="number"
                           name="K"
                           value={analysisForm.Nutrients.K}
                           onChange={handleChange}

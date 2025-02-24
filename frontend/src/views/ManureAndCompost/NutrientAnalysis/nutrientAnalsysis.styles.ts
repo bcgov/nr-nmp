@@ -3,6 +3,7 @@
  */
 import styled from '@emotion/styled';
 import { StyledInput } from '@/components/common/InputField/inputField.styles';
+import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
 
 export const ContentWrapper = styled.div<{ hasAnalysis: boolean }>`
   margin-bottom: ${({ hasAnalysis }) => (hasAnalysis ? '170px' : '0')};
@@ -13,10 +14,17 @@ export const NutrientContent = styled.div`
   justify-items: stretch;
   height: 20px;
   margin-top: 1em;
+  width: 5em;
 `;
 
 export const NutrientInputField = styled(StyledInput)`
-  width: 6em;
+  width: 5em;
+  margin: 0.25em;
+`;
+
+export const NutrientRadioWrapper = styled(RadioButtonWrapper)`
+  margin-bottom: 1em;
+  justify-content: space-evenly;
 `;
 
 export const ButtonWrapper = styled.div`
