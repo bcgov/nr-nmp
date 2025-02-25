@@ -13,13 +13,13 @@ import {
   Column,
   ListItemContainer,
   ListItem,
-  ButtonContainer,
   Header,
   ButtonWrapper,
   NutrientContent,
   NutrientInputField,
   NutrientRadioWrapper,
   NutrientContainer,
+  CenterButtonWrapper,
 } from './nutrientAnalsysis.styles';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
@@ -225,13 +225,6 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
     });
   };
 
-  // delete these before pushing
-  useEffect(() => {
-    console.log('Updated manue types:', manureTypesData);
-    console.log('Updated mannures', manures);
-    console.log('Updated AnalysisForm:', analysisForm);
-  }, [analysisForm, manureTypesData, manures]);
-
   // get manure types
   useEffect(() => {
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
@@ -283,19 +276,17 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
           </ListItemContainer>
         ))}
       </ContentWrapper>
-      {mockImportedManures.length > 0 && (
-        <ButtonContainer>
-          {/* button to add a nutrient analysis if there are manures to add it to */}
-          {/* add a new nutrient analysis */}
-          <Button
-            variant="primary"
-            size="sm"
-            disabled={mockImportedManures.length === 0}
-            text="Add Nutrient Analysis"
-            handleClick={() => setIsModalVisible(true)}
-          />
-        </ButtonContainer>
-      )}
+      <CenterButtonWrapper>
+        {/* button to add a nutrient analysis if there are manures to add it to */}
+        {/* add a new nutrient analysis */}
+        <Button
+          variant="primary"
+          size="sm"
+          disabled={mockImportedManures.length === 0}
+          text="Add Nutrient Analysis"
+          handleClick={() => setIsModalVisible(true)}
+        />
+      </CenterButtonWrapper>
       <Modal
         isVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}

@@ -61,8 +61,8 @@ export const CenterButtonWrapper = styled.div`
   align-items: center;
   height: 100px;
   button {
-    width: 100px;
-    height: 40px;
+    width: 150px;
+    height: 50px;
   }
 `;
 
