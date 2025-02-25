@@ -19,7 +19,6 @@ export default function ManureAndCompost() {
     if (state.nmpFile?.years?.[0]?.ImportedManures) {
       setManures(state.nmpFile.years[0].ImportedManures);
     }
-    console.log(state.nmpFile);
   }, [state.nmpFile]);
 
   const tabs = [

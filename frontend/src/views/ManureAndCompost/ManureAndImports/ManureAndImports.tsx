@@ -200,11 +200,6 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
       });
   }, []);
 
-  useEffect(() => {
-    console.log(liquidManureDropdownOptions);
-    console.log(solidManureDropdownOptions);
-  }, []);
-
   return (
     <div>
       <ButtonContainer hasManure={manures.length > 0}>

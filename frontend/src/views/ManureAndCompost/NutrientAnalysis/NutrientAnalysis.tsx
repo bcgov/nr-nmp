@@ -145,22 +145,19 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
       if (name === 'BookLab' && prevForm.BookLab !== value) {
         const selectedManure = manureTypesData.find(
           (manure) => manure.name === prevForm.MaterialType,
-        ) || {
-          moisture: '',
-          nitrogen: 0,
-          ammonia: 0,
-          phosphorous: 0,
-          potassium: 0,
-        };
+        );
+        if (!selectedManure) {
+          throw new Error(`Manure type "${value}" not found.`);
+        }
         return {
           ...prevForm,
           BookLab: value,
           Nutrients: {
-            Moisture: selectedManure.moisture != null ? String(selectedManure.moisture) : '',
-            N: selectedManure.nitrogen || 0,
-            NH4N: selectedManure.ammonia ?? 0,
-            P: selectedManure.phosphorous ?? 0,
-            K: selectedManure.potassium ?? 0,
+            Moisture: String(selectedManure.moisture),
+            N: selectedManure.nitrogen,
+            NH4N: selectedManure.ammonia,
+            P: selectedManure.phosphorous,
+            K: selectedManure.potassium,
           },
         };
       }
@@ -192,10 +189,6 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
       }
     });
   }, [apiCache]);
-
-  useEffect(() => {
-    console.log(manures);
-  }, [manures]);
 
   return (
     <div>
