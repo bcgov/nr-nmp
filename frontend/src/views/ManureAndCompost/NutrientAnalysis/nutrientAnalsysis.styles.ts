@@ -4,6 +4,7 @@
 import styled from '@emotion/styled';
 import { StyledInput } from '@/components/common/InputField/inputField.styles';
 import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
+import { ColumnContainer } from '@/views/FieldAndSoil/Crops/crops.styles';
 
 export const ContentWrapper = styled.div<{ hasAnalysis: boolean }>`
   margin-bottom: ${({ hasAnalysis }) => (hasAnalysis ? '170px' : '0')};
@@ -14,6 +15,13 @@ export const NutrientContent = styled.div`
   justify-items: stretch;
   height: 20px;
   margin-top: 1em;
+  width: 5em;
+`;
+
+export const NutrientContainer = styled(ColumnContainer)`
+  display: grid;
+  justify-items: stretch;
+  height: 20px;
   width: 5em;
 `;
 

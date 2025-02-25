@@ -19,6 +19,7 @@ import {
   NutrientContent,
   NutrientInputField,
   NutrientRadioWrapper,
+  NutrientContainer,
 } from './nutrientAnalsysis.styles';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
@@ -395,26 +396,26 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
                 <NutrientContent>
                   <ColumnContainer>
                     <RowContainer>
-                      <ColumnContainer>
-                        <HeaderText>Moisture (%)</HeaderText>
+                      <NutrientContainer>
+                        <HeaderText>Moisture</HeaderText>
                         <ValueText>{analysisForm.Nutrients.Moisture}</ValueText>
-                      </ColumnContainer>
-                      <ColumnContainer>
+                      </NutrientContainer>
+                      <NutrientContainer>
                         <HeaderText>N (%)</HeaderText>
                         <ValueText>{analysisForm.Nutrients.N}</ValueText>
-                      </ColumnContainer>
-                      <ColumnContainer>
+                      </NutrientContainer>
+                      <NutrientContainer>
                         <HeaderText>NH4-N (%)</HeaderText>
                         <ValueText>{analysisForm.Nutrients.NH4N}</ValueText>
-                      </ColumnContainer>
-                      <ColumnContainer>
+                      </NutrientContainer>
+                      <NutrientContainer>
                         <HeaderText>P (%)</HeaderText>
                         <ValueText>{analysisForm.Nutrients.P}</ValueText>
-                      </ColumnContainer>
-                      <ColumnContainer>
+                      </NutrientContainer>
+                      <NutrientContainer>
                         <HeaderText>K (%)</HeaderText>
                         <ValueText>{analysisForm.Nutrients.K}</ValueText>
-                      </ColumnContainer>
+                      </NutrientContainer>
                     </RowContainer>
                   </ColumnContainer>
                 </NutrientContent>
