@@ -30,9 +30,9 @@ import {
   ValueText,
 } from '@/views/FieldAndSoil/Crops/crops.styles';
 
-interface ManureListProps {
-  manures: NMPFileImportedManureData[];
-}
+// interface ManureListProps {
+//   manures: NMPFileImportedManureData[];
+// }
 
 interface ManureType {
   id: number;
@@ -52,7 +52,8 @@ interface ManureType {
   defaultSolidMoisture: number;
 }
 
-export default function NutrientAnalysis({ manures }: ManureListProps) {
+export default function NutrientAnalysis() {
+  // { manures }: ManureListProps import when tab complete
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);

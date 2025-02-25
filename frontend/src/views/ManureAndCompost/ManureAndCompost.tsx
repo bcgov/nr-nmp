@@ -29,7 +29,7 @@ export default function ManureAndCompost() {
     {
       id: 'nutrient-analysis',
       label: 'Nutrient Analysis',
-      content: <NutrientAnalysis manures={manures} />,
+      content: <NutrientAnalysis />,
     },
   ];
 
@@ -59,12 +59,12 @@ export default function ManureAndCompost() {
   };
 
   // assumes only 1 year, edit
-  useEffect(() => {
-    if (state.nmpFile) {
-      const parsedData = JSON.parse(state.nmpFile);
-      // setManures(parsedData.ImportedManures);
-    }
-  }, [state]);
+  // useEffect(() => {
+  //   if (state.nmpFile) {
+  //     const parsedData = JSON.parse(state.nmpFile);
+  //     setManures(parsedData.ImportedManures);
+  //   }
+  // }, [state]);
 
   return (
     <Card
