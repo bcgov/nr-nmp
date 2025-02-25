@@ -31,4 +31,5 @@ urlpatterns = [
     path('api/', include('apps.shared.urls')),
     path('api/', include('apps.manure.urls')),
     path('api/', include('apps.fertilizers.urls')),
+    path('api/', include('apps.manures.urls')),
 ]

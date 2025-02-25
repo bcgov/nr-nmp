@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'apps.shared',
     'apps.manure',
     'apps.fertilizers',
+    'apps.manures',
 ]
 
 MIDDLEWARE = [

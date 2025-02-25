@@ -8,7 +8,7 @@ interface DropdownProps {
   label: string;
   name: string;
   value: number | string;
-  options: { value: number | string; label: string }[];
+  options: { value: number | string | undefined; label: string | undefined }[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   flex?: string;
 }
