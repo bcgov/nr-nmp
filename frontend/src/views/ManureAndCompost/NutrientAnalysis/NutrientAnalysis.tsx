@@ -122,24 +122,21 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
           prevForm.MaterialName !== `Custom - ${prevForm.MaterialType}`
             ? `Custom - ${value}`
             : prevForm.MaterialName;
-        const selectedManure = manureTypesData.find((manure) => manure.name === value) || {
-          moisture: '0',
-          nitrogen: 0,
-          ammonia: 0,
-          phosphorous: 0,
-          potassium: 0,
-        };
+        const selectedManure = manureTypesData.find((manure) => manure.name === value);
+        if (!selectedManure) {
+          throw new Error(`Manure type "${value}" not found.`);
+        }
 
         return {
           ...prevForm,
           MaterialType: value,
           MaterialName: updatedMaterialName,
           Nutrients: {
-            Moisture: selectedManure.moisture != null ? String(selectedManure.moisture) : '',
-            N: selectedManure.nitrogen ?? 0,
-            NH4N: selectedManure.ammonia ?? 0,
-            P: selectedManure.phosphorous ?? 0,
-            K: selectedManure.potassium ?? 0,
+            Moisture: String(selectedManure.moisture),
+            N: selectedManure.nitrogen,
+            NH4N: selectedManure.ammonia,
+            P: selectedManure.phosphorous,
+            K: selectedManure.potassium,
           },
         };
       }
@@ -290,7 +287,7 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
         }
       >
         <ModalContent>
-          {/* // modal has "Source of Material" dropdown which maps manures input using a mock value replace when manure tab is completed */}
+          {/* // modal has "Source of Material" dropdown which maps users manures input from ManureAndCompost page */}
           <Dropdown
             label="Source of Material"
             name="ManureSource"
