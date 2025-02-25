@@ -10,6 +10,7 @@ import { FlexContainer, MarginWrapper } from './addAnimals.styles';
 import { Column, Header } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
+import DairyCattle from './DairyCattle/DairyCattle';
 
 interface AddAnimalsProps {
   saveData: React.Dispatch<React.SetStateAction<any[]>>;
@@ -72,22 +73,38 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
     if (data === undefined || data.length === 0) {
       data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id }));
     }
+
     const dataElems = data.map((d, index) => {
       if (d === null) {
         return null;
       }
-      // TODO: Once more animal types are added, return a different elem based on type
-      return (
-        <BeefCattle
-          // eslint-disable-next-line react/no-array-index-key
-          key={`a-${index}`}
-          startData={d}
-          startExpanded={index === 0}
-          saveData={handleSave}
-          onDelete={handleDelete}
-          myIndex={index}
-        />
-      );
+      if (d.id === '1') {
+        return (
+          <BeefCattle
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${index}`}
+            startData={d}
+            startExpanded={index === 0}
+            saveData={handleSave}
+            onDelete={handleDelete}
+            myIndex={index}
+          />
+        );
+      }
+      if (d.id === '2') {
+        return (
+          <DairyCattle
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${index}`}
+            startData={d}
+            startExpanded={index === 0}
+            saveData={handleSave}
+            onDelete={handleDelete}
+            myIndex={index}
+          />
+        );
+      }
+      throw new Error('Unexpected animal id.');
     });
 
     setFormData(data);
@@ -96,25 +113,38 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
   }, []);
 
   const handleAdd = (animalId: string) => {
-    // Right now we only handle beef cattle
-    if (animalId !== '1') return;
+    // Right now we only handle cattle
+    if (animalId !== '1' && animalId !== '2') return;
 
-    const { length } = formData;
     setFormData((prev) => {
       prev.push({ id: animalId });
       return prev;
     });
+    const { length } = formData;
     setElems((prev) => {
       const next = [...prev];
-      next.push(
-        <BeefCattle
-          key={`a-${length}`}
-          startData={{ id: animalId }}
-          saveData={handleSave}
-          onDelete={handleDelete}
-          myIndex={length}
-        />,
-      );
+      if (animalId === '1') {
+        next.push(
+          <BeefCattle
+            key={`${length}`}
+            startData={{ id: animalId }}
+            saveData={handleSave}
+            onDelete={handleDelete}
+            myIndex={length}
+          />,
+        );
+      } else if (animalId === '2') {
+        next.push(
+          <DairyCattle
+            key={`${length}`}
+            startData={{ id: animalId }}
+            saveData={handleSave}
+            onDelete={handleDelete}
+            myIndex={length}
+          />,
+        );
+      }
+
       return next;
     });
   };
@@ -123,9 +153,10 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
     apiCache.callEndpoint('api/animals/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        const animals: { value: number; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ value: row.id, label: row.name }));
+        const animals: { value: number; label: string }[] = (data as { id: number; name: string }[])
+          .map((row) => ({ value: row.id, label: row.name }))
+          // Temp, remove non-cattle as an option
+          .filter((opt) => opt.value === 1 || opt.value === 2);
         setAnimalOptions(animals);
       }
     });
@@ -134,7 +165,7 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
 
   return (
     <div>
-      <div>
+      <div style={{ overflowY: 'scroll' }}>
         <Header>
           <Column>Animal Type</Column>
           <Column>Annual Manure Amount</Column>
