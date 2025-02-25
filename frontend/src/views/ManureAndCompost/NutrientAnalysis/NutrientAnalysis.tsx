@@ -6,7 +6,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { APICacheContext } from '@/context/APICacheContext';
-import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
+// import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import { Button, Dropdown, InputField, Modal, RadioButton } from '../../../components/common';
 import {
   ContentWrapper,
