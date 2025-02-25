@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
@@ -15,6 +15,13 @@ export default function ManureAndCompost() {
   const [activeTab, setActiveTab] = useState(0);
   const [manures, setManures] = useState<NMPFileImportedManureData[]>([]);
 
+  useEffect(() => {
+    if (state.nmpFile?.years?.[0]?.ImportedManures) {
+      setManures(state.nmpFile.years[0].ImportedManures);
+    }
+    console.log(state.nmpFile);
+  }, [state.nmpFile]);
+
   const tabs = [
     {
       id: 'manure-imports',
@@ -29,7 +36,7 @@ export default function ManureAndCompost() {
     {
       id: 'nutrient-analysis',
       label: 'Nutrient Analysis',
-      content: <NutrientAnalysis />,
+      content: <NutrientAnalysis manures={manures} />,
     },
   ];
 
@@ -38,11 +45,11 @@ export default function ManureAndCompost() {
     if (state.nmpFile) {
       nmpFile = JSON.parse(state.nmpFile);
     }
-    // if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
-    //   nmpFile.years[0].ImportedManures = manures.map((manure) => ({
-    //     ...manure,
-    //   }));
-    // }
+    if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
+      nmpFile.years[0].ImportedManures = manures.map((manure) => ({
+        ...manure,
+      }));
+    }
     setNMPFile(JSON.stringify(nmpFile));
 
     // if on the last tab navigate to calculate nutrients page
@@ -57,14 +64,6 @@ export default function ManureAndCompost() {
     if (activeTab > 0) setActiveTab(activeTab - 1);
     else navigate('/field-and-soil');
   };
-
-  // assumes only 1 year, edit
-  // useEffect(() => {
-  //   if (state.nmpFile) {
-  //     const parsedData = JSON.parse(state.nmpFile);
-  //     setManures(parsedData.ImportedManures);
-  //   }
-  // }, [state]);
 
   return (
     <Card

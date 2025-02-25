@@ -6,7 +6,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { APICacheContext } from '@/context/APICacheContext';
-// import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import { Button, Dropdown, InputField, Modal, RadioButton } from '../../../components/common';
 import {
   ContentWrapper,
@@ -29,10 +28,11 @@ import {
   RowContainer,
   ValueText,
 } from '@/views/FieldAndSoil/Crops/crops.styles';
+import { NMPFileImportedManureData } from '@/types';
 
-// interface ManureListProps {
-//   manures: NMPFileImportedManureData[];
-// }
+interface ManureListProps {
+  manures: NMPFileImportedManureData[];
+}
 
 interface ManureType {
   id: number;
@@ -52,15 +52,14 @@ interface ManureType {
   defaultSolidMoisture: number;
 }
 
-export default function NutrientAnalysis() {
-  // { manures }: ManureListProps import when tab complete
+export default function NutrientAnalysis({ manures }: ManureListProps) {
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   // manure types data from db
   const [manureTypesData, setManureTypesData] = useState<ManureType[]>([]);
-  // an array of objects to hold nutrient analysis form data
   // for each manuresource user can create nutrient analysis' objects
+  // replace with nmpfile
   const [nutrientAnalysisFormData, setNutrientAnalysisFormData] = useState<
     {
       ManureSource: string;
@@ -78,45 +77,6 @@ export default function NutrientAnalysis() {
     MaterialName: '',
     Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
   });
-
-  const mockImportedManures = [
-    {
-      Id: 1,
-      Name: 'Manure A',
-      ManureClass: 'Class 1',
-      SolidLiquid: 'Solid',
-      Moisture: '10',
-      Nitrogen: 5,
-      Ammonia: 1.2,
-      Phosphorous: 2.3,
-      Potassium: 3.4,
-      DryMatterId: 100,
-      NMineralizationId: 200,
-      SortNum: 1,
-      CubicYardConversion: 1.1,
-      Nitrate: 0.5,
-      StaticDataVersionId: 1,
-      DefaultSolidMoisture: 8,
-    },
-    {
-      Id: 2,
-      Name: 'Manure B',
-      ManureClass: 'Class 2',
-      SolidLiquid: 'Liquid',
-      Moisture: '15',
-      Nitrogen: 4,
-      Ammonia: 0.9,
-      Phosphorous: 1.7,
-      Potassium: 2.1,
-      DryMatterId: 101,
-      NMineralizationId: 201,
-      SortNum: 2,
-      CubicYardConversion: 1.2,
-      Nitrate: 0.3,
-      StaticDataVersionId: 2,
-      DefaultSolidMoisture: 7,
-    },
-  ];
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
@@ -236,6 +196,10 @@ export default function NutrientAnalysis() {
     });
   }, [apiCache]);
 
+  useEffect(() => {
+    console.log(manures);
+  }, [manures]);
+
   return (
     <div>
       {/* table with source of Material, material type, moisture, N, P, K, edit and delete button */}
@@ -279,11 +243,10 @@ export default function NutrientAnalysis() {
       </ContentWrapper>
       <CenterButtonWrapper>
         {/* button to add a nutrient analysis if there are manures to add it to */}
-        {/* add a new nutrient analysis */}
         <Button
           variant="primary"
           size="sm"
-          disabled={mockImportedManures.length === 0}
+          disabled={manures.length === 0}
           text="Add Nutrient Analysis"
           handleClick={() => setIsModalVisible(true)}
         />
@@ -332,13 +295,13 @@ export default function NutrientAnalysis() {
             label="Source of Material"
             name="ManureSource"
             value={analysisForm.ManureSource}
-            options={mockImportedManures.map((manure) => ({
-              value: manure.Name,
-              label: manure.Name,
+            options={manures.map((manure) => ({
+              value: manure.MaterialName,
+              label: manure.MaterialName,
             }))}
             onChange={handleChange}
           />
-          {mockImportedManures.length > 0 && (
+          {manures.length > 0 && (
             <>
               <DropdownWrapper>
                 <Dropdown

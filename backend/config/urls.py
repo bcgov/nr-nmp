@@ -29,7 +29,6 @@ urlpatterns = [
     path('api/', include('apps.animals.urls')),
     path('api/', include('apps.crops.urls')),
     path('api/', include('apps.shared.urls')),
-    path('api/', include('apps.manure.urls')),
-    path('api/', include('apps.fertilizers.urls')),
     path('api/', include('apps.manures.urls')),
+    path('api/', include('apps.fertilizers.urls')),
 ]
