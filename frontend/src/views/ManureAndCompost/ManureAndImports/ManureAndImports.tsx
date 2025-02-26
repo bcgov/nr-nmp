@@ -176,6 +176,11 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     setIsModalVisible(false);
   };
 
+  const handleAddManure = () => {
+    setManureFormData(DefaultManureFormData);
+    setIsModalVisible(true);
+  };
+
   useEffect(() => {
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
@@ -200,7 +205,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
       <ButtonContainer hasManure={manures.length > 0}>
         <Button
           text="Add Manure"
-          handleClick={() => setIsModalVisible(true)}
+          handleClick={handleAddManure}
           aria-label="Add Imported Manure"
           variant="primary"
           size="sm"
@@ -299,7 +304,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           <>
             {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
             <Dropdown
-              label="(Units)"
+              label="Units"
               name="Units"
               value={manureFormData.Units || ''}
               options={liquidManureDropdownOptions.map((manure) => ({
@@ -314,7 +319,7 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
             {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
 
             <Dropdown
-              label="(Units)"
+              label="Units"
               name="Units"
               value={manureFormData.Units || ''}
               options={solidManureDropdownOptions.map((manure) => ({
