@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'apps.crops',
     'apps.animals',
     'apps.shared',
-    'apps.manure',
+    'apps.manures',
     'apps.fertilizers',
 ]
 
