@@ -5,10 +5,16 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { ListItem, ListItemContainer } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
+import { ListItem } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import { AnimalData, BeefCattleData } from './types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
-import { FlexRowContainer } from './addAnimals.styles';
+import {
+  BeefCattleYesNoWrapper,
+  EditListItemBody,
+  EditListItemHeader,
+  FlexRowContainer,
+  ListItemContainer,
+} from './addAnimals.styles';
 
 interface BeefCattleSubtype {
   id: number;
@@ -135,9 +141,9 @@ export default function BeefCattle({
           </ListItem>
         </ListItemContainer>
       ) : (
-        <div>Edit Animal</div>
+        <EditListItemHeader>Edit Animal</EditListItemHeader>
       )}
-      <div {...getCollapseProps()}>
+      <EditListItemBody {...getCollapseProps()}>
         <FlexRowContainer>
           <Dropdown
             label="Cattle Type"
@@ -153,17 +159,18 @@ export default function BeefCattle({
             value={formData.animalsPerFarm?.toString() || ''}
             onChange={handleInputChange}
           />
-        </FlexRowContainer>
-        <FlexRowContainer>
-          <YesNoRadioButtons
-            name="yes-no"
-            text="Do you pile or collect manure from these animals?"
-            handleYes={() => setShowCollectionDays(true)}
-            handleNo={() => {
-              setShowCollectionDays(false);
-              setFormData((prev) => ({ ...prev, collectionDays: undefined }));
-            }}
-          />
+          <BeefCattleYesNoWrapper>
+            <YesNoRadioButtons
+              name="yes-no"
+              text="Do you pile or collect manure from these animals?"
+              handleYes={() => setShowCollectionDays(true)}
+              handleNo={() => {
+                setShowCollectionDays(false);
+                setFormData((prev) => ({ ...prev, collectionDays: undefined }));
+              }}
+              omitWrapper
+            />
+          </BeefCattleYesNoWrapper>
           {showCollectionDays && (
             <InputField
               label="How long is the manure collected?"
@@ -182,7 +189,7 @@ export default function BeefCattle({
           size="sm"
           disabled={false}
         />
-      </div>
+      </EditListItemBody>
     </>
   );
 }

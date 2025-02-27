@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
-// Make own style file if necessary
-import { SelectorContainer } from '@/views/FarmInformation/farmInformation.styles';
 import RadioButton from '../RadioButton/RadioButton';
+import { RadioButtonsWrapper, StyledSpan } from './yesNoRadioButtons.styles';
 
 interface YesNoRadioButtonProps {
   name: string;
   text: string;
   handleYes: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleNo: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  omitWrapper?: boolean;
 }
 
-function YesNoRadioButtons({ name, text, handleYes, handleNo }: YesNoRadioButtonProps) {
+function YesNoRadioButtons({
+  name,
+  text,
+  handleYes,
+  handleNo,
+  omitWrapper,
+}: YesNoRadioButtonProps) {
   const [isYes, setIsYes] = useState<boolean>(false);
-  return (
-    <SelectorContainer>
-      <span style={{ marginRight: '8px' }}>{text}</span>
+  const unwrappedElements = (
+    <>
+      <StyledSpan>{text}</StyledSpan>
       <RadioButton
         label="Yes"
         name={name}
@@ -35,7 +41,12 @@ function YesNoRadioButtons({ name, text, handleYes, handleNo }: YesNoRadioButton
           handleNo(e);
         }}
       />
-    </SelectorContainer>
+    </>
+  );
+  return omitWrapper ? (
+    unwrappedElements
+  ) : (
+    <RadioButtonsWrapper>{unwrappedElements}</RadioButtonsWrapper>
   );
 }
 

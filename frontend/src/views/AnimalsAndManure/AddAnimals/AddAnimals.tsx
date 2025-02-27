@@ -1,13 +1,21 @@
 /* eslint-disable no-param-reassign */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import useAppService from '@/services/app/useAppService';
-import { Button, Dropdown } from '@/components/common';
+import { Dropdown } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData } from './types';
 import NMPFile from '@/types/NMPFile';
 import BeefCattle from './BeefCattle';
-import { FlexContainer, MarginWrapper } from './addAnimals.styles';
-import { Column, Header } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
+import {
+  Header,
+  FlexContainer,
+  AddButton,
+  MarginWrapperOne,
+  MarginWrapperTwo,
+} from './addAnimals.styles';
+import { Column } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 import DairyCattle from './DairyCattle/DairyCattle';
@@ -174,8 +182,8 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
         {elems}
       </div>
       <FlexContainer>
-        <MarginWrapper>Add:</MarginWrapper>
-        <MarginWrapper>
+        <MarginWrapperOne>Add:</MarginWrapperOne>
+        <MarginWrapperTwo>
           <Dropdown
             label=""
             name="Animals"
@@ -184,18 +192,18 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
             onChange={(e) => setSelectedAnimal(e.target.value)}
             flex="0.5"
           />
-        </MarginWrapper>
-        <Button
-          text="+"
-          size="sm"
-          disabled={selectedAnimal === null}
-          handleClick={() => {
+        </MarginWrapperTwo>
+        <AddButton
+          type="button"
+          onClick={() => {
             handleAdd(selectedAnimal as string);
             setSelectedAnimal(null);
           }}
+          disabled={selectedAnimal === null}
           aria-label="Add"
-          variant="primary"
-        />
+        >
+          <FontAwesomeIcon icon={faPlus} />
+        </AddButton>
       </FlexContainer>
     </div>
   );
