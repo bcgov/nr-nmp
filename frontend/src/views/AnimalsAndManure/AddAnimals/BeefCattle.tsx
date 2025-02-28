@@ -144,51 +144,56 @@ export default function BeefCattle({
         <EditListItemHeader>Edit Animal</EditListItemHeader>
       )}
       <EditListItemBody {...getCollapseProps()}>
-        <FlexRowContainer>
-          <Dropdown
-            label="Cattle Type"
-            name="animalSubtype"
-            value={formData.subtype || ''}
-            options={subtypeOptions}
-            onChange={handleSubtypeChange}
-          />
-          <InputField
-            label="Average Animal Number on Farm"
-            type="text"
-            name="animalsPerFarm"
-            value={formData.animalsPerFarm?.toString() || ''}
-            onChange={handleInputChange}
-          />
-          <BeefCattleYesNoWrapper>
-            <YesNoRadioButtons
-              name="yes-no"
-              text="Do you pile or collect manure from these animals?"
-              handleYes={() => setShowCollectionDays(true)}
-              handleNo={() => {
-                setShowCollectionDays(false);
-                setFormData((prev) => ({ ...prev, collectionDays: undefined }));
-              }}
-              omitWrapper
+        <form onSubmit={handleSave}>
+          <FlexRowContainer>
+            <Dropdown
+              label="Cattle Type"
+              name="animalSubtype"
+              value={formData.subtype || ''}
+              options={subtypeOptions}
+              onChange={handleSubtypeChange}
+              required
             />
-          </BeefCattleYesNoWrapper>
-          {showCollectionDays && (
             <InputField
-              label="How long is the manure collected?"
+              label="Average Animal Number on Farm"
               type="text"
-              name="daysCollected"
-              value={formData.daysCollected?.toString() || ''}
+              name="animalsPerFarm"
+              value={formData.animalsPerFarm?.toString() || ''}
               onChange={handleInputChange}
+              required
             />
-          )}
-        </FlexRowContainer>
-        <Button
-          text="Submit"
-          handleClick={handleSave}
-          aria-label="Submit"
-          variant="primary"
-          size="sm"
-          disabled={false}
-        />
+            <BeefCattleYesNoWrapper>
+              <YesNoRadioButtons
+                name="yes-no"
+                text="Do you pile or collect manure from these animals?"
+                handleYes={() => setShowCollectionDays(true)}
+                handleNo={() => {
+                  setShowCollectionDays(false);
+                  setFormData((prev) => ({ ...prev, collectionDays: undefined }));
+                }}
+                omitWrapper
+              />
+            </BeefCattleYesNoWrapper>
+            {showCollectionDays && (
+              <InputField
+                label="How long is the manure collected?"
+                type="text"
+                name="daysCollected"
+                value={formData.daysCollected?.toString() || ''}
+                onChange={handleInputChange}
+                required
+              />
+            )}
+          </FlexRowContainer>
+          <Button
+            text="Submit"
+            handleClick={handleSave}
+            aria-label="Submit"
+            variant="primary"
+            size="sm"
+            disabled={false}
+          />
+        </form>
       </EditListItemBody>
     </>
   );

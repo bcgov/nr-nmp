@@ -80,6 +80,7 @@ export default function MilkingFields({
           setMilkProduction(e.target.value);
           handleChange(e);
         }}
+        required
       />
       <InputField
         label="Milking Centre Wash Water"
@@ -90,6 +91,7 @@ export default function MilkingFields({
           setWashWater(e.target.value);
           handleChange(e);
         }}
+        required
       />
       <Dropdown
         label="(Units)"
@@ -97,6 +99,7 @@ export default function MilkingFields({
         value={washWaterUnit || perDayPerAnimalUnit}
         options={washWaterOptions}
         onChange={handleUnitChange}
+        required
       />
     </>
   );
