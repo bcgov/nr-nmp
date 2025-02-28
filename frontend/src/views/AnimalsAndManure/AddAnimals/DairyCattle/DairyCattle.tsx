@@ -1,5 +1,3 @@
-/* eslint-disable no-continue */
-/* eslint-disable no-case-declarations */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,21 +58,14 @@ export default function DairyCattle({
   myIndex,
 }: DairyCattleProps) {
   const [formData, setFormData] = useState<DairyCattleData>(initData(startData));
+  const [lastSaved, setLastSaved] = useState<DairyCattleData>(formData);
   const apiCache = useContext(APICacheContext);
-
-  // Dairy cows have both a subtype and a breed
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
-  const selectedSubtypeName = useMemo(() => {
-    if (!formData.subtype || subtypes.length === 0) return '';
-    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    return subtype.name;
-  }, [formData.subtype, subtypes]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
 
-  // Initial values for milking fields, if "Milking cow" is selected
+  // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
     if (subtypes.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === milkingCowId);
@@ -90,54 +81,58 @@ export default function DairyCattle({
     return milkingCow.milkproduction * breed.breedmanurefactor;
   }, [subtypes, breeds, formData.breed]);
 
+  // Props for the collapsed view //
+  const selectedSubtypeName = useMemo(() => {
+    if (!lastSaved.subtype || subtypes.length === 0) return '';
+    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
+    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    return subtype.name;
+  }, [lastSaved.subtype, subtypes]);
+
   const annualManure = useMemo(() => {
     if (
-      !formData.subtype ||
-      !formData.animalsPerFarm ||
-      !formData.manureType ||
-      formData.grazingDaysPerYear === undefined ||
+      !lastSaved.subtype ||
+      !lastSaved.animalsPerFarm ||
+      !lastSaved.manureType ||
+      lastSaved.grazingDaysPerYear === undefined ||
       subtypes.length === 0
     )
       return 0;
-    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
     if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    const breed = breeds.find((b) => b.id.toString() === formData.breed);
+    const breed = breeds.find((b) => b.id.toString() === lastSaved.breed);
     if (breed === undefined) throw new Error('Chosen breed is missing from list.');
-    const nonGrazingDays = 365 - formData.grazingDaysPerYear;
+    const nonGrazingDays = 365 - lastSaved.grazingDaysPerYear;
 
     let extraCoefficient;
-    if (formData.subtype === milkingCowId) {
-      if (formData.milkProduction === undefined) return 0;
+    if (lastSaved.subtype === milkingCowId) {
+      if (lastSaved.milkProduction === undefined) return 0;
       const expectedMilkProduction = subtype.milkproduction * breed.breedmanurefactor;
       // Due to potential floating point issues, round factor to 1 if numbers are close
       const milkProdPercent =
-        Math.abs(expectedMilkProduction - formData.milkProduction) < 1
+        Math.abs(expectedMilkProduction - lastSaved.milkProduction) < 1
           ? 1
-          : formData.milkProduction / expectedMilkProduction;
+          : lastSaved.milkProduction / expectedMilkProduction;
       extraCoefficient = breed.breedmanurefactor * milkProdPercent;
     } else {
       extraCoefficient = breed.breedmanurefactor;
     }
 
-    if (formData.manureType === 'liquid') {
-      return Math.round(
-        calculateAnnualLiquidManure(
-          subtype.liquidpergalperanimalperday,
-          formData.animalsPerFarm,
-          nonGrazingDays,
-          extraCoefficient,
-        ),
-      );
-    }
-    return Math.round(
-      calculateAnnualSolidManure(
-        subtype.solidperpoundperanimalperday,
-        formData.animalsPerFarm,
+    if (lastSaved.manureType === 'liquid') {
+      return calculateAnnualLiquidManure(
+        subtype.liquidpergalperanimalperday,
+        lastSaved.animalsPerFarm,
         nonGrazingDays,
         extraCoefficient,
-      ),
+      );
+    }
+    return calculateAnnualSolidManure(
+      subtype.solidperpoundperanimalperday,
+      lastSaved.animalsPerFarm,
+      nonGrazingDays,
+      extraCoefficient,
     );
-  }, [formData, subtypes, breeds]);
+  }, [lastSaved, subtypes, breeds]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
@@ -177,6 +172,7 @@ export default function DairyCattle({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Props for expanded view //
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -190,6 +186,7 @@ export default function DairyCattle({
   const handleSave = (e: FormEvent) => {
     e.preventDefault();
     saveData(formData, myIndex);
+    setLastSaved(formData);
     setExpanded(false);
   };
 
@@ -199,7 +196,7 @@ export default function DairyCattle({
         <div key={`dairy-${myIndex}`}>
           <ListItemContainer>
             <ListItem>{selectedSubtypeName}</ListItem>
-            <ListItem>{`${annualManure} ${formData.manureType === 'liquid' ? 'U.S. gallon' : 'ton'}${annualManure === 1 ? '' : 's'}`}</ListItem>
+            <ListItem>{`${Math.round(annualManure)} ${formData.manureType === 'liquid' ? 'U.S. gallon' : 'ton'}${annualManure === 1 ? '' : 's'}`}</ListItem>
             <ListItem align="right">
               <button
                 type="button"
