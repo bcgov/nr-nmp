@@ -4,12 +4,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { ListItem, ListItemContainer } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
+import { ListItem } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import { AnimalData, DairyCattleData, perDayPerAnimalUnit } from '../types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
 import MilkingFields from './MilkingFields';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
+import {
+  EditListItemBody,
+  EditListItemHeader,
+  FlexRowContainer,
+  ListItemContainer,
+} from '../addAnimals.styles';
 
 const milkingCowId: string = '9';
 
@@ -215,56 +221,58 @@ export default function DairyCattle({
           )}
         </div>
       ) : (
-        <div>Edit Animal</div>
+        <EditListItemHeader>Edit Animal</EditListItemHeader>
       )}
-      <div {...getCollapseProps()}>
-        <Dropdown
-          label="Sub Type"
-          name="subtype"
-          value={formData.subtype || ''}
-          options={subtypeOptions}
-          onChange={handleChange}
-        />
-        <Dropdown
-          label="Breed"
-          name="breed"
-          value={formData.breed || ''}
-          options={breedOptions}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Average Animal Number on Farm"
-          type="text"
-          name="animalsPerFarm"
-          value={formData.animalsPerFarm?.toString() || ''}
-          onChange={handleChange}
-        />
-        <Dropdown
-          label="Manure Type"
-          name="manureType"
-          value={formData.manureType || ''}
-          options={manureTypeOptions}
-          onChange={handleChange}
-        />
-        <InputField
-          label="Grazing Days per Year"
-          type="text"
-          name="grazingDaysPerYear"
-          value={formData.grazingDaysPerYear?.toString() || ''}
-          onChange={handleChange}
-        />
-        {formData.subtype === milkingCowId &&
-          milkProductionInit !== undefined &&
-          washWaterInit !== undefined && (
-            <MilkingFields
-              milkProductionInit={milkProductionInit}
-              washWaterInit={washWaterInit}
-              animalsPerFarm={formData.animalsPerFarm || 0}
-              washWaterUnit={formData.washWaterUnit}
-              handleChange={handleChange}
-              setFormData={setFormData}
-            />
-          )}
+      <EditListItemBody {...getCollapseProps()}>
+        <FlexRowContainer>
+          <Dropdown
+            label="Sub Type"
+            name="subtype"
+            value={formData.subtype || ''}
+            options={subtypeOptions}
+            onChange={handleChange}
+          />
+          <Dropdown
+            label="Breed"
+            name="breed"
+            value={formData.breed || ''}
+            options={breedOptions}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Average Animal Number on Farm"
+            type="text"
+            name="animalsPerFarm"
+            value={formData.animalsPerFarm?.toString() || ''}
+            onChange={handleChange}
+          />
+          <Dropdown
+            label="Manure Type"
+            name="manureType"
+            value={formData.manureType || ''}
+            options={manureTypeOptions}
+            onChange={handleChange}
+          />
+          <InputField
+            label="Grazing Days per Year"
+            type="text"
+            name="grazingDaysPerYear"
+            value={formData.grazingDaysPerYear?.toString() || ''}
+            onChange={handleChange}
+          />
+          {formData.subtype === milkingCowId &&
+            milkProductionInit !== undefined &&
+            washWaterInit !== undefined && (
+              <MilkingFields
+                milkProductionInit={milkProductionInit}
+                washWaterInit={washWaterInit}
+                animalsPerFarm={formData.animalsPerFarm || 0}
+                washWaterUnit={formData.washWaterUnit}
+                handleChange={handleChange}
+                setFormData={setFormData}
+              />
+            )}
+        </FlexRowContainer>
         <Button
           text="Submit"
           handleClick={handleSave}
@@ -273,7 +281,7 @@ export default function DairyCattle({
           size="sm"
           disabled={false}
         />
-      </div>
+      </EditListItemBody>
     </>
   );
 }
