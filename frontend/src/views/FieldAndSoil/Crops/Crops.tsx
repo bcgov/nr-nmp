@@ -130,6 +130,7 @@ function Crops({ fields, setFields }: FieldListProps) {
             'test: ',
             getCropRequirementP205(
               field,
+              setFields,
               combinedCropsData,
               JSON.parse(state.nmpFile).farmDetails.FarmRegion,
             ),

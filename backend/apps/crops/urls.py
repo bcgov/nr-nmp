@@ -13,3 +13,4 @@ urlpatterns = [
     path('soiltestmethods/', CropsViewset.as_view({'get': 'soilTestMethods'})),
     path('cropsconversionfactors/', CropsViewset.as_view({'get': 'conversionFactors'})),
 ]
+
