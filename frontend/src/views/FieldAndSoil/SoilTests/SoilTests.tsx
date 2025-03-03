@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, Modal, InputField, Button } from '../../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
+import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 import {
   InfoBox,
   ListItemContainer,
@@ -25,16 +26,7 @@ interface FieldListProps {
 
 export default function SoilTests({ fields, setFields }: FieldListProps) {
   const apiCache = useContext(APICacheContext);
-  const [soilTestData, setSoilTestData] = useState({
-    SoilTest: '1',
-    ConvertedKelownaK: '2',
-    ConvertedKelownaP: '4',
-    ValP: '',
-    sampleDate: '',
-    valK: '',
-    valNO3H: '',
-    valPH: '',
-  });
+  const [soilTestData, setSoilTestData] = useState(defaultSoilTestData);
   const [soilTestMethods, setSoilTestMethods] = useState<
     {
       id: number;
@@ -130,7 +122,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
         <Dropdown
           label="Lab (Soil Test Method)"
           name="SoilTest"
-          value={soilTestData.SoilTest}
+          value={soilTestData.SoilTest || ''}
           options={soilTestMethods.map((method) => ({
             value: method.id,
             label: method.name,
@@ -225,7 +217,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="Sample Month"
             type="month"
             name="sampleDate"
-            value={soilTestData.sampleDate}
+            value={soilTestData.sampleDate || ''}
             onChange={handleChange}
           />
           {errors.valNO3H && <ErrorText>{errors.valNO3H}</ErrorText>}
@@ -233,7 +225,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="NO3-N (ppm), nitrate-nitrogen"
             type="text"
             name="valNO3H"
-            value={soilTestData.valNO3H}
+            value={soilTestData.valNO3H || ''}
             onChange={handleChange}
           />
           {errors.ValP && <ErrorText>{errors.ValP}</ErrorText>}
@@ -241,7 +233,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="P (ppm), phosphorus"
             type="text"
             name="ValP"
-            value={soilTestData.ValP}
+            value={soilTestData.ValP || ''}
             onChange={handleChange}
           />
           {errors.valK && <ErrorText>{errors.valK}</ErrorText>}
@@ -249,7 +241,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="K (ppm), potassium"
             type="text"
             name="valK"
-            value={soilTestData.valK}
+            value={soilTestData.valK || ''}
             onChange={handleChange}
           />
           {errors.valPH && <ErrorText>{errors.valPH}</ErrorText>}
@@ -257,7 +249,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="pH"
             type="text"
             name="valPH"
-            value={soilTestData.valPH}
+            value={soilTestData.valPH || ''}
             onChange={handleChange}
           />
         </Modal>

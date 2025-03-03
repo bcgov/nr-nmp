@@ -7,6 +7,7 @@ urlpatterns = [
     path('crops/', CropsViewset.as_view({'get': 'crops'}), name='crops'),
     path('previouscroptypes/', CropsViewset.as_view({'get': 'previousCropTypes'})),
     path('cropsoiltestphosphorousregions/', CropsViewset.as_view({'get': 'cropSoilTestPhosphorousRegions'})),
+    path('cropsoiltestphosphorousregions/<int:cropId>/<int:SoilTestPhosphorousRegionCode>/', CropsViewset.as_view({'get': 'cropsoiltestphosphorousregions'})),
     path('soiltestphosphorousrecommendation/', CropsViewset.as_view({'get': 'soilTestPhosphorousRecommendation'})),
     path('soiltestphosphorouskelonwaranges/', CropsViewset.as_view({'get': 'soilTestPhosphorousKelownaRanges'})),
     path('soiltestmethods/', CropsViewset.as_view({'get': 'soilTestMethods'})),
