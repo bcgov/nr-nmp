@@ -9,7 +9,7 @@ class CropTypes(models.Model):
     modifynitrogen = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'crop_types'
         
 class Crops(models.Model):
@@ -29,5 +29,17 @@ class Crops(models.Model):
     harvestbushelsperton = models.FloatField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'crops'
+
+# New model that will be managed by Django ORM
+class YieldFactor(models.Model):
+    crop = models.ForeignKey(Crops, on_delete=models.CASCADE, related_name='yield_factors')
+    region = models.CharField(max_length=100)
+    yield_value = models.FloatField(help_text="Yield factor value for the crop in this region")
+    unit = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.crop.cropname} - {self.region}: {self.yield_value} {self.unit}"

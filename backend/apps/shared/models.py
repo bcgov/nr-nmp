@@ -9,7 +9,7 @@ class Regions(models.Model):
     sortorder = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'regions'
 
 class Subregion(models.Model):
@@ -20,5 +20,15 @@ class Subregion(models.Model):
     regionid = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'subregion'
+
+# New model that will be managed by Django ORM
+class Note(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.title

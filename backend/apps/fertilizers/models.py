@@ -7,7 +7,7 @@ class FertilizerTypes(models.Model):
     custom = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'fertilizer_types'
 
 class FertilizerUnits(models.Model):
@@ -19,7 +19,7 @@ class FertilizerUnits(models.Model):
     farmrequirednutrientsstdunitsareaconversion = models.FloatField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'fertilizer_units'
 
 class Fertilizers(models.Model):
@@ -32,5 +32,5 @@ class Fertilizers(models.Model):
     sortnum = models.FloatField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'fertilizers'
