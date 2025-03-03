@@ -29,6 +29,24 @@ export async function getSTPKelownaRangeByPpm(STP: number) {
   return response;
 }
 
+export async function getSTPRecommend(
+  stpKelownaRangeId: number,
+  soilTestPhosphorousRegionCd: number,
+  phosphorousCropGroupRegionCd: number,
+) {
+  const response = await axios.get(
+    `${env.VITE_BACKEND_URL}/api/soiltestphosphorousrecommendations/`,
+  );
+
+  const recommendations = response.data.find(
+    (stp: any) =>
+      stp.SoilTestPhosphorousKelownaRangeId === stpKelownaRangeId &&
+      stp.SoilTestPhosphorousRegionCode === soilTestPhosphorousRegionCd &&
+      stp.PhosphorousCropGroupRegionCode === phosphorousCropGroupRegionCd,
+  );
+  return recommendations;
+}
+
 export async function getCropRequirementP205(
   field: NMPFileFieldData,
   setFields: (fields: any[]) => void,
@@ -39,9 +57,12 @@ export async function getCropRequirementP205(
   const conversionFactors = response.data[0];
   const region = await getRegion(regionId);
 
-  //   NEED TO ADD DEFAULT IF NO SOIL TEST
   const updatedField = { ...field };
-  if (field.SoilTest === undefined) {
+  if (
+    field.SoilTest == undefined ||
+    field.SoilTest == null ||
+    Object.keys(field.SoilTest).length === 0
+  ) {
     updatedField.SoilTest.valNO3H = defaultSoilTestData.valNO3H;
     updatedField.SoilTest.ValP = defaultSoilTestData.ValP;
     updatedField.SoilTest.valK = defaultSoilTestData.valK;
@@ -53,12 +74,11 @@ export async function getCropRequirementP205(
 
   // (SOIL TEST Phosphrous)
   let STP = field.SoilTest.ConvertedKelownaP;
-  console.log('STP: ', STP);
-  if (STP == '0' || STP == undefined) STP = conversionFactors.DefaultSoilTestKelownaPhosphorous;
+  if (STP == '0' || STP == undefined) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 
   // (SOIL TEST Potassium)
   let STK = field.SoilTest.ConvertedKelownaK;
-  if (STK == '0' || STP == undefined) STK = conversionFactors.DefaultSoilTestKelownaPotassium;
+  if (STK == '0' || STP == undefined) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
   const cropSTPRegionCd = await getCropSoilTestPhosphorousRegions(
     combinedCropData.cropId ? Number(combinedCropData.cropId) : 0,
@@ -69,13 +89,32 @@ export async function getCropRequirementP205(
 
   const sTPKelownaRange = await getSTPKelownaRangeByPpm(Number(STP));
 
-  console.log('HERE: ', sTPKelownaRange);
+  const stpKelownaRangeId = sTPKelownaRange.id;
+
+  console.log('HERE: ', stpKelownaRangeId);
+
+  if (!phosphorousCropGroupRegionCd == null) {
+    return 0;
+  }
+  const sTPRecommend = await getSTPRecommend(
+    stpKelownaRangeId,
+    region[0].soiltestphosphorousregioncd,
+    phosphorousCropGroupRegionCd,
+  );
+  return (
+    Number(sTPRecommend.p2o5recommendationkilogramperhectare) *
+    conversionFactors.kilogramperhectaretopoundperacreconversion
+  );
+
+  // SoilTestPhosphorousRecommendation sTPRecommend = _sd.GetSTPRecommend(stp_kelowna_range_id, region.SoilTestPhosphorousRegionCd, Convert.ToInt16(phosphorous_crop_group_region_cd));
+  // crr.P2O5_Requirement = Convert.ToInt32(Convert.ToDecimal(sTPRecommend.P2O5RecommendationKilogramPerHectare) * _cf.KilogramPerHectareToPoundPerAcreConversion);
+
   // p2o5 recommend calculations
   //   CropSoilTestPhosphorousRegion cropSTPRegionCd = _sd.GetCropSTPRegionCd(cropid, region.SoilTestPhosphorousRegionCd);
   //   int? phosphorous_crop_group_region_cd = cropSTPRegionCd.PhosphorousCropGroupRegionCode;
   //   SoilTestPhosphorousKelownaRange sTPKelownaRange = _sd.GetSTPKelownaRangeByPpm(_STP);
-
   //   int stp_kelowna_range_id = sTPKelownaRange.Id;
+
   //   if (phosphorous_crop_group_region_cd == null)
   //       crr.P2O5_Requirement = 0;
   //   else
@@ -87,5 +126,4 @@ export async function getCropRequirementP205(
   //   console.log(conversionFactors);
   //   console.log(region);
   //   console.log(field.SoilTest);
-  return 0;
 }

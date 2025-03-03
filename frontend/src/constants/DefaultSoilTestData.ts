@@ -7,7 +7,7 @@ const defaultSoilTestData: SoilTestData = {
   valK: '500',
   valPH: '6',
   ConvertedKelownaK: '500',
-  ConvertedKelownaP: '250',
+  ConvertedKelownaP: '250000',
   sampleDate: '',
 };
 
