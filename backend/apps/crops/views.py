@@ -25,12 +25,12 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
-    def cropSoilTestPhosphorousRegions(self, request, cropId=None, SoilTestPhosphorousRegionCode=None):
+    def cropSoilTestPhosphorousRegions(self, request, cropid=None, soiltestphosphorousregioncode=None):
         crop_soil_test_phosphorous_regions = None
-        if cropId == None and SoilTestPhosphorousRegionCode == None:
+        if cropid == None and soiltestphosphorousregioncode == None:
             crop_soil_test_phosphorous_regions = CropSoilTestPhosphorousRegions.objects.all()
         else:
-            crop_soil_test_phosphorous_regions = CropSoilTestPhosphorousRegions.objects.filter(cropId=cropId, SoilTestPhosphorousRegionCode=SoilTestPhosphorousRegionCode)
+            crop_soil_test_phosphorous_regions = CropSoilTestPhosphorousRegions.objects.filter(cropid=cropid, soiltestphosphorousregioncode=soiltestphosphorousregioncode)
         serializer = CropSoilTestPhosphorousRegionsSerializer(crop_soil_test_phosphorous_regions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

@@ -13,9 +13,12 @@ export async function getCropSoilTestPhosphorousRegions(
   cropId: number,
   soilTestPotassiumRegionCode: number,
 ) {
+  console.log('cropId: ', cropId);
+  console.log('soilTestPotassiumRegionCode: ', soilTestPotassiumRegionCode);
   const response = await axios.get(
     `${env.VITE_BACKEND_URL}/api/cropsoiltestphosphorousregions/${cropId}/${soilTestPotassiumRegionCode}/`,
   );
+  console.log('response: ', response);
   return response.data;
 }
 
@@ -38,13 +41,14 @@ export async function getCropRequirementP205(
   // (SOIL TEST Potassium)
   let STK = field.SoilTest.ConvertedKelownaK;
   if (STK == '0') STK = conversionFactors.DefaultSoilTestKelownaPotassium;
-  console.log('field: ', field);
+  console.log('test1: ', combinedCropData.cropId);
+  console.log('test2: ', region[0].soiltestphosphorousregioncd);
   const cropSTPRegionCd = await getCropSoilTestPhosphorousRegions(
     combinedCropData.cropId ? Number(combinedCropData.cropId) : 0,
     region[0].soiltestphosphorousregioncd,
   );
 
-  const phosphorousCropGroupRegionCd = cropSTPRegionCd.PhosphorousCropGroupRegionCode;
+  const phosphorousCropGroupRegionCd = cropSTPRegionCd[0].phosphorouscropgroupregioncode;
 
   console.log('HERE: ', phosphorousCropGroupRegionCd);
   // p2o5 recommend calculations
