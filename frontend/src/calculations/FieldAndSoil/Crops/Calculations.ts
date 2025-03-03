@@ -25,7 +25,6 @@ export async function getSTPKelownaRangeByPpm(STP: number) {
   const response = ranges.data.find(
     (range: any) => range.rangelow <= STP && range.rangehigh >= STP,
   );
-  console.log('HERE: ', response);
   return response;
 }
 
@@ -35,15 +34,18 @@ export async function getSTPRecommend(
   phosphorousCropGroupRegionCd: number,
 ) {
   const response = await axios.get(
-    `${env.VITE_BACKEND_URL}/api/soiltestphosphorousrecommendations/`,
+    `${env.VITE_BACKEND_URL}/api/soiltestphosphorousrecommendation/`,
   );
+
+  console.log(response.data);
 
   const recommendations = response.data.find(
     (stp: any) =>
-      stp.SoilTestPhosphorousKelownaRangeId === stpKelownaRangeId &&
-      stp.SoilTestPhosphorousRegionCode === soilTestPhosphorousRegionCd &&
-      stp.PhosphorousCropGroupRegionCode === phosphorousCropGroupRegionCd,
+      stp.soiltestphosphorouskelownarangeid == stpKelownaRangeId &&
+      stp.soiltestphosphorousregioncode == soilTestPhosphorousRegionCd &&
+      stp.phosphorouscropgroupregioncode == phosphorousCropGroupRegionCd,
   );
+  console.log(recommendations);
   return recommendations;
 }
 
@@ -90,9 +92,7 @@ export async function getCropRequirementP205(
   const sTPKelownaRange = await getSTPKelownaRangeByPpm(Number(STP));
 
   const stpKelownaRangeId = sTPKelownaRange.id;
-
-  console.log('HERE: ', stpKelownaRangeId);
-
+  console.log('HERE: ', phosphorousCropGroupRegionCd);
   if (!phosphorousCropGroupRegionCd == null) {
     return 0;
   }
@@ -101,6 +101,7 @@ export async function getCropRequirementP205(
     region[0].soiltestphosphorousregioncd,
     phosphorousCropGroupRegionCd,
   );
+  console.log('HERE2: ', sTPRecommend);
   return (
     Number(sTPRecommend.p2o5recommendationkilogramperhectare) *
     conversionFactors.kilogramperhectaretopoundperacreconversion

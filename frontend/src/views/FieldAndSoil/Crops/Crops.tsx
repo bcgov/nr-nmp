@@ -122,25 +122,30 @@ function Crops({ fields, setFields }: FieldListProps) {
     setFields(updatedFields);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (currentFieldIndex !== null) {
-      const updatedFields = fields.map((field, index) => {
-        if (index === currentFieldIndex) {
-          console.log(
-            'test: ',
-            getCropRequirementP205(
-              field,
-              setFields,
-              combinedCropsData,
-              JSON.parse(state.nmpFile).farmDetails.FarmRegion,
-            ),
-          );
-          return { ...field, Crops: [combinedCropsData] };
-        }
-        return field;
-      });
-      setFields(updatedFields);
-      // setIsModalVisible(false);
+      try {
+        const updatedFields = await Promise.all(
+          fields.map(async (field, index) => {
+            if (index === currentFieldIndex) {
+              const cropRequirementP205 = await getCropRequirementP205(
+                field,
+                setFields,
+                combinedCropsData,
+                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+              );
+              console.log('test: ', cropRequirementP205);
+              return { ...field, Crops: [combinedCropsData] };
+            }
+            return field;
+          }),
+        );
+        setFields(updatedFields);
+        // setIsModalVisible(false);
+      } catch (error) {
+        console.error('Error submitting crop data:', error);
+        // Optionally, you can set an error state to display an error message to the user
+      }
     }
   };
 

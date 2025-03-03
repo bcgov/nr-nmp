@@ -57,10 +57,10 @@ class CropSoilTestPhosphorousRegions(models.Model):
 
 class SoilTestPhosphorousRecommendation(models.Model):
     id = models.IntegerField(primary_key=True)
-    soiltestphosphorousratingid = models.IntegerField()
-    soiltestphosphorousratingvalue = models.FloatField()
-    soiltestphosphorousrecommendationpoundperacre = models.FloatField()
-    soiltestphosphorousrecommendationupperlimitpoundperacre = models.FloatField()
+    soiltestphosphorouskelownarangeid = models.IntegerField()
+    soiltestphosphorousregioncode = models.FloatField()
+    phosphorouscropgroupregioncode = models.FloatField()
+    p2o5recommendationkilogramperhectare = models.FloatField()
 
     class Meta:
         managed = False
