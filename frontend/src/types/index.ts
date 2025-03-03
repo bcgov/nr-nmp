@@ -4,6 +4,8 @@ import NMPFileCropData from './NMPFileCropData';
 import NMPFileFieldData from './NMPFileFieldData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 import SolidManureConversionFactors from './SolidManureConversionFactors';
+import Region from './Region';
+import CropsConversionFactors from './CropsConversionFactors';
 
 export type {
   LiquidManureConversionFactors,
@@ -12,4 +14,6 @@ export type {
   NMPFileFieldData,
   NMPFileImportedManureData,
   SolidManureConversionFactors,
+  Region,
+  CropsConversionFactors,
 };

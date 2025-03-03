@@ -6,7 +6,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import useAppService from '@/services/app/useAppService';
 import { Modal, InputField, Dropdown, RadioButton, Button } from '../../../components/common';
+import getCropRequirementP205 from '@/calculations/FieldAndSoil/Crops/Calculations';
 import {
   ContentWrapper,
   Header,
@@ -36,6 +38,7 @@ interface FieldListProps {
 }
 
 function Crops({ fields, setFields }: FieldListProps) {
+  const { state } = useAppService();
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
@@ -121,11 +124,18 @@ function Crops({ fields, setFields }: FieldListProps) {
 
   const handleSubmit = () => {
     if (currentFieldIndex !== null) {
-      const updatedFields = fields.map((field, index) =>
-        index === currentFieldIndex ? { ...field, Crops: [combinedCropsData] } : field,
-      );
+      const updatedFields = fields.map((field, index) => {
+        if (index === currentFieldIndex) {
+          console.log(
+            'test: ',
+            getCropRequirementP205(JSON.parse(state.nmpFile).farmDetails.FarmRegion),
+          );
+          return { ...field, Crops: [combinedCropsData] };
+        }
+        return field;
+      });
       setFields(updatedFields);
-      setIsModalVisible(false);
+      // setIsModalVisible(false);
     }
   };
 

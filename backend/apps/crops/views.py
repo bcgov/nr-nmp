@@ -23,3 +23,33 @@ class CropsViewset(viewsets.ViewSet):
         previous_crops_types = PreviousCropTypes.objects.all()
         serializer = PreviousCropTypesSerializer(previous_crops_types, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def cropSoilTestPhosphorousRegions(self, request):
+        crop_soil_test_phosphorous_regions = CropSoilTestPhosphorousRegions.objects.all()
+        serializer = CropSoilTestPhosphorousRegionsSerializer(crop_soil_test_phosphorous_regions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def soilTestPhosphorousRecommendation(self, request):
+        soil_test_phosphorous_recommendation = SoilTestPhosphorousRecommendation.objects.all()
+        serializer = SoilTestPhosphorousRecommendationSerializer(soil_test_phosphorous_recommendation, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def soilTestPhosphorousKelownaRanges(self, request):
+        soil_test_phosphorous_kelowna_ranges = SoilTestPhosphorousKelownaRanges.objects.all()
+        serializer = SoilTestPhosphorousKelownaRangesSerializer(soil_test_phosphorous_kelowna_ranges, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def soilTestMethods(self, request):
+        soil_test_methods = SoilTestMethods.objects.all()
+        serializer = SoilTestMethodsSerializer(soil_test_methods, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def conversionFactors(self, request):
+        conversion_factors = ConversionFactors.objects.all()
+        serializer = ConversionFactorsSerializer(conversion_factors, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -1,10 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /**
  * @summary This is the Soil Tests Tab
  */
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, Modal, InputField, Button } from '../../../components/common';
+import { APICacheContext } from '@/context/APICacheContext';
 import {
   InfoBox,
   ListItemContainer,
@@ -22,6 +24,7 @@ interface FieldListProps {
 }
 
 export default function SoilTests({ fields, setFields }: FieldListProps) {
+  const apiCache = useContext(APICacheContext);
   const [soilTestData, setSoilTestData] = useState({
     SoilTest: '1',
     ConvertedKelownaK: '2',
@@ -32,14 +35,19 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     valNO3H: '',
     valPH: '',
   });
+  const [soilTestMethods, setSoilTestMethods] = useState<
+    {
+      id: number;
+      name: string;
+      converttokelownaphlessthan72: number;
+      converttokelownaphgreaterthan72: number;
+      converttokelownak: number;
+      sortnum: number;
+    }[]
+  >([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
-
-  const soilTestOptions = [
-    { value: 1, label: 'No Soil Test from within the past 3 years' },
-    { value: 2, label: 'Other Lab (Bicarbonate and Amm Acetate)' },
-  ];
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -98,6 +106,15 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     }
   };
 
+  useEffect(() => {
+    apiCache.callEndpoint('api/soiltestmethods/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setSoilTestMethods(data);
+      }
+    });
+  }, []);
+
   return (
     <div>
       <ContentWrapper hasFields={fields.length > 0}>
@@ -114,7 +131,10 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
           label="Lab (Soil Test Method)"
           name="SoilTest"
           value={soilTestData.SoilTest}
-          options={soilTestOptions}
+          options={soilTestMethods.map((method) => ({
+            value: method.id,
+            label: method.name,
+          }))}
           onChange={handleChange}
         />
         {soilTestData.SoilTest !== '1' && (
