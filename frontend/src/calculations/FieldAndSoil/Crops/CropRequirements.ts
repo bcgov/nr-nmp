@@ -26,7 +26,7 @@ export async function getCropSoilTestRegions(
   return response.data;
 }
 
-export async function getSTPKelownaRangeByPpm(STP: number, endpoint: string) {
+export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
   const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
   const response = ranges.data.find(
     (range: any) => range.rangelow <= STP && range.rangehigh >= STP,
@@ -34,7 +34,7 @@ export async function getSTPKelownaRangeByPpm(STP: number, endpoint: string) {
   return response;
 }
 
-export async function getSTPRecommend(
+export async function getRecommendations(
   kelownaRangeId: number,
   soilTestRegionCd: number,
   cropGroupRegionCd: number,
@@ -101,16 +101,13 @@ export async function getCropRequirementK2O(
 
   const potassiumCropGroupRegionCd = cropSTKRegionCd[0].potassiumcropgroupregioncode;
 
-  const sTKKelownaRange = await getSTPKelownaRangeByPpm(
-    Number(STK),
-    'soiltestpotassiumkelonwaranges',
-  );
+  const sTKKelownaRange = await getKelownaRangeByPpm(Number(STK), 'soiltestpotassiumkelonwaranges');
 
   const stkKelownaRangeId = sTKKelownaRange.id;
   if (!potassiumCropGroupRegionCd == null) {
     return 0;
   }
-  const sTKRecommend = await getSTPRecommend(
+  const sTKRecommend = await getRecommendations(
     stkKelownaRangeId,
     region[0].soiltestpotassiumregioncd,
     potassiumCropGroupRegionCd,
@@ -146,7 +143,7 @@ export async function getCropRequirementP205(
 
   const phosphorousCropGroupRegionCd = cropSTPRegionCd[0].phosphorouscropgroupregioncode;
 
-  const sTPKelownaRange = await getSTPKelownaRangeByPpm(
+  const sTPKelownaRange = await getKelownaRangeByPpm(
     Number(STP),
     'soiltestphosphorouskelonwaranges',
   );
@@ -155,7 +152,7 @@ export async function getCropRequirementP205(
   if (!phosphorousCropGroupRegionCd == null) {
     return 0;
   }
-  const sTPRecommend = await getSTPRecommend(
+  const sTPRecommend = await getRecommendations(
     stpKelownaRangeId,
     region[0].soiltestphosphorousregioncd,
     phosphorousCropGroupRegionCd,
