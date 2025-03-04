@@ -9,7 +9,7 @@ class Regions(models.Model):
     sortorder = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'regions'
 
 class Subregion(models.Model):
@@ -20,5 +20,5 @@ class Subregion(models.Model):
     regionid = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'subregion'

@@ -9,7 +9,7 @@ class CropTypes(models.Model):
     modifynitrogen = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'crop_types'
         
 class Crops(models.Model):
@@ -29,5 +29,5 @@ class Crops(models.Model):
     harvestbushelsperton = models.FloatField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'crops'

@@ -6,7 +6,7 @@ class Animals(models.Model):
     usesortorder = models.BooleanField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'animals'
 
 class AnimalSubtype(models.Model):
@@ -22,7 +22,7 @@ class AnimalSubtype(models.Model):
     sortorder = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'animal_subtype'
 
 class Breed(models.Model):
@@ -32,5 +32,5 @@ class Breed(models.Model):
     breedmanurefactor = models.FloatField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'breed'
