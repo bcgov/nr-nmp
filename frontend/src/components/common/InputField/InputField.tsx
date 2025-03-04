@@ -10,10 +10,23 @@ interface InputFieldProps {
   name: string;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInput?: React.FormEventHandler<HTMLInputElement>;
   flex?: string;
+  maxLength?: number;
+  required?: true;
 }
 
-function InputField({ label, type, name, value, onChange, flex }: InputFieldProps) {
+function InputField({
+  label,
+  type,
+  name,
+  value,
+  onChange,
+  onInput,
+  flex,
+  maxLength,
+  required,
+}: InputFieldProps) {
   return (
     <InputWrapper flex={flex}>
       <StyledLabel htmlFor={name}>{label}</StyledLabel>
@@ -22,6 +35,9 @@ function InputField({ label, type, name, value, onChange, flex }: InputFieldProp
         name={name}
         value={value}
         onChange={onChange}
+        onInput={onInput}
+        maxLength={maxLength}
+        required={required}
       />
     </InputWrapper>
   );

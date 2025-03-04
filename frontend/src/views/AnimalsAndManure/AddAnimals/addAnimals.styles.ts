@@ -35,6 +35,11 @@ export const AddButton = styled.button`
   height: 32px;
   border-radius: 8px;
   color: #ffffff;
+  cursor: pointer;
+  &:disabled {
+    background-color: #a0a0a0;
+    cursor: default;
+  }
 `;
 
 export const FlexForm = styled.div`

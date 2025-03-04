@@ -22,9 +22,10 @@ import DairyCattle from './DairyCattle/DairyCattle';
 
 interface AddAnimalsProps {
   saveData: React.Dispatch<React.SetStateAction<any[]>>;
+  setNextDisabled: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function AddAnimals({ saveData }: AddAnimalsProps) {
+export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProps) {
   const { state } = useAppService();
   const apiCache = useContext(APICacheContext);
   const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
@@ -32,6 +33,8 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
 
   const [formData, setFormData] = useState<(AnimalData | null)[]>([]);
   const [elems, setElems] = useState<(React.ReactNode | null)[]>([]);
+  const [formComplete, setFormComplete] = useState<(boolean | null)[]>([]);
+  const [formExpanded, setFormExpanded] = useState<(boolean | null)[]>([]);
 
   const handleSave = useCallback(
     (data: AnimalData, index: number) => {
@@ -56,6 +59,16 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
       return prev;
     });
     setElems((prev) => {
+      const next = [...prev];
+      next[index] = null;
+      return next;
+    });
+    setFormComplete((prev) => {
+      const next = [...prev];
+      next[index] = null;
+      return next;
+    });
+    setFormExpanded((prev) => {
       const next = [...prev];
       next[index] = null;
       return next;
@@ -95,6 +108,8 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
             startExpanded={index === 0}
             saveData={handleSave}
             onDelete={handleDelete}
+            updateIsComplete={setFormComplete}
+            updateIsExpanded={setFormExpanded}
             myIndex={index}
           />
         );
@@ -117,6 +132,9 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
 
     setFormData(data);
     setElems(dataElems);
+    // Default to open and incomplete to disable the buttons
+    setFormComplete(Array(data.length).fill(false));
+    setFormExpanded(Array(data.length).fill(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -138,6 +156,8 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
             startData={{ id: animalId }}
             saveData={handleSave}
             onDelete={handleDelete}
+            updateIsComplete={setFormComplete}
+            updateIsExpanded={setFormExpanded}
             myIndex={length}
           />,
         );
@@ -155,7 +175,18 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
 
       return next;
     });
+    // Default to open and incomplete to disable the buttons
+    setFormComplete((prev) => prev.concat(false));
+    setFormExpanded((prev) => prev.concat(true));
   };
+
+  useEffect(() => {
+    if (formComplete.length === 0) {
+      setNextDisabled(true);
+    } else {
+      setNextDisabled(formComplete.some((bool) => bool === false));
+    }
+  }, [formComplete, setNextDisabled]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animals/').then((response) => {
@@ -199,7 +230,7 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
             handleAdd(selectedAnimal as string);
             setSelectedAnimal(null);
           }}
-          disabled={selectedAnimal === null}
+          disabled={selectedAnimal === null || formExpanded.some((bool) => bool === true)}
           aria-label="Add"
         >
           <FontAwesomeIcon icon={faPlus} />
