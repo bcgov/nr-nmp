@@ -108,3 +108,34 @@ class ConversionFactors(models.Model):
     class Meta:
         managed = False
         db_table = 'conversion_factors'
+
+class SoilTestPotassiumKelownaRanges(models.Model):
+    id = models.IntegerField(primary_key=True)
+    rangelow = models.IntegerField()
+    rangehigh = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'soil_test_potassium_kelowna_ranges'
+
+
+class SoilTestPotassiumRecommendation(models.Model):
+    id = models.IntegerField(primary_key=True)
+    soiltestpotassiumkelownarangeid = models.IntegerField()
+    soiltestpotassiumregioncode = models.FloatField()
+    potassiumcropgroupregioncode = models.FloatField()
+    k2orecommendationkilogramperhectare = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = 'soil_test_potassium_recommendation'
+
+class CropSoilPotassiumRegions(models.Model):
+    id = models.IntegerField(primary_key=True)
+    cropid = models.IntegerField()
+    soiltestpotassiumregioncode = models.IntegerField()
+    potassiumcropgroupregioncode = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'crop_soil_potassium_regions'

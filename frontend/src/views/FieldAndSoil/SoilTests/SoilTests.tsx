@@ -104,15 +104,22 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     )?.converttokelownaphgreaterthan72;
 
     let convertedKelownaP = soilTestData.valP;
-    let convertedKelownaK = soilTestData.valK;
 
     if (Number(soilTestData.valPH) < 7.2 && lessThan72 !== undefined) {
       convertedKelownaP = (Number(soilTestData.valP) * lessThan72).toString();
-      convertedKelownaK = (Number(soilTestData.valK) * lessThan72).toString();
     } else if (Number(soilTestData.valPH) >= 7.2 && greaterThan72 !== undefined) {
       convertedKelownaP = (Number(soilTestData.valP) * greaterThan72).toString();
-      convertedKelownaK = (Number(soilTestData.valK) * greaterThan72).toString();
     }
+
+    // Calculate converted Kelowna K value (if you need it)
+    const convertedKelownaK =
+      soilTestMethods.find((method) => method.id === Number(soilTestId))?.converttokelownak !==
+      undefined
+        ? (
+            Number(soilTestData.valK) *
+            soilTestMethods.find((method) => method.id === Number(soilTestId))!.converttokelownak
+          ).toString()
+        : soilTestData.valK;
 
     // Create updated soil test data with the converted values
     const updatedSoilTestData = {

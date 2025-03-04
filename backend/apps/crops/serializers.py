@@ -40,3 +40,19 @@ class ConversionFactorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConversionFactors
         fields = '__all__'
+
+class SoilTestPotassiumKelownaRangesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SoilTestPotassiumKelownaRanges
+        fields = '__all__'
+
+class SoilTestPotassiumRecommendationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SoilTestPotassiumRecommendation
+        fields = '__all__'
+
+class CropSoilPotassiumRegionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CropSoilPotassiumRegions
+        fields = '__all__'
+

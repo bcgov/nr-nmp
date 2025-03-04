@@ -57,3 +57,25 @@ class CropsViewset(viewsets.ViewSet):
         conversion_factors = ConversionFactors.objects.all()
         serializer = ConversionFactorsSerializer(conversion_factors, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def soilTestPotassiumRecommendation(self, request):
+        soil_test_potassium_recommendation = SoilTestPotassiumRecommendation.objects.all()
+        serializer = SoilTestPotassiumRecommendationSerializer(soil_test_potassium_recommendation, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def cropSoilPotassiumRegions(self, request, cropid=None, soiltestpotassiumregioncode=None):
+        crop_soil_potassium_regions = None
+        if cropid == None and soiltestpotassiumregioncode == None:
+            crop_soil_potassium_regions = CropSoilPotassiumRegions.objects.all()
+        else:
+            crop_soil_potassium_regions = CropSoilPotassiumRegions.objects.filter(cropid=cropid, soiltestpotassiumregioncode=soiltestpotassiumregioncode)
+        serializer = CropSoilPotassiumRegionsSerializer(crop_soil_potassium_regions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def soilTestPotassiumKelownaRanges(self, request):
+        soil_test_potassium_kelowna_ranges = SoilTestPotassiumKelownaRanges.objects.all()
+        serializer = SoilTestPotassiumKelownaRangesSerializer(soil_test_potassium_kelowna_ranges, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

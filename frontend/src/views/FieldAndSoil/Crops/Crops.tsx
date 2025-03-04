@@ -8,7 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import useAppService from '@/services/app/useAppService';
 import { Modal, InputField, Dropdown, RadioButton, Button } from '../../../components/common';
-import { getCropRequirementP205 } from '@/calculations/FieldAndSoil/Crops/Calculations';
+import {
+  getCropRequirementP205,
+  getCropRequirementK2O,
+} from '@/calculations/FieldAndSoil/Crops/CropRequirements';
 import {
   ContentWrapper,
   Header,
@@ -134,7 +137,18 @@ function Crops({ fields, setFields }: FieldListProps) {
                 combinedCropsData,
                 JSON.parse(state.nmpFile).farmDetails.FarmRegion,
               );
-              console.log('test: ', cropRequirementP205);
+              const cropRequirementK2O = await getCropRequirementK2O(
+                field,
+                setFields,
+                combinedCropsData,
+                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+              );
+              const updatedCombinedCropsData = {
+                ...combinedCropsData,
+                reqP2o5: cropRequirementP205,
+                reqK2o: cropRequirementK2O,
+              };
+              setCombinedCropsData(updatedCombinedCropsData);
               return { ...field, Crops: [combinedCropsData] };
             }
             return field;
