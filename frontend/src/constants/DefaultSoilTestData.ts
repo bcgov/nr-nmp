@@ -1,13 +1,13 @@
 import { SoilTestData } from '@/types';
 
 const defaultSoilTestData: SoilTestData = {
-  SoilTest: '1',
+  soilTest: '1',
   valNO3H: '0',
-  ValP: '250',
+  valP: '250',
   valK: '500',
   valPH: '6',
-  ConvertedKelownaK: '500',
-  ConvertedKelownaP: '250000',
+  convertedKelownaK: '500',
+  convertedKelownaP: '250',
   sampleDate: '',
 };
 

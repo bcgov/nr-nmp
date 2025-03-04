@@ -27,6 +27,7 @@ interface FieldListProps {
 export default function SoilTests({ fields, setFields }: FieldListProps) {
   const apiCache = useContext(APICacheContext);
   const [soilTestData, setSoilTestData] = useState(defaultSoilTestData);
+  const [soilTestId, setSoilTestId] = useState('');
   const [soilTestMethods, setSoilTestMethods] = useState<
     {
       id: number;
@@ -43,7 +44,11 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
+
     setSoilTestData({ ...soilTestData, [name]: value });
+    if (name === 'soilTest') {
+      setSoilTestId(value);
+    }
   };
 
   const validate = () => {
@@ -54,7 +59,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     if (!soilTestData.valNO3H || Number.isNaN(Number(soilTestData.valNO3H))) {
       newErrors.valNO3H = 'NO3-N (ppm) is required and must be a number';
     }
-    if (!soilTestData.ValP || Number.isNaN(Number(soilTestData.ValP))) {
+    if (!soilTestData.valP || Number.isNaN(Number(soilTestData.valP))) {
       newErrors.ValP = 'P (ppm) is required and must be a number';
     }
     if (!soilTestData.valK || Number.isNaN(Number(soilTestData.valK))) {
@@ -89,9 +94,39 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
       return;
     }
     setErrors({});
+
+    // Calculate convertedKelownaP directly
+    const lessThan72 = soilTestMethods.find(
+      (method) => method.id === Number(soilTestId),
+    )?.converttokelownaphlessthan72;
+    const greaterThan72 = soilTestMethods.find(
+      (method) => method.id === Number(soilTestId),
+    )?.converttokelownaphgreaterthan72;
+
+    let convertedKelownaP = soilTestData.valP;
+    let convertedKelownaK = soilTestData.valK;
+
+    if (Number(soilTestData.valPH) < 7.2 && lessThan72 !== undefined) {
+      convertedKelownaP = (Number(soilTestData.valP) * lessThan72).toString();
+      convertedKelownaK = (Number(soilTestData.valK) * lessThan72).toString();
+    } else if (Number(soilTestData.valPH) >= 7.2 && greaterThan72 !== undefined) {
+      convertedKelownaP = (Number(soilTestData.valP) * greaterThan72).toString();
+      convertedKelownaK = (Number(soilTestData.valK) * greaterThan72).toString();
+    }
+
+    // Create updated soil test data with the converted values
+    const updatedSoilTestData = {
+      ...soilTestData,
+      convertedKelownaP,
+      convertedKelownaK,
+    };
+
+    // Update state for future reference
+    setSoilTestData(updatedSoilTestData);
+
     if (currentFieldIndex !== null) {
       const updatedFields = fields.map((field, index) =>
-        index === currentFieldIndex ? { ...field, SoilTest: soilTestData } : field,
+        index === currentFieldIndex ? { ...field, SoilTest: updatedSoilTestData } : field,
       );
       setFields(updatedFields);
       setIsModalVisible(false);
@@ -110,7 +145,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
   return (
     <div>
       <ContentWrapper hasFields={fields.length > 0}>
-        {soilTestData.SoilTest === '1' && (
+        {soilTestData.soilTest === '1' && (
           <InfoBox>
             Do you have soil test from within the past 3 years?
             <ul>
@@ -121,15 +156,15 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
         )}
         <Dropdown
           label="Lab (Soil Test Method)"
-          name="SoilTest"
-          value={soilTestData.SoilTest || ''}
+          name="soilTest"
+          value={soilTestData.soilTest || ''}
           options={soilTestMethods.map((method) => ({
             value: method.id,
             label: method.name,
           }))}
           onChange={handleChange}
         />
-        {soilTestData.SoilTest !== '1' && (
+        {soilTestData.soilTest !== '1' && (
           <div>
             {fields.length > 0 && (
               <Header>
@@ -147,7 +182,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
                 <ListItem>{field.FieldName}</ListItem>
                 <ListItem>{field.SoilTest.sampleDate}</ListItem>
                 <ListItem>{field.SoilTest.valNO3H}</ListItem>
-                <ListItem>{field.SoilTest.ValP}</ListItem>
+                <ListItem>{field.SoilTest.valP}</ListItem>
                 <ListItem>{field.SoilTest.valK}</ListItem>
                 <ListItem>{field.SoilTest.valPH}</ListItem>
                 {Object.keys(field.SoilTest).length === 0 ? (
@@ -232,8 +267,8 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
           <InputField
             label="P (ppm), phosphorus"
             type="text"
-            name="ValP"
-            value={soilTestData.ValP || ''}
+            name="valP"
+            value={soilTestData.valP || ''}
             onChange={handleChange}
           />
           {errors.valK && <ErrorText>{errors.valK}</ErrorText>}

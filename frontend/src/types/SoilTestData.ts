@@ -1,10 +1,10 @@
 export default interface SoilTestData {
-  SoilTest?: string;
+  soilTest?: string;
   valNO3H?: string;
-  ValP?: string;
+  valP?: string;
   valK?: string;
   valPH?: string;
-  ConvertedKelownaK?: string;
-  ConvertedKelownaP?: string;
+  convertedKelownaK?: string;
+  convertedKelownaP?: string;
   sampleDate?: string;
 }
