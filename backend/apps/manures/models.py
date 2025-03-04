@@ -18,7 +18,7 @@ class Manures(models.Model):
     defaultsolidmoisture = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'manures'
 
 class SolidMaterialsConversionFactors(models.Model):
@@ -30,7 +30,7 @@ class SolidMaterialsConversionFactors(models.Model):
   metrictonsoutput = models.CharField(max_length=100)
 
   class Meta:
-      managed = False
+      managed = True
       db_table = 'solid_materials_conversion_factors'
 
 class LiquidMaterialsConversionFactors(models.Model):
@@ -40,5 +40,5 @@ class LiquidMaterialsConversionFactors(models.Model):
   usgallonsoutput = models.CharField(max_length=100)
 
   class Meta:
-      managed = False
+      managed = True
       db_table = 'liquid_materials_conversion_factors'
