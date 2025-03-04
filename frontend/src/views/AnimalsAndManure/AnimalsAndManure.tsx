@@ -13,6 +13,7 @@ export default function AnimalsAndManure() {
   const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
+  const [nextDisabled, setNextDisabled] = useState(false);
 
   const [formData, setFormData] = useState<AnimalsWorkflowData[][]>([[], [], []]);
 
@@ -20,7 +21,12 @@ export default function AnimalsAndManure() {
     {
       id: 'add-animals',
       label: 'Add Animals',
-      content: <AddAnimals saveData={setFormData} />,
+      content: (
+        <AddAnimals
+          saveData={setFormData}
+          setNextDisabled={setNextDisabled}
+        />
+      ),
     },
     {
       id: 'manure-and-imports',
@@ -83,7 +89,7 @@ export default function AnimalsAndManure() {
           }}
           aria-label="Next"
           variant="primary"
-          disabled={false}
+          disabled={nextDisabled}
         />
       </ButtonWrapper>
       <ButtonWrapper position="left">

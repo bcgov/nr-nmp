@@ -28,6 +28,8 @@ interface BeefCattleProps {
   startExpanded?: boolean;
   saveData: (data: AnimalData, index: number) => void;
   onDelete: (index: number) => void;
+  updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
+  updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
 }
 
@@ -38,11 +40,16 @@ const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
   return { id: '1', ...data };
 };
 
+const isBeefCattleDataComplete: (data: BeefCattleData) => boolean = (data) =>
+  data.subtype !== undefined && data.animalsPerFarm !== undefined;
+
 export default function BeefCattle({
   startData,
   startExpanded = false,
   saveData,
   onDelete,
+  updateIsComplete,
+  updateIsExpanded,
   myIndex,
 }: BeefCattleProps) {
   const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
@@ -123,6 +130,22 @@ export default function BeefCattle({
     setLastSaved(formData);
     setExpanded(false);
   };
+
+  // When the form is saved or re-opened, update the validity and expanded trackers
+  useEffect(() => {
+    updateIsExpanded((prev) => {
+      const next = [...prev];
+      next[myIndex] = isExpanded;
+      return next;
+    });
+  }, [isExpanded, updateIsExpanded, myIndex]);
+  useEffect(() => {
+    updateIsComplete((prev) => {
+      const next = [...prev];
+      next[myIndex] = isBeefCattleDataComplete(lastSaved);
+      return next;
+    });
+  }, [lastSaved, updateIsComplete, myIndex]);
 
   return (
     <>
