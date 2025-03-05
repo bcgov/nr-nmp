@@ -64,11 +64,7 @@ export async function getRecommendations(
 
 export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (fields: any[]) => void) {
   const updatedField = { ...field };
-  if (
-    field.SoilTest == undefined ||
-    field.SoilTest == null ||
-    Object.keys(field.SoilTest).length === 0
-  ) {
+  if (field.SoilTest == null || Object.keys(field.SoilTest).length === 0) {
     updatedField.SoilTest.valNO3H = defaultSoilTestData.valNO3H;
     updatedField.SoilTest.valP = defaultSoilTestData.valP;
     updatedField.SoilTest.valK = defaultSoilTestData.valK;
@@ -85,7 +81,7 @@ export async function getCrop(cropId: number) {
 }
 
 export async function getNCredit(cropId: number) {
-  if (cropId == null || cropId == undefined || cropId == 0) {
+  if (cropId == null || cropId === 0) {
     return 0;
   }
   const response = await axios.get(`${env.VITE_BACKEND_URL}/api/previouscroptypes/${cropId}/`);
@@ -207,11 +203,10 @@ export async function getCropRequirementN(
       nRequirement = crop.nitrogenrecommendationpoundperacre;
       break;
     case 3:
-      console.log('Case 3');
       nRequirement = await getCropRemovalN(combinedCropData, regionId);
       break;
     case 4: {
-      if (cropYield?.amount != null && cropYield?.amount != 0) {
+      if (cropYield?.amount != null && cropYield?.amount !== 0) {
         nRequirement = Math.round(
           (cropYield.amount / cropYield.amount) * crop.nitrogenrecommendationpoundperacre,
         );
@@ -240,7 +235,7 @@ export async function getCropRequirementK2O(
   checkExistingSoilTest(field, setFields);
 
   let STK = field.SoilTest.convertedKelownaK;
-  if (STK == '0' || STK == undefined) STK = conversionFactors.defaultsoiltestkelownapotassium;
+  if (STK == '0' || STK == null) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
   const cropSTKRegionCd = await getCropSoilTestRegions(
     Number(combinedCropData.cropId),
@@ -253,7 +248,7 @@ export async function getCropRequirementK2O(
   const sTKKelownaRange = await getKelownaRangeByPpm(Number(STK), 'soiltestpotassiumkelonwaranges');
 
   const stkKelownaRangeId = sTKKelownaRange.id;
-  if (!potassiumCropGroupRegionCd == null) {
+  if (potassiumCropGroupRegionCd == null) {
     return 0;
   }
   const sTKRecommended = await getRecommendations(
@@ -281,7 +276,7 @@ export async function getCropRequirementP205(
   checkExistingSoilTest(field, setFields);
 
   let STP = field.SoilTest.convertedKelownaP;
-  if (STP == '0' || STP == undefined) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
+  if (STP == '0' || STP == null) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 
   const cropSTPRegionCd = await getCropSoilTestRegions(
     Number(combinedCropData.cropId),
@@ -297,7 +292,7 @@ export async function getCropRequirementP205(
   );
 
   const stpKelownaRangeId = sTPKelownaRange.id;
-  if (!phosphorousCropGroupRegionCd == null) {
+  if (phosphorousCropGroupRegionCd == null) {
     return 0;
   }
   const sTPRecommended = await getRecommendations(
