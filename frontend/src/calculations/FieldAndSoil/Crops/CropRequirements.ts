@@ -97,52 +97,85 @@ export async function getCropYield(cropId: number, regionId: number) {
   return response.data[0];
 }
 
+export async function getCropRemovalK20(
+  combinedCropData: NMPFileCropData,
+  regionId: number,
+): Promise<number> {
+  const region = await getRegion(regionId);
+  const crop = await getCrop(Number(combinedCropData.cropId));
+  const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
+
+  if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
+    return 0;
+  }
+
+  let k2oRemoval: number = 0;
+
+  if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
+    k2oRemoval = (cropYield.amount / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
+  } else {
+    k2oRemoval = cropYield.amount * crop.cropremovalfactork2o;
+  }
+
+  return Math.round(k2oRemoval) || 0;
+}
+
+export async function getCropRemovalP205(
+  combinedCropData: NMPFileCropData,
+  regionId: number,
+): Promise<number> {
+  const region = await getRegion(regionId);
+  const crop = await getCrop(Number(combinedCropData.cropId));
+  const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
+
+  if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
+    return 0;
+  }
+
+  let p2o5Removal: number = 0;
+
+  if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
+    p2o5Removal = (cropYield.amount / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
+  } else {
+    p2o5Removal = cropYield.amount * crop.cropremovalfactorp2o5;
+  }
+
+  return Math.round(p2o5Removal) || 0;
+}
+
 export async function getCropRemovalN(
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {
-  const conversionFactors = await getConversionFactors();
   let nRemoval: number = 0;
+  const region = await getRegion(regionId);
   const crop = await getCrop(Number(combinedCropData.cropId));
-  const cropYield = await getCropYield(Number(combinedCropData.cropId), regionId);
+  const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
 
-  if (
-    !combinedCropData.crudeProtien ||
-    (combinedCropData.crudeProtien && combinedCropData.crudeProtien == 0)
-  ) {
-    if (cropYield.cropremovalfactornitrogen) {
+  const cropTypeResponse = await axios.get(
+    `${env.VITE_BACKEND_URL}/api/croptypes/${crop.croptypeid}/`,
+  );
+  const cropType = cropTypeResponse.data[0];
+  const isForageCrop = cropType.crudeproteinrequired === true;
+
+  if (isForageCrop) {
+    if (!combinedCropData.crudeProtien || combinedCropData.crudeProtien == 0) {
       nRemoval = crop.cropremovalfactornitrogen * cropYield.amount;
     } else {
-      nRemoval = 0;
+      const nToProteinConversionFactor = 0.625;
+      const unitConversionFactor = 0.5;
+
+      const newCropRemovalFactorNitrogen =
+        combinedCropData.crudeProtien / (nToProteinConversionFactor * unitConversionFactor);
+      nRemoval = newCropRemovalFactorNitrogen * cropYield.amount;
     }
+  } else if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
+    nRemoval = (cropYield.amount / crop.harvestbushelsperton) * crop.cropremovalfactornitrogen;
   } else {
-    nRemoval =
-      (combinedCropData.crudeProtien /
-        (conversionFactors.nitrogenproteinconversion * conversionFactors.unitconversion)) *
-      cropYield;
+    nRemoval = cropYield.amount * crop.cropremovalfactornitrogen;
   }
-  // if (!crudeProtien.HasValue || crudeProtien.HasValue && crudeProtien.Value == 0)
-  //   {
-  //       decimal tmpDec;
-  //       if (decimal.TryParse(crop.CropRemovalFactorNitrogen.ToString(), out tmpDec))
-  //           n_removal = tmpDec * yield;
-  //       else
-  //           n_removal = 0;
-  //   }
-  //   else
-  //       n_removal = decimal.Divide(Convert.ToDecimal(crudeProtien), _cf.NitrogenProteinConversion * _cf.UnitConversion) * yield;
 
-  //   crr.P2O5_Removal = Convert.ToInt32(crop.CropRemovalFactorP2O5 * yield);
-  //   crr.K2O_Removal = Convert.ToInt32(crop.CropRemovalFactorK2O * yield);
-  //   crr.N_Removal = Convert.ToInt32(n_removal);
-
-  //   if (coverCropHarvested.HasValue && coverCropHarvested.Value == false)
-  //   {
-  //       crr.P2O5_Removal = 0;
-  //       crr.K2O_Removal = 0;
-  //       crr.N_Removal = 0;
-  //   }
-  return nRemoval || 0;
+  return Math.round(nRemoval) || 0;
 }
 
 export async function getCropRequirementN(
@@ -151,7 +184,6 @@ export async function getCropRequirementN(
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {
-  // const conversionFactors = await getConversionFactors();
   const region = await getRegion(regionId);
   const crop = await getCrop(Number(combinedCropData.cropId));
   const ncredit = await getNCredit(Number(combinedCropData.prevCropId));
@@ -174,14 +206,9 @@ export async function getCropRequirementN(
       }
       nRequirement = crop.nitrogenrecommendationpoundperacre;
       break;
-    // Finish this case
     case 3:
-      if (crop.nitrogenrecommendationpoundperacre == null) {
-        nRequirement = 0;
-        break;
-      }
-      // HERE
-      nRequirement = crop.nitrogenrecommendationpoundperacre;
+      console.log('Case 3');
+      nRequirement = await getCropRemovalN(combinedCropData, regionId);
       break;
     case 4: {
       if (cropYield?.amount != null && cropYield?.amount != 0) {
@@ -200,13 +227,6 @@ export async function getCropRequirementN(
   nRequirement = nRequirement < 0 ? 0 : nRequirement;
 
   return Math.round(nRequirement);
-
-  // switch (crop.NitrogenRecommendationId)
-  // {
-
-  //     case 3:
-  //         crr.N_Requirement = crr.N_Removal;
-  //         break;
 }
 
 export async function getCropRequirementK2O(
@@ -219,7 +239,6 @@ export async function getCropRequirementK2O(
   const region = await getRegion(regionId);
   checkExistingSoilTest(field, setFields);
 
-  // (SOIL TEST Potassium)
   let STK = field.SoilTest.convertedKelownaK;
   if (STK == '0' || STK == undefined) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
@@ -261,7 +280,6 @@ export async function getCropRequirementP205(
 
   checkExistingSoilTest(field, setFields);
 
-  // (SOIL TEST Phosphrous)
   let STP = field.SoilTest.convertedKelownaP;
   if (STP == '0' || STP == undefined) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 

@@ -4,6 +4,7 @@ from .views import CropsViewset
 
 urlpatterns = [
     path('croptypes/', CropsViewset.as_view({'get': 'cropTypes'})),
+    path('croptypes/<int:id>/', CropsViewset.as_view({'get': 'cropTypes'})),
     path('crops/', CropsViewset.as_view({'get': 'crops'})),
     path('crops/<int:id>/', CropsViewset.as_view({'get': 'crops'})),
     path('previouscroptypes/', CropsViewset.as_view({'get': 'previousCropTypes'})),

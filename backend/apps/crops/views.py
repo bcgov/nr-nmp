@@ -7,8 +7,12 @@ from .serializers import *
 class CropsViewset(viewsets.ViewSet):
 
     @action(detail=True, methods=['get'])
-    def cropTypes(self, request):
-        crop_types = CropTypes.objects.all()
+    def cropTypes(self, request, id=None):
+        crop_types = None
+        if id == None:
+            crop_types = CropTypes.objects.all()
+        else:
+            crop_types = CropTypes.objects.filter(id=id)
         serializer = CropTypesSerializer(crop_types, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

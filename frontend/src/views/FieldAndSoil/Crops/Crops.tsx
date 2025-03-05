@@ -15,6 +15,8 @@ import {
   getCropRequirementK2O,
   getCropRequirementN,
   getCropRemovalN,
+  getCropRemovalP205,
+  getCropRemovalK20,
 } from '@/calculations/FieldAndSoil/Crops/CropRequirements';
 import {
   ContentWrapper,
@@ -158,12 +160,22 @@ function Crops({ fields, setFields }: FieldListProps) {
                 combinedCropsData,
                 JSON.parse(state.nmpFile).farmDetails.FarmRegion,
               );
+              const cropRemovalP205 = await getCropRemovalP205(
+                combinedCropsData,
+                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+              );
+              const cropRemovalK20 = await getCropRemovalK20(
+                combinedCropsData,
+                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+              );
               const updatedCombinedCropsData = {
                 ...combinedCropsData,
                 reqP2o5: cropRequirementP205,
                 reqK2o: cropRequirementK2O,
                 reqN: cropRequirementN,
                 remN: cropRemovalN,
+                remP2o5: cropRemovalP205,
+                remK2o: cropRemovalK20,
               };
               setCombinedCropsData(updatedCombinedCropsData);
               return { ...field, Crops: [combinedCropsData] };
