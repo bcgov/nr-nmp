@@ -123,6 +123,8 @@ export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProp
             startExpanded={index === 0}
             saveData={handleSave}
             onDelete={handleDelete}
+            updateIsComplete={setFormComplete}
+            updateIsExpanded={setFormExpanded}
             myIndex={index}
           />
         );
@@ -168,6 +170,8 @@ export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProp
             startData={{ id: animalId }}
             saveData={handleSave}
             onDelete={handleDelete}
+            updateIsComplete={setFormComplete}
+            updateIsExpanded={setFormExpanded}
             myIndex={length}
           />,
         );

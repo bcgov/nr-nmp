@@ -39,6 +39,8 @@ interface DairyCattleProps {
   startExpanded?: boolean;
   saveData: (data: AnimalData, index: number) => void;
   onDelete: (index: number) => void;
+  updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
+  updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
 }
 
@@ -50,11 +52,20 @@ const initData: (d: Partial<DairyCattleData>) => DairyCattleData = (data) => {
   return { id: '2', breed: '1', grazingDaysPerYear: 0, ...data };
 };
 
+const isDairyCattleDataComplete: (data: DairyCattleData) => boolean = (data) =>
+  data.subtype !== undefined &&
+  data.breed !== undefined &&
+  data.animalsPerFarm !== undefined &&
+  data.manureType !== undefined &&
+  data.grazingDaysPerYear !== undefined;
+
 export default function DairyCattle({
   startData,
   startExpanded = false,
   saveData,
   onDelete,
+  updateIsComplete,
+  updateIsExpanded,
   myIndex,
 }: DairyCattleProps) {
   const [formData, setFormData] = useState<DairyCattleData>(initData(startData));
@@ -189,6 +200,22 @@ export default function DairyCattle({
     setLastSaved(formData);
     setExpanded(false);
   };
+
+  // When the form is saved or re-opened, update the validity and expanded trackers
+  useEffect(() => {
+    updateIsExpanded((prev) => {
+      const next = [...prev];
+      next[myIndex] = isExpanded;
+      return next;
+    });
+  }, [isExpanded, updateIsExpanded, myIndex]);
+  useEffect(() => {
+    updateIsComplete((prev) => {
+      const next = [...prev];
+      next[myIndex] = isDairyCattleDataComplete(lastSaved);
+      return next;
+    });
+  }, [lastSaved, updateIsComplete, myIndex]);
 
   return (
     <>
