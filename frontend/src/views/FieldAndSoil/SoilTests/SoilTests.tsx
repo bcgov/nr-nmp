@@ -1,10 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /**
  * @summary This is the Soil Tests Tab
  */
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, Modal, InputField, Button } from '../../../components/common';
+import { APICacheContext } from '@/context/APICacheContext';
+import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 import {
   InfoBox,
   ListItemContainer,
@@ -22,28 +25,30 @@ interface FieldListProps {
 }
 
 export default function SoilTests({ fields, setFields }: FieldListProps) {
-  const [soilTestData, setSoilTestData] = useState({
-    SoilTest: '1',
-    ConvertedKelownaK: '2',
-    ConvertedKelownaP: '4',
-    ValP: '',
-    sampleDate: '',
-    valK: '',
-    valNO3H: '',
-    valPH: '',
-  });
+  const apiCache = useContext(APICacheContext);
+  const [soilTestData, setSoilTestData] = useState(defaultSoilTestData);
+  const [soilTestId, setSoilTestId] = useState('');
+  const [soilTestMethods, setSoilTestMethods] = useState<
+    {
+      id: number;
+      name: string;
+      converttokelownaphlessthan72: number;
+      converttokelownaphgreaterthan72: number;
+      converttokelownak: number;
+      sortnum: number;
+    }[]
+  >([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
-  const soilTestOptions = [
-    { value: 1, label: 'No Soil Test from within the past 3 years' },
-    { value: 2, label: 'Other Lab (Bicarbonate and Amm Acetate)' },
-  ];
-
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
+
     setSoilTestData({ ...soilTestData, [name]: value });
+    if (name === 'soilTest') {
+      setSoilTestId(value);
+    }
   };
 
   const validate = () => {
@@ -54,7 +59,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     if (!soilTestData.valNO3H || Number.isNaN(Number(soilTestData.valNO3H))) {
       newErrors.valNO3H = 'NO3-N (ppm) is required and must be a number';
     }
-    if (!soilTestData.ValP || Number.isNaN(Number(soilTestData.ValP))) {
+    if (!soilTestData.valP || Number.isNaN(Number(soilTestData.valP))) {
       newErrors.ValP = 'P (ppm) is required and must be a number';
     }
     if (!soilTestData.valK || Number.isNaN(Number(soilTestData.valK))) {
@@ -89,19 +94,65 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
       return;
     }
     setErrors({});
+
+    // Calculate convertedKelownaP directly
+    const lessThan72 = soilTestMethods.find(
+      (method) => method.id === Number(soilTestId),
+    )?.converttokelownaphlessthan72;
+    const greaterThan72 = soilTestMethods.find(
+      (method) => method.id === Number(soilTestId),
+    )?.converttokelownaphgreaterthan72;
+
+    let convertedKelownaP = soilTestData.valP;
+
+    if (Number(soilTestData.valPH) < 7.2 && lessThan72 !== undefined) {
+      convertedKelownaP = (Number(soilTestData.valP) * lessThan72).toString();
+    } else if (Number(soilTestData.valPH) >= 7.2 && greaterThan72 !== undefined) {
+      convertedKelownaP = (Number(soilTestData.valP) * greaterThan72).toString();
+    }
+
+    // Calculate converted Kelowna K value (if you need it)
+    const convertedKelownaK =
+      soilTestMethods.find((method) => method.id === Number(soilTestId))?.converttokelownak !==
+      undefined
+        ? (
+            Number(soilTestData.valK) *
+            soilTestMethods.find((method) => method.id === Number(soilTestId))!.converttokelownak
+          ).toString()
+        : soilTestData.valK;
+
+    // Create updated soil test data with the converted values
+    const updatedSoilTestData = {
+      ...soilTestData,
+      convertedKelownaP,
+      convertedKelownaK,
+    };
+
+    // Update state for future reference
+    setSoilTestData(updatedSoilTestData);
+
     if (currentFieldIndex !== null) {
       const updatedFields = fields.map((field, index) =>
-        index === currentFieldIndex ? { ...field, SoilTest: soilTestData } : field,
+        index === currentFieldIndex ? { ...field, SoilTest: updatedSoilTestData } : field,
       );
       setFields(updatedFields);
       setIsModalVisible(false);
     }
   };
 
+  useEffect(() => {
+    apiCache.callEndpoint('api/soiltestmethods/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setSoilTestMethods(data);
+      }
+    });
+  }, []);
+
   return (
     <div>
       <ContentWrapper hasFields={fields.length > 0}>
-        {soilTestData.SoilTest === '1' && (
+        {soilTestData.soilTest === '1' && (
           <InfoBox>
             Do you have soil test from within the past 3 years?
             <ul>
@@ -112,12 +163,15 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
         )}
         <Dropdown
           label="Lab (Soil Test Method)"
-          name="SoilTest"
-          value={soilTestData.SoilTest}
-          options={soilTestOptions}
+          name="soilTest"
+          value={soilTestData.soilTest || ''}
+          options={soilTestMethods.map((method) => ({
+            value: method.id,
+            label: method.name,
+          }))}
           onChange={handleChange}
         />
-        {soilTestData.SoilTest !== '1' && (
+        {soilTestData.soilTest !== '1' && (
           <div>
             {fields.length > 0 && (
               <Header>
@@ -135,7 +189,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
                 <ListItem>{field.FieldName}</ListItem>
                 <ListItem>{field.SoilTest.sampleDate}</ListItem>
                 <ListItem>{field.SoilTest.valNO3H}</ListItem>
-                <ListItem>{field.SoilTest.ValP}</ListItem>
+                <ListItem>{field.SoilTest.valP}</ListItem>
                 <ListItem>{field.SoilTest.valK}</ListItem>
                 <ListItem>{field.SoilTest.valPH}</ListItem>
                 {Object.keys(field.SoilTest).length === 0 ? (
@@ -205,7 +259,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="Sample Month"
             type="month"
             name="sampleDate"
-            value={soilTestData.sampleDate}
+            value={soilTestData.sampleDate || ''}
             onChange={handleChange}
           />
           {errors.valNO3H && <ErrorText>{errors.valNO3H}</ErrorText>}
@@ -213,15 +267,15 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="NO3-N (ppm), nitrate-nitrogen"
             type="text"
             name="valNO3H"
-            value={soilTestData.valNO3H}
+            value={soilTestData.valNO3H || ''}
             onChange={handleChange}
           />
           {errors.ValP && <ErrorText>{errors.ValP}</ErrorText>}
           <InputField
             label="P (ppm), phosphorus"
             type="text"
-            name="ValP"
-            value={soilTestData.ValP}
+            name="valP"
+            value={soilTestData.valP || ''}
             onChange={handleChange}
           />
           {errors.valK && <ErrorText>{errors.valK}</ErrorText>}
@@ -229,7 +283,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="K (ppm), potassium"
             type="text"
             name="valK"
-            value={soilTestData.valK}
+            value={soilTestData.valK || ''}
             onChange={handleChange}
           />
           {errors.valPH && <ErrorText>{errors.valPH}</ErrorText>}
@@ -237,7 +291,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
             label="pH"
             type="text"
             name="valPH"
-            value={soilTestData.valPH}
+            value={soilTestData.valPH || ''}
             onChange={handleChange}
           />
         </Modal>
