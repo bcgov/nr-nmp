@@ -17,7 +17,7 @@ import {
   getCropRemovalN,
   getCropRemovalP205,
   getCropRemovalK20,
-} from '@/calculations/FieldAndSoil/Crops/CropRequirements';
+} from '@/calculations/FieldAndSoil/Crops/Calculations';
 import {
   ContentWrapper,
   Header,
@@ -35,6 +35,7 @@ import {
   ValueText,
   ColumnContainer,
   RowContainer,
+  ErrorText,
 } from './crops.styles';
 import {
   CropTypesDatabase,
@@ -63,6 +64,8 @@ function Crops({ fields, setFields }: FieldListProps) {
   const [cropTypesDatabase, setCropTypesDatabase] = useState<CropTypesDatabase[]>([]);
   const [cropsDatabase, setCropsDatabase] = useState<CropsDatabase[]>([]);
   const [previousCropDatabase, setPreviousCropDatabase] = useState<PreviousCropsDatabase[]>([]);
+  const [calculationsPerformed, setCalculationsPerformed] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -70,6 +73,11 @@ function Crops({ fields, setFields }: FieldListProps) {
       ...prevData,
       [name]: value,
     }));
+
+    // Clear the error for the field being changed
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
 
     if (name === 'cropTypeId') {
       const selectedCropType = cropsDatabase.filter(
@@ -90,6 +98,8 @@ function Crops({ fields, setFields }: FieldListProps) {
   const handleEditCrop = (fieldIndex: number) => {
     setCurrentFieldIndex(fieldIndex);
     setCombinedCropsData(fields[fieldIndex].Crops[0] || combinedCropsData);
+    setCalculationsPerformed(false);
+    setErrors({}); // Clear errors when modal is opened
     setIsModalVisible(true);
   };
 
@@ -100,63 +110,139 @@ function Crops({ fields, setFields }: FieldListProps) {
     setFields(updatedFields);
   };
 
-  const handleSubmit = async () => {
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!combinedCropsData.cropTypeId) {
+      newErrors.cropTypeId = 'Crop Type is required';
+    }
+
+    if (!combinedCropsData.cropId) {
+      newErrors.cropId = 'Crop is required';
+    }
+
+    if (!combinedCropsData.yield) {
+      newErrors.yield = 'Yield is required';
+    } else if (
+      Number.isNaN(Number(combinedCropsData.yield)) ||
+      Number(combinedCropsData.yield) <= 0
+    ) {
+      newErrors.yield = 'Yield must be a valid number greater than zero';
+    }
+
+    if (combinedCropsData.cropTypeId == 6 && !combinedCropsData.cropOther) {
+      newErrors.cropOther = 'Crop Description is required';
+    }
+
+    if (combinedCropsData.cropTypeId == 1 && !combinedCropsData.crudeProtien) {
+      newErrors.crudeProtien = 'Crude Protein is required';
+    } else if (
+      combinedCropsData.cropTypeId == 1 &&
+      (Number.isNaN(Number(combinedCropsData.crudeProtien)) ||
+        Number(combinedCropsData.crudeProtien) <= 0)
+    ) {
+      newErrors.crudeProtien = 'Crude Protein must be a valid number greater than zero';
+    }
+
+    // Only validate previous crop if options are available
+    if (
+      combinedCropsData.cropTypeId != 6 &&
+      combinedCropsData.cropId &&
+      !combinedCropsData.prevCropId
+    ) {
+      // Check if there are previous crop options for this crop
+      const hasPreviousCropOptions = previousCropDatabase.some(
+        (crop) => crop.cropid === Number(combinedCropsData.cropId),
+      );
+
+      if (hasPreviousCropOptions) {
+        newErrors.prevCropId = 'Previous crop selection is required';
+      }
+    }
+
+    if (combinedCropsData.cropTypeId == 2 && !combinedCropsData.coverCropHarvested) {
+      newErrors.coverCropHarvested = 'Please specify if cover crop was harvested';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleCalculate = async () => {
+    if (!validateForm()) {
+      return; // Stop if validation fails
+    }
+
     if (currentFieldIndex !== null) {
       try {
-        const updatedFields = await Promise.all(
-          fields.map(async (field, index) => {
-            if (index === currentFieldIndex) {
-              const cropRequirementP205 = await getCropRequirementP205(
-                field,
-                setFields,
-                combinedCropsData,
-                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
-              );
-
-              const cropRequirementK2O = await getCropRequirementK2O(
-                field,
-                setFields,
-                combinedCropsData,
-                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
-              );
-              const cropRequirementN = await getCropRequirementN(
-                field,
-                setFields,
-                combinedCropsData,
-                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
-              );
-              const cropRemovalN = await getCropRemovalN(
-                combinedCropsData,
-                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
-              );
-              const cropRemovalP205 = await getCropRemovalP205(
-                combinedCropsData,
-                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
-              );
-              const cropRemovalK20 = await getCropRemovalK20(
-                combinedCropsData,
-                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
-              );
-              const updatedCombinedCropsData = {
-                ...combinedCropsData,
-                reqP2o5: cropRequirementP205,
-                reqK2o: cropRequirementK2O,
-                reqN: cropRequirementN,
-                remN: cropRemovalN,
-                remP2o5: cropRemovalP205,
-                remK2o: cropRemovalK20,
-              };
-              setCombinedCropsData(updatedCombinedCropsData);
-              return { ...field, Crops: [updatedCombinedCropsData] };
-            }
-            return field;
-          }),
+        const cropRequirementP205 = await getCropRequirementP205(
+          fields[currentFieldIndex],
+          setFields,
+          combinedCropsData,
+          JSON.parse(state.nmpFile).farmDetails.FarmRegion,
         );
-        setFields(updatedFields);
-        //         setIsModalVisible(false);
+
+        const cropRequirementK2O = await getCropRequirementK2O(
+          fields[currentFieldIndex],
+          setFields,
+          combinedCropsData,
+          JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+        );
+
+        const cropRequirementN = await getCropRequirementN(
+          fields[currentFieldIndex],
+          setFields,
+          combinedCropsData,
+          JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+        );
+
+        const cropRemovalN = await getCropRemovalN(
+          combinedCropsData,
+          JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+        );
+
+        const cropRemovalP205 = await getCropRemovalP205(
+          combinedCropsData,
+          JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+        );
+
+        const cropRemovalK20 = await getCropRemovalK20(
+          combinedCropsData,
+          JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+        );
+
+        // Update the crops data with calculated values
+        setCombinedCropsData((prevData) => ({
+          ...prevData,
+          reqP2o5: cropRequirementP205,
+          reqK2o: cropRequirementK2O,
+          reqN: cropRequirementN,
+          remN: cropRemovalN,
+          remP2o5: cropRemovalP205,
+          remK2o: cropRemovalK20,
+        }));
+
+        // Mark calculations as performed
+        setCalculationsPerformed(true);
       } catch (error) {
-        console.error('Error submitting crop data:', error);
+        console.error('Error calculating crop data:', error);
       }
+    }
+  };
+
+  const handleSubmit = () => {
+    if (currentFieldIndex !== null) {
+      const updatedFields = fields.map((field, index) => {
+        if (index === currentFieldIndex) {
+          return { ...field, Crops: [combinedCropsData] };
+        }
+        return field;
+      });
+
+      setFields(updatedFields);
+      setIsModalVisible(false);
+      setCalculationsPerformed(false);
+      setErrors({}); // Clear all errors
     }
   };
 
@@ -241,6 +327,30 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   }, [combinedCropsData.cropId]);
 
+  const modalFooter = (
+    <ButtonWrapper>
+      <Button
+        text="Cancel"
+        handleClick={() => {
+          setIsModalVisible(false);
+          setCalculationsPerformed(false);
+        }}
+        aria-label="Cancel"
+        variant="secondary"
+        size="sm"
+        disabled={false}
+      />
+      <Button
+        text={calculationsPerformed ? 'Submit' : 'Calculate'}
+        handleClick={calculationsPerformed ? handleSubmit : handleCalculate}
+        aria-label={calculationsPerformed ? 'Submit' : 'Calculate'}
+        variant="primary"
+        size="sm"
+        disabled={false}
+      />
+    </ButtonWrapper>
+  );
+
   return (
     <div>
       <ContentWrapper hasFields={fields.length > 0}>
@@ -292,29 +402,16 @@ function Crops({ fields, setFields }: FieldListProps) {
         <Modal
           isVisible={isModalVisible}
           title="Edit Crop"
-          onClose={() => setIsModalVisible(false)}
-          footer={
-            <ButtonWrapper>
-              <Button
-                text="Cancel"
-                handleClick={() => setIsModalVisible(false)}
-                aria-label="Cancel"
-                variant="secondary"
-                size="sm"
-                disabled={false}
-              />
-              <Button
-                text="Submit"
-                handleClick={handleSubmit}
-                aria-label="Submit"
-                variant="primary"
-                size="sm"
-                disabled={false}
-              />
-            </ButtonWrapper>
-          }
+          onClose={() => {
+            setIsModalVisible(false);
+            setCalculationsPerformed(false);
+            setErrors({});
+          }}
+          footer={modalFooter}
         >
           <ModalContent>
+            {errors.cropTypeId && <ErrorText>{errors.cropTypeId}</ErrorText>}
+
             <Dropdown
               label="Crop Type"
               name="cropTypeId"
@@ -325,6 +422,7 @@ function Crops({ fields, setFields }: FieldListProps) {
               }))}
               onChange={handleChange}
             />
+            {errors.cropId && <ErrorText>{errors.cropId}</ErrorText>}
             <Dropdown
               label="Crop"
               name="cropId"
@@ -334,28 +432,43 @@ function Crops({ fields, setFields }: FieldListProps) {
             />
             {/* Each of these are a conditional render based on the cropTypeId of the select crop type */}
             {combinedCropsData.cropTypeId != 6 && (
-              <Dropdown
-                label="Previous crop ploughed down (N credit)"
-                name="prevCropId"
-                value={combinedCropsData.prevCropId || ''}
-                options={previousCropDatabase
-                  .filter((crop) => crop.cropid === Number(combinedCropsData.cropId))
-                  .map((crop) => ({
-                    value: crop.id,
-                    label: crop.name,
-                  }))}
-                onChange={handleChange}
-              />
+              <>
+                {(() => {
+                  const availablePreviousCrops = previousCropDatabase.filter(
+                    (crop) => crop.cropid === Number(combinedCropsData.cropId),
+                  );
+
+                  return availablePreviousCrops.length > 0 ? (
+                    <>
+                      {errors.prevCropId && <ErrorText>{errors.prevCropId}</ErrorText>}
+                      <Dropdown
+                        label="Previous crop ploughed down (N credit)"
+                        name="prevCropId"
+                        value={combinedCropsData.prevCropId || ''}
+                        options={availablePreviousCrops.map((crop) => ({
+                          value: crop.id,
+                          label: crop.name,
+                        }))}
+                        onChange={handleChange}
+                      />
+                    </>
+                  ) : null;
+                })()}
+              </>
             )}
             {combinedCropsData.cropTypeId == 6 && (
-              <InputField
-                label="Crop Description"
-                type="text"
-                name="cropOther"
-                value={combinedCropsData.cropOther || ''}
-                onChange={handleChange}
-              />
+              <>
+                {errors.cropOther && <ErrorText>{errors.cropOther}</ErrorText>}
+                <InputField
+                  label="Crop Description"
+                  type="text"
+                  name="cropOther"
+                  value={combinedCropsData.cropOther || ''}
+                  onChange={handleChange}
+                />
+              </>
             )}
+            {errors.yield && <ErrorText>{errors.yield}</ErrorText>}
             <InputField
               label="Yield"
               type="text"
@@ -364,13 +477,16 @@ function Crops({ fields, setFields }: FieldListProps) {
               onChange={handleChange}
             />
             {combinedCropsData.cropTypeId == 1 && (
-              <InputField
-                label="Crude Protein"
-                type="text"
-                name="crudeProtien"
-                value={combinedCropsData.crudeProtien?.toString() || ''}
-                onChange={handleChange}
-              />
+              <>
+                {errors.crudeProtien && <ErrorText>{errors.crudeProtien}</ErrorText>}
+                <InputField
+                  label="Crude Protein"
+                  type="text"
+                  name="crudeProtien"
+                  value={combinedCropsData.crudeProtien?.toString() || ''}
+                  onChange={handleChange}
+                />
+              </>
             )}
             {combinedCropsData.cropTypeId != 6 && (
               <FlexContainer>
@@ -380,6 +496,9 @@ function Crops({ fields, setFields }: FieldListProps) {
                 {combinedCropsData.cropTypeId == 2 && (
                   <RightJustifiedText>
                     <span>Cover Crop Harvested?</span>
+                    {errors.coverCropHarvested && (
+                      <ErrorText>{errors.coverCropHarvested}</ErrorText>
+                    )}
                     <RadioButton
                       label="Yes"
                       name="coverCropHarvested"
@@ -394,6 +513,11 @@ function Crops({ fields, setFields }: FieldListProps) {
                       checked={combinedCropsData.coverCropHarvested === 'false'}
                       onChange={handleChange}
                     />
+                    {errors.coverCropHarvested && (
+                      <div style={{ color: 'red', fontSize: '12px' }}>
+                        {errors.coverCropHarvested}
+                      </div>
+                    )}
                   </RightJustifiedText>
                 )}
               </FlexContainer>
