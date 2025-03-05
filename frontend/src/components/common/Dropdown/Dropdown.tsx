@@ -11,15 +11,17 @@ interface DropdownProps {
   options: { value: number | string | undefined; label: string | undefined }[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   flex?: string;
+  required?: true;
 }
 
-function Dropdown({ label, name, value, options, onChange, flex }: DropdownProps) {
+function Dropdown({ label, name, value, options, onChange, flex, required }: DropdownProps) {
   const defaultOption = (
     <option
       key=""
       value=""
       style={{ display: 'none' }}
       selected
+      disabled
     >
       --Select--
     </option>
@@ -31,6 +33,7 @@ function Dropdown({ label, name, value, options, onChange, flex }: DropdownProps
         name={name}
         value={value}
         onChange={onChange}
+        required={required}
       >
         {[defaultOption].concat(
           options.map((option) => (

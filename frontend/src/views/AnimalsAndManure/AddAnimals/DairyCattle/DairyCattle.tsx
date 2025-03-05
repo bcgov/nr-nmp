@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, InputField } from '@/components/common';
@@ -39,6 +39,8 @@ interface DairyCattleProps {
   startExpanded?: boolean;
   saveData: (data: AnimalData, index: number) => void;
   onDelete: (index: number) => void;
+  updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
+  updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
 }
 
@@ -50,29 +52,31 @@ const initData: (d: Partial<DairyCattleData>) => DairyCattleData = (data) => {
   return { id: '2', breed: '1', grazingDaysPerYear: 0, ...data };
 };
 
+const isDairyCattleDataComplete: (data: DairyCattleData) => boolean = (data) =>
+  data.subtype !== undefined &&
+  data.breed !== undefined &&
+  data.animalsPerFarm !== undefined &&
+  data.manureType !== undefined &&
+  data.grazingDaysPerYear !== undefined;
+
 export default function DairyCattle({
   startData,
   startExpanded = false,
   saveData,
   onDelete,
+  updateIsComplete,
+  updateIsExpanded,
   myIndex,
 }: DairyCattleProps) {
   const [formData, setFormData] = useState<DairyCattleData>(initData(startData));
+  const [lastSaved, setLastSaved] = useState<DairyCattleData>(formData);
   const apiCache = useContext(APICacheContext);
-
-  // Dairy cows have both a subtype and a breed
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
-  const selectedSubtypeName = useMemo(() => {
-    if (!formData.subtype || subtypes.length === 0) return '';
-    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    return subtype.name;
-  }, [formData.subtype, subtypes]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
 
-  // Initial values for milking fields, if "Milking cow" is selected
+  // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
     if (subtypes.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === milkingCowId);
@@ -88,54 +92,58 @@ export default function DairyCattle({
     return milkingCow.milkproduction * breed.breedmanurefactor;
   }, [subtypes, breeds, formData.breed]);
 
+  // Props for the collapsed view //
+  const selectedSubtypeName = useMemo(() => {
+    if (!lastSaved.subtype || subtypes.length === 0) return '';
+    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
+    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    return subtype.name;
+  }, [lastSaved.subtype, subtypes]);
+
   const annualManure = useMemo(() => {
     if (
-      !formData.subtype ||
-      !formData.animalsPerFarm ||
-      !formData.manureType ||
-      formData.grazingDaysPerYear === undefined ||
+      !lastSaved.subtype ||
+      !lastSaved.animalsPerFarm ||
+      !lastSaved.manureType ||
+      lastSaved.grazingDaysPerYear === undefined ||
       subtypes.length === 0
     )
       return 0;
-    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
     if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    const breed = breeds.find((b) => b.id.toString() === formData.breed);
+    const breed = breeds.find((b) => b.id.toString() === lastSaved.breed);
     if (breed === undefined) throw new Error('Chosen breed is missing from list.');
-    const nonGrazingDays = 365 - formData.grazingDaysPerYear;
+    const nonGrazingDays = 365 - lastSaved.grazingDaysPerYear;
 
     let extraCoefficient;
-    if (formData.subtype === milkingCowId) {
-      if (formData.milkProduction === undefined) return 0;
+    if (lastSaved.subtype === milkingCowId) {
+      if (lastSaved.milkProduction === undefined) return 0;
       const expectedMilkProduction = subtype.milkproduction * breed.breedmanurefactor;
       // Due to potential floating point issues, round factor to 1 if numbers are close
       const milkProdPercent =
-        Math.abs(expectedMilkProduction - formData.milkProduction) < 1
+        Math.abs(expectedMilkProduction - lastSaved.milkProduction) < 1
           ? 1
-          : formData.milkProduction / expectedMilkProduction;
+          : lastSaved.milkProduction / expectedMilkProduction;
       extraCoefficient = breed.breedmanurefactor * milkProdPercent;
     } else {
       extraCoefficient = breed.breedmanurefactor;
     }
 
-    if (formData.manureType === 'liquid') {
-      return Math.round(
-        calculateAnnualLiquidManure(
-          subtype.liquidpergalperanimalperday,
-          formData.animalsPerFarm,
-          nonGrazingDays,
-          extraCoefficient,
-        ),
-      );
-    }
-    return Math.round(
-      calculateAnnualSolidManure(
-        subtype.solidperpoundperanimalperday,
-        formData.animalsPerFarm,
+    if (lastSaved.manureType === 'liquid') {
+      return calculateAnnualLiquidManure(
+        subtype.liquidpergalperanimalperday,
+        lastSaved.animalsPerFarm,
         nonGrazingDays,
         extraCoefficient,
-      ),
+      );
+    }
+    return calculateAnnualSolidManure(
+      subtype.solidperpoundperanimalperday,
+      lastSaved.animalsPerFarm,
+      nonGrazingDays,
+      extraCoefficient,
     );
-  }, [formData, subtypes, breeds]);
+  }, [lastSaved, subtypes, breeds]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
@@ -175,6 +183,7 @@ export default function DairyCattle({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Props for expanded view //
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -185,10 +194,28 @@ export default function DairyCattle({
     defaultExpanded: startExpanded,
   });
 
-  const handleSave = () => {
+  const handleSave = (e: FormEvent) => {
+    e.preventDefault();
     saveData(formData, myIndex);
+    setLastSaved(formData);
     setExpanded(false);
   };
+
+  // When the form is saved or re-opened, update the validity and expanded trackers
+  useEffect(() => {
+    updateIsExpanded((prev) => {
+      const next = [...prev];
+      next[myIndex] = isExpanded;
+      return next;
+    });
+  }, [isExpanded, updateIsExpanded, myIndex]);
+  useEffect(() => {
+    updateIsComplete((prev) => {
+      const next = [...prev];
+      next[myIndex] = isDairyCattleDataComplete(lastSaved);
+      return next;
+    });
+  }, [lastSaved, updateIsComplete, myIndex]);
 
   return (
     <>
@@ -196,7 +223,7 @@ export default function DairyCattle({
         <div key={`dairy-${myIndex}`}>
           <ListItemContainer>
             <ListItem>{selectedSubtypeName}</ListItem>
-            <ListItem>{`${annualManure} ${formData.manureType === 'liquid' ? 'U.S. gallon' : 'ton'}${annualManure === 1 ? '' : 's'}`}</ListItem>
+            <ListItem>{`${Math.round(annualManure)} ${formData.manureType === 'liquid' ? 'U.S. gallon' : 'ton'}${annualManure === 1 ? '' : 's'}`}</ListItem>
             <ListItem align="right">
               <button
                 type="button"
@@ -224,63 +251,89 @@ export default function DairyCattle({
         <EditListItemHeader>Edit Animal</EditListItemHeader>
       )}
       <EditListItemBody {...getCollapseProps()}>
-        <FlexRowContainer>
-          <Dropdown
-            label="Sub Type"
-            name="subtype"
-            value={formData.subtype || ''}
-            options={subtypeOptions}
-            onChange={handleChange}
+        <form onSubmit={handleSave}>
+          <FlexRowContainer>
+            <Dropdown
+              label="Sub Type"
+              name="subtype"
+              value={formData.subtype || ''}
+              options={subtypeOptions}
+              onChange={handleChange}
+              required
+            />
+            <Dropdown
+              label="Breed"
+              name="breed"
+              value={formData.breed || ''}
+              options={breedOptions}
+              onChange={handleChange}
+              required
+            />
+            <InputField
+              label="Average Animal Number on Farm"
+              type="text"
+              name="animalsPerFarm"
+              value={formData.animalsPerFarm?.toString() || ''}
+              onChange={handleChange}
+              maxLength={7}
+              required
+              onInput={(e) => {
+                const elem = e.target as HTMLInputElement;
+                const value = Number(elem.value);
+                if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
+                  elem.setCustomValidity('Please enter a valid whole number.');
+                } else {
+                  elem.setCustomValidity('');
+                }
+              }}
+            />
+            <Dropdown
+              label="Manure Type"
+              name="manureType"
+              value={formData.manureType || ''}
+              options={manureTypeOptions}
+              onChange={handleChange}
+              required
+            />
+            <InputField
+              label="Grazing Days per Year"
+              type="text"
+              name="grazingDaysPerYear"
+              value={formData.grazingDaysPerYear?.toString() || ''}
+              onChange={handleChange}
+              maxLength={3}
+              required
+              onInput={(e) => {
+                const elem = e.target as HTMLInputElement;
+                const value = Number(elem.value);
+                if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
+                  elem.setCustomValidity('Please enter a valid number of days. (0-365)');
+                } else {
+                  elem.setCustomValidity('');
+                }
+              }}
+            />
+            {formData.subtype === milkingCowId &&
+              milkProductionInit !== undefined &&
+              washWaterInit !== undefined && (
+                <MilkingFields
+                  milkProductionInit={milkProductionInit}
+                  washWaterInit={washWaterInit}
+                  animalsPerFarm={formData.animalsPerFarm || 0}
+                  washWaterUnit={formData.washWaterUnit}
+                  handleChange={handleChange}
+                  setFormData={setFormData}
+                />
+              )}
+          </FlexRowContainer>
+          <Button
+            text="Submit"
+            aria-label="Submit"
+            variant="primary"
+            size="sm"
+            disabled={false}
           />
-          <Dropdown
-            label="Breed"
-            name="breed"
-            value={formData.breed || ''}
-            options={breedOptions}
-            onChange={handleChange}
-          />
-          <InputField
-            label="Average Animal Number on Farm"
-            type="text"
-            name="animalsPerFarm"
-            value={formData.animalsPerFarm?.toString() || ''}
-            onChange={handleChange}
-          />
-          <Dropdown
-            label="Manure Type"
-            name="manureType"
-            value={formData.manureType || ''}
-            options={manureTypeOptions}
-            onChange={handleChange}
-          />
-          <InputField
-            label="Grazing Days per Year"
-            type="text"
-            name="grazingDaysPerYear"
-            value={formData.grazingDaysPerYear?.toString() || ''}
-            onChange={handleChange}
-          />
-          {formData.subtype === milkingCowId &&
-            milkProductionInit !== undefined &&
-            washWaterInit !== undefined && (
-              <MilkingFields
-                milkProductionInit={milkProductionInit}
-                washWaterInit={washWaterInit}
-                animalsPerFarm={formData.animalsPerFarm || 0}
-                washWaterUnit={formData.washWaterUnit}
-                handleChange={handleChange}
-                setFormData={setFormData}
-              />
-            )}
-        </FlexRowContainer>
-        <Button
-          text="Submit"
-          handleClick={handleSave}
-          aria-label="Submit"
-          variant="primary"
-          size="sm"
-          disabled={false}
-        />
+        </form>
       </EditListItemBody>
     </>
   );

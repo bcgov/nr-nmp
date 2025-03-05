@@ -70,16 +70,17 @@ export default function FarmInformation() {
     apiCache.callEndpoint('api/animals/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        const animalDict: { [id: string]: string } = (
-          data as { id: string; name: string }[]
-        ).reduce(
-          (dict, row) => {
-            // eslint-disable-next-line no-param-reassign
-            dict[row.id] = row.name;
-            return dict;
-          },
-          {} as { [id: string]: string },
-        );
+        const animalDict: { [id: string]: string } = (data as { id: number; name: string }[])
+          // Temp, remove non-cattle as an option
+          .filter((opt) => opt.id === 1 || opt.id === 2)
+          .reduce(
+            (dict, row) => {
+              // eslint-disable-next-line no-param-reassign
+              dict[row.id] = row.name;
+              return dict;
+            },
+            {} as { [id: string]: string },
+          );
         setRawAnimalNames(animalDict);
       }
     });
