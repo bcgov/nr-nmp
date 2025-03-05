@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS previous_crop_types (
-  Id INT NOT NULL,
+  Id INT PRIMARY KEY,
   PreviousCropCode INT NOT NULL,
   Name VARCHAR(100) NOT NULL,
   NitrogenCreditMetric INT NOT NULL,

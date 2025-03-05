@@ -33,7 +33,7 @@ class Crops(models.Model):
         db_table = 'crops'
 
 class PreviousCropTypes(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     previouscropcode = models.IntegerField()
     name = models.CharField(max_length=100)
     nitrogencreditmetric = models.IntegerField()
@@ -150,7 +150,7 @@ class CropYields(models.Model):
         db_table = 'crop_yields'
 
 class NitrogenRecommendation(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     recommendationdesc = models.TextField()
 
     class Meta:
