@@ -80,6 +80,16 @@ export default function MilkingFields({
           setMilkProduction(e.target.value);
           handleChange(e);
         }}
+        required
+        onInput={(e) => {
+          const elem = e.target as HTMLInputElement;
+          const value = Number(elem.value);
+          if (Number.isNaN(value) || value! < 0) {
+            elem.setCustomValidity('Please enter a valid amount.');
+          } else {
+            elem.setCustomValidity('');
+          }
+        }}
       />
       <InputField
         label="Milking Centre Wash Water"
@@ -90,6 +100,16 @@ export default function MilkingFields({
           setWashWater(e.target.value);
           handleChange(e);
         }}
+        required
+        onInput={(e) => {
+          const elem = e.target as HTMLInputElement;
+          const value = Number(elem.value);
+          if (Number.isNaN(value) || value! < 0) {
+            elem.setCustomValidity('Please enter a valid amount.');
+          } else {
+            elem.setCustomValidity('');
+          }
+        }}
       />
       <Dropdown
         label="(Units)"
@@ -97,6 +117,7 @@ export default function MilkingFields({
         value={washWaterUnit || perDayPerAnimalUnit}
         options={washWaterOptions}
         onChange={handleUnitChange}
+        required
       />
     </>
   );
