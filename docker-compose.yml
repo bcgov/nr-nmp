@@ -58,13 +58,16 @@ services:
     healthcheck:
      test: curl --fail http://localhost:3000 || exit 1
     ports: ["3000:3000"]
+    # Add volume mount for backend
+    volumes:
+      - ./backend:/app
     # For debugging
     stdin_open: true
     tty: true
 
   # Frontend
   frontend:
-    image: node:20.18.2
+    image: node:20.18.3
     command: /bin/bash -c "cd ./app && npm install && npm run ${CMD:-dev}"
     container_name: nr-nmp-frontend
     depends_on:

@@ -73,7 +73,7 @@ jobs:
         name: [database, backend, frontend]
         include:
           - name: database
-            overwrite: false
+            overwrite: true
             parameters:
               -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
               -p CPU_REQUEST=${{ inputs.db-cpu-request }}
@@ -94,7 +94,7 @@ jobs:
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
-          overwrite: false
+          overwrite: true
           parameters: 
             -p TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
