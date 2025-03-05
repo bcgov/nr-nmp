@@ -10,7 +10,10 @@ import { FlexContainer, MarginWrapper } from './addAnimals.styles';
 import { Column, Header } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
+<<<<<<< HEAD
 import DairyCattle from './DairyCattle/DairyCattle';
+=======
+>>>>>>> 7eef0a5 (feat: [NR-NMP-112] Beef Cattle flow (#160))
 
 interface AddAnimalsProps {
   saveData: React.Dispatch<React.SetStateAction<any[]>>;
@@ -73,11 +76,15 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
     if (data === undefined || data.length === 0) {
       data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id }));
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7eef0a5 (feat: [NR-NMP-112] Beef Cattle flow (#160))
     const dataElems = data.map((d, index) => {
       if (d === null) {
         return null;
       }
+<<<<<<< HEAD
       if (d.id === '1') {
         return (
           <BeefCattle
@@ -105,6 +112,20 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
         );
       }
       throw new Error('Unexpected animal id.');
+=======
+      // TODO: Once more animal types are added, return a different elem based on type
+      return (
+        <BeefCattle
+          // eslint-disable-next-line react/no-array-index-key
+          key={`a-${index}`}
+          startData={d}
+          startExpanded={index === 0}
+          saveData={handleSave}
+          onDelete={handleDelete}
+          myIndex={index}
+        />
+      );
+>>>>>>> 7eef0a5 (feat: [NR-NMP-112] Beef Cattle flow (#160))
     });
 
     setFormData(data);
@@ -113,13 +134,21 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
   }, []);
 
   const handleAdd = (animalId: string) => {
+<<<<<<< HEAD
     // Right now we only handle cattle
     if (animalId !== '1' && animalId !== '2') return;
 
+=======
+    // Right now we only handle beef cattle
+    if (animalId !== '1') return;
+
+    const { length } = formData;
+>>>>>>> 7eef0a5 (feat: [NR-NMP-112] Beef Cattle flow (#160))
     setFormData((prev) => {
       prev.push({ id: animalId });
       return prev;
     });
+<<<<<<< HEAD
     const { length } = formData;
     setElems((prev) => {
       const next = [...prev];
@@ -145,6 +174,19 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
         );
       }
 
+=======
+    setElems((prev) => {
+      const next = [...prev];
+      next.push(
+        <BeefCattle
+          key={`a-${length}`}
+          startData={{ id: animalId }}
+          saveData={handleSave}
+          onDelete={handleDelete}
+          myIndex={length}
+        />,
+      );
+>>>>>>> 7eef0a5 (feat: [NR-NMP-112] Beef Cattle flow (#160))
       return next;
     });
   };
@@ -153,10 +195,16 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
     apiCache.callEndpoint('api/animals/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
+<<<<<<< HEAD
         const animals: { value: number; label: string }[] = (data as { id: number; name: string }[])
           .map((row) => ({ value: row.id, label: row.name }))
           // Temp, remove non-cattle as an option
           .filter((opt) => opt.value === 1 || opt.value === 2);
+=======
+        const animals: { value: number; label: string }[] = (
+          data as { id: number; name: string }[]
+        ).map((row) => ({ value: row.id, label: row.name }));
+>>>>>>> 7eef0a5 (feat: [NR-NMP-112] Beef Cattle flow (#160))
         setAnimalOptions(animals);
       }
     });
@@ -165,7 +213,7 @@ export default function AddAnimals({ saveData }: AddAnimalsProps) {
 
   return (
     <div>
-      <div style={{ overflowY: 'scroll' }}>
+      <div>
         <Header>
           <Column>Animal Type</Column>
           <Column>Annual Manure Amount</Column>
