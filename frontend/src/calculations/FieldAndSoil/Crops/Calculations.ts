@@ -5,16 +5,35 @@ import NMPFileFieldData from '@/types/NMPFileFieldData';
 import NMPFileCropData from '@/types/NMPFileCropData';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 
+/**
+ * Fetches crop conversion factors from the API
+ * 
+ * @returns {Promise<any>} Conversion factors for calculations
+ */
 export async function getConversionFactors() {
   const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropsconversionfactors/`);
   return response.data[0];
 }
 
+/**
+ * Retrieves region data by region ID
+ * 
+ * @param {number} regionId - The ID of the region to fetch
+ * @returns {Promise<any>} Region data
+ */
 export async function getRegion(regionId: number) {
   const response = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${regionId}/`);
   return response.data;
 }
 
+/**
+ * Gets soil test regions for a specific crop
+ * 
+ * @param {number} cropId - ID of the crop
+ * @param {number} soilTestPotassiumRegionCode - Region code for potassium soil test
+ * @param {string} endpoint - API endpoint to query
+ * @returns {Promise<any>} Soil test region data for the specified crop
+ */
 export async function getCropSoilTestRegions(
   cropId: number,
   soilTestPotassiumRegionCode: number,
@@ -26,6 +45,13 @@ export async function getCropSoilTestRegions(
   return response.data;
 }
 
+/**
+ * Finds the Kelowna range that contains a specific soil test phosphorus value
+ * 
+ * @param {number} STP - Soil test phosphorus value in ppm
+ * @param {string} endpoint - API endpoint to query
+ * @returns {Promise<any>} Matching Kelowna range
+ */
 export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
   const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
   const response = ranges.data.find(
@@ -34,6 +60,15 @@ export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
   return response;
 }
 
+/**
+ * Retrieves recommendations based on soil test values, regions, and crop group
+ * 
+ * @param {number} kelownaRangeId - ID of the Kelowna range
+ * @param {number} soilTestRegionCd - Soil test region code
+ * @param {number} cropGroupRegionCd - Crop group region code
+ * @param {string} endpoint - API endpoint for recommendations
+ * @returns {Promise<any>} Recommendations for nutrient application
+ */
 export async function getRecommendations(
   kelownaRangeId: number,
   soilTestRegionCd: number,
@@ -62,6 +97,12 @@ export async function getRecommendations(
   return recommendations;
 }
 
+/**
+ * Checks if a field has existing soil test data, populates with defaults if not
+ * 
+ * @param {NMPFileFieldData} field - Field data to check
+ * @param {Function} setFields - Function to update field data
+ */
 export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (fields: any[]) => void) {
   const updatedField = { ...field };
   if (field.SoilTest == null || Object.keys(field.SoilTest).length === 0) {
@@ -75,11 +116,23 @@ export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (field
   }
 }
 
+/**
+ * Fetches crop data by crop ID
+ * 
+ * @param {number} cropId - ID of the crop to fetch
+ * @returns {Promise<any>} Crop data
+ */
 export async function getCrop(cropId: number) {
   const response = await axios.get(`${env.VITE_BACKEND_URL}/api/crops/${cropId}/`);
   return response.data[0];
 }
 
+/**
+ * Gets nitrogen credit for a previous crop
+ * 
+ * @param {number} cropId - ID of the previous crop
+ * @returns {Promise<number>} Nitrogen credit amount in imperial units (0 if no crop ID)
+ */
 export async function getNCredit(cropId: number) {
   if (cropId == null || cropId === 0) {
     return 0;
@@ -88,11 +141,25 @@ export async function getNCredit(cropId: number) {
   return response.data[0].nitrogencreditimperial;
 }
 
+/**
+ * Fetches yield data for a specific crop in a specific region
+ * 
+ * @param {number} cropId - ID of the crop
+ * @param {number} regionId - ID of the region
+ * @returns {Promise<any>} Crop yield data
+ */
 export async function getCropYield(cropId: number, regionId: number) {
   const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropyields/${cropId}/${regionId}/`);
   return response.data[0];
 }
 
+/**
+ * Calculates potassium (K2O) removal for a crop
+ * 
+ * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {number} regionId - ID of the region
+ * @returns {Promise<number>} Amount of K2O removed in lbs/acre, rounded to nearest integer
+ */
 export async function getCropRemovalK20(
   combinedCropData: NMPFileCropData,
   regionId: number,
@@ -101,12 +168,14 @@ export async function getCropRemovalK20(
   const crop = await getCrop(Number(combinedCropData.cropId));
   const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
 
+  // For cover crops not harvested, there's no removal
   if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
     return 0;
   }
 
   let k2oRemoval: number = 0;
 
+  // Calculate removal differently based on crop harvesting method
   if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
     k2oRemoval = (cropYield.amount / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
   } else {
@@ -116,6 +185,13 @@ export async function getCropRemovalK20(
   return Math.round(k2oRemoval) || 0;
 }
 
+/**
+ * Calculates phosphorus (P2O5) removal for a crop
+ * 
+ * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {number} regionId - ID of the region
+ * @returns {Promise<number>} Amount of P2O5 removed in lbs/acre, rounded to nearest integer
+ */
 export async function getCropRemovalP205(
   combinedCropData: NMPFileCropData,
   regionId: number,
@@ -124,12 +200,14 @@ export async function getCropRemovalP205(
   const crop = await getCrop(Number(combinedCropData.cropId));
   const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
 
+  // For cover crops not harvested, there's no removal
   if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
     return 0;
   }
 
   let p2o5Removal: number = 0;
 
+  // Calculate removal differently based on crop harvesting method
   if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
     p2o5Removal = (cropYield.amount / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
   } else {
@@ -139,6 +217,13 @@ export async function getCropRemovalP205(
   return Math.round(p2o5Removal) || 0;
 }
 
+/**
+ * Calculates nitrogen removal for a crop
+ * 
+ * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {number} regionId - ID of the region
+ * @returns {Promise<number>} Amount of N removed in lbs/acre, rounded to nearest integer
+ */
 export async function getCropRemovalN(
   combinedCropData: NMPFileCropData,
   regionId: number,
@@ -154,6 +239,7 @@ export async function getCropRemovalN(
   const cropType = cropTypeResponse.data[0];
   const isForageCrop = cropType.crudeproteinrequired === true;
 
+  // Special calculation for forage crops with crude protein data
   if (isForageCrop) {
     if (!combinedCropData.crudeProtien || combinedCropData.crudeProtien == 0) {
       nRemoval = crop.cropremovalfactornitrogen * cropYield.amount;
@@ -174,6 +260,15 @@ export async function getCropRemovalN(
   return Math.round(nRemoval) || 0;
 }
 
+/**
+ * Calculates nitrogen requirement for a crop, accounting for previous crop credit
+ * 
+ * @param {NMPFileFieldData} field - Field data including soil test information
+ * @param {Function} setFields - Function to update field data
+ * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {number} regionId - ID of the region
+ * @returns {Promise<number>} Required N application in lbs/acre, rounded to nearest integer
+ */
 export async function getCropRequirementN(
   field: NMPFileFieldData,
   setFields: (fields: any[]) => void,
@@ -187,6 +282,7 @@ export async function getCropRequirementN(
   checkExistingSoilTest(field, setFields);
 
   let nRequirement;
+  // Different calculation methods based on nitrogen recommendation ID
   switch (crop.nitrogenrecommendationid) {
     case 1:
       if (crop.nitrogenrecommendationpoundperacre == null) {
@@ -218,12 +314,22 @@ export async function getCropRequirementN(
     default:
       break;
   }
+  // Subtract N credit from previous crop and ensure value isn't negative
   nRequirement -= ncredit;
   nRequirement = nRequirement < 0 ? 0 : nRequirement;
 
   return Math.round(nRequirement);
 }
 
+/**
+ * Calculates potassium (K2O) requirement based on soil test and crop needs
+ * 
+ * @param {NMPFileFieldData} field - Field data including soil test information
+ * @param {Function} setFields - Function to update field data
+ * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {number} regionId - ID of the region
+ * @returns {Promise<number>} Required K2O application in lbs/acre, rounded to nearest integer
+ */
 export async function getCropRequirementK2O(
   field: NMPFileFieldData,
   setFields: (fields: any[]) => void,
@@ -234,6 +340,7 @@ export async function getCropRequirementK2O(
   const region = await getRegion(regionId);
   checkExistingSoilTest(field, setFields);
 
+  // Use default if soil test data is missing
   let STK = field.SoilTest.convertedKelownaK;
   if (STK == '0' || STK == null) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
@@ -258,12 +365,22 @@ export async function getCropRequirementK2O(
     'soiltestpotassiumrecommendation',
   );
 
+  // Convert from kg/ha to lbs/acre
   return Math.round(
     Number(sTKRecommended.k2orecommendationkilogramperhectare) *
       conversionFactors.kilogramperhectaretopoundperacreconversion,
   );
 }
 
+/**
+ * Calculates phosphorus (P2O5) requirement based on soil test and crop needs
+ * 
+ * @param {NMPFileFieldData} field - Field data including soil test information
+ * @param {Function} setFields - Function to update field data
+ * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {number} regionId - ID of the region
+ * @returns {Promise<number>} Required P2O5 application in lbs/acre, rounded to nearest integer
+ */
 export async function getCropRequirementP205(
   field: NMPFileFieldData,
   setFields: (fields: any[]) => void,
@@ -275,6 +392,7 @@ export async function getCropRequirementP205(
 
   checkExistingSoilTest(field, setFields);
 
+  // Use default if soil test data is missing
   let STP = field.SoilTest.convertedKelownaP;
   if (STP == '0' || STP == null) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 
@@ -301,6 +419,8 @@ export async function getCropRequirementP205(
     phosphorousCropGroupRegionCd,
     'soiltestphosphorousrecommendation',
   );
+  
+  // Convert from kg/ha to lbs/acre
   return Math.round(
     Number(sTPRecommended.p2o5recommendationkilogramperhectare) *
       conversionFactors.kilogramperhectaretopoundperacreconversion,
