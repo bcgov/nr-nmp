@@ -7,6 +7,9 @@ import SolidManureConversionFactors from './SolidManureConversionFactors';
 import Region from './Region';
 import CropsConversionFactors from './CropsConversionFactors';
 import SoilTestData from './SoilTestData';
+import CropTypesDatabase from './CropTypesDatabase';
+import CropsDatabase from './CropsDatabase';
+import PreviousCropsDatabase from './PreviousCropsDatabase';
 
 export type {
   LiquidManureConversionFactors,
@@ -18,4 +21,7 @@ export type {
   Region,
   CropsConversionFactors,
   SoilTestData,
+  CropTypesDatabase,
+  CropsDatabase,
+  PreviousCropsDatabase,
 };

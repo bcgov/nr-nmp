@@ -36,8 +36,13 @@ import {
   ColumnContainer,
   RowContainer,
 } from './crops.styles';
-import NMPFileCropData from '@/types/NMPFileCropData';
-import NMPFileFieldData from '@/types/NMPFileFieldData';
+import {
+  CropTypesDatabase,
+  NMPFileCropData,
+  NMPFileFieldData,
+  CropsDatabase,
+  PreviousCropsDatabase,
+} from '@/types';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 import { APICacheContext } from '@/context/APICacheContext';
 
@@ -55,45 +60,9 @@ function Crops({ fields, setFields }: FieldListProps) {
   const [combinedCropsData, setCombinedCropsData] =
     useState<NMPFileCropData>(defaultNMPFileCropsData);
   const [filteredCrops, setFilteredCrops] = useState<{ value: number; label: string }[]>([]);
-  const [cropTypesDatabase, setCropTypesDatabase] = useState<
-    {
-      id: number;
-      name: string;
-      covercrop: boolean;
-      crudeproteinrequired: boolean;
-      customcrop: boolean;
-      modifynitrogen: boolean;
-    }[]
-  >([]);
-  const [cropsDatabase, setCropsDatabase] = useState<
-    {
-      cropname: string;
-      cropremovalfactork2o: number;
-      cropremovalfactornitrogen: number;
-      cropremovalfactorp2o5: number;
-      croptypeid: number;
-      harvestbushelsperton: number;
-      id: number;
-      manureapplicationhistory: number;
-      nitrogenrecommendationid: number;
-      nitrogenrecommendationpoundperacre: number;
-      nitrogenrecommendationupperlimitpoundperacre: number;
-      previouscropcode: number;
-      sortnumber: number;
-      yieldcd: number;
-    }[]
-  >([]);
-  const [previousCropDatabase, setPreviousCropDatabase] = useState<
-    {
-      id: number;
-      previouscropcode: number;
-      name: string;
-      nitrogencreditmetric: number;
-      nitrogencreditimperial: number;
-      cropid: number;
-      croptypeid: number;
-    }[]
-  >([]);
+  const [cropTypesDatabase, setCropTypesDatabase] = useState<CropTypesDatabase[]>([]);
+  const [cropsDatabase, setCropsDatabase] = useState<CropsDatabase[]>([]);
+  const [previousCropDatabase, setPreviousCropDatabase] = useState<PreviousCropsDatabase[]>([]);
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -143,7 +112,7 @@ function Crops({ fields, setFields }: FieldListProps) {
                 combinedCropsData,
                 JSON.parse(state.nmpFile).farmDetails.FarmRegion,
               );
-              console.log('cropRequirementP205', cropRequirementP205);
+
               const cropRequirementK2O = await getCropRequirementK2O(
                 field,
                 setFields,
@@ -178,13 +147,13 @@ function Crops({ fields, setFields }: FieldListProps) {
                 remK2o: cropRemovalK20,
               };
               setCombinedCropsData(updatedCombinedCropsData);
-              return { ...field, Crops: [combinedCropsData] };
+              return { ...field, Crops: [updatedCombinedCropsData] };
             }
             return field;
           }),
         );
         setFields(updatedFields);
-        // setIsModalVisible(false);
+        //         setIsModalVisible(false);
       } catch (error) {
         console.error('Error submitting crop data:', error);
       }
@@ -216,17 +185,13 @@ function Crops({ fields, setFields }: FieldListProps) {
 
   useEffect(() => {
     try {
-      if (
-        combinedCropsData.prevCropId != null &&
-        combinedCropsData.prevCropId != undefined &&
-        combinedCropsData.prevCropId != 0
-      ) {
+      if (combinedCropsData.prevCropId && combinedCropsData.prevCropId != 0) {
         apiCache
           .callEndpoint(`api/previouscroptypes/${combinedCropsData.prevCropId}/`)
           .then((response: { status?: any; data: any }) => {
             if (response.status === 200) {
               const { data } = response;
-              setNcredit(data[0].nitrogencreditimperial ? 0 : data[0].nitrogencreditimperial);
+              setNcredit(data[0].nitrogencreditimperial || 0);
             }
           });
       }
@@ -236,11 +201,7 @@ function Crops({ fields, setFields }: FieldListProps) {
   }, [combinedCropsData.prevCropId]);
 
   useEffect(() => {
-    if (
-      combinedCropsData.cropId &&
-      combinedCropsData.cropId != null &&
-      combinedCropsData.cropId != undefined
-    ) {
+    if (combinedCropsData.cropId && Number(combinedCropsData.cropId) !== 0) {
       try {
         (async () => {
           const region = await getRegion(JSON.parse(state.nmpFile).farmDetails.FarmRegion);
@@ -265,11 +226,7 @@ function Crops({ fields, setFields }: FieldListProps) {
           const unitConversionFactor = 0.5;
           const crop = await getCrop(Number(combinedCropsData.cropId));
 
-          if (
-            (crop && crop.nitrogenrecommendationid != 0) ||
-            (crop && crop.nitrogenrecommendationid != null) ||
-            (crop && crop.nitrogenrecommendationid != undefined)
-          ) {
+          if (crop && crop.nitrogenrecommendationid != null) {
             const crudeProtien =
               crop.cropremovalfactornitrogen * nToProteinConversionFactor * unitConversionFactor;
             setCombinedCropsData((prevData) => ({
@@ -279,7 +236,7 @@ function Crops({ fields, setFields }: FieldListProps) {
           }
         })();
       } catch (error) {
-        console.error('Error getting crop yield:', error);
+        console.error('Error getting crop protein data:', error);
       }
     }
   }, [combinedCropsData.cropId]);
@@ -300,9 +257,7 @@ function Crops({ fields, setFields }: FieldListProps) {
               <ListItem align="right">
                 <Button
                   text="Add Crop"
-                  handleClick={() => {
-                    handleEditCrop(index);
-                  }}
+                  handleClick={() => handleEditCrop(index)}
                   aria-label={`Add Crop to ${field.FieldName}`}
                   variant="primary"
                   size="sm"
@@ -315,18 +270,14 @@ function Crops({ fields, setFields }: FieldListProps) {
                 <ListItem align="right">
                   <button
                     type="button"
-                    onClick={() => {
-                      handleEditCrop(index);
-                    }}
+                    onClick={() => handleEditCrop(index)}
                     aria-label={`Edit Crop ${field.Crops[0].cropName}`}
                   >
                     <FontAwesomeIcon icon={faEdit} />
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      handleDeleteCrop(index);
-                    }}
+                    onClick={() => handleDeleteCrop(index)}
                     aria-label={`Delete Crop ${field.Crops[0].cropName}`}
                   >
                     <FontAwesomeIcon icon={faTrash} />
