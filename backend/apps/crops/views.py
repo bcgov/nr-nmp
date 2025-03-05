@@ -13,14 +13,22 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
-    def crops(self, request, pk=None):
-        crops = Crops.objects.all()
+    def crops(self, request, id=None):
+        crops = None
+        if id == None:
+            crops = Crops.objects.all()
+        else:
+            crops = Crops.objects.filter(id=id)
         serializer = CropsSerializer(crops, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
-    def previousCropTypes(self, request):
-        previous_crops_types = PreviousCropTypes.objects.all()
+    def previousCropTypes(self, request, id=None):
+        previous_crops_types = None
+        if id == None:
+            previous_crops_types = PreviousCropTypes.objects.all()
+        else:
+            previous_crops_types = PreviousCropTypes.objects.filter(id=id)
         serializer = PreviousCropTypesSerializer(previous_crops_types, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -78,4 +86,24 @@ class CropsViewset(viewsets.ViewSet):
     def soilTestPotassiumKelownaRanges(self, request):
         soil_test_potassium_kelowna_ranges = SoilTestPotassiumKelownaRanges.objects.all()
         serializer = SoilTestPotassiumKelownaRangesSerializer(soil_test_potassium_kelowna_ranges, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def cropYields(self, request, cropid=None, locationid=None):
+        crop_yields = None
+        if cropid == None and locationid == None:
+            crop_yields = CropYields.objects.all()
+        else:
+            crop_yields = CropYields.objects.filter(cropid=cropid, locationid=locationid)
+        serializer = CropYieldsSerializer(crop_yields, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def nitrogenRecommendation(self, request, id=None):
+        nitrogen_recommendation = None
+        if id == None:
+            nitrogen_recommendation = NitrogenRecommendation.objects.all()
+        else:
+            nitrogen_recommendation = NitrogenRecommendation.objects.filter(id=id)
+        serializer = NitrogenRecommendationSerializer(nitrogen_recommendation, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -9,8 +9,12 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import useAppService from '@/services/app/useAppService';
 import { Modal, InputField, Dropdown, RadioButton, Button } from '../../../components/common';
 import {
+  getRegion,
+  getCrop,
   getCropRequirementP205,
   getCropRequirementK2O,
+  getCropRequirementN,
+  getCropRemovalN,
 } from '@/calculations/FieldAndSoil/Crops/CropRequirements';
 import {
   ContentWrapper,
@@ -42,6 +46,7 @@ interface FieldListProps {
 
 function Crops({ fields, setFields }: FieldListProps) {
   const { state } = useAppService();
+  const [ncredit, setNcredit] = useState<number>(0);
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
@@ -107,7 +112,6 @@ function Crops({ fields, setFields }: FieldListProps) {
       setCombinedCropsData((prevData) => ({
         ...prevData,
         cropName: selectedCrop?.cropname,
-        reqN: selectedCrop?.nitrogenrecommendationpoundperacre,
       }));
     }
   };
@@ -137,9 +141,20 @@ function Crops({ fields, setFields }: FieldListProps) {
                 combinedCropsData,
                 JSON.parse(state.nmpFile).farmDetails.FarmRegion,
               );
+              console.log('cropRequirementP205', cropRequirementP205);
               const cropRequirementK2O = await getCropRequirementK2O(
                 field,
                 setFields,
+                combinedCropsData,
+                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+              );
+              const cropRequirementN = await getCropRequirementN(
+                field,
+                setFields,
+                combinedCropsData,
+                JSON.parse(state.nmpFile).farmDetails.FarmRegion,
+              );
+              const cropRemovalN = await getCropRemovalN(
                 combinedCropsData,
                 JSON.parse(state.nmpFile).farmDetails.FarmRegion,
               );
@@ -147,6 +162,8 @@ function Crops({ fields, setFields }: FieldListProps) {
                 ...combinedCropsData,
                 reqP2o5: cropRequirementP205,
                 reqK2o: cropRequirementK2O,
+                reqN: cropRequirementN,
+                remN: cropRemovalN,
               };
               setCombinedCropsData(updatedCombinedCropsData);
               return { ...field, Crops: [combinedCropsData] };
@@ -158,7 +175,6 @@ function Crops({ fields, setFields }: FieldListProps) {
         // setIsModalVisible(false);
       } catch (error) {
         console.error('Error submitting crop data:', error);
-        // Optionally, you can set an error state to display an error message to the user
       }
     }
   };
@@ -185,6 +201,76 @@ function Crops({ fields, setFields }: FieldListProps) {
         }
       });
   }, []);
+
+  useEffect(() => {
+    try {
+      if (
+        combinedCropsData.prevCropId != null &&
+        combinedCropsData.prevCropId != undefined &&
+        combinedCropsData.prevCropId != 0
+      ) {
+        apiCache
+          .callEndpoint(`api/previouscroptypes/${combinedCropsData.prevCropId}/`)
+          .then((response: { status?: any; data: any }) => {
+            if (response.status === 200) {
+              const { data } = response;
+              setNcredit(data[0].nitrogencreditimperial ? 0 : data[0].nitrogencreditimperial);
+            }
+          });
+      }
+    } catch (error) {
+      console.error('Error getting nitrogen credit:', error);
+    }
+  }, [combinedCropsData.prevCropId]);
+
+  useEffect(() => {
+    if (
+      combinedCropsData.cropId &&
+      combinedCropsData.cropId != null &&
+      combinedCropsData.cropId != undefined
+    ) {
+      try {
+        (async () => {
+          const region = await getRegion(JSON.parse(state.nmpFile).farmDetails.FarmRegion);
+          apiCache
+            .callEndpoint(`api/cropyields/${combinedCropsData.cropId}/${region[0]?.locationid}/`)
+            .then((response: { status?: any; data: any }) => {
+              if (response.status === 200) {
+                const { data } = response;
+                setCombinedCropsData((prevData) => ({
+                  ...prevData,
+                  yield: data[0].amount,
+                }));
+              }
+            });
+        })();
+      } catch (error) {
+        console.error('Error getting crop yield:', error);
+      }
+      try {
+        (async () => {
+          const nToProteinConversionFactor = 0.625;
+          const unitConversionFactor = 0.5;
+          const crop = await getCrop(Number(combinedCropsData.cropId));
+
+          if (
+            (crop && crop.nitrogenrecommendationid != 0) ||
+            (crop && crop.nitrogenrecommendationid != null) ||
+            (crop && crop.nitrogenrecommendationid != undefined)
+          ) {
+            const crudeProtien =
+              crop.cropremovalfactornitrogen * nToProteinConversionFactor * unitConversionFactor;
+            setCombinedCropsData((prevData) => ({
+              ...prevData,
+              crudeProtien,
+            }));
+          }
+        })();
+      } catch (error) {
+        console.error('Error getting crop yield:', error);
+      }
+    }
+  }, [combinedCropsData.cropId]);
 
   return (
     <div>
@@ -326,7 +412,7 @@ function Crops({ fields, setFields }: FieldListProps) {
             {combinedCropsData.cropTypeId != 6 && (
               <FlexContainer>
                 <LeftJustifiedText>
-                  N credit (lb/ac)<div>{combinedCropsData.crudeProtien}</div>
+                  N credit (lb/ac)<div>{ncredit}</div>
                 </LeftJustifiedText>
                 {combinedCropsData.cropTypeId == 2 && (
                   <RightJustifiedText>

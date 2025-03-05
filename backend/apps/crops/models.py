@@ -139,3 +139,21 @@ class CropSoilPotassiumRegions(models.Model):
     class Meta:
         managed = False
         db_table = 'crop_soil_potassium_regions'
+
+class CropYields(models.Model):
+    id = models.IntegerField(primary_key=True)
+    cropid = models.IntegerField()
+    locationid = models.IntegerField()
+    amount = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'crop_yields'
+
+class NitrogenRecommendation(models.Model):
+    id = models.IntegerField()
+    recommendationdesc = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'nitrogen_recommendations'

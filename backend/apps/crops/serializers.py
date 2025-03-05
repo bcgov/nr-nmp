@@ -56,3 +56,12 @@ class CropSoilPotassiumRegionsSerializer(serializers.ModelSerializer):
         model = CropSoilPotassiumRegions
         fields = '__all__'
 
+class CropYieldsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CropYields
+        fields = '__all__'
+
+class NitrogenRecommendationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NitrogenRecommendation
+        fields = '__all__'
