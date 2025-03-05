@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
 /**
- * @summary This is the Crops Tab
+ * @summary This is the Crops Tab component for managing crop data for fields
+ * @description Allows users to view, add, edit and delete crops associated with fields
+ * Provides functionality to calculate nutrient requirements and removals
  */
 import { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -48,11 +50,32 @@ import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 import { APICacheContext } from '@/context/APICacheContext';
 
 interface FieldListProps {
-  fields: NMPFileFieldData[];
-  setFields: (fields: any[]) => void;
+  fields: NMPFileFieldData[]; // Array of field data from parent component
+  setFields: (fields: any[]) => void; // Function to update fields in parent component
 }
 
+/**
+ * Crops component for managing crop data associated with fields
+ *
+ * @param {FieldListProps} props - Component props containing fields array and setFields function
+ * @returns {JSX.Element} Rendered Crops component
+ */
 function Crops({ fields, setFields }: FieldListProps) {
+  /**
+   * State Variables:
+   * - state: Global application state from useAppService
+   * - ncredit: Nitrogen credit value from previous crop
+   * - apiCache: Context for API data caching
+   * - isModalVisible: Controls the visibility of the edit modal
+   * - currentFieldIndex: Tracks which field is being edited
+   * - combinedCropsData: Current crop data being edited
+   * - filteredCrops: List of crops filtered by selected crop type
+   * - cropTypesDatabase: All crop types from database
+   * - cropsDatabase: All crops from database
+   * - previousCropDatabase: All previous crop types from database
+   * - calculationsPerformed: Tracks if nutrient calculations have been performed
+   * - errors: Form validation errors
+   */
   const { state } = useAppService();
   const [ncredit, setNcredit] = useState<number>(0);
   const apiCache = useContext(APICacheContext);
@@ -67,6 +90,13 @@ function Crops({ fields, setFields }: FieldListProps) {
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  /**
+   * Handles changes to form inputs
+   *
+   * @param {Object} e - Event object containing name and value of changed field
+   * @param {string} e.target.name - Name of the input field
+   * @param {any} e.target.value - New value of the input field
+   */
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setCombinedCropsData((prevData) => ({
@@ -79,6 +109,7 @@ function Crops({ fields, setFields }: FieldListProps) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
 
+    // Handle special case for cropTypeId - filter available crops based on type
     if (name === 'cropTypeId') {
       const selectedCropType = cropsDatabase.filter(
         (type) => type.croptypeid === parseInt(value, 10),
@@ -86,6 +117,7 @@ function Crops({ fields, setFields }: FieldListProps) {
       setFilteredCrops(selectedCropType.map((crop) => ({ value: crop.id, label: crop.cropname })));
     }
 
+    // Handle special case for cropId - set the crop name for display
     if (name === 'cropId') {
       const selectedCrop = cropsDatabase.find((crop) => crop.id === parseInt(value, 10));
       setCombinedCropsData((prevData) => ({
@@ -95,6 +127,11 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   };
 
+  /**
+   * Opens the edit modal for a specific field
+   *
+   * @param {number} fieldIndex - Index of the field to edit in the fields array
+   */
   const handleEditCrop = (fieldIndex: number) => {
     setCurrentFieldIndex(fieldIndex);
     setCombinedCropsData(fields[fieldIndex].Crops[0] || combinedCropsData);
@@ -103,6 +140,11 @@ function Crops({ fields, setFields }: FieldListProps) {
     setIsModalVisible(true);
   };
 
+  /**
+   * Deletes crop data for a specific field
+   *
+   * @param {number} fieldIndex - Index of the field whose crop to delete
+   */
   const handleDeleteCrop = (fieldIndex: number) => {
     const updatedFields = fields.map((field, index) =>
       index === fieldIndex ? { ...field, Crops: [] } : field,
@@ -110,9 +152,15 @@ function Crops({ fields, setFields }: FieldListProps) {
     setFields(updatedFields);
   };
 
+  /**
+   * Validates the crop form data
+   *
+   * @returns {boolean} True if the form is valid, false otherwise
+   */
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
+    // Required field validation
     if (!combinedCropsData.cropTypeId) {
       newErrors.cropTypeId = 'Crop Type is required';
     }
@@ -121,6 +169,7 @@ function Crops({ fields, setFields }: FieldListProps) {
       newErrors.cropId = 'Crop is required';
     }
 
+    // Yield validation - required and must be positive number
     if (!combinedCropsData.yield) {
       newErrors.yield = 'Yield is required';
     } else if (
@@ -130,10 +179,12 @@ function Crops({ fields, setFields }: FieldListProps) {
       newErrors.yield = 'Yield must be a valid number greater than zero';
     }
 
+    // Special validation for "Other" crop type
     if (combinedCropsData.cropTypeId == 6 && !combinedCropsData.cropOther) {
       newErrors.cropOther = 'Crop Description is required';
     }
 
+    // Crude protein validation for forage crops (type 1)
     if (combinedCropsData.cropTypeId == 1 && !combinedCropsData.crudeProtien) {
       newErrors.crudeProtien = 'Crude Protein is required';
     } else if (
@@ -160,6 +211,7 @@ function Crops({ fields, setFields }: FieldListProps) {
       }
     }
 
+    // Special validation for cover crops (type 2)
     if (combinedCropsData.cropTypeId == 2 && !combinedCropsData.coverCropHarvested) {
       newErrors.coverCropHarvested = 'Please specify if cover crop was harvested';
     }
@@ -168,6 +220,10 @@ function Crops({ fields, setFields }: FieldListProps) {
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Calculates nutrient requirements and removals for the selected crop
+   * Updates the combinedCropsData state with calculated values
+   */
   const handleCalculate = async () => {
     if (!validateForm()) {
       return; // Stop if validation fails
@@ -175,6 +231,7 @@ function Crops({ fields, setFields }: FieldListProps) {
 
     if (currentFieldIndex !== null) {
       try {
+        // Calculate crop requirements (P2O5, K2O, N)
         const cropRequirementP205 = await getCropRequirementP205(
           fields[currentFieldIndex],
           setFields,
@@ -196,6 +253,7 @@ function Crops({ fields, setFields }: FieldListProps) {
           JSON.parse(state.nmpFile).farmDetails.FarmRegion,
         );
 
+        // Calculate crop removals (N, P2O5, K2O)
         const cropRemovalN = await getCropRemovalN(
           combinedCropsData,
           JSON.parse(state.nmpFile).farmDetails.FarmRegion,
@@ -230,6 +288,10 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   };
 
+  /**
+   * Submits the crop data to update the field
+   * Only called after calculations have been performed
+   */
   const handleSubmit = () => {
     if (currentFieldIndex !== null) {
       const updatedFields = fields.map((field, index) => {
@@ -246,6 +308,10 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   };
 
+  /**
+   * Effect: Load initial data from API
+   * Fetches crop types, crops, and previous crop types on component mount
+   */
   useEffect(() => {
     apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
@@ -269,6 +335,10 @@ function Crops({ fields, setFields }: FieldListProps) {
       });
   }, []);
 
+  /**
+   * Effect: Update nitrogen credit when previous crop changes
+   * Fetches nitrogen credit value for the selected previous crop
+   */
   useEffect(() => {
     try {
       if (combinedCropsData.prevCropId && combinedCropsData.prevCropId != 0) {
@@ -286,6 +356,11 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   }, [combinedCropsData.prevCropId]);
 
+  /**
+   * Effect: Auto-fill yield and crude protein values when crop changes
+   * Fetches yield data based on selected crop and region
+   * Calculates crude protein for forage crops
+   */
   useEffect(() => {
     if (combinedCropsData.cropId && Number(combinedCropsData.cropId) !== 0) {
       try {
@@ -327,6 +402,10 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   }, [combinedCropsData.cropId]);
 
+  /**
+   * Modal footer component with Cancel and Calculate/Submit buttons
+   * Button text changes based on whether calculations have been performed
+   */
   const modalFooter = (
     <ButtonWrapper>
       <Button
@@ -353,6 +432,7 @@ function Crops({ fields, setFields }: FieldListProps) {
 
   return (
     <div>
+      {/* Crops table listing fields and their associated crops */}
       <ContentWrapper hasFields={fields.length > 0}>
         <Header>
           <Column>Field Name</Column>
@@ -398,6 +478,8 @@ function Crops({ fields, setFields }: FieldListProps) {
           </ListItemContainer>
         ))}
       </ContentWrapper>
+
+      {/* Crop edit modal */}
       {isModalVisible && (
         <Modal
           isVisible={isModalVisible}

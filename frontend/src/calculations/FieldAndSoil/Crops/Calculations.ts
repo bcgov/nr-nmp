@@ -7,7 +7,7 @@ import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 
 /**
  * Fetches crop conversion factors from the API
- * 
+ *
  * @returns {Promise<any>} Conversion factors for calculations
  */
 export async function getConversionFactors() {
@@ -17,7 +17,7 @@ export async function getConversionFactors() {
 
 /**
  * Retrieves region data by region ID
- * 
+ *
  * @param {number} regionId - The ID of the region to fetch
  * @returns {Promise<any>} Region data
  */
@@ -28,7 +28,7 @@ export async function getRegion(regionId: number) {
 
 /**
  * Gets soil test regions for a specific crop
- * 
+ *
  * @param {number} cropId - ID of the crop
  * @param {number} soilTestPotassiumRegionCode - Region code for potassium soil test
  * @param {string} endpoint - API endpoint to query
@@ -47,7 +47,7 @@ export async function getCropSoilTestRegions(
 
 /**
  * Finds the Kelowna range that contains a specific soil test phosphorus value
- * 
+ *
  * @param {number} STP - Soil test phosphorus value in ppm
  * @param {string} endpoint - API endpoint to query
  * @returns {Promise<any>} Matching Kelowna range
@@ -62,7 +62,7 @@ export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
 
 /**
  * Retrieves recommendations based on soil test values, regions, and crop group
- * 
+ *
  * @param {number} kelownaRangeId - ID of the Kelowna range
  * @param {number} soilTestRegionCd - Soil test region code
  * @param {number} cropGroupRegionCd - Crop group region code
@@ -99,7 +99,7 @@ export async function getRecommendations(
 
 /**
  * Checks if a field has existing soil test data, populates with defaults if not
- * 
+ *
  * @param {NMPFileFieldData} field - Field data to check
  * @param {Function} setFields - Function to update field data
  */
@@ -118,7 +118,7 @@ export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (field
 
 /**
  * Fetches crop data by crop ID
- * 
+ *
  * @param {number} cropId - ID of the crop to fetch
  * @returns {Promise<any>} Crop data
  */
@@ -129,7 +129,7 @@ export async function getCrop(cropId: number) {
 
 /**
  * Gets nitrogen credit for a previous crop
- * 
+ *
  * @param {number} cropId - ID of the previous crop
  * @returns {Promise<number>} Nitrogen credit amount in imperial units (0 if no crop ID)
  */
@@ -143,7 +143,7 @@ export async function getNCredit(cropId: number) {
 
 /**
  * Fetches yield data for a specific crop in a specific region
- * 
+ *
  * @param {number} cropId - ID of the crop
  * @param {number} regionId - ID of the region
  * @returns {Promise<any>} Crop yield data
@@ -155,7 +155,7 @@ export async function getCropYield(cropId: number, regionId: number) {
 
 /**
  * Calculates potassium (K2O) removal for a crop
- * 
+ *
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
  * @param {number} regionId - ID of the region
  * @returns {Promise<number>} Amount of K2O removed in lbs/acre, rounded to nearest integer
@@ -187,7 +187,7 @@ export async function getCropRemovalK20(
 
 /**
  * Calculates phosphorus (P2O5) removal for a crop
- * 
+ *
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
  * @param {number} regionId - ID of the region
  * @returns {Promise<number>} Amount of P2O5 removed in lbs/acre, rounded to nearest integer
@@ -219,7 +219,7 @@ export async function getCropRemovalP205(
 
 /**
  * Calculates nitrogen removal for a crop
- * 
+ *
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
  * @param {number} regionId - ID of the region
  * @returns {Promise<number>} Amount of N removed in lbs/acre, rounded to nearest integer
@@ -262,7 +262,7 @@ export async function getCropRemovalN(
 
 /**
  * Calculates nitrogen requirement for a crop, accounting for previous crop credit
- * 
+ *
  * @param {NMPFileFieldData} field - Field data including soil test information
  * @param {Function} setFields - Function to update field data
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
@@ -323,7 +323,7 @@ export async function getCropRequirementN(
 
 /**
  * Calculates potassium (K2O) requirement based on soil test and crop needs
- * 
+ *
  * @param {NMPFileFieldData} field - Field data including soil test information
  * @param {Function} setFields - Function to update field data
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
@@ -374,7 +374,7 @@ export async function getCropRequirementK2O(
 
 /**
  * Calculates phosphorus (P2O5) requirement based on soil test and crop needs
- * 
+ *
  * @param {NMPFileFieldData} field - Field data including soil test information
  * @param {Function} setFields - Function to update field data
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
@@ -419,7 +419,7 @@ export async function getCropRequirementP205(
     phosphorousCropGroupRegionCd,
     'soiltestphosphorousrecommendation',
   );
-  
+
   // Convert from kg/ha to lbs/acre
   return Math.round(
     Number(sTPRecommended.p2o5recommendationkilogramperhectare) *
