@@ -8,6 +8,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown, Modal, InputField, Button } from '../../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
+import { soilTestMethodsData } from '@/types';
 import {
   InfoBox,
   ListItemContainer,
@@ -28,16 +29,7 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
   const apiCache = useContext(APICacheContext);
   const [soilTestData, setSoilTestData] = useState(defaultSoilTestData);
   const [soilTestId, setSoilTestId] = useState('');
-  const [soilTestMethods, setSoilTestMethods] = useState<
-    {
-      id: number;
-      name: string;
-      converttokelownaphlessthan72: number;
-      converttokelownaphgreaterthan72: number;
-      converttokelownak: number;
-      sortnum: number;
-    }[]
-  >([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<soilTestMethodsData[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);

@@ -1,5 +1,4 @@
-import CropData from './NMPFileCropData';
-import SoilTestData from './SoilTestData';
+import { NMPFileCropData, SoilTestData } from './Crops';
 
 interface NMPFileFieldData {
   FieldName: string;
@@ -7,7 +6,7 @@ interface NMPFileFieldData {
   PreviousYearManureApplicationFrequency: string;
   Comment: string;
   SoilTest: SoilTestData;
-  Crops: CropData[];
+  Crops: NMPFileCropData[];
 }
 
 export default NMPFileFieldData;
