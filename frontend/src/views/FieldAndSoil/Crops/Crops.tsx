@@ -51,7 +51,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 
 interface FieldListProps {
   fields: NMPFileFieldData[]; // Array of field data from parent component
-  setFields: (fields: any[]) => void; // Function to update fields in parent component
+  setFields: (fields: NMPFileFieldData[]) => void; // Function to update fields in parent component
 }
 
 /**
