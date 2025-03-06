@@ -1,6 +1,6 @@
-import CropData from '@/types/NMPFileCropData';
+import { NMPFileCropData } from '@/types';
 
-const defaultNMPFileCropsData: CropData = {
+const defaultNMPFileCropsData: NMPFileCropData = {
   id: 0,
   cropId: '',
   cropTypeId: 0,
