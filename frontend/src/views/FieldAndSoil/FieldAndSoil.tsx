@@ -12,7 +12,7 @@ import Crops from './Crops/Crops';
 import { Card, Button } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './fieldAndSoil.styles';
-import NMPFileCropData from '@/types/NMPFileCropData';
+import { NMPFileCropData } from '@/types';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 
 export default function FieldAndSoil() {

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { env } from '@/env';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-import NMPFileCropData from '@/types/NMPFileCropData';
+import { NMPFileCropData } from '@/types';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 
 /**
