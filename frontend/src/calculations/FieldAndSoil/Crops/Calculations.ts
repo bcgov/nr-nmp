@@ -11,8 +11,13 @@ import defaultSoilTestData from '@/constants/DefaultSoilTestData';
  * @returns {Promise<any>} Conversion factors for calculations
  */
 export async function getConversionFactors() {
-  const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropsconversionfactors/`);
-  return response.data[0];
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropsconversionfactors/`);
+    return response.data[0];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
@@ -22,8 +27,29 @@ export async function getConversionFactors() {
  * @returns {Promise<any>} Region data
  */
 export async function getRegion(regionId: number) {
-  const response = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${regionId}/`);
-  return response.data;
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${regionId}/`);
+    return response.data[0];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+/**
+ * Fetches crop type data by crop type ID
+ *
+ * @param {number} cropTypeId - ID of the crop type to fetch
+ * @returns {Promise<any>} Crop type data
+ */
+export async function getCropType(cropTypeId: number) {
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/croptypes/${cropTypeId}/`);
+    return response.data[0];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
@@ -39,10 +65,15 @@ export async function getCropSoilTestRegions(
   soilTestPotassiumRegionCode: number,
   endpoint: string,
 ) {
-  const response = await axios.get(
-    `${env.VITE_BACKEND_URL}/api/${endpoint}/${cropId}/${soilTestPotassiumRegionCode}/`,
-  );
-  return response.data;
+  try {
+    const response = await axios.get(
+      `${env.VITE_BACKEND_URL}/api/${endpoint}/${cropId}/${soilTestPotassiumRegionCode}/`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
@@ -53,11 +84,16 @@ export async function getCropSoilTestRegions(
  * @returns {Promise<any>} Matching Kelowna range
  */
 export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
-  const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
-  const response = ranges.data.find(
-    (range: any) => range.rangelow <= STP && range.rangehigh >= STP,
-  );
-  return response;
+  try {
+    const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
+    const response = ranges.data.find(
+      (range: any) => range.rangelow <= STP && range.rangehigh >= STP,
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
@@ -75,26 +111,31 @@ export async function getRecommendations(
   cropGroupRegionCd: number,
   endpoint: string,
 ) {
-  const response = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
-  let recommendations;
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
+    let recommendations;
 
-  if (endpoint.includes('phosphorous')) {
-    recommendations = response.data.find(
-      (stp: any) =>
-        stp.soiltestphosphorouskelownarangeid === kelownaRangeId &&
-        stp.soiltestphosphorousregioncode === soilTestRegionCd &&
-        stp.phosphorouscropgroupregioncode === cropGroupRegionCd,
-    );
-  } else if (endpoint.includes('potassium')) {
-    recommendations = response.data.find(
-      (stk: any) =>
-        stk.soiltestpotassiumkelownarangeid === kelownaRangeId &&
-        stk.soiltestpotassiumregioncode === soilTestRegionCd &&
-        stk.potassiumcropgroupregioncode === cropGroupRegionCd,
-    );
+    if (endpoint.includes('phosphorous')) {
+      recommendations = response.data.find(
+        (stp: any) =>
+          stp.soiltestphosphorouskelownarangeid === kelownaRangeId &&
+          stp.soiltestphosphorousregioncode === soilTestRegionCd &&
+          stp.phosphorouscropgroupregioncode === cropGroupRegionCd,
+      );
+    } else if (endpoint.includes('potassium')) {
+      recommendations = response.data.find(
+        (stk: any) =>
+          stk.soiltestpotassiumkelownarangeid === kelownaRangeId &&
+          stk.soiltestpotassiumregioncode === soilTestRegionCd &&
+          stk.potassiumcropgroupregioncode === cropGroupRegionCd,
+      );
+    }
+
+    return recommendations;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
-
-  return recommendations;
 }
 
 /**
@@ -123,8 +164,13 @@ export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (field
  * @returns {Promise<any>} Crop data
  */
 export async function getCrop(cropId: number) {
-  const response = await axios.get(`${env.VITE_BACKEND_URL}/api/crops/${cropId}/`);
-  return response.data[0];
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/crops/${cropId}/`);
+    return response.data[0];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
@@ -134,11 +180,16 @@ export async function getCrop(cropId: number) {
  * @returns {Promise<number>} Nitrogen credit amount in imperial units (0 if no crop ID)
  */
 export async function getNCredit(cropId: number) {
-  if (cropId == null || cropId === 0) {
-    return 0;
+  try {
+    if (cropId == null || cropId === 0) {
+      return 0;
+    }
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/previouscroptypes/${cropId}/`);
+    return response.data[0].nitrogencreditimperial;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
-  const response = await axios.get(`${env.VITE_BACKEND_URL}/api/previouscroptypes/${cropId}/`);
-  return response.data[0].nitrogencreditimperial;
 }
 
 /**
@@ -149,8 +200,15 @@ export async function getNCredit(cropId: number) {
  * @returns {Promise<any>} Crop yield data
  */
 export async function getCropYield(cropId: number, regionId: number) {
-  const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropyields/${cropId}/${regionId}/`);
-  return response.data[0];
+  try {
+    const response = await axios.get(
+      `${env.VITE_BACKEND_URL}/api/cropyields/${cropId}/${regionId}/`,
+    );
+    return response.data[0];
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
@@ -166,7 +224,7 @@ export async function getCropRemovalK20(
 ): Promise<number> {
   const region = await getRegion(regionId);
   const crop = await getCrop(Number(combinedCropData.cropId));
-  const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
+  const cropYield = await getCropYield(Number(combinedCropData.cropId), region.locationid);
 
   // For cover crops not harvested, there's no removal
   if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
@@ -198,7 +256,7 @@ export async function getCropRemovalP205(
 ): Promise<number> {
   const region = await getRegion(regionId);
   const crop = await getCrop(Number(combinedCropData.cropId));
-  const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
+  const cropYield = await getCropYield(Number(combinedCropData.cropId), region.locationid);
 
   // For cover crops not harvested, there's no removal
   if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
@@ -231,12 +289,8 @@ export async function getCropRemovalN(
   let nRemoval: number = 0;
   const region = await getRegion(regionId);
   const crop = await getCrop(Number(combinedCropData.cropId));
-  const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
-
-  const cropTypeResponse = await axios.get(
-    `${env.VITE_BACKEND_URL}/api/croptypes/${crop.croptypeid}/`,
-  );
-  const cropType = cropTypeResponse.data[0];
+  const cropYield = await getCropYield(Number(combinedCropData.cropId), region.locationid);
+  const cropType = await getCropType(crop.croptypeid);
   const isForageCrop = cropType.crudeproteinrequired === true;
 
   // Special calculation for forage crops with crude protein data
@@ -278,7 +332,7 @@ export async function getCropRequirementN(
   const region = await getRegion(regionId);
   const crop = await getCrop(Number(combinedCropData.cropId));
   const ncredit = await getNCredit(Number(combinedCropData.prevCropId));
-  const cropYield = await getCropYield(Number(combinedCropData.cropId), region[0].locationid);
+  const cropYield = await getCropYield(Number(combinedCropData.cropId), region.locationid);
   checkExistingSoilTest(field, setFields);
 
   let nRequirement;
@@ -346,7 +400,7 @@ export async function getCropRequirementK2O(
 
   const cropSTKRegionCd = await getCropSoilTestRegions(
     Number(combinedCropData.cropId),
-    region[0]?.soiltestpotassiumregioncd,
+    region?.soiltestpotassiumregioncd,
     'cropsoilpotassiumregions',
   );
 
@@ -360,7 +414,7 @@ export async function getCropRequirementK2O(
   }
   const sTKRecommended = await getRecommendations(
     stkKelownaRangeId,
-    region[0].soiltestpotassiumregioncd,
+    region.soiltestpotassiumregioncd,
     potassiumCropGroupRegionCd,
     'soiltestpotassiumrecommendation',
   );
@@ -398,7 +452,7 @@ export async function getCropRequirementP205(
 
   const cropSTPRegionCd = await getCropSoilTestRegions(
     Number(combinedCropData.cropId),
-    region[0]?.soiltestphosphorousregioncd,
+    region?.soiltestphosphorousregioncd,
     'cropsoiltestphosphorousregions',
   );
 
@@ -415,7 +469,7 @@ export async function getCropRequirementP205(
   }
   const sTPRecommended = await getRecommendations(
     stpKelownaRangeId,
-    region[0].soiltestphosphorousregioncd,
+    region.soiltestphosphorousregioncd,
     phosphorousCropGroupRegionCd,
     'soiltestphosphorousrecommendation',
   );

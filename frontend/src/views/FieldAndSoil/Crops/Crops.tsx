@@ -367,7 +367,7 @@ function Crops({ fields, setFields }: FieldListProps) {
         (async () => {
           const region = await getRegion(JSON.parse(state.nmpFile).farmDetails.FarmRegion);
           apiCache
-            .callEndpoint(`api/cropyields/${combinedCropsData.cropId}/${region[0]?.locationid}/`)
+            .callEndpoint(`api/cropyields/${combinedCropsData.cropId}/${region?.locationid}/`)
             .then((response: { status?: any; data: any }) => {
               if (response.status === 200) {
                 const { data } = response;
