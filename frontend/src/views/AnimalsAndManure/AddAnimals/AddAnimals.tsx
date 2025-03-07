@@ -144,11 +144,11 @@ export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProp
     // Right now we only handle cattle
     if (animalId !== '1' && animalId !== '2') return;
 
+    const { length } = formData;
     setFormData((prev) => {
       prev.push({ id: animalId });
       return prev;
     });
-    const { length } = formData;
     setElems((prev) => {
       const next = [...prev];
       if (animalId === '1') {
