@@ -1,6 +1,7 @@
 /**
  * @summary The landing page for the application
  */
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import constants from '../../constants/Constants';
 import useAppService from '../../services/app/useAppService';
@@ -9,7 +10,7 @@ import { ButtonWrapper, StyledDivider, StyledContent } from './landingPage.style
 import { Button, Card } from '../../components/common';
 
 export default function LandingPage() {
-  const { setNMPFile } = useAppService();
+  const { setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
 
   const handleUpload = () => {
@@ -40,6 +41,10 @@ export default function LandingPage() {
     deleteLocalStorageKey(constants.NMP_FILE_KEY);
     navigate('/farm-information');
   };
+
+  useEffect(() => {
+    setProgressStep(0);
+  }, []);
 
   return (
     <Card

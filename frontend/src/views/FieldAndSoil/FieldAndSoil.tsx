@@ -16,7 +16,7 @@ import { NMPFileCropData } from '@/types';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 
 export default function FieldAndSoil() {
-  const { state, setNMPFile } = useAppService();
+  const { state, setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [fields, setFields] = useState<
@@ -103,6 +103,10 @@ export default function FieldAndSoil() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  useEffect(() => {
+    setProgressStep(3);
+  }, []);
 
   return (
     <Card

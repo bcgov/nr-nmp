@@ -21,7 +21,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 
 export default function FarmInformation() {
-  const { state, setNMPFile } = useAppService();
+  const { state, setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
@@ -41,6 +41,10 @@ export default function FarmInformation() {
   // Props for region selections
   const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
   const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
+
+  useEffect(() => {
+    setProgressStep(1);
+  }, []);
 
   // Flagging for potential state issues if the state.nmpFile object can change
   useEffect(() => {
@@ -133,7 +137,8 @@ export default function FarmInformation() {
         let nextAnimals: string[];
         if (value === 'true') {
           // eslint-disable-next-line prettier/prettier
-        nextAnimals = currentAnimals.indexOf(name) === -1 ? currentAnimals.concat([name]) : currentAnimals;
+          nextAnimals =
+            currentAnimals.indexOf(name) === -1 ? currentAnimals.concat([name]) : currentAnimals;
         } else {
           nextAnimals = currentAnimals.filter((val) => val !== name);
         }
