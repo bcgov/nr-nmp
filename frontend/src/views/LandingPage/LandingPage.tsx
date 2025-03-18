@@ -44,6 +44,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     setProgressStep(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

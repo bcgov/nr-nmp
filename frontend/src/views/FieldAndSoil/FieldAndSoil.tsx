@@ -106,6 +106,7 @@ export default function FieldAndSoil() {
 
   useEffect(() => {
     setProgressStep(3);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

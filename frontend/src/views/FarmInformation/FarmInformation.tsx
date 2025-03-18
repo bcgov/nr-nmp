@@ -44,6 +44,7 @@ export default function FarmInformation() {
 
   useEffect(() => {
     setProgressStep(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Flagging for potential state issues if the state.nmpFile object can change
