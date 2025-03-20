@@ -99,7 +99,17 @@ def import_csv_to_model(csv_path, model, clear_table=True):
 
 
 def find_latest_csv_file(directory):
-    """Find the latest CSV file in a directory"""
+    """Find the latest CSV file in a directory or direct file path"""
+    # Check if the directory is actually a CSV file
+    if directory.endswith('.csv') and os.path.isfile(directory):
+        return directory
+        
+    # Check if there's a direct CSV file with the directory name
+    direct_file = f"{directory}.csv"
+    if os.path.isfile(direct_file):
+        return direct_file
+    
+    # Traditional directory search
     csv_files = glob.glob(os.path.join(directory, '*.csv'))
     if not csv_files:
         return None
@@ -136,7 +146,25 @@ def seed_database(apps, schema_editor):
         '_Previous_Crop_Types': 'crops.PreviousCropTypes',
     }
     
-    base_dir = '/app/database/db/trimmed_tables'
+    # Check multiple potential locations for CSV files
+    base_dirs = [
+        '/app/database/db/trimmed_tables',  # Docker volume mount path
+        '/docker-entrypoint-initdb.d',      # PostgreSQL init path
+        '/opt/app-root/src/database/db/trimmed_tables'  # OpenShift path
+    ]
+    
+    # Use the first directory that exists
+    base_dir = None
+    for path in base_dirs:
+        if os.path.exists(path):
+            base_dir = path
+            print(f"Using CSV directory: {base_dir}")
+            break
+    
+    if not base_dir:
+        print("No valid CSV directory found. Data seeding will be skipped.")
+        return
+    
     total_count = 0
     errors = 0
     
@@ -146,16 +174,29 @@ def seed_database(apps, schema_editor):
             app_label, model_name = model_path.split('.')
             model = apps.get_model(app_label, model_name)
             
-            # Find CSV file
-            directory_path = os.path.join(base_dir, directory)
-            csv_file = find_latest_csv_file(directory_path)
+            # Try different path structures
+            possible_paths = [
+                os.path.join(base_dir, directory),  # /path/to/dir/_ModelName/
+                os.path.join(base_dir, f"{directory}.csv"),  # /path/to/dir/_ModelName.csv
+                os.path.join(base_dir, directory.lstrip('_') + ".csv"),  # /path/to/dir/ModelName.csv
+            ]
+            
+            csv_file = None
+            for path in possible_paths:
+                if os.path.exists(path):
+                    if path.endswith('.csv'):
+                        csv_file = path
+                    else:
+                        csv_file = find_latest_csv_file(path)
+                    if csv_file:
+                        break
             
             if csv_file:
                 count = import_csv_to_model(csv_file, model, clear_table=True)
-                print(f"Imported {count} records into {model_path}")
+                print(f"Imported {count} records into {model_path} from {csv_file}")
                 total_count += count
             else:
-                print(f"No CSV file found in {directory_path}")
+                print(f"No CSV file found in {base_dir} for {directory}")
         except Exception as e:
             print(f"Error importing {model_path}: {str(e)}")
             errors += 1
