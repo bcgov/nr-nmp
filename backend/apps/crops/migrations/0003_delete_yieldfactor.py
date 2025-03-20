@@ -10,7 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.DeleteModel(
-            name='YieldFactor',
-        ),
+        # No operations - YieldFactor was removed from initial migration
+        # This migration exists only for history/compatibility
     ]

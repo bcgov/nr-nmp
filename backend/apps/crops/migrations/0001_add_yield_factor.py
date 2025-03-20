@@ -1,5 +1,4 @@
 from django.db import migrations, models
-import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
@@ -47,17 +46,5 @@ class Migration(migrations.Migration):
                 'db_table': 'crops',
                 'managed': False,
             },
-        ),
-        migrations.CreateModel(
-            name='YieldFactor',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('region', models.CharField(max_length=100)),
-                ('yield_value', models.FloatField(help_text='Yield factor value for the crop in this region')),
-                ('unit', models.CharField(max_length=50)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('crop', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='yield_factors', to='crops.crops')),
-            ],
         ),
     ] 
