@@ -25,18 +25,6 @@ parameters:
   - name: MEMORY_REQUEST
     value: 75Mi
 objects:
-  - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: csv-data-pvc
-      labels:
-        app: ${REPO}-${TARGET}
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 32Mi
   - kind: Service
     apiVersion: v1
     metadata:
@@ -131,13 +119,6 @@ objects:
                 requests:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
-              volumeMounts:
-                - name: csv-data
-                  mountPath: /app/database/db/trimmed_tables
-      volumes:
-        - name: csv-data
-          persistentVolumeClaim:
-            claimName: csv-data-pvc
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:

@@ -1,0 +1,5 @@
+"id","name","dryliquid","custom"
+1,Dry Fertilizer,dry,false
+2,Dry Fertilizer (Custom),dry,true
+3,Liquid Fertilizer,liquid,false
+4,Liquid Fertilizer (Custom),liquid,true
