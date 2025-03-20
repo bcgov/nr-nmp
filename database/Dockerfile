@@ -2,7 +2,7 @@ FROM postgres:17
 
 # Copy startup scripts
 # Change trimmed_tables to seed_tables if you want to run the SQL there
-COPY db/trimmed_tables/*/* /docker-entrypoint-initdb.d/
+#COPY db/trimmed_tables/*/* /docker-entrypoint-initdb.d/
 
 # User, port and Healthcheck
 USER postgres
