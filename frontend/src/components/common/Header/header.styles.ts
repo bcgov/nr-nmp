@@ -11,13 +11,10 @@ export const HeaderWrapper = styled.header`
   padding: 0;
   color: #fff;
   display: flex;
+  flex: 0 1 65px;
   justify-content: space-between;
   align-items: center;
-  height: 65px;
-  top: 0;
-  position: fixed;
   width: 100%;
-  left: 0;
   @media (min-width: ${screenSizes.tablet}) {
     justify-content: flex-start;
     padding-left: 2em;
