@@ -42,7 +42,7 @@ class PreviousCropTypes(models.Model):
     croptypeid = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'previous_crop_types'
 
 class CropSoilTestPhosphorousRegions(models.Model):
@@ -52,7 +52,7 @@ class CropSoilTestPhosphorousRegions(models.Model):
     phosphorouscropgroupregioncode = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'crop_soil_test_phosphorous_regions'
 
 class SoilTestPhosphorousRecommendation(models.Model):
@@ -63,7 +63,7 @@ class SoilTestPhosphorousRecommendation(models.Model):
     p2o5recommendationkilogramperhectare = models.FloatField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'soil_test_phosphorous_recommendation'
 
 class SoilTestPhosphorousKelownaRanges(models.Model):
@@ -72,7 +72,7 @@ class SoilTestPhosphorousKelownaRanges(models.Model):
     rangehigh = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'soil_test_phosphorous_kelowna_ranges'
 
 class SoilTestMethods(models.Model):
@@ -84,7 +84,7 @@ class SoilTestMethods(models.Model):
     sortnum = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'soil_test_methods'
 
 class ConversionFactors(models.Model):
@@ -106,7 +106,7 @@ class ConversionFactors(models.Model):
     soiltestppmtopoundperacreconversion = models.FloatField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'conversion_factors'
 
 class SoilTestPotassiumKelownaRanges(models.Model):
@@ -115,7 +115,7 @@ class SoilTestPotassiumKelownaRanges(models.Model):
     rangehigh = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'soil_test_potassium_kelowna_ranges'
 
 class SoilTestPotassiumRecommendation(models.Model):
@@ -126,7 +126,7 @@ class SoilTestPotassiumRecommendation(models.Model):
     k2orecommendationkilogramperhectare = models.FloatField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'soil_test_potassium_recommendation'
 
 class CropSoilPotassiumRegions(models.Model):
@@ -136,7 +136,7 @@ class CropSoilPotassiumRegions(models.Model):
     potassiumcropgroupregioncode = models.IntegerField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'crop_soil_potassium_regions'
 
 class CropYields(models.Model):
@@ -146,7 +146,7 @@ class CropYields(models.Model):
     amount = models.FloatField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'crop_yields'
 
 class NitrogenRecommendation(models.Model):
@@ -154,5 +154,5 @@ class NitrogenRecommendation(models.Model):
     recommendationdesc = models.TextField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'nitrogen_recommendations'

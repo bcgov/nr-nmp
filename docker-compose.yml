@@ -58,9 +58,9 @@ services:
     healthcheck:
      test: curl --fail http://localhost:3000 || exit 1
     ports: ["3000:3000"]
-    # Add volume mount for backend
     volumes:
       - ./backend:/app
+      - ./database/db:/app/database/db
     # For debugging
     stdin_open: true
     tty: true
