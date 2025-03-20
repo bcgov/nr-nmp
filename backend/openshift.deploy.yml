@@ -1,4 +1,3 @@
-
 apiVersion: template.openshift.io/v1
 kind: Template
 parameters:
@@ -120,6 +119,9 @@ objects:
                 requests:
                   cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
+              volumeMounts:
+                - name: csv-data
+                  mountPath: /app/database/db/trimmed_tables
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
@@ -137,3 +139,7 @@ objects:
       tls:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
+volumes:
+- name: csv-data
+  persistentVolumeClaim:
+    claimName: csv-data-pvc
