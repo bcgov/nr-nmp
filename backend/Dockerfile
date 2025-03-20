@@ -9,6 +9,7 @@ RUN python3 -m pip install --upgrade pip
 
 COPY . /app
 COPY ./requirements.txt /requirements.txt
+COPY database/db/trimmed_tables /app/database/db/trimmed_tables
 
 RUN python3 -m pip install -r requirements.txt
 
