@@ -122,6 +122,10 @@ objects:
               volumeMounts:
                 - name: csv-data
                   mountPath: /app/database/db/trimmed_tables
+      volumes:
+        - name: csv-data
+          persistentVolumeClaim:
+            claimName: csv-data-pvc
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
@@ -139,7 +143,3 @@ objects:
       tls:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
-volumes:
-- name: csv-data
-  persistentVolumeClaim:
-    claimName: csv-data-pvc
