@@ -9,11 +9,13 @@ RUN python3 -m pip install --upgrade pip
 
 COPY . /app
 COPY ./requirements.txt /requirements.txt
-COPY database/db/trimmed_tables /app/database/db/trimmed_tables
+COPY database/db/trimmed_tables /app/backend/database/db/trimmed_tables
 
 RUN python3 -m pip install -r requirements.txt
 
 CMD sh -c "python3 manage.py migrate && \
+    python3 manage.py migrate shared 0002_seed_database --fake && \
+    python3 manage.py migrate shared 0002_seed_database && \
     python3 manage.py runserver 0.0.0.0:3000"
 
 # Boilerplate, not used in OpenShift/Kubernetes
