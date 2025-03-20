@@ -1,6 +1,6 @@
 import { StyledApp, ViewContainer } from './App.styles';
 import { Header, Footer } from './components/common';
-import ProgressBar from './components/common/ProgressBar/ProgressBar';
+// import ProgressBar from './components/common/ProgressBar/ProgressBar';
 import ViewRouter from './routes/ViewRouter';
 
 /**
@@ -10,7 +10,6 @@ function App() {
   return (
     <StyledApp>
       <Header />
-      <ProgressBar />
       <ViewContainer>
         <ViewRouter />
       </ViewContainer>
