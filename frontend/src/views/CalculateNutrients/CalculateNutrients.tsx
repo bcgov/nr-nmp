@@ -11,7 +11,7 @@ import FieldTable from './FieldTable/FieldTable';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 export default function CalculateNutrients() {
-  const { state } = useAppService();
+  const { state, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [fields, setFields] = useState<NMPFileFieldData[]>([]);
@@ -40,6 +40,11 @@ export default function CalculateNutrients() {
       setFields(JSON.parse(state.nmpFile).years[0].Fields);
     }
   }, [state]);
+
+  useEffect(() => {
+    setProgressStep(5);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Card

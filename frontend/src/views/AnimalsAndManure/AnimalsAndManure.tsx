@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import { Banner, ButtonWrapper, CardHeader } from '../FieldAndSoil/fieldAndSoil.styles';
@@ -10,7 +10,7 @@ import NMPFile from '@/types/NMPFile';
 import AddAnimals from './AddAnimals/AddAnimals';
 
 export default function AnimalsAndManure() {
-  const { state, setNMPFile } = useAppService();
+  const { state, setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [nextDisabled, setNextDisabled] = useState(false);
@@ -62,6 +62,11 @@ export default function AnimalsAndManure() {
     if (activeTab > 0) setActiveTab(activeTab - 1);
     else navigate('/farm-information');
   };
+
+  useEffect(() => {
+    setProgressStep(2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Card
