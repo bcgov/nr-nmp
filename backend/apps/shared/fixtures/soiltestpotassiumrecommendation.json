@@ -1,0 +1,2522 @@
+[
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3025,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3026,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3027,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3028,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3029,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3030,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3031,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3032,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3033,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3034,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3035,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3036,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3037,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3038,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 125.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3039,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3040,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3041,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3042,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 1,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3043,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3044,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3045,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3046,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3047,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3048,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3049,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3050,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3051,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3052,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3053,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3054,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3055,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3056,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3057,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 125.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3058,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3059,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3060,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 2,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3061,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3062,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3063,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3064,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3065,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3066,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3067,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3068,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3069,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3070,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3071,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3072,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3073,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3074,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3075,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3076,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 125.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3077,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3078,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 3,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3079,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3080,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3081,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3082,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3083,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3084,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3085,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3086,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3087,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3088,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3089,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3090,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3091,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3092,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3093,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3094,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3095,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 125.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3096,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 4,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3097,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3098,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3099,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3100,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3101,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3102,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3103,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3104,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3105,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3106,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3107,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3108,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3109,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3110,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3111,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3112,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3113,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3114,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 5,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3115,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3116,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3117,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3118,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3119,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3120,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3121,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3122,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3123,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3124,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3125,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3126,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3127,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3128,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3129,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3130,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3131,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3132,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 6,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3133,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3134,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3135,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3136,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3137,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3138,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3139,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3140,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3141,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3142,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3143,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3144,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3145,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3146,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3147,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3148,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3149,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3150,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 7,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3151,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3152,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3153,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3154,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3155,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3156,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3157,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3158,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3159,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3160,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3161,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3162,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3163,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3164,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3165,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3166,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3167,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3168,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 8,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3169,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3170,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3171,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3172,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3173,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3174,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3175,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3176,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3177,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3178,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3179,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3180,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3181,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3182,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3183,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3184,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3185,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3186,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 9,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3187,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3188,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3189,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3190,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3191,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3192,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3193,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3194,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3195,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3196,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3197,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3198,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3199,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3200,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3201,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3202,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3203,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3204,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 10,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3205,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3206,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3207,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3208,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3209,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3210,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3211,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3212,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3213,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3214,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3215,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3216,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3217,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3218,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3219,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3220,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3221,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3222,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 11,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3223,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3224,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3225,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3226,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3227,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3228,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3229,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3230,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3231,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3232,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3233,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3234,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3235,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3236,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3237,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3238,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3239,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3240,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 12,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3241,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3242,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3243,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3244,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3245,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3246,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3247,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3248,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3249,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3250,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3251,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3252,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3253,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3254,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3255,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3256,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3257,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3258,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 13,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3259,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3260,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3261,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3262,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3263,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3264,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3265,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3266,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3267,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3268,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3269,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3270,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3271,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 1.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3272,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3273,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3274,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3275,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumrecommendation",
+    "pk": 3276,
+    "fields": {
+      "soiltestpotassiumkelownarangeid": 14,
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0,
+      "k2orecommendationkilogramperhectare": 0.0
+    }
+  }
+]

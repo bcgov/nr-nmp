@@ -1,0 +1,68 @@
+[
+  {
+    "model": "crops.croptypes",
+    "pk": 1,
+    "fields": {
+      "name": "Forage",
+      "covercrop": false,
+      "crudeproteinrequired": true,
+      "customcrop": false,
+      "modifynitrogen": false
+    }
+  },
+  {
+    "model": "crops.croptypes",
+    "pk": 2,
+    "fields": {
+      "name": "Cover crops",
+      "covercrop": true,
+      "crudeproteinrequired": false,
+      "customcrop": false,
+      "modifynitrogen": false
+    }
+  },
+  {
+    "model": "crops.croptypes",
+    "pk": 4,
+    "fields": {
+      "name": "Grains and oilseeds",
+      "covercrop": false,
+      "crudeproteinrequired": false,
+      "customcrop": false,
+      "modifynitrogen": false
+    }
+  },
+  {
+    "model": "crops.croptypes",
+    "pk": 5,
+    "fields": {
+      "name": "Field vegetables",
+      "covercrop": false,
+      "crudeproteinrequired": false,
+      "customcrop": false,
+      "modifynitrogen": true
+    }
+  },
+  {
+    "model": "crops.croptypes",
+    "pk": 6,
+    "fields": {
+      "name": "Other (not listed)",
+      "covercrop": false,
+      "crudeproteinrequired": false,
+      "customcrop": true,
+      "modifynitrogen": false
+    }
+  },
+  {
+    "model": "crops.croptypes",
+    "pk": 7,
+    "fields": {
+      "name": "Berry",
+      "covercrop": false,
+      "crudeproteinrequired": false,
+      "customcrop": false,
+      "modifynitrogen": false
+    }
+  }
+]

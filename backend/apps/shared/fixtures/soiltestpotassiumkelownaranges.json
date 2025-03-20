@@ -1,0 +1,114 @@
+[
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 1,
+    "fields": {
+      "rangelow": 0.0,
+      "rangehigh": 25.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 2,
+    "fields": {
+      "rangelow": 26.0,
+      "rangehigh": 35.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 3,
+    "fields": {
+      "rangelow": 36.0,
+      "rangehigh": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 4,
+    "fields": {
+      "rangelow": 51.0,
+      "rangehigh": 65.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 5,
+    "fields": {
+      "rangelow": 66.0,
+      "rangehigh": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 6,
+    "fields": {
+      "rangelow": 81.0,
+      "rangehigh": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 7,
+    "fields": {
+      "rangelow": 101.0,
+      "rangehigh": 125.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 8,
+    "fields": {
+      "rangelow": 126.0,
+      "rangehigh": 150.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 9,
+    "fields": {
+      "rangelow": 151.0,
+      "rangehigh": 160.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 10,
+    "fields": {
+      "rangelow": 161.0,
+      "rangehigh": 175.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 11,
+    "fields": {
+      "rangelow": 176.0,
+      "rangehigh": 190.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 12,
+    "fields": {
+      "rangelow": 191.0,
+      "rangehigh": 220.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 13,
+    "fields": {
+      "rangelow": 221.0,
+      "rangehigh": 250.0
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumkelownaranges",
+    "pk": 14,
+    "fields": {
+      "rangelow": 251.0,
+      "rangehigh": 1000.0
+    }
+  }
+]

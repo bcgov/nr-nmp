@@ -1,7 +1,0 @@
-"id","name","covercrop","crudeproteinrequired","customcrop","modifynitrogen"
-1,Forage,false,true,false,false
-2,Cover crops,true,false,false,false
-4,Grains and oilseeds,false,false,false,false
-5,Field vegetables,false,false,false,true
-6,Other (not listed),false,false,true,false
-7,Berry,false,false,false,false

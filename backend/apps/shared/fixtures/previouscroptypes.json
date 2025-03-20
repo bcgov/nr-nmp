@@ -1,0 +1,158 @@
+[
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 1,
+    "fields": {
+      "previouscropcode": 1.0,
+      "name": "established forage: 0-30% legumes",
+      "nitrogencreditmetric": 0.0,
+      "nitrogencreditimperial": 0.0,
+      "cropid": 4,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 2,
+    "fields": {
+      "previouscropcode": 1.0,
+      "name": "established forage: 30-50% legumes",
+      "nitrogencreditmetric": 45.0,
+      "nitrogencreditimperial": 40.0,
+      "cropid": 4,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 3,
+    "fields": {
+      "previouscropcode": 1.0,
+      "name": "established forage: 50-100% legumes",
+      "nitrogencreditmetric": 90.0,
+      "nitrogencreditimperial": 80.0,
+      "cropid": 4,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 4,
+    "fields": {
+      "previouscropcode": 1.0,
+      "name": "legume cover crop (red clover, austrian winter pea, etc.)",
+      "nitrogencreditmetric": 79.0,
+      "nitrogencreditimperial": 70.0,
+      "cropid": 4,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 5,
+    "fields": {
+      "previouscropcode": 1.0,
+      "name": "non-legume cover crop (winter wheat, fall rye, etc.)",
+      "nitrogencreditmetric": 0.0,
+      "nitrogencreditimperial": 0.0,
+      "cropid": 4,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 6,
+    "fields": {
+      "previouscropcode": 2.0,
+      "name": "not applicable (no N credit)",
+      "nitrogencreditmetric": 0.0,
+      "nitrogencreditimperial": 0.0,
+      "cropid": 72,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 7,
+    "fields": {
+      "previouscropcode": 3.0,
+      "name": "established forage: 0-30% legumes",
+      "nitrogencreditmetric": 0.0,
+      "nitrogencreditimperial": 0.0,
+      "cropid": 71,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 8,
+    "fields": {
+      "previouscropcode": 3.0,
+      "name": "established forage: 30-50% legumes",
+      "nitrogencreditmetric": 45.0,
+      "nitrogencreditimperial": 40.0,
+      "cropid": 71,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 9,
+    "fields": {
+      "previouscropcode": 3.0,
+      "name": "established forage: 50-100% legumes",
+      "nitrogencreditmetric": 90.0,
+      "nitrogencreditimperial": 80.0,
+      "cropid": 71,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 10,
+    "fields": {
+      "previouscropcode": 3.0,
+      "name": "legume cover crop (vetch, clover, etc.)",
+      "nitrogencreditmetric": 45.0,
+      "nitrogencreditimperial": 40.0,
+      "cropid": 71,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 11,
+    "fields": {
+      "previouscropcode": 3.0,
+      "name": "non-legume cover crop (barley, radish, etc.)",
+      "nitrogencreditmetric": 0.0,
+      "nitrogencreditimperial": 0.0,
+      "cropid": 71,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 12,
+    "fields": {
+      "previouscropcode": 1.0,
+      "name": "none (no N credit)",
+      "nitrogencreditmetric": 0.0,
+      "nitrogencreditimperial": 0.0,
+      "cropid": 4,
+      "croptypeid": null
+    }
+  },
+  {
+    "model": "crops.previouscroptypes",
+    "pk": 13,
+    "fields": {
+      "previouscropcode": 3.0,
+      "name": "none (no N credit)",
+      "nitrogencreditmetric": 0.0,
+      "nitrogencreditimperial": 0.0,
+      "cropid": 71,
+      "croptypeid": null
+    }
+  }
+]

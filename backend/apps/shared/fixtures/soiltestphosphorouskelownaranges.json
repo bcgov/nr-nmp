@@ -1,0 +1,98 @@
+[
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 1,
+    "fields": {
+      "rangelow": 0.0,
+      "rangehigh": 5.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 2,
+    "fields": {
+      "rangelow": 6.0,
+      "rangehigh": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 3,
+    "fields": {
+      "rangelow": 11.0,
+      "rangehigh": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 4,
+    "fields": {
+      "rangelow": 16.0,
+      "rangehigh": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 5,
+    "fields": {
+      "rangelow": 21.0,
+      "rangehigh": 25.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 6,
+    "fields": {
+      "rangelow": 26.0,
+      "rangehigh": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 7,
+    "fields": {
+      "rangelow": 31.0,
+      "rangehigh": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 8,
+    "fields": {
+      "rangelow": 41.0,
+      "rangehigh": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 9,
+    "fields": {
+      "rangelow": 51.0,
+      "rangehigh": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 10,
+    "fields": {
+      "rangelow": 61.0,
+      "rangehigh": 75.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 11,
+    "fields": {
+      "rangelow": 76.0,
+      "rangehigh": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorouskelownaranges",
+    "pk": 12,
+    "fields": {
+      "rangelow": 101.0,
+      "rangehigh": 1000.0
+    }
+  }
+]

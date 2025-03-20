@@ -1,0 +1,46 @@
+[
+  {
+    "model": "manures.solidmaterialsconversionfactors",
+    "pk": 1,
+    "fields": {
+      "inputunit": 2.0,
+      "inputunitname": "cubic meters",
+      "cubicyardsoutput": 1.30795,
+      "cubicmetersoutput": 1.0,
+      "metrictonsoutput": "1.30795*density"
+    }
+  },
+  {
+    "model": "manures.solidmaterialsconversionfactors",
+    "pk": 2,
+    "fields": {
+      "inputunit": 4.0,
+      "inputunitname": "tons",
+      "cubicyardsoutput": "1/density",
+      "cubicmetersoutput": "(1/density)*0.764555",
+      "metrictonsoutput": 1.0
+    }
+  },
+  {
+    "model": "manures.solidmaterialsconversionfactors",
+    "pk": 3,
+    "fields": {
+      "inputunit": 5.0,
+      "inputunitname": "tonnes",
+      "cubicyardsoutput": "1.10231/density",
+      "cubicmetersoutput": "(1.10231/density)*0.764555",
+      "metrictonsoutput": 1.10231
+    }
+  },
+  {
+    "model": "manures.solidmaterialsconversionfactors",
+    "pk": 4,
+    "fields": {
+      "inputunit": 6.0,
+      "inputunitname": "cubic yards",
+      "cubicyardsoutput": 1.0,
+      "cubicmetersoutput": 0.764555,
+      "metrictonsoutput": "1*density"
+    }
+  }
+]

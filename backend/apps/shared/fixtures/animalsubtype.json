@@ -1,0 +1,512 @@
+[
+  {
+    "model": "animals.animalsubtype",
+    "pk": 1,
+    "fields": {
+      "name": "Cows (1300 lb), including Calves",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 8.983,
+      "solidperpoundperanimalperday": 60.046,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 1,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 2,
+    "fields": {
+      "name": "Backgrounding to Grass (400-600 lb)",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 3.358,
+      "solidperpoundperanimalperday": 24.29,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 1,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 3,
+    "fields": {
+      "name": "Backgrounding to Feedlot (400-850 lb)",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 3.985,
+      "solidperpoundperanimalperday": 28.616,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 1,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 4,
+    "fields": {
+      "name": "Calves (0 to 3 months old)",
+      "liquidpergalperanimalperday": 1.849,
+      "solidpergalperanimalperday": 2.906,
+      "solidperpoundperanimalperday": 15.541,
+      "solidliquidseparationpercentage": 10.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 2,
+      "sortorder": 6
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 5,
+    "fields": {
+      "name": "Calves (3 to 6 months old)",
+      "liquidpergalperanimalperday": 3.699,
+      "solidpergalperanimalperday": 5.812,
+      "solidperpoundperanimalperday": 31.082,
+      "solidliquidseparationpercentage": 10.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 2,
+      "sortorder": 5
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 6,
+    "fields": {
+      "name": "Heifers (6 to 15 months old)",
+      "liquidpergalperanimalperday": 7.398,
+      "solidpergalperanimalperday": 11.625,
+      "solidperpoundperanimalperday": 71.49,
+      "solidliquidseparationpercentage": 10.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 2,
+      "sortorder": 4
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 7,
+    "fields": {
+      "name": "Heifers (15 to 26 months old)",
+      "liquidpergalperanimalperday": 12.946,
+      "solidpergalperanimalperday": 20.079,
+      "solidperpoundperanimalperday": 123.482,
+      "solidliquidseparationpercentage": 10.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 2,
+      "sortorder": 3
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 8,
+    "fields": {
+      "name": "Dry Cow",
+      "liquidpergalperanimalperday": 18.494,
+      "solidpergalperanimalperday": 28.534,
+      "solidperpoundperanimalperday": 205.992,
+      "solidliquidseparationpercentage": 10.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 2,
+      "sortorder": 2
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 9,
+    "fields": {
+      "name": "Milking Cow",
+      "liquidpergalperanimalperday": 19.815,
+      "solidpergalperanimalperday": 30.647,
+      "solidperpoundperanimalperday": 221.251,
+      "solidliquidseparationpercentage": 10.0,
+      "washwater": 5.0,
+      "milkproduction": 72.3,
+      "animalid": 2,
+      "sortorder": 1
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 10,
+    "fields": {
+      "name": "Ducks",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 0.04,
+      "solidperpoundperanimalperday": 0.141,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 11,
+    "fields": {
+      "name": "Goats",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 0.687,
+      "solidperpoundperanimalperday": 4.592,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 4,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 12,
+    "fields": {
+      "name": "Horse",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 14.954,
+      "solidperpoundperanimalperday": 78.002,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 5,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 13,
+    "fields": {
+      "name": "Pullets - Cage Housing",
+      "liquidpergalperanimalperday": 0.144,
+      "solidpergalperanimalperday": 0.01,
+      "solidperpoundperanimalperday": 0.072,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 14,
+    "fields": {
+      "name": "Pullets - Floor Housing",
+      "liquidpergalperanimalperday": 0.288,
+      "solidpergalperanimalperday": 0.016,
+      "solidperpoundperanimalperday": 0.054,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 15,
+    "fields": {
+      "name": "Layer",
+      "liquidpergalperanimalperday": 0.24,
+      "solidpergalperanimalperday": 0.034,
+      "solidperpoundperanimalperday": 0.143,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 16,
+    "fields": {
+      "name": "Broiler Breeder Layer- Cage Housing",
+      "liquidpergalperanimalperday": 0.252,
+      "solidpergalperanimalperday": 0.037,
+      "solidperpoundperanimalperday": 0.147,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 17,
+    "fields": {
+      "name": "Broiler Breeder Layer- Floor Housing",
+      "liquidpergalperanimalperday": 0.252,
+      "solidpergalperanimalperday": 0.048,
+      "solidperpoundperanimalperday": 0.188,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 18,
+    "fields": {
+      "name": "Broiler Breeder Pullets",
+      "liquidpergalperanimalperday": 0.288,
+      "solidpergalperanimalperday": 0.02,
+      "solidperpoundperanimalperday": 0.071,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 19,
+    "fields": {
+      "name": "Broiler Chicken (6.5 cycles)",
+      "liquidpergalperanimalperday": 0.259,
+      "solidpergalperanimalperday": 0.0172,
+      "solidperpoundperanimalperday": 0.0663,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 20,
+    "fields": {
+      "name": "Roaster Chicken",
+      "liquidpergalperanimalperday": 0.259,
+      "solidpergalperanimalperday": 0.024,
+      "solidperpoundperanimalperday": 0.092,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 21,
+    "fields": {
+      "name": "Turkey Broiler",
+      "liquidpergalperanimalperday": 0.306,
+      "solidpergalperanimalperday": 0.077,
+      "solidperpoundperanimalperday": 0.25,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 22,
+    "fields": {
+      "name": "Turkey Heavy Hen",
+      "liquidpergalperanimalperday": 0.306,
+      "solidpergalperanimalperday": 0.108,
+      "solidperpoundperanimalperday": 0.354,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 23,
+    "fields": {
+      "name": "Turkey Heavy Tom",
+      "liquidpergalperanimalperday": 0.306,
+      "solidpergalperanimalperday": 0.124,
+      "solidperpoundperanimalperday": 0.406,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 6,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 24,
+    "fields": {
+      "name": "Doe and Litter",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 0.188,
+      "solidperpoundperanimalperday": 1.003,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 7,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 25,
+    "fields": {
+      "name": " Ewe or Ram",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 1.11,
+      "solidperpoundperanimalperday": 6.676,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 8,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 26,
+    "fields": {
+      "name": "Dry Sow, Boar, or Gilts",
+      "liquidpergalperanimalperday": 4.174,
+      "solidpergalperanimalperday": 3.593,
+      "solidperpoundperanimalperday": 19.215,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 9,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 27,
+    "fields": {
+      "name": "Nursing Sow and Litter",
+      "liquidpergalperanimalperday": 6.209,
+      "solidpergalperanimalperday": 0.0,
+      "solidperpoundperanimalperday": 0.0,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 9,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 28,
+    "fields": {
+      "name": "Nursery",
+      "liquidpergalperanimalperday": 0.661,
+      "solidpergalperanimalperday": 0.0,
+      "solidperpoundperanimalperday": 0.0,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 9,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 29,
+    "fields": {
+      "name": "Grower",
+      "liquidpergalperanimalperday": 1.664,
+      "solidpergalperanimalperday": 0.0,
+      "solidperpoundperanimalperday": 0.0,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 9,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 30,
+    "fields": {
+      "name": "Finisher",
+      "liquidpergalperanimalperday": 3.17,
+      "solidpergalperanimalperday": 0.0,
+      "solidperpoundperanimalperday": 0.0,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 9,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 31,
+    "fields": {
+      "name": "Grower Finisher",
+      "liquidpergalperanimalperday": 2.668,
+      "solidpergalperanimalperday": 0.0,
+      "solidperpoundperanimalperday": 0.0,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 9,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 33,
+    "fields": {
+      "name": "Finishing: Yearlings (850-1400 lb)",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 7.477,
+      "solidperpoundperanimalperday": 50.0,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 1,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 34,
+    "fields": {
+      "name": "Finishing: Feeders (550-1250 lb)",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 5.688,
+      "solidperpoundperanimalperday": 41.032,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 1,
+      "sortorder": 0
+    }
+  },
+  {
+    "model": "animals.animalsubtype",
+    "pk": 35,
+    "fields": {
+      "name": "Finishing: Short Keep (900-300 lb)",
+      "liquidpergalperanimalperday": 0.0,
+      "solidpergalperanimalperday": 7.47,
+      "solidperpoundperanimalperday": 54.0,
+      "solidliquidseparationpercentage": 0.0,
+      "washwater": 0.0,
+      "milkproduction": 0.0,
+      "animalid": 1,
+      "sortorder": 0
+    }
+  }
+]

@@ -1,0 +1,79 @@
+[
+  {
+    "model": "fertilizers.fertilizerunits",
+    "pk": 1,
+    "fields": {
+      "name": "lb/ac",
+      "dryliquid": "dry",
+      "conversiontoimperialgallonsperacre": 0.0,
+      "farmrequirednutrientsstdunitsconversion": 0.45359237,
+      "farmrequirednutrientsstdunitsareaconversion": 1.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizerunits",
+    "pk": 2,
+    "fields": {
+      "name": "kg/ha",
+      "dryliquid": "dry",
+      "conversiontoimperialgallonsperacre": 0.0,
+      "farmrequirednutrientsstdunitsconversion": 1.0,
+      "farmrequirednutrientsstdunitsareaconversion": 0.404685642
+    }
+  },
+  {
+    "model": "fertilizers.fertilizerunits",
+    "pk": 3,
+    "fields": {
+      "name": "L/ac",
+      "dryliquid": "liquid",
+      "conversiontoimperialgallonsperacre": 0.219969157,
+      "farmrequirednutrientsstdunitsconversion": 0.264172052,
+      "farmrequirednutrientsstdunitsareaconversion": 1.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizerunits",
+    "pk": 4,
+    "fields": {
+      "name": "imp. gallons/ac",
+      "dryliquid": "liquid",
+      "conversiontoimperialgallonsperacre": 1.0,
+      "farmrequirednutrientsstdunitsconversion": 1.200949926,
+      "farmrequirednutrientsstdunitsareaconversion": 1.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizerunits",
+    "pk": 5,
+    "fields": {
+      "name": "US gallons/ac",
+      "dryliquid": "liquid",
+      "conversiontoimperialgallonsperacre": 0.83267384,
+      "farmrequirednutrientsstdunitsconversion": 1.0,
+      "farmrequirednutrientsstdunitsareaconversion": 1.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizerunits",
+    "pk": 6,
+    "fields": {
+      "name": "L/ha",
+      "dryliquid": "liquid",
+      "conversiontoimperialgallonsperacre": 0.08901836,
+      "farmrequirednutrientsstdunitsconversion": 0.264172052,
+      "farmrequirednutrientsstdunitsareaconversion": 0.404685642
+    }
+  },
+  {
+    "model": "fertilizers.fertilizerunits",
+    "pk": 7,
+    "fields": {
+      "name": "lb/1000ft\u00b2",
+      "dryliquid": "dry",
+      "conversiontoimperialgallonsperacre": 0.0,
+      "farmrequirednutrientsstdunitsconversion": 0.45359237,
+      "farmrequirednutrientsstdunitsareaconversion": 43.56
+    }
+  }
+]

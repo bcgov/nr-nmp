@@ -1,0 +1,30 @@
+[
+  {
+    "model": "crops.nitrogenrecommendation",
+    "pk": 1,
+    "fields": {
+      "recommendationdesc": "no nitrogen needed"
+    }
+  },
+  {
+    "model": "crops.nitrogenrecommendation",
+    "pk": 2,
+    "fields": {
+      "recommendationdesc": "independent of yield"
+    }
+  },
+  {
+    "model": "crops.nitrogenrecommendation",
+    "pk": 3,
+    "fields": {
+      "recommendationdesc": "dependent on yield and same as N removal"
+    }
+  },
+  {
+    "model": "crops.nitrogenrecommendation",
+    "pk": 4,
+    "fields": {
+      "recommendationdesc": "dependent on yield and greater than N removal"
+    }
+  }
+]

@@ -1,8 +1,0 @@
-"id","name","dryliquid","conversiontoimperialgallonsperacre","farmrequirednutrientsstdunitsconversion","farmrequirednutrientsstdunitsareaconversion"
-1,lb/ac,dry,0.000000000,0.453592370,1.000000000
-2,kg/ha,dry,0.000000000,1.000000000,0.404685642
-3,L/ac,liquid,0.219969157,0.264172052,1.000000000
-4,imp. gallons/ac,liquid,1.000000000,1.200949926,1.000000000
-5,US gallons/ac,liquid,0.832673840,1.000000000,1.000000000
-6,L/ha,liquid,0.089018360,0.264172052,0.404685642
-7,lb/1000ft²,dry,0.000000000,0.453592370,43.560000000

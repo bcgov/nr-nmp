@@ -1,0 +1,522 @@
+[
+  {
+    "model": "manures.manures",
+    "pk": 1,
+    "fields": {
+      "name": "Beef-feedlot, solid (dry)",
+      "manureclass": "Beef ",
+      "solidliquid": "Solid",
+      "moisture": "\u226472%",
+      "nitrogen": 0.42,
+      "ammonia": 44.0,
+      "phosphorous": 0.13,
+      "potassium": 0.67,
+      "drymatterid": 4,
+      "nmineralizationid": 11,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.51,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 70.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 2,
+    "fields": {
+      "name": "Beef-feedlot, solid (moist)",
+      "manureclass": "Beef ",
+      "solidliquid": "Solid",
+      "moisture": "72-82%",
+      "nitrogen": 0.68,
+      "ammonia": 368.0,
+      "phosphorous": 0.15,
+      "potassium": 0.3,
+      "drymatterid": 4,
+      "nmineralizationid": 11,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.7,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 77.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 3,
+    "fields": {
+      "name": "Beef, liquid",
+      "manureclass": "Beef ",
+      "solidliquid": "Liquid",
+      "moisture": "82-90%",
+      "nitrogen": 0.28,
+      "ammonia": 77.0,
+      "phosphorous": 0.09,
+      "potassium": 0.19,
+      "drymatterid": 4,
+      "nmineralizationid": 2,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.0,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 4,
+    "fields": {
+      "name": "Compost",
+      "manureclass": "Compost",
+      "solidliquid": "Solid",
+      "moisture": "50%",
+      "nitrogen": 0.0,
+      "ammonia": 0.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "drymatterid": 6,
+      "nmineralizationid": 10,
+      "sortnum": 50.0,
+      "cubicyardconversion": 0.5,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 5,
+    "fields": {
+      "name": "Chicken-broiler (general)",
+      "manureclass": "Chickens",
+      "solidliquid": "Solid",
+      "moisture": "50%",
+      "nitrogen": 2.26,
+      "ammonia": 3423.0,
+      "phosphorous": 0.91,
+      "potassium": 1.14,
+      "drymatterid": 5,
+      "nmineralizationid": 5,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.45,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 6,
+    "fields": {
+      "name": "Chicken-broiler (manure fresh from barn)",
+      "manureclass": "Chickens",
+      "solidliquid": "Solid",
+      "moisture": "25%",
+      "nitrogen": 2.97,
+      "ammonia": 4078.0,
+      "phosphorous": 1.05,
+      "potassium": 1.04,
+      "drymatterid": 5,
+      "nmineralizationid": 5,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.4,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 7,
+    "fields": {
+      "name": "Chicken-broiler (manure aged outdoors)",
+      "manureclass": "Chickens",
+      "solidliquid": "Solid",
+      "moisture": "70%",
+      "nitrogen": 1.91,
+      "ammonia": 3095.0,
+      "phosphorous": 0.8,
+      "potassium": 1.14,
+      "drymatterid": 5,
+      "nmineralizationid": 5,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.5,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 8,
+    "fields": {
+      "name": "Chicken-broiler breeder",
+      "manureclass": "Chickens",
+      "solidliquid": "Solid",
+      "moisture": "46%",
+      "nitrogen": 1.25,
+      "ammonia": 3096.0,
+      "phosphorous": 0.84,
+      "potassium": 1.71,
+      "drymatterid": 5,
+      "nmineralizationid": 5,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.4,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 10,
+    "fields": {
+      "name": "Chicken-layer",
+      "manureclass": "Chickens",
+      "solidliquid": "Solid",
+      "moisture": "50%",
+      "nitrogen": 2.26,
+      "ammonia": 3889.0,
+      "phosphorous": 1.13,
+      "potassium": 1.51,
+      "drymatterid": 5,
+      "nmineralizationid": 5,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.4,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 11,
+    "fields": {
+      "name": "Dairy, solid (dry)",
+      "manureclass": "Dairy",
+      "solidliquid": "Solid",
+      "moisture": "\u226472%",
+      "nitrogen": 0.76,
+      "ammonia": 317.0,
+      "phosphorous": 0.2,
+      "potassium": 0.43,
+      "drymatterid": 4,
+      "nmineralizationid": 11,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.59,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 12,
+    "fields": {
+      "name": "Dairy, solid (moist)",
+      "manureclass": "Dairy",
+      "solidliquid": "Solid",
+      "moisture": "72-82%",
+      "nitrogen": 0.39,
+      "ammonia": 797.0,
+      "phosphorous": 0.1,
+      "potassium": 0.3,
+      "drymatterid": 4,
+      "nmineralizationid": 11,
+      "sortnum": 100.0,
+      "cubicyardconversion": 0.7,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 14,
+    "fields": {
+      "name": "Dairy, liquid (thick slurry)",
+      "manureclass": "Dairy",
+      "solidliquid": "Liquid",
+      "moisture": "80-92%",
+      "nitrogen": 0.4,
+      "ammonia": 1760.0,
+      "phosphorous": 0.08,
+      "potassium": 0.3,
+      "drymatterid": 4,
+      "nmineralizationid": 2,
+      "sortnum": 110.0,
+      "cubicyardconversion": 0.0,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 15,
+    "fields": {
+      "name": "Dairy, liquid (medium slurry)",
+      "manureclass": "Dairy",
+      "solidliquid": "Liquid",
+      "moisture": "92-95%",
+      "nitrogen": 0.28,
+      "ammonia": 1450.0,
+      "phosphorous": 0.06,
+      "potassium": 0.25,
+      "drymatterid": 3,
+      "nmineralizationid": 2,
+      "sortnum": 111.0,
+      "cubicyardconversion": 0.0,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 16,
+    "fields": {
+      "name": "Dairy, liquid (quite watery)",
+      "manureclass": "Dairy",
+      "solidliquid": "Liquid",
+      "moisture": "95-98%",
+      "nitrogen": 0.2,
+      "ammonia": 1110.0,
+      "phosphorous": 0.04,
+      "potassium": 0.16,
+      "drymatterid": 2,
+      "nmineralizationid": 2,
+      "sortnum": 112.0,
+      "cubicyardconversion": 0.0,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 17,
+    "fields": {
+      "name": "Dairy, liquid (very watery)",
+      "manureclass": "Dairy",
+      "solidliquid": "Liquid",
+      "moisture": "98-99%",
+      "nitrogen": 0.13,
+      "ammonia": 730.0,
+      "phosphorous": 0.02,
+      "potassium": 0.12,
+      "drymatterid": 2,
+      "nmineralizationid": 2,
+      "sortnum": 113.0,
+      "cubicyardconversion": 0.0,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 18,
+    "fields": {
+      "name": "Biosolids, anaerobically digested & dewatered",
+      "manureclass": "Biosolids",
+      "solidliquid": "Solid",
+      "moisture": "70%",
+      "nitrogen": 1.47,
+      "ammonia": 2940.0,
+      "phosphorous": 0.9,
+      "potassium": 0.03,
+      "drymatterid": 4,
+      "nmineralizationid": 4,
+      "sortnum": 300.0,
+      "cubicyardconversion": 0.7,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 19,
+    "fields": {
+      "name": "Goat (dairy)",
+      "manureclass": "Goats (dairy)",
+      "solidliquid": "Solid",
+      "moisture": "65%",
+      "nitrogen": 1.04,
+      "ammonia": 2818.0,
+      "phosphorous": 0.28,
+      "potassium": 1.03,
+      "drymatterid": 4,
+      "nmineralizationid": 11,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.7,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 20,
+    "fields": {
+      "name": "Hog, liquid",
+      "manureclass": "Hog",
+      "solidliquid": "Liquid",
+      "moisture": "\u226582%",
+      "nitrogen": 0.33,
+      "ammonia": 2211.0,
+      "phosphorous": 0.1,
+      "potassium": 0.15,
+      "drymatterid": 4,
+      "nmineralizationid": 2,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.0,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 21,
+    "fields": {
+      "name": "Hog, solid",
+      "manureclass": "Hog",
+      "solidliquid": "Solid",
+      "moisture": "<82%",
+      "nitrogen": 0.86,
+      "ammonia": 525.0,
+      "phosphorous": 0.42,
+      "potassium": 0.5,
+      "drymatterid": 2,
+      "nmineralizationid": 7,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.7,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 22,
+    "fields": {
+      "name": "Horse",
+      "manureclass": "Horses",
+      "solidliquid": "Solid",
+      "moisture": "<82%",
+      "nitrogen": 0.32,
+      "ammonia": 268.0,
+      "phosphorous": 0.09,
+      "potassium": 0.25,
+      "drymatterid": 4,
+      "nmineralizationid": 9,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.7,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 23,
+    "fields": {
+      "name": "Mink",
+      "manureclass": "Mink",
+      "solidliquid": "Solid",
+      "moisture": "54%",
+      "nitrogen": 3.28,
+      "ammonia": 14151.0,
+      "phosphorous": 1.82,
+      "potassium": 0.79,
+      "drymatterid": 4,
+      "nmineralizationid": 6,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.5,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 24,
+    "fields": {
+      "name": "Sheep",
+      "manureclass": "Sheep",
+      "solidliquid": "Solid",
+      "moisture": "68%",
+      "nitrogen": 0.87,
+      "ammonia": 2784.0,
+      "phosphorous": 0.34,
+      "potassium": 0.76,
+      "drymatterid": 4,
+      "nmineralizationid": 11,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.7,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 25,
+    "fields": {
+      "name": "Turkey (manure aged, \u22657 weeks out of barn)",
+      "manureclass": "Turkeys",
+      "solidliquid": "Solid",
+      "moisture": "70%",
+      "nitrogen": 0.87,
+      "ammonia": 1281.0,
+      "phosphorous": 0.44,
+      "potassium": 0.59,
+      "drymatterid": 5,
+      "nmineralizationid": 5,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.33,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 26,
+    "fields": {
+      "name": "Turkey (manure fresh from barn, <7 weeks)",
+      "manureclass": "Turkeys",
+      "solidliquid": "Solid",
+      "moisture": "33%",
+      "nitrogen": 1.79,
+      "ammonia": 2518.0,
+      "phosphorous": 0.79,
+      "potassium": 1.31,
+      "drymatterid": 5,
+      "nmineralizationid": 5,
+      "sortnum": 200.0,
+      "cubicyardconversion": 0.33,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 27,
+    "fields": {
+      "name": "(Other, solid)",
+      "manureclass": "Other",
+      "solidliquid": "Solid",
+      "moisture": "Solid",
+      "nitrogen": 0.0,
+      "ammonia": 0.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "drymatterid": 4,
+      "nmineralizationid": 11,
+      "sortnum": 10.0,
+      "cubicyardconversion": 0.5,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  },
+  {
+    "model": "manures.manures",
+    "pk": 28,
+    "fields": {
+      "name": "(Other, liquid)",
+      "manureclass": "Other",
+      "solidliquid": "Liquid",
+      "moisture": "Liquid",
+      "nitrogen": 0.0,
+      "ammonia": 0.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "drymatterid": 2,
+      "nmineralizationid": 2,
+      "sortnum": 10.0,
+      "cubicyardconversion": 0.0,
+      "nitrate": 0.0,
+      "defaultsolidmoisture": 0.0
+    }
+  }
+]

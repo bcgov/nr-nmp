@@ -1,0 +1,1118 @@
+[
+  {
+    "model": "crops.cropyields",
+    "pk": 1445,
+    "fields": {
+      "cropid": 1,
+      "locationid": 1,
+      "amount": 2.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1446,
+    "fields": {
+      "cropid": 1,
+      "locationid": 2,
+      "amount": 2.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1447,
+    "fields": {
+      "cropid": 2,
+      "locationid": 1,
+      "amount": 4.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1448,
+    "fields": {
+      "cropid": 2,
+      "locationid": 2,
+      "amount": 4.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1449,
+    "fields": {
+      "cropid": 3,
+      "locationid": 1,
+      "amount": 5.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1450,
+    "fields": {
+      "cropid": 3,
+      "locationid": 2,
+      "amount": 5.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1451,
+    "fields": {
+      "cropid": 4,
+      "locationid": 1,
+      "amount": 7.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1452,
+    "fields": {
+      "cropid": 4,
+      "locationid": 2,
+      "amount": 8.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1453,
+    "fields": {
+      "cropid": 5,
+      "locationid": 1,
+      "amount": 4.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1454,
+    "fields": {
+      "cropid": 5,
+      "locationid": 2,
+      "amount": 4.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1455,
+    "fields": {
+      "cropid": 6,
+      "locationid": 1,
+      "amount": 4.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1456,
+    "fields": {
+      "cropid": 6,
+      "locationid": 2,
+      "amount": 4.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1457,
+    "fields": {
+      "cropid": 7,
+      "locationid": 1,
+      "amount": 5.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1458,
+    "fields": {
+      "cropid": 7,
+      "locationid": 2,
+      "amount": 5.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1459,
+    "fields": {
+      "cropid": 8,
+      "locationid": 1,
+      "amount": 6.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1460,
+    "fields": {
+      "cropid": 8,
+      "locationid": 2,
+      "amount": 6.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1461,
+    "fields": {
+      "cropid": 9,
+      "locationid": 1,
+      "amount": 7.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1462,
+    "fields": {
+      "cropid": 9,
+      "locationid": 2,
+      "amount": 7.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1463,
+    "fields": {
+      "cropid": 10,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1464,
+    "fields": {
+      "cropid": 10,
+      "locationid": 2,
+      "amount": 1.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1465,
+    "fields": {
+      "cropid": 11,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1466,
+    "fields": {
+      "cropid": 11,
+      "locationid": 2,
+      "amount": 2.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1467,
+    "fields": {
+      "cropid": 12,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1468,
+    "fields": {
+      "cropid": 12,
+      "locationid": 2,
+      "amount": 2.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1469,
+    "fields": {
+      "cropid": 13,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1470,
+    "fields": {
+      "cropid": 13,
+      "locationid": 2,
+      "amount": 1.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1471,
+    "fields": {
+      "cropid": 14,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1472,
+    "fields": {
+      "cropid": 14,
+      "locationid": 2,
+      "amount": 2.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1473,
+    "fields": {
+      "cropid": 15,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1474,
+    "fields": {
+      "cropid": 15,
+      "locationid": 2,
+      "amount": 2.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1475,
+    "fields": {
+      "cropid": 16,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1476,
+    "fields": {
+      "cropid": 16,
+      "locationid": 2,
+      "amount": 2.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1477,
+    "fields": {
+      "cropid": 22,
+      "locationid": 1,
+      "amount": 1.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1478,
+    "fields": {
+      "cropid": 22,
+      "locationid": 2,
+      "amount": 1.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1479,
+    "fields": {
+      "cropid": 23,
+      "locationid": 1,
+      "amount": 1.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1480,
+    "fields": {
+      "cropid": 23,
+      "locationid": 2,
+      "amount": 1.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1481,
+    "fields": {
+      "cropid": 24,
+      "locationid": 1,
+      "amount": 1.92
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1482,
+    "fields": {
+      "cropid": 24,
+      "locationid": 2,
+      "amount": 1.92
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1483,
+    "fields": {
+      "cropid": 25,
+      "locationid": 1,
+      "amount": 1.92
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1484,
+    "fields": {
+      "cropid": 25,
+      "locationid": 2,
+      "amount": 1.92
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1485,
+    "fields": {
+      "cropid": 26,
+      "locationid": 1,
+      "amount": 0.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1486,
+    "fields": {
+      "cropid": 26,
+      "locationid": 2,
+      "amount": 0.58
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1487,
+    "fields": {
+      "cropid": 27,
+      "locationid": 1,
+      "amount": 4.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1488,
+    "fields": {
+      "cropid": 27,
+      "locationid": 2,
+      "amount": 4.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1489,
+    "fields": {
+      "cropid": 28,
+      "locationid": 1,
+      "amount": 2.9
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1490,
+    "fields": {
+      "cropid": 28,
+      "locationid": 2,
+      "amount": 2.9
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1491,
+    "fields": {
+      "cropid": 30,
+      "locationid": 1,
+      "amount": 9.9
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1492,
+    "fields": {
+      "cropid": 30,
+      "locationid": 2,
+      "amount": 11.4
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1493,
+    "fields": {
+      "cropid": 31,
+      "locationid": 1,
+      "amount": 2.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1494,
+    "fields": {
+      "cropid": 31,
+      "locationid": 2,
+      "amount": 2.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1495,
+    "fields": {
+      "cropid": 32,
+      "locationid": 1,
+      "amount": 5.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1496,
+    "fields": {
+      "cropid": 32,
+      "locationid": 2,
+      "amount": 5.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1497,
+    "fields": {
+      "cropid": 33,
+      "locationid": 1,
+      "amount": 13.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1498,
+    "fields": {
+      "cropid": 33,
+      "locationid": 2,
+      "amount": 13.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1499,
+    "fields": {
+      "cropid": 34,
+      "locationid": 1,
+      "amount": 5.9
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1500,
+    "fields": {
+      "cropid": 34,
+      "locationid": 2,
+      "amount": 5.9
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1501,
+    "fields": {
+      "cropid": 35,
+      "locationid": 1,
+      "amount": 14.4
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1502,
+    "fields": {
+      "cropid": 35,
+      "locationid": 2,
+      "amount": 14.4
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1503,
+    "fields": {
+      "cropid": 36,
+      "locationid": 1,
+      "amount": 4.4
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1504,
+    "fields": {
+      "cropid": 36,
+      "locationid": 2,
+      "amount": 4.4
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1505,
+    "fields": {
+      "cropid": 37,
+      "locationid": 1,
+      "amount": 26.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1506,
+    "fields": {
+      "cropid": 37,
+      "locationid": 2,
+      "amount": 26.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1507,
+    "fields": {
+      "cropid": 39,
+      "locationid": 1,
+      "amount": 6.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1508,
+    "fields": {
+      "cropid": 39,
+      "locationid": 2,
+      "amount": 7.3
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1509,
+    "fields": {
+      "cropid": 40,
+      "locationid": 1,
+      "amount": 5.1
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1510,
+    "fields": {
+      "cropid": 40,
+      "locationid": 2,
+      "amount": 6.4
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1511,
+    "fields": {
+      "cropid": 43,
+      "locationid": 1,
+      "amount": 4.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1512,
+    "fields": {
+      "cropid": 43,
+      "locationid": 2,
+      "amount": 4.7
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1513,
+    "fields": {
+      "cropid": 45,
+      "locationid": 1,
+      "amount": 11.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1514,
+    "fields": {
+      "cropid": 45,
+      "locationid": 2,
+      "amount": 11.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1515,
+    "fields": {
+      "cropid": 46,
+      "locationid": 1,
+      "amount": 15.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1516,
+    "fields": {
+      "cropid": 46,
+      "locationid": 2,
+      "amount": 12.1
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1517,
+    "fields": {
+      "cropid": 48,
+      "locationid": 1,
+      "amount": null
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1518,
+    "fields": {
+      "cropid": 48,
+      "locationid": 2,
+      "amount": null
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1519,
+    "fields": {
+      "cropid": 49,
+      "locationid": 1,
+      "amount": 15.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1520,
+    "fields": {
+      "cropid": 49,
+      "locationid": 2,
+      "amount": 15.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1521,
+    "fields": {
+      "cropid": 52,
+      "locationid": 1,
+      "amount": 2.3
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1522,
+    "fields": {
+      "cropid": 52,
+      "locationid": 2,
+      "amount": 2.3
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1523,
+    "fields": {
+      "cropid": 53,
+      "locationid": 1,
+      "amount": 8.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1524,
+    "fields": {
+      "cropid": 53,
+      "locationid": 2,
+      "amount": 8.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1525,
+    "fields": {
+      "cropid": 54,
+      "locationid": 1,
+      "amount": 15.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1526,
+    "fields": {
+      "cropid": 54,
+      "locationid": 2,
+      "amount": 15.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1527,
+    "fields": {
+      "cropid": 55,
+      "locationid": 1,
+      "amount": 20.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1528,
+    "fields": {
+      "cropid": 55,
+      "locationid": 2,
+      "amount": 20.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1529,
+    "fields": {
+      "cropid": 56,
+      "locationid": 1,
+      "amount": 25.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1530,
+    "fields": {
+      "cropid": 56,
+      "locationid": 2,
+      "amount": 25.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1531,
+    "fields": {
+      "cropid": 57,
+      "locationid": 1,
+      "amount": 15.1
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1532,
+    "fields": {
+      "cropid": 57,
+      "locationid": 2,
+      "amount": 15.1
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1533,
+    "fields": {
+      "cropid": 58,
+      "locationid": 1,
+      "amount": 6.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1534,
+    "fields": {
+      "cropid": 58,
+      "locationid": 2,
+      "amount": 6.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1535,
+    "fields": {
+      "cropid": 59,
+      "locationid": 1,
+      "amount": null
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1536,
+    "fields": {
+      "cropid": 59,
+      "locationid": 2,
+      "amount": null
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1537,
+    "fields": {
+      "cropid": 60,
+      "locationid": 1,
+      "amount": 7.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1538,
+    "fields": {
+      "cropid": 60,
+      "locationid": 2,
+      "amount": 7.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1539,
+    "fields": {
+      "cropid": 61,
+      "locationid": 1,
+      "amount": 14.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1540,
+    "fields": {
+      "cropid": 61,
+      "locationid": 2,
+      "amount": 14.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1541,
+    "fields": {
+      "cropid": 62,
+      "locationid": 1,
+      "amount": 5.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1542,
+    "fields": {
+      "cropid": 62,
+      "locationid": 2,
+      "amount": 5.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1543,
+    "fields": {
+      "cropid": 63,
+      "locationid": 1,
+      "amount": 14.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1544,
+    "fields": {
+      "cropid": 63,
+      "locationid": 2,
+      "amount": 14.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1545,
+    "fields": {
+      "cropid": 64,
+      "locationid": 1,
+      "amount": 9.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1546,
+    "fields": {
+      "cropid": 64,
+      "locationid": 2,
+      "amount": 9.5
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1547,
+    "fields": {
+      "cropid": 65,
+      "locationid": 1,
+      "amount": 6.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1548,
+    "fields": {
+      "cropid": 65,
+      "locationid": 2,
+      "amount": 6.2
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1549,
+    "fields": {
+      "cropid": 67,
+      "locationid": 1,
+      "amount": 1.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1550,
+    "fields": {
+      "cropid": 67,
+      "locationid": 2,
+      "amount": 1.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1551,
+    "fields": {
+      "cropid": 68,
+      "locationid": 1,
+      "amount": 1.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1552,
+    "fields": {
+      "cropid": 68,
+      "locationid": 2,
+      "amount": 1.6
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1553,
+    "fields": {
+      "cropid": 69,
+      "locationid": 1,
+      "amount": 1.54
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1554,
+    "fields": {
+      "cropid": 69,
+      "locationid": 2,
+      "amount": 1.54
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1555,
+    "fields": {
+      "cropid": 70,
+      "locationid": 1,
+      "amount": 1.54
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1556,
+    "fields": {
+      "cropid": 70,
+      "locationid": 2,
+      "amount": 1.54
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1557,
+    "fields": {
+      "cropid": 71,
+      "locationid": 1,
+      "amount": 0.875
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1558,
+    "fields": {
+      "cropid": 71,
+      "locationid": 2,
+      "amount": 0.875
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1559,
+    "fields": {
+      "cropid": 72,
+      "locationid": 1,
+      "amount": 7.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1560,
+    "fields": {
+      "cropid": 72,
+      "locationid": 2,
+      "amount": 7.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1561,
+    "fields": {
+      "cropid": 73,
+      "locationid": 1,
+      "amount": 0.1
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1562,
+    "fields": {
+      "cropid": 73,
+      "locationid": 2,
+      "amount": 0.1
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1563,
+    "fields": {
+      "cropid": 74,
+      "locationid": 1,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1564,
+    "fields": {
+      "cropid": 74,
+      "locationid": 2,
+      "amount": 1.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1565,
+    "fields": {
+      "cropid": 75,
+      "locationid": 1,
+      "amount": 5.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1566,
+    "fields": {
+      "cropid": 75,
+      "locationid": 2,
+      "amount": 5.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1567,
+    "fields": {
+      "cropid": 76,
+      "locationid": 1,
+      "amount": 5.0
+    }
+  },
+  {
+    "model": "crops.cropyields",
+    "pk": 1568,
+    "fields": {
+      "cropid": 76,
+      "locationid": 2,
+      "amount": 5.0
+    }
+  }
+]
