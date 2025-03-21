@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Converts CSV files from database/db/trimmed_tables to Django fixtures
-and saves them in apps/shared/fixtures/
+and saves them as JSON files in backend/apps/shared/fixtures/ (may need to be updated to handle some null values and floats)
 """
 
 import csv
@@ -11,7 +11,7 @@ import os
 import re
 from pathlib import Path
 
-# Directory mappings 
+# Directory mappings of the file paths 
 CSV_DIR = "../../database/db/trimmed_tables"
 FIXTURE_DIR = "../apps/shared/fixtures"
 
@@ -55,7 +55,7 @@ def clean_value(value, column_name):
         except ValueError:
             pass
     
-    # Try float for likely numeric columns
+    # Try float for likely numeric columns (this will need to be updated for crops workflow as a float may cause issues with endpoints)
     if re.match(r'^[\d.]+$', value):
         try:
             return float(value)
@@ -72,7 +72,7 @@ def clean_value(value, column_name):
     return value
 
 def convert_csv_to_fixture(csv_path, model_name):
-    """Convert a CSV file to Django fixture format"""
+    """Convert a CSV file to Django fixture format of JSON files"""
     fixture_data = []
     
     with open(csv_path, 'r') as csv_file:
@@ -142,7 +142,7 @@ def main():
         # Add to combined data
         all_fixtures.extend(fixture_data)
     
-    # Save combined fixture file
+    # Save combined fixture file (this will be used to load the data into the database)
     combined_file = os.path.join(FIXTURE_DIR, "all_data.json")
     with open(combined_file, 'w') as f:
         json.dump(all_fixtures, f, indent=2)
