@@ -15,5 +15,5 @@ export const ViewContainer = styled.div`
   height: 100%;
   justify-content: center;
   width: 100%;
-  align-items: center;
+  align-items: flex-start;
 `;

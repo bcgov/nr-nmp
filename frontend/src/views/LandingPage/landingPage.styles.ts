@@ -60,7 +60,7 @@ export const StyledDivider = styled.div`
 `;
 
 export const StyledContent = styled.div`
-  width: 400px;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   max-height: 180px;

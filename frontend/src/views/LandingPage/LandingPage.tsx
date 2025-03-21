@@ -7,7 +7,8 @@ import constants from '../../constants/Constants';
 import useAppService from '../../services/app/useAppService';
 import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
 import { ButtonWrapper, StyledDivider, StyledContent } from './landingPage.styles';
-import { Button, Card } from '../../components/common';
+import { AppTitle, Button, PageTitle, ProgressStepper } from '../../components/common';
+import { LANDING_PAGE } from '@/constants/RouteConstants';
 
 export default function LandingPage() {
   const { setNMPFile, setProgressStep } = useAppService();
@@ -48,13 +49,11 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <Card
-      width="500px"
-      height="500px"
-      justifyContent="center"
-    >
+    <div>
+      <ProgressStepper step={LANDING_PAGE} />
       <StyledContent>
-        <h1>Nutrient Management Calculator</h1>
+        <AppTitle />
+        <PageTitle title="Nutrient Management Calculator" />
         <p>
           The Nutrient Management Calculator provides a starting point for the efficient use of
           fertilizer and manure on farms. This tool assists in you choosing the right rate and
@@ -91,6 +90,6 @@ export default function LandingPage() {
           hidden
         />
       </ButtonWrapper>
-    </Card>
+    </div>
   );
 }
