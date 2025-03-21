@@ -7,7 +7,9 @@ import Checkbox from './Checkbox/Checkbox';
 import Dropdown from './Dropdown/Dropdown';
 import Card from './Card/Card';
 import Modal from './Modal/Modal';
-import ProgressBar from './ProgressBar/ProgressBar';
+import ProgressStepper from './ProgressStepper/ProgressStepper';
+import AppTitle from './AppTitle/AppTitle';
+import PageTitle from './PageTitle/PageTitle';
 
 export {
   Header,
@@ -19,5 +21,7 @@ export {
   Dropdown,
   Card,
   Modal,
-  ProgressBar,
+  ProgressStepper,
+  AppTitle,
+  PageTitle,
 };

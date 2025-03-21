@@ -2,6 +2,14 @@
  * @summary Router to different views
  */
 import { Routes, Route } from 'react-router-dom';
+import {
+  ANIMALS_MANURE,
+  CALCULATE_NUTRIENTS,
+  FARM_INFORMATION,
+  FIELD_SOIL,
+  LANDING_PAGE,
+  MANURE_COMPOST,
+} from '@/constants/RouteConstants';
 
 import LandingPage from '../views/LandingPage/LandingPage';
 import FarmInformation from '../views/FarmInformation/FarmInformation';
@@ -14,27 +22,27 @@ export default function ViewRouter() {
   return (
     <Routes>
       <Route
-        path="/"
+        path={`/${LANDING_PAGE}`}
         Component={LandingPage}
       />
       <Route
-        path="/farm-information"
+        path={`/${FARM_INFORMATION}`}
         Component={FarmInformation}
       />
       <Route
-        path="/field-and-soil"
+        path={`/${FIELD_SOIL}`}
         Component={FieldAndSoil}
       />
       <Route
-        path="/manure-and-compost"
+        path={`/${MANURE_COMPOST}`}
         Component={ManureAndCompost}
       />
       <Route
-        path="/calculate-nutrients"
+        path={`/${CALCULATE_NUTRIENTS}`}
         Component={CalculateNutrients}
       />
       <Route
-        path="/animals-and-manure"
+        path={`/${ANIMALS_MANURE}`}
         Component={AnimalsAndManure}
       />
     </Routes>
