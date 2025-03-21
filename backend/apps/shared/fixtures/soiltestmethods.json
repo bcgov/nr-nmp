@@ -1,0 +1,123 @@
+[
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 1,
+    "fields": {
+      "name": "AGAT (Mod Bray-1 and Amm Acetate)",
+      "converttokelownaphlessthan72": 0.74,
+      "converttokelownaphgreaterthan72": 1.0,
+      "converttokelownak": 0.8,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 2,
+    "fields": {
+      "name": "A and L Canada (Bray-1 and Mehlich 3)",
+      "converttokelownaphlessthan72": 0.74,
+      "converttokelownaphgreaterthan72": 1.0,
+      "converttokelownak": 0.75,
+      "sortnum": 110.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 3,
+    "fields": {
+      "name": "ALS (Mod Kelowna 94)",
+      "converttokelownaphlessthan72": 1.24,
+      "converttokelownaphgreaterthan72": 1.24,
+      "converttokelownak": 0.76,
+      "sortnum": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 4,
+    "fields": {
+      "name": "Brookside (Mehlich 3)",
+      "converttokelownaphlessthan72": 0.72,
+      "converttokelownaphgreaterthan72": 0.72,
+      "converttokelownak": 0.75,
+      "sortnum": 140.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 6,
+    "fields": {
+      "name": "Element (Mod Kelowna 95)",
+      "converttokelownaphlessthan72": 1.24,
+      "converttokelownaphgreaterthan72": 1.24,
+      "converttokelownak": 0.76,
+      "sortnum": 160.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 7,
+    "fields": {
+      "name": "MB Laboratories (Mod Kelowna 94)",
+      "converttokelownaphlessthan72": 1.24,
+      "converttokelownaphgreaterthan72": 1.24,
+      "converttokelownak": 0.76,
+      "sortnum": 170.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 8,
+    "fields": {
+      "name": "Pacific Soil Analysis (Bray-1 and Amm Acetate)",
+      "converttokelownaphlessthan72": 0.74,
+      "converttokelownaphgreaterthan72": 1.0,
+      "converttokelownak": 0.8,
+      "sortnum": 180.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 9,
+    "fields": {
+      "name": "Plant Science Lab/Terralink (Mehlich 3)",
+      "converttokelownaphlessthan72": 0.72,
+      "converttokelownaphgreaterthan72": 0.72,
+      "converttokelownak": 0.75,
+      "sortnum": 190.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 10,
+    "fields": {
+      "name": "Soil Foodweb Canada (Mehlich 1)",
+      "converttokelownaphlessthan72": 0.72,
+      "converttokelownaphgreaterthan72": 0.72,
+      "converttokelownak": 0.75,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 11,
+    "fields": {
+      "name": "Other lab (Bicarbonate and Amm Acetate)",
+      "converttokelownaphlessthan72": 2.0,
+      "converttokelownaphgreaterthan72": 2.0,
+      "converttokelownak": 0.8,
+      "sortnum": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestmethods",
+    "pk": 12,
+    "fields": {
+      "name": "Other lab (Original Kelowna method)",
+      "converttokelownaphlessthan72": 1.0,
+      "converttokelownaphgreaterthan72": 1.0,
+      "converttokelownak": 1.0,
+      "sortnum": 10.0
+    }
+  }
+]

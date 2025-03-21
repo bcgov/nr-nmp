@@ -1,0 +1,222 @@
+[
+  {
+    "model": "shared.regions",
+    "pk": 1,
+    "fields": {
+      "name": "Bulkley-Nechako",
+      "soiltestphosphorousregioncd": 2.0,
+      "soiltestpotassiumregioncd": 3.0,
+      "locationid": 1,
+      "sortorder": 1
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 2,
+    "fields": {
+      "name": "Northern Rockies",
+      "soiltestphosphorousregioncd": 3.0,
+      "soiltestpotassiumregioncd": 3.0,
+      "locationid": 1,
+      "sortorder": 21
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 3,
+    "fields": {
+      "name": "Cariboo",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 2
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 4,
+    "fields": {
+      "name": "Central Kootenay",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 4
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 5,
+    "fields": {
+      "name": "Central Okanagan",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 12
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 6,
+    "fields": {
+      "name": "Columbia Shuswap",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 3
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 9,
+    "fields": {
+      "name": "East Kootenay",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 6
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 10,
+    "fields": {
+      "name": "Fraser Valley, East (including Abbotsford/Mission)",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 1.0,
+      "locationid": 2,
+      "sortorder": 8
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 11,
+    "fields": {
+      "name": "Fraser-Fort George",
+      "soiltestphosphorousregioncd": 2.0,
+      "soiltestpotassiumregioncd": 3.0,
+      "locationid": 1,
+      "sortorder": 10
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 12,
+    "fields": {
+      "name": "Kitimat-Stikine",
+      "soiltestphosphorousregioncd": 2.0,
+      "soiltestpotassiumregioncd": 3.0,
+      "locationid": 1,
+      "sortorder": 11
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 13,
+    "fields": {
+      "name": "Kootenay Boundary",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 7
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 14,
+    "fields": {
+      "name": "Fraser Valley, West (Delta to Langley/Maple Ridge)",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 1.0,
+      "locationid": 2,
+      "sortorder": 9
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 16,
+    "fields": {
+      "name": "North Okanagan",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 13
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 17,
+    "fields": {
+      "name": "Okanagan-Similkameen",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 14
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 18,
+    "fields": {
+      "name": "Peace River",
+      "soiltestphosphorousregioncd": 3.0,
+      "soiltestpotassiumregioncd": 3.0,
+      "locationid": 1,
+      "sortorder": 15
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 19,
+    "fields": {
+      "name": "Squamish-Lilloeet",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 2,
+      "sortorder": 16
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 20,
+    "fields": {
+      "name": "Thompson-Nicola",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 2.0,
+      "locationid": 1,
+      "sortorder": 19
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 21,
+    "fields": {
+      "name": "Vancouver Island",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 1.0,
+      "locationid": 2,
+      "sortorder": 20
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 22,
+    "fields": {
+      "name": "Powell River / qathet Region",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 1.0,
+      "locationid": 2,
+      "sortorder": 17
+    }
+  },
+  {
+    "model": "shared.regions",
+    "pk": 23,
+    "fields": {
+      "name": "Sunshine Coast",
+      "soiltestphosphorousregioncd": 1.0,
+      "soiltestpotassiumregioncd": 1.0,
+      "locationid": 2,
+      "sortorder": 18
+    }
+  }
+]

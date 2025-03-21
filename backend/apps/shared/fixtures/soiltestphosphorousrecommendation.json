@@ -1,0 +1,2162 @@
+[
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2593,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2594,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2595,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 140.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2596,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 170.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2597,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 200.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2598,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2599,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2600,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2601,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2602,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 140.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2603,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 160.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2604,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2605,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2606,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2607,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2608,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 140.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2609,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 160.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2610,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 1,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2611,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2612,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2613,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2614,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 140.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2615,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 170.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2616,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2617,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2618,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2619,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2620,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 130.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2621,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 140.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2622,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2623,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2624,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2625,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2626,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 130.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2627,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 140.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2628,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 2,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2629,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2630,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2631,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2632,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2633,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 144.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2634,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2635,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2636,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2637,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2638,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2639,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2640,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2641,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2642,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2643,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2644,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2645,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 120.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2646,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 3,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2647,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2648,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2649,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2650,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2651,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2652,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2653,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2654,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2655,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2656,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2657,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2658,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2659,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2660,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2661,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2662,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2663,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 100.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2664,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 4,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2665,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2666,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2667,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2668,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2669,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2670,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2671,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2672,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2673,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2674,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2675,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2676,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2677,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2678,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2679,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2680,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2681,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 90.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2682,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 5,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2683,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2684,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2685,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2686,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2687,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2688,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2689,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2690,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2691,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2692,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2693,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2694,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2695,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2696,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2697,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2698,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2699,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 80.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2700,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 6,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2701,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2702,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2703,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2704,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2705,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2706,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2707,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2708,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2709,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2710,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2711,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2712,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2713,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2714,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2715,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2716,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2717,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 70.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2718,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 7,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2719,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2720,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2721,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2722,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2723,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2724,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2725,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2726,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2727,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2728,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2729,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2730,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2731,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2732,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2733,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2734,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2735,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 60.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2736,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 8,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2737,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2738,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2739,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2740,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2741,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2742,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2743,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2744,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2745,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2746,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2747,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2748,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2749,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2750,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2751,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2752,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2753,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2754,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 9,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2755,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2756,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2757,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2758,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2759,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2760,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2761,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2762,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2763,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2764,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2765,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2766,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2767,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2768,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2769,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2770,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 40.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2771,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 50.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2772,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 10,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2773,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2774,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2775,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2776,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2777,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 25.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2778,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2779,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2780,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2781,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2782,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 25.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2783,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2784,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2785,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 10.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2786,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 15.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2787,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 20.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2788,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 25.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2789,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 30.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2790,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 11,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2791,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2792,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2793,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2794,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2795,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2796,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 1.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2797,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2798,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2799,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2800,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2801,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2802,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 2.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2803,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 1.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2804,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 2.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2805,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 3.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2806,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 4.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2807,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 5.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousrecommendation",
+    "pk": 2808,
+    "fields": {
+      "soiltestphosphorouskelownarangeid": 12,
+      "soiltestphosphorousregioncode": 3.0,
+      "phosphorouscropgroupregioncode": 6.0,
+      "p2o5recommendationkilogramperhectare": 0.0
+    }
+  }
+]

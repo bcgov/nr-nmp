@@ -1,0 +1,29 @@
+[
+  {
+    "model": "animals.breed",
+    "pk": 1,
+    "fields": {
+      "breedname": "Holstein",
+      "animalid": 2,
+      "breedmanurefactor": 1.0
+    }
+  },
+  {
+    "model": "animals.breed",
+    "pk": 2,
+    "fields": {
+      "breedname": "Guernsey",
+      "animalid": 2,
+      "breedmanurefactor": 0.68
+    }
+  },
+  {
+    "model": "animals.breed",
+    "pk": 3,
+    "fields": {
+      "breedname": "Brown Swiss",
+      "animalid": 2,
+      "breedmanurefactor": 0.765
+    }
+  }
+]

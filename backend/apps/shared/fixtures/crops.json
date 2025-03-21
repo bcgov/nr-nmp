@@ -1,0 +1,1199 @@
+[
+  {
+    "model": "crops.crops",
+    "pk": 1,
+    "fields": {
+      "cropname": "Alfalfa or legume dominant stand (1 cut)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 64.0,
+      "cropremovalfactorp2o5": 18.32,
+      "cropremovalfactork2o": 50.4,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 2,
+    "fields": {
+      "cropname": "Alfalfa or legume dominant stand (2 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 64.0,
+      "cropremovalfactorp2o5": 18.32,
+      "cropremovalfactork2o": 50.4,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 1.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 3,
+    "fields": {
+      "cropname": "Alfalfa or legume dominant stand (3 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 64.0,
+      "cropremovalfactorp2o5": 18.32,
+      "cropremovalfactork2o": 50.4,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 4,
+    "fields": {
+      "cropname": "Corn silage",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 25.0,
+      "cropremovalfactorp2o5": 9.16,
+      "cropremovalfactork2o": 24.0,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 1.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 1.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 5,
+    "fields": {
+      "cropname": "Grass or mixed stand (1-2 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 32.0,
+      "cropremovalfactorp2o5": 13.74,
+      "cropremovalfactork2o": 45.6,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 6,
+    "fields": {
+      "cropname": "Grass or mixed stand (2-3 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 38.0,
+      "cropremovalfactorp2o5": 13.74,
+      "cropremovalfactork2o": 45.6,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 7,
+    "fields": {
+      "cropname": "Grass or mixed stand (4-5 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 48.0,
+      "cropremovalfactorp2o5": 16.03,
+      "cropremovalfactork2o": 45.6,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 1.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 8,
+    "fields": {
+      "cropname": "Grass or mixed stand (5-6 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 58.0,
+      "cropremovalfactorp2o5": 18.32,
+      "cropremovalfactork2o": 48.0,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 9,
+    "fields": {
+      "cropname": "Grass or mixed stand (7 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 64.0,
+      "cropremovalfactorp2o5": 18.32,
+      "cropremovalfactork2o": 48.0,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 10,
+    "fields": {
+      "cropname": "Austrian winter pea",
+      "croptypeid": 2,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 60.0,
+      "cropremovalfactorp2o5": 20.0,
+      "cropremovalfactork2o": 60.0,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 11,
+    "fields": {
+      "cropname": "Crimson clover",
+      "croptypeid": 2,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 54.8,
+      "cropremovalfactorp2o5": 12.6,
+      "cropremovalfactork2o": 74.4,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 12,
+    "fields": {
+      "cropname": "Hairy vetch",
+      "croptypeid": 2,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 61.0,
+      "cropremovalfactorp2o5": 18.0,
+      "cropremovalfactork2o": 60.0,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 13,
+    "fields": {
+      "cropname": "Red clover",
+      "croptypeid": 2,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 58.0,
+      "cropremovalfactorp2o5": 18.0,
+      "cropremovalfactork2o": 60.0,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 14,
+    "fields": {
+      "cropname": "Annual ryegrass",
+      "croptypeid": 2,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 35.0,
+      "cropremovalfactorp2o5": 13.7,
+      "cropremovalfactork2o": 45.8,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 15,
+    "fields": {
+      "cropname": "Cereal (barley, oats, wheat, etc.)",
+      "croptypeid": 2,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 44.0,
+      "cropremovalfactorp2o5": 16.0,
+      "cropremovalfactork2o": 40.0,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 16,
+    "fields": {
+      "cropname": "Fall rye",
+      "croptypeid": 2,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 56.8,
+      "cropremovalfactorp2o5": 17.2,
+      "cropremovalfactork2o": 74.8,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 22,
+    "fields": {
+      "cropname": "Spring wheat (straw removed)",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 70.59,
+      "cropremovalfactorp2o5": 26.732,
+      "cropremovalfactork2o": 60.566,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": 33.333333
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 23,
+    "fields": {
+      "cropname": "Spring wheat",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 50.123,
+      "cropremovalfactorp2o5": 19.632,
+      "cropremovalfactork2o": 14.619,
+      "nitrogenrecommendationid": 4,
+      "nitrogenrecommendationpoundperacre": 84.5,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": 33.333333
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 24,
+    "fields": {
+      "cropname": "Barley (straw removed)",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 58.009,
+      "cropremovalfactorp2o5": 23.256,
+      "cropremovalfactork2o": 55.657,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": 41.666667
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 25,
+    "fields": {
+      "cropname": "Barley",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 40.502,
+      "cropremovalfactorp2o5": 17.507,
+      "cropremovalfactork2o": 13.326,
+      "nitrogenrecommendationid": 4,
+      "nitrogenrecommendationpoundperacre": 111.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": 41.666667
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 26,
+    "fields": {
+      "cropname": "Asparagus-establishment year",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 9.2,
+      "cropremovalfactorp2o5": 3.1,
+      "cropremovalfactork2o": 6.8,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 62.45253854,
+      "nitrogenrecommendationupperlimitpoundperacre": 66.91343415,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 27,
+    "fields": {
+      "cropname": "Asparagus-established plantings",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 9.2,
+      "cropremovalfactorp2o5": 3.1,
+      "cropremovalfactork2o": 6.8,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 107.0614946,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 28,
+    "fields": {
+      "cropname": "Beans-green, wax",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 7.34,
+      "cropremovalfactorp2o5": 2.8,
+      "cropremovalfactork2o": 6.78,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 35.68716488,
+      "nitrogenrecommendationupperlimitpoundperacre": 35.68716488,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 30,
+    "fields": {
+      "cropname": "Beets",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 11.64,
+      "cropremovalfactorp2o5": 3.56,
+      "cropremovalfactork2o": 8.76,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 49.06985171,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 31,
+    "fields": {
+      "cropname": "Broccoli",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 10.0,
+      "cropremovalfactorp2o5": 2.5,
+      "cropremovalfactork2o": 13.8,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 115.9832859,
+      "nitrogenrecommendationupperlimitpoundperacre": 165.0531376,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 32,
+    "fields": {
+      "cropname": "Brussels Sprouts",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 13.34,
+      "cropremovalfactorp2o5": 3.145315,
+      "cropremovalfactork2o": 10.452,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 107.0614946,
+      "nitrogenrecommendationupperlimitpoundperacre": 115.9832859,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 33,
+    "fields": {
+      "cropname": "Cabbage-regular",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 4.2,
+      "cropremovalfactorp2o5": 1.7,
+      "cropremovalfactork2o": 5.0,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 107.0614946,
+      "nitrogenrecommendationupperlimitpoundperacre": 151.6704507,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 34,
+    "fields": {
+      "cropname": "Cabbage-Chinese",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.5,
+      "cropremovalfactorp2o5": 1.8,
+      "cropremovalfactork2o": 5.0,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 107.0614946,
+      "nitrogenrecommendationupperlimitpoundperacre": 151.6704507,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 35,
+    "fields": {
+      "cropname": "Carrot",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.62,
+      "cropremovalfactorp2o5": 1.8,
+      "cropremovalfactork2o": 7.0,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 62.45253854,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 36,
+    "fields": {
+      "cropname": "Cauliflower",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 8.0736,
+      "cropremovalfactorp2o5": 2.77548,
+      "cropremovalfactork2o": 7.047936,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 115.9832859,
+      "nitrogenrecommendationupperlimitpoundperacre": 165.0531376,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 37,
+    "fields": {
+      "cropname": "Celery-field",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.815,
+      "cropremovalfactorp2o5": 1.895,
+      "cropremovalfactork2o": 11.14,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 62.45253854,
+      "nitrogenrecommendationupperlimitpoundperacre": 62.45253854,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 39,
+    "fields": {
+      "cropname": "Corn-sweetcorn",
+      "croptypeid": 5,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 10.34754196,
+      "cropremovalfactorp2o5": 2.413333333,
+      "cropremovalfactork2o": 5.78,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 80.29612098,
+      "nitrogenrecommendationupperlimitpoundperacre": 147.2095551,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 40,
+    "fields": {
+      "cropname": "Cucumber",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 2.26,
+      "cropremovalfactorp2o5": 1.08,
+      "cropremovalfactork2o": 4.6,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 43,
+    "fields": {
+      "cropname": "Garlic",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 20.48,
+      "cropremovalfactorp2o5": 7.86,
+      "cropremovalfactork2o": 12.96,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 45,
+    "fields": {
+      "cropname": "Lettuce-head (western iceberg)",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 4.6,
+      "cropremovalfactorp2o5": 1.8,
+      "cropremovalfactork2o": 6.4,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 156.1313464,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 46,
+    "fields": {
+      "cropname": "Lettuce-leaf and eastern iceberg",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 4.69,
+      "cropremovalfactorp2o5": 1.715,
+      "cropremovalfactork2o": 6.4,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 178.4358244,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 48,
+    "fields": {
+      "cropname": "Onions-green ",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 4.0,
+      "cropremovalfactorp2o5": 2.3,
+      "cropremovalfactork2o": 2.8,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 80.29612098,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 49,
+    "fields": {
+      "cropname": "Onions-dry",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 5.0,
+      "cropremovalfactorp2o5": 2.3,
+      "cropremovalfactork2o": 4.5,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 89.2179122,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 52,
+    "fields": {
+      "cropname": "Peas",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 18.88,
+      "cropremovalfactorp2o5": 5.04,
+      "cropremovalfactork2o": 6.24,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 13.38268683,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 53,
+    "fields": {
+      "cropname": "Pepper",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.26,
+      "cropremovalfactorp2o5": 1.3,
+      "cropremovalfactork2o": 3.86,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 62.45253854,
+      "nitrogenrecommendationupperlimitpoundperacre": 124.9050771,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 54,
+    "fields": {
+      "cropname": "Potatoes-early",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 7.34,
+      "cropremovalfactorp2o5": 2.58,
+      "cropremovalfactork2o": 10.92,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 120.4441815,
+      "nitrogenrecommendationupperlimitpoundperacre": 120.4441815,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 55,
+    "fields": {
+      "cropname": "Potatoes-midseason",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 7.34,
+      "cropremovalfactorp2o5": 2.58,
+      "cropremovalfactork2o": 10.92,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 142.7486595,
+      "nitrogenrecommendationupperlimitpoundperacre": 160.592242,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 56,
+    "fields": {
+      "cropname": "Potatoes-late",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 7.34,
+      "cropremovalfactorp2o5": 2.58,
+      "cropremovalfactork2o": 10.92,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 160.592242,
+      "nitrogenrecommendationupperlimitpoundperacre": 178.4358244,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 57,
+    "fields": {
+      "cropname": "Pumpkin",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 4.82,
+      "cropremovalfactorp2o5": 1.68,
+      "cropremovalfactork2o": 6.22,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 58,
+    "fields": {
+      "cropname": "Radish-muck",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.52,
+      "cropremovalfactorp2o5": 1.28,
+      "cropremovalfactork2o": 6.72,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 44.6089561,
+      "nitrogenrecommendationupperlimitpoundperacre": 62.45253854,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 59,
+    "fields": {
+      "cropname": "Rhubarb-establishment year",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 2.24,
+      "cropremovalfactorp2o5": 0.92,
+      "cropremovalfactork2o": 8.64,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 71.37432976,
+      "nitrogenrecommendationupperlimitpoundperacre": 71.37432976,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 60,
+    "fields": {
+      "cropname": "Rhubarb-established plantings",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 2.24,
+      "cropremovalfactorp2o5": 0.92,
+      "cropremovalfactork2o": 8.64,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 151.6704507,
+      "nitrogenrecommendationupperlimitpoundperacre": 178.4358244,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 61,
+    "fields": {
+      "cropname": "Rutabagas and turnip",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.06,
+      "cropremovalfactorp2o5": 1.3,
+      "cropremovalfactork2o": 6.16,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 31.22626927,
+      "nitrogenrecommendationupperlimitpoundperacre": 40.14806049,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 62,
+    "fields": {
+      "cropname": "Spinach-mineral",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 9.74,
+      "cropremovalfactorp2o5": 2.38,
+      "cropremovalfactork2o": 12.72,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 62.45253854,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 63,
+    "fields": {
+      "cropname": "Squash-pumpkins",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 4.48,
+      "cropremovalfactorp2o5": 1.74,
+      "cropremovalfactork2o": 4.56,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 64,
+    "fields": {
+      "cropname": "Tomatoes",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.06,
+      "cropremovalfactorp2o5": 1.3,
+      "cropremovalfactork2o": 6.16,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 62.45253854,
+      "nitrogenrecommendationupperlimitpoundperacre": 160.592242,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 65,
+    "fields": {
+      "cropname": "Squash-zucchini, other",
+      "croptypeid": 5,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 3.84,
+      "cropremovalfactorp2o5": 1.46,
+      "cropremovalfactork2o": 5.28,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 98.13970342,
+      "nitrogenrecommendationupperlimitpoundperacre": 98.13970342,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 66,
+    "fields": {
+      "cropname": "Other",
+      "croptypeid": 6,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 0.0,
+      "cropremovalfactorp2o5": 0.0,
+      "cropremovalfactork2o": 0.0,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 3.0,
+      "sortnumber": 10.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 67,
+    "fields": {
+      "cropname": "Oats (straw removed)",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 66.776,
+      "cropremovalfactorp2o5": 25.394,
+      "cropremovalfactork2o": 91.229,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": 62.5
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 68,
+    "fields": {
+      "cropname": "Oats",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 38.561,
+      "cropremovalfactorp2o5": 15.989,
+      "cropremovalfactork2o": 11.6,
+      "nitrogenrecommendationid": 4,
+      "nitrogenrecommendationpoundperacre": 107.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": 62.5
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 69,
+    "fields": {
+      "cropname": "Rye (straw removed)",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 59.925,
+      "cropremovalfactorp2o5": 29.963,
+      "cropremovalfactork2o": 85.002,
+      "nitrogenrecommendationid": 3,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": 35.71428571
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 70,
+    "fields": {
+      "cropname": "Rye",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 38.105,
+      "cropremovalfactorp2o5": 15.958,
+      "cropremovalfactork2o": 13.027,
+      "nitrogenrecommendationid": 4,
+      "nitrogenrecommendationpoundperacre": 92.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": 35.71428571
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 71,
+    "fields": {
+      "cropname": "Canola",
+      "croptypeid": 4,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 77.391,
+      "cropremovalfactorp2o5": 41.848,
+      "cropremovalfactork2o": 20.637,
+      "nitrogenrecommendationid": 4,
+      "nitrogenrecommendationpoundperacre": 125.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 3.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": 40.0
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 72,
+    "fields": {
+      "cropname": "Alfalfa or legume dominant stand (4 cuts)",
+      "croptypeid": 1,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 32.0,
+      "cropremovalfactorp2o5": 9.2,
+      "cropremovalfactork2o": 25.2,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 2.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 73,
+    "fields": {
+      "cropname": "Hops (establishment year)",
+      "croptypeid": 5,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 0.0,
+      "cropremovalfactorp2o5": 0.0,
+      "cropremovalfactork2o": 0.0,
+      "nitrogenrecommendationid": 1,
+      "nitrogenrecommendationpoundperacre": 75.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 75.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 1.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 74,
+    "fields": {
+      "cropname": "Hops (established planting, vines removed)",
+      "croptypeid": 5,
+      "yieldcd": 2.0,
+      "cropremovalfactornitrogen": 160.0,
+      "cropremovalfactorp2o5": 80.0,
+      "cropremovalfactork2o": 180.0,
+      "nitrogenrecommendationid": 2,
+      "nitrogenrecommendationpoundperacre": null,
+      "nitrogenrecommendationupperlimitpoundperacre": null,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 1.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 75,
+    "fields": {
+      "cropname": "Blueberry",
+      "croptypeid": 7,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 0.0,
+      "cropremovalfactorp2o5": 0.0,
+      "cropremovalfactork2o": 0.0,
+      "nitrogenrecommendationid": 0,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  },
+  {
+    "model": "crops.crops",
+    "pk": 76,
+    "fields": {
+      "cropname": "Raspberry",
+      "croptypeid": 7,
+      "yieldcd": 1.0,
+      "cropremovalfactornitrogen": 0.0,
+      "cropremovalfactorp2o5": 0.0,
+      "cropremovalfactork2o": 0.0,
+      "nitrogenrecommendationid": 0,
+      "nitrogenrecommendationpoundperacre": 0.0,
+      "nitrogenrecommendationupperlimitpoundperacre": 0.0,
+      "previouscropcode": 2.0,
+      "sortnumber": 100.0,
+      "manureapplicationhistory": 0.0,
+      "harvestbushelsperton": null
+    }
+  }
+]

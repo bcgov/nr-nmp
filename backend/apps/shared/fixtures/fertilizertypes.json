@@ -1,0 +1,38 @@
+[
+  {
+    "model": "fertilizers.fertilizertypes",
+    "pk": 1,
+    "fields": {
+      "name": "Dry Fertilizer",
+      "dryliquid": "dry",
+      "custom": false
+    }
+  },
+  {
+    "model": "fertilizers.fertilizertypes",
+    "pk": 2,
+    "fields": {
+      "name": "Dry Fertilizer (Custom)",
+      "dryliquid": "dry",
+      "custom": true
+    }
+  },
+  {
+    "model": "fertilizers.fertilizertypes",
+    "pk": 3,
+    "fields": {
+      "name": "Liquid Fertilizer",
+      "dryliquid": "liquid",
+      "custom": false
+    }
+  },
+  {
+    "model": "fertilizers.fertilizertypes",
+    "pk": 4,
+    "fields": {
+      "name": "Liquid Fertilizer (Custom)",
+      "dryliquid": "liquid",
+      "custom": true
+    }
+  }
+]

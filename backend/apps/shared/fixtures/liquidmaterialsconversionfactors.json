@@ -1,0 +1,29 @@
+[
+  {
+    "model": "manures.liquidmaterialsconversionfactors",
+    "pk": 1,
+    "fields": {
+      "inputunit": 1.0,
+      "inputunitname": "Imp. gallons",
+      "usgallonsoutput": 1.20095
+    }
+  },
+  {
+    "model": "manures.liquidmaterialsconversionfactors",
+    "pk": 2,
+    "fields": {
+      "inputunit": 2.0,
+      "inputunitname": "cubic meters",
+      "usgallonsoutput": 264.172
+    }
+  },
+  {
+    "model": "manures.liquidmaterialsconversionfactors",
+    "pk": 3,
+    "fields": {
+      "inputunit": 3.0,
+      "inputunitname": "US gallons",
+      "usgallonsoutput": 1.0
+    }
+  }
+]

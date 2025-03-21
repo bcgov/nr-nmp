@@ -13,6 +13,7 @@ COPY ./requirements.txt /requirements.txt
 RUN python3 -m pip install -r requirements.txt
 
 CMD sh -c "python3 manage.py migrate && \
+    python3 manage.py loaddata all_data && \
     python3 manage.py runserver 0.0.0.0:3000"
 
 # Boilerplate, not used in OpenShift/Kubernetes

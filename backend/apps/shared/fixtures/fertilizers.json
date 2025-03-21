@@ -1,0 +1,494 @@
+[
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 1,
+    "fields": {
+      "name": "Urea (46-0-0)",
+      "dryliquid": "dry",
+      "nitrogen": 46.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 10.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 2,
+    "fields": {
+      "name": "10-16-18",
+      "dryliquid": "dry",
+      "nitrogen": 10.0,
+      "phosphorous": 16.0,
+      "potassium": 18.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 3,
+    "fields": {
+      "name": "18-18-18",
+      "dryliquid": "dry",
+      "nitrogen": 18.0,
+      "phosphorous": 18.0,
+      "potassium": 18.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 4,
+    "fields": {
+      "name": "18-9-9",
+      "dryliquid": "dry",
+      "nitrogen": 18.0,
+      "phosphorous": 9.0,
+      "potassium": 9.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 5,
+    "fields": {
+      "name": "30-10-0-7S",
+      "dryliquid": "dry",
+      "nitrogen": 30.0,
+      "phosphorous": 10.0,
+      "potassium": 0.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 6,
+    "fields": {
+      "name": "Ammonium nitrate (34-0-0)",
+      "dryliquid": "dry",
+      "nitrogen": 34.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 7,
+    "fields": {
+      "name": "Ammonium sulphate (21-0-0-24S)",
+      "dryliquid": "dry",
+      "nitrogen": 21.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 8,
+    "fields": {
+      "name": "Blood meal (12-1-1)",
+      "dryliquid": "dry",
+      "nitrogen": 12.0,
+      "phosphorous": 1.0,
+      "potassium": 1.0,
+      "sortnum": 300.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 9,
+    "fields": {
+      "name": "Bone meal (3-20-0)",
+      "dryliquid": "dry",
+      "nitrogen": 3.0,
+      "phosphorous": 20.0,
+      "potassium": 0.0,
+      "sortnum": 300.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 10,
+    "fields": {
+      "name": "Diammonium phosphate (DAP, 18-46-0)",
+      "dryliquid": "dry",
+      "nitrogen": 18.0,
+      "phosphorous": 46.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 11,
+    "fields": {
+      "name": "Feather meal (12-0-0)",
+      "dryliquid": "dry",
+      "nitrogen": 12.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 300.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 12,
+    "fields": {
+      "name": "Fish meal (10-6-2)",
+      "dryliquid": "dry",
+      "nitrogen": 10.0,
+      "phosphorous": 6.0,
+      "potassium": 2.0,
+      "sortnum": 300.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 13,
+    "fields": {
+      "name": "Greensand (0-1-6)",
+      "dryliquid": "dry",
+      "nitrogen": 0.0,
+      "phosphorous": 1.0,
+      "potassium": 6.0,
+      "sortnum": 300.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 14,
+    "fields": {
+      "name": "Monoammonium phosphate (MAP, 11-52-0)",
+      "dryliquid": "dry",
+      "nitrogen": 11.0,
+      "phosphorous": 52.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 15,
+    "fields": {
+      "name": "Muriate of potash (0-0-62)",
+      "dryliquid": "dry",
+      "nitrogen": 0.0,
+      "phosphorous": 0.0,
+      "potassium": 62.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 16,
+    "fields": {
+      "name": "Sulphate of potash (0-0-50-17S)",
+      "dryliquid": "dry",
+      "nitrogen": 0.0,
+      "phosphorous": 0.0,
+      "potassium": 50.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 17,
+    "fields": {
+      "name": "Anhydrous ammonia (82-0-0)",
+      "dryliquid": "dry",
+      "nitrogen": 82.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 18,
+    "fields": {
+      "name": "Ammonium polyphosphate (10-34-0)",
+      "dryliquid": "liquid",
+      "nitrogen": 10.0,
+      "phosphorous": 34.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 19,
+    "fields": {
+      "name": "Urea ammonium nitrate (UAN 32-0-0)",
+      "dryliquid": "liquid",
+      "nitrogen": 32.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 20,
+    "fields": {
+      "name": "Urea ammonium nitrate (UAN 30-0-0)",
+      "dryliquid": "liquid",
+      "nitrogen": 30.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 21,
+    "fields": {
+      "name": "Urea ammonium nitrate (UAN 28-0-0)",
+      "dryliquid": "liquid",
+      "nitrogen": 28.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 22,
+    "fields": {
+      "name": "3-18-18",
+      "dryliquid": "liquid",
+      "nitrogen": 3.0,
+      "phosphorous": 18.0,
+      "potassium": 18.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 23,
+    "fields": {
+      "name": "12-0-0-26S",
+      "dryliquid": "liquid",
+      "nitrogen": 12.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 24,
+    "fields": {
+      "name": "20.5-5-0",
+      "dryliquid": "liquid",
+      "nitrogen": 20.5,
+      "phosphorous": 5.0,
+      "potassium": 0.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 25,
+    "fields": {
+      "name": "0-0-15-9.7S",
+      "dryliquid": "liquid",
+      "nitrogen": 0.0,
+      "phosphorous": 0.0,
+      "potassium": 15.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 26,
+    "fields": {
+      "name": "Phosphoric acid (0-54-0)",
+      "dryliquid": "liquid",
+      "nitrogen": 0.0,
+      "phosphorous": 54.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 27,
+    "fields": {
+      "name": "Liquid urea (23-0-0)",
+      "dryliquid": "liquid",
+      "nitrogen": 23.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 28,
+    "fields": {
+      "name": "Ammonium phosphate-sulfate (16-20-0)",
+      "dryliquid": "dry",
+      "nitrogen": 16.0,
+      "phosphorous": 20.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 29,
+    "fields": {
+      "name": "Calcium nitrate (15.5-0-0-18Ca)",
+      "dryliquid": "dry",
+      "nitrogen": 15.5,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 30,
+    "fields": {
+      "name": "Sulphur coated urea (40-0-0)",
+      "dryliquid": "dry",
+      "nitrogen": 40.0,
+      "phosphorous": 0.0,
+      "potassium": 0.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 31,
+    "fields": {
+      "name": "8-18-22",
+      "dryliquid": "dry",
+      "nitrogen": 8.0,
+      "phosphorous": 18.0,
+      "potassium": 22.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 32,
+    "fields": {
+      "name": "8-24-24",
+      "dryliquid": "dry",
+      "nitrogen": 8.0,
+      "phosphorous": 24.0,
+      "potassium": 24.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 33,
+    "fields": {
+      "name": "15-8-11",
+      "dryliquid": "dry",
+      "nitrogen": 15.0,
+      "phosphorous": 8.0,
+      "potassium": 11.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 34,
+    "fields": {
+      "name": "20-10-6",
+      "dryliquid": "dry",
+      "nitrogen": 20.0,
+      "phosphorous": 10.0,
+      "potassium": 6.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 35,
+    "fields": {
+      "name": "15-15-17",
+      "dryliquid": "dry",
+      "nitrogen": 15.0,
+      "phosphorous": 15.0,
+      "potassium": 17.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 36,
+    "fields": {
+      "name": "6-20-14",
+      "dryliquid": "dry",
+      "nitrogen": 6.0,
+      "phosphorous": 20.0,
+      "potassium": 14.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 37,
+    "fields": {
+      "name": "8-10-20",
+      "dryliquid": "dry",
+      "nitrogen": 8.0,
+      "phosphorous": 10.0,
+      "potassium": 20.0,
+      "sortnum": 100.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 38,
+    "fields": {
+      "name": "3-10-10",
+      "dryliquid": "liquid",
+      "nitrogen": 3.0,
+      "phosphorous": 10.0,
+      "potassium": 10.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 39,
+    "fields": {
+      "name": "12-5-8",
+      "dryliquid": "liquid",
+      "nitrogen": 12.0,
+      "phosphorous": 5.0,
+      "potassium": 8.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 40,
+    "fields": {
+      "name": "0-10-10",
+      "dryliquid": "liquid",
+      "nitrogen": 0.0,
+      "phosphorous": 10.0,
+      "potassium": 10.0,
+      "sortnum": 200.0
+    }
+  },
+  {
+    "model": "fertilizers.fertilizers",
+    "pk": 41,
+    "fields": {
+      "name": "16-16-16",
+      "dryliquid": "dry",
+      "nitrogen": 16.0,
+      "phosphorous": 16.0,
+      "potassium": 16.0,
+      "sortnum": 100.0
+    }
+  }
+]
