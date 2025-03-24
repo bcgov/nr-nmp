@@ -9,19 +9,19 @@ export const StyledContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
-  width: 100vw;
-
-  div {
-    width: 80vw;
-  }
+  margin-left: 3rem;
+  margin-right: 3rem;
+  max-width: 992px;
 
   p {
     color: ${tokens.typographyColorSecondary};
     margin-top: 1.25rem;
     margin-bottom: 2.5rem;
     text-align: left;
-    width: 80vw;
+  }
+
+  .bcds-ButtonGroup {
+    align-self: flex-start;
   }
 `;
 

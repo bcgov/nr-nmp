@@ -92,9 +92,10 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
       justifyContent="center"
       alignItems="center"
       paddingY="2.5rem"
+      width="100%"
     >
       <Stepper
-        sx={{ width: '80%' }}
+        sx={{ width: '100%' }}
         activeStep={displayActiveStep()}
         alternativeLabel
       >

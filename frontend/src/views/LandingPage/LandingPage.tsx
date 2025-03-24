@@ -50,50 +50,48 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div>
+    <StyledContent>
       <ProgressStepper step={LANDING_PAGE} />
-      <StyledContent>
-        <AppTitle />
-        <PageTitle title="Nutrient Management Calculator" />
-        <p>
-          The Nutrient Management Calculator provides a starting point for the efficient use of
-          fertilizer and manure on farms. This tool assists in you choosing the right rate and
-          nutrient source for your crops. You can start a new calculation or pick up where you left
-          off by uploading an existing .nmp file.
-        </p>
-        <ButtonGroup
-          alignment="start"
-          ariaLabel="A group of buttons"
-          orientation="horizontal"
+      <AppTitle />
+      <PageTitle title="Nutrient Management Calculator" />
+      <p>
+        The Nutrient Management Calculator provides a starting point for the efficient use of
+        fertilizer and manure on farms. This tool assists in you choosing the right rate and
+        nutrient source for your crops. You can start a new calculation or pick up where you left
+        off by uploading an existing .nmp file.
+      </p>
+      <ButtonGroup
+        alignment="start"
+        ariaLabel="A group of buttons"
+        orientation="horizontal"
+      >
+        <Button
+          size="medium"
+          onPress={newCalcHandler}
+          aria-label="Get Started"
+          variant="primary"
+          isDisabled={false}
         >
-          <Button
-            size="medium"
-            onPress={newCalcHandler}
-            aria-label="Get Started"
-            variant="primary"
-            isDisabled={false}
-          >
-            Get Started
-          </Button>
-          <Button
-            size="medium"
-            onPress={handleUpload}
-            aria-label="Upload an existing .nmp file"
-            isDisabled={false}
-            variant="secondary"
-          >
-            Upload File
-          </Button>
-          <input
-            id="fileUp"
-            type="file"
-            accept=".nmp, application/json"
-            onChange={saveFile}
-            aria-label="Upload an existing .nmp file"
-            hidden
-          />
-        </ButtonGroup>
-      </StyledContent>
-    </div>
+          Get Started
+        </Button>
+        <Button
+          size="medium"
+          onPress={handleUpload}
+          aria-label="Upload an existing .nmp file"
+          isDisabled={false}
+          variant="secondary"
+        >
+          Upload File
+        </Button>
+        <input
+          id="fileUp"
+          type="file"
+          accept=".nmp, application/json"
+          onChange={saveFile}
+          aria-label="Upload an existing .nmp file"
+          hidden
+        />
+      </ButtonGroup>
+    </StyledContent>
   );
 }
