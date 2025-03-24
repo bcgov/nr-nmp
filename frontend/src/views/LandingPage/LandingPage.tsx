@@ -3,11 +3,12 @@
  */
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import constants from '../../constants/Constants';
 import useAppService from '../../services/app/useAppService';
 import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
-import { ButtonWrapper, StyledDivider, StyledContent } from './landingPage.styles';
-import { AppTitle, Button, PageTitle, ProgressStepper } from '../../components/common';
+import { StyledContent } from './landingPage.styles';
+import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import { LANDING_PAGE } from '@/constants/RouteConstants';
 
 export default function LandingPage() {
@@ -60,36 +61,39 @@ export default function LandingPage() {
           nutrient source for your crops. You can start a new calculation or pick up where you left
           off by uploading an existing .nmp file.
         </p>
+        <ButtonGroup
+          alignment="start"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            onPress={newCalcHandler}
+            aria-label="Get Started"
+            variant="primary"
+            isDisabled={false}
+          >
+            Get Started
+          </Button>
+          <Button
+            size="medium"
+            onPress={handleUpload}
+            aria-label="Upload an existing .nmp file"
+            isDisabled={false}
+            variant="secondary"
+          >
+            Upload File
+          </Button>
+          <input
+            id="fileUp"
+            type="file"
+            accept=".nmp, application/json"
+            onChange={saveFile}
+            aria-label="Upload an existing .nmp file"
+            hidden
+          />
+        </ButtonGroup>
       </StyledContent>
-      <ButtonWrapper>
-        <Button
-          text="Start a new calculation"
-          size="lg"
-          handleClick={newCalcHandler}
-          aria-label="Start a new calculation"
-          variant="primary"
-          disabled={false}
-        />
-      </ButtonWrapper>
-      <StyledDivider>or</StyledDivider>
-      <ButtonWrapper>
-        <Button
-          size="lg"
-          text="Upload an existing .nmp file"
-          handleClick={handleUpload}
-          aria-label="Upload an existing .nmp file"
-          variant="primary"
-          disabled={false}
-        />
-        <input
-          id="fileUp"
-          type="file"
-          accept=".nmp, application/json"
-          onChange={saveFile}
-          aria-label="Upload an existing .nmp file"
-          hidden
-        />
-      </ButtonWrapper>
     </div>
   );
 }

@@ -87,13 +87,22 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
   }, [step, state.showAnimals]);
 
   return (
-    <Box sx={{ width: '100%', paddingTop: '2.5rem', paddingBottom: '2.5rem' }}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      paddingY="2.5rem"
+    >
       <Stepper
+        sx={{ width: '80%' }}
         activeStep={displayActiveStep()}
         alternativeLabel
       >
         {displayAnimalsStep().map((label) => (
-          <Step key={label}>
+          <Step
+            sx={{ paddingX: '0' }}
+            key={label}
+          >
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
