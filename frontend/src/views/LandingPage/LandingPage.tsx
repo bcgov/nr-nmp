@@ -3,11 +3,13 @@
  */
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import constants from '../../constants/Constants';
 import useAppService from '../../services/app/useAppService';
 import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
-import { ButtonWrapper, StyledDivider, StyledContent } from './landingPage.styles';
-import { Button, Card } from '../../components/common';
+import { StyledContent } from './landingPage.styles';
+import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
+import { LANDING_PAGE } from '@/constants/RouteConstants';
 
 export default function LandingPage() {
   const { setNMPFile, setProgressStep } = useAppService();
@@ -48,40 +50,39 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <Card
-      width="500px"
-      height="500px"
-      justifyContent="center"
-    >
-      <StyledContent>
-        <h1>Nutrient Management Calculator</h1>
-        <p>
-          The Nutrient Management Calculator provides a starting point for the efficient use of
-          fertilizer and manure on farms. This tool assists in you choosing the right rate and
-          nutrient source for your crops. You can start a new calculation or pick up where you left
-          off by uploading an existing .nmp file.
-        </p>
-      </StyledContent>
-      <ButtonWrapper>
+    <StyledContent>
+      <ProgressStepper step={LANDING_PAGE} />
+      <AppTitle />
+      <PageTitle title="Nutrient Management Calculator" />
+      <p>
+        The Nutrient Management Calculator provides a starting point for the efficient use of
+        fertilizer and manure on farms. This tool assists in you choosing the right rate and
+        nutrient source for your crops. You can start a new calculation or pick up where you left
+        off by uploading an existing .nmp file.
+      </p>
+      <ButtonGroup
+        alignment="start"
+        ariaLabel="A group of buttons"
+        orientation="horizontal"
+      >
         <Button
-          text="Start a new calculation"
-          size="lg"
-          handleClick={newCalcHandler}
-          aria-label="Start a new calculation"
+          size="medium"
+          onPress={newCalcHandler}
+          aria-label="Get Started"
           variant="primary"
-          disabled={false}
-        />
-      </ButtonWrapper>
-      <StyledDivider>or</StyledDivider>
-      <ButtonWrapper>
+          isDisabled={false}
+        >
+          Get Started
+        </Button>
         <Button
-          size="lg"
-          text="Upload an existing .nmp file"
-          handleClick={handleUpload}
+          size="medium"
+          onPress={handleUpload}
           aria-label="Upload an existing .nmp file"
-          variant="primary"
-          disabled={false}
-        />
+          isDisabled={false}
+          variant="secondary"
+        >
+          Upload File
+        </Button>
         <input
           id="fileUp"
           type="file"
@@ -90,7 +91,7 @@ export default function LandingPage() {
           aria-label="Upload an existing .nmp file"
           hidden
         />
-      </ButtonWrapper>
-    </Card>
+      </ButtonGroup>
+    </StyledContent>
   );
 }

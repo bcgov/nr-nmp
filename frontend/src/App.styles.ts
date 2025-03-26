@@ -10,12 +10,10 @@ export const StyledApp = styled.div`
 `;
 
 export const ViewContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
   display: flex;
-  height: 100svh;
+  flex: 1 1 auto;
+  height: 100%;
   justify-content: center;
   width: 100%;
-  align-items: center;
+  align-items: flex-start;
 `;
