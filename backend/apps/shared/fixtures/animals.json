@@ -1,0 +1,66 @@
+[
+  {
+    "model": "animals.animals",
+    "pk": 1,
+    "fields": {
+      "name": "Beef Cattle",
+      "usesortorder": false
+    }
+  },
+  {
+    "model": "animals.animals",
+    "pk": 2,
+    "fields": {
+      "name": "Dairy Cattle",
+      "usesortorder": true
+    }
+  },
+  {
+    "model": "animals.animals",
+    "pk": 4,
+    "fields": {
+      "name": "Goats",
+      "usesortorder": false
+    }
+  },
+  {
+    "model": "animals.animals",
+    "pk": 5,
+    "fields": {
+      "name": "Horse",
+      "usesortorder": false
+    }
+  },
+  {
+    "model": "animals.animals",
+    "pk": 6,
+    "fields": {
+      "name": "Poultry",
+      "usesortorder": false
+    }
+  },
+  {
+    "model": "animals.animals",
+    "pk": 7,
+    "fields": {
+      "name": "Rabbits",
+      "usesortorder": false
+    }
+  },
+  {
+    "model": "animals.animals",
+    "pk": 8,
+    "fields": {
+      "name": "Sheep",
+      "usesortorder": false
+    }
+  },
+  {
+    "model": "animals.animals",
+    "pk": 9,
+    "fields": {
+      "name": "Swine",
+      "usesortorder": false
+    }
+  }
+]

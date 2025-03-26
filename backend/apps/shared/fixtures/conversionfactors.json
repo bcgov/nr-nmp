@@ -1,0 +1,23 @@
+[
+  {
+    "model": "crops.conversionfactors",
+    "pk": 0,
+    "fields": {
+      "nitrogenproteinconversion": 0.625,
+      "unitconversion": 0.5,
+      "defaultsoiltestkelownaphosphorous": 250.0,
+      "defaultsoiltestkelownapotassium": 500.0,
+      "kilogramperhectaretopoundperacreconversion": 0.892176122,
+      "potassiumavailabilityfirstyear": 1.0,
+      "potassiumavailabilitylongterm": 1.0,
+      "potassiumktok2oconversion": 1.2,
+      "phosphorousavailabilityfirstyear": 0.7,
+      "phosphorousavailabilitylongterm": 1.0,
+      "phosphorousptop2o5conversion": 2.29,
+      "poundpertonconversion": 20.0,
+      "poundper1000ftsquaredtopoundperacreconversion": 43.56000216,
+      "defaultapplicationofmanureinprevyears": 0.0,
+      "soiltestppmtopoundperacreconversion": 1.74
+    }
+  }
+]

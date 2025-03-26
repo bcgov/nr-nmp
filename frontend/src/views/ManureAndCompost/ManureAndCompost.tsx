@@ -10,7 +10,7 @@ import ManureAndImports from './ManureAndImports/ManureAndImports';
 import NutrientAnalysis from './NutrientAnalysis/NutrientAnalysis';
 
 export default function ManureAndCompost() {
-  const { state, setNMPFile } = useAppService();
+  const { state, setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [manures, setManures] = useState<NMPFileImportedManureData[]>([]);
@@ -63,6 +63,11 @@ export default function ManureAndCompost() {
     if (activeTab > 0) setActiveTab(activeTab - 1);
     else navigate('/field-and-soil');
   };
+
+  useEffect(() => {
+    setProgressStep(4);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Card

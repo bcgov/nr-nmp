@@ -5,7 +5,7 @@ import { AppContext } from '../../context/AppProvider';
 import AppActionType from './AppActions';
 import { saveDataToLocalStorage } from '../../utils/AppLocalStorage';
 
-const { SET_NMP_FILE } = AppActionType;
+const { SET_NMP_FILE, SET_PROGRESS_STEP } = AppActionType;
 
 /**
  * @summary Custom hook that provides app related functions
@@ -26,7 +26,12 @@ const useAppService = () => {
       }
     };
 
+    const setProgressStep = (step: number) => {
+      dispatch({ type: SET_PROGRESS_STEP, payload: step });
+    };
+
     return {
+      setProgressStep,
       setNMPFile,
       state,
     };

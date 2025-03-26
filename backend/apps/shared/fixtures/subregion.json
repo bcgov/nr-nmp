@@ -1,0 +1,952 @@
+[
+  {
+    "model": "shared.subregion",
+    "pk": 1,
+    "fields": {
+      "name": "Fort St. James",
+      "annualprecipitation": 488.0,
+      "annualprecipitationocttomar": 251.0,
+      "regionid": 1
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 2,
+    "fields": {
+      "name": "Smithers",
+      "annualprecipitation": 512.0,
+      "annualprecipitationocttomar": 267.0,
+      "regionid": 1
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 3,
+    "fields": {
+      "name": "Vanderhoof",
+      "annualprecipitation": 496.0,
+      "annualprecipitationocttomar": 244.0,
+      "regionid": 1
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 4,
+    "fields": {
+      "name": "Saanichton",
+      "annualprecipitation": 909.0,
+      "annualprecipitationocttomar": 707.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 5,
+    "fields": {
+      "name": "Quesnel",
+      "annualprecipitation": 542.0,
+      "annualprecipitationocttomar": 253.0,
+      "regionid": 3
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 6,
+    "fields": {
+      "name": "Williams Lake",
+      "annualprecipitation": 450.0,
+      "annualprecipitationocttomar": 194.0,
+      "regionid": 3
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 7,
+    "fields": {
+      "name": "Castlegar",
+      "annualprecipitation": 754.0,
+      "annualprecipitationocttomar": 427.0,
+      "regionid": 4
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 8,
+    "fields": {
+      "name": "Creston",
+      "annualprecipitation": 630.0,
+      "annualprecipitationocttomar": 357.0,
+      "regionid": 4
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 9,
+    "fields": {
+      "name": "Kelowna",
+      "annualprecipitation": 410.0,
+      "annualprecipitationocttomar": 215.0,
+      "regionid": 5
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 10,
+    "fields": {
+      "name": "Salmon Arm",
+      "annualprecipitation": 668.0,
+      "annualprecipitationocttomar": 364.0,
+      "regionid": 6
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 11,
+    "fields": {
+      "name": "Comox",
+      "annualprecipitation": 1180.0,
+      "annualprecipitationocttomar": 917.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 13,
+    "fields": {
+      "name": "Cranbrook",
+      "annualprecipitation": 382.0,
+      "annualprecipitationocttomar": 161.0,
+      "regionid": 9
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 14,
+    "fields": {
+      "name": "Fernie",
+      "annualprecipitation": 1217.0,
+      "annualprecipitationocttomar": 741.0,
+      "regionid": 9
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 15,
+    "fields": {
+      "name": "Abbotsford",
+      "annualprecipitation": 1876.0,
+      "annualprecipitationocttomar": 1262.0,
+      "regionid": 10
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 16,
+    "fields": {
+      "name": "Agassiz",
+      "annualprecipitation": 1755.0,
+      "annualprecipitationocttomar": 1223.0,
+      "regionid": 10
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 17,
+    "fields": {
+      "name": "Chilliwack",
+      "annualprecipitation": 1776.0,
+      "annualprecipitationocttomar": 1230.0,
+      "regionid": 10
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 18,
+    "fields": {
+      "name": "Hope",
+      "annualprecipitation": 2142.0,
+      "annualprecipitationocttomar": 1473.0,
+      "regionid": 10
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 19,
+    "fields": {
+      "name": "Mission",
+      "annualprecipitation": 1876.0,
+      "annualprecipitationocttomar": 1262.0,
+      "regionid": 10
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 20,
+    "fields": {
+      "name": "Delta",
+      "annualprecipitation": 918.0,
+      "annualprecipitationocttomar": 655.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 21,
+    "fields": {
+      "name": "Pitt Meadows",
+      "annualprecipitation": 2253.0,
+      "annualprecipitationocttomar": 1591.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 22,
+    "fields": {
+      "name": "Surrey",
+      "annualprecipitation": 1354.0,
+      "annualprecipitationocttomar": 957.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 23,
+    "fields": {
+      "name": "Prince George",
+      "annualprecipitation": 556.0,
+      "annualprecipitationocttomar": 262.0,
+      "regionid": 11
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 24,
+    "fields": {
+      "name": "Hazelton",
+      "annualprecipitation": 747.0,
+      "annualprecipitationocttomar": 362.0,
+      "regionid": 12
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 25,
+    "fields": {
+      "name": "Terrace",
+      "annualprecipitation": 1160.0,
+      "annualprecipitationocttomar": 809.0,
+      "regionid": 12
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 26,
+    "fields": {
+      "name": "Grand Forks",
+      "annualprecipitation": 510.0,
+      "annualprecipitationocttomar": 250.0,
+      "regionid": 13
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 27,
+    "fields": {
+      "name": "Nanaimo",
+      "annualprecipitation": 846.0,
+      "annualprecipitationocttomar": 620.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 28,
+    "fields": {
+      "name": "Enderby",
+      "annualprecipitation": 480.0,
+      "annualprecipitationocttomar": 253.0,
+      "regionid": 16
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 29,
+    "fields": {
+      "name": "Vernon",
+      "annualprecipitation": 445.0,
+      "annualprecipitationocttomar": 222.0,
+      "regionid": 16
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 30,
+    "fields": {
+      "name": "Keremos",
+      "annualprecipitation": 326.0,
+      "annualprecipitationocttomar": 152.0,
+      "regionid": 17
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 31,
+    "fields": {
+      "name": "Penticton",
+      "annualprecipitation": 333.0,
+      "annualprecipitationocttomar": 146.0,
+      "regionid": 17
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 32,
+    "fields": {
+      "name": "Princeton",
+      "annualprecipitation": 358.0,
+      "annualprecipitationocttomar": 196.0,
+      "regionid": 17
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 33,
+    "fields": {
+      "name": "Dawson Creek",
+      "annualprecipitation": 482.0,
+      "annualprecipitationocttomar": 160.0,
+      "regionid": 18
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 34,
+    "fields": {
+      "name": "Fort St. John",
+      "annualprecipitation": 466.0,
+      "annualprecipitationocttomar": 150.0,
+      "regionid": 18
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 35,
+    "fields": {
+      "name": "Lillooet",
+      "annualprecipitation": 369.0,
+      "annualprecipitationocttomar": 219.0,
+      "regionid": 19
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 36,
+    "fields": {
+      "name": "Pemberton",
+      "annualprecipitation": 1060.0,
+      "annualprecipitationocttomar": 783.0,
+      "regionid": 19
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 37,
+    "fields": {
+      "name": "Kamloops",
+      "annualprecipitation": 279.0,
+      "annualprecipitationocttomar": 118.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 38,
+    "fields": {
+      "name": "Merritt",
+      "annualprecipitation": 325.0,
+      "annualprecipitationocttomar": 177.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 39,
+    "fields": {
+      "name": "Vavenby",
+      "annualprecipitation": 474.0,
+      "annualprecipitationocttomar": 221.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 40,
+    "fields": {
+      "name": "Metchosin",
+      "annualprecipitation": 1010.0,
+      "annualprecipitationocttomar": 803.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 41,
+    "fields": {
+      "name": "Campbell River",
+      "annualprecipitation": 1605.0,
+      "annualprecipitationocttomar": 1197.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 42,
+    "fields": {
+      "name": "Golden",
+      "annualprecipitation": 488.0,
+      "annualprecipitationocttomar": 260.0,
+      "regionid": 6
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 43,
+    "fields": {
+      "name": "Grassy Plains",
+      "annualprecipitation": 510.0,
+      "annualprecipitationocttomar": 278.0,
+      "regionid": 1
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 44,
+    "fields": {
+      "name": "100 Mile house",
+      "annualprecipitation": 475.0,
+      "annualprecipitationocttomar": 208.0,
+      "regionid": 3
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 45,
+    "fields": {
+      "name": "Anahim Lake",
+      "annualprecipitation": 545.0,
+      "annualprecipitationocttomar": 348.0,
+      "regionid": 3
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 46,
+    "fields": {
+      "name": "Alexis Creek",
+      "annualprecipitation": 338.0,
+      "annualprecipitationocttomar": 149.0,
+      "regionid": 3
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 47,
+    "fields": {
+      "name": "Grasmere",
+      "annualprecipitation": 430.0,
+      "annualprecipitationocttomar": 191.0,
+      "regionid": 9
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 48,
+    "fields": {
+      "name": "Invermere",
+      "annualprecipitation": 397.0,
+      "annualprecipitationocttomar": 176.0,
+      "regionid": 9
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 49,
+    "fields": {
+      "name": "McBride",
+      "annualprecipitation": 591.0,
+      "annualprecipitationocttomar": 294.0,
+      "regionid": 11
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 50,
+    "fields": {
+      "name": "Lumby",
+      "annualprecipitation": 478.0,
+      "annualprecipitationocttomar": 216.0,
+      "regionid": 16
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 51,
+    "fields": {
+      "name": "Chetwynd",
+      "annualprecipitation": 521.0,
+      "annualprecipitationocttomar": 220.0,
+      "regionid": 18
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 52,
+    "fields": {
+      "name": "Cache Creek",
+      "annualprecipitation": 284.0,
+      "annualprecipitationocttomar": 127.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 53,
+    "fields": {
+      "name": "Fort Nelson",
+      "annualprecipitation": 491.0,
+      "annualprecipitationocttomar": 171.0,
+      "regionid": 2
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 54,
+    "fields": {
+      "name": "Burns Lake",
+      "annualprecipitation": 509.0,
+      "annualprecipitationocttomar": 277.0,
+      "regionid": 1
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 55,
+    "fields": {
+      "name": "Houston",
+      "annualprecipitation": 440.0,
+      "annualprecipitationocttomar": 231.0,
+      "regionid": 1
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 56,
+    "fields": {
+      "name": "Salmo",
+      "annualprecipitation": 692.0,
+      "annualprecipitationocttomar": 367.0,
+      "regionid": 4
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 57,
+    "fields": {
+      "name": "Nelson",
+      "annualprecipitation": 803.0,
+      "annualprecipitationocttomar": 490.0,
+      "regionid": 4
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 58,
+    "fields": {
+      "name": "Nakusp",
+      "annualprecipitation": 827.0,
+      "annualprecipitationocttomar": 496.0,
+      "regionid": 4
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 59,
+    "fields": {
+      "name": "Lake Country",
+      "annualprecipitation": 385.0,
+      "annualprecipitationocttomar": 191.0,
+      "regionid": 5
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 60,
+    "fields": {
+      "name": "Peachland",
+      "annualprecipitation": 335.0,
+      "annualprecipitationocttomar": 172.0,
+      "regionid": 5
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 61,
+    "fields": {
+      "name": "Kelowna",
+      "annualprecipitation": 361.0,
+      "annualprecipitationocttomar": 176.0,
+      "regionid": 5
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 62,
+    "fields": {
+      "name": "Revelstoke",
+      "annualprecipitation": 925.0,
+      "annualprecipitationocttomar": 564.0,
+      "regionid": 6
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 63,
+    "fields": {
+      "name": "Sicamous",
+      "annualprecipitation": 627.0,
+      "annualprecipitationocttomar": 334.0,
+      "regionid": 6
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 64,
+    "fields": {
+      "name": "Mica Creek",
+      "annualprecipitation": 1039.0,
+      "annualprecipitationocttomar": 726.0,
+      "regionid": 6
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 65,
+    "fields": {
+      "name": "Sparwood",
+      "annualprecipitation": 630.0,
+      "annualprecipitationocttomar": 346.0,
+      "regionid": 9
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 66,
+    "fields": {
+      "name": "Haztic lake",
+      "annualprecipitation": 1845.0,
+      "annualprecipitationocttomar": 1288.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 67,
+    "fields": {
+      "name": "Aldergrove",
+      "annualprecipitation": 1600.0,
+      "annualprecipitationocttomar": 1119.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 68,
+    "fields": {
+      "name": "Langley City",
+      "annualprecipitation": 1453.0,
+      "annualprecipitationocttomar": 1026.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 69,
+    "fields": {
+      "name": "White Rock",
+      "annualprecipitation": 1319.0,
+      "annualprecipitationocttomar": 943.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 70,
+    "fields": {
+      "name": "Maple Ridge",
+      "annualprecipitation": 1769.0,
+      "annualprecipitationocttomar": 1247.0,
+      "regionid": 14
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 71,
+    "fields": {
+      "name": "Grand Forks",
+      "annualprecipitation": 500.0,
+      "annualprecipitationocttomar": 266.0,
+      "regionid": 13
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 72,
+    "fields": {
+      "name": "Beaverdell",
+      "annualprecipitation": 437.0,
+      "annualprecipitationocttomar": 228.0,
+      "regionid": 13
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 73,
+    "fields": {
+      "name": "Rock Creek",
+      "annualprecipitation": 379.0,
+      "annualprecipitationocttomar": 180.0,
+      "regionid": 13
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 74,
+    "fields": {
+      "name": "Trail",
+      "annualprecipitation": 658.0,
+      "annualprecipitationocttomar": 398.0,
+      "regionid": 13
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 75,
+    "fields": {
+      "name": "Greenwood",
+      "annualprecipitation": 498.0,
+      "annualprecipitationocttomar": 270.0,
+      "regionid": 13
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 76,
+    "fields": {
+      "name": "Cherryville",
+      "annualprecipitation": 557.0,
+      "annualprecipitationocttomar": 273.0,
+      "regionid": 16
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 77,
+    "fields": {
+      "name": "Armstrong",
+      "annualprecipitation": 472.0,
+      "annualprecipitationocttomar": 241.0,
+      "regionid": 16
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 78,
+    "fields": {
+      "name": "Ft. Nelson",
+      "annualprecipitation": 505.0,
+      "annualprecipitationocttomar": 167.0,
+      "regionid": 2
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 79,
+    "fields": {
+      "name": "Summerland",
+      "annualprecipitation": 325.0,
+      "annualprecipitationocttomar": 157.0,
+      "regionid": 17
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 80,
+    "fields": {
+      "name": "Oliver",
+      "annualprecipitation": 299.0,
+      "annualprecipitationocttomar": 147.0,
+      "regionid": 17
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 81,
+    "fields": {
+      "name": "Osoyoos",
+      "annualprecipitation": 304.0,
+      "annualprecipitationocttomar": 163.0,
+      "regionid": 17
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 82,
+    "fields": {
+      "name": "Powell River",
+      "annualprecipitation": 1176.0,
+      "annualprecipitationocttomar": 848.0,
+      "regionid": 22
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 83,
+    "fields": {
+      "name": "Squamish",
+      "annualprecipitation": 2154.0,
+      "annualprecipitationocttomar": 1659.0,
+      "regionid": 19
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 84,
+    "fields": {
+      "name": "Gibson",
+      "annualprecipitation": 1459.0,
+      "annualprecipitationocttomar": 1084.0,
+      "regionid": 23
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 85,
+    "fields": {
+      "name": "Sechelt",
+      "annualprecipitation": 1178.0,
+      "annualprecipitationocttomar": 866.0,
+      "regionid": 23
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 86,
+    "fields": {
+      "name": "Barriere",
+      "annualprecipitation": 451.0,
+      "annualprecipitationocttomar": 219.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 87,
+    "fields": {
+      "name": "Lytton",
+      "annualprecipitation": 460.0,
+      "annualprecipitationocttomar": 320.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 88,
+    "fields": {
+      "name": "Clinton",
+      "annualprecipitation": 394.0,
+      "annualprecipitationocttomar": 158.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 89,
+    "fields": {
+      "name": "Westwold",
+      "annualprecipitation": 422.0,
+      "annualprecipitationocttomar": 203.0,
+      "regionid": 20
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 90,
+    "fields": {
+      "name": "Duncan",
+      "annualprecipitation": 1191.0,
+      "annualprecipitationocttomar": 954.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 91,
+    "fields": {
+      "name": "Port Alberni",
+      "annualprecipitation": 2186.0,
+      "annualprecipitationocttomar": 1735.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 92,
+    "fields": {
+      "name": "Parksville",
+      "annualprecipitation": 1131.0,
+      "annualprecipitationocttomar": 878.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 93,
+    "fields": {
+      "name": "Salt Spring Island",
+      "annualprecipitation": 1010.0,
+      "annualprecipitationocttomar": 779.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 94,
+    "fields": {
+      "name": "Mayne Island",
+      "annualprecipitation": 876.0,
+      "annualprecipitationocttomar": 653.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 95,
+    "fields": {
+      "name": "Pender Island",
+      "annualprecipitation": 823.0,
+      "annualprecipitationocttomar": 615.0,
+      "regionid": 21
+    }
+  },
+  {
+    "model": "shared.subregion",
+    "pk": 96,
+    "fields": {
+      "name": "Galiano Island",
+      "annualprecipitation": 974.0,
+      "annualprecipitationocttomar": 734.0,
+      "regionid": 21
+    }
+  }
+]
