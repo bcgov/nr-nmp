@@ -43,7 +43,7 @@ class ManuresTests(TestCase):
         """Test that creating a manure with a duplicate ID raises an error"""
         with self.assertRaises(IntegrityError):
             Manures.objects.create(
-                id=1,  # Same ID as in setUp
+                id=1,  # Same ID as in setUp to check duplicate
                 name="Another Manure",
                 manureclass="Poultry",
                 solidliquid="Liquid",
@@ -80,7 +80,7 @@ class ManuresTests(TestCase):
             defaultsolidmoisture=20
         )
         
-        # Retrieve from database to verify precision
+        # Retrieve from database to verify precision and verify db is storing the data
         manure_from_db = Manures.objects.get(id=2)
         self.assertEqual(manure_from_db.nitrogen, 10.56789)
         self.assertEqual(manure_from_db.ammonia, 5.23456)
