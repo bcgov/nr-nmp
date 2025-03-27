@@ -121,6 +121,7 @@ export default function FarmInformation() {
             {} as { [id: string]: string },
           );
         setRawAnimalNames(animalDict);
+        console.log('rawAnimalNames', Object.entries(animalDict));
       }
     });
 
@@ -183,7 +184,7 @@ export default function FarmInformation() {
       const { name, value } = e.target as HTMLInputElement;
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     },
-    [setFormData],
+    [formData, setFormData],
   );
 
   const handleChange = useCallback(
