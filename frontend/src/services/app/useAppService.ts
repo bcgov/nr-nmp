@@ -31,7 +31,7 @@ const useAppService = () => {
     };
 
     const setShowAnimalsStep = (showAnimals: boolean) => {
-      dispatch({ type: SET_SHOW_ANIMALS_STEP, payload: showAnimals })
+      dispatch({ type: SET_SHOW_ANIMALS_STEP, payload: showAnimals });
     };
 
     return {
