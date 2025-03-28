@@ -2,6 +2,7 @@
 /* eslint-disable object-shorthand */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -27,11 +28,7 @@ import {
   ListItem,
   ListItemContainer,
 } from './manureAndImports.styles';
-
-interface ManureAndImportsProps {
-  manures: NMPFileImportedManureData[];
-  setManures: (manures: NMPFileImportedManureData[]) => void;
-}
+import useAppService from '@/services/app/useAppService';
 
 const manureTypeOptions = [
   { label: 'Select', value: 0 },
@@ -39,11 +36,15 @@ const manureTypeOptions = [
   { label: 'Solid', value: 2 },
 ];
 
-export default function ManureAndImports({ manures, setManures }: ManureAndImportsProps) {
+export default function ManureAndImports() {
+  const { state, setNMPFile } = useAppService();
+  const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [manures, setManures] = useState<NMPFileImportedManureData[]>([]);
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
     SolidManureConversionFactors[]
   >([DefaultSolidManureConversionFactors]);
@@ -52,6 +53,12 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
   >([DefaultLiquidManureConversionFactors]);
   const [manureFormData, setManureFormData] =
     useState<NMPFileImportedManureData>(DefaultManureFormData);
+
+  useEffect(() => {
+    if (state.nmpFile?.years?.[0]?.ImportedManures) {
+      setManures(state.nmpFile.years[0].ImportedManures);
+    }
+  }, [state.nmpFile]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

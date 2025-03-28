@@ -6,7 +6,7 @@ import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import { Card, Button } from '../../components/common';
 import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs';
 import { CardHeader, Banner, ButtonWrapper } from './manureAndCompost.styles';
-import ManureAndImports from './ManureAndImports/ManureAndImports';
+import ManureAndImports from '../ManureAndImports/ManureAndImports';
 import NutrientAnalysis from './NutrientAnalysis/NutrientAnalysis';
 
 export default function ManureAndCompost() {
