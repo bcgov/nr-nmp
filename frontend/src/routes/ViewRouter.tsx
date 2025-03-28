@@ -8,7 +8,7 @@ import {
   FARM_INFORMATION,
   FIELD_SOIL,
   LANDING_PAGE,
-  MANURE_COMPOST,
+  MANURE_IMPORTS,
 } from '@/constants/RouteConstants';
 
 import LandingPage from '../views/LandingPage/LandingPage';
@@ -16,7 +16,7 @@ import FarmInformation from '../views/FarmInformation/FarmInformation';
 import FieldAndSoil from '@/views/FieldAndSoil/FieldAndSoil';
 import AnimalsAndManure from '@/views/AnimalsAndManure/AnimalsAndManure';
 import CalculateNutrients from '@/views/CalculateNutrients/CalculateNutrients';
-import ManureAndCompost from '@/views/ManureAndCompost/ManureAndCompost';
+import ManureAndImports from '@/views/ManureAndImports/ManureAndImports';
 
 export default function ViewRouter() {
   return (
@@ -34,8 +34,8 @@ export default function ViewRouter() {
         Component={FieldAndSoil}
       />
       <Route
-        path={`/${MANURE_COMPOST}`}
-        Component={ManureAndCompost}
+        path={`/${MANURE_IMPORTS}`}
+        Component={ManureAndImports}
       />
       <Route
         path={`/${CALCULATE_NUTRIENTS}`}

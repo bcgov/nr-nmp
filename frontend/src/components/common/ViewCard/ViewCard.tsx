@@ -8,7 +8,9 @@ interface ViewCardProps {
   width?: string;
   height?: string;
   handleNext?: () => void;
+  nextDisabled?: boolean;
   handlePrevious?: () => void;
+  prevDisabled?: boolean;
 }
 
 export default function ViewCard({
@@ -16,7 +18,9 @@ export default function ViewCard({
   width = '500px',
   height = '500px',
   handleNext,
+  nextDisabled = false,
   handlePrevious,
+  prevDisabled = false,
 }: ViewCardProps) {
   return (
     <Card
@@ -32,7 +36,7 @@ export default function ViewCard({
             handleClick={handleNext}
             aria-label="Next"
             variant="primary"
-            disabled={false}
+            disabled={nextDisabled}
           />
         </ButtonWrapper>
       )}
@@ -44,7 +48,7 @@ export default function ViewCard({
             handleClick={handlePrevious}
             aria-label="Back"
             variant="primary"
-            disabled={false}
+            disabled={prevDisabled}
           />
         </ButtonWrapper>
       )}

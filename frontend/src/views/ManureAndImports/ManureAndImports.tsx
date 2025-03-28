@@ -10,6 +10,7 @@ import {
   NMPFileImportedManureData,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
+  NMPFile,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
@@ -29,6 +30,8 @@ import {
   ListItemContainer,
 } from './manureAndImports.styles';
 import useAppService from '@/services/app/useAppService';
+import ViewCard from '@/components/common/ViewCard/ViewCard';
+import { FIELD_SOIL, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
 
 const manureTypeOptions = [
   { label: 'Select', value: 0 },
@@ -37,7 +40,7 @@ const manureTypeOptions = [
 ];
 
 export default function ManureAndImports() {
-  const { state, setNMPFile } = useAppService();
+  const { state, setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
@@ -188,6 +191,24 @@ export default function ManureAndImports() {
     setIsModalVisible(true);
   };
 
+  const handlePrevious = () => {
+    navigate(FIELD_SOIL);
+  };
+
+  const handleNext = () => {
+    let nmpFile: NMPFile | null = null;
+    if (state.nmpFile) {
+      nmpFile = JSON.parse(state.nmpFile);
+    }
+    if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
+      nmpFile.years[0].ImportedManures = manures.map((manure) => ({
+        ...manure,
+      }));
+    }
+    setNMPFile(JSON.stringify(nmpFile));
+    navigate(NUTRIENT_ANALYSIS);
+  };
+
   useEffect(() => {
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
@@ -207,8 +228,17 @@ export default function ManureAndImports() {
       });
   }, []);
 
+  useEffect(() => {
+    setProgressStep(4);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div>
+    <ViewCard
+      height="700px"
+      handlePrevious={handlePrevious}
+      handleNext={handleNext}
+    >
       <ButtonContainer hasManure={manures.length > 0}>
         <Button
           text="Add Manure"
@@ -350,6 +380,6 @@ export default function ManureAndImports() {
           </>
         )}
       </Modal>
-    </div>
+    </ViewCard>
   );
 }

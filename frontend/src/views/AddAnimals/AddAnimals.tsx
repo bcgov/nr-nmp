@@ -1,5 +1,7 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-param-reassign */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import useAppService from '@/services/app/useAppService';
@@ -19,17 +21,15 @@ import { Column } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 import DairyCattle from './DairyCattle/DairyCattle';
+import ViewCard from '@/components/common/ViewCard/ViewCard';
 
-interface AddAnimalsProps {
-  saveData: React.Dispatch<React.SetStateAction<any[]>>;
-  setNextDisabled: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProps) {
-  const { state } = useAppService();
+export default function AddAnimals() {
+  const { state, setNMPFile, setProgressStep } = useAppService();
+  const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
   const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
+  const [nextDisabled, setNextDisabled] = useState(false);
 
   const [formData, setFormData] = useState<(AnimalData | null)[]>([]);
   const [elems, setElems] = useState<(React.ReactNode | null)[]>([]);
@@ -41,15 +41,10 @@ export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProp
       setFormData((prev) => {
         prev[index] = data;
         // Save this data up the chain, to the parent
-        saveData((parentPrev) => {
-          // This is the first tab, so the 0th index
-          parentPrev[0] = prev.filter((d) => d !== null);
-          return parentPrev;
-        });
         return prev;
       });
     },
-    [setFormData, saveData],
+    [setFormData],
   );
 
   const handleDelete = (index: number) => {
@@ -184,6 +179,24 @@ export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProp
     setFormExpanded((prev) => prev.concat(true));
   };
 
+  const handlePrevious = () => {
+    navigate('/farm-information');
+  };
+
+  const handleNext = () => {
+    if (!state.nmpFile) {
+      throw new Error('NMP file has entered impossible state in AnimalsAndManure.');
+    }
+
+    const nmpFile: NMPFile = JSON.parse(state.nmpFile);
+    // TODO: Add multi-year handling
+    nmpFile.years[0].FarmAnimals = formData;
+    // TODO: Copy the data of the other tabs
+    setNMPFile(JSON.stringify(nmpFile));
+
+    navigate('/field-and-soil');
+  };
+
   useEffect(() => {
     if (formComplete.length === 0) {
       setNextDisabled(true);
@@ -206,8 +219,19 @@ export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProp
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setProgressStep(2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div>
+    <ViewCard
+      height="700px"
+      width="700px"
+      handlePrevious={handlePrevious}
+      handleNext={handleNext}
+      nextDisabled={nextDisabled}
+    >
       <div style={{ overflowY: 'scroll' }}>
         <Header>
           <Column>Animal Type</Column>
@@ -240,6 +264,6 @@ export default function AddAnimals({ saveData, setNextDisabled }: AddAnimalsProp
           <FontAwesomeIcon icon={faPlus} />
         </AddButton>
       </FlexContainer>
-    </div>
+    </ViewCard>
   );
 }
