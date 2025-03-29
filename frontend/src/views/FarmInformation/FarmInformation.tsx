@@ -270,7 +270,7 @@ export default function FarmInformation() {
             <Checkbox
               isSelected={formData?.Crops}
               onChange={(e) => {
-                handleChange('Crops', false);
+                handleChange('Crops', e);
                 if (!e) {
                   handleChange('HasVegetables', false);
                   handleChange('HasBerries', false);
