@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
           ],
         }),
       },
-      react(),
+      react({ jsxImportSource: '@emotion/react' }),
     ],
     define,
   };

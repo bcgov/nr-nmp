@@ -3,25 +3,35 @@
  */
 import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Button,
+  ButtonGroup,
+  Checkbox,
+  Form,
+  Select,
+  TextField,
+} from '@bcgov/design-system-react-components';
+import Grid from '@mui/material/Grid2';
+import type { Key } from 'react-aria-components';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
+import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import defaultNMPFile from '../../constants/DefaultNMPFile';
-import {
-  CardHeader,
-  Banner,
-  Heading,
-  InputFieldsContainer,
-  SelectorContainer,
-  RegionContainer,
-  ButtonWrapper,
-} from './farmInformation.styles';
-import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/common';
-import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
+import { formCss, hideCheckboxGroup, showCheckboxGroup } from '../../common.styles';
+import { StyledContent, subHeader } from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
+import {
+  ANIMALS_MANURE,
+  FARM_INFORMATION,
+  FIELD_SOIL,
+  LANDING_PAGE,
+} from '@/constants/RouteConstants';
+
+import { SelectOption } from '../../types';
 
 export default function FarmInformation() {
-  const { state, setNMPFile, setProgressStep } = useAppService();
+  const { state, setNMPFile, setProgressStep, setShowAnimalsStep } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
@@ -39,8 +49,22 @@ export default function FarmInformation() {
   const [rawAnimalNames, setRawAnimalNames] = useState<{ [id: string]: string }>({});
 
   // Props for region selections
-  const [regionOptions, setRegionOptions] = useState<{ value: number; label: string }[]>([]);
-  const [subregionOptions, setSubregionOptions] = useState<{ value: number; label: string }[]>([]);
+  const [regionOptions, setRegionOptions] = useState<Array<SelectOption>>([]);
+  const [subregionOptions, setSubregionOptions] = useState<Array<SelectOption>>([]);
+
+  // Initialize year list
+  const [yearOptions, setYearOptions] = useState<Array<SelectOption>>([]);
+
+  useEffect(() => {
+    const currentYear = new Date().getFullYear();
+    const yearArray = [];
+
+    for (let i = currentYear; i > currentYear - 20; i -= 1) {
+      yearArray.push({ id: i.toString(), label: i.toString() });
+    }
+
+    setYearOptions(yearArray);
+  }, []);
 
   useEffect(() => {
     setProgressStep(1);
@@ -62,7 +86,7 @@ export default function FarmInformation() {
           FarmAnimals: parsedData.farmDetails.FarmAnimals || [],
           HasVegetables: parsedData.farmDetails.HasVegetables || false,
           HasBerries: parsedData.farmDetails.HasBerries || false,
-          Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || 'false',
+          Crops: parsedData.farmDetails.HasHorticulturalCrops.toString() || false,
         });
       }
     }
@@ -92,10 +116,11 @@ export default function FarmInformation() {
 
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
-      const regions: { value: number; label: string }[] = (
-        data as { id: number; name: string }[]
-      ).map((row) => ({ value: row.id, label: row.name }));
-      setRegionOptions(regions);
+      const regions = (data as { id: string; name: string }[]).map((row) => ({
+        id: row.id,
+        label: row.name,
+      }));
+      setRegionOptions(regions as Array<SelectOption>);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -108,40 +133,42 @@ export default function FarmInformation() {
     }
     apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
       const { data } = response;
-      const subregions: { value: number; label: string }[] = (
-        data as { id: number; name: string }[]
-      ).map((row) => ({ value: row.id, label: row.name }));
-      setSubregionOptions(subregions);
+      const subregions = (data as { id: string; name: string }[]).map((row) => ({
+        id: row.id,
+        label: row.name,
+      }));
+
+      setSubregionOptions(subregions as Array<SelectOption>);
     });
   }, [formData.FarmRegion, apiCache]);
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      const { name, value, type, checked } = e.target as HTMLInputElement;
-      const setVal = type === 'checkbox' ? checked : value;
-      // If the element is a radio button intended to return a boolean, the value must be casted
-      if ((setVal === 'true' || setVal === 'false') && name !== 'Crops') {
-        // This is the easiest way to convert bool strings to bools in JS
-        setFormData({ ...formData, [name]: setVal === 'true' });
-      } else {
-        setFormData({ ...formData, [name]: setVal });
-      }
-    },
-    [formData, setFormData],
-  );
+  const checkBoxList = useMemo(() => {
+    const checkBox = Object.entries(rawAnimalNames).map(([id, name]) => {
+      const splitName = name.split(' ');
+      const joinedName = splitName.join('');
+
+      return {
+        joinedName,
+        id,
+        name,
+      };
+    });
+
+    return checkBox;
+  }, [rawAnimalNames]);
 
   const handleAnimalChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target as HTMLInputElement;
+    (value: boolean, animal: string) => {
       setFormData((prevData) => {
         const currentAnimals: string[] = prevData.FarmAnimals;
         let nextAnimals: string[];
-        if (value === 'true') {
-          // eslint-disable-next-line prettier/prettier
+        if (value) {
           nextAnimals =
-            currentAnimals.indexOf(name) === -1 ? currentAnimals.concat([name]) : currentAnimals;
+            currentAnimals.indexOf(animal) === -1
+              ? currentAnimals.concat([animal])
+              : currentAnimals;
         } else {
-          nextAnimals = currentAnimals.filter((val) => val !== name);
+          nextAnimals = currentAnimals.filter((val) => val !== animal);
         }
         return { ...prevData, FarmAnimals: nextAnimals };
       });
@@ -149,7 +176,25 @@ export default function FarmInformation() {
     [setFormData],
   );
 
-  const handleSubmit = () => {
+  const handleInputChange: React.FormEventHandler = useCallback(
+    (e: React.ChangeEvent) => {
+      const { name, value } = e.target as HTMLInputElement;
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    },
+    [setFormData],
+  );
+
+  const handleChange = useCallback(
+    (name: Key | string, value: boolean | string | number) => {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    },
+    [setFormData],
+  );
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // Prevent default browser page refresh.
+    e.preventDefault();
+
     let nmpFile: NMPFile;
 
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
@@ -162,125 +207,147 @@ export default function FarmInformation() {
     setNMPFile(JSON.stringify(nmpFile));
 
     if (formData.FarmAnimals.length === 0) {
-      navigate('/field-and-soil');
+      setShowAnimalsStep(false);
+      navigate(FIELD_SOIL);
     } else {
-      navigate('/animals-and-manure');
+      setShowAnimalsStep(true);
+      navigate(ANIMALS_MANURE);
     }
   };
 
-  const animalRadioButtons: React.ReactNode | null = useMemo(() => {
-    if (Object.keys(rawAnimalNames).length === 0) {
-      return null;
-    }
-
-    const radioButtons = Object.entries(rawAnimalNames).map(([id, name]) => {
-      const pluralName = name === 'Horse' ? 'Horses' : name;
-      const asTitleCase: string = pluralName
-        .split(' ')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-        .join(' ');
-
-      return (
-        <YesNoRadioButtons
-          key={asTitleCase}
-          name={id}
-          text={`I have ${pluralName.toLowerCase()}`}
-          handleYes={handleAnimalChange}
-          handleNo={handleAnimalChange}
-        />
-      );
-    });
-
-    return radioButtons;
-  }, [rawAnimalNames, handleAnimalChange]);
-
   return (
-    <Card
-      height="700px"
-      width="600px"
-      justifyContent="flex-start"
-    >
-      <CardHeader>
-        <Banner>
-          <Heading>Farm Information</Heading>
-        </Banner>
-      </CardHeader>
-      <InputFieldsContainer>
-        <InputField
-          label="Year"
-          type="text"
-          name="Year"
-          value={formData.Year}
-          onChange={handleChange}
-          flex="0.5"
-        />
-        <InputField
-          label="Farm Name"
-          type="text"
-          name="FarmName"
-          value={formData.FarmName}
-          onChange={handleChange}
-          flex="1"
-        />
-      </InputFieldsContainer>
-      <RegionContainer>
-        <Dropdown
-          label="Region"
-          name="FarmRegion"
-          value={formData.FarmRegion}
-          options={regionOptions}
-          onChange={handleChange}
-        />
-        <Dropdown
-          label="Subregion"
-          name="FarmSubRegion"
-          value={formData.FarmSubRegion}
-          options={subregionOptions}
-          onChange={handleChange}
-        />
-      </RegionContainer>
-      <YesNoRadioButtons
-        name="Crops"
-        text="I have crops"
-        handleYes={handleChange}
-        handleNo={handleChange}
-      />
-      {formData.Crops === 'true' && (
-        <SelectorContainer>
-          <span style={{ marginRight: '8px' }}>Select your crops:</span>
-          <Checkbox
-            label="Vegetables"
-            name="HasVegetables"
-            checked={formData.HasVegetables}
-            onChange={handleChange}
-          />
-          <Checkbox
-            label="Berries"
-            name="HasBerries"
-            checked={formData.HasBerries}
-            onChange={handleChange}
-          />
-        </SelectorContainer>
-      )}
-      <YesNoRadioButtons
-        name=""
-        text="I have animals"
-        handleYes={() => setHasAnimals(true)}
-        handleNo={() => setHasAnimals(false)}
-      />
-      {hasAnimals && animalRadioButtons}
-      <ButtonWrapper>
-        <Button
-          text="Next"
-          size="sm"
-          handleClick={() => {
-            handleSubmit();
-          }}
-          aria-label="Next"
-          variant="primary"
-          disabled={false}
-        />
-      </ButtonWrapper>
-    </Card>
+    <StyledContent>
+      <ProgressStepper step={FARM_INFORMATION} />
+      <AppTitle />
+      <PageTitle title="Farm Information" />
+      <Form
+        css={formCss}
+        validationBehavior="native"
+        onSubmit={onSubmit}
+      >
+        <Grid
+          container
+          spacing={2}
+        >
+          <Grid size={6}>
+            <TextField
+              isRequired
+              label="Name"
+              name="FarmName"
+              onInput={handleInputChange}
+            />
+          </Grid>
+          <Grid size={6}>
+            <Select
+              isRequired
+              label="Year"
+              name="Year"
+              items={yearOptions}
+              onSelectionChange={(e) => handleChange('Year', e)}
+            />
+          </Grid>
+          <Grid size={6}>
+            <Select
+              isRequired
+              label="Region"
+              items={regionOptions}
+              onSelectionChange={(e) => handleChange('FarmRegion', e)}
+            />
+          </Grid>
+          <Grid size={6}>
+            <Select
+              isRequired
+              label="Subregion"
+              items={subregionOptions}
+              onSelectionChange={(e) => handleChange('FarmSubRegion', e)}
+              isDisabled={!(subregionOptions && subregionOptions.length)}
+            />
+          </Grid>
+          <div css={subHeader}>
+            Select all agriculture that occupy your farm (check all that apply)
+          </div>
+          <Grid size={12}>
+            <Checkbox
+              isSelected={formData?.Crops}
+              onChange={(e) => {
+                handleChange('Crops', e);
+                if (!e) {
+                  handleChange('HasVegetables', false);
+                  handleChange('HasBerries', false);
+                }
+              }}
+              value="Crops"
+            >
+              I have Horticultural crops
+            </Checkbox>
+            <div css={formData.Crops ? showCheckboxGroup : hideCheckboxGroup}>
+              <Checkbox
+                isSelected={formData?.HasVegetables}
+                onChange={(e: boolean) => handleChange('HasVegetables', e)}
+                value="HasVegetables"
+              >
+                Vegetables
+              </Checkbox>
+              <Checkbox
+                isSelected={formData?.HasBerries}
+                onChange={(e: boolean) => handleChange('HasBerries', e)}
+                value="HasBerries"
+              >
+                Berries
+              </Checkbox>
+            </div>
+          </Grid>
+          <Grid size={12}>
+            <Checkbox
+              isSelected={hasAnimals}
+              onChange={(e: boolean) => {
+                setHasAnimals(e);
+                if (!e && checkBoxList.length)
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    FarmAnimals: [],
+                  }));
+              }}
+              value="HasAnimals"
+            >
+              I have Livestock
+            </Checkbox>
+            <div css={hasAnimals ? showCheckboxGroup : hideCheckboxGroup}>
+              {checkBoxList.map((ele) => (
+                <Checkbox
+                  key={ele.joinedName}
+                  isSelected={formData?.FarmAnimals.includes(`Has${ele.joinedName}`)}
+                  name={ele.id}
+                  value={`Has${ele.joinedName}`}
+                  onChange={(e) => handleAnimalChange(e, `Has${ele.joinedName}`)}
+                >{`I have ${ele?.name.toLowerCase()}`}</Checkbox>
+              ))}
+            </div>
+          </Grid>
+        </Grid>
+        <ButtonGroup
+          alignment="start"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            aria-label="Next"
+            variant="primary"
+            type="submit"
+          >
+            Next
+          </Button>
+          <Button
+            size="medium"
+            aria-label="Back"
+            onPress={() => navigate(LANDING_PAGE)}
+            variant="secondary"
+          >
+            BACK
+          </Button>
+        </ButtonGroup>
+      </Form>
+    </StyledContent>
   );
 }
