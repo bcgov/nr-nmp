@@ -1,6 +1,6 @@
 import LiquidManureConversionFactors from './LiquidManureConversionFactors';
 import NMPFile from './NMPFile';
-import { SelectOption } from './common';
+import { SelectOption } from './Common';
 import {
   NMPFileCropData,
   CropsConversionFactors,
