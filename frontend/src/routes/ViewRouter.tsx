@@ -22,27 +22,27 @@ export default function ViewRouter() {
   return (
     <Routes>
       <Route
-        path={`/${LANDING_PAGE}`}
+        path={LANDING_PAGE}
         Component={LandingPage}
       />
       <Route
-        path={`/${FARM_INFORMATION}`}
+        path={`${FARM_INFORMATION}`}
         Component={FarmInformation}
       />
       <Route
-        path={`/${FIELD_SOIL}`}
+        path={`${FIELD_SOIL}`}
         Component={FieldAndSoil}
       />
       <Route
-        path={`/${MANURE_COMPOST}`}
+        path={`${MANURE_COMPOST}`}
         Component={ManureAndCompost}
       />
       <Route
-        path={`/${CALCULATE_NUTRIENTS}`}
+        path={`${CALCULATE_NUTRIENTS}`}
         Component={CalculateNutrients}
       />
       <Route
-        path={`/${ANIMALS_MANURE}`}
+        path={`${ANIMALS_MANURE}`}
         Component={AnimalsAndManure}
       />
     </Routes>
