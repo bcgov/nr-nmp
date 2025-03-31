@@ -152,7 +152,7 @@ export default function FarmInformation() {
       return null;
     }
 
-    const checkBox = Object.entries(rawAnimalNames).map(([id, name]) => {
+    const checkboxes = Object.entries(rawAnimalNames).map(([id, name]) => {
       const pluralName = name === 'Horse' ? 'Horses' : name;
 
       const asTitleCase: string = pluralName
@@ -160,14 +160,17 @@ export default function FarmInformation() {
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
         .join(' ');
 
-      return {
-        asTitleCase,
-        id,
-        name,
-      };
+      return (
+        <Checkbox
+          key={asTitleCase}
+          value={id}
+        >
+          I have {pluralName.toLowerCase()}
+        </Checkbox>
+      );
     });
 
-    return checkBox;
+    return checkboxes;
   }, [rawAnimalNames]);
 
   const handleInputChange: React.FormEventHandler = useCallback(
@@ -179,7 +182,7 @@ export default function FarmInformation() {
   );
 
   const handleChange = useCallback(
-    (name: Key | string, value: boolean | string | number) => {
+    (name: Key | string, value: boolean | string | number | string[]) => {
       setFormData((prevData) => ({ ...prevData, [name]: value }));
     },
     [setFormData],
@@ -305,7 +308,13 @@ export default function FarmInformation() {
               orientation="horizontal"
             />
             <CheckboxGroup
-              css={hasAnimals ? { gap: '0', '> div': showCheckboxGroup } : hideCheckboxGroup}
+              css={
+                hasAnimals
+                  ? {
+                      '> div': [showCheckboxGroup, { gap: '0 !important' }],
+                    }
+                  : hideCheckboxGroup
+              }
               orientation="vertical"
               value={formData.FarmAnimals}
               onChange={(val) => handleChange('FarmAnimals', val)}
