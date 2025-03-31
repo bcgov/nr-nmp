@@ -5,6 +5,7 @@ export const StyledSpan = styled.span`
   font-size: 16px;
 `;
 
+// Unused
 export const RadioButtonsWrapper = styled.div`
   display: flex;
   gap: 16px;

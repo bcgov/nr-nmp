@@ -1,52 +1,34 @@
-import React, { useState } from 'react';
-import RadioButton from '../RadioButton/RadioButton';
-import { RadioButtonsWrapper, StyledSpan } from './yesNoRadioButtons.styles';
+import { useState } from 'react';
+import { RadioGroup, Radio } from '@bcgov/design-system-react-components';
+import { StyledSpan } from './yesNoRadioButtons.styles';
 
 interface YesNoRadioButtonProps {
-  name: string;
   text: string;
-  handleYes: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleNo: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  omitWrapper?: boolean;
+  onChange: (value: string) => void;
+  defaultVal?: boolean;
+  orientation?: 'vertical' | 'horizontal';
 }
 
 function YesNoRadioButtons({
-  name,
   text,
-  handleYes,
-  handleNo,
-  omitWrapper,
+  onChange,
+  defaultVal = false,
+  orientation = 'vertical',
 }: YesNoRadioButtonProps) {
-  const [isYes, setIsYes] = useState<boolean>(false);
-  const unwrappedElements = (
-    <>
+  const [selected, setSelected] = useState<string>(defaultVal ? 'true' : 'false');
+  return (
+    <RadioGroup
+      orientation={orientation}
+      value={selected}
+      onChange={(val) => {
+        setSelected(val);
+        onChange(val);
+      }}
+    >
       <StyledSpan>{text}</StyledSpan>
-      <RadioButton
-        label="Yes"
-        name={name}
-        value="true"
-        checked={isYes}
-        onChange={(e) => {
-          setIsYes(true);
-          handleYes(e);
-        }}
-      />
-      <RadioButton
-        label="No"
-        name={name}
-        value="false"
-        checked={!isYes}
-        onChange={(e) => {
-          setIsYes(false);
-          handleNo(e);
-        }}
-      />
-    </>
-  );
-  return omitWrapper ? (
-    unwrappedElements
-  ) : (
-    <RadioButtonsWrapper>{unwrappedElements}</RadioButtonsWrapper>
+      <Radio value="true">Yes</Radio>
+      <Radio value="false">No</Radio>
+    </RadioGroup>
   );
 }
 

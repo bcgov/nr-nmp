@@ -200,6 +200,7 @@ export default function BeefCattle({
                 }
               }}
             />
+            {/*
             <BeefCattleYesNoWrapper>
               <YesNoRadioButtons
                 name="yes-no"
@@ -212,6 +213,7 @@ export default function BeefCattle({
                 omitWrapper
               />
             </BeefCattleYesNoWrapper>
+            */}
             {showCollectionDays && (
               <InputField
                 label="How long is the manure collected?"

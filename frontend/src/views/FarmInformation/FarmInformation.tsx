@@ -7,6 +7,7 @@ import {
   Button,
   ButtonGroup,
   Checkbox,
+  CheckboxGroup,
   Form,
   Select,
   TextField,
@@ -266,65 +267,70 @@ export default function FarmInformation() {
           <div css={subHeader}>
             Select all agriculture that occupy your farm (check all that apply)
           </div>
-          <Grid size={12}>
-            <Checkbox
-              isSelected={formData?.Crops}
-              onChange={(e) => {
-                handleChange('Crops', e);
-                if (!e) {
-                  handleChange('HasVegetables', false);
-                  handleChange('HasBerries', false);
-                }
-              }}
-              value="Crops"
-            >
-              I have Horticultural crops
-            </Checkbox>
-            <div css={formData.Crops ? showCheckboxGroup : hideCheckboxGroup}>
+          <CheckboxGroup>
+            <Grid size={12}>
               <Checkbox
-                isSelected={formData?.HasVegetables}
-                onChange={(e: boolean) => handleChange('HasVegetables', e)}
-                value="HasVegetables"
+                isSelected={formData?.Crops}
+                onChange={(e) => {
+                  handleChange('Crops', e);
+                  if (!e) {
+                    handleChange('HasVegetables', false);
+                    handleChange('HasBerries', false);
+                  }
+                }}
+                value="Crops"
               >
-                Vegetables
+                I have Horticultural crops
               </Checkbox>
+              <div css={formData.Crops ? showCheckboxGroup : hideCheckboxGroup}>
+                <CheckboxGroup label="Select your crops:">
+                  <Checkbox
+                    value="HasVegetables"
+                    isSelected={formData.HasVegetables}
+                    onChange={(s) => handleChange('HasVegetables', s)}
+                  >
+                    Vegetables
+                  </Checkbox>
+                  <Checkbox
+                    value="HasBerries"
+                    isSelected={formData.HasBerries}
+                    onChange={(s) => handleChange('HasBerries', s)}
+                  >
+                    Berries
+                  </Checkbox>
+                </CheckboxGroup>
+              </div>
+            </Grid>
+            <Grid size={12}>
               <Checkbox
-                isSelected={formData?.HasBerries}
-                onChange={(e: boolean) => handleChange('HasBerries', e)}
-                value="HasBerries"
+                isSelected={hasAnimals}
+                onChange={(e: boolean) => {
+                  setHasAnimals(e);
+                  if (!e && checkBoxList.length)
+                    setFormData((prevData) => ({
+                      ...prevData,
+                      FarmAnimals: [],
+                    }));
+                }}
+                value="HasAnimals"
               >
-                Berries
+                I have Livestock
               </Checkbox>
-            </div>
-          </Grid>
-          <Grid size={12}>
-            <Checkbox
-              isSelected={hasAnimals}
-              onChange={(e: boolean) => {
-                setHasAnimals(e);
-                if (!e && checkBoxList.length)
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    FarmAnimals: [],
-                  }));
-              }}
-              value="HasAnimals"
-            >
-              I have Livestock
-            </Checkbox>
-            <div css={hasAnimals ? showCheckboxGroup : hideCheckboxGroup}>
-              {checkBoxList.map((ele) => (
-                <Checkbox
-                  key={ele.joinedName}
-                  isSelected={formData?.FarmAnimals.includes(`Has${ele.joinedName}`)}
-                  name={ele.id}
-                  value={`Has${ele.joinedName}`}
-                  onChange={(e) => handleAnimalChange(e, `Has${ele.joinedName}`)}
-                >{`I have ${ele?.name.toLowerCase()}`}</Checkbox>
-              ))}
-            </div>
-          </Grid>
+              <div css={hasAnimals ? showCheckboxGroup : hideCheckboxGroup}>
+                {checkBoxList.map((ele) => (
+                  <Checkbox
+                    key={ele.joinedName}
+                    isSelected={formData?.FarmAnimals.includes(`Has${ele.joinedName}`)}
+                    name={ele.id}
+                    value={`Has${ele.joinedName}`}
+                    onChange={(e) => handleAnimalChange(e, `Has${ele.joinedName}`)}
+                  >{`I have ${ele?.name.toLowerCase()}`}</Checkbox>
+                ))}
+              </div>
+            </Grid>
+          </CheckboxGroup>
         </Grid>
+
         <ButtonGroup
           alignment="start"
           ariaLabel="A group of buttons"
