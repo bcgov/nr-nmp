@@ -144,12 +144,20 @@ export default function FarmInformation() {
   }, [formData.FarmRegion, apiCache]);
 
   const checkBoxList = useMemo(() => {
+    if (Object.keys(rawAnimalNames).length === 0) {
+      return null;
+    }
+
     const checkBox = Object.entries(rawAnimalNames).map(([id, name]) => {
-      const splitName = name.split(' ');
-      const joinedName = splitName.join('');
+      const pluralName = name === 'Horse' ? 'Horses' : name;
+
+      const asTitleCase: string = pluralName
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 
       return {
-        joinedName,
+        asTitleCase,
         id,
         name,
       };
@@ -235,6 +243,7 @@ export default function FarmInformation() {
               isRequired
               label="Name"
               name="FarmName"
+              value={formData?.FarmName}
               onInput={handleInputChange}
             />
           </Grid>
@@ -244,6 +253,7 @@ export default function FarmInformation() {
               label="Year"
               name="Year"
               items={yearOptions}
+              selectedKey={formData?.Year}
               onSelectionChange={(e) => handleChange('Year', e)}
             />
           </Grid>
@@ -252,6 +262,7 @@ export default function FarmInformation() {
               isRequired
               label="Region"
               items={regionOptions}
+              selectedKey={formData?.FarmRegion}
               onSelectionChange={(e) => handleChange('FarmRegion', e)}
             />
           </Grid>
@@ -260,6 +271,7 @@ export default function FarmInformation() {
               isRequired
               label="Subregion"
               items={subregionOptions}
+              selectedKey={formData?.FarmSubRegion}
               onSelectionChange={(e) => handleChange('FarmSubRegion', e)}
               isDisabled={!(subregionOptions && subregionOptions.length)}
             />
@@ -267,68 +279,82 @@ export default function FarmInformation() {
           <div css={subHeader}>
             Select all agriculture that occupy your farm (check all that apply)
           </div>
-          <CheckboxGroup>
-            <Grid size={12}>
-              <Checkbox
-                isSelected={formData?.Crops}
-                onChange={(e) => {
-                  handleChange('Crops', e);
-                  if (!e) {
-                    handleChange('HasVegetables', false);
-                    handleChange('HasBerries', false);
-                  }
-                }}
-                value="Crops"
-              >
-                I have Horticultural crops
-              </Checkbox>
-              <div css={formData.Crops ? showCheckboxGroup : hideCheckboxGroup}>
-                <CheckboxGroup label="Select your crops:">
-                  <Checkbox
-                    value="HasVegetables"
-                    isSelected={formData.HasVegetables}
-                    onChange={(s) => handleChange('HasVegetables', s)}
-                  >
-                    Vegetables
-                  </Checkbox>
-                  <Checkbox
-                    value="HasBerries"
-                    isSelected={formData.HasBerries}
-                    onChange={(s) => handleChange('HasBerries', s)}
-                  >
-                    Berries
-                  </Checkbox>
-                </CheckboxGroup>
-              </div>
-            </Grid>
-            <Grid size={12}>
-              <Checkbox
-                isSelected={hasAnimals}
-                onChange={(e: boolean) => {
-                  setHasAnimals(e);
-                  if (!e && checkBoxList.length)
-                    setFormData((prevData) => ({
-                      ...prevData,
-                      FarmAnimals: [],
-                    }));
-                }}
-                value="HasAnimals"
-              >
-                I have Livestock
-              </Checkbox>
-              <div css={hasAnimals ? showCheckboxGroup : hideCheckboxGroup}>
-                {checkBoxList.map((ele) => (
-                  <Checkbox
-                    key={ele.joinedName}
-                    isSelected={formData?.FarmAnimals.includes(`Has${ele.joinedName}`)}
-                    name={ele.id}
-                    value={`Has${ele.joinedName}`}
-                    onChange={(e) => handleAnimalChange(e, `Has${ele.joinedName}`)}
-                  >{`I have ${ele?.name.toLowerCase()}`}</Checkbox>
-                ))}
-              </div>
-            </Grid>
-          </CheckboxGroup>
+          <Grid size={12}>
+            <Checkbox
+              isSelected={formData?.Crops}
+              onChange={(e) => {
+                handleChange('Crops', e);
+                if (!e) {
+                  handleChange('HasVegetables', false);
+                  handleChange('HasBerries', false);
+                }
+              }}
+              value="Crops"
+            >
+              I have Horticultural crops
+            </Checkbox>
+            <div css={formData.Crops ? showCheckboxGroup : hideCheckboxGroup}>
+              <CheckboxGroup label="Select your crops:">
+                <Checkbox
+                  value="HasVegetables"
+                  isSelected={formData.HasVegetables}
+                  onChange={(s) => handleChange('HasVegetables', s)}
+                >
+                  Vegetables
+                </Checkbox>
+                <Checkbox
+                  value="HasBerries"
+                  isSelected={formData.HasBerries}
+                  onChange={(s) => handleChange('HasBerries', s)}
+                >
+                  Berries
+                </Checkbox>
+              </CheckboxGroup>
+            </div>
+          </Grid>
+          <Grid size={12}>
+            <Checkbox
+              isSelected={hasAnimals}
+              onChange={(e: boolean) => {
+                setHasAnimals(e);
+                if (!e && checkBoxList.length)
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    FarmAnimals: [],
+                  }));
+              }}
+              value="HasAnimals"
+            >
+              I have Livestock
+            </Checkbox>
+          </Grid>
+          <Grid size={12}>
+            <Checkbox
+              isSelected={hasAnimals}
+              onChange={(e: boolean) => {
+                setHasAnimals(e);
+                if (!e && checkBoxList?.length)
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    FarmAnimals: [],
+                  }));
+              }}
+              value="HasAnimals"
+            >
+              I have Livestock
+            </Checkbox>
+            <div css={hasAnimals ? showCheckboxGroup : hideCheckboxGroup}>
+              {checkBoxList?.map((ele) => (
+                <Checkbox
+                  key={ele.asTitleCase}
+                  isSelected={formData?.FarmAnimals.includes(`${ele.id}`)}
+                  name={ele.id}
+                  value={ele.asTitleCase}
+                  onChange={(e) => handleAnimalChange(e, `${ele.id}`)}
+                >{`I have ${ele?.name.toLowerCase()}`}</Checkbox>
+              ))}
+            </div>
+          </Grid>
         </Grid>
 
         <ButtonGroup
