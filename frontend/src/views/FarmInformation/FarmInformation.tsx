@@ -351,13 +351,7 @@ export default function FarmInformation() {
               orientation="horizontal"
             />
             <CheckboxGroup
-              css={
-                hasAnimals
-                  ? {
-                      '> div': [showCheckboxGroup, { gap: '0 !important' }],
-                    }
-                  : hideCheckboxGroup
-              }
+              css={hasAnimals ? { gap: '0', '> div': showCheckboxGroup } : hideCheckboxGroup}
               orientation="vertical"
               value={formData.FarmAnimals}
               onChange={(val) => handleChange('FarmAnimals', val)}
