@@ -1,31 +1,27 @@
-import { useState } from 'react';
 import { RadioGroup, Radio } from '@bcgov/design-system-react-components';
-import { StyledSpan } from './yesNoRadioButtons.styles';
 
 interface YesNoRadioButtonProps {
   text: string;
-  onChange: (value: string) => void;
-  defaultVal?: boolean;
+  value: boolean;
+  onChange: (value: boolean) => void;
   orientation?: 'vertical' | 'horizontal';
 }
 
 function YesNoRadioButtons({
   text,
+  value,
   onChange,
-  defaultVal = false,
   orientation = 'vertical',
 }: YesNoRadioButtonProps) {
-  const [selected, setSelected] = useState<string>(defaultVal ? 'true' : 'false');
   return (
     <RadioGroup
       orientation={orientation}
-      value={selected}
+      value={value ? 'true' : 'false'}
       onChange={(val) => {
-        setSelected(val);
-        onChange(val);
+        onChange(val === 'true');
       }}
+      label={text}
     >
-      <StyledSpan>{text}</StyledSpan>
       <Radio value="true">Yes</Radio>
       <Radio value="false">No</Radio>
     </RadioGroup>
