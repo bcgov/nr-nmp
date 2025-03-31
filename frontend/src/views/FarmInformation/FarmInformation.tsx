@@ -55,9 +55,7 @@ export default function FarmInformation() {
   const [subregionOptions, setSubregionOptions] = useState<Array<SelectOption>>([]);
 
   // Initialize year list
-  const [yearOptions, setYearOptions] = useState<Array<SelectOption>>([]);
-
-  useEffect(() => {
+  const yearOptions = useMemo(() => {
     const currentYear = new Date().getFullYear();
     const yearArray = [];
 
@@ -65,7 +63,7 @@ export default function FarmInformation() {
       yearArray.push({ id: i.toString(), label: i.toString() });
     }
 
-    setYearOptions(yearArray);
+    return yearArray;
   }, []);
 
   useEffect(() => {
@@ -121,8 +119,8 @@ export default function FarmInformation() {
 
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
-      const regions = (data as { id: string; name: string }[]).map((row) => ({
-        id: row.id,
+      const regions = (data as { id: number; name: string }[]).map((row) => ({
+        id: row?.id.toString(),
         label: row.name,
       }));
       setRegionOptions(regions as Array<SelectOption>);
@@ -138,8 +136,8 @@ export default function FarmInformation() {
     }
     apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
       const { data } = response;
-      const subregions = (data as { id: string; name: string }[]).map((row) => ({
-        id: row.id,
+      const subregions = (data as { id: number; name: string }[]).map((row) => ({
+        id: row?.id.toString(),
         label: row.name,
       }));
 
