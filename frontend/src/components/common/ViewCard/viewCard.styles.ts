@@ -1,5 +1,10 @@
+/**
+ * @summary Styling for FieldList view
+ */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import screenSizes from '@/constants/screenSizes';
+import screenSizes from '../../constants/screenSizes';
+import { componentContainer, paragraphCss } from '../../../common.styles';
 
 export const CardHeader = styled.div`
   background-color: rgba(200, 200, 200, 0.3);
@@ -49,3 +54,29 @@ export const ChildrenWrapper = styled.div`
   margin-left: 20px;
   margin-right: 20px;
 `;
+export const StyledContent = styled.div`
+  ${componentContainer}
+
+  ${paragraphCss}
+
+
+  .bcds-ButtonGroup {
+    overflow: visible;
+    height: 0.5rem;
+    position: relative;
+    z-index: 99;
+    bottom: -0.5rem;
+  }
+`;
+
+export const subHeader = css({
+  fontWeight: '700',
+  size: '1.25rem',
+  lineHeight: '100%',
+  letterSpacing: '0px',
+});
+
+export default {
+  StyledContent,
+  subHeader,
+};

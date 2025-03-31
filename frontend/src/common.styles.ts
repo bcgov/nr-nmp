@@ -65,7 +65,6 @@ export const paragraphCss = css({
 export const buttonGroup = css({
   '.bcds-ButtonGroup': {
     marginTop: '1rem',
-    marginBottom: '3rem',
   },
 });
 
