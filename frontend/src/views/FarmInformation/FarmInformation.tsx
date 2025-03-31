@@ -301,22 +301,40 @@ export default function FarmInformation() {
               }}
               orientation="horizontal"
             />
-            <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
-              <Checkbox
-                value="HasVegetables"
-                isSelected={formData.HasVegetables || false}
-                onChange={(s) => handleChange('HasVegetables', s)}
-              >
-                Vegetables
-              </Checkbox>
-              <Checkbox
-                value="HasBerries"
-                isSelected={formData.HasBerries || false}
-                onChange={(s) => handleChange('HasBerries', s)}
-              >
-                Berries
-              </Checkbox>
+            <Checkbox
+              value="HasVegetables"
+              isSelected={formData.HasVegetables || false}
+              onChange={(s) => handleChange('HasVegetables', s)}
+            >
+              I have Horticultural crops
+            </Checkbox>
+            <div css={formData.Crops ? showCheckboxGroup : hideCheckboxGroup}>
+              <CheckboxGroup label="Select your crops:">
+                <Checkbox
+                  value="HasVegetables"
+                  isSelected={formData.HasVegetables}
+                  onChange={(s) => handleChange('HasVegetables', s)}
+                >
+                  Vegetables
+                </Checkbox>
+                <Checkbox
+                  value="HasBerries"
+                  isSelected={formData.HasBerries}
+                  onChange={(s) => handleChange('HasBerries', s)}
+                >
+                  Berries
+                </Checkbox>
+              </CheckboxGroup>
             </div>
+          </Grid>
+          <Grid size={12}>
+            <Checkbox
+              value="HasBerries"
+              isSelected={formData.HasBerries || false}
+              onChange={(s) => handleChange('HasBerries', s)}
+            >
+              I have Livestock
+            </Checkbox>
           </Grid>
           <Grid size={12}>
             <YesNoRadioButtons
