@@ -31,7 +31,8 @@ import {
 } from './manureAndImports.styles';
 import useAppService from '@/services/app/useAppService';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
-import { FIELD_SOIL, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
+import { CROPS, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
+import { initManures, saveManuresToFile } from '@/utils/utils';
 
 const manureTypeOptions = [
   { label: 'Select', value: 0 },
@@ -47,7 +48,7 @@ export default function ManureAndImports() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [manures, setManures] = useState<NMPFileImportedManureData[]>([]);
+  const [manures, setManures] = useState<NMPFileImportedManureData[]>(initManures(state));
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
     SolidManureConversionFactors[]
   >([DefaultSolidManureConversionFactors]);
@@ -192,20 +193,13 @@ export default function ManureAndImports() {
   };
 
   const handlePrevious = () => {
-    navigate(FIELD_SOIL);
+    // TODO: Add a check to see if this is the animal flow
+    // If so, navigate to ADD_ANIMALS instead
+    navigate(CROPS);
   };
 
   const handleNext = () => {
-    let nmpFile: NMPFile | null = null;
-    if (state.nmpFile) {
-      nmpFile = JSON.parse(state.nmpFile);
-    }
-    if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
-      nmpFile.years[0].ImportedManures = manures.map((manure) => ({
-        ...manure,
-      }));
-    }
-    setNMPFile(JSON.stringify(nmpFile));
+    saveManuresToFile(manures, state.nmpFile, setNMPFile);
     navigate(NUTRIENT_ANALYSIS);
   };
 

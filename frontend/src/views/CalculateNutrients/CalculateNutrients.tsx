@@ -9,6 +9,7 @@ import { TabOptions, TabContentDisplay } from '../../components/common/Tabs/Tabs
 import { Card, Button } from '../../components/common';
 import FieldTable from './FieldTable/FieldTable';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
 
 export default function CalculateNutrients() {
   const { state, setProgressStep } = useAppService();
@@ -29,7 +30,7 @@ export default function CalculateNutrients() {
   };
 
   const handlePrevious = () => {
-    navigate('/field-and-soil');
+    navigate(NUTRIENT_ANALYSIS);
   };
 
   // are there multiple years?

@@ -19,6 +19,7 @@ import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/c
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { APICacheContext } from '@/context/APICacheContext';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
+import { ADD_ANIMALS, FIELD_LIST } from '@/constants/RouteConstants';
 
 export default function FarmInformation() {
   const { state, setNMPFile, setProgressStep } = useAppService();
@@ -162,9 +163,9 @@ export default function FarmInformation() {
     setNMPFile(JSON.stringify(nmpFile));
 
     if (formData.FarmAnimals.length === 0) {
-      navigate('/field-and-soil');
+      navigate(FIELD_LIST);
     } else {
-      navigate('/animals-and-manure');
+      navigate(ADD_ANIMALS);
     }
   };
 

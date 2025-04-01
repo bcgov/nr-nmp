@@ -3,20 +3,26 @@
  */
 import { Routes, Route } from 'react-router-dom';
 import {
-  ANIMALS_MANURE,
+  ADD_ANIMALS,
   CALCULATE_NUTRIENTS,
+  CROPS,
   FARM_INFORMATION,
-  FIELD_SOIL,
+  FIELD_LIST,
   LANDING_PAGE,
   MANURE_IMPORTS,
+  NUTRIENT_ANALYSIS,
+  SOIL_TESTS,
 } from '@/constants/RouteConstants';
 
-import LandingPage from '../views/LandingPage/LandingPage';
-import FarmInformation from '../views/FarmInformation/FarmInformation';
-import FieldAndSoil from '@/views/FieldAndSoil/FieldAndSoil';
-import AnimalsAndManure from '@/views/AnimalsAndManure/AnimalsAndManure';
+import LandingPage from '@/views/LandingPage/LandingPage';
+import FarmInformation from '@/views/FarmInformation/FarmInformation';
 import CalculateNutrients from '@/views/CalculateNutrients/CalculateNutrients';
 import ManureAndImports from '@/views/ManureAndImports/ManureAndImports';
+import AddAnimals from '@/views/AddAnimals/AddAnimals';
+import FieldList from '@/views/FieldList/FieldList';
+import SoilTests from '@/views/SoilTests/SoilTests';
+import Crops from '@/views/Crops/Crops';
+import NutrientAnalysis from '@/views/NutrientAnalysis/NutrientAnalysis';
 
 export default function ViewRouter() {
   return (
@@ -26,24 +32,36 @@ export default function ViewRouter() {
         Component={LandingPage}
       />
       <Route
-        path={`/${FARM_INFORMATION}`}
+        path={FARM_INFORMATION}
         Component={FarmInformation}
       />
       <Route
-        path={`/${FIELD_SOIL}`}
-        Component={FieldAndSoil}
+        path={ADD_ANIMALS}
+        Component={AddAnimals}
       />
       <Route
-        path={`/${MANURE_IMPORTS}`}
+        path={FIELD_LIST}
+        Component={FieldList}
+      />
+      <Route
+        path={SOIL_TESTS}
+        Component={SoilTests}
+      />
+      <Route
+        path={CROPS}
+        Component={Crops}
+      />
+      <Route
+        path={MANURE_IMPORTS}
         Component={ManureAndImports}
       />
       <Route
-        path={`/${CALCULATE_NUTRIENTS}`}
-        Component={CalculateNutrients}
+        path={NUTRIENT_ANALYSIS}
+        Component={NutrientAnalysis}
       />
       <Route
-        path={`/${ANIMALS_MANURE}`}
-        Component={AnimalsAndManure}
+        path={CALCULATE_NUTRIENTS}
+        Component={CalculateNutrients}
       />
     </Routes>
   );

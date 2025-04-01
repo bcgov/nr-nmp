@@ -4,7 +4,7 @@
 import styled from '@emotion/styled';
 import { StyledInput } from '@/components/common/InputField/inputField.styles';
 import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
-import { ColumnContainer } from '@/views/FieldAndSoil/Crops/crops.styles';
+import { ColumnContainer } from '@/views/Crops/crops.styles';
 
 export const ContentWrapper = styled.div<{ hasAnalysis: boolean }>`
   margin-bottom: ${({ hasAnalysis }) => (hasAnalysis ? '170px' : '0')};

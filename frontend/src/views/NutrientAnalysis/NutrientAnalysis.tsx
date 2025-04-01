@@ -23,16 +23,12 @@ import {
 } from './nutrientAnalsysis.styles';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
-import {
-  ColumnContainer,
-  HeaderText,
-  RowContainer,
-  ValueText,
-} from '@/views/FieldAndSoil/Crops/crops.styles';
+import { ColumnContainer, HeaderText, RowContainer, ValueText } from '@/views/Crops/crops.styles';
 import { NMPFileImportedManureData } from '@/types';
 import useAppService from '@/services/app/useAppService';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { CALCULATE_NUTRIENTS, MANURE_IMPORTS } from '@/constants/RouteConstants';
+import { initManures, saveManuresToFile } from '@/utils/utils';
 
 interface ManureType {
   id: number;
@@ -53,7 +49,7 @@ interface ManureType {
 }
 
 export default function NutrientAnalysis() {
-  const { state, setProgressStep } = useAppService();
+  const { state, setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -79,10 +75,13 @@ export default function NutrientAnalysis() {
     MaterialName: '',
     Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
   });
-  const manures: NMPFileImportedManureData[] = useMemo(
-    () => state.nmpFile?.years?.[0]?.ImportedManures || [],
-    [state.nmpFile],
-  );
+  const [manures, setManures] = useState<NMPFileImportedManureData[]>(initManures(state));
+
+  useEffect(() => {
+    if (state.nmpFile?.years?.[0]?.ImportedManures) {
+      setManures(state.nmpFile.years[0].ImportedManures);
+    }
+  }, [state.nmpFile]);
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
@@ -191,8 +190,7 @@ export default function NutrientAnalysis() {
   };
 
   const handleNext = () => {
-    // Why doesn't this component set the manures or anything in the NMP file?
-    // I looked through the Manure and Compost file and didn't find anything
+    saveManuresToFile(manures, state.nmpFile, setNMPFile);
     navigate(CALCULATE_NUTRIENTS);
   };
 

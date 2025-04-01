@@ -17,11 +17,12 @@ import {
   MarginWrapperOne,
   MarginWrapperTwo,
 } from './addAnimals.styles';
-import { Column } from '@/views/FieldAndSoil/FieldList/fieldList.styles';
+import { Column } from '@/views/FieldList/fieldList.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 import DairyCattle from './DairyCattle/DairyCattle';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
+import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
@@ -180,7 +181,7 @@ export default function AddAnimals() {
   };
 
   const handlePrevious = () => {
-    navigate('/farm-information');
+    navigate(FARM_INFORMATION);
   };
 
   const handleNext = () => {
@@ -194,7 +195,7 @@ export default function AddAnimals() {
     // TODO: Copy the data of the other tabs
     setNMPFile(JSON.stringify(nmpFile));
 
-    navigate('/field-and-soil');
+    navigate(MANURE_IMPORTS);
   };
 
   useEffect(() => {

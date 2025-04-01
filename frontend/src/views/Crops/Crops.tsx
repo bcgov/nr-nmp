@@ -6,10 +6,11 @@
  * Provides functionality to calculate nutrient requirements and removals
  */
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import useAppService from '@/services/app/useAppService';
-import { Modal, InputField, Dropdown, RadioButton, Button } from '../../../components/common';
+import { Modal, InputField, Dropdown, RadioButton, Button } from '../../components/common';
 import {
   getRegion,
   getCrop,
@@ -48,11 +49,9 @@ import {
 } from '@/types';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 import { APICacheContext } from '@/context/APICacheContext';
-
-interface FieldListProps {
-  fields: NMPFileFieldData[]; // Array of field data from parent component
-  setFields: (fields: NMPFileFieldData[]) => void; // Function to update fields in parent component
-}
+import ViewCard from '@/components/common/ViewCard/ViewCard';
+import { initFields, saveFieldsToFile } from '../../utils/utils';
+import { MANURE_IMPORTS, SOIL_TESTS } from '@/constants/RouteConstants';
 
 /**
  * Crops component for managing crop data associated with fields
@@ -60,12 +59,13 @@ interface FieldListProps {
  * @param {FieldListProps} props - Component props containing fields array and setFields function
  * @returns {JSX.Element} Rendered Crops component
  */
-function Crops({ fields, setFields }: FieldListProps) {
+function Crops() {
+  const { state, setNMPFile, setProgressStep } = useAppService();
+  const navigate = useNavigate();
+  const apiCache = useContext(APICacheContext);
   /**
    * State Variables:
-   * - state: Global application state from useAppService
    * - ncredit: Nitrogen credit value from previous crop
-   * - apiCache: Context for API data caching
    * - isModalVisible: Controls the visibility of the edit modal
    * - currentFieldIndex: Tracks which field is being edited
    * - combinedCropsData: Current crop data being edited
@@ -75,10 +75,9 @@ function Crops({ fields, setFields }: FieldListProps) {
    * - previousCropDatabase: All previous crop types from database
    * - calculationsPerformed: Tracks if nutrient calculations have been performed
    * - errors: Form validation errors
+   * - fields: Array of field data
    */
-  const { state } = useAppService();
   const [ncredit, setNcredit] = useState<number>(0);
-  const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
   const [combinedCropsData, setCombinedCropsData] =
@@ -89,6 +88,7 @@ function Crops({ fields, setFields }: FieldListProps) {
   const [previousCropDatabase, setPreviousCropDatabase] = useState<PreviousCropsDatabase[]>([]);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
 
   /**
    * Handles changes to form inputs
@@ -308,6 +308,15 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   };
 
+  const handleNext = () => {
+    saveFieldsToFile(fields, state.nmpFile, setNMPFile);
+    navigate(MANURE_IMPORTS);
+  };
+
+  const handlePrevious = () => {
+    navigate(SOIL_TESTS);
+  };
+
   /**
    * Effect: Load initial data from API
    * Fetches crop types, crops, and previous crop types on component mount
@@ -402,6 +411,11 @@ function Crops({ fields, setFields }: FieldListProps) {
     }
   }, [combinedCropsData.cropId]);
 
+  useEffect(() => {
+    setProgressStep(3);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   /**
    * Modal footer component with Cancel and Calculate/Submit buttons
    * Button text changes based on whether calculations have been performed
@@ -431,7 +445,11 @@ function Crops({ fields, setFields }: FieldListProps) {
   );
 
   return (
-    <div>
+    <ViewCard
+      handlePrevious={handlePrevious}
+      handleNext={handleNext}
+      nextDisabled={fields.length === 0}
+    >
       {/* Crops table listing fields and their associated crops */}
       <ContentWrapper hasFields={fields.length > 0}>
         <Header>
@@ -644,7 +662,7 @@ function Crops({ fields, setFields }: FieldListProps) {
           </ModalContent>
         </Modal>
       )}
-    </div>
+    </ViewCard>
   );
 }
 
