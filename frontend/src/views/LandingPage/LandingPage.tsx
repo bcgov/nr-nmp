@@ -55,7 +55,7 @@ export default function LandingPage() {
       <AppTitle />
       <PageTitle title="Nutrient Management Calculator" />
       <p>
-        Theeeeeeeee Nutrient Management Calculator provides a starting point for the efficient use of
+        The Nutrient Management Calculator provides a starting point for the efficient use of
         fertilizer and manure on farms. This tool assists in you choosing the right rate and
         nutrient source for your crops. You can start a new calculation or pick up where you left
         off by uploading an existing .nmp file.
