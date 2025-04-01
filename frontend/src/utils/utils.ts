@@ -38,8 +38,9 @@ export const saveFieldsToFile = (
 };
 
 export const initManures = (state: any) => {
-  if (state.nmpFile && state.nmpFile?.years?.[0]?.ImportedManures) {
-    return state.nmpFile.years[0].ImportedManures;
+  if (state.nmpFile) {
+    const parsedData = JSON.parse(state.nmpFile);
+    return parsedData.years[0].ImportedManures;
   }
   return [];
 };

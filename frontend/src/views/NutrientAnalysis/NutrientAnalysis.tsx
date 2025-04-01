@@ -77,12 +77,6 @@ export default function NutrientAnalysis() {
   });
   const [manures, setManures] = useState<NMPFileImportedManureData[]>(initManures(state));
 
-  useEffect(() => {
-    if (state.nmpFile?.years?.[0]?.ImportedManures) {
-      setManures(state.nmpFile.years[0].ImportedManures);
-    }
-  }, [state.nmpFile]);
-
   const handleEdit = (index: number) => {
     setEditIndex(index);
     setAnalysisForm(nutrientAnalysisFormData[index]); // Pre-fill the form with the existing analysis data

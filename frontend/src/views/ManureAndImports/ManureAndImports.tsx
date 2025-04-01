@@ -58,12 +58,6 @@ export default function ManureAndImports() {
   const [manureFormData, setManureFormData] =
     useState<NMPFileImportedManureData>(DefaultManureFormData);
 
-  useEffect(() => {
-    if (state.nmpFile?.years?.[0]?.ImportedManures) {
-      setManures(state.nmpFile.years[0].ImportedManures);
-    }
-  }, [state.nmpFile]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setManureFormData({ ...manureFormData, [name]: value });
