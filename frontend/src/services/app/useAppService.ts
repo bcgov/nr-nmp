@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useContext, useMemo } from 'react';
 import constants from '../../constants/Constants';
 import { AppContext } from '../../context/AppProvider';
@@ -31,7 +30,7 @@ const useAppService = () => {
     };
 
     const setShowAnimalsStep = (showAnimals: boolean) => {
-      dispatch({ type: SET_SHOW_ANIMALS_STEP, payload: showAnimals })
+      dispatch({ type: SET_SHOW_ANIMALS_STEP, payload: showAnimals });
     };
 
     return {

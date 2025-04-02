@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import NMPFile from '@/types/NMPFile';

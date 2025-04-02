@@ -138,7 +138,6 @@ export default function FarmInformation() {
         const currentAnimals: string[] = prevData.FarmAnimals;
         let nextAnimals: string[];
         if (value === 'true') {
-          // eslint-disable-next-line prettier/prettier
           nextAnimals =
             currentAnimals.indexOf(name) === -1 ? currentAnimals.concat([name]) : currentAnimals;
         } else {

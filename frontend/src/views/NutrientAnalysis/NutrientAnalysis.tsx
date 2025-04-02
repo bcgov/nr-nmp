@@ -75,7 +75,8 @@ export default function NutrientAnalysis() {
     MaterialName: '',
     Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
   });
-  const [manures, setManures] = useState<NMPFileImportedManureData[]>(initManures(state));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const manures: NMPFileImportedManureData[] = useMemo(() => initManures(state), []);
 
   const handleEdit = (index: number) => {
     setEditIndex(index);

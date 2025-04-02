@@ -1,6 +1,4 @@
 /* eslint-disable eqeqeq */
-/* eslint-disable object-shorthand */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +8,6 @@ import {
   NMPFileImportedManureData,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
-  NMPFile,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
@@ -214,6 +211,7 @@ export default function ManureAndImports() {
           setSolidManureDropdownOptions(data);
         }
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

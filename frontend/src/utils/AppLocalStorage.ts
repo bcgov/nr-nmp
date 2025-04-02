@@ -8,7 +8,6 @@ export const saveDataToLocalStorage = (key: string, data: any) => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log(error);
   }
 };

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /**
  * @summary This is a universal button component for use in our application.
  * @param   handleClick - optional stub function to designate what occurs if button is clicked.
