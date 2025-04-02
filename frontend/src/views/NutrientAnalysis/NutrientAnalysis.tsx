@@ -206,6 +206,7 @@ export default function NutrientAnalysis() {
 
   return (
     <ViewCard
+      heading="Nutrient Analysis"
       height="700px"
       handlePrevious={handlePrevious}
       handleNext={handleNext}

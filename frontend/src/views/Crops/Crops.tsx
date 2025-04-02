@@ -445,6 +445,7 @@ function Crops() {
 
   return (
     <ViewCard
+      heading="Crops"
       handlePrevious={handlePrevious}
       handleNext={handleNext}
       nextDisabled={fields.length === 0}

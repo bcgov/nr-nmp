@@ -226,6 +226,7 @@ export default function AddAnimals() {
 
   return (
     <ViewCard
+      heading="Add Animals"
       height="700px"
       width="700px"
       handlePrevious={handlePrevious}

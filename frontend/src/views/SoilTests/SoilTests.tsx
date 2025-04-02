@@ -160,6 +160,7 @@ export default function SoilTests() {
 
   return (
     <ViewCard
+      heading="Soil Tests"
       handlePrevious={handlePrevious}
       handleNext={handleNext}
       nextDisabled={fields.length === 0}

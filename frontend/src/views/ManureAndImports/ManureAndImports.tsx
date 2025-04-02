@@ -221,6 +221,7 @@ export default function ManureAndImports() {
 
   return (
     <ViewCard
+      heading="Manure and Imports"
       height="700px"
       handlePrevious={handlePrevious}
       handleNext={handleNext}

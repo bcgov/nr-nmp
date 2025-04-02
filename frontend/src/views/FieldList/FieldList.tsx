@@ -126,6 +126,7 @@ export default function FieldList() {
 
   return (
     <ViewCard
+      heading="Field List"
       handlePrevious={handlePrevious}
       handleNext={handleNext}
       nextDisabled={fields.length === 0}

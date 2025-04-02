@@ -1,9 +1,10 @@
 import React from 'react';
 import Card from '../Card/Card';
 import { Button } from '../Button/Button';
-import { ButtonWrapper } from './viewCard.styles';
+import { Banner, ButtonWrapper, CardHeader, ChildrenWrapper, Heading } from './viewCard.styles';
 
 interface ViewCardProps {
+  heading: string;
   children: React.ReactNode;
   width?: string;
   height?: string;
@@ -14,6 +15,7 @@ interface ViewCardProps {
 }
 
 export default function ViewCard({
+  heading,
   children,
   width = '500px',
   height = '500px',
@@ -26,8 +28,14 @@ export default function ViewCard({
     <Card
       height={height}
       width={width}
+      justifyContent="flex-start"
     >
-      {children}
+      <CardHeader>
+        <Banner>
+          <Heading>{heading}</Heading>
+        </Banner>
+      </CardHeader>
+      <ChildrenWrapper>{children}</ChildrenWrapper>
       {handleNext && (
         <ButtonWrapper position="right">
           <Button

@@ -21,9 +21,9 @@ export const CardWrapper = styled.div<CardWrapperProps>`
   object-fit: scale-down;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  padding: 20px;
   text-align: center;
   position: relative;
+  margin: auto;
   justify-content: ${(props) => props.justifyContent};
   overflow: auto;
 `;
