@@ -1,10 +1,11 @@
 /**
  * @summary This is the Field list Tab
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown, InputField, Button } from '../../../components/common';
+import { Dropdown, InputField, Button } from '../../components/common';
 import Modal from '@/components/common/Modal/Modal';
 import {
   ListItemContainer,
@@ -17,11 +18,10 @@ import {
   ErrorText,
 } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-
-interface FieldListProps {
-  fields: NMPFileFieldData[];
-  setFields: (fields: NMPFileFieldData[]) => void;
-}
+import ViewCard from '@/components/common/ViewCard/ViewCard';
+import { FARM_INFORMATION, SOIL_TESTS } from '@/constants/RouteConstants';
+import { initFields, saveFieldsToFile } from '../../utils/utils';
+import useAppService from '@/services/app/useAppService';
 
 const initialFieldFormData = {
   FieldName: '',
@@ -39,10 +39,14 @@ const manureOptions = [
   { value: 3, label: 'Manure applied in each of the 2 years' },
 ];
 
-export default function FieldList({ fields, setFields }: FieldListProps) {
+export default function FieldList() {
+  const { state, setNMPFile, setProgressStep } = useAppService();
+  const navigate = useNavigate();
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [fieldFormData, setFieldFormData] = useState<NMPFileFieldData>(initialFieldFormData);
+  const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -104,10 +108,29 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
     setIsModalVisible(false);
   };
 
+  const handleNext = () => {
+    saveFieldsToFile(fields, state.nmpFile, setNMPFile);
+    navigate(SOIL_TESTS);
+  };
+
+  const handlePrevious = () => {
+    navigate(FARM_INFORMATION);
+  };
+
+  useEffect(() => {
+    setProgressStep(3);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const filteredFields = fields.filter((field) => field.FieldName.trim() !== '');
 
   return (
-    <div>
+    <ViewCard
+      heading="Field List"
+      handlePrevious={handlePrevious}
+      handleNext={handleNext}
+      nextDisabled={fields.length === 0}
+    >
       <ButtonContainer hasFields={filteredFields.length > 0}>
         <Button
           text="Add Field"
@@ -212,6 +235,6 @@ export default function FieldList({ fields, setFields }: FieldListProps) {
           onChange={handleChange}
         />
       </Modal>
-    </div>
+    </ViewCard>
   );
 }

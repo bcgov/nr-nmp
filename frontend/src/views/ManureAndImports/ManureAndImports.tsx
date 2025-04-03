@@ -1,7 +1,6 @@
 /* eslint-disable eqeqeq */
-/* eslint-disable object-shorthand */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -27,11 +26,10 @@ import {
   ListItem,
   ListItemContainer,
 } from './manureAndImports.styles';
-
-interface ManureAndImportsProps {
-  manures: NMPFileImportedManureData[];
-  setManures: (manures: NMPFileImportedManureData[]) => void;
-}
+import useAppService from '@/services/app/useAppService';
+import ViewCard from '@/components/common/ViewCard/ViewCard';
+import { CROPS, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
+import { initManures, saveManuresToFile } from '@/utils/utils';
 
 const manureTypeOptions = [
   { label: 'Select', value: 0 },
@@ -39,11 +37,15 @@ const manureTypeOptions = [
   { label: 'Solid', value: 2 },
 ];
 
-export default function ManureAndImports({ manures, setManures }: ManureAndImportsProps) {
+export default function ManureAndImports() {
+  const { state, setNMPFile, setProgressStep } = useAppService();
+  const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [manures, setManures] = useState<NMPFileImportedManureData[]>(initManures(state));
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
     SolidManureConversionFactors[]
   >([DefaultSolidManureConversionFactors]);
@@ -181,6 +183,17 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
     setIsModalVisible(true);
   };
 
+  const handlePrevious = () => {
+    // TODO: Add a check to see if this is the animal flow
+    // If so, navigate to ADD_ANIMALS instead
+    navigate(CROPS);
+  };
+
+  const handleNext = () => {
+    saveManuresToFile(manures, state.nmpFile, setNMPFile);
+    navigate(NUTRIENT_ANALYSIS);
+  };
+
   useEffect(() => {
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
@@ -198,10 +211,21 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           setSolidManureDropdownOptions(data);
         }
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setProgressStep(4);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div>
+    <ViewCard
+      heading="Manure and Imports"
+      height="700px"
+      handlePrevious={handlePrevious}
+      handleNext={handleNext}
+    >
       <ButtonContainer hasManure={manures.length > 0}>
         <Button
           text="Add Manure"
@@ -343,6 +367,6 @@ export default function ManureAndImports({ manures, setManures }: ManureAndImpor
           </>
         )}
       </Modal>
-    </div>
+    </ViewCard>
   );
 }

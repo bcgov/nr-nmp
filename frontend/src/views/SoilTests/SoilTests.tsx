@@ -3,12 +3,13 @@
  * @summary This is the Soil Tests Tab
  */
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown, Modal, InputField, Button } from '../../../components/common';
+import { Dropdown, Modal, InputField, Button } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
-import { soilTestMethodsData } from '@/types';
+import { NMPFileFieldData, soilTestMethodsData } from '@/types';
 import {
   InfoBox,
   ListItemContainer,
@@ -19,20 +20,23 @@ import {
   ButtonWrapper,
   ErrorText,
 } from './soilTests.styles';
+import useAppService from '@/services/app/useAppService';
+import { initFields, saveFieldsToFile } from '@/utils/utils';
+import { CROPS, FIELD_LIST } from '@/constants/RouteConstants';
+import ViewCard from '@/components/common/ViewCard/ViewCard';
 
-interface FieldListProps {
-  fields: any[];
-  setFields: (fields: any[]) => void;
-}
-
-export default function SoilTests({ fields, setFields }: FieldListProps) {
+export default function SoilTests() {
+  const { state, setNMPFile, setProgressStep } = useAppService();
+  const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+
   const [soilTestData, setSoilTestData] = useState(defaultSoilTestData);
   const [soilTestId, setSoilTestId] = useState('');
   const [soilTestMethods, setSoilTestMethods] = useState<soilTestMethodsData[]>([]);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
+  const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
@@ -132,6 +136,15 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     }
   };
 
+  const handleNext = () => {
+    saveFieldsToFile(fields, state.nmpFile, setNMPFile);
+    navigate(CROPS);
+  };
+
+  const handlePrevious = () => {
+    navigate(FIELD_LIST);
+  };
+
   useEffect(() => {
     apiCache.callEndpoint('api/soiltestmethods/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
@@ -141,8 +154,17 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
     });
   }, []);
 
+  useEffect(() => {
+    setProgressStep(3);
+  }, []);
+
   return (
-    <div>
+    <ViewCard
+      heading="Soil Tests"
+      handlePrevious={handlePrevious}
+      handleNext={handleNext}
+      nextDisabled={fields.length === 0}
+    >
       <ContentWrapper hasFields={fields.length > 0}>
         {soilTestData.soilTest === '1' && (
           <InfoBox>
@@ -288,6 +310,6 @@ export default function SoilTests({ fields, setFields }: FieldListProps) {
           />
         </Modal>
       )}
-    </div>
+    </ViewCard>
   );
 }

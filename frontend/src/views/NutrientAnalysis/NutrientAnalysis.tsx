@@ -2,11 +2,12 @@
  * @summary The nutrient analysis tab on the manure page for the application
  */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { APICacheContext } from '@/context/APICacheContext';
-import { Button, Dropdown, InputField, Modal, RadioButton } from '../../../components/common';
+import { Button, Dropdown, InputField, Modal, RadioButton } from '../../components/common';
 import {
   ContentWrapper,
   Column,
@@ -22,17 +23,12 @@ import {
 } from './nutrientAnalsysis.styles';
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
-import {
-  ColumnContainer,
-  HeaderText,
-  RowContainer,
-  ValueText,
-} from '@/views/FieldAndSoil/Crops/crops.styles';
+import { ColumnContainer, HeaderText, RowContainer, ValueText } from '@/views/Crops/crops.styles';
 import { NMPFileImportedManureData } from '@/types';
-
-interface ManureListProps {
-  manures: NMPFileImportedManureData[];
-}
+import useAppService from '@/services/app/useAppService';
+import ViewCard from '@/components/common/ViewCard/ViewCard';
+import { CALCULATE_NUTRIENTS, MANURE_IMPORTS } from '@/constants/RouteConstants';
+import { initManures, saveManuresToFile } from '@/utils/utils';
 
 interface ManureType {
   id: number;
@@ -52,7 +48,9 @@ interface ManureType {
   defaultSolidMoisture: number;
 }
 
-export default function NutrientAnalysis({ manures }: ManureListProps) {
+export default function NutrientAnalysis() {
+  const { state, setNMPFile, setProgressStep } = useAppService();
+  const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -77,6 +75,8 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
     MaterialName: '',
     Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
   });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const manures: NMPFileImportedManureData[] = useMemo(() => initManures(state), []);
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
@@ -180,6 +180,15 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
     });
   };
 
+  const handlePrevious = () => {
+    navigate(MANURE_IMPORTS);
+  };
+
+  const handleNext = () => {
+    saveManuresToFile(manures, state.nmpFile, setNMPFile);
+    navigate(CALCULATE_NUTRIENTS);
+  };
+
   // get manure types
   useEffect(() => {
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
@@ -190,8 +199,18 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
     });
   }, [apiCache]);
 
+  useEffect(() => {
+    setProgressStep(4);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div>
+    <ViewCard
+      heading="Nutrient Analysis"
+      height="700px"
+      handlePrevious={handlePrevious}
+      handleNext={handleNext}
+    >
       {/* table with source of Material, material type, moisture, N, P, K, edit and delete button */}
       <ContentWrapper hasAnalysis={nutrientAnalysisFormData.length > 0}>
         {nutrientAnalysisFormData.length > 0 && (
@@ -422,6 +441,6 @@ export default function NutrientAnalysis({ manures }: ManureListProps) {
           )}
         </ModalContent>
       </Modal>
-    </div>
+    </ViewCard>
   );
 }

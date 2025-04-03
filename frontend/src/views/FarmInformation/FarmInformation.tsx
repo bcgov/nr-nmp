@@ -6,19 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
 import defaultNMPFile from '../../constants/DefaultNMPFile';
-import {
-  CardHeader,
-  Banner,
-  Heading,
-  InputFieldsContainer,
-  SelectorContainer,
-  RegionContainer,
-  ButtonWrapper,
-} from './farmInformation.styles';
-import { InputField, Checkbox, Dropdown, Card, Button } from '../../components/common';
+import { InputFieldsContainer, SelectorContainer, RegionContainer } from './farmInformation.styles';
+import { InputField, Checkbox, Dropdown } from '../../components/common';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { APICacheContext } from '@/context/APICacheContext';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
+import { ADD_ANIMALS, FIELD_LIST } from '@/constants/RouteConstants';
+import ViewCard from '@/components/common/ViewCard/ViewCard';
 
 export default function FarmInformation() {
   const { state, setNMPFile, setProgressStep } = useAppService();
@@ -137,7 +131,6 @@ export default function FarmInformation() {
         const currentAnimals: string[] = prevData.FarmAnimals;
         let nextAnimals: string[];
         if (value === 'true') {
-          // eslint-disable-next-line prettier/prettier
           nextAnimals =
             currentAnimals.indexOf(name) === -1 ? currentAnimals.concat([name]) : currentAnimals;
         } else {
@@ -162,9 +155,9 @@ export default function FarmInformation() {
     setNMPFile(JSON.stringify(nmpFile));
 
     if (formData.FarmAnimals.length === 0) {
-      navigate('/field-and-soil');
+      navigate(FIELD_LIST);
     } else {
-      navigate('/animals-and-manure');
+      navigate(ADD_ANIMALS);
     }
   };
 
@@ -195,16 +188,12 @@ export default function FarmInformation() {
   }, [rawAnimalNames, handleAnimalChange]);
 
   return (
-    <Card
+    <ViewCard
+      heading="Farm Information"
       height="700px"
       width="600px"
-      justifyContent="flex-start"
+      handleNext={handleSubmit}
     >
-      <CardHeader>
-        <Banner>
-          <Heading>Farm Information</Heading>
-        </Banner>
-      </CardHeader>
       <InputFieldsContainer>
         <InputField
           label="Year"
@@ -269,18 +258,6 @@ export default function FarmInformation() {
         handleNo={() => setHasAnimals(false)}
       />
       {hasAnimals && animalRadioButtons}
-      <ButtonWrapper>
-        <Button
-          text="Next"
-          size="sm"
-          handleClick={() => {
-            handleSubmit();
-          }}
-          aria-label="Next"
-          variant="primary"
-          disabled={false}
-        />
-      </ButtonWrapper>
-    </Card>
+    </ViewCard>
   );
 }
