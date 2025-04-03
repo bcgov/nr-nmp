@@ -28,9 +28,9 @@ import { StyledContent, subHeader } from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 import {
-  ANIMALS_MANURE,
+  ADD_ANIMALS,
   FARM_INFORMATION,
-  FIELD_SOIL,
+  FIELD_LIST,
   LANDING_PAGE,
 } from '@/constants/RouteConstants';
 
@@ -210,10 +210,10 @@ export default function FarmInformation() {
 
     if (formData.FarmAnimals.length === 0) {
       setShowAnimalsStep(false);
-      navigate(FIELD_SOIL);
+      navigate(FIELD_LIST);
     } else {
       setShowAnimalsStep(true);
-      navigate(ANIMALS_MANURE);
+      navigate(ADD_ANIMALS);
     }
   };
 

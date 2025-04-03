@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useContext, useMemo } from 'react';
 import constants from '../../constants/Constants';
 import { AppContext } from '../../context/AppProvider';

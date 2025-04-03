@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 /**
  * @summary This is the styling page for the common button component.
  */

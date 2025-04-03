@@ -27,7 +27,7 @@ export const reducer = (state: object, action: AppAction): object => {
     case SET_PROGRESS_STEP:
       return { ...state, step: action.payload };
     case SET_SHOW_ANIMALS_STEP:
-      return { ...state, showAnimalsStep: action.payload }
+      return { ...state, showAnimalsStep: action.payload };
     default:
       throw new Error();
   }

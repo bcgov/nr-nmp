@@ -7,11 +7,13 @@ import StepLabel from '@mui/material/StepLabel';
 
 import useAppService from '../../../services/app/useAppService';
 import {
-  ANIMALS_MANURE,
+  ADD_ANIMALS,
   CALCULATE_NUTRIENTS,
+  CROPS,
   FARM_INFORMATION,
-  FIELD_SOIL,
+  FIELD_LIST,
   LANDING_PAGE,
+  SOIL_TESTS,
 } from '@/constants/RouteConstants';
 
 type ProgressStepperProps = {
@@ -54,10 +56,12 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
         case FARM_INFORMATION:
           stepNumber = 1;
           break;
-        case ANIMALS_MANURE:
+        case ADD_ANIMALS:
           stepNumber = 2;
           break;
-        case FIELD_SOIL:
+        case FIELD_LIST:
+        case SOIL_TESTS:
+        case CROPS:
           stepNumber = 3;
           break;
         case CALCULATE_NUTRIENTS:
@@ -73,7 +77,9 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
         case FARM_INFORMATION:
           stepNumber = 1;
           break;
-        case FIELD_SOIL:
+        case FIELD_LIST:
+        case SOIL_TESTS:
+        case CROPS:
           stepNumber = 2;
           break;
         case CALCULATE_NUTRIENTS:

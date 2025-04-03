@@ -107,7 +107,7 @@ export default function FertilizerModal({
     // Nutrients still required (if negative, set to 0)
     const nutrientsStillRequired = {
       N: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.N, 0) - availableNutrients.N, 0),
-      P: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.P, 0)- availableNutrients.P, 0),
+      P: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.P, 0) - availableNutrients.P, 0),
       K: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.K, 0) - availableNutrients.K, 0),
     };
     setFertilizerForm((prevForm) => ({

@@ -62,7 +62,7 @@ objects:
               # TODO: be more specific when giving permissions
               securityContext:
                 capabilities:
-                  add: ["NET_BIND_SERVICE"]
+                  add: ['NET_BIND_SERVICE']
               imagePullPolicy: Always
               env:
                 - name: LOG_LEVEL
