@@ -18,7 +18,12 @@ import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import defaultNMPFile from '../../constants/DefaultNMPFile';
-import { formCss, hideCheckboxGroup, showCheckboxGroup } from '../../common.styles';
+import {
+  formCss,
+  formGridBreakpoints,
+  hideCheckboxGroup,
+  showCheckboxGroup,
+} from '../../common.styles';
 import { StyledContent, subHeader } from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
@@ -53,6 +58,8 @@ export default function FarmInformation() {
   // Props for region selections
   const [regionOptions, setRegionOptions] = useState<Array<SelectOption>>([]);
   const [subregionOptions, setSubregionOptions] = useState<Array<SelectOption>>([]);
+
+  const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
 
   // Initialize year list
   const yearOptions = useMemo(() => {
@@ -218,44 +225,64 @@ export default function FarmInformation() {
       <Form
         css={formCss}
         validationBehavior="native"
+        onInvalid={() => setIsFormInvalid(true)}
         onSubmit={onSubmit}
       >
         <Grid
           container
           spacing={2}
         >
-          <Grid size={6}>
+          <Grid size={formGridBreakpoints}>
+            <span
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.FarmName ? '--error' : ''}`}
+            >
+              Farm Name
+            </span>
             <TextField
               isRequired
-              label="Name"
               name="FarmName"
               value={formData?.FarmName}
               onInput={handleInputChange}
             />
           </Grid>
-          <Grid size={6}>
+          <Grid size={formGridBreakpoints}>
+            <span
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.Year ? '--error' : ''}`}
+            >
+              Year
+            </span>
+
             <Select
               isRequired
-              label="Year"
               name="Year"
               items={yearOptions}
               selectedKey={formData?.Year}
               onSelectionChange={(e) => handleChange('Year', e)}
             />
           </Grid>
-          <Grid size={6}>
+          <Grid size={formGridBreakpoints}>
+            <span
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.FarmRegion ? '--error' : ''}`}
+            >
+              Region
+            </span>
+
             <Select
               isRequired
-              label="Region"
               items={regionOptions}
               selectedKey={formData?.FarmRegion}
               onSelectionChange={(e) => handleChange('FarmRegion', e)}
             />
           </Grid>
-          <Grid size={6}>
+          <Grid size={formGridBreakpoints}>
+            <span
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.FarmSubRegion ? '--error' : ''}`}
+            >
+              Subregion
+            </span>
+
             <Select
               isRequired
-              label="Subregion"
               items={subregionOptions}
               selectedKey={formData?.FarmSubRegion}
               onSelectionChange={(e) => handleChange('FarmSubRegion', e)}

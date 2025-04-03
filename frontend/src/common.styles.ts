@@ -6,7 +6,7 @@ export const componentContainer = css({
   flexDirection: 'column',
   marginLeft: '3rem',
   marginRight: '3rem',
-  maxWidth: '992px',
+  maxWidth: '900px',
 });
 
 export const formCss = css({
@@ -15,12 +15,28 @@ export const formCss = css({
 
   '.bcds-react-aria-TextField': {
     width: '100%',
+
+    '> .bcds-react-aria-TextField--Error': {
+      display: 'none;',
+    },
   },
 
   '.bcds-react-aria-Select': {
     Button: {
       width: '100%',
     },
+
+    '> .bcds-react-aria-Select--Error': {
+      display: 'none;',
+    },
+  },
+
+  '#exclamation-icon': {
+    display: 'none;',
+  },
+
+  '.--error': {
+    color: 'var(--support-border-color-danger);',
   },
 });
 
@@ -52,3 +68,5 @@ export const buttonGroup = css({
     marginBottom: '3rem',
   },
 });
+
+export const formGridBreakpoints = { xs: 12, md: 6 };
