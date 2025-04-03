@@ -1,39 +1,26 @@
 /**
  * @summary Styling for FarmInformation view
  */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import { buttonGroup, componentContainer, paragraphCss } from '../../common.styles';
 
-export const InputFieldsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 16px;
-  margin-top: 32px;
+export const StyledContent = styled.div`
+  ${componentContainer}
+
+  ${paragraphCss}
+
+  ${buttonGroup}
 `;
 
-export const RegionContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-`;
+export const subHeader = css({
+  fontWeight: '700',
+  size: '1.25rem',
+  lineHeight: '100%',
+  letterSpacing: '0px',
+});
 
-export const SelectorContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-export const ButtonWrapper = styled.div`
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  button {
-    width: 80px;
-    height: 40px;
-  }
-`;
+export default {
+  StyledContent,
+  subHeader,
+};

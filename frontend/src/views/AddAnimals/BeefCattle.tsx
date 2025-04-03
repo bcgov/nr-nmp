@@ -9,7 +9,6 @@ import { ListItem } from '@/views/FieldList/fieldList.styles';
 import { AnimalData, BeefCattleData } from './types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
 import {
-  BeefCattleYesNoWrapper,
   EditListItemBody,
   EditListItemHeader,
   FlexRowContainer,
@@ -200,18 +199,17 @@ export default function BeefCattle({
                 }
               }}
             />
-            <BeefCattleYesNoWrapper>
-              <YesNoRadioButtons
-                name="yes-no"
-                text="Do you pile or collect manure from these animals?"
-                handleYes={() => setShowCollectionDays(true)}
-                handleNo={() => {
-                  setShowCollectionDays(false);
+            <YesNoRadioButtons
+              orientation="horizontal"
+              text="Do you pile or collect manure from these animals?"
+              value={showCollectionDays}
+              onChange={(val) => {
+                setShowCollectionDays(val);
+                if (!val) {
                   setFormData((prev) => ({ ...prev, collectionDays: undefined }));
-                }}
-                omitWrapper
-              />
-            </BeefCattleYesNoWrapper>
+                }
+              }}
+            />
             {showCollectionDays && (
               <InputField
                 label="How long is the manure collected?"

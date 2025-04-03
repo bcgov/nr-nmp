@@ -28,7 +28,7 @@ export default function ViewRouter() {
   return (
     <Routes>
       <Route
-        path={`/${LANDING_PAGE}`}
+        path={LANDING_PAGE}
         Component={LandingPage}
       />
       <Route
