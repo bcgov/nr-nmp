@@ -30,6 +30,7 @@ export default function AddAnimals() {
   const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [nextDisabled, setNextDisabled] = useState(false);
+  const [isAllSelected, setIsAllSelected] = useState(false);
 
   const [formData, setFormData] = useState<(AnimalData | null)[]>([]);
   const [elems, setElems] = useState<(React.ReactNode | null)[]>([]);
@@ -68,6 +69,12 @@ export default function AddAnimals() {
       next[index] = null;
       return next;
     });
+  };
+
+  const handleSelectAll = () => {
+    const newIsAllSelected = !isAllSelected;
+    setIsAllSelected(newIsAllSelected);
+    // setSelectedRows(new Array(elems.length).fill(newIsAllSelected));
   };
 
   // Init data & elems on first render
@@ -139,9 +146,14 @@ export default function AddAnimals() {
     // Right now we only handle cattle
     if (animalId !== '1' && animalId !== '2') return;
 
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
     const { length } = formData;
     setFormData((prev) => {
-      prev.push({ id: animalId });
+      prev.push({ id: animalId, date: currentDate });
       return prev;
     });
     setElems((prev) => {
@@ -156,6 +168,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={length}
+            date={currentDate}
           />,
         );
       } else if (animalId === '2') {
@@ -168,6 +181,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={length}
+            date={currentDate}
           />,
         );
       }
@@ -234,37 +248,46 @@ export default function AddAnimals() {
       nextDisabled={nextDisabled}
     >
       <div style={{ overflowY: 'scroll' }}>
+        <FlexContainer>
+          <MarginWrapperOne>Add:</MarginWrapperOne>
+          <MarginWrapperTwo>
+            <Dropdown
+              label=""
+              name="Animals"
+              value={selectedAnimal || ''}
+              options={animalOptions}
+              onChange={(e) => setSelectedAnimal(e.target.value)}
+              flex="0.5"
+            />
+          </MarginWrapperTwo>
+          <AddButton
+            type="button"
+            onClick={() => {
+              handleAdd(selectedAnimal as string);
+              setSelectedAnimal(null);
+            }}
+            disabled={selectedAnimal === null || formExpanded.some((bool) => bool === true)}
+            aria-label="Add"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </AddButton>
+        </FlexContainer>
         <Header>
+          <Column text-align="center">
+            <input
+              type="checkbox"
+              onChange={handleSelectAll}
+              checked={isAllSelected}
+              aria-label="Select all"
+            />
+          </Column>
           <Column>Animal Type</Column>
-          <Column>Annual Manure Amount</Column>
-          <Column align="right">Actions</Column>
+          <Column>Annual Manure</Column>
+          <Column>Date</Column>
+          <Column>Actions</Column>
         </Header>
         {elems}
       </div>
-      <FlexContainer>
-        <MarginWrapperOne>Add:</MarginWrapperOne>
-        <MarginWrapperTwo>
-          <Dropdown
-            label=""
-            name="Animals"
-            value={selectedAnimal || ''}
-            options={animalOptions}
-            onChange={(e) => setSelectedAnimal(e.target.value)}
-            flex="0.5"
-          />
-        </MarginWrapperTwo>
-        <AddButton
-          type="button"
-          onClick={() => {
-            handleAdd(selectedAnimal as string);
-            setSelectedAnimal(null);
-          }}
-          disabled={selectedAnimal === null || formExpanded.some((bool) => bool === true)}
-          aria-label="Add"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </AddButton>
-      </FlexContainer>
     </ViewCard>
   );
 }

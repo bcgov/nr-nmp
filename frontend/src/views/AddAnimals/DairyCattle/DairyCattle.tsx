@@ -46,6 +46,7 @@ interface DairyCattleProps {
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
+  date: string;
 }
 
 const initData: (d: Partial<DairyCattleData>) => DairyCattleData = (data) => {
@@ -71,6 +72,7 @@ export default function DairyCattle({
   updateIsComplete,
   updateIsExpanded,
   myIndex,
+  date,
 }: DairyCattleProps) {
   const [formData, setFormData] = useState<DairyCattleData>(initData(startData));
   const [lastSaved, setLastSaved] = useState<DairyCattleData>(formData);
