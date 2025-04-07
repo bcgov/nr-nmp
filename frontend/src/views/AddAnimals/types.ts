@@ -3,6 +3,7 @@ export interface BeefCattleData {
   subtype?: string;
   animalsPerFarm?: number;
   daysCollected?: number | undefined;
+  date?: string;
 }
 
 export const perDayPerAnimalUnit = 'PER_DAY_PER_ANIMAL';
@@ -17,6 +18,7 @@ export interface DairyCattleData {
   milkProduction?: number | undefined;
   washWater?: number | undefined;
   washWaterUnit?: 'PER_DAY_PER_ANIMAL' | 'PER_DAY' | undefined;
+  date?: string;
 }
 
 export type AnimalData = BeefCattleData | DairyCattleData;

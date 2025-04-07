@@ -30,6 +30,7 @@ interface BeefCattleProps {
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
+  date: string;
 }
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
@@ -50,6 +51,7 @@ export default function BeefCattle({
   updateIsComplete,
   updateIsExpanded,
   myIndex,
+  date,
 }: BeefCattleProps) {
   const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
   const [lastSaved, setLastSaved] = useState<BeefCattleData>(formData);
@@ -152,6 +154,7 @@ export default function BeefCattle({
         <ListItemContainer key={`beef-${myIndex}`}>
           <ListItem>{selectedSubtypeName}</ListItem>
           <ListItem>{`${Math.round(manureInTons)} ton${manureInTons === 1 ? '' : 's'}`}</ListItem>
+          <ListItem>{date}</ListItem>
           <ListItem align="right">
             <button
               type="button"
