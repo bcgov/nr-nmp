@@ -32,6 +32,7 @@ export default function AddAnimals() {
   const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [nextDisabled, setNextDisabled] = useState(false);
+  const [isAllSelected, setIsAllSelected] = useState(false);
 
   const [formData, setFormData] = useState<(AnimalData | null)[]>([]);
   const [elems, setElems] = useState<(React.ReactNode | null)[]>([]);
@@ -70,6 +71,12 @@ export default function AddAnimals() {
       next[index] = null;
       return next;
     });
+  };
+
+  const handleSelectAll = () => {
+    const newIsAllSelected = !isAllSelected;
+    setIsAllSelected(newIsAllSelected);
+    // setSelectedRows(new Array(elems.length).fill(newIsAllSelected));
   };
 
   // Init data & elems on first render
