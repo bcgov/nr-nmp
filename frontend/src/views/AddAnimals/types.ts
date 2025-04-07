@@ -4,6 +4,7 @@ export interface BeefCattleData {
   animalsPerFarm?: number;
   daysCollected?: number | undefined;
   manureData?: { name: string; annualSolidManure: number } | undefined;
+  date?: string;
 }
 
 export const BEEF_COW_ID: string = '1';
