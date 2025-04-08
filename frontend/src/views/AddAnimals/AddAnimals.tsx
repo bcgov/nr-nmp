@@ -22,6 +22,7 @@ import defaultNMPFile from '@/constants/DefaultNMPFile';
 import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
+import DairyCattle from './DairyCattle/DairyCattle';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import DairyCattle from './DairyCattle/DairyCattle';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
