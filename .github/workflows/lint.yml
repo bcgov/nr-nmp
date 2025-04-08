@@ -14,21 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          
-      - name: Install dependencies
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Build and start Docker containers
         run: |
-          python -m pip install --upgrade pip
-          pip install flake8 pylint pylint-django
-          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+          docker compose up -d backend
           
-      - name: Run linting
-        working-directory: backend
+      - name: Run lint command from root Makefile
         run: |
-          # Set PYLINTHOME to a writable location
-          export PYLINTHOME=$(pwd)/.pylint.d
-          # Run the existing make lint command
           make lint 
