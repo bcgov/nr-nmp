@@ -11,3 +11,24 @@ export const Container = styled.div`
 export const ErrorText = styled.div`
   color: red;
 `;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+`;
+
+export const DropdownButton = styled.button`
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+`;
