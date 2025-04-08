@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Run Linting
+    name: Run Python Linting
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
@@ -25,16 +25,10 @@ jobs:
           pip install flake8 pylint pylint-django
           if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
           
-      - name: Run flake8
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # Check all Python files with relaxed rules
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
-          
-      - name: Run pylint
+      - name: Run linting
+        working-directory: backend
         run: |
           # Set PYLINTHOME to a writable location
           export PYLINTHOME=$(pwd)/.pylint.d
-          # Run pylint on Python files
-          pylint --load-plugins=pylint_django --django-settings-module=config.settings --ignore=migrations backend/ 
+          # Run the existing make lint command
+          make lint 
