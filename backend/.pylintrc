@@ -25,7 +25,6 @@ disable=missing-docstring,
         attribute-defined-outside-init,
         protected-access,
         abstract-method,
-        no-self-use,
         model-missing-unicode
 
 [DESIGN]

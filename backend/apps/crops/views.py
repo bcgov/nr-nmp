@@ -22,7 +22,7 @@ from .serializers import (
 class CropsViewset(viewsets.ViewSet):
 
     @action(detail=True, methods=['get'])
-    def cropTypes(self, request, id=None):
+    def cropTypes(self, request, id=None):  # pylint: disable=redefined-builtin
         crop_types = None
         if id is None:
             crop_types = CropTypes.objects.all()
@@ -32,7 +32,7 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'])
-    def crops(self, request, id=None):
+    def crops(self, request, id=None):  # pylint: disable=redefined-builtin
         crops = None
         if id is None:
             crops = Crops.objects.all()
@@ -42,7 +42,7 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'])
-    def previousCropTypes(self, request, id=None):
+    def previousCropTypes(self, request, id=None):  # pylint: disable=redefined-builtin
         previous_crops_types = None
         if id is None:
             previous_crops_types = PreviousCropTypes.objects.all()
@@ -57,7 +57,8 @@ class CropsViewset(viewsets.ViewSet):
         if cropid is None and soiltestphosphorousregioncode is None:
             crop_soil_test_phosphorous_regions = CropSoilTestPhosphorousRegions.objects.all()
         else:
-            crop_soil_test_phosphorous_regions = CropSoilTestPhosphorousRegions.objects.filter(cropid=cropid, soiltestphosphorousregioncode=soiltestphosphorousregioncode)
+            crop_soil_test_phosphorous_regions = CropSoilTestPhosphorousRegions.objects.filter(
+                cropid=cropid, soiltestphosphorousregioncode=soiltestphosphorousregioncode)
         serializer = CropSoilTestPhosphorousRegionsSerializer(crop_soil_test_phosphorous_regions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -97,7 +98,8 @@ class CropsViewset(viewsets.ViewSet):
         if cropid is None and soiltestpotassiumregioncode is None:
             crop_soil_potassium_regions = CropSoilPotassiumRegions.objects.all()
         else:
-            crop_soil_potassium_regions = CropSoilPotassiumRegions.objects.filter(cropid=cropid, soiltestpotassiumregioncode=soiltestpotassiumregioncode)
+            crop_soil_potassium_regions = CropSoilPotassiumRegions.objects.filter(
+                cropid=cropid, soiltestpotassiumregioncode=soiltestpotassiumregioncode)
         serializer = CropSoilPotassiumRegionsSerializer(crop_soil_potassium_regions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -118,7 +120,7 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'])
-    def nitrogenRecommendation(self, request, id=None):
+    def nitrogenRecommendation(self, request, id=None):  # pylint: disable=redefined-builtin
         nitrogen_recommendation = None
         if id is None:
             nitrogen_recommendation = NitrogenRecommendation.objects.all()

@@ -65,7 +65,7 @@ class ManuresTests(TestCase):
 
     def test_float_values(self):
         """Test that float values can be stored with different precisions"""
-        manure_with_precision = Manures.objects.create(
+        manure_with_precision = Manures.objects.create(  # noqa: F841
             id=2,
             name="Precision Manure",
             manureclass="Livestock",
