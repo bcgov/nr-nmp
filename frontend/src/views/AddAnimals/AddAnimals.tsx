@@ -92,6 +92,12 @@ export default function AddAnimals() {
       data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id })) as AnimalData[];
     }
 
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
     const dataElems = data.map((d, index) => {
       if (d === null) {
         return null;
@@ -108,7 +114,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={index}
-            date=""
+            date={currentDate}
           />
         );
       }
@@ -124,7 +130,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={index}
-            date=""
+            date={currentDate}
           />
         );
       }
@@ -242,13 +248,13 @@ export default function AddAnimals() {
       <PageTitle title="Livestock Information" />
       <ViewCard
         heading="Add Animals"
-        height="700px"
+        height="500px"
         width="700px"
         handlePrevious={handlePrevious}
         handleNext={handleNext}
         nextDisabled={nextDisabled}
       >
-        <div style={{ overflow: 'auto', minHeight: '600px' }}>
+        <div style={{ overflow: 'auto', minHeight: '400px' }}>
           <FlexContainer>
             <MarginWrapperOne>Add:</MarginWrapperOne>
             <MarginWrapperTwo>
