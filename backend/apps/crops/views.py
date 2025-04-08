@@ -2,8 +2,21 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import *
-from .serializers import *
+from .models import (
+    CropTypes, Crops, PreviousCropTypes, CropSoilTestPhosphorousRegions,
+    SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
+    SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges,
+    SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
+    CropYields, NitrogenRecommendation
+)
+from .serializers import (
+    CropTypesSerializer, CropsSerializer, PreviousCropTypesSerializer,
+    CropSoilTestPhosphorousRegionsSerializer, SoilTestPhosphorousRecommendationSerializer,
+    SoilTestPhosphorousKelownaRangesSerializer, SoilTestMethodsSerializer,
+    ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer,
+    SoilTestPotassiumRecommendationSerializer, CropSoilPotassiumRegionsSerializer,
+    CropYieldsSerializer, NitrogenRecommendationSerializer
+)
 
 
 class CropsViewset(viewsets.ViewSet):

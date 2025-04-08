@@ -114,7 +114,7 @@ class SolidMaterialsConversionFactorsTests(TestCase):
 
     def test_string_precision(self):
         """Test that string-based numeric values can store full precision"""
-        conversion_factor = SolidMaterialsConversionFactors.objects.create(
+        _ = SolidMaterialsConversionFactors.objects.create(
             id=2,
             inputunit=2,
             inputunitname="Cubic Foot",

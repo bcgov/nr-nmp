@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from .models import *
+from .models import (
+    CropTypes, Crops, PreviousCropTypes, CropSoilTestPhosphorousRegions,
+    SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
+    SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges,
+    SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
+    CropYields, NitrogenRecommendation
+)
 
 
 class CropTypesSerializer(serializers.ModelSerializer):

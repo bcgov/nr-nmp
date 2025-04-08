@@ -2,8 +2,8 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import *
-from .serializers import *
+from .models import Regions, Subregion
+from .serializers import RegionsSerializer, SubregionSerializer
 
 
 class SharedViewset(viewsets.ViewSet):
