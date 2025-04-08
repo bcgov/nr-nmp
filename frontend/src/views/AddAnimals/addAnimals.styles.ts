@@ -59,7 +59,7 @@ export const FlexRowContainer = styled.div`
 
 export const ListItemContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1.5fr 1fr auto;
+  grid-template-columns: 0.25fr 2fr 1.5fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
   margin-bottom: 10px;

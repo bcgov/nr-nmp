@@ -30,7 +30,6 @@ export default function AddAnimals() {
   const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
   const [nextDisabled, setNextDisabled] = useState(false);
-  const [isAllSelected, setIsAllSelected] = useState(false);
 
   const [formData, setFormData] = useState<(AnimalData | null)[]>([]);
   const [elems, setElems] = useState<(React.ReactNode | null)[]>([]);
@@ -71,12 +70,6 @@ export default function AddAnimals() {
     });
   };
 
-  const handleSelectAll = () => {
-    const newIsAllSelected = !isAllSelected;
-    setIsAllSelected(newIsAllSelected);
-    // setSelectedRows(new Array(elems.length).fill(newIsAllSelected));
-  };
-
   // Init data & elems on first render
   useEffect(() => {
     // Uncomment once we cache session state
@@ -113,6 +106,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={index}
+            date=""
           />
         );
       }
@@ -128,6 +122,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={index}
+            date=""
           />
         );
       }
@@ -276,8 +271,6 @@ export default function AddAnimals() {
           <Column text-align="center">
             <input
               type="checkbox"
-              onChange={handleSelectAll}
-              checked={isAllSelected}
               aria-label="Select all"
             />
           </Column>
