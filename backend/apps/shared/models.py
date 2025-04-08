@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Regions(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -11,6 +12,7 @@ class Regions(models.Model):
     class Meta:
         managed = True
         db_table = 'regions'
+
 
 class Subregion(models.Model):
     id = models.IntegerField(primary_key=True)

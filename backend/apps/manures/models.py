@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Manures(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -21,24 +22,26 @@ class Manures(models.Model):
         managed = True
         db_table = 'manures'
 
-class SolidMaterialsConversionFactors(models.Model):
-  id = models.IntegerField(primary_key=True)
-  inputunit = models.IntegerField()
-  inputunitname = models.CharField(max_length=100)
-  cubicyardsoutput = models.CharField(max_length=100)
-  cubicmetersoutput = models.CharField(max_length=100)
-  metrictonsoutput = models.CharField(max_length=100)
 
-  class Meta:
-      managed = True
-      db_table = 'solid_materials_conversion_factors'
+class SolidMaterialsConversionFactors(models.Model):
+    id = models.IntegerField(primary_key=True)
+    inputunit = models.IntegerField()
+    inputunitname = models.CharField(max_length=100)
+    cubicyardsoutput = models.CharField(max_length=100)
+    cubicmetersoutput = models.CharField(max_length=100)
+    metrictonsoutput = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'solid_materials_conversion_factors'
+
 
 class LiquidMaterialsConversionFactors(models.Model):
-  id = models.IntegerField(primary_key=True)
-  inputunit = models.IntegerField()
-  inputunitname = models.CharField(max_length=100)
-  usgallonsoutput = models.CharField(max_length=100)
+    id = models.IntegerField(primary_key=True)
+    inputunit = models.IntegerField()
+    inputunitname = models.CharField(max_length=100)
+    usgallonsoutput = models.CharField(max_length=100)
 
-  class Meta:
-      managed = True
-      db_table = 'liquid_materials_conversion_factors'
+    class Meta:
+        managed = True
+        db_table = 'liquid_materials_conversion_factors'
