@@ -1,6 +1,9 @@
-from django.test import TestCase
 from django.db.utils import IntegrityError
-from ..models import Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors
+from django.test import TestCase
+
+from ..models import (LiquidMaterialsConversionFactors, Manures,
+                      SolidMaterialsConversionFactors)
+
 
 class ManuresTests(TestCase):
     def setUp(self):
@@ -38,7 +41,7 @@ class ManuresTests(TestCase):
         self.assertEqual(self.manure.cubicyardconversion, 1.5)
         self.assertEqual(self.manure.nitrate, 2.1)
         self.assertEqual(self.manure.defaultsolidmoisture, 20)
-    
+
     def test_duplicate_id_constraint(self):
         """Test that creating a manure with a duplicate ID raises an error"""
         with self.assertRaises(IntegrityError):
@@ -59,7 +62,7 @@ class ManuresTests(TestCase):
                 nitrate=1.0,
                 defaultsolidmoisture=30
             )
-            
+
     def test_float_values(self):
         """Test that float values can be stored with different precisions"""
         manure_with_precision = Manures.objects.create(
@@ -79,7 +82,7 @@ class ManuresTests(TestCase):
             nitrate=2.12345,
             defaultsolidmoisture=20
         )
-        
+
         # Retrieve from database to verify precision and verify db is storing the data
         manure_from_db = Manures.objects.get(id=2)
         self.assertEqual(manure_from_db.nitrogen, 10.56789)
@@ -88,6 +91,7 @@ class ManuresTests(TestCase):
         self.assertEqual(manure_from_db.potassium, 2.78901)
         self.assertEqual(manure_from_db.cubicyardconversion, 1.56789)
         self.assertEqual(manure_from_db.nitrate, 2.12345)
+
 
 class SolidMaterialsConversionFactorsTests(TestCase):
     def setUp(self):
@@ -107,7 +111,7 @@ class SolidMaterialsConversionFactorsTests(TestCase):
         self.assertEqual(self.conversion_factor.cubicyardsoutput, "1.0")
         self.assertEqual(self.conversion_factor.cubicmetersoutput, "0.76455")
         self.assertEqual(self.conversion_factor.metrictonsoutput, "0.5")
-    
+
     def test_string_precision(self):
         """Test that string-based numeric values can store full precision"""
         conversion_factor = SolidMaterialsConversionFactors.objects.create(
@@ -118,12 +122,13 @@ class SolidMaterialsConversionFactorsTests(TestCase):
             cubicmetersoutput="0.0283168",
             metrictonsoutput="0.018518518518519"
         )
-        
+
         # Retrieve from database to verify precision is maintained
         factor_from_db = SolidMaterialsConversionFactors.objects.get(id=2)
         self.assertEqual(factor_from_db.cubicyardsoutput, "0.037037037037037")
         self.assertEqual(factor_from_db.cubicmetersoutput, "0.0283168")
         self.assertEqual(factor_from_db.metrictonsoutput, "0.018518518518519")
+
 
 class LiquidMaterialsConversionFactorsTests(TestCase):
     def setUp(self):
@@ -139,7 +144,7 @@ class LiquidMaterialsConversionFactorsTests(TestCase):
         self.assertEqual(self.conversion_factor.inputunit, 1)
         self.assertEqual(self.conversion_factor.inputunitname, "US Gallon")
         self.assertEqual(self.conversion_factor.usgallonsoutput, "1.0")
-    
+
     def test_various_liquid_units(self):
         """Test creating conversion factors for various liquid units"""
         # Imperial Gallon
@@ -149,7 +154,7 @@ class LiquidMaterialsConversionFactorsTests(TestCase):
             inputunitname="Imperial Gallon",
             usgallonsoutput="1.20095"
         )
-        
+
         # Liter
         liter = LiquidMaterialsConversionFactors.objects.create(
             id=3,
@@ -157,7 +162,7 @@ class LiquidMaterialsConversionFactorsTests(TestCase):
             inputunitname="Liter",
             usgallonsoutput="0.26417"
         )
-        
+
         # Cubic Meter
         cubic_meter = LiquidMaterialsConversionFactors.objects.create(
             id=4,
@@ -165,13 +170,13 @@ class LiquidMaterialsConversionFactorsTests(TestCase):
             inputunitname="Cubic Meter",
             usgallonsoutput="264.17"
         )
-        
+
         # Verify all were created correctly
         self.assertEqual(imperial_gallon.inputunitname, "Imperial Gallon")
         self.assertEqual(imperial_gallon.usgallonsoutput, "1.20095")
-        
+
         self.assertEqual(liter.inputunitname, "Liter")
         self.assertEqual(liter.usgallonsoutput, "0.26417")
-        
+
         self.assertEqual(cubic_meter.inputunitname, "Cubic Meter")
-        self.assertEqual(cubic_meter.usgallonsoutput, "264.17") 
+        self.assertEqual(cubic_meter.usgallonsoutput, "264.17")

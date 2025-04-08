@@ -1,0 +1,13 @@
+[flake8]
+max-line-length = 120
+
+# Directories/files to ignore
+exclude = .git,__pycache__,
+          */migrations/*,
+          */static/*,*/media/*
+
+# Specific error codes to ignore
+# E501 = line too long, etc.
+ignore = E203, E266, E501,
+         W503, F403, F401
+
