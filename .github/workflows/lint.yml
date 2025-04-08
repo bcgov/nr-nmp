@@ -1,0 +1,40 @@
+name: Linting
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '**.py'  # Only run on Python file changes
+
+jobs:
+  lint:
+    name: Run Linting
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pylint pylint-django
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+          
+      - name: Run flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Check all Python files with relaxed rules
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
+          
+      - name: Run pylint
+        run: |
+          # Set PYLINTHOME to a writable location
+          export PYLINTHOME=$(pwd)/.pylint.d
+          # Run pylint on Python files
+          pylint --load-plugins=pylint_django --django-settings-module=config.settings --ignore=migrations backend/ 
