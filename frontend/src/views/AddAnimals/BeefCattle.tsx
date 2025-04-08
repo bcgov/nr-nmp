@@ -153,7 +153,7 @@ export default function BeefCattle({
     <>
       {!isExpanded ? (
         <ListItemContainer key={`beef-${myIndex}`}>
-          <ListItem>{`Beef Cattle - ${selectedSubtypeName}`}</ListItem>
+          <ListItem>{`Beef Cattle - ${lastSaved.manureData?.name || ''}`}</ListItem>
           <ListItem>{manureDisplay}</ListItem>
           <ListItem>{date}</ListItem>
           <ListItem align="right">

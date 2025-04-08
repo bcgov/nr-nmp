@@ -245,7 +245,13 @@ export default function DairyCattle({
       {!isExpanded ? (
         <div key={`dairy-${myIndex}`}>
           <ListItemContainer>
-            <ListItem>{`Dairy - ${selectedSubtypeName}`}</ListItem>
+            <ListItem>
+              <input
+                type="checkbox"
+                aria-label="Checkbox"
+              />
+            </ListItem>
+            <ListItem>{`Dairy - ${lastSaved.manureData?.name || ''}`}</ListItem>
             <ListItem>{manureDisplay}</ListItem>
             <ListItem>{date}</ListItem>
             <ListItem align="right">
