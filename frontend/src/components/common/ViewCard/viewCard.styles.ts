@@ -2,13 +2,12 @@ import styled from '@emotion/styled';
 import screenSizes from '@/constants/screenSizes';
 
 export const CardHeader = styled.div`
-  background-color: rgba(200, 200, 200, 0.3);
   padding: 0;
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 65px;
+  height: 50px;
   width: 100%;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -17,6 +16,7 @@ export const CardHeader = styled.div`
     padding-left: 2em;
   }
   z-index: 2000;
+  align-items: flex-end;
 `;
 
 export const Banner = styled.div`
@@ -27,7 +27,7 @@ export const Banner = styled.div`
 
 export const Heading = styled.h2`
   color: #494949;
-  font-size: 16pt;
+  font-size: 12pt;
   font-weight: 500;
   min-width: 150px;
   display: contents;

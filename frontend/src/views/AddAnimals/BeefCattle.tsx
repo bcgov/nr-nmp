@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
@@ -13,6 +13,10 @@ import {
   EditListItemHeader,
   FlexRowContainer,
   ListItemContainer,
+  DropdownMenu,
+  DropdownButton,
+  DropdownButtonHover,
+  EllipsisButton,
 } from './addAnimals.styles';
 import { calculateAnnualSolidManure, getSolidManureDisplay } from './utils';
 
@@ -31,6 +35,11 @@ interface BeefCattleProps {
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
   date: string;
+}
+interface ListItemWithDropdownProps {
+  myIndex: number;
+  onDelete: (index: number) => void;
+  getToggleProps: () => React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
@@ -58,6 +67,7 @@ export default function BeefCattle({
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Props for the collapsed view //
   const manureDisplay = useMemo(() => {
@@ -153,18 +163,33 @@ export default function BeefCattle({
           <ListItem>{lastSaved.manureData?.name || ''}</ListItem>
           <ListItem>{manureDisplay}</ListItem>
           <ListItem align="right">
-            <button
-              type="button"
-              {...getToggleProps()}
+            <div
+              className="list-item"
+              style={{ position: 'relative' }}
+              onMouseEnter={() => setIsDropdownOpen(true)}
+              onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
-            <button
-              type="button"
-              onClick={() => onDelete(myIndex)}
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
+              <FontAwesomeIcon
+                icon={faEllipsisH}
+                style={{ cursor: 'pointer' }}
+              />
+              {isDropdownOpen && (
+                <DropdownMenu className="dropdown-menu">
+                  <DropdownButton
+                    type="button"
+                    {...getToggleProps()}
+                  >
+                    <FontAwesomeIcon icon={faEdit} /> Edit
+                  </DropdownButton>
+                  <DropdownButton
+                    type="button"
+                    onClick={() => onDelete(myIndex)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} /> Delete
+                  </DropdownButton>
+                </DropdownMenu>
+              )}
+            </div>
           </ListItem>
         </ListItemContainer>
       ) : (

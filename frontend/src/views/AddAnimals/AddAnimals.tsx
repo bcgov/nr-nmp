@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import useAppService from '@/services/app/useAppService';
-import { Dropdown } from '@/components/common';
+import { AppTitle, Dropdown, PageTitle } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData } from './types';
 import NMPFile from '@/types/NMPFile';
@@ -17,11 +17,13 @@ import {
   MarginWrapperTwo,
 } from './addAnimals.styles';
 import { Column } from '@/views/FieldList/fieldList.styles';
+import StyledContent from '../LandingPage/landingPage.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 import DairyCattle from './DairyCattle/DairyCattle';
+import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
@@ -234,53 +236,58 @@ export default function AddAnimals() {
   }, []);
 
   return (
-    <ViewCard
-      heading="Add Animals"
-      height="700px"
-      width="700px"
-      handlePrevious={handlePrevious}
-      handleNext={handleNext}
-      nextDisabled={nextDisabled}
-    >
-      <div style={{ overflowY: 'scroll' }}>
-        <FlexContainer>
-          <MarginWrapperOne>Add:</MarginWrapperOne>
-          <MarginWrapperTwo>
-            <Dropdown
-              label=""
-              name="Animals"
-              value={selectedAnimal || ''}
-              options={animalOptions}
-              onChange={(e) => setSelectedAnimal(e.target.value)}
-              flex="0.5"
-            />
-          </MarginWrapperTwo>
-          <AddButton
-            type="button"
-            onClick={() => {
-              handleAdd(selectedAnimal as string);
-              setSelectedAnimal(null);
-            }}
-            disabled={selectedAnimal === null || formExpanded.some((bool) => bool === true)}
-            aria-label="Add"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </AddButton>
-        </FlexContainer>
-        <Header>
-          <Column text-align="center">
-            <input
-              type="checkbox"
-              aria-label="Select all"
-            />
-          </Column>
-          <Column>Animal Type</Column>
-          <Column>Annual Manure</Column>
-          <Column>Date</Column>
-          <Column>Actions</Column>
-        </Header>
-        {elems}
-      </div>
-    </ViewCard>
+    <StyledContent>
+      <ProgressStepper step={FARM_INFORMATION} />
+      <AppTitle />
+      <PageTitle title="Livestock Information" />
+      <ViewCard
+        heading="Add Animals"
+        height="700px"
+        width="700px"
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+        nextDisabled={nextDisabled}
+      >
+        <div style={{ overflow: 'auto', minHeight: '600px' }}>
+          <FlexContainer>
+            <MarginWrapperOne>Add:</MarginWrapperOne>
+            <MarginWrapperTwo>
+              <Dropdown
+                label=""
+                name="Animals"
+                value={selectedAnimal || ''}
+                options={animalOptions}
+                onChange={(e) => setSelectedAnimal(e.target.value)}
+                flex="0.5"
+              />
+            </MarginWrapperTwo>
+            <AddButton
+              type="button"
+              onClick={() => {
+                handleAdd(selectedAnimal as string);
+                setSelectedAnimal(null);
+              }}
+              disabled={selectedAnimal === null || formExpanded.some((bool) => bool === true)}
+              aria-label="Add"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </AddButton>
+          </FlexContainer>
+          <Header>
+            <Column text-align="center">
+              <input
+                type="checkbox"
+                aria-label="Select all"
+              />
+            </Column>
+            <Column>Animal Type</Column>
+            <Column>Annual Manure</Column>
+            <Column>Date</Column>
+            <Column>Actions</Column>
+          </Header>
+          {elems}
+        </div>
+      </ViewCard>
+    </StyledContent>
   );
 }
