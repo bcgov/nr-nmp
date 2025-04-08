@@ -5,19 +5,23 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ListItem } from '@/views/FieldList/fieldList.styles';
-import { AnimalData, DairyCattleData, perDayPerAnimalUnit } from '../types';
+import { AnimalData, DairyCattleData, MILKING_COW_ID } from '../types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
 import MilkingFields from './MilkingFields';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
-import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
+import {
+  calculateAnnualLiquidManure,
+  calculateAnnualSolidManure,
+  calculateAnnualWashWater,
+  getLiquidManureDisplay,
+  getSolidManureDisplay,
+} from '../utils';
 import {
   EditListItemBody,
   EditListItemHeader,
   FlexRowContainer,
   ListItemContainer,
 } from '../addAnimals.styles';
-
-const milkingCowId: string = '9';
 
 interface DairyCattleSubtype {
   id: number;
@@ -79,13 +83,13 @@ export default function DairyCattle({
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
     if (subtypes.length === 0) return undefined;
-    const milkingCow = subtypes.find((s) => s.id.toString() === milkingCowId);
+    const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     return milkingCow.washwater;
   }, [subtypes]);
   const milkProductionInit = useMemo(() => {
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
-    const milkingCow = subtypes.find((s) => s.id.toString() === milkingCowId);
+    const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     const breed = breeds.find((b) => b.id.toString() === formData.breed);
     if (breed === undefined) throw new Error('Chosen breed is missing from list.');
@@ -93,57 +97,15 @@ export default function DairyCattle({
   }, [subtypes, breeds, formData.breed]);
 
   // Props for the collapsed view //
-  const selectedSubtypeName = useMemo(() => {
-    if (!lastSaved.subtype || subtypes.length === 0) return '';
-    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    return subtype.name;
-  }, [lastSaved.subtype, subtypes]);
-
-  const annualManure = useMemo(() => {
-    if (
-      !lastSaved.subtype ||
-      !lastSaved.animalsPerFarm ||
-      !lastSaved.manureType ||
-      lastSaved.grazingDaysPerYear === undefined ||
-      subtypes.length === 0
-    )
-      return 0;
-    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    const breed = breeds.find((b) => b.id.toString() === lastSaved.breed);
-    if (breed === undefined) throw new Error('Chosen breed is missing from list.');
-    const nonGrazingDays = 365 - lastSaved.grazingDaysPerYear;
-
-    let extraCoefficient;
-    if (lastSaved.subtype === milkingCowId) {
-      if (lastSaved.milkProduction === undefined) return 0;
-      const expectedMilkProduction = subtype.milkproduction * breed.breedmanurefactor;
-      // Due to potential floating point issues, round factor to 1 if numbers are close
-      const milkProdPercent =
-        Math.abs(expectedMilkProduction - lastSaved.milkProduction) < 1
-          ? 1
-          : lastSaved.milkProduction / expectedMilkProduction;
-      extraCoefficient = breed.breedmanurefactor * milkProdPercent;
-    } else {
-      extraCoefficient = breed.breedmanurefactor;
+  const manureDisplay = useMemo(() => {
+    if (lastSaved.manureData === undefined) {
+      return '';
     }
-
-    if (lastSaved.manureType === 'liquid') {
-      return calculateAnnualLiquidManure(
-        subtype.liquidpergalperanimalperday,
-        lastSaved.animalsPerFarm,
-        nonGrazingDays,
-        extraCoefficient,
-      );
+    if (lastSaved.manureData.annualLiquidManure !== undefined) {
+      return getLiquidManureDisplay(lastSaved.manureData.annualLiquidManure);
     }
-    return calculateAnnualSolidManure(
-      subtype.solidperpoundperanimalperday,
-      lastSaved.animalsPerFarm,
-      nonGrazingDays,
-      extraCoefficient,
-    );
-  }, [lastSaved, subtypes, breeds]);
+    return getSolidManureDisplay(lastSaved.manureData.annualSolidManure);
+  }, [lastSaved.manureData]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
@@ -196,8 +158,64 @@ export default function DairyCattle({
 
   const handleSave = (e: FormEvent) => {
     e.preventDefault();
-    saveData(formData, myIndex);
-    setLastSaved(formData);
+
+    // Calculate manure
+    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    const breed = breeds.find((b) => b.id.toString() === formData.breed);
+    if (breed === undefined) throw new Error('Chosen breed is missing from list.');
+    const nonGrazingDays = 365 - formData.grazingDaysPerYear!;
+
+    let extraCoefficient;
+    if (formData.subtype === MILKING_COW_ID) {
+      if (formData.milkProduction === undefined) {
+        extraCoefficient = 0;
+      } else {
+        const expectedMilkProduction = subtype.milkproduction * breed.breedmanurefactor;
+        // Due to potential floating point issues, round factor to 1 if numbers are close
+        const milkProdPercent =
+          Math.abs(expectedMilkProduction - formData.milkProduction) < 1
+            ? 1
+            : formData.milkProduction / expectedMilkProduction;
+        extraCoefficient = breed.breedmanurefactor * milkProdPercent;
+      }
+    } else {
+      extraCoefficient = breed.breedmanurefactor;
+    }
+
+    let withManureCalc: DairyCattleData;
+    if (formData.manureType === 'liquid') {
+      withManureCalc = {
+        ...formData,
+        manureData: {
+          name: subtype.name,
+          annualLiquidManure: calculateAnnualLiquidManure(
+            subtype.liquidpergalperanimalperday,
+            formData.animalsPerFarm!,
+            nonGrazingDays,
+            extraCoefficient,
+          ),
+          annualSolidManure: undefined,
+        },
+      };
+    } else {
+      withManureCalc = {
+        ...formData,
+        manureData: {
+          name: subtype.name,
+          annualSolidManure: calculateAnnualSolidManure(
+            subtype.solidperpoundperanimalperday,
+            formData.animalsPerFarm!,
+            nonGrazingDays,
+            extraCoefficient,
+          ),
+          annualLiquidManure: undefined,
+        },
+      };
+    }
+
+    saveData(withManureCalc, myIndex);
+    setLastSaved(withManureCalc);
     setExpanded(false);
   };
 
@@ -222,8 +240,8 @@ export default function DairyCattle({
       {!isExpanded ? (
         <div key={`dairy-${myIndex}`}>
           <ListItemContainer>
-            <ListItem>{selectedSubtypeName}</ListItem>
-            <ListItem>{`${Math.round(annualManure)} ${formData.manureType === 'liquid' ? 'U.S. gallon' : 'ton'}${annualManure === 1 ? '' : 's'}`}</ListItem>
+            <ListItem>{lastSaved.manureData?.name || ''}</ListItem>
+            <ListItem>{manureDisplay}</ListItem>
             <ListItem align="right">
               <button
                 type="button"
@@ -242,7 +260,7 @@ export default function DairyCattle({
           {formData.washWater && formData.washWaterUnit && (
             <ListItemContainer>
               <ListItem>Milking Centre Wash Water</ListItem>
-              <ListItem>{`${formData.washWater * 365 * (formData.washWaterUnit === perDayPerAnimalUnit ? formData.animalsPerFarm || 0 : 1)} U.S. gallons`}</ListItem>
+              <ListItem>{`${calculateAnnualWashWater(formData.washWater, formData.washWaterUnit, formData.animalsPerFarm || 0)} U.S. gallons`}</ListItem>
               <div />
             </ListItemContainer>
           )}
@@ -313,7 +331,7 @@ export default function DairyCattle({
                 }
               }}
             />
-            {formData.subtype === milkingCowId &&
+            {formData.subtype === MILKING_COW_ID &&
               milkProductionInit !== undefined &&
               washWaterInit !== undefined && (
                 <MilkingFields
