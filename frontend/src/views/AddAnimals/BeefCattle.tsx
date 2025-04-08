@@ -15,8 +15,6 @@ import {
   ListItemContainer,
   DropdownMenu,
   DropdownButton,
-  DropdownButtonHover,
-  EllipsisButton,
 } from './addAnimals.styles';
 import { calculateAnnualSolidManure, getSolidManureDisplay } from './utils';
 
@@ -35,11 +33,6 @@ interface BeefCattleProps {
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
   date: string;
-}
-interface ListItemWithDropdownProps {
-  myIndex: number;
-  onDelete: (index: number) => void;
-  getToggleProps: () => React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
