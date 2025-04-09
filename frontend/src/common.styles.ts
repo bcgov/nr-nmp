@@ -7,6 +7,7 @@ export const componentContainer = css({
   marginLeft: '3rem',
   marginRight: '3rem',
   maxWidth: '900px',
+  width: '100%',
 });
 
 export const formCss = css({

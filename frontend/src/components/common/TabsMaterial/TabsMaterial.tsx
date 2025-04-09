@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { useState, SyntheticEvent, ReactNode } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 interface TabPanelProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   index: number;
   value: number;
 }
@@ -19,23 +19,30 @@ function CustomTabPanel(props: TabPanelProps) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box>{children}</Box>}
     </div>
   );
 }
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+// function a11yProps(index: number) {
+//   return {
+//     id: `simple-tab-${index}`,
+//     'aria-controls': `simple-tabpanel-${index}`,
+//   };
+// }
 
-export default function BasicTabs({ children }) {
-  const [value, setValue] = React.useState(0);
+export default function BasicTabs({
+  children,
+  tabLabel,
+}: {
+  children: Array<ReactNode | null>;
+  tabLabel: Array<string>;
+}) {
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: SyntheticEvent, newValue: number) => {
+    console.log('Tab clicked value', newValue, event);
+    setValue((prev) => prev);
   };
 
   return (
@@ -44,40 +51,25 @@ export default function BasicTabs({ children }) {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label="tab"
         >
-          <Tab
-            label="Item One"
-            {...a11yProps(0)}
-          />
-          <Tab
-            label="Item Two"
-            {...a11yProps(1)}
-          />
-          <Tab
-            label="Item Three"
-            {...a11yProps(2)}
-          />
+          {tabLabel.map((ele) => (
+            <Tab
+              label={ele}
+              key={ele}
+            />
+          ))}
         </Tabs>
       </Box>
-      <CustomTabPanel
-        value={value}
-        index={0}
-      >
-        {children}
-      </CustomTabPanel>
-      <CustomTabPanel
-        value={value}
-        index={1}
-      >
-        Item Two
-      </CustomTabPanel>
-      <CustomTabPanel
-        value={value}
-        index={2}
-      >
-        Item Three
-      </CustomTabPanel>
+      {children.map((ele, index) => (
+        <CustomTabPanel
+          key={tabLabel[index]}
+          value={value}
+          index={index}
+        >
+          {ele}
+        </CustomTabPanel>
+      ))}
     </Box>
   );
 }

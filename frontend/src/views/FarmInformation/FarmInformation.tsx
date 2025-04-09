@@ -374,19 +374,19 @@ export default function FarmInformation() {
         >
           <Button
             size="medium"
-            aria-label="Next"
-            variant="primary"
-            type="submit"
-          >
-            Next
-          </Button>
-          <Button
-            size="medium"
             aria-label="Back"
             onPress={() => navigate(LANDING_PAGE)}
             variant="secondary"
           >
             BACK
+          </Button>
+          <Button
+            size="medium"
+            aria-label="Next"
+            variant="primary"
+            type="submit"
+          >
+            Next
           </Button>
         </ButtonGroup>
       </Form>

@@ -2,6 +2,8 @@
  * @summary Styling for FieldList view
  */
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
 
 export const ContentWrapper = styled.div<{ hasFields: boolean }>`
   margin-bottom: ${({ hasFields }) => (hasFields ? '170px' : '0')};
@@ -77,3 +79,45 @@ export const ListItem = styled.div<{ align?: string }>`
 export const ErrorText = styled.div`
   color: red;
 `;
+
+export const StyledContent = styled.div`
+  margin-bottom: 1rem;
+  ${componentContainer}
+
+  ${paragraphCss}
+
+  ${buttonGroup}
+`;
+
+export const subHeader = css({
+  fontWeight: '700',
+  size: '1.25rem',
+  lineHeight: '100%',
+  letterSpacing: '0px',
+});
+
+export const customTableStyle = {
+  borderStyle: 'none',
+  '& .MuiDataGrid-columnHeaders': {
+    borderBottom: 'none',
+  },
+  '& div div div div >.MuiDataGrid-cell': {
+    borderBottom: 'none',
+    borderTop: '1px solid rgba(224, 224, 224, 1)',
+  },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'transparent',
+  },
+};
+
+export const tableActionButtonCss = css({
+  paddingLeft: '0.75rem',
+  color: 'var(--surface-color-primary-button-default)',
+});
+
+export default {
+  customTableStyle,
+  StyledContent,
+  subHeader,
+  tableActionButtonCss,
+};
