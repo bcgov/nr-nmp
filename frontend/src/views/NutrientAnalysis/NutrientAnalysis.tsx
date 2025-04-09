@@ -24,73 +24,65 @@ import {
 import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
 import { ColumnContainer, HeaderText, RowContainer, ValueText } from '@/views/Crops/crops.styles';
-import { NMPFileImportedManureData } from '@/types';
+import { NMPFile, NMPFileImportedManureData } from '@/types';
 import useAppService from '@/services/app/useAppService';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { CALCULATE_NUTRIENTS, MANURE_IMPORTS } from '@/constants/RouteConstants';
-import { initManures, saveManuresToFile } from '@/utils/utils';
-
-interface ManureType {
-  id: number;
-  name: string;
-  manureClass: string;
-  solidLiquid: string;
-  moisture: number;
-  nitrogen: number;
-  ammonia: number;
-  phosphorous: number;
-  potassium: number;
-  dryMatterId: number;
-  nMineralizationId: number;
-  sortNum: number;
-  cubicYardConversion: number;
-  nitrate: number;
-  defaultSolidMoisture: number;
-}
+import { saveFarmManuresToFile } from '@/utils/utils';
+import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
+import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
+import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
+import ManureType from '@/types/ManureType';
 
 export default function NutrientAnalysis() {
   const { state, setNMPFile, setProgressStep } = useAppService();
+  const parsedFile: NMPFile = useMemo(() => {
+    if (state.nmpFile) {
+      return JSON.parse(state.nmpFile);
+    }
+    // TODO: Once we cache state, throw error if uninitialized
+    return { ...defaultNMPFile, years: [{...defaultNMPFileYear}] };
+  }, [state.nmpFile]);
+  const manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[] = useMemo(
+    () =>
+      (parsedFile.years[0]?.ImportedManures || []).concat(
+        parsedFile.years[0]?.GeneratedManures || [],
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   // manure types data from db
   const [manureTypesData, setManureTypesData] = useState<ManureType[]>([]);
   // for each manuresource user can create nutrient analysis' objects
   // replace with nmpfile
-  const [nutrientAnalysisFormData, setNutrientAnalysisFormData] = useState<
-    {
-      ManureSource: string;
-      MaterialType: string;
-      BookLab: string;
-      MaterialName: string;
-      Nutrients: { Moisture: string; N: number; NH4N: number; P: number; K: number };
-    }[]
-  >([]);
+  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileFarmManureData[]>([]);
   // for each manuresource user can create nutrient analysis' objects
-  const [analysisForm, setAnalysisForm] = useState({
+  const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData>({
     ManureSource: '',
     MaterialType: '',
     BookLab: '',
-    MaterialName: '',
+    UniqueMaterialName: '',
     Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
   });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const manures: NMPFileImportedManureData[] = useMemo(() => initManures(state), []);
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
-    setAnalysisForm(nutrientAnalysisFormData[index]); // Pre-fill the form with the existing analysis data
+    setAnalysisForm(nutrientAnalysisData[index]); // Pre-fill the form with the existing analysis data
     setIsModalVisible(true);
   };
 
   const handleDelete = (index: number) => {
-    setNutrientAnalysisFormData((prevState) => prevState.filter((_, i) => i !== index));
+    setNutrientAnalysisData((prevState) => prevState.filter((_, i) => i !== index));
   };
 
   // submits to nutrient analysis form data and clears modal analysis form
   const handleSubmit = () => {
-    setNutrientAnalysisFormData((prevState) => {
+    setNutrientAnalysisData((prevState) => {
       // if editing an entry then updates that entry
       if (editIndex !== null) {
         return prevState.map((item, index) => (index === editIndex ? { ...analysisForm } : item));
@@ -104,7 +96,7 @@ export default function NutrientAnalysis() {
       ManureSource: '',
       MaterialType: '',
       BookLab: '',
-      MaterialName: '',
+      UniqueMaterialName: '',
       Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
     });
     // resets index
@@ -117,11 +109,11 @@ export default function NutrientAnalysis() {
     setAnalysisForm((prevForm) => {
       // update nutrients and material type when type is changed
       if (name === 'MaterialType') {
-        const updatedMaterialName =
-          prevForm.MaterialName === '' ||
-          prevForm.MaterialName !== `Custom - ${prevForm.MaterialType}`
+        const updatedUniqueMaterialName =
+          prevForm.UniqueMaterialName === '' ||
+          prevForm.UniqueMaterialName !== `Custom - ${prevForm.MaterialType}`
             ? `Custom - ${value}`
-            : prevForm.MaterialName;
+            : prevForm.UniqueMaterialName;
         const selectedManure = manureTypesData.find((manure) => manure.name === value);
         if (!selectedManure) {
           throw new Error(`Manure type "${value}" not found.`);
@@ -130,7 +122,7 @@ export default function NutrientAnalysis() {
         return {
           ...prevForm,
           MaterialType: value,
-          MaterialName: updatedMaterialName,
+          UniqueMaterialName: updatedUniqueMaterialName,
           Nutrients: {
             Moisture: String(selectedManure.moisture),
             N: selectedManure.nitrogen,
@@ -185,7 +177,7 @@ export default function NutrientAnalysis() {
   };
 
   const handleNext = () => {
-    saveManuresToFile(manures, state.nmpFile, setNMPFile);
+    saveFarmManuresToFile(nutrientAnalysisData, state.nmpFile, setNMPFile);
     navigate(CALCULATE_NUTRIENTS);
   };
 
@@ -208,12 +200,13 @@ export default function NutrientAnalysis() {
     <ViewCard
       heading="Nutrient Analysis"
       height="700px"
+      width="700px"
       handlePrevious={handlePrevious}
       handleNext={handleNext}
     >
       {/* table with source of Material, material type, moisture, N, P, K, edit and delete button */}
-      <ContentWrapper hasAnalysis={nutrientAnalysisFormData.length > 0}>
-        {nutrientAnalysisFormData.length > 0 && (
+      <ContentWrapper hasAnalysis={nutrientAnalysisData.length > 0}>
+        {nutrientAnalysisData.length > 0 && (
           <Header>
             <Column>Source of Material</Column>
             <Column>Material Type</Column>
@@ -225,8 +218,8 @@ export default function NutrientAnalysis() {
             <Column align="right">Actions</Column>
           </Header>
         )}
-        {nutrientAnalysisFormData.map((NAnalysis, index) => (
-          <ListItemContainer key={NAnalysis.MaterialName}>
+        {nutrientAnalysisData.map((NAnalysis, index) => (
+          <ListItemContainer key={NAnalysis.UniqueMaterialName}>
             <ListItem>{NAnalysis.MaterialType}</ListItem>
             <ListItem>{NAnalysis.Nutrients.Moisture}</ListItem>
             <ListItem>{NAnalysis.Nutrients.N}</ListItem>
@@ -275,7 +268,7 @@ export default function NutrientAnalysis() {
                     ManureSource: '',
                     MaterialType: '',
                     BookLab: '',
-                    MaterialName: '',
+                    UniqueMaterialName: '',
                     Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
                   });
                 }}
@@ -305,8 +298,8 @@ export default function NutrientAnalysis() {
             name="ManureSource"
             value={analysisForm.ManureSource}
             options={manures.map((manure) => ({
-              value: manure.MaterialName,
-              label: manure.MaterialName,
+              value: manure.UniqueMaterialName,
+              label: manure.UniqueMaterialName,
             }))}
             onChange={handleChange}
           />
@@ -348,8 +341,8 @@ export default function NutrientAnalysis() {
                 <InputField
                   label="Material Name"
                   type="text"
-                  name="MaterialName"
-                  value={analysisForm.MaterialName}
+                  name="UniqueMaterialName"
+                  value={analysisForm.UniqueMaterialName}
                   onChange={handleChange}
                 />
               )}
