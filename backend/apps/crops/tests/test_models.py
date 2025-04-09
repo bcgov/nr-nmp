@@ -1,12 +1,14 @@
-from django.test import TestCase
 from django.db.utils import IntegrityError
-from ..models import (
-    CropTypes, Crops, PreviousCropTypes, SoilTestMethods, 
-    ConversionFactors, CropYields, NitrogenRecommendation,
-    CropSoilTestPhosphorousRegions, SoilTestPhosphorousRecommendation,
-    SoilTestPhosphorousKelownaRanges, SoilTestPotassiumKelownaRanges,
-    SoilTestPotassiumRecommendation, CropSoilPotassiumRegions
-)
+from django.test import TestCase
+
+from ..models import (ConversionFactors, Crops, CropSoilPotassiumRegions,
+                      CropSoilTestPhosphorousRegions, CropTypes, CropYields,
+                      NitrogenRecommendation, PreviousCropTypes,
+                      SoilTestMethods, SoilTestPhosphorousKelownaRanges,
+                      SoilTestPhosphorousRecommendation,
+                      SoilTestPotassiumKelownaRanges,
+                      SoilTestPotassiumRecommendation)
+
 
 class CropTypesTests(TestCase):
     def setUp(self):
@@ -26,7 +28,7 @@ class CropTypesTests(TestCase):
         self.assertFalse(self.crop_type.crudeproteinrequired)
         self.assertFalse(self.crop_type.customcrop)
         self.assertTrue(self.crop_type.modifynitrogen)
-    
+
     def test_duplicate_id_constraint(self):
         """Test that creating a crop type with a duplicate ID raises an error"""
         with self.assertRaises(IntegrityError):
@@ -39,6 +41,7 @@ class CropTypesTests(TestCase):
                 modifynitrogen=False
             )
 
+
 class CropsTests(TestCase):
     def setUp(self):
         self.crop_type = CropTypes.objects.create(
@@ -49,12 +52,12 @@ class CropsTests(TestCase):
             customcrop=False,
             modifynitrogen=False
         )
-        
+
         self.nitrogen_recommendation = NitrogenRecommendation.objects.create(
             id=1,
             recommendationdesc="Test nitrogen recommendation"
         )
-        
+
         self.crop = Crops.objects.create(
             id=1,
             cropname="Test Crop",
@@ -103,20 +106,21 @@ class CropsTests(TestCase):
             sortnumber=1,
             manureapplicationhistory=1
         )
-        
+
         self.assertIsNone(crop_without_optional.nitrogenrecommendationpoundperacre)
         self.assertIsNone(crop_without_optional.nitrogenrecommendationupperlimitpoundperacre)
         self.assertIsNone(crop_without_optional.harvestbushelsperton)
-    
+
     def test_crop_relationships(self):
         """Test the relationship between crops and crop types"""
         # Verify the crop type exists
         crop_type = CropTypes.objects.get(id=self.crop.croptypeid)
         self.assertEqual(crop_type.name, "Test Crop Type")
-        
+
         # Verify the nitrogen recommendation exists
         nitrogen_rec = NitrogenRecommendation.objects.get(id=self.crop.nitrogenrecommendationid)
         self.assertEqual(nitrogen_rec.recommendationdesc, "Test nitrogen recommendation")
+
 
 class PreviousCropTypesTests(TestCase):
     def setUp(self):
@@ -128,7 +132,7 @@ class PreviousCropTypesTests(TestCase):
             customcrop=False,
             modifynitrogen=False
         )
-        
+
         self.crop = Crops.objects.create(
             id=1,
             cropname="Test Crop",
@@ -142,7 +146,7 @@ class PreviousCropTypesTests(TestCase):
             sortnumber=1,
             manureapplicationhistory=1
         )
-        
+
         self.previous_crop = PreviousCropTypes.objects.create(
             id=1,
             previouscropcode=1,
@@ -173,16 +177,17 @@ class PreviousCropTypesTests(TestCase):
             cropid=self.crop.id
         )
         self.assertIsNone(previous_crop_without_type.croptypeid)
-    
+
     def test_previous_crop_relationships(self):
         """Test the relationship between previous crop types and crops/crop types"""
         # Verify the crop exists
         crop = Crops.objects.get(id=self.previous_crop.cropid)
         self.assertEqual(crop.cropname, "Test Crop")
-        
+
         # Verify the crop type exists
         crop_type = CropTypes.objects.get(id=self.previous_crop.croptypeid)
         self.assertEqual(crop_type.name, "Test Crop Type")
+
 
 class SoilTestMethodsTests(TestCase):
     def setUp(self):
@@ -202,7 +207,7 @@ class SoilTestMethodsTests(TestCase):
         self.assertEqual(self.soil_test_method.converttokelownaphgreaterthan72, 1.1)
         self.assertEqual(self.soil_test_method.converttokelownak, 1.3)
         self.assertEqual(self.soil_test_method.sortnum, 1)
-    
+
     def test_negative_conversion_factors(self):
         """Test that negative conversion factors are allowed"""
         soil_test_method = SoilTestMethods.objects.create(
@@ -213,10 +218,11 @@ class SoilTestMethodsTests(TestCase):
             converttokelownak=-0.9,
             sortnum=2
         )
-        
+
         self.assertEqual(soil_test_method.converttokelownaphlessthan72, -0.5)
         self.assertEqual(soil_test_method.converttokelownaphgreaterthan72, -0.7)
         self.assertEqual(soil_test_method.converttokelownak, -0.9)
+
 
 class ConversionFactorsTests(TestCase):
     def setUp(self):
@@ -257,6 +263,7 @@ class ConversionFactorsTests(TestCase):
         self.assertEqual(self.conversion_factors.defaultapplicationofmanureinprevyears, 3.0)
         self.assertEqual(self.conversion_factors.soiltestppmtopoundperacreconversion, 2.0)
 
+
 class NitrogenRecommendationTests(TestCase):
     def setUp(self):
         self.recommendation = NitrogenRecommendation.objects.create(
@@ -267,7 +274,7 @@ class NitrogenRecommendationTests(TestCase):
     def test_recommendation_creation(self):
         """Test that a nitrogen recommendation can be created"""
         self.assertEqual(self.recommendation.recommendationdesc, "Test recommendation description")
-    
+
     def test_long_description(self):
         """Test that a long description can be stored"""
         long_desc = "This is a very long description " * 50  # Create a long text
@@ -276,6 +283,7 @@ class NitrogenRecommendationTests(TestCase):
             recommendationdesc=long_desc
         )
         self.assertEqual(recommendation.recommendationdesc, long_desc)
+
 
 class CropYieldsTests(TestCase):
     def setUp(self):
@@ -287,7 +295,7 @@ class CropYieldsTests(TestCase):
             customcrop=False,
             modifynitrogen=False
         )
-        
+
         self.crop = Crops.objects.create(
             id=1,
             cropname="Test Crop",
@@ -301,7 +309,7 @@ class CropYieldsTests(TestCase):
             sortnumber=1,
             manureapplicationhistory=1
         )
-        
+
         self.crop_yield = CropYields.objects.create(
             id=1,
             cropid=self.crop.id,
@@ -314,7 +322,7 @@ class CropYieldsTests(TestCase):
         self.assertEqual(self.crop_yield.cropid, self.crop.id)
         self.assertEqual(self.crop_yield.locationid, 1)
         self.assertEqual(self.crop_yield.amount, 2.5)
-    
+
     def test_crop_yield_optional_amount(self):
         """Test that amount can be null"""
         crop_yield_without_amount = CropYields.objects.create(
@@ -323,11 +331,12 @@ class CropYieldsTests(TestCase):
             locationid=2
         )
         self.assertIsNone(crop_yield_without_amount.amount)
-    
+
     def test_crop_yield_relationship(self):
         """Test the relationship between crop yields and crops"""
         crop = Crops.objects.get(id=self.crop_yield.cropid)
         self.assertEqual(crop.cropname, "Test Crop")
+
 
 class SoilTestPhosphorousKelownaRangesTests(TestCase):
     def setUp(self):
@@ -341,7 +350,7 @@ class SoilTestPhosphorousKelownaRangesTests(TestCase):
         """Test that a soil test phosphorous range can be created"""
         self.assertEqual(self.range.rangelow, 10)
         self.assertEqual(self.range.rangehigh, 20)
-    
+
     def test_overlapping_ranges(self):
         """Test that overlapping ranges can be created (no constraint in model)"""
         overlapping_range = SoilTestPhosphorousKelownaRanges.objects.create(
@@ -351,6 +360,7 @@ class SoilTestPhosphorousKelownaRangesTests(TestCase):
         )
         self.assertEqual(overlapping_range.rangelow, 15)
         self.assertEqual(overlapping_range.rangehigh, 25)
+
 
 class SoilTestPotassiumKelownaRangesTests(TestCase):
     def setUp(self):
@@ -364,7 +374,7 @@ class SoilTestPotassiumKelownaRangesTests(TestCase):
         """Test that a soil test potassium range can be created"""
         self.assertEqual(self.range.rangelow, 100)
         self.assertEqual(self.range.rangehigh, 200)
-    
+
     def test_duplicated_id(self):
         """Test that creating a range with a duplicate ID raises an error"""
         with self.assertRaises(IntegrityError):
@@ -373,6 +383,7 @@ class SoilTestPotassiumKelownaRangesTests(TestCase):
                 rangelow=300,
                 rangehigh=400
             )
+
 
 class CropSoilTestPhosphorousRegionsTests(TestCase):
     def setUp(self):
@@ -384,7 +395,7 @@ class CropSoilTestPhosphorousRegionsTests(TestCase):
             customcrop=False,
             modifynitrogen=False
         )
-        
+
         self.crop = Crops.objects.create(
             id=1,
             cropname="Test Crop",
@@ -398,7 +409,7 @@ class CropSoilTestPhosphorousRegionsTests(TestCase):
             sortnumber=1,
             manureapplicationhistory=1
         )
-        
+
         self.phosphorous_region = CropSoilTestPhosphorousRegions.objects.create(
             id=1,
             cropid=self.crop.id,
@@ -411,11 +422,12 @@ class CropSoilTestPhosphorousRegionsTests(TestCase):
         self.assertEqual(self.phosphorous_region.cropid, self.crop.id)
         self.assertEqual(self.phosphorous_region.soiltestphosphorousregioncode, 1)
         self.assertEqual(self.phosphorous_region.phosphorouscropgroupregioncode, 2)
-    
+
     def test_phosphorous_region_relationship(self):
         """Test the relationship between phosphorous regions and crops"""
         crop = Crops.objects.get(id=self.phosphorous_region.cropid)
         self.assertEqual(crop.cropname, "Test Crop")
+
 
 class SoilTestPhosphorousRecommendationTests(TestCase):
     def setUp(self):
@@ -424,7 +436,7 @@ class SoilTestPhosphorousRecommendationTests(TestCase):
             rangelow=10,
             rangehigh=20
         )
-        
+
         self.recommendation = SoilTestPhosphorousRecommendation.objects.create(
             id=1,
             soiltestphosphorouskelownarangeid=self.range.id,
@@ -439,12 +451,13 @@ class SoilTestPhosphorousRecommendationTests(TestCase):
         self.assertEqual(self.recommendation.soiltestphosphorousregioncode, 1.0)
         self.assertEqual(self.recommendation.phosphorouscropgroupregioncode, 2.0)
         self.assertEqual(self.recommendation.p2o5recommendationkilogramperhectare, 60.0)
-    
+
     def test_phosphorous_recommendation_relationship(self):
         """Test the relationship between phosphorous recommendations and kelowna ranges"""
         kelowna_range = SoilTestPhosphorousKelownaRanges.objects.get(id=self.recommendation.soiltestphosphorouskelownarangeid)
         self.assertEqual(kelowna_range.rangelow, 10)
         self.assertEqual(kelowna_range.rangehigh, 20)
+
 
 class SoilTestPotassiumRecommendationTests(TestCase):
     def setUp(self):
@@ -453,7 +466,7 @@ class SoilTestPotassiumRecommendationTests(TestCase):
             rangelow=100,
             rangehigh=200
         )
-        
+
         self.recommendation = SoilTestPotassiumRecommendation.objects.create(
             id=1,
             soiltestpotassiumkelownarangeid=self.range.id,
@@ -468,12 +481,13 @@ class SoilTestPotassiumRecommendationTests(TestCase):
         self.assertEqual(self.recommendation.soiltestpotassiumregioncode, 1.0)
         self.assertEqual(self.recommendation.potassiumcropgroupregioncode, 2.0)
         self.assertEqual(self.recommendation.k2orecommendationkilogramperhectare, 80.0)
-    
+
     def test_potassium_recommendation_relationship(self):
         """Test the relationship between potassium recommendations and kelowna ranges"""
         kelowna_range = SoilTestPotassiumKelownaRanges.objects.get(id=self.recommendation.soiltestpotassiumkelownarangeid)
         self.assertEqual(kelowna_range.rangelow, 100)
         self.assertEqual(kelowna_range.rangehigh, 200)
+
 
 class CropSoilPotassiumRegionsTests(TestCase):
     def setUp(self):
@@ -485,7 +499,7 @@ class CropSoilPotassiumRegionsTests(TestCase):
             customcrop=False,
             modifynitrogen=False
         )
-        
+
         self.crop = Crops.objects.create(
             id=1,
             cropname="Test Crop",
@@ -499,7 +513,7 @@ class CropSoilPotassiumRegionsTests(TestCase):
             sortnumber=1,
             manureapplicationhistory=1
         )
-        
+
         self.potassium_region = CropSoilPotassiumRegions.objects.create(
             id=1,
             cropid=self.crop.id,
@@ -512,8 +526,8 @@ class CropSoilPotassiumRegionsTests(TestCase):
         self.assertEqual(self.potassium_region.cropid, self.crop.id)
         self.assertEqual(self.potassium_region.soiltestpotassiumregioncode, 1)
         self.assertEqual(self.potassium_region.potassiumcropgroupregioncode, 2)
-    
+
     def test_potassium_region_relationship(self):
         """Test the relationship between potassium regions and crops"""
         crop = Crops.objects.get(id=self.potassium_region.cropid)
-        self.assertEqual(crop.cropname, "Test Crop") 
+        self.assertEqual(crop.cropname, "Test Crop")
