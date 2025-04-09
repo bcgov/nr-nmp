@@ -348,13 +348,7 @@ export default function FarmInformation() {
             </CheckboxGroup>
           </Grid>
         </Grid>
-
-        <ButtonGroup
-          alignment="start"
-          ariaLabel="A group of buttons"
-          orientation="horizontal"
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
           <Button
             size="medium"
             aria-label="Back"
@@ -371,7 +365,7 @@ export default function FarmInformation() {
           >
             Next
           </Button>
-        </ButtonGroup>
+        </div>
       </Form>
     </StyledContent>
   );
