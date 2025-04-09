@@ -98,6 +98,9 @@ export const subHeader = css({
 
 export const customTableStyle = {
   borderStyle: 'none',
+  '& .MuiDataGrid-columnHeader > .MuiDataGrid-columnSeparator': {
+    visibility: 'hidden',
+  },
   '& .MuiDataGrid-columnHeaders': {
     borderBottom: 'none',
   },
@@ -107,6 +110,9 @@ export const customTableStyle = {
   },
   '& .MuiDataGrid-row:hover': {
     backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-columnHeaderTitle': {
+    fontWeight: '700',
   },
 };
 

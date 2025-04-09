@@ -301,40 +301,23 @@ export default function FarmInformation() {
               }}
               orientation="horizontal"
             />
-            <Checkbox
-              value="HasVegetables"
-              isSelected={formData.HasVegetables || false}
-              onChange={(s) => handleChange('HasVegetables', s)}
-            >
-              I have Horticultural crops
-            </Checkbox>
-            <div css={formData.Crops ? showCheckboxGroup : hideCheckboxGroup}>
-              <CheckboxGroup label="Select your crops:">
-                <Checkbox
-                  value="HasVegetables"
-                  isSelected={formData.HasVegetables}
-                  onChange={(s) => handleChange('HasVegetables', s)}
-                >
-                  Vegetables
-                </Checkbox>
-                <Checkbox
-                  value="HasBerries"
-                  isSelected={formData.HasBerries}
-                  onChange={(s) => handleChange('HasBerries', s)}
-                >
-                  Berries
-                </Checkbox>
-              </CheckboxGroup>
+            {/* <div>{JSON.stringify(formData)}</div> */}
+            <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
+              <Checkbox
+                value="HasVegetables"
+                isSelected={formData.HasVegetables}
+                onChange={(s) => handleChange('HasVegetables', s)}
+              >
+                I have vegetables
+              </Checkbox>
+              <Checkbox
+                value="HasBerries"
+                isSelected={formData.HasBerries}
+                onChange={(s) => handleChange('HasBerries', s)}
+              >
+                I have berries
+              </Checkbox>
             </div>
-          </Grid>
-          <Grid size={12}>
-            <Checkbox
-              value="HasBerries"
-              isSelected={formData.HasBerries || false}
-              onChange={(s) => handleChange('HasBerries', s)}
-            >
-              I have Livestock
-            </Checkbox>
           </Grid>
           <Grid size={12}>
             <YesNoRadioButtons

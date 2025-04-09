@@ -3,7 +3,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -19,197 +19,95 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid2';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-// import { Dropdown, InputField, Button } from '../../components/common';
-// import Modal from '@/components/common/Modal/Modal';
-import {
-  formCss,
-  // formGridBreakpoints,
-  // hideCheckboxGroup,
-  // showCheckboxGroup,
-} from '../../common.styles';
+import { formCss } from '../../common.styles';
 import {
   customTableStyle,
   StyledContent,
   tableActionButtonCss,
-  // ListItemContainer,
-  // ButtonWrapper,
-  // Header,
-  // Column,
-  // ListItem,
-  // ContentWrapper,
-  // ButtonContainer,
-  // ErrorText,
+  ErrorText,
 } from './fieldList.styles';
-// import NMPFileFieldData from '@/types/NMPFileFieldData';
-// import ViewCard from '@/components/common/ViewCard/ViewCard';
-import {
-  // FARM_INFORMATION,
-  FIELD_LIST,
-  // SOIL_TESTS
-} from '@/constants/RouteConstants';
-// import { initFields, saveFieldsToFile } from '../../utils/utils';
+import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { FARM_INFORMATION, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
+import { initFields, saveFieldsToFile } from '../../utils/utils';
 import useAppService from '@/services/app/useAppService';
 
-type FieldEntry = {
-  id?: number;
-  fieldName: string;
-  area: number | undefined;
-  manureApplication: string;
-  comments: string;
-};
+type tempNMPFileFieldData = NMPFileFieldData & { id?: string };
 
-const EMPTY_FIELD_FORM: FieldEntry = {
-  fieldName: '',
-  comments: '',
-  area: undefined,
-  manureApplication: '',
+const initialFieldFormData: tempNMPFileFieldData = {
+  FieldName: '',
+  Area: '',
+  PreviousYearManureApplicationFrequency: '0',
+  Comment: '',
+  SoilTest: {},
+  Crops: [],
 };
-
-// const initialFieldFormData = {
-//   FieldName: '',
-//   Area: '',
-//   PreviousYearManureApplicationFrequency: '0',
-//   Comment: '',
-//   SoilTest: {},
-//   Crops: [],
-// };
 
 const manureOptions = [
-  { id: 0, label: 'Select' },
-  { id: 1, label: 'No Manure in the last 2 years' },
-  { id: 2, label: 'Manure applied in 1 of the 2 years' },
-  { id: 3, label: 'Manure applied in each of the 2 years' },
+  { id: '0', label: 'Select' },
+  { id: '1', label: 'No Manure in the last 2 years' },
+  { id: '2', label: 'Manure applied in 1 of the 2 years' },
+  { id: '3', label: 'Manure applied in each of the 2 years' },
 ];
 
 export default function FieldList() {
-  const {
-    // state,
-    // setNMPFile,
-    setProgressStep,
-  } = useAppService();
-  // const navigate = useNavigate();
+  const { state, setNMPFile, setProgressStep } = useAppService();
+  const [formData, setFormData] = useState<tempNMPFileFieldData>(initialFieldFormData);
+  const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
+  const [showViewError, setShowViewError] = useState<string>('');
 
-  const [fieldList, setFieldList] = useState<Array<FieldEntry>>([
-    {
-      id: 0,
-      fieldName: 'Test Field',
-      comments: 'None',
-      area: 42,
-      manureApplication: 'TestApplication',
-    },
-    {
-      id: 1,
-      fieldName: 'Test Field 2',
-      comments: 'None 2',
-      area: 422,
-      manureApplication: 'TestApplication2',
-    },
-  ]);
+  const navigate = useNavigate();
 
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [editIndex, setEditIndex] = useState<number | null>(null);
-  // const [fieldFormData, setFieldFormData] = useState<NMPFileFieldData>(initialFieldFormData);
-  // const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
-  // const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-  //   const { name, value } = e.target;
-  //   setFieldFormData({ ...fieldFormData, [name]: value });
-  // };
-
-  // const handleEdit = (index: number) => {
-  //   setFieldFormData(fields[index]);
-  //   setEditIndex(index);
-  //   setIsModalVisible(true);
-  // };
-
-  // const handleDelete = (index: number) => {
-  //   const updatedFields = fields.filter((_, i) => i !== index);
-  //   setFields(updatedFields);
-  // };
-
-  // const validate = () => {
-  //   const newErrors: { [key: string]: string } = {};
-  //   if (!fieldFormData.FieldName.trim()) {
-  //     newErrors.FieldName = 'Field Name is required';
-  //   } else if (
-  //     fields.some(
-  //       (field, index) =>
-  //         field.FieldName.trim().toLowerCase() === fieldFormData.FieldName.trim().toLowerCase() &&
-  //         index !== editIndex,
-  //     )
-  //   ) {
-  //     newErrors.FieldName = 'Field Name must be unique';
-  //   }
-  //   if (!fieldFormData.Area.trim() || Number.isNaN(Number(fieldFormData.Area))) {
-  //     newErrors.Area = 'Area is required and must be a number';
-  //   }
-  //   if (fieldFormData.PreviousYearManureApplicationFrequency === '0') {
-  //     newErrors.PreviousYearManureApplicationFrequency =
-  //       'Please select a manure application frequency';
-  //   }
-  //   return newErrors;
-  // };
-
-  // const handleSubmit = () => {
-  //   const validationErrors = validate();
-  //   if (Object.keys(validationErrors).length > 0) {
-  //     setErrors(validationErrors);
-  //     return;
-  //   }
-  //   setErrors({});
-  //   if (editIndex !== null) {
-  //     const updatedFields = fields.map((field, index) =>
-  //       index === editIndex ? fieldFormData : field,
-  //     );
-  //     setFields(updatedFields);
-  //     setEditIndex(null);
-  //   } else {
-  //     setFields([...fields, fieldFormData]);
-  //   }
-  //   setFieldFormData(initialFieldFormData);
-  //   setIsModalVisible(false);
-  // };
-
-  // const handleNext = () => {
-  //   saveFieldsToFile(fields, state.nmpFile, setNMPFile);
-  //   navigate(SOIL_TESTS);
-  // };
-
-  // const handlePrevious = () => {
-  //   navigate(FARM_INFORMATION);
-  // };
+  const [fieldList, setFieldList] = useState<Array<tempNMPFileFieldData>>(
+    // Load NMP fields into view, add id key for UI tracking purposes
+    // id key removed on save
+    initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
+      ...fieldElement,
+      id: index.toString(),
+    })),
+  );
 
   useEffect(() => {
     setProgressStep(3);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const filteredFields = fields.filter((field) => field.FieldName.trim() !== '');
-
-  const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
-  const [formData, setFormData] = useState<FieldEntry>(EMPTY_FIELD_FORM);
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
 
-    // console.log(e);
-    const data = Object.fromEntries(new FormData(e.currentTarget)) as unknown as FieldEntry;
-    setFieldList((prev) => [...prev, { ...data, id: prev?.length ?? 0 }]);
     if (isEditingForm) {
-      // temp blank
-      setIsEditingForm(false);
+      // If editing, find and replace field instead of adding new field
+      const replaceIndex = fieldList.findIndex((element) => element?.id === formData?.id);
+      setFieldList((prev) => {
+        const newList = [...prev];
+        newList[replaceIndex] = { ...formData };
+        return newList;
+      });
     } else {
-      setFormData(EMPTY_FIELD_FORM);
+      //
+      setFieldList((prev) => [...prev, { ...formData, id: prev?.length.toString() ?? '0' }]);
     }
+    setFormData(initialFieldFormData);
+    setIsEditingForm(false);
     setIsDialogOpen(false);
+    setShowViewError('');
   };
 
-  const handleFormFieldChange = (field: string, value: string | number | undefined) => {
+  const handleFormFieldChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const validateUniqueField = (): string => {
+    // Trigger validation error if blank, replaces default isRequired
+    if (!formData?.FieldName) return ' ';
+
+    // Check if field name is unique, with exception of editing the same field
+    const isNameValid = fieldList.some(
+      (fieldRow) => fieldRow.FieldName === formData.FieldName && fieldRow.id !== formData?.id,
+    );
+    return isNameValid ? ' must be unique' : '';
   };
 
   const handleEditRow = (e: any) => {
@@ -219,15 +117,36 @@ export default function FieldList() {
   };
 
   const handleDeleteRow = (e: any) => {
-    // delete row
     console.log(e);
+    setFieldList((prev) => {
+      const newList = [...prev];
+      if (e?.id === 0 || e?.id) newList.splice(e.id, 1);
+      return newList;
+    });
+  };
+
+  const handleNextPage = () => {
+    setShowViewError('');
+
+    if (fieldList.length) {
+      saveFieldsToFile(
+        // Delete the id key in each field to prevent saving into NMPfile
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        fieldList.map(({ id, ...remainingFields }) => remainingFields),
+        state.nmpFile,
+        setNMPFile,
+      );
+      navigate(SOIL_TESTS);
+    } else {
+      setShowViewError('Must enter at least 1 field');
+    }
   };
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'fieldName', headerName: 'Field Type', width: 200, minWidth: 150, maxWidth: 300 },
-      { field: 'area', headerName: 'Area', width: 150, minWidth: 125, maxWidth: 300 },
-      { field: 'comments', headerName: 'Comments (optional)', minWidth: 200, maxWidth: 300 },
+      { field: 'FieldName', headerName: 'Field Type', width: 200, minWidth: 150, maxWidth: 300 },
+      { field: 'Area', headerName: 'Area', width: 150, minWidth: 125, maxWidth: 300 },
+      { field: 'Comment', headerName: 'Comment (optional)', minWidth: 200, maxWidth: 300 },
       {
         field: '',
         headerName: 'Actions',
@@ -258,7 +177,6 @@ export default function FieldList() {
       <ProgressStepper step={FIELD_LIST} />
       <AppTitle />
       <PageTitle title="Field Information" />
-
       <>
         <div
           css={{
@@ -330,35 +248,36 @@ export default function FieldList() {
                 >
                   <Grid size={6}>
                     <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid ? '--error' : ''}`}
+                      className={`bcds-react-aria-Select--Label ${isFormInvalid && validateUniqueField() ? '--error' : ''}`}
                     >
-                      Field name
+                      Field name {isFormInvalid && validateUniqueField()}
                     </span>
                     <TextField
                       isRequired
-                      name="fieldName"
-                      value={formData?.fieldName}
-                      onChange={(e) => handleFormFieldChange('fieldName', e)}
+                      name="FieldName"
+                      value={formData?.FieldName}
+                      validate={() => (isFormInvalid ? validateUniqueField() : '')}
+                      onChange={(e) => handleFormFieldChange('FieldName', e)}
                     />
                   </Grid>
                   <Grid size={6}>
                     <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid ? '--error' : ''}`}
+                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.Area ? '--error' : ''}`}
                     >
                       Area
                     </span>
                     <TextField
                       isRequired
                       type="number"
-                      name="area"
-                      value={formData?.area?.toString()}
-                      onChange={(e) => handleFormFieldChange('area', e)}
+                      name="Area"
+                      value={formData?.Area?.toString()}
+                      onChange={(e) => handleFormFieldChange('Area', e?.trim())}
                     />
                   </Grid>
 
                   <Grid size={6}>
                     <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid ? '--error' : ''}`}
+                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.PreviousYearManureApplicationFrequency ? '--error' : ''}`}
                     >
                       Manure Application
                     </span>
@@ -366,18 +285,21 @@ export default function FieldList() {
                       isRequired
                       name="manureApplication"
                       items={manureOptions}
-                      value={formData?.manureApplication}
-                      onChange={(e: string | number | undefined) =>
-                        handleFormFieldChange('manureApplication', e)
-                      }
+                      selectedKey={formData?.PreviousYearManureApplicationFrequency}
+                      onSelectionChange={(e) => {
+                        handleFormFieldChange(
+                          'PreviousYearManureApplicationFrequency',
+                          e.toString(),
+                        );
+                      }}
                     />
                   </Grid>
                   <Grid size={6}>
-                    <span>Comments (Optional)</span>
+                    <span>Comment (Optional)</span>
                     <TextField
-                      name="comments"
-                      value={formData.comments}
-                      onChange={(e) => handleFormFieldChange('comments', e)}
+                      name="Comment"
+                      value={formData.Comment}
+                      onChange={(e) => handleFormFieldChange('Comment', e)}
                     />
                   </Grid>
                 </Grid>
@@ -412,21 +334,20 @@ export default function FieldList() {
           </Dialog>
         </Modal>
       </>
-      <TabsMaterial tabLabel={['Field List', 'Soil Tests', 'Crops']}>
-        {[
-          <DataGrid
-            sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-            key="Field List"
-            rows={fieldList}
-            columns={columns}
-            checkboxSelection
-            disableRowSelectionOnClick
-            disableColumnMenu
-            hideFooterPagination
-            hideFooter
-          />,
-        ]}
-      </TabsMaterial>
+      <TabsMaterial
+        activeTab={0}
+        tabLabel={['Field List', 'Soil Tests', 'Crops']}
+      />
+      <DataGrid
+        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+        rows={fieldList}
+        columns={columns}
+        disableRowSelectionOnClick
+        disableColumnMenu
+        hideFooterPagination
+        hideFooter
+      />
+      <ErrorText>{showViewError}</ErrorText>
       <ButtonGroup
         alignment="start"
         ariaLabel="A group of buttons"
@@ -436,6 +357,7 @@ export default function FieldList() {
           size="medium"
           aria-label="Back"
           variant="secondary"
+          onPress={() => navigate(FARM_INFORMATION)}
         >
           BACK
         </Button>
@@ -443,6 +365,7 @@ export default function FieldList() {
           size="medium"
           aria-label="Next"
           variant="primary"
+          onPress={handleNextPage}
           type="submit"
         >
           Next
@@ -470,7 +393,7 @@ export default function FieldList() {
     //       <Header>
     //         <Column>Field Name</Column>
     //         <Column>Area</Column>
-    //         <Column>Comments</Column>
+    //         <Column>Comment</Column>
     //         <Column align="right">Actions</Column>
     //       </Header>
     //     )}
@@ -552,7 +475,7 @@ export default function FieldList() {
     //       onChange={handleChange}
     //     />
     //     <InputField
-    //       label="Comments (optional)"
+    //       label="Comment (optional)"
     //       type="text"
     //       name="Comment"
     //       value={fieldFormData.Comment}
