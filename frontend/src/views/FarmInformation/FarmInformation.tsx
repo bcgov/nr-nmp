@@ -354,6 +354,7 @@ export default function FarmInformation() {
           alignment="start"
           ariaLabel="A group of buttons"
           orientation="horizontal"
+          style={{ display: 'flex', justifyContent: 'space-between' }}
         >
           <Button
             size="medium"
