@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Animals(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -8,6 +9,7 @@ class Animals(models.Model):
     class Meta:
         managed = True
         db_table = 'animals'
+
 
 class AnimalSubtype(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -24,6 +26,7 @@ class AnimalSubtype(models.Model):
     class Meta:
         managed = True
         db_table = 'animal_subtype'
+
 
 class Breed(models.Model):
     id = models.IntegerField(primary_key=True)

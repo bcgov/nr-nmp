@@ -1,6 +1,5 @@
-from django.conf import settings
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from pprint import pprint
+
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 

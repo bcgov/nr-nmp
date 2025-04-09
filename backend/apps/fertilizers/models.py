@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class FertilizerTypes(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -9,6 +10,7 @@ class FertilizerTypes(models.Model):
     class Meta:
         managed = True
         db_table = 'fertilizer_types'
+
 
 class FertilizerUnits(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -21,6 +23,7 @@ class FertilizerUnits(models.Model):
     class Meta:
         managed = True
         db_table = 'fertilizer_units'
+
 
 class Fertilizers(models.Model):
     id = models.IntegerField(primary_key=True)

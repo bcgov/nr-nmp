@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class CropTypes(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -11,7 +12,8 @@ class CropTypes(models.Model):
     class Meta:
         managed = True
         db_table = 'crop_types'
-        
+
+
 class Crops(models.Model):
     id = models.IntegerField(primary_key=True)
     cropname = models.CharField(max_length=100)
@@ -32,6 +34,7 @@ class Crops(models.Model):
         managed = True
         db_table = 'crops'
 
+
 class PreviousCropTypes(models.Model):
     id = models.IntegerField(primary_key=True)
     previouscropcode = models.IntegerField()
@@ -45,6 +48,7 @@ class PreviousCropTypes(models.Model):
         managed = True
         db_table = 'previous_crop_types'
 
+
 class CropSoilTestPhosphorousRegions(models.Model):
     id = models.IntegerField(primary_key=True)
     cropid = models.IntegerField()
@@ -54,6 +58,7 @@ class CropSoilTestPhosphorousRegions(models.Model):
     class Meta:
         managed = True
         db_table = 'crop_soil_test_phosphorous_regions'
+
 
 class SoilTestPhosphorousRecommendation(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -66,6 +71,7 @@ class SoilTestPhosphorousRecommendation(models.Model):
         managed = True
         db_table = 'soil_test_phosphorous_recommendation'
 
+
 class SoilTestPhosphorousKelownaRanges(models.Model):
     id = models.IntegerField(primary_key=True)
     rangelow = models.IntegerField()
@@ -74,6 +80,7 @@ class SoilTestPhosphorousKelownaRanges(models.Model):
     class Meta:
         managed = True
         db_table = 'soil_test_phosphorous_kelowna_ranges'
+
 
 class SoilTestMethods(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -86,6 +93,7 @@ class SoilTestMethods(models.Model):
     class Meta:
         managed = True
         db_table = 'soil_test_methods'
+
 
 class ConversionFactors(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -109,6 +117,7 @@ class ConversionFactors(models.Model):
         managed = True
         db_table = 'conversion_factors'
 
+
 class SoilTestPotassiumKelownaRanges(models.Model):
     id = models.IntegerField(primary_key=True)
     rangelow = models.IntegerField()
@@ -117,6 +126,7 @@ class SoilTestPotassiumKelownaRanges(models.Model):
     class Meta:
         managed = True
         db_table = 'soil_test_potassium_kelowna_ranges'
+
 
 class SoilTestPotassiumRecommendation(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -129,6 +139,7 @@ class SoilTestPotassiumRecommendation(models.Model):
         managed = True
         db_table = 'soil_test_potassium_recommendation'
 
+
 class CropSoilPotassiumRegions(models.Model):
     id = models.IntegerField(primary_key=True)
     cropid = models.IntegerField()
@@ -139,6 +150,7 @@ class CropSoilPotassiumRegions(models.Model):
         managed = True
         db_table = 'crop_soil_potassium_regions'
 
+
 class CropYields(models.Model):
     id = models.IntegerField(primary_key=True)
     cropid = models.IntegerField()
@@ -148,6 +160,7 @@ class CropYields(models.Model):
     class Meta:
         managed = True
         db_table = 'crop_yields'
+
 
 class NitrogenRecommendation(models.Model):
     id = models.IntegerField(primary_key=True)
