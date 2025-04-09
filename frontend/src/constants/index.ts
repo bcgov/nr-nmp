@@ -1,4 +1,4 @@
-import blankNMPFileYearData from './BlankNMPFileYearData';
+import defaultNMPFileYear from './DefaultNMPFileYear';
 import constants from './Constants';
 import DefaultLiquidManureConversionFactors from './DefaultLiquidManureConversionFactors';
 import DefaultManureFormData from './DefaultManureFormData';
@@ -7,7 +7,7 @@ import defaultNMPFileCropsData from './DefaultNMPFileCropsData';
 import DefaultSolidManureConversionFactors from './DefaultSolidManureConversionFactors';
 
 export {
-  blankNMPFileYearData,
+  defaultNMPFileYear,
   constants,
   DefaultLiquidManureConversionFactors,
   DefaultManureFormData,

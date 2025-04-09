@@ -9,6 +9,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData } from './types';
 import NMPFile from '@/types/NMPFile';
 import BeefCattle from './BeefCattle';
+import DairyCattle from './DairyCattle/DairyCattle';
 import {
   Header,
   FlexContainer,
@@ -19,8 +20,7 @@ import {
 import { Column } from '@/views/FieldList/fieldList.styles';
 import StyledContent from '../LandingPage/landingPage.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
-import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
-import DairyCattle from './DairyCattle/DairyCattle';
+import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
@@ -85,11 +85,11 @@ export default function AddAnimals() {
     if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
     else {
       nmpFile = { ...defaultNMPFile };
-      nmpFile.years.push({ ...blankNMPFileYearData });
+      nmpFile.years.push({ ...defaultNMPFileYear });
     }
     let data = nmpFile.years[0].FarmAnimals;
     if (data === undefined || data.length === 0) {
-      data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id }));
+      data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id })) as AnimalData[];
     }
 
     const currentDate = new Date().toLocaleDateString('en-US', {
@@ -207,7 +207,7 @@ export default function AddAnimals() {
 
     const nmpFile: NMPFile = JSON.parse(state.nmpFile);
     // TODO: Add multi-year handling
-    nmpFile.years[0].FarmAnimals = formData;
+    nmpFile.years[0].FarmAnimals = formData.filter((f) => f !== null);
     // TODO: Copy the data of the other tabs
     setNMPFile(JSON.stringify(nmpFile));
 

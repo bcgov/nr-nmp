@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -8,11 +8,14 @@ import {
   NMPFileImportedManureData,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
+  NMPFile,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
   DefaultLiquidManureConversionFactors,
   DefaultManureFormData,
+  defaultNMPFile,
+  defaultNMPFileYear,
 } from '@/constants';
 import { Button, Modal, InputField, Dropdown } from '@/components/common';
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
@@ -25,11 +28,16 @@ import {
   Column,
   ListItem,
   ListItemContainer,
+  GeneratedListItemContainer,
+  GeneratedHeader,
 } from './manureAndImports.styles';
 import useAppService from '@/services/app/useAppService';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
-import { CROPS, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
-import { initManures, saveManuresToFile } from '@/utils/utils';
+import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
+import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
+import { DAIRY_COW_ID, MILKING_COW_ID } from '../AddAnimals/types';
+import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
+import { getLiquidManureDisplay, getSolidManureDisplay } from '../AddAnimals/utils';
 
 const manureTypeOptions = [
   { label: 'Select', value: 0 },
@@ -39,13 +47,58 @@ const manureTypeOptions = [
 
 export default function ManureAndImports() {
   const { state, setNMPFile, setProgressStep } = useAppService();
+  const parsedFile: NMPFile = useMemo(() => {
+    if (state.nmpFile) {
+      return JSON.parse(state.nmpFile);
+    }
+    // TODO: Once we cache state, throw error if uninitialized
+    return { ...defaultNMPFile, years: [{...defaultNMPFileYear}] };
+  }, [state.nmpFile]);
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [manures, setManures] = useState<NMPFileImportedManureData[]>(initManures(state));
+  const [manures, setManures] = useState<NMPFileImportedManureData[]>(
+    parsedFile.years[0]?.ImportedManures || [],
+  );
+  const generatedManures: NMPFileGeneratedManureData[] = useMemo(() => {
+    const farmAnimals = parsedFile.years[0]?.FarmAnimals;
+    if (farmAnimals === undefined) {
+      return [];
+    }
+    const gManures: NMPFileGeneratedManureData[] = [];
+    for (let i = 0; i < farmAnimals.length; i += 1) {
+      const animal = farmAnimals[i];
+      if (animal.manureData !== undefined) {
+        if (animal.id === DAIRY_COW_ID && animal.subtype === MILKING_COW_ID) {
+          // TODO: Add wash water as manure. We're ignoring a lot of dairy cow stuff for now
+        }
+
+        if (animal.manureData.annualSolidManure !== undefined) {
+          gManures.push({
+            ...DefaultGeneratedManureFormData,
+            UniqueMaterialName: animal.manureData.name,
+            ManureTypeName: '2',
+            AnnualAmount: animal.manureData.annualSolidManure,
+            AnnualAmountTonsWeight: animal.manureData.annualSolidManure,
+            AnnualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
+          });
+        } else {
+          gManures.push({
+            ...DefaultGeneratedManureFormData,
+            UniqueMaterialName: animal.manureData.name,
+            ManureTypeName: '1',
+            AnnualAmount: animal.manureData.annualLiquidManure,
+            AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
+            AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
+          });
+        }
+      }
+    }
+    return gManures;
+  }, [parsedFile.years]);
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
     SolidManureConversionFactors[]
   >([DefaultSolidManureConversionFactors]);
@@ -73,13 +126,13 @@ export default function ManureAndImports() {
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!manureFormData.MaterialName?.trim()) {
+    if (!manureFormData.UniqueMaterialName?.trim()) {
       newErrors.FieldName = 'Field Name is required';
     } else if (
       manures.some(
         (manure, index) =>
-          manure.MaterialName?.trim().toLowerCase() ===
-            (manureFormData.MaterialName ?? '').trim().toLowerCase() && index !== editIndex,
+          manure.UniqueMaterialName?.trim().toLowerCase() ===
+            (manureFormData.UniqueMaterialName ?? '').trim().toLowerCase() && index !== editIndex,
       )
     ) {
       newErrors.FieldName = 'Material Name must be unique';
@@ -112,7 +165,7 @@ export default function ManureAndImports() {
     }
     setErrors({});
 
-    let updatedManureFormData = {};
+    let updatedManureFormData: NMPFileImportedManureData;
 
     if (manureFormData.ManureTypeName === '1') {
       const liquidManureConversionFactor = liquidManureDropdownOptions.find(
@@ -163,6 +216,8 @@ export default function ManureAndImports() {
         AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10).toString()} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10).toString()} m³)`,
         AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10).toString()} tons`,
       };
+    } else {
+      throw new Error("Manure type isn't set.");
     }
 
     if (editIndex !== null) {
@@ -184,13 +239,25 @@ export default function ManureAndImports() {
   };
 
   const handlePrevious = () => {
-    // TODO: Add a check to see if this is the animal flow
-    // If so, navigate to ADD_ANIMALS instead
-    navigate(CROPS);
+    // Remove the generated manures, which will be reprocessed when returning to this page
+    if (parsedFile.years[0].GeneratedManures !== undefined) {
+      const nmpFile = { ...parsedFile };
+      nmpFile.years[0].GeneratedManures = undefined;
+      setNMPFile(JSON.stringify(nmpFile));
+    }
+
+    if (parsedFile.years[0]?.FarmAnimals !== undefined) {
+      navigate(ADD_ANIMALS);
+    } else {
+      navigate(CROPS);
+    }
   };
 
   const handleNext = () => {
-    saveManuresToFile(manures, state.nmpFile, setNMPFile);
+    const nmpFile = { ...parsedFile };
+    nmpFile.years[0].ImportedManures = structuredClone(manures);
+    nmpFile.years[0].GeneratedManures = structuredClone(generatedManures);
+    setNMPFile(JSON.stringify(nmpFile));
     navigate(NUTRIENT_ANALYSIS);
   };
 
@@ -226,6 +293,25 @@ export default function ManureAndImports() {
       handlePrevious={handlePrevious}
       handleNext={handleNext}
     >
+      {generatedManures.length > 0 && (
+        <>
+          <span>Manure Generated</span>
+          <ContentWrapper hasManure>
+            <GeneratedHeader>
+              <Column>Animal Sub Type</Column>
+              <Column align="right">Amount collected per year</Column>
+            </GeneratedHeader>
+            {generatedManures.map((manure) => (
+              <GeneratedListItemContainer key={manure.UniqueMaterialName}>
+                <ListItem>{manure.UniqueMaterialName}</ListItem>
+                <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
+              </GeneratedListItemContainer>
+            ))}
+          </ContentWrapper>
+          <hr className="solid" />
+          <span>Manure/Compost Imported</span>
+        </>
+      )}
       <ButtonContainer hasManure={manures.length > 0}>
         <Button
           text="Add Manure"
@@ -247,9 +333,9 @@ export default function ManureAndImports() {
           </Header>
         )}
         {manures.map((manure, index) => (
-          <ListItemContainer key={manure.MaterialName}>
+          <ListItemContainer key={manure.UniqueMaterialName}>
             <ListItem>
-              {manure.MaterialName} {manure.ManureTypeName === '1' ? '(Liquid)' : '(Solid)'}
+              {manure.UniqueMaterialName} {manure.ManureTypeName === '1' ? '(Liquid)' : '(Solid)'}
             </ListItem>
             <ListItem>{manure.AnnualAmountDisplayVolume}</ListItem>
             <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
@@ -304,8 +390,8 @@ export default function ManureAndImports() {
         <InputField
           label="Material Name"
           type="text"
-          name="MaterialName"
-          value={manureFormData.MaterialName || ''}
+          name="UniqueMaterialName"
+          value={manureFormData.UniqueMaterialName || ''}
           onChange={handleChange}
         />
         {errors.ManureTypeName && <ErrorText>{errors.ManureTypeName}</ErrorText>}

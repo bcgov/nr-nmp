@@ -1,4 +1,4 @@
-const blankNMPFileYearData = {
+const defaultNMPFileYear = {
   Year: '',
   Fields: [],
   // Keeping these properties to show what used to be stored in the NMP file
@@ -68,4 +68,4 @@ const blankNMPFileYearData = {
   ManureStorageSystems: [],
 };
 
-export default blankNMPFileYearData;
+export default defaultNMPFileYear;

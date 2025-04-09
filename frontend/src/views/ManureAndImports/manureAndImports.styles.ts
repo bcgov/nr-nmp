@@ -7,6 +7,14 @@ export const ContentWrapper = styled.div<{ hasManure: boolean }>`
   margin-bottom: ${({ hasManure }) => (hasManure ? '170px' : '0')};
 `;
 
+export const GeneratedListItemContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
 export const ListItemContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
@@ -54,6 +62,17 @@ export const ButtonContainer = styled.div<{ hasManure: boolean }>`
     width: 110px;
     height: 40px;
   }
+`;
+
+export const GeneratedHeader = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
 `;
 
 export const Header = styled.div`
