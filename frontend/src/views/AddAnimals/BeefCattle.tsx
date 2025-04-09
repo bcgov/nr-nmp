@@ -155,12 +155,6 @@ export default function BeefCattle({
     <>
       {!isExpanded ? (
         <ListItemContainer key={`beef-${myIndex}`}>
-          <ListItem>
-            <input
-              type="checkbox"
-              aria-label="Checkbox"
-            />
-          </ListItem>
           <ListItem>{`Beef Cattle - ${selectedSubtypeName}`}</ListItem>
           <ListItem>{`${Math.round(manureInTons)} ton${manureInTons === 1 ? '' : 's'}`}</ListItem>
           <ListItem>{date}</ListItem>

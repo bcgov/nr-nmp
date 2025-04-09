@@ -280,12 +280,6 @@ export default function AddAnimals() {
             </AddButton>
           </FlexContainer>
           <Header>
-            <Column text-align="center">
-              <input
-                type="checkbox"
-                aria-label="Select all"
-              />
-            </Column>
             <Column>Animal Type</Column>
             <Column>Annual Manure</Column>
             <Column>Date</Column>

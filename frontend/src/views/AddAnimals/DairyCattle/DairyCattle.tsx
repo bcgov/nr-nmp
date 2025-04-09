@@ -227,12 +227,6 @@ export default function DairyCattle({
       {!isExpanded ? (
         <div key={`dairy-${myIndex}`}>
           <ListItemContainer>
-            <ListItem>
-              <input
-                type="checkbox"
-                aria-label="Checkbox"
-              />
-            </ListItem>
             <ListItem>{`Dairy - ${selectedSubtypeName}`}</ListItem>
             <ListItem>{`${Math.round(annualManure)} ${formData.manureType === 'liquid' ? 'U.S. gallon' : 'ton'}${annualManure === 1 ? '' : 's'}`}</ListItem>
             <ListItem>{date}</ListItem>
