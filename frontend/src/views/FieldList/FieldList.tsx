@@ -149,6 +149,9 @@ export default function FieldList() {
     }
   };
 
+  const isManureOptionValid = () =>
+    formData?.PreviousYearManureApplicationFrequency !== manureOptions[0].id;
+
   const columns: GridColDef[] = useMemo(
     () => [
       { field: 'FieldName', headerName: 'Field Type', width: 200, minWidth: 150, maxWidth: 300 },
@@ -278,10 +281,9 @@ export default function FieldList() {
                       onChange={(e) => handleFormFieldChange('Area', e?.trim())}
                     />
                   </Grid>
-
                   <Grid size={6}>
                     <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.PreviousYearManureApplicationFrequency ? '--error' : ''}`}
+                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !isManureOptionValid() ? '--error' : ''}`}
                     >
                       Manure Application
                     </span>
@@ -290,6 +292,7 @@ export default function FieldList() {
                       name="manureApplication"
                       items={manureOptions}
                       selectedKey={formData?.PreviousYearManureApplicationFrequency}
+                      validate={() => (!isManureOptionValid() ? 'required' : '')}
                       onSelectionChange={(e) => {
                         handleFormFieldChange(
                           'PreviousYearManureApplicationFrequency',
