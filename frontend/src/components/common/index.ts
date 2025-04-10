@@ -10,6 +10,7 @@ import Modal from './Modal/Modal';
 import ProgressStepper from './ProgressStepper/ProgressStepper';
 import AppTitle from './AppTitle/AppTitle';
 import PageTitle from './PageTitle/PageTitle';
+import TabsMaterial from './TabsMaterial/TabsMaterial';
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   ProgressStepper,
   AppTitle,
   PageTitle,
+  TabsMaterial,
 };
