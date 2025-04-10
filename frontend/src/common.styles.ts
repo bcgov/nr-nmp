@@ -7,6 +7,7 @@ export const componentContainer = css({
   marginLeft: '3rem',
   marginRight: '3rem',
   maxWidth: '900px',
+  width: '100%',
 });
 
 export const formCss = css({
@@ -65,7 +66,6 @@ export const paragraphCss = css({
 export const buttonGroup = css({
   '.bcds-ButtonGroup': {
     marginTop: '1rem',
-    marginBottom: '3rem',
   },
 });
 
