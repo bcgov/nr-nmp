@@ -3,7 +3,6 @@ export interface BeefCattleData {
   subtype?: string;
   animalsPerFarm?: number;
   daysCollected?: number | undefined;
-  date?: string;
   manureData?: { name: string; annualSolidManure: number } | undefined;
   date?: string;
 }
