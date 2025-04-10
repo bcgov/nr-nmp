@@ -301,16 +301,20 @@ export default function FarmInformation() {
               orientation="horizontal"
             />
             {/* <div>{JSON.stringify(formData)}</div> */}
+            {/* <div>{JSON.stringify(formData)}</div> */}
             <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
               <Checkbox
                 value="HasVegetables"
                 isSelected={formData.HasVegetables}
+                isSelected={formData.HasVegetables}
                 onChange={(s) => handleChange('HasVegetables', s)}
               >
+                I have vegetables
                 I have vegetables
               </Checkbox>
               <Checkbox
                 value="HasBerries"
+                isSelected={formData.HasBerries}
                 isSelected={formData.HasBerries}
                 onChange={(s) => handleChange('HasBerries', s)}
               >
@@ -348,7 +352,12 @@ export default function FarmInformation() {
             </CheckboxGroup>
           </Grid>
         </Grid>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+
+        <ButtonGroup
+          alignment="start"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
           <Button
             size="medium"
             aria-label="Back"
@@ -365,7 +374,7 @@ export default function FarmInformation() {
           >
             Next
           </Button>
-        </div>
+        </ButtonGroup>
       </Form>
     </StyledContent>
   );
