@@ -52,7 +52,7 @@ export default function ManureAndImports() {
       return JSON.parse(state.nmpFile);
     }
     // TODO: Once we cache state, throw error if uninitialized
-    return { ...defaultNMPFile, years: [{...defaultNMPFileYear}] };
+    return { ...defaultNMPFile, years: [{ ...defaultNMPFileYear }] };
   }, [state.nmpFile]);
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
@@ -246,7 +246,10 @@ export default function ManureAndImports() {
       setNMPFile(JSON.stringify(nmpFile));
     }
 
-    if (parsedFile.years[0]?.FarmAnimals !== undefined) {
+    if (
+      parsedFile.years[0]?.FarmAnimals !== undefined &&
+      parsedFile.years[0].FarmAnimals.length > 0
+    ) {
       navigate(ADD_ANIMALS);
     } else {
       navigate(CROPS);
