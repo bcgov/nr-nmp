@@ -26,7 +26,6 @@ import {
 } from '../../common.styles';
 import { StyledContent, subHeader } from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
 import {
   ADD_ANIMALS,
   FARM_INFORMATION,
@@ -36,6 +35,7 @@ import {
 
 import { SelectOption } from '../../types';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
+import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 
 export default function FarmInformation() {
   const { state, setNMPFile, setProgressStep, setShowAnimalsStep } = useAppService();
@@ -204,7 +204,7 @@ export default function FarmInformation() {
 
     formData.FarmAnimals = formData.FarmAnimals.sort();
     nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
-    const year = { ...blankNMPFileYearData, Year: formData.Year };
+    const year = { ...defaultNMPFileYear, Year: formData.Year };
     nmpFile.years.push(year);
     setNMPFile(JSON.stringify(nmpFile));
 
