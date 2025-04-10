@@ -5,7 +5,6 @@ import React, { useState, useEffect, useContext, useMemo, useCallback } from 're
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
-  ButtonGroup,
   Checkbox,
   CheckboxGroup,
   Form,
@@ -301,20 +300,21 @@ export default function FarmInformation() {
               }}
               orientation="horizontal"
             />
+            {/* <div>{JSON.stringify(formData)}</div> */}
             <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
               <Checkbox
                 value="HasVegetables"
-                isSelected={formData.HasVegetables || false}
+                isSelected={formData.HasVegetables}
                 onChange={(s) => handleChange('HasVegetables', s)}
               >
-                Vegetables
+                I have vegetables
               </Checkbox>
               <Checkbox
                 value="HasBerries"
-                isSelected={formData.HasBerries || false}
+                isSelected={formData.HasBerries}
                 onChange={(s) => handleChange('HasBerries', s)}
               >
-                Berries
+                I have berries
               </Checkbox>
             </div>
           </Grid>
@@ -348,20 +348,7 @@ export default function FarmInformation() {
             </CheckboxGroup>
           </Grid>
         </Grid>
-
-        <ButtonGroup
-          alignment="start"
-          ariaLabel="A group of buttons"
-          orientation="horizontal"
-        >
-          <Button
-            size="medium"
-            aria-label="Next"
-            variant="primary"
-            type="submit"
-          >
-            Next
-          </Button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
           <Button
             size="medium"
             aria-label="Back"
@@ -370,7 +357,15 @@ export default function FarmInformation() {
           >
             BACK
           </Button>
-        </ButtonGroup>
+          <Button
+            size="medium"
+            aria-label="Next"
+            variant="primary"
+            type="submit"
+          >
+            Next
+          </Button>
+        </div>
       </Form>
     </StyledContent>
   );

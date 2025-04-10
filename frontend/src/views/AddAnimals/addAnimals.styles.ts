@@ -5,9 +5,10 @@ import styled from '@emotion/styled';
 
 export const Header = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1.5fr 1fr auto;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr auto;
   gap: 10px;
   font-weight: bold;
+  margin-top: 1em;
   margin-bottom: 10px;
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
@@ -58,7 +59,7 @@ export const FlexRowContainer = styled.div`
 
 export const ListItemContainer = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1.5fr 1fr auto;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr auto;
   gap: 10px;
   align-items: center;
   margin-bottom: 10px;
@@ -77,4 +78,25 @@ export const EditListItemBody = styled.div`
   border-top: 0;
   border-radius: 0 0 8px 8px;
   padding: 0 10px 10px 10px;
+`;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+`;
+
+export const DropdownButton = styled.button`
+  background: none;
+  border: none;
+  padding: 4px 8px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
 `;

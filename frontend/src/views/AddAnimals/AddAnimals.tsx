@@ -4,11 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import useAppService from '@/services/app/useAppService';
-import { Dropdown } from '@/components/common';
+import { AppTitle, Dropdown, PageTitle } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData } from './types';
 import NMPFile from '@/types/NMPFile';
 import BeefCattle from './BeefCattle';
+import DairyCattle from './DairyCattle/DairyCattle';
 import {
   Header,
   FlexContainer,
@@ -17,11 +18,13 @@ import {
   MarginWrapperTwo,
 } from './addAnimals.styles';
 import { Column } from '@/views/FieldList/fieldList.styles';
+import StyledContent from '../LandingPage/landingPage.styles';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 import DairyCattle from './DairyCattle/DairyCattle';
+import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
@@ -90,6 +93,12 @@ export default function AddAnimals() {
       data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id })) as AnimalData[];
     }
 
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
     const dataElems = data.map((d, index) => {
       if (d === null) {
         return null;
@@ -106,6 +115,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={index}
+            date={currentDate}
           />
         );
       }
@@ -121,6 +131,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={index}
+            date={currentDate}
           />
         );
       }
@@ -139,9 +150,14 @@ export default function AddAnimals() {
     // Right now we only handle cattle
     if (animalId !== '1' && animalId !== '2') return;
 
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
     const { length } = formData;
     setFormData((prev) => {
-      prev.push({ id: animalId });
+      prev.push({ id: animalId, date: currentDate });
       return prev;
     });
     setElems((prev) => {
@@ -156,6 +172,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={length}
+            date={currentDate}
           />,
         );
       } else if (animalId === '2') {
@@ -168,6 +185,7 @@ export default function AddAnimals() {
             updateIsComplete={setFormComplete}
             updateIsExpanded={setFormExpanded}
             myIndex={length}
+            date={currentDate}
           />,
         );
       }
@@ -225,46 +243,52 @@ export default function AddAnimals() {
   }, []);
 
   return (
-    <ViewCard
-      heading="Add Animals"
-      height="700px"
-      width="700px"
-      handlePrevious={handlePrevious}
-      handleNext={handleNext}
-      nextDisabled={nextDisabled}
-    >
-      <div style={{ overflowY: 'scroll' }}>
-        <Header>
-          <Column>Animal Type</Column>
-          <Column>Annual Manure Amount</Column>
-          <Column align="right">Actions</Column>
-        </Header>
-        {elems}
-      </div>
-      <FlexContainer>
-        <MarginWrapperOne>Add:</MarginWrapperOne>
-        <MarginWrapperTwo>
-          <Dropdown
-            label=""
-            name="Animals"
-            value={selectedAnimal || ''}
-            options={animalOptions}
-            onChange={(e) => setSelectedAnimal(e.target.value)}
-            flex="0.5"
-          />
-        </MarginWrapperTwo>
-        <AddButton
-          type="button"
-          onClick={() => {
-            handleAdd(selectedAnimal as string);
-            setSelectedAnimal(null);
-          }}
-          disabled={selectedAnimal === null || formExpanded.some((bool) => bool === true)}
-          aria-label="Add"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </AddButton>
-      </FlexContainer>
-    </ViewCard>
+    <StyledContent>
+      <ProgressStepper step={FARM_INFORMATION} />
+      <AppTitle />
+      <PageTitle title="Livestock Information" />
+      <ViewCard
+        heading="Add Animals"
+        height="500px"
+        width="700px"
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+        nextDisabled={nextDisabled}
+      >
+        <div style={{ overflow: 'auto', minHeight: '400px' }}>
+          <FlexContainer>
+            <MarginWrapperOne>Add:</MarginWrapperOne>
+            <MarginWrapperTwo>
+              <Dropdown
+                label=""
+                name="Animals"
+                value={selectedAnimal || ''}
+                options={animalOptions}
+                onChange={(e) => setSelectedAnimal(e.target.value)}
+                flex="0.5"
+              />
+            </MarginWrapperTwo>
+            <AddButton
+              type="button"
+              onClick={() => {
+                handleAdd(selectedAnimal as string);
+                setSelectedAnimal(null);
+              }}
+              disabled={selectedAnimal === null || formExpanded.some((bool) => bool === true)}
+              aria-label="Add"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </AddButton>
+          </FlexContainer>
+          <Header>
+            <Column>Animal Type</Column>
+            <Column>Annual Manure</Column>
+            <Column>Date</Column>
+            <Column>Actions</Column>
+          </Header>
+          {elems}
+        </div>
+      </ViewCard>
+    </StyledContent>
   );
 }

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ListItem } from '@/views/FieldList/fieldList.styles';
@@ -17,6 +17,8 @@ import {
   getSolidManureDisplay,
 } from '../utils';
 import {
+  DropdownButton,
+  DropdownMenu,
   EditListItemBody,
   EditListItemHeader,
   FlexRowContainer,
@@ -46,6 +48,7 @@ interface DairyCattleProps {
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
+  date: string;
 }
 
 const initData: (d: Partial<DairyCattleData>) => DairyCattleData = (data) => {
@@ -71,6 +74,7 @@ export default function DairyCattle({
   updateIsComplete,
   updateIsExpanded,
   myIndex,
+  date,
 }: DairyCattleProps) {
   const [formData, setFormData] = useState<DairyCattleData>(initData(startData));
   const [lastSaved, setLastSaved] = useState<DairyCattleData>(formData);
@@ -79,6 +83,7 @@ export default function DairyCattle({
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
@@ -240,21 +245,37 @@ export default function DairyCattle({
       {!isExpanded ? (
         <div key={`dairy-${myIndex}`}>
           <ListItemContainer>
-            <ListItem>{lastSaved.manureData?.name || ''}</ListItem>
+            <ListItem>{`Dairy - ${lastSaved.manureData?.name || ''}`}</ListItem>
             <ListItem>{manureDisplay}</ListItem>
+            <ListItem>{date}</ListItem>
             <ListItem align="right">
-              <button
-                type="button"
-                {...getToggleProps()}
+              <div
+                className="list-item"
+                style={{ position: 'relative' }}
+                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseLeave={() => setIsDropdownOpen(false)}
               >
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
-              <button
-                type="button"
-                onClick={() => onDelete(myIndex)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
+                <FontAwesomeIcon
+                  icon={faEllipsisH}
+                  style={{ cursor: 'pointer' }}
+                />
+                {isDropdownOpen && (
+                  <DropdownMenu className="dropdown-menu">
+                    <DropdownButton
+                      type="button"
+                      {...getToggleProps()}
+                    >
+                      <FontAwesomeIcon icon={faEdit} /> Edit
+                    </DropdownButton>
+                    <DropdownButton
+                      type="button"
+                      onClick={() => onDelete(myIndex)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} /> Delete
+                    </DropdownButton>
+                  </DropdownMenu>
+                )}
+              </div>
             </ListItem>
           </ListItemContainer>
           {formData.washWater && formData.washWaterUnit && (

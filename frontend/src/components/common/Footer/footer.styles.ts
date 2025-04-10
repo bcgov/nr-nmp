@@ -36,6 +36,7 @@ export const Banner = styled.div`
   display: flex;
   align-items: center;
   margin: 0;
+  border-left: 1px solid #4b5e73;
 `;
 
 export const BannerRight = styled.div`
@@ -69,4 +70,7 @@ export const Image = styled.img`
 
 export const StyledLink = styled.a`
   text-decoration: none;
+  padding: 0.1rem 0.5rem;
+  color: #fff !important;
+  border-right: 1px solid #4b5e73;
 `;
