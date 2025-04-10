@@ -34,11 +34,6 @@ interface BeefCattleProps {
   myIndex: number;
   date: string;
 }
-interface ListItemWithDropdownProps {
-  myIndex: number;
-  onDelete: (index: number) => void;
-  getToggleProps: () => React.ButtonHTMLAttributes<HTMLButtonElement>;
-}
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
   if (data.id !== '1') {
