@@ -300,20 +300,21 @@ export default function FarmInformation() {
               }}
               orientation="horizontal"
             />
+            {/* <div>{JSON.stringify(formData)}</div> */}
             <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
               <Checkbox
                 value="HasVegetables"
-                isSelected={formData.HasVegetables || false}
+                isSelected={formData.HasVegetables}
                 onChange={(s) => handleChange('HasVegetables', s)}
               >
-                Vegetables
+                I have vegetables
               </Checkbox>
               <Checkbox
                 value="HasBerries"
-                isSelected={formData.HasBerries || false}
+                isSelected={formData.HasBerries}
                 onChange={(s) => handleChange('HasBerries', s)}
               >
-                Berries
+                I have berries
               </Checkbox>
             </div>
           </Grid>
