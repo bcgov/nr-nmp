@@ -125,6 +125,13 @@ export default function FieldList() {
     });
   };
 
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setIsEditingForm(false);
+    setIsFormInvalid(false);
+    setFormData(initialFieldFormData);
+  };
+
   const handleNextPage = () => {
     setShowViewError('');
 
@@ -210,10 +217,7 @@ export default function FieldList() {
         <Modal
           isDismissable
           isOpen={isDialogOpen}
-          onOpenChange={(e) => {
-            setIsFormInvalid(false);
-            setIsDialogOpen(e);
-          }}
+          onOpenChange={handleDialogClose}
         >
           <Dialog
             isCloseable
@@ -230,7 +234,7 @@ export default function FieldList() {
                   fontSize: '1.25rem',
                 }}
               >
-                Add Field
+                {isEditingForm ? 'Edit Field' : 'Add Field'}
               </span>
               <Divider
                 aria-hidden="true"
@@ -315,10 +319,7 @@ export default function FieldList() {
                   <Button
                     type="reset"
                     variant="secondary"
-                    onPress={() => {
-                      setIsDialogOpen(false);
-                      setIsFormInvalid(false);
-                    }}
+                    onPress={handleDialogClose}
                   >
                     Cancel
                   </Button>
@@ -372,116 +373,5 @@ export default function FieldList() {
         </Button>
       </ButtonGroup>
     </StyledContent>
-    // <ViewCard
-    //   heading="Field List"
-    //   handlePrevious={handlePrevious}
-    //   handleNext={handleNext}
-    //   nextDisabled={fields.length === 0}
-    // >
-    //   <ButtonContainer hasFields={filteredFields.length > 0}>
-    //     <Button
-    //       text="Add Field"
-    //       handleClick={() => setIsModalVisible(true)}
-    //       aria-label="Add Field"
-    //       variant="primary"
-    //       size="sm"
-    //       disabled={false}
-    //     />
-    //   </ButtonContainer>
-    //   <ContentWrapper hasFields={filteredFields.length > 0}>
-    //     {filteredFields.length > 0 && (
-    //       <Header>
-    //         <Column>Field Name</Column>
-    //         <Column>Area</Column>
-    //         <Column>Comment</Column>
-    //         <Column align="right">Actions</Column>
-    //       </Header>
-    //     )}
-    //     {filteredFields.map((field, index) => (
-    //       <ListItemContainer key={field.FieldName}>
-    //         <ListItem>{field.FieldName}</ListItem>
-    //         <ListItem>{field.Area}</ListItem>
-    //         <ListItem>{field.Comment}</ListItem>
-    //         <ListItem align="right">
-    //           <button
-    //             type="button"
-    //             onClick={() => handleEdit(index)}
-    //           >
-    //             <FontAwesomeIcon icon={faEdit} />
-    //           </button>
-    //           <button
-    //             type="button"
-    //             onClick={() => handleDelete(index)}
-    //           >
-    //             <FontAwesomeIcon icon={faTrash} />
-    //           </button>
-    //         </ListItem>
-    //       </ListItemContainer>
-    //     ))}
-    //   </ContentWrapper>
-    //   <Modal
-    //     isVisible={isModalVisible}
-    //     title={editIndex !== null ? 'Edit Field' : 'Add Field'}
-    //     onClose={() => setIsModalVisible(false)}
-    //     footer={
-    //       <>
-    //         <ButtonWrapper>
-    //           <Button
-    //             text="Cancel"
-    //             handleClick={() => setIsModalVisible(false)}
-    //             aria-label="Cancel"
-    //             variant="secondary"
-    //             size="sm"
-    //             disabled={false}
-    //           />
-    //         </ButtonWrapper>
-    //         <ButtonWrapper>
-    //           <Button
-    //             text="Submit"
-    //             handleClick={handleSubmit}
-    //             aria-label="Submit"
-    //             variant="primary"
-    //             size="sm"
-    //             disabled={false}
-    //           />
-    //         </ButtonWrapper>
-    //       </>
-    //     }
-    //   >
-    //     {errors.FieldName && <ErrorText>{errors.FieldName}</ErrorText>}
-    //     <InputField
-    //       label="Field Name"
-    //       type="text"
-    //       name="FieldName"
-    //       value={fieldFormData.FieldName}
-    //       onChange={handleChange}
-    //     />
-    //     {errors.Area && <ErrorText>{errors.Area}</ErrorText>}
-    //     <InputField
-    //       label="Area"
-    //       type="text"
-    //       name="Area"
-    //       value={fieldFormData.Area}
-    //       onChange={handleChange}
-    //     />
-    //     {errors.PreviousYearManureApplicationFrequency && (
-    //       <ErrorText>{errors.PreviousYearManureApplicationFrequency}</ErrorText>
-    //     )}
-    //     <Dropdown
-    //       label="Manure application in previous years"
-    //       name="PreviousYearManureApplicationFrequency"
-    //       value={fieldFormData.PreviousYearManureApplicationFrequency}
-    //       options={manureOptions}
-    //       onChange={handleChange}
-    //     />
-    //     <InputField
-    //       label="Comment (optional)"
-    //       type="text"
-    //       name="Comment"
-    //       value={fieldFormData.Comment}
-    //       onChange={handleChange}
-    //     />
-    //   </Modal>
-    // </ViewCard>
   );
 }
