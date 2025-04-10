@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown, InputField } from '@/components/common';
-import { DairyCattleData, perDayUnit, perDayPerAnimalUnit } from '../types';
+import { DairyCattleData, PER_DAY_UNIT, PER_DAY_PER_ANIMAL_UNIT } from '../types';
 
 interface MilkingFieldsProps {
   milkProductionInit: number;
@@ -12,8 +12,8 @@ interface MilkingFieldsProps {
 }
 
 const washWaterOptions: { value: string; label: string }[] = [
-  { value: perDayPerAnimalUnit, label: 'US gallons/day/animal' },
-  { value: perDayUnit, label: 'US gallons/day' },
+  { value: PER_DAY_PER_ANIMAL_UNIT, label: 'US gallons/day/animal' },
+  { value: PER_DAY_UNIT, label: 'US gallons/day' },
 ];
 
 export default function MilkingFields({
@@ -41,7 +41,7 @@ export default function MilkingFields({
   useEffect(() => {
     // Default to the first unit if one isn't chosen
     setFormData((prev) => ({
-      washWaterUnit: perDayPerAnimalUnit,
+      washWaterUnit: PER_DAY_PER_ANIMAL_UNIT,
       ...prev,
       milkProduction: milkProductionInit,
       washWater: washWaterInit,
@@ -54,10 +54,10 @@ export default function MilkingFields({
 
   const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    if (value === perDayPerAnimalUnit && washWaterUnit === perDayUnit) {
+    if (value === PER_DAY_PER_ANIMAL_UNIT && washWaterUnit === PER_DAY_UNIT) {
       setWashWater(`${washWaterInit}.0`);
       setFormData((prev) => ({ ...prev, washWater: washWaterInit, washWaterUnit: value }));
-    } else if (value === perDayUnit && washWaterUnit === perDayPerAnimalUnit) {
+    } else if (value === PER_DAY_UNIT && washWaterUnit === PER_DAY_PER_ANIMAL_UNIT) {
       setWashWater(String(washWaterInit * animalsPerFarm));
       setFormData((prev) => ({
         ...prev,
@@ -114,7 +114,7 @@ export default function MilkingFields({
       <Dropdown
         label="(Units)"
         name="washWaterUnit"
-        value={washWaterUnit || perDayPerAnimalUnit}
+        value={washWaterUnit || PER_DAY_PER_ANIMAL_UNIT}
         options={washWaterOptions}
         onChange={handleUnitChange}
         required

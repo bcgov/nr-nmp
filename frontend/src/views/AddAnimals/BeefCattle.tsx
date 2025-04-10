@@ -14,7 +14,7 @@ import {
   FlexRowContainer,
   ListItemContainer,
 } from './addAnimals.styles';
-import { calculateAnnualSolidManure } from './utils';
+import { calculateAnnualSolidManure, getSolidManureDisplay } from './utils';
 
 interface BeefCattleSubtype {
   id: number;
@@ -58,29 +58,12 @@ export default function BeefCattle({
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
 
   // Props for the collapsed view //
-  const selectedSubtypeName = useMemo(() => {
-    if (!lastSaved.subtype || subtypes.length === 0) return '';
-    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    return subtype.name;
-  }, [lastSaved.subtype, subtypes]);
-
-  const manureInTons = useMemo(() => {
-    if (
-      !lastSaved.subtype ||
-      !lastSaved.animalsPerFarm ||
-      !lastSaved.daysCollected ||
-      subtypes.length === 0
-    )
-      return 0;
-    const subtype = subtypes.find((s) => s.id.toString() === lastSaved.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    return calculateAnnualSolidManure(
-      subtype.solidperpoundperanimalperday,
-      lastSaved.animalsPerFarm,
-      lastSaved.daysCollected,
-    );
-  }, [lastSaved, subtypes]);
+  const manureDisplay = useMemo(() => {
+    if (lastSaved.manureData === undefined) {
+      return '';
+    }
+    return getSolidManureDisplay(lastSaved.manureData.annualSolidManure);
+  }, [lastSaved.manureData]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
@@ -125,8 +108,23 @@ export default function BeefCattle({
 
   const handleSave = (e: FormEvent) => {
     e.preventDefault();
-    saveData(formData, myIndex);
-    setLastSaved(formData);
+
+    // Calculate manure
+    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    const withManureCalc = {
+      ...formData,
+      manureData: {
+        name: subtype.name,
+        annualSolidManure: calculateAnnualSolidManure(
+          subtype.solidperpoundperanimalperday,
+          formData.animalsPerFarm!,
+          formData.daysCollected,
+        ),
+      },
+    };
+    saveData(withManureCalc, myIndex);
+    setLastSaved(withManureCalc);
     setExpanded(false);
   };
 
@@ -150,8 +148,8 @@ export default function BeefCattle({
     <>
       {!isExpanded ? (
         <ListItemContainer key={`beef-${myIndex}`}>
-          <ListItem>{selectedSubtypeName}</ListItem>
-          <ListItem>{`${Math.round(manureInTons)} ton${manureInTons === 1 ? '' : 's'}`}</ListItem>
+          <ListItem>{lastSaved.manureData?.name || ''}</ListItem>
+          <ListItem>{manureDisplay}</ListItem>
           <ListItem align="right">
             <button
               type="button"

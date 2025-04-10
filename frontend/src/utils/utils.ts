@@ -1,8 +1,8 @@
-import blankNMPFileYearData from '@/constants/BlankNMPFileYearData';
+import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import NMPFile from '@/types/NMPFile';
+import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 
 export const initFields = (state: any) => {
   if (state.nmpFile) {
@@ -21,7 +21,7 @@ export const saveFieldsToFile = (
   if (prevNMPFile) nmpFile = JSON.parse(prevNMPFile);
   else {
     nmpFile = { ...defaultNMPFile };
-    nmpFile.years.push({ ...blankNMPFileYearData });
+    nmpFile.years.push({ ...defaultNMPFileYear });
   }
   if (nmpFile.years.length > 0) {
     nmpFile.years[0].Fields = fields.map((field) => ({
@@ -36,23 +36,15 @@ export const saveFieldsToFile = (
   setNMPFile(JSON.stringify(nmpFile));
 };
 
-export const initManures = (state: any) => {
-  if (state.nmpFile) {
-    const parsedData = JSON.parse(state.nmpFile);
-    return parsedData.years[0].ImportedManures;
-  }
-  return [];
-};
-
-export const saveManuresToFile = (
-  manures: NMPFileImportedManureData[],
+export const saveFarmManuresToFile = (
+  manures: NMPFileFarmManureData[],
   prevNMPFile: string,
   setNMPFile: (nmpFile: string | ArrayBuffer) => Promise<void>,
 ) => {
   let nmpFile: NMPFile | null = null;
   if (prevNMPFile) nmpFile = JSON.parse(prevNMPFile);
   if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
-    nmpFile.years[0].ImportedManures = manures.map((manure) => ({
+    nmpFile.years[0].FarmManures = manures.map((manure) => ({
       ...manure,
     }));
   }

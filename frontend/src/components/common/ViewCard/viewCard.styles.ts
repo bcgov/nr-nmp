@@ -46,8 +46,9 @@ export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
 `;
 
 export const ChildrenWrapper = styled.div`
-  margin-left: 20px;
-  margin-right: 20px;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 export const StyledContent = styled.div`
   ${componentContainer}

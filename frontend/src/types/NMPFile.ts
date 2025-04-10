@@ -1,4 +1,7 @@
+import { AnimalData } from '@/views/AddAnimals/types';
+import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
+import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 /**
  * @summary Type definition for NMP File
  */
@@ -77,9 +80,9 @@ type NMPFile = {
       MatureAnimalDailyFeedRequirementId?: number;
       GrowingAnimalDailyFeedRequirementId?: number;
     }>;
-    FarmAnimals?: any[];
-    FarmManures?: any[];
-    GeneratedManures?: any[];
+    FarmAnimals?: AnimalData[];
+    FarmManures?: NMPFileFarmManureData[];
+    GeneratedManures?: NMPFileGeneratedManureData[];
     ImportedManures?: NMPFileImportedManureData[];
     SeparatedSolidManures?: any[];
     ManureStorageSystems?: any[];
