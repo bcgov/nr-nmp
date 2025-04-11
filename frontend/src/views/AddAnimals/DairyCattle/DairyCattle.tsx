@@ -1,29 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { ListItem } from '@/views/FieldList/fieldList.styles';
 import { AnimalData, DairyCattleData, MILKING_COW_ID } from '../types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
 import MilkingFields from './MilkingFields';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
-import {
-  calculateAnnualLiquidManure,
-  calculateAnnualSolidManure,
-  calculateAnnualWashWater,
-  getLiquidManureDisplay,
-  getSolidManureDisplay,
-} from '../utils';
-import {
-  DropdownButton,
-  DropdownMenu,
-  EditListItemBody,
-  EditListItemHeader,
-  FlexRowContainer,
-  ListItemContainer,
-} from '../addAnimals.styles';
+import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
+import { EditListItemBody, FlexRowContainer } from '../addAnimals.styles';
 
 interface DairyCattleSubtype {
   id: number;
@@ -44,11 +28,9 @@ interface DairyCattleProps {
   startData: Partial<DairyCattleData>;
   startExpanded?: boolean;
   saveData: (data: AnimalData, index: number) => void;
-  onDelete: (index: number) => void;
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
-  date: string;
 }
 
 const initData: (d: Partial<DairyCattleData>) => DairyCattleData = (data) => {
@@ -70,11 +52,9 @@ export default function DairyCattle({
   startData,
   startExpanded = false,
   saveData,
-  onDelete,
   updateIsComplete,
   updateIsExpanded,
   myIndex,
-  date,
 }: DairyCattleProps) {
   const [formData, setFormData] = useState<DairyCattleData>(initData(startData));
   const [lastSaved, setLastSaved] = useState<DairyCattleData>(formData);
@@ -83,7 +63,6 @@ export default function DairyCattle({
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
@@ -100,17 +79,6 @@ export default function DairyCattle({
     if (breed === undefined) throw new Error('Chosen breed is missing from list.');
     return milkingCow.milkproduction * breed.breedmanurefactor;
   }, [subtypes, breeds, formData.breed]);
-
-  // Props for the collapsed view //
-  const manureDisplay = useMemo(() => {
-    if (lastSaved.manureData === undefined) {
-      return '';
-    }
-    if (lastSaved.manureData.annualLiquidManure !== undefined) {
-      return getLiquidManureDisplay(lastSaved.manureData.annualLiquidManure);
-    }
-    return getSolidManureDisplay(lastSaved.manureData.annualSolidManure);
-  }, [lastSaved.manureData]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
@@ -156,7 +124,7 @@ export default function DairyCattle({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { getToggleProps, getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
+  const { getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
     id: `dairy-${myIndex}`,
     defaultExpanded: startExpanded,
   });

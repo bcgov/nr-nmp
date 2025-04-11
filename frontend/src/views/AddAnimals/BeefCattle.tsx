@@ -1,22 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { ListItem } from '@/views/FieldList/fieldList.styles';
 import { AnimalData, BeefCattleData } from './types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
-import {
-  EditListItemBody,
-  EditListItemHeader,
-  FlexRowContainer,
-  ListItemContainer,
-  DropdownMenu,
-  DropdownButton,
-} from './addAnimals.styles';
-import { calculateAnnualSolidManure, getSolidManureDisplay } from './utils';
+import { EditListItemBody, FlexRowContainer } from './addAnimals.styles';
+import { calculateAnnualSolidManure } from './utils';
 
 interface BeefCattleSubtype {
   id: number;
@@ -28,11 +18,9 @@ interface BeefCattleProps {
   startData: Partial<BeefCattleData>;
   startExpanded?: boolean;
   saveData: (data: AnimalData, index: number) => void;
-  onDelete: (index: number) => void;
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
-  date: string;
 }
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
@@ -49,26 +37,15 @@ export default function BeefCattle({
   startData,
   startExpanded = false,
   saveData,
-  onDelete,
   updateIsComplete,
   updateIsExpanded,
   myIndex,
-  date,
 }: BeefCattleProps) {
   const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
   const [lastSaved, setLastSaved] = useState<BeefCattleData>(formData);
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // Props for the collapsed view //
-  const manureDisplay = useMemo(() => {
-    if (lastSaved.manureData === undefined) {
-      return '';
-    }
-    return getSolidManureDisplay(lastSaved.manureData.annualSolidManure);
-  }, [lastSaved.manureData]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
@@ -106,7 +83,7 @@ export default function BeefCattle({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { getToggleProps, getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
+  const { getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
     id: `beef-${myIndex}`,
     defaultExpanded: startExpanded,
   });
