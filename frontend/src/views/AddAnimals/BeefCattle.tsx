@@ -1,22 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisH, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { ListItem } from '@/views/FieldList/fieldList.styles';
 import { AnimalData, BeefCattleData } from './types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
-import {
-  EditListItemBody,
-  EditListItemHeader,
-  FlexRowContainer,
-  ListItemContainer,
-  DropdownMenu,
-  DropdownButton,
-} from './addAnimals.styles';
-import { calculateAnnualSolidManure, getSolidManureDisplay } from './utils';
+import { EditListItemBody, FlexRowContainer } from './addAnimals.styles';
+import { calculateAnnualSolidManure } from './utils';
 
 interface BeefCattleSubtype {
   id: number;
@@ -28,11 +18,9 @@ interface BeefCattleProps {
   startData: Partial<BeefCattleData>;
   startExpanded?: boolean;
   saveData: (data: AnimalData, index: number) => void;
-  onDelete: (index: number) => void;
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
-  date: string;
 }
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
@@ -49,26 +37,15 @@ export default function BeefCattle({
   startData,
   startExpanded = false,
   saveData,
-  onDelete,
   updateIsComplete,
   updateIsExpanded,
   myIndex,
-  date,
 }: BeefCattleProps) {
   const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
   const [lastSaved, setLastSaved] = useState<BeefCattleData>(formData);
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // Props for the collapsed view //
-  const manureDisplay = useMemo(() => {
-    if (lastSaved.manureData === undefined) {
-      return '';
-    }
-    return getSolidManureDisplay(lastSaved.manureData.annualSolidManure);
-  }, [lastSaved.manureData]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
@@ -106,7 +83,7 @@ export default function BeefCattle({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { getToggleProps, getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
+  const { getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
     id: `beef-${myIndex}`,
     defaultExpanded: startExpanded,
   });
@@ -150,115 +127,75 @@ export default function BeefCattle({
   }, [lastSaved, updateIsComplete, myIndex]);
 
   return (
-    <>
-      {!isExpanded ? (
-        <ListItemContainer key={`beef-${myIndex}`}>
-          <ListItem>{`Beef Cattle - ${lastSaved.manureData?.name || ''}`}</ListItem>
-          <ListItem>{manureDisplay}</ListItem>
-          <ListItem>{date}</ListItem>
-          <ListItem align="right">
-            <div
-              className="list-item"
-              style={{ position: 'relative' }}
-              onMouseEnter={() => setIsDropdownOpen(true)}
-              onMouseLeave={() => setIsDropdownOpen(false)}
-            >
-              <FontAwesomeIcon
-                icon={faEllipsisH}
-                style={{ cursor: 'pointer' }}
-              />
-              {isDropdownOpen && (
-                <DropdownMenu className="dropdown-menu">
-                  <DropdownButton
-                    type="button"
-                    {...getToggleProps()}
-                  >
-                    <FontAwesomeIcon icon={faEdit} /> Edit
-                  </DropdownButton>
-                  <DropdownButton
-                    type="button"
-                    onClick={() => onDelete(myIndex)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                  </DropdownButton>
-                </DropdownMenu>
-              )}
-            </div>
-          </ListItem>
-        </ListItemContainer>
-      ) : (
-        <EditListItemHeader>Edit Animal</EditListItemHeader>
-      )}
-      <EditListItemBody {...getCollapseProps()}>
-        <form onSubmit={handleSave}>
-          <FlexRowContainer>
-            <Dropdown
-              label="Cattle Type"
-              name="animalSubtype"
-              value={formData.subtype || ''}
-              options={subtypeOptions}
-              onChange={handleSubtypeChange}
-              required
-            />
+    <EditListItemBody {...getCollapseProps()}>
+      <form onSubmit={handleSave}>
+        <FlexRowContainer>
+          <Dropdown
+            label="Cattle Type"
+            name="animalSubtype"
+            value={formData.subtype || ''}
+            options={subtypeOptions}
+            onChange={handleSubtypeChange}
+            required
+          />
+          <InputField
+            label="Average Animal Number on Farm"
+            type="text"
+            name="animalsPerFarm"
+            value={formData.animalsPerFarm?.toString() || ''}
+            onChange={handleInputChange}
+            maxLength={7}
+            required
+            onInput={(e) => {
+              const elem = e.target as HTMLInputElement;
+              const value = Number(elem.value);
+              if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
+                elem.setCustomValidity('Please enter a valid whole number.');
+              } else {
+                elem.setCustomValidity('');
+              }
+            }}
+          />
+          <YesNoRadioButtons
+            orientation="horizontal"
+            text="Do you pile or collect manure from these animals?"
+            value={showCollectionDays}
+            onChange={(val) => {
+              setShowCollectionDays(val);
+              if (!val) {
+                setFormData((prev) => ({ ...prev, collectionDays: undefined }));
+              }
+            }}
+          />
+          {showCollectionDays && (
             <InputField
-              label="Average Animal Number on Farm"
+              label="How long is the manure collected?"
               type="text"
-              name="animalsPerFarm"
-              value={formData.animalsPerFarm?.toString() || ''}
+              name="daysCollected"
+              value={formData.daysCollected?.toString() || ''}
               onChange={handleInputChange}
-              maxLength={7}
+              maxLength={3}
               required
               onInput={(e) => {
                 const elem = e.target as HTMLInputElement;
                 const value = Number(elem.value);
-                if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
-                  elem.setCustomValidity('Please enter a valid whole number.');
+                if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
+                  elem.setCustomValidity('Please enter a valid number of days. (0-365)');
                 } else {
                   elem.setCustomValidity('');
                 }
               }}
             />
-            <YesNoRadioButtons
-              orientation="horizontal"
-              text="Do you pile or collect manure from these animals?"
-              value={showCollectionDays}
-              onChange={(val) => {
-                setShowCollectionDays(val);
-                if (!val) {
-                  setFormData((prev) => ({ ...prev, collectionDays: undefined }));
-                }
-              }}
-            />
-            {showCollectionDays && (
-              <InputField
-                label="How long is the manure collected?"
-                type="text"
-                name="daysCollected"
-                value={formData.daysCollected?.toString() || ''}
-                onChange={handleInputChange}
-                maxLength={3}
-                required
-                onInput={(e) => {
-                  const elem = e.target as HTMLInputElement;
-                  const value = Number(elem.value);
-                  if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
-                    elem.setCustomValidity('Please enter a valid number of days. (0-365)');
-                  } else {
-                    elem.setCustomValidity('');
-                  }
-                }}
-              />
-            )}
-          </FlexRowContainer>
-          <Button
-            text="Submit"
-            aria-label="Submit"
-            variant="primary"
-            size="sm"
-            disabled={false}
-          />
-        </form>
-      </EditListItemBody>
-    </>
+          )}
+        </FlexRowContainer>
+        <Button
+          text="Submit"
+          aria-label="Submit"
+          variant="primary"
+          size="sm"
+          disabled={false}
+        />
+      </form>
+    </EditListItemBody>
   );
 }
