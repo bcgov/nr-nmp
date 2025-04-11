@@ -29,7 +29,6 @@ export default function DairyCattle({ onChange }: { onChange: (data: DairyCattle
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
