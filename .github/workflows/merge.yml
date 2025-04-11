@@ -32,6 +32,10 @@ jobs:
       - name: PR Number
         id: pr
         uses: bcgov-nr/action-get-pr@v0.0.1
+    
+  run-tests:
+    name: Run Tests
+    uses: ./.github/workflows/.test.yml
 
   # https://github.com/bcgov/quickstart-openshift-helpers
   deploys-test:
