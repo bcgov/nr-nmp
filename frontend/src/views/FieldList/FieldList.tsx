@@ -17,7 +17,7 @@ import {
 } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { customTableStyle, formCss, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';

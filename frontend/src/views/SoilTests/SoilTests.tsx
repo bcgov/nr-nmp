@@ -6,9 +6,8 @@ import { useState, useEffect, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
-
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import {
   Button,
