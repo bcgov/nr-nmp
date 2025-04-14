@@ -54,12 +54,17 @@ export default function AddAnimals() {
         // Save this data up the chain, to the parent
         return prev;
       });
+      setAnimalForm(null);
+      setIsEditingForm(false);
+      setIsDialogOpen(false);
     },
     [setFormData],
   );
 
   // on close of add animal form
   const handleDialogClose = () => {
+    setSelectedAnimal(null);
+    setAnimalForm(null);
     setIsDialogOpen(false);
     setIsEditingForm(false);
   };
@@ -71,7 +76,6 @@ export default function AddAnimals() {
   };
 
   const handleDelete = (index: number) => {
-    // Avoid array deletions by setting index to null
     setFormData((prev) => {
       prev[index] = null;
       return prev;
@@ -165,13 +169,11 @@ export default function AddAnimals() {
   }, []);
 
   const handleAdd = (animal: string) => {
-    const animalId: string = animal === 'Beef Cattle' ? '1' : animal === 'Dairy Cattle' ? '2' : '';
-
-    // Only allow beef or dairy
+    setSelectedAnimal(animal);
+    // Only beef or dairy for now
+    const animalId: '1' | '2' | '' =
+      animal === 'Beef Cattle' ? '1' : animal === 'Dairy Cattle' ? '2' : '';
     if (!animalId) return;
-
-    setSelectedAnimal(animalId);
-    console.log('handleAdd called with:', animalId);
 
     const currentDate = new Date().toLocaleDateString('en-US', {
       year: 'numeric',
@@ -205,11 +207,7 @@ export default function AddAnimals() {
           date={currentDate}
         />
       );
-    // Add the new form component to your list/state here (if needed)
-    // e.g., setFormComponents((prev) => [...prev, newForm]);
-
     setAnimalForm(newForm);
-    // Optionally expand and mark as incomplete
     setFormComplete((prev) => prev.concat(false));
     setFormExpanded((prev) => prev.concat(true));
   };
@@ -332,34 +330,6 @@ export default function AddAnimals() {
           isOpen={isDialogOpen}
           onOpenChange={handleDialogClose}
         >
-          {formData.map((animal, index) => {
-            if (!animal) return null;
-
-            if (animal.id === '1') {
-              return (
-                <BeefCattle
-                  key={animal.id || index}
-                  startData={animal}
-                  saveData={handleSave}
-                  updateIsComplete={setFormComplete}
-                  updateIsExpanded={setFormExpanded}
-                  myIndex={index}
-                  date={animal.date || ''}
-                />
-              );
-            }
-            return (
-              <DairyCattle
-                key={animal.id || index}
-                startData={animal}
-                saveData={handleSave}
-                updateIsComplete={setFormComplete}
-                updateIsExpanded={setFormExpanded}
-                myIndex={index}
-                date={animal.date || ''}
-              />
-            );
-          })}
           <Dialog
             isCloseable
             role="dialog"
@@ -387,12 +357,9 @@ export default function AddAnimals() {
                 css={formCss}
                 onSubmit={handleSave}
               >
-                <Grid
-                  container
-                  spacing={1}
-                >
+                <Grid>
                   <Grid size={6}>
-                    {/* Needs to dynamically render the form fields depending on the users choice of animal in the select below */}
+                    {/* dynamically renders the form fields depending on the users choice of animal in the select below */}
                     <Select
                       isRequired
                       name="AnimalType"
@@ -403,7 +370,7 @@ export default function AddAnimals() {
                       }}
                       label="Animal Type"
                     />
-                    {animalForm}
+                    <div style={{ marginTop: '0.5rem' }}>{animalForm}</div>
                   </Grid>
                 </Grid>
                 <Divider

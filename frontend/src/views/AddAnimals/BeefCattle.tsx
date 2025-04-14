@@ -1,14 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
-import { Select, TextField, RadioGroup, Radio } from '@bcgov/design-system-react-components';
-import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { AnimalData, BeefCattleData } from './types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
-import { EditListItemBody, FlexRowContainer } from './addAnimals.styles';
 import { calculateAnnualSolidManure } from './utils';
+import { Dropdown, InputField } from '@/components/common';
 
 interface BeefCattleSubtype {
   id: number;
@@ -86,7 +84,7 @@ export default function BeefCattle({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
+  const { isExpanded, setExpanded } = useEventfulCollapse({
     id: `beef-${myIndex}`,
     defaultExpanded: startExpanded,
   });
@@ -134,70 +132,62 @@ export default function BeefCattle({
       container
       spacing={2}
     >
-      <Grid size={6}>
-        <Select
-          isRequired
-          label="Cattle Type"
-          name="animalSubtype"
-          value={formData.subtype || ''}
-          options={subtypeOptions}
-          onChange={handleSubtypeChange}
-        />
-      </Grid>
-      <Grid size={12}>
-        <TextField
-          isRequired
-          label="Average Animal Number on Farm"
+      <Dropdown
+        label="Cattle Type"
+        name="animalSubtype"
+        value={formData.subtype || ''}
+        options={subtypeOptions}
+        onChange={handleSubtypeChange}
+        required
+      />
+      <InputField
+        label="Average Animal Number on Farm"
+        type="text"
+        name="animalsPerFarm"
+        value={formData.animalsPerFarm?.toString() || ''}
+        onChange={handleInputChange}
+        maxLength={7}
+        required
+        onInput={(e) => {
+          const elem = e.target as HTMLInputElement;
+          const value = Number(elem.value);
+          if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
+            elem.setCustomValidity('Please enter a valid whole number.');
+          } else {
+            elem.setCustomValidity('');
+          }
+        }}
+      />
+      <YesNoRadioButtons
+        orientation="horizontal"
+        text="Do you pile or collect manure from these animals?"
+        value={showCollectionDays}
+        onChange={(val) => {
+          setShowCollectionDays(val);
+          if (!val) {
+            setFormData((prev) => ({ ...prev, collectionDays: undefined }));
+          }
+        }}
+      />
+      {showCollectionDays && (
+        <InputField
+          label="How long is the manure collected?"
           type="text"
-          name="animalsPerFarm"
-          value={formData.animalsPerFarm?.toString() || ''}
+          name="daysCollected"
+          value={formData.daysCollected?.toString() || ''}
           onChange={handleInputChange}
-          maxLength={7}
+          maxLength={3}
+          required
           onInput={(e) => {
             const elem = e.target as HTMLInputElement;
             const value = Number(elem.value);
-            if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
-              elem.setCustomValidity('Please enter a valid whole number.');
+            if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
+              elem.setCustomValidity('Please enter a valid number of days. (0-365)');
             } else {
               elem.setCustomValidity('');
             }
           }}
         />
-      </Grid>
-      <Grid size={12}>
-        <YesNoRadioButtons
-          orientation="horizontal"
-          text="Do you pile or collect manure from these animals?"
-          value={showCollectionDays}
-          onChange={(val) => {
-            setShowCollectionDays(val);
-            if (!val) {
-              setFormData((prev) => ({ ...prev, collectionDays: undefined }));
-            }
-          }}
-        />
-      </Grid>
-      {showCollectionDays && (
-        <Grid size={6}>
-          <TextField
-            isRequired
-            label="How long is the manure collected?"
-            type="text"
-            name="daysCollected"
-            value={formData.daysCollected?.toString() || ''}
-            onChange={handleInputChange}
-            maxLength={3}
-            onInput={(e) => {
-              const elem = e.target as HTMLInputElement;
-              const value = Number(elem.value);
-              if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
-                elem.setCustomValidity('Please enter a valid number of days. (0-365)');
-              } else {
-                elem.setCustomValidity('');
-              }
-            }}
-          />
-        </Grid>
       )}
     </Grid>
   );
