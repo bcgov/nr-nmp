@@ -1,5 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid2';
+import { Select, TextField, RadioGroup, Radio } from '@bcgov/design-system-react-components';
 import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
@@ -21,6 +23,7 @@ interface BeefCattleProps {
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
+  date: string;
 }
 
 const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {

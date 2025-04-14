@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -45,33 +45,33 @@ export default function AddAnimals() {
   const apiCache = useContext(APICacheContext);
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
-  const [formData, setFormData] = useState<((AnimalData & { id?: string }) | null)[]>([]);
-  const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
+  const [formData, setFormData] = useState<(AnimalData | null)[]>([]);
+
   const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
+  const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
+  const [elems, setElems] = useState<(React.ReactNode | null)[]>([]);
+  const [animalForm, setAnimalForm] = useState<React.ReactNode | null>(null);
   const [formComplete, setFormComplete] = useState<(boolean | null)[]>([]);
   const [formExpanded, setFormExpanded] = useState<(boolean | null)[]>([]);
   const [nextDisabled, setNextDisabled] = useState(false);
 
-  useEffect(() => {
-    setProgressStep(2);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // on submit/save
-  const handleSave = useCallback((data: AnimalData, index: number) => {
-    setFormData((prev) => {
-      const updated = [...prev];
-      updated[index] = data;
-      return updated;
-    });
-  }, []);
+  const handleSave = useCallback(
+    (data: AnimalData, index: number) => {
+      setFormData((prev) => {
+        prev[index] = data;
+        // Save this data up the chain, to the parent
+        return prev;
+      });
+    },
+    [setFormData],
+  );
 
+  // on close of add animal form
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setIsEditingForm(false);
-    setIsFormInvalid(false);
   };
 
   const handleEdit = (e: any) => {
@@ -81,20 +81,25 @@ export default function AddAnimals() {
   };
 
   const handleDelete = (index: number) => {
+    // Avoid array deletions by setting index to null
     setFormData((prev) => {
-      const updated = [...prev];
-      updated[index] = null;
-      return updated;
+      prev[index] = null;
+      return prev;
+    });
+    setElems((prev) => {
+      const next = [...prev];
+      next[index] = null;
+      return next;
     });
     setFormComplete((prev) => {
-      const updated = [...prev];
-      updated[index] = null;
-      return updated;
+      const next = [...prev];
+      next[index] = null;
+      return next;
     });
     setFormExpanded((prev) => {
-      const updated = [...prev];
-      updated[index] = null;
-      return updated;
+      const next = [...prev];
+      next[index] = null;
+      return next;
     });
   };
 
@@ -118,77 +123,130 @@ export default function AddAnimals() {
       data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id })) as AnimalData[];
     }
 
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    const dataElems = data.map((d, index) => {
+      if (d === null) {
+        return null;
+      }
+      if (d.id === '1') {
+        return (
+          <BeefCattle
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${index}`}
+            startData={d}
+            startExpanded={index === 0}
+            saveData={handleSave}
+            updateIsComplete={setFormComplete}
+            updateIsExpanded={setFormExpanded}
+            myIndex={index}
+            date={currentDate}
+          />
+        );
+      }
+      if (d.id === '2') {
+        return (
+          <DairyCattle
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${index}`}
+            startData={d}
+            startExpanded={index === 0}
+            saveData={handleSave}
+            updateIsComplete={setFormComplete}
+            updateIsExpanded={setFormExpanded}
+            myIndex={index}
+            date={currentDate}
+          />
+        );
+      }
+      throw new Error('Unexpected animal id.');
+    });
+
     setFormData(data);
+    setElems(dataElems);
     // Default to open and incomplete to disable the buttons
     setFormComplete(Array(data.length).fill(false));
     setFormExpanded(Array(data.length).fill(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // used to render the form for the selected animal
-  const animalForm = () => {
+  const handleAdd = (animal: string) => {
+    const animalId: string = animal === 'Beef Cattle' ? '1' : animal === 'Dairy Cattle' ? '2' : '';
+
+    // Only allow beef or dairy
+    if (!animalId) return;
+
+    setSelectedAnimal(animalId);
+    console.log('handleAdd called with:', animalId);
+
     const currentDate = new Date().toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
 
-    switch (selectedAnimal) {
-      case '1':
-        return (
-          <BeefCattle
-            key={formData[0]?.id || 0}
-            startData={formData[0]}
-            startExpanded={formExpanded[0] ?? false}
-            saveData={handleSave}
-            updateIsComplete={setFormComplete}
-            updateIsExpanded={setFormExpanded}
-            myIndex={0}
-          />
-        );
-      case '2':
-        return (
-          <DairyCattle
-            key={formData[0]?.id || 0}
-            startData={formData[0]}
-            startExpanded={formExpanded[0] ?? false}
-            saveData={handleSave}
-            updateIsComplete={setFormComplete}
-            updateIsExpanded={setFormExpanded}
-            myIndex={0}
-          />
-        );
-      default:
-        return null;
-    }
-  };
+    const { length } = formData;
 
-  const handleAdd = (animalId: string) => {
-    if (animalId !== '1' && animalId !== '2') return;
-    const currentDate = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-    setFormData((prev) => [...prev, { id: animalId, date: currentDate }]);
-    setFormComplete((prev) => [...prev, false]);
-    setFormExpanded((prev) => [...prev, true]);
+    const newForm =
+      animalId === '1' ? (
+        <BeefCattle
+          key={formData[0]?.id || 0}
+          startData={{ id: animalId }}
+          startExpanded={formExpanded[0] ?? false}
+          saveData={handleSave}
+          updateIsComplete={setFormComplete}
+          updateIsExpanded={setFormExpanded}
+          myIndex={length}
+          date={currentDate}
+        />
+      ) : (
+        <DairyCattle
+          key={formData[0]?.id || 0}
+          startData={{ id: animalId }}
+          startExpanded={formExpanded[0] ?? false}
+          saveData={handleSave}
+          updateIsComplete={setFormComplete}
+          updateIsExpanded={setFormExpanded}
+          myIndex={length}
+          date={currentDate}
+        />
+      );
+    // Add the new form component to your list/state here (if needed)
+    // e.g., setFormComponents((prev) => [...prev, newForm]);
+
+    setAnimalForm(newForm);
+    // Optionally expand and mark as incomplete
+    setFormComplete((prev) => prev.concat(false));
+    setFormExpanded((prev) => prev.concat(true));
   };
 
   const handleNext = () => {
     if (!state.nmpFile) {
       throw new Error('NMP file has entered impossible state in AnimalsAndManure.');
     }
+
     const nmpFile: NMPFile = JSON.parse(state.nmpFile);
     // TODO: Add multi-year handling
     nmpFile.years[0].FarmAnimals = formData.filter((f) => f !== null);
     // TODO: Copy the data of the other tabs
     setNMPFile(JSON.stringify(nmpFile));
+
     navigate(MANURE_IMPORTS);
   };
 
   useEffect(() => {
-    setNextDisabled(formComplete.length === 0 || formComplete.some((bool) => bool === false));
+    if (formComplete.length === 0) {
+      setNextDisabled(true);
+    } else {
+      setNextDisabled(formComplete.some((bool) => bool === false));
+    }
+  }, [formComplete, setNextDisabled]);
+
+  useEffect(() => {
     apiCache.callEndpoint('api/animals/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
@@ -200,7 +258,12 @@ export default function AddAnimals() {
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formComplete, setNextDisabled]);
+  }, []);
+
+  useEffect(() => {
+    setProgressStep(2);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -229,7 +292,7 @@ export default function AddAnimals() {
               css={tableActionButtonCss}
               onClick={() => handleDelete(params.row?.index)}
               icon={faTrash}
-              area-label="Delete"
+              aria-label="Delete"
             />
           </>
         ),
@@ -291,6 +354,7 @@ export default function AddAnimals() {
                   updateIsComplete={setFormComplete}
                   updateIsExpanded={setFormExpanded}
                   myIndex={index}
+                  date={animal.date || ''}
                 />
               );
             }
@@ -302,6 +366,7 @@ export default function AddAnimals() {
                 updateIsComplete={setFormComplete}
                 updateIsExpanded={setFormExpanded}
                 myIndex={index}
+                date={animal.date || ''}
               />
             );
           })}
@@ -330,23 +395,25 @@ export default function AddAnimals() {
               />
               <Form
                 css={formCss}
-                onSubmit={handleAdd}
-                onInvalid={() => setIsFormInvalid(true)}
+                onSubmit={handleSave}
               >
                 <Grid
                   container
                   spacing={1}
                 >
                   <Grid size={6}>
+                    {/* Needs to dynamically render the form fields depending on the users choice of animal in the select below */}
                     <Select
                       isRequired
                       name="AnimalType"
                       items={animalOptions}
                       selectedKey={selectedAnimal}
-                      onSelectionChange={(e, option) => setSelectedAnimal(option?.key as string)}
+                      onSelectionChange={(e) => {
+                        handleAdd(e.toString());
+                      }}
                       label="Animal Type"
                     />
-                    {animalForm()}
+                    {animalForm}
                   </Grid>
                 </Grid>
                 <Divider
@@ -366,6 +433,7 @@ export default function AddAnimals() {
                   >
                     Cancel
                   </Button>
+                  {/* can we use the components save function? */}
                   <Button
                     type="submit"
                     variant="primary"

@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
+import Grid from '@mui/material/Grid2';
 import { Button, Dropdown, InputField } from '@/components/common';
+import { Select, TextField, RadioGroup, Radio } from '@bcgov/design-system-react-components';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, DairyCattleData, MILKING_COW_ID } from '../types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
@@ -31,6 +33,7 @@ interface DairyCattleProps {
   updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
   myIndex: number;
+  date: string;
 }
 
 const initData: (d: Partial<DairyCattleData>) => DairyCattleData = (data) => {
