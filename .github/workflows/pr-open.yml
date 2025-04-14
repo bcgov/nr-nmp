@@ -38,13 +38,13 @@ jobs:
       backend-cpu-request: 30m
       frontend-cpu-request: 30m
 
-  # tests:
-  #   name: Tests
+  tests:
+    name: Tests
   #   if: needs.deploys.outputs.triggered == 'true'
-  #   needs: [deploys]
-  #   uses: ./.github/workflows/.tests.yml
-  #   with:
-  #     target: ${{ github.event.number }}
+    needs: [deploys]
+    uses: ./.github/workflows/.tests.yml
+    with:
+      target: ${{ github.event.number }}
 
   results:
     name: PR Results
