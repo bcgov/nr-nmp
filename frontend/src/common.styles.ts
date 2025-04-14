@@ -103,3 +103,10 @@ export const tableActionButtonCss = css({
   paddingLeft: '0.75rem',
   color: 'var(--surface-color-primary-button-default)',
 });
+
+export const modalHeaderStyle = css({
+  fontWeight: '700',
+  fontSize: '1.25rem',
+});
+
+export const modalDividerStyle = css({ marginTop: '0.5rem', marginBottom: '0.5rem' });

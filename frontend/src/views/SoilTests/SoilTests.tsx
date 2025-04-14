@@ -21,6 +21,8 @@ import {
   customTableStyle,
   formCss,
   formGridBreakpoints,
+  modalDividerStyle,
+  modalHeaderStyle,
   tableActionButtonCss,
 } from '../../common.styles';
 import {
@@ -135,14 +137,12 @@ export default function SoilTests() {
           ).toString()
         : formData.valK;
 
-    setFormData((prev) => {
-      const newFormData = {
-        ...prev,
-        convertedKelownaP,
-        convertedKelownaK,
-      };
-      return newFormData;
-    });
+    setFormData((prev) => ({
+      ...prev,
+      convertedKelownaP,
+      convertedKelownaK,
+      soilTest: soilTestId,
+    }));
 
     setFields((prev) => {
       const newList = [...prev];
@@ -296,18 +296,11 @@ export default function SoilTests() {
               padding: '1rem',
             }}
           >
-            <span
-              style={{
-                fontWeight: '700',
-                fontSize: '1.25rem',
-              }}
-            >
-              Add Field
-            </span>
+            <span css={modalHeaderStyle}>Add Field</span>
             <Divider
               aria-hidden="true"
               component="div"
-              css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
+              css={modalDividerStyle}
             />
             <div css={formCss}>
               <Grid
@@ -442,8 +435,7 @@ export default function SoilTests() {
               id: method.id,
               label: method.name,
             }))}
-            // selectedKey={formData?.PreviousYearManureApplicationFrequency}
-            // validate={() => (!isManureOptionValid() ? 'required' : '')}
+            selectedKey={soilTestId}
             onSelectionChange={(e) => {
               soilTestMethodSelect('soilTest', e?.toString() as string);
             }}
@@ -464,7 +456,6 @@ export default function SoilTests() {
       )}
       <ButtonGroup
         alignment="start"
-        ariaLabel="A group of buttons"
         orientation="horizontal"
       >
         <Button
