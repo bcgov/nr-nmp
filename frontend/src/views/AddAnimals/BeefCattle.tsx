@@ -1,14 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
-import { Select, TextField, RadioGroup, Radio } from '@bcgov/design-system-react-components';
-import { Button, Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { AnimalData, BeefCattleData } from './types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
-import { EditListItemBody, FlexRowContainer } from './addAnimals.styles';
 import { calculateAnnualSolidManure } from './utils';
+import { Dropdown, InputField } from '@/components/common';
 
 interface BeefCattleSubtype {
   id: number;
@@ -86,7 +84,7 @@ export default function BeefCattle({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
+  const { isExpanded, setExpanded } = useEventfulCollapse({
     id: `beef-${myIndex}`,
     defaultExpanded: startExpanded,
   });

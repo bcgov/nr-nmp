@@ -1,15 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid2';
-import { Button, Dropdown, InputField } from '@/components/common';
-import { Select, TextField, RadioGroup, Radio } from '@bcgov/design-system-react-components';
+import { Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, DairyCattleData, MILKING_COW_ID } from '../types';
 import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
 import MilkingFields from './MilkingFields';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
-import { EditListItemBody, FlexRowContainer } from '../addAnimals.styles';
 
 interface DairyCattleSubtype {
   id: number;
@@ -127,7 +125,7 @@ export default function DairyCattle({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
+  const { isExpanded, setExpanded } = useEventfulCollapse({
     id: `dairy-${myIndex}`,
     defaultExpanded: startExpanded,
   });
