@@ -9,7 +9,8 @@ export type AppAction = {
 
 // Initial settings state.
 export const initialState = {
-  nmpFile: '',
+  nmpFile:
+    '{"farmDetails":{"Year":"2025","FarmName":"Test Farm 1","FarmRegion":"2","FarmSubRegion":"78","SoilTests":null,"TestingMethod":null,"Manure":null,"HasSelectedFarmType":false,"ImportsManureCompost":false,"FarmAnimals":[],"HasHorticulturalCrops":true,"HasBerries":true,"HasVegetables":true,"LeafTests":null,"LeafTestingMethod":null,"UserJourney":0},"unsaved":false,"years":[{"Year":"2025","Fields":[{"FieldName":"Field 1","Area":345345,"PreviousYearManureApplicationFrequency":"1","Comment":"Test comment 1","SoilTest":{"sampleDate":"2025-03","valNO3H":"2","valP":"3","valK":"4","valPH":"5","soilTest":""},"Crops":[]},{"FieldName":"Field 2","Area":5,"PreviousYearManureApplicationFrequency":"2","Comment":"Test comment 2","SoilTest":{"sampleDate":"2025-05","valNO3H":"6","valP":"5","valK":"4","valPH":"3","soilTest":""},"Crops":[]}],"FarmAnimals":[],"FarmManures":[],"GeneratedManures":[],"ImportedManures":[],"SeparatedSolidManures":[],"ManureStorageSystems":[]}],"LastAppliedFarmManureId":null,"NMPReleaseVersion":0}',
   step: '',
   showAnimalsStep: false,
 };

@@ -5,10 +5,21 @@
  * @description Allows users to view, add, edit and delete crops associated with fields
  * Provides functionality to calculate nutrient requirements and removals
  */
-import { useState, useEffect, useContext } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  Button as ButtonGov,
+  ButtonGroup as ButtonGovGroup,
+  Dialog,
+  Modal as ModalGov,
+  TextField,
+  Select,
+} from '@bcgov/design-system-react-components';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppService from '@/services/app/useAppService';
 import { Modal, InputField, Dropdown, RadioButton, Button } from '../../components/common';
 import {
@@ -32,13 +43,13 @@ import {
   ModalContent,
   FlexContainer,
   RightJustifiedText,
-  Divider,
   FlexRowContainer,
   HeaderText,
   ValueText,
   ColumnContainer,
   RowContainer,
   ErrorText,
+  StyledContent,
 } from './crops.styles';
 import {
   CropTypesDatabase,
@@ -52,6 +63,13 @@ import { APICacheContext } from '@/context/APICacheContext';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
 import { MANURE_IMPORTS, SOIL_TESTS } from '@/constants/RouteConstants';
+import {
+  customTableStyle,
+  formCss,
+  formGridBreakpoints,
+  tableActionButtonCss,
+} from '../../common.styles';
+import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 
 /**
  * Crops component for managing crop data associated with fields
@@ -63,6 +81,7 @@ function Crops() {
   const { state, setNMPFile, setProgressStep } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+
   /**
    * State Variables:
    * - ncredit: Nitrogen credit value from previous crop
@@ -88,7 +107,18 @@ function Crops() {
   const [previousCropDatabase, setPreviousCropDatabase] = useState<PreviousCropsDatabase[]>([]);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
+
+  // TBD, todo Temp init state for dev work, to be removed
+  const [fields, setFields] = useState<NMPFileFieldData[]>(
+    initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
+      ...fieldElement,
+      id: index.toString(),
+    })),
+  );
+
+  const [formData, setFormData] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   /**
    * Handles changes to form inputs
@@ -415,6 +445,96 @@ function Crops() {
     setProgressStep(3);
   }, []);
 
+  const handleFormFieldChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setFormErrors({});
+    setFormData({});
+  };
+
+  const columns: GridColDef[] = useMemo(
+    () => [
+      { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
+      {
+        field: 'Crops',
+        headerName: 'Crops',
+        valueGetter: (_value, row) => row?.Crops[0]?.cropName,
+        width: 150,
+        minWidth: 150,
+        maxWidth: 300,
+        sortable: false,
+      },
+      {
+        field: 'cropTypeName',
+        headerName: 'Crop Type',
+        valueGetter: (_value, row) => row?.Crops[0]?.cropTypeName,
+        width: 120,
+        minWidth: 100,
+        maxWidth: 300,
+      },
+      {
+        field: '',
+        headerName: 'Actions',
+        width: 150,
+        renderCell: (cell: any) => {
+          // const isRowHasSoilTest = Object.keys(fields[cell?.row?.id].SoilTest)?.length;
+          const handleEditRowBtnClick = () => {
+            // console.log(cell);
+            // setFormData(() => {
+            //   if (isRowHasSoilTest) {
+            //     return fields[cell?.row?.id].SoilTest;
+            //   }
+            //   return EMPTY_SOIL_TEST_FORM;
+            // });
+            setCurrentFieldIndex(cell?.row?.id?.toString());
+            setIsDialogOpen(true);
+          };
+          // const handleDeleteRowBtnClick = () => {
+          // if (isRowHasSoilTest) {
+          //   setFields((prev) => {
+          //     const newList = [...prev];
+          //     newList[cell?.row?.id].SoilTest = {};
+          //     return newList;
+          //   });
+          // }
+          // };
+          return (
+            <div>
+              {/* {isRowHasSoilTest ? (
+                <div>
+                  <FontAwesomeIcon
+                    css={tableActionButtonCss}
+                    onClick={handleEditRowBtnClick}
+                    icon={faEdit}
+                  />
+                  <FontAwesomeIcon
+                    css={tableActionButtonCss}
+                    onClick={handleDeleteRowBtnClick}
+                    icon={faTrash}
+                  />
+                </div>
+              ) : ( */}
+              <ButtonGov
+                variant="primary"
+                size="small"
+                onPress={handleEditRowBtnClick}
+              >
+                Add soil test
+              </ButtonGov>
+              {/* )} */}
+            </div>
+          );
+        },
+        sortable: false,
+        resizable: false,
+      },
+    ],
+    [],
+  );
+
   /**
    * Modal footer component with Cancel and Calculate/Submit buttons
    * Button text changes based on whether calculations have been performed
@@ -444,225 +564,381 @@ function Crops() {
   );
 
   return (
-    <ViewCard
-      heading="Crops"
-      handlePrevious={handlePrevious}
-      handleNext={handleNext}
-      nextDisabled={fields.length === 0}
-    >
-      {/* Crops table listing fields and their associated crops */}
-      <ContentWrapper hasFields={fields.length > 0}>
-        <Header>
-          <Column>Field Name</Column>
-          <Column>Crop Name</Column>
-          <Column align="right">Actions</Column>
-        </Header>
-        {fields.map((field, index) => (
-          <ListItemContainer key={field.FieldName}>
-            <ListItem>{field.FieldName}</ListItem>
-            {field.Crops.length === 0 && <ListItem>None</ListItem>}
-            {field.Crops.length === 0 ? (
-              <ListItem align="right">
-                <Button
-                  text="Add Crop"
-                  handleClick={() => handleEditCrop(index)}
-                  aria-label={`Add Crop to ${field.FieldName}`}
-                  variant="primary"
-                  size="sm"
-                  disabled={false}
-                />
-              </ListItem>
-            ) : (
-              <>
-                <ListItem>{field.Crops[0].cropName}</ListItem>
-                <ListItem align="right">
-                  <button
-                    type="button"
-                    onClick={() => handleEditCrop(index)}
-                    aria-label={`Edit Crop ${field.Crops[0].cropName}`}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteCrop(index)}
-                    aria-label={`Delete Crop ${field.Crops[0].cropName}`}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                </ListItem>
-              </>
-            )}
-          </ListItemContainer>
-        ))}
-      </ContentWrapper>
+    <>
+      <StyledContent>
+        <ProgressStepper step={SOIL_TESTS} />
+        <AppTitle />
+        <PageTitle title="Field Information" />
 
-      {/* Crop edit modal */}
-      {isModalVisible && (
-        <Modal
-          isVisible={isModalVisible}
-          title="Edit Crop"
-          onClose={() => {
-            setIsModalVisible(false);
-            setCalculationsPerformed(false);
-            setErrors({});
-          }}
-          footer={modalFooter}
+        <TabsMaterial
+          activeTab={2}
+          tabLabel={['Field List', 'Soil Tests', 'Crops']}
+        />
+        <ModalGov
+          isDismissable
+          isOpen={isDialogOpen}
+          onOpenChange={handleDialogClose}
         >
-          <ModalContent>
-            {errors.cropTypeId && <ErrorText>{errors.cropTypeId}</ErrorText>}
+          <Dialog
+            isCloseable
+            role="dialog"
+          >
+            <div
+              style={{
+                padding: '1rem',
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: '700',
+                  fontSize: '1.25rem',
+                }}
+              >
+                Add Field
+              </span>
+              <Divider
+                aria-hidden="true"
+                component="div"
+                css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
+              />
+              <div css={formCss}>
+                <Grid
+                  container
+                  spacing={1}
+                >
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      className={`bcds-react-aria-Select--Label ${formErrors ? '--error' : ''}`}
+                    >
+                      NO3-N (ppm), nitrate-nitrogen
+                    </span>
+                    <TextField
+                      isRequired
+                      type="number"
+                      name="valNO3H"
+                      value={formData.valNO3H}
+                      onChange={(e) => handleFormFieldChange('valNO3H', e)}
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      className={`bcds-react-aria-Select--Label ${formErrors ? '--error' : ''}`}
+                    >
+                      P (ppm), phosphorus
+                    </span>
+                    <TextField
+                      isRequired
+                      type="number"
+                      name="valP"
+                      value={formData.valP}
+                      onChange={(e) => handleFormFieldChange('valP', e)}
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      className={`bcds-react-aria-Select--Label ${formErrors.valK ? '--error' : ''}`}
+                    >
+                      K (ppm), potassium
+                    </span>
+                    <TextField
+                      isRequired
+                      type="number"
+                      name="valK"
+                      value={formData.valK}
+                      onChange={(e) => handleFormFieldChange('valK', e)}
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      className={`bcds-react-aria-Select--Label ${formErrors ? '--error' : ''}`}
+                    >
+                      pH
+                    </span>
+                    <TextField
+                      isRequired
+                      type="number"
+                      name="valPH"
+                      value={formData.valPH}
+                      onChange={(e) => handleFormFieldChange('valPH', e)}
+                    />
+                  </Grid>
+                </Grid>
+                <Divider
+                  aria-hidden="true"
+                  component="div"
+                  css={{ marginTop: '1rem', marginBottom: '1rem' }}
+                />
+                <ButtonGovGroup
+                  alignment="end"
+                  orientation="horizontal"
+                >
+                  <ButtonGov
+                    variant="secondary"
+                    onPress={handleDialogClose}
+                  >
+                    Cancel
+                  </ButtonGov>
+                  <ButtonGov variant="primary">Confirm</ButtonGov>
+                </ButtonGovGroup>
+              </div>
+            </div>
+          </Dialog>
+        </ModalGov>
+        <DataGrid
+          sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+          rows={fields}
+          columns={columns}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          hideFooterPagination
+          hideFooter
+        />
 
-            <Dropdown
-              label="Crop Type"
-              name="cropTypeId"
-              value={combinedCropsData.cropTypeId || ''}
-              options={cropTypesDatabase.map((cropType) => ({
-                value: cropType.id,
-                label: cropType.name,
-              }))}
-              onChange={handleChange}
-            />
-            {errors.cropId && <ErrorText>{errors.cropId}</ErrorText>}
-            <Dropdown
-              label="Crop"
-              name="cropId"
-              value={combinedCropsData.cropId || ''}
-              options={filteredCrops}
-              onChange={handleChange}
-            />
-            {/* Each of these are a conditional render based on the cropTypeId of the select crop type */}
-            {combinedCropsData.cropTypeId != 6 && (
-              <>
-                {(() => {
-                  const availablePreviousCrops = previousCropDatabase.filter(
-                    (crop) => crop.cropid === Number(combinedCropsData.cropId),
-                  );
+        <ButtonGovGroup
+          alignment="start"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <ButtonGov
+            size="medium"
+            aria-label="Back"
+            variant="secondary"
+            onPress={handlePrevious}
+          >
+            BACK
+          </ButtonGov>
+          <ButtonGov
+            size="medium"
+            aria-label="Next"
+            variant="primary"
+            onPress={handleNext}
+            type="submit"
+          >
+            Next
+          </ButtonGov>
+        </ButtonGovGroup>
+        {/* <pre>{JSON.stringify(JSON.parse(state.nmpFile), null, 2)}</pre> */}
+      </StyledContent>
+      <ViewCard
+        heading="Crops"
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+        nextDisabled={fields.length === 0}
+      >
+        {/* Crops table listing fields and their associated crops */}
+        <ContentWrapper hasFields={fields.length > 0}>
+          <Header>
+            <Column>Field Name</Column>
+            <Column>Crop Name</Column>
+            <Column align="right">Actions</Column>
+          </Header>
+          {fields.map((field, index) => (
+            <ListItemContainer key={field.FieldName}>
+              <ListItem>{field.FieldName}</ListItem>
+              {field.Crops.length === 0 && <ListItem>None</ListItem>}
+              {field.Crops.length === 0 ? (
+                <ListItem align="right">
+                  <Button
+                    text="Add Crop"
+                    handleClick={() => handleEditCrop(index)}
+                    aria-label={`Add Crop to ${field.FieldName}`}
+                    variant="primary"
+                    size="sm"
+                    disabled={false}
+                  />
+                </ListItem>
+              ) : (
+                <>
+                  <ListItem>{field.Crops[0].cropName}</ListItem>
+                  <ListItem align="right">
+                    <button
+                      type="button"
+                      onClick={() => handleEditCrop(index)}
+                      aria-label={`Edit Crop ${field.Crops[0].cropName}`}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteCrop(index)}
+                      aria-label={`Delete Crop ${field.Crops[0].cropName}`}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </ListItem>
+                </>
+              )}
+            </ListItemContainer>
+          ))}
+        </ContentWrapper>
 
-                  return availablePreviousCrops.length > 0 ? (
-                    <>
-                      {errors.prevCropId && <ErrorText>{errors.prevCropId}</ErrorText>}
-                      <Dropdown
-                        label="Previous crop ploughed down (N credit)"
-                        name="prevCropId"
-                        value={combinedCropsData.prevCropId || ''}
-                        options={availablePreviousCrops.map((crop) => ({
-                          value: crop.id,
-                          label: crop.name,
-                        }))}
+        {/* Crop edit modal */}
+        {isModalVisible && (
+          <Modal
+            isVisible={isModalVisible}
+            title="Edit Crop"
+            onClose={() => {
+              setIsModalVisible(false);
+              setCalculationsPerformed(false);
+              setErrors({});
+            }}
+            footer={modalFooter}
+          >
+            <ModalContent>
+              {errors.cropTypeId && <ErrorText>{errors.cropTypeId}</ErrorText>}
+
+              <Dropdown
+                label="Crop Type"
+                name="cropTypeId"
+                value={combinedCropsData.cropTypeId || ''}
+                options={cropTypesDatabase.map((cropType) => ({
+                  value: cropType.id,
+                  label: cropType.name,
+                }))}
+                onChange={handleChange}
+              />
+              {errors.cropId && <ErrorText>{errors.cropId}</ErrorText>}
+              <Dropdown
+                label="Crop"
+                name="cropId"
+                value={combinedCropsData.cropId || ''}
+                options={filteredCrops}
+                onChange={handleChange}
+              />
+              {/* Each of these are a conditional render based on the cropTypeId of the select crop type */}
+              {combinedCropsData.cropTypeId != 6 && (
+                <>
+                  {(() => {
+                    const availablePreviousCrops = previousCropDatabase.filter(
+                      (crop) => crop.cropid === Number(combinedCropsData.cropId),
+                    );
+
+                    return availablePreviousCrops.length > 0 ? (
+                      <>
+                        {errors.prevCropId && <ErrorText>{errors.prevCropId}</ErrorText>}
+                        <Dropdown
+                          label="Previous crop ploughed down (N credit)"
+                          name="prevCropId"
+                          value={combinedCropsData.prevCropId || ''}
+                          options={availablePreviousCrops.map((crop) => ({
+                            value: crop.id,
+                            label: crop.name,
+                          }))}
+                          onChange={handleChange}
+                        />
+                      </>
+                    ) : null;
+                  })()}
+                </>
+              )}
+              {combinedCropsData.cropTypeId == 6 && (
+                <>
+                  {errors.cropOther && <ErrorText>{errors.cropOther}</ErrorText>}
+                  <InputField
+                    label="Crop Description"
+                    type="text"
+                    name="cropOther"
+                    value={combinedCropsData.cropOther || ''}
+                    onChange={handleChange}
+                  />
+                </>
+              )}
+              {errors.yield && <ErrorText>{errors.yield}</ErrorText>}
+              <InputField
+                label="Yield"
+                type="text"
+                name="yield"
+                value={combinedCropsData.yield?.toString() || ''}
+                onChange={handleChange}
+              />
+              {combinedCropsData.cropTypeId == 1 && (
+                <>
+                  {errors.crudeProtien && <ErrorText>{errors.crudeProtien}</ErrorText>}
+                  <InputField
+                    label="Crude Protein"
+                    type="text"
+                    name="crudeProtien"
+                    value={combinedCropsData.crudeProtien?.toString() || ''}
+                    onChange={handleChange}
+                  />
+                </>
+              )}
+              {combinedCropsData.cropTypeId != 6 && (
+                <FlexContainer>
+                  <LeftJustifiedText>
+                    N credit (lb/ac)<div>{ncredit}</div>
+                  </LeftJustifiedText>
+                  {combinedCropsData.cropTypeId == 2 && (
+                    <RightJustifiedText>
+                      <span>Cover Crop Harvested?</span>
+                      {errors.coverCropHarvested && (
+                        <ErrorText>{errors.coverCropHarvested}</ErrorText>
+                      )}
+                      <RadioButton
+                        label="Yes"
+                        name="coverCropHarvested"
+                        value="true"
+                        checked={combinedCropsData.coverCropHarvested === 'true'}
                         onChange={handleChange}
                       />
-                    </>
-                  ) : null;
-                })()}
-              </>
-            )}
-            {combinedCropsData.cropTypeId == 6 && (
-              <>
-                {errors.cropOther && <ErrorText>{errors.cropOther}</ErrorText>}
-                <InputField
-                  label="Crop Description"
-                  type="text"
-                  name="cropOther"
-                  value={combinedCropsData.cropOther || ''}
-                  onChange={handleChange}
-                />
-              </>
-            )}
-            {errors.yield && <ErrorText>{errors.yield}</ErrorText>}
-            <InputField
-              label="Yield"
-              type="text"
-              name="yield"
-              value={combinedCropsData.yield?.toString() || ''}
-              onChange={handleChange}
-            />
-            {combinedCropsData.cropTypeId == 1 && (
-              <>
-                {errors.crudeProtien && <ErrorText>{errors.crudeProtien}</ErrorText>}
-                <InputField
-                  label="Crude Protein"
-                  type="text"
-                  name="crudeProtien"
-                  value={combinedCropsData.crudeProtien?.toString() || ''}
-                  onChange={handleChange}
-                />
-              </>
-            )}
-            {combinedCropsData.cropTypeId != 6 && (
-              <FlexContainer>
-                <LeftJustifiedText>
-                  N credit (lb/ac)<div>{ncredit}</div>
-                </LeftJustifiedText>
-                {combinedCropsData.cropTypeId == 2 && (
-                  <RightJustifiedText>
-                    <span>Cover Crop Harvested?</span>
-                    {errors.coverCropHarvested && (
-                      <ErrorText>{errors.coverCropHarvested}</ErrorText>
-                    )}
-                    <RadioButton
-                      label="Yes"
-                      name="coverCropHarvested"
-                      value="true"
-                      checked={combinedCropsData.coverCropHarvested === 'true'}
-                      onChange={handleChange}
-                    />
-                    <RadioButton
-                      label="No"
-                      name="coverCropHarvested"
-                      value="false"
-                      checked={combinedCropsData.coverCropHarvested === 'false'}
-                      onChange={handleChange}
-                    />
-                    {errors.coverCropHarvested && (
-                      <div style={{ color: 'red', fontSize: '12px' }}>
-                        {errors.coverCropHarvested}
-                      </div>
-                    )}
-                  </RightJustifiedText>
-                )}
-              </FlexContainer>
-            )}
-            <Divider />
-            <FlexRowContainer>
-              <ColumnContainer>
-                <HeaderText>Crop Requirement (lb/ac)</HeaderText>
-                <RowContainer>
-                  <ColumnContainer>
-                    <HeaderText>N</HeaderText>
-                    <ValueText>{combinedCropsData.reqN}</ValueText>
-                  </ColumnContainer>
-                  <ColumnContainer>
-                    <HeaderText>P2O5</HeaderText>
-                    <ValueText>{combinedCropsData.reqP2o5}</ValueText>
-                  </ColumnContainer>
-                  <ColumnContainer>
-                    <HeaderText>K2O</HeaderText>
-                    <ValueText>{combinedCropsData.reqK2o}</ValueText>
-                  </ColumnContainer>
-                </RowContainer>
-              </ColumnContainer>
-              <ColumnContainer>
-                <HeaderText>Nutrient Removal (lb/ac)</HeaderText>
-                <RowContainer>
-                  <ColumnContainer>
-                    <HeaderText>N</HeaderText>
-                    <ValueText>{combinedCropsData.remN}</ValueText>
-                  </ColumnContainer>
-                  <ColumnContainer>
-                    <HeaderText>P2O5</HeaderText>
-                    <ValueText>{combinedCropsData.remP2o5}</ValueText>
-                  </ColumnContainer>
-                  <ColumnContainer>
-                    <HeaderText>K2O</HeaderText>
-                    <ValueText>{combinedCropsData.remK2o}</ValueText>
-                  </ColumnContainer>
-                </RowContainer>
-              </ColumnContainer>
-            </FlexRowContainer>
-          </ModalContent>
-        </Modal>
-      )}
-    </ViewCard>
+                      <RadioButton
+                        label="No"
+                        name="coverCropHarvested"
+                        value="false"
+                        checked={combinedCropsData.coverCropHarvested === 'false'}
+                        onChange={handleChange}
+                      />
+                      {errors.coverCropHarvested && (
+                        <div style={{ color: 'red', fontSize: '12px' }}>
+                          {errors.coverCropHarvested}
+                        </div>
+                      )}
+                    </RightJustifiedText>
+                  )}
+                </FlexContainer>
+              )}
+
+              <FlexRowContainer>
+                <ColumnContainer>
+                  <HeaderText>Crop Requirement (lb/ac)</HeaderText>
+                  <RowContainer>
+                    <ColumnContainer>
+                      <HeaderText>N</HeaderText>
+                      <ValueText>{combinedCropsData.reqN}</ValueText>
+                    </ColumnContainer>
+                    <ColumnContainer>
+                      <HeaderText>P2O5</HeaderText>
+                      <ValueText>{combinedCropsData.reqP2o5}</ValueText>
+                    </ColumnContainer>
+                    <ColumnContainer>
+                      <HeaderText>K2O</HeaderText>
+                      <ValueText>{combinedCropsData.reqK2o}</ValueText>
+                    </ColumnContainer>
+                  </RowContainer>
+                </ColumnContainer>
+                <ColumnContainer>
+                  <HeaderText>Nutrient Removal (lb/ac)</HeaderText>
+                  <RowContainer>
+                    <ColumnContainer>
+                      <HeaderText>N</HeaderText>
+                      <ValueText>{combinedCropsData.remN}</ValueText>
+                    </ColumnContainer>
+                    <ColumnContainer>
+                      <HeaderText>P2O5</HeaderText>
+                      <ValueText>{combinedCropsData.remP2o5}</ValueText>
+                    </ColumnContainer>
+                    <ColumnContainer>
+                      <HeaderText>K2O</HeaderText>
+                      <ValueText>{combinedCropsData.remK2o}</ValueText>
+                    </ColumnContainer>
+                  </RowContainer>
+                </ColumnContainer>
+              </FlexRowContainer>
+            </ModalContent>
+          </Modal>
+        )}
+      </ViewCard>
+    </>
   );
 }
 
