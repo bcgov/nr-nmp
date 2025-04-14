@@ -2,6 +2,7 @@
  * @summary Styling for FieldList view
  */
 import styled from '@emotion/styled';
+import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
 
 export const ContentWrapper = styled.div<{ hasFields: boolean }>`
   margin-bottom: 170px;
@@ -118,4 +119,13 @@ export const Column = styled.div<{ align?: string }>`
 
 export const ErrorText = styled.div`
   color: red;
+`;
+
+export const StyledContent = styled.div`
+  margin-bottom: 1rem;
+  ${componentContainer}
+
+  ${paragraphCss}
+
+  ${buttonGroup}
 `;
