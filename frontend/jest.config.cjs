@@ -2,17 +2,7 @@ module.exports = {
   testEnvironment: 'jsdom',
 
   transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
-    '^.+\\.(js|jsx)$': 'babel-jest',
-  },
-
-  transformIgnorePatterns: ['/node_modules/'],
-
-  modulePaths: ['<rootDir>'],
-
-  moduleNameMapper: {
-    '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'babel-jest',
-    '^@/(.*)$': '<rootDir>/src/$1',
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
 
   setupFilesAfterEnv: ['@testing-library/jest-dom'],
