@@ -38,6 +38,14 @@ export const formCss = css({
 
   '.--error': {
     color: 'var(--support-border-color-danger);',
+
+    '+ div > .bcds-react-aria-TextField--container': {
+      borderColor: 'var(--support-border-color-danger) !important;',
+    },
+
+    '+ div > div > input': {
+      borderColor: 'var(--support-border-color-danger) !important;',
+    },
   },
 });
 
@@ -70,3 +78,35 @@ export const buttonGroup = css({
 });
 
 export const formGridBreakpoints = { xs: 12, md: 6 };
+
+export const customTableStyle = {
+  borderStyle: 'none',
+  '& .MuiDataGrid-columnHeader > .MuiDataGrid-columnSeparator': {
+    visibility: 'hidden',
+  },
+  '& .MuiDataGrid-columnHeaders': {
+    borderBottom: 'none',
+  },
+  '& div div div div >.MuiDataGrid-cell': {
+    borderBottom: 'none',
+    borderTop: '1px solid rgba(224, 224, 224, 1)',
+  },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'transparent',
+  },
+  '& .MuiDataGrid-columnHeaderTitle': {
+    fontWeight: '700',
+  },
+};
+
+export const tableActionButtonCss = css({
+  paddingLeft: '0.75rem',
+  color: 'var(--surface-color-primary-button-default)',
+});
+
+export const modalHeaderStyle = css({
+  fontWeight: '700',
+  fontSize: '1.25rem',
+});
+
+export const modalDividerStyle = css({ marginTop: '0.5rem', marginBottom: '0.5rem' });
