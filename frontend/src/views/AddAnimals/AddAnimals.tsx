@@ -20,7 +20,7 @@ import {
 import { formCss } from '../../common.styles';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
-import { AnimalData, BeefCattleData, DairyCattleData } from './types';
+import { AnimalData, BeefCattleData, DairyCattleData, initialBeefFormData, initialDairyFormData } from './types';
 import BeefCattle from './BeefCattle';
 import DairyCattle from './DairyCattle/DairyCattle';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
@@ -30,13 +30,14 @@ import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper
 import { initAnimals, saveAnimalsToFile } from './utils';
 import { ErrorText } from './addAnimals.styles';
 
-const initialAnimalFormData: AnimalData = {
-  id: '0',
-};
+type tempAnimalData = AnimalData & { id?: string };
 
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
-  const [formData, setFormData] = useState<AnimalData>(initialAnimalFormData);
+  const [selectedAnimal, setSelectedAnimal] = useState<string>('');
+  const [formData, setFormData] = useState<AnimalData>(
+    selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData,
+  );
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
@@ -44,7 +45,7 @@ export default function AddAnimals() {
 
   const navigate = useNavigate();
 
-  const [animalList, setAnimalList] = useState<Array<AnimalData>>(
+  const [animalList, setAnimalList] = useState<Array<tempAnimalData>>(
     // Load NMP animals into view, add id key for UI tracking purposes
     initAnimals(state).map((animalElement: AnimalData, index: number) => ({
       ...animalElement,
@@ -81,7 +82,7 @@ export default function AddAnimals() {
       ]);
     }
     console.log('after animalList', animalList);
-    setFormData(initialAnimalFormData);
+    setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
     setAnimalForm(null);
     setIsEditingForm(false);
     setIsDialogOpen(false);
@@ -89,7 +90,6 @@ export default function AddAnimals() {
   };
 
   const handleFormAnimalChange = (animal: string) => {
-    console.log('handleFormAnimalChange', animal);
     setFormData((prev) => ({ ...prev, animal }));
   };
 
@@ -117,7 +117,6 @@ export default function AddAnimals() {
   };
 
   const handleDeleteRow = (e: any) => {
-    console.log(e);
     setAnimalList((prev) => {
       const newList = [...prev];
       if (e?.id === 0 || e?.id) newList.splice(e.id, 1);
@@ -262,15 +261,12 @@ export default function AddAnimals() {
                     <Select
                       isRequired
                       name="AnimalType"
-                      value={formData.id}
+                      value={selectedAnimal}
                       items={animalOptions}
                       onSelectionChange={(e) => {
                         const selectedItem = animalOptions.find((item) => item.label === e);
-                        console.log('Selected Value:', selectedItem);
-                        console.log('formData', formData); // Debugging
-                        if (selectedItem) {
-                          handleAnimalType(selectedItem.value); // Update formData.id
-                        }
+                        setSelectedAnimal(e);
+                        handleAnimalType(selectedItem.value);
                       }}
                       label="Animal Type"
                     />
