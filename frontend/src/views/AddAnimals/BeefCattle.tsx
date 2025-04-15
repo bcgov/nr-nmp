@@ -12,11 +12,20 @@ interface BeefCattleSubtype {
   solidperpoundperanimalperday: number;
 }
 
-const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => ({ id: '1', ...data });
+type tempBeefData = BeefCattleData & { id?: string };
+
+const initialBeefFormData: tempBeefData = {
+  id: '1',
+  subtype: '',
+  animalsPerFarm: undefined,
+  daysCollected: undefined,
+  manureData: undefined,
+  date: new Date().toISOString(),
+};
 
 export default function BeefCattle() {
   const apiCache = useContext(APICacheContext);
-  const [formData, setFormData] = useState<BeefCattleData>(initData({ id: '1' }));
+  const [formData, setFormData] = useState<BeefCattleData>(initialBeefFormData);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
 

@@ -22,16 +22,25 @@ interface DairyCattleBreed {
   breedmanurefactor: number;
 }
 
-const initData: (d: Partial<DairyCattleData>) => DairyCattleData = (data) => ({
+type tempDairyData = DairyCattleData & { id?: string };
+
+const initialDairyFormData: tempDairyData = {
   id: '2',
+  subtype: '',
   breed: '1',
+  manureType: undefined,
   grazingDaysPerYear: 0,
-  ...data,
-});
+  animalsPerFarm: undefined,
+  milkProduction: undefined,
+  washWater: undefined,
+  washWaterUnit: undefined,
+  manureData: undefined,
+  date: new Date().toISOString(),
+};
 
 export default function DairyCattle() {
   const apiCache = useContext(APICacheContext);
-  const [formData, setFormData] = useState<DairyCattleData>(initData({ id: '2' }));
+  const [formData, setFormData] = useState<DairyCattleData>(initialDairyFormData);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
