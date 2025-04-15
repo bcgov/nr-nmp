@@ -12,7 +12,7 @@ import {
   Select,
   TextField,
 } from '@bcgov/design-system-react-components';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import type { Key } from 'react-aria-components';
 import useAppService from '@/services/app/useAppService';
 import NMPFile from '@/types/NMPFile';

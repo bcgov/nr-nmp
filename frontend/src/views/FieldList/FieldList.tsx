@@ -17,15 +17,10 @@ import {
 } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-import { formCss } from '../../common.styles';
-import {
-  customTableStyle,
-  StyledContent,
-  tableActionButtonCss,
-  ErrorText,
-} from './fieldList.styles';
+import { customTableStyle, formCss, tableActionButtonCss } from '../../common.styles';
+import { ErrorText, StyledContent } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 import { FARM_INFORMATION, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
@@ -117,7 +112,6 @@ export default function FieldList() {
   };
 
   const handleDeleteRow = (e: any) => {
-    console.log(e);
     setFieldList((prev) => {
       const newList = [...prev];
       if (e?.id === 0 || e?.id) newList.splice(e.id, 1);
