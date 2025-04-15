@@ -35,7 +35,11 @@ const initialDairyFormData: tempDairyData = {
   washWater: undefined,
   washWaterUnit: undefined,
   manureData: undefined,
-  date: new Date().toISOString(),
+  date: new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }),
 };
 
 export default function DairyCattle() {

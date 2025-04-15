@@ -7,6 +7,15 @@ export interface BeefCattleData {
   date?: string;
 }
 
+export const initialBeefFormData: BeefCattleData = {
+  id: '1',
+  subtype: '',
+  animalsPerFarm: undefined,
+  daysCollected: undefined,
+  manureData: undefined,
+  date: new Date().toISOString(),
+};
+
 export const BEEF_COW_ID: string = '1';
 export const DAIRY_COW_ID: string = '2';
 export const MILKING_COW_ID: string = '9';
@@ -29,11 +38,21 @@ export interface DairyCattleData {
     | undefined;
 }
 
-export interface InitialForm {
-  id: '0';
-}
+export const initialDairyFormData: DairyCattleData = {
+  id: '2',
+  subtype: '',
+  breed: '1',
+  manureType: undefined,
+  grazingDaysPerYear: 0,
+  animalsPerFarm: undefined,
+  milkProduction: undefined,
+  washWater: undefined,
+  washWaterUnit: undefined,
+  manureData: undefined,
+  date: new Date().toISOString(),
+};
 
-export type AnimalData = BeefCattleData | DairyCattleData | InitialForm;
+export type AnimalData = BeefCattleData | DairyCattleData;
 
 // TODO: Add interfaces for the manure tab and nutrient tab
 export type AnimalsWorkflowData = AnimalData;
