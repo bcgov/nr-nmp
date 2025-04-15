@@ -1,11 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { AnimalData, BeefCattleData } from './types';
-import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
-import { calculateAnnualSolidManure } from './utils';
+import { BeefCattleData } from './types';
 import { Dropdown, InputField } from '@/components/common';
 
 interface BeefCattleSubtype {
@@ -14,37 +12,11 @@ interface BeefCattleSubtype {
   solidperpoundperanimalperday: number;
 }
 
-interface BeefCattleProps {
-  startData: Partial<BeefCattleData>;
-  startExpanded?: boolean;
-  saveData: (data: AnimalData, index: number) => void;
-  updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
-  updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
-  myIndex: number;
-  date: string;
-}
+const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => ({ id: '1', ...data });
 
-const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
-  if (data.id !== '1') {
-    throw new Error('AddAnimals sent bad data to BeefCattle.');
-  }
-  return { id: '1', ...data };
-};
-
-const isBeefCattleDataComplete: (data: BeefCattleData) => boolean = (data) =>
-  data.subtype !== undefined && data.animalsPerFarm !== undefined;
-
-export default function BeefCattle({
-  startData,
-  startExpanded = false,
-  saveData,
-  updateIsComplete,
-  updateIsExpanded,
-  myIndex,
-}: BeefCattleProps) {
-  const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
-  const [lastSaved, setLastSaved] = useState<BeefCattleData>(formData);
+export default function BeefCattle() {
   const apiCache = useContext(APICacheContext);
+  const [formData, setFormData] = useState<BeefCattleData>(initData({ id: '1' }));
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
 
@@ -74,58 +46,11 @@ export default function BeefCattle({
     typeof formData.animalsPerFarm === 'number',
   );
 
-  const handleSubtypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setFormData((prev) => ({ ...prev, subtype: value }));
-  };
-
+  // save to form data on change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev: BeefCattleData) => ({ ...prev, [name]: value }));
   };
-
-  const { isExpanded, setExpanded } = useEventfulCollapse({
-    id: `beef-${myIndex}`,
-    defaultExpanded: startExpanded,
-  });
-
-  const handleSave = (e: FormEvent) => {
-    e.preventDefault();
-
-    // Calculate manure
-    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    const withManureCalc = {
-      ...formData,
-      manureData: {
-        name: subtype.name,
-        annualSolidManure: calculateAnnualSolidManure(
-          subtype.solidperpoundperanimalperday,
-          formData.animalsPerFarm!,
-          formData.daysCollected,
-        ),
-      },
-    };
-    saveData(withManureCalc, myIndex);
-    setLastSaved(withManureCalc);
-    setExpanded(false);
-  };
-
-  // When the form is saved or re-opened, update the validity and expanded trackers
-  useEffect(() => {
-    updateIsExpanded((prev) => {
-      const next = [...prev];
-      next[myIndex] = isExpanded;
-      return next;
-    });
-  }, [isExpanded, updateIsExpanded, myIndex]);
-  useEffect(() => {
-    updateIsComplete((prev) => {
-      const next = [...prev];
-      next[myIndex] = isBeefCattleDataComplete(lastSaved);
-      return next;
-    });
-  }, [lastSaved, updateIsComplete, myIndex]);
 
   return (
     <>

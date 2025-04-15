@@ -1,5 +1,8 @@
 /* eslint-disable no-param-reassign */
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+/**
+ * @summary This is the Add Animal list Tab
+ */
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -38,230 +41,132 @@ import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 import { customTableStyle, tableActionButtonCss } from '@/views/FieldList/fieldList.styles';
 import StyledContent from '../LandingPage/landingPage.styles';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
+import { initAnimals, saveAnimalsToFile } from './utils';
+import { ErrorText } from './addAnimals.styles';
+
+const initialAnimalFormData: AnimalData = {
+  id: '0',
+};
 
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
-  const navigate = useNavigate();
-  const apiCache = useContext(APICacheContext);
-
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [formData, setFormData] = useState<AnimalData>(initialAnimalFormData);
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
-  const [formData, setFormData] = useState<(AnimalData | null)[]>([]);
-
-  const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null);
-  const [animalOptions, setAnimalOptions] = useState<{ value: number; label: string }[]>([]);
-  const [elems, setElems] = useState<(React.ReactNode | null)[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [showViewError, setShowViewError] = useState<string>('');
   const [animalForm, setAnimalForm] = useState<React.ReactNode | null>(null);
-  const [formComplete, setFormComplete] = useState<(boolean | null)[]>([]);
-  const [formExpanded, setFormExpanded] = useState<(boolean | null)[]>([]);
-  const [nextDisabled, setNextDisabled] = useState(false);
 
-  // on submit/save
-  const handleSave = useCallback(
-    (data: AnimalData, index: number) => {
-      setFormData((prev) => {
-        prev[index] = data;
-        // Save this data up the chain, to the parent
-        return prev;
-      });
-      setAnimalForm(null);
-      setIsEditingForm(false);
-      setIsDialogOpen(false);
-    },
-    [setFormData],
+  const navigate = useNavigate();
+
+  const [animalList, setAnimalList] = useState<Array<AnimalData>>(
+    // Load NMP animals into view, add id key for UI tracking purposes
+    initAnimals(state).map((animalElement: AnimalData) => ({
+      ...animalElement,
+    })),
   );
-
-  // on close of add animal form
-  const handleDialogClose = () => {
-    setSelectedAnimal(null);
-    setAnimalForm(null);
-    setIsDialogOpen(false);
-    setIsEditingForm(false);
-  };
-
-  const handleEdit = (e: any) => {
-    setIsEditingForm(true);
-    setFormData(e.row);
-    setIsDialogOpen(true);
-  };
-
-  const handleDelete = (index: number) => {
-    setFormData((prev) => {
-      prev[index] = null;
-      return prev;
-    });
-    setElems((prev) => {
-      const next = [...prev];
-      next[index] = null;
-      return next;
-    });
-    setFormComplete((prev) => {
-      const next = [...prev];
-      next[index] = null;
-      return next;
-    });
-    setFormExpanded((prev) => {
-      const next = [...prev];
-      next[index] = null;
-      return next;
-    });
-  };
-
-  // Init data & elems on first render
-  useEffect(() => {
-    // Uncomment once we cache session state
-    /*
-    if (!state.nmpFile) {
-      throw new Error('NMP file has entered bad state in AddAnimals. (can be caused by refresh)');
-    }
-    const nmpFile: NMPFile = JSON.parse(state.nmpFile);
-    */
-    let nmpFile: NMPFile;
-    if (state.nmpFile) nmpFile = JSON.parse(state.nmpFile);
-    else {
-      nmpFile = { ...defaultNMPFile };
-      nmpFile.years.push({ ...defaultNMPFileYear });
-    }
-    let data = nmpFile.years[0].FarmAnimals;
-    if (data === undefined || data.length === 0) {
-      data = (nmpFile.farmDetails.FarmAnimals || []).map((id) => ({ id })) as AnimalData[];
-    }
-
-    const currentDate = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-
-    const dataElems = data.map((d, index) => {
-      if (d === null) {
-        return null;
-      }
-      if (d.id === '1') {
-        return (
-          <BeefCattle
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${index}`}
-            startData={d}
-            startExpanded={index === 0}
-            saveData={handleSave}
-            updateIsComplete={setFormComplete}
-            updateIsExpanded={setFormExpanded}
-            myIndex={index}
-            date={currentDate}
-          />
-        );
-      }
-      if (d.id === '2') {
-        return (
-          <DairyCattle
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${index}`}
-            startData={d}
-            startExpanded={index === 0}
-            saveData={handleSave}
-            updateIsComplete={setFormComplete}
-            updateIsExpanded={setFormExpanded}
-            myIndex={index}
-            date={currentDate}
-          />
-        );
-      }
-      throw new Error('Unexpected animal id.');
-    });
-
-    setFormData(data);
-    setElems(dataElems);
-    // Default to open and incomplete to disable the buttons
-    setFormComplete(Array(data.length).fill(false));
-    setFormExpanded(Array(data.length).fill(true));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleAdd = (animal: string) => {
-    setSelectedAnimal(animal);
-    // Only beef or dairy for now
-    const animalId: '1' | '2' | '' =
-      animal === 'Beef Cattle' ? '1' : animal === 'Dairy Cattle' ? '2' : '';
-    if (!animalId) return;
-
-    const currentDate = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-
-    const { length } = formData;
-
-    const newForm =
-      animalId === '1' ? (
-        <BeefCattle
-          key={formData[0]?.id || 0}
-          startData={{ id: animalId }}
-          startExpanded={formExpanded[0] ?? false}
-          saveData={handleSave}
-          updateIsComplete={setFormComplete}
-          updateIsExpanded={setFormExpanded}
-          myIndex={length}
-          date={currentDate}
-        />
-      ) : (
-        <DairyCattle
-          key={formData[0]?.id || 0}
-          startData={{ id: animalId }}
-          startExpanded={formExpanded[0] ?? false}
-          saveData={handleSave}
-          updateIsComplete={setFormComplete}
-          updateIsExpanded={setFormExpanded}
-          myIndex={length}
-          date={currentDate}
-        />
-      );
-    setAnimalForm(newForm);
-    setFormComplete((prev) => prev.concat(false));
-    setFormExpanded((prev) => prev.concat(true));
-  };
-
-  const handleNext = () => {
-    if (!state.nmpFile) {
-      throw new Error('NMP file has entered impossible state in AnimalsAndManure.');
-    }
-
-    const nmpFile: NMPFile = JSON.parse(state.nmpFile);
-    // TODO: Add multi-year handling
-    nmpFile.years[0].FarmAnimals = formData.filter((f) => f !== null);
-    // TODO: Copy the data of the other tabs
-    setNMPFile(JSON.stringify(nmpFile));
-
-    navigate(MANURE_IMPORTS);
-  };
-
-  useEffect(() => {
-    if (formComplete.length === 0) {
-      setNextDisabled(true);
-    } else {
-      setNextDisabled(formComplete.some((bool) => bool === false));
-    }
-  }, [formComplete, setNextDisabled]);
-
-  useEffect(() => {
-    apiCache.callEndpoint('api/animals/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const animals: { value: number; label: string }[] = (data as { id: number; name: string }[])
-          .map((row) => ({ value: row.id, label: row.name }))
-          // Temp, remove non-cattle as an option
-          .filter((opt) => opt.value === 1 || opt.value === 2);
-        setAnimalOptions(animals);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     setProgressStep(2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    // Prevent default browser page refresh.
+    e.preventDefault();
+
+    if (isEditingForm) {
+      // If editing, find and replace field instead of adding new field
+      const replaceIndex = animalList.findIndex((element) => element?.id === formData?.id);
+      setAnimalList((prev) => {
+        const newList = [...prev];
+        newList[replaceIndex] = { ...formData };
+        return newList;
+      });
+    } else {
+      setAnimalList((prev) => [
+        ...prev,
+        {
+          ...formData,
+        },
+      ]);
+    }
+    setFormData(initialAnimalFormData);
+    setAnimalForm(null);
+    setIsEditingForm(false);
+    setIsDialogOpen(false);
+    setShowViewError('');
+  };
+
+  const handleFormAnimalChange = (animal: string) => {
+    console.log('handleFormAnimalChange', animal);
+    setFormData((prev) => ({ ...prev, animal }));
+  };
+
+  const handleAnimalType = (animal: string) => {
+    console.log('Animal Type:', animal);
+    // Only beef or dairy for now
+
+    const newForm =
+      animal === '1' ? (
+        <BeefCattle
+          key={animalList.length}
+          formData={formData as BeefCattleData}
+          setFormData={setFormData}
+        />
+      ) : (
+        <DairyCattle
+          key={animalList.length}
+          formData={formData as DairyCattleData}
+          setFormData={setFormData}
+        />
+      );
+    console.log(newForm);
+    setAnimalForm(newForm);
+    handleFormAnimalChange(animal);
+  };
+
+  const handleEditRow = (e: any) => {
+    setIsEditingForm(true);
+    setFormData(e.row);
+    setIsDialogOpen(true);
+  };
+
+  const handleDeleteRow = (e: any) => {
+    console.log(e);
+    setAnimalList((prev) => {
+      const newList = [...prev];
+      if (e?.id === 0 || e?.id) newList.splice(e.id, 1);
+      return newList;
+    });
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setIsEditingForm(false);
+    // setIsFormInvalid(false);
+    setFormData(initialAnimalFormData);
+  };
+
+  const handleNextPage = () => {
+    setShowViewError('');
+
+    if (animalList.length) {
+      saveAnimalsToFile(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        animalList.map(({ ...remainingAnimals }) => remainingAnimals),
+        state.nmpFile,
+        setNMPFile,
+      );
+      navigate(MANURE_IMPORTS);
+    } else {
+      setShowViewError('You must add at least one animal before continuing.');
+    }
+  };
+
+  const animalOptions = [
+    { value: '1', label: 'Beef Cattle' },
+    { value: '2', label: 'Dairy Cattle' },
+  ];
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -278,17 +183,17 @@ export default function AddAnimals() {
         field: '',
         headerName: 'Actions',
         width: 120,
-        renderCell: (params: any) => (
+        renderCell: (row: any) => (
           <>
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleEdit({ row: { ...params.row, index: params.row?.index } })}
+              onClick={() => handleEditRow(row)}
               icon={faEdit}
               aria-label="Edit"
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDelete(params.row?.index)}
+              onClick={() => handleDeleteRow(row)}
               icon={faTrash}
               aria-label="Delete"
             />
@@ -365,7 +270,7 @@ export default function AddAnimals() {
               />
               <Form
                 css={formCss}
-                onSubmit={handleSave}
+                onSubmit={onSubmit}
               >
                 <Grid>
                   <Grid size={6}>
@@ -373,10 +278,15 @@ export default function AddAnimals() {
                     <Select
                       isRequired
                       name="AnimalType"
+                      value={formData.id}
                       items={animalOptions}
-                      selectedKey={selectedAnimal}
                       onSelectionChange={(e) => {
-                        handleAdd(e.toString());
+                        const selectedItem = animalOptions.find((item) => item.label === e);
+                        console.log('Selected Value:', selectedItem);
+                        console.log('formData', formData); // Debugging
+                        if (selectedItem) {
+                          handleAnimalType(selectedItem.value); // Update formData.id
+                        }
                       }}
                       label="Animal Type"
                     />
@@ -420,13 +330,14 @@ export default function AddAnimals() {
       />
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={formData}
+        rows={animalList}
         columns={columns}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
         hideFooter
       />
+      <ErrorText>{showViewError}</ErrorText>
       <ButtonGroup
         alignment="start"
         ariaLabel="A group of buttons"
@@ -444,9 +355,8 @@ export default function AddAnimals() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onPress={handleNext}
+          onPress={handleNextPage}
           type="submit"
-          disabled={nextDisabled}
         >
           Next
         </Button>
