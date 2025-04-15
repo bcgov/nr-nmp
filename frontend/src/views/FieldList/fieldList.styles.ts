@@ -95,35 +95,3 @@ export const subHeader = css({
   lineHeight: '100%',
   letterSpacing: '0px',
 });
-
-export const customTableStyle = {
-  borderStyle: 'none',
-  '& .MuiDataGrid-columnHeader > .MuiDataGrid-columnSeparator': {
-    visibility: 'hidden',
-  },
-  '& .MuiDataGrid-columnHeaders': {
-    borderBottom: 'none',
-  },
-  '& div div div div >.MuiDataGrid-cell': {
-    borderBottom: 'none',
-    borderTop: '1px solid rgba(224, 224, 224, 1)',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-columnHeaderTitle': {
-    fontWeight: '700',
-  },
-};
-
-export const tableActionButtonCss = css({
-  paddingLeft: '0.75rem',
-  color: 'var(--surface-color-primary-button-default)',
-});
-
-export default {
-  customTableStyle,
-  StyledContent,
-  subHeader,
-  tableActionButtonCss,
-};
