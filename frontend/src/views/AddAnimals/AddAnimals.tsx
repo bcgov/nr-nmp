@@ -60,8 +60,9 @@ export default function AddAnimals() {
 
   const [animalList, setAnimalList] = useState<Array<AnimalData>>(
     // Load NMP animals into view, add id key for UI tracking purposes
-    initAnimals(state).map((animalElement: AnimalData) => ({
+    initAnimals(state).map((animalElement: AnimalData, index: number) => ({
       ...animalElement,
+      id: index.toString(),
     })),
   );
 
@@ -73,6 +74,8 @@ export default function AddAnimals() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
+    console.log('onSubmit', formData);
+    console.log('before submit animalList', animalList);
 
     if (isEditingForm) {
       // If editing, find and replace field instead of adding new field
@@ -87,9 +90,11 @@ export default function AddAnimals() {
         ...prev,
         {
           ...formData,
-        },
+          id: animalList.length.toString(),
+        } as AnimalData,
       ]);
     }
+    console.log('after animalList', animalList);
     setFormData(initialAnimalFormData);
     setAnimalForm(null);
     setIsEditingForm(false);
@@ -108,25 +113,19 @@ export default function AddAnimals() {
 
     const newForm =
       animal === '1' ? (
-        <BeefCattle
-          key={animalList.length}
-          formData={formData as BeefCattleData}
-          setFormData={setFormData}
-        />
+        <BeefCattle key={animalList.length} />
       ) : (
-        <DairyCattle
-          key={animalList.length}
-          formData={formData as DairyCattleData}
-          setFormData={setFormData}
-        />
+        <DairyCattle key={animalList.length} />
       );
-    console.log(newForm);
+    console.log('animalList.length', animalList.length);
     setAnimalForm(newForm);
     handleFormAnimalChange(animal);
   };
 
+  // fix
   const handleEditRow = (e: any) => {
     setIsEditingForm(true);
+    console.log('handleEditRow', e);
     setFormData(e.row);
     setIsDialogOpen(true);
   };
@@ -143,7 +142,6 @@ export default function AddAnimals() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setIsEditingForm(false);
-    // setIsFormInvalid(false);
     setFormData(initialAnimalFormData);
   };
 

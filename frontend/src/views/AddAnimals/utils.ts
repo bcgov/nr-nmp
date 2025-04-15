@@ -76,15 +76,6 @@ export const initAnimals = (state: any) => {
     console.log('parsedData from nmp file', parsedData.years[0].FarmAnimals);
     return parsedData.years[0].FarmAnimals;
   }
-
-  const data: Partial<BeefCattleData | DairyCattleData> = {};
-  if (data.id === '1') {
-    return { id: '1', ...data } as BeefCattleData;
-  }
-  if (data.id === '2') {
-    return { id: '2', breed: '1', grazingDaysPerYear: 0, ...data } as DairyCattleData;
-  }
-
   return [];
 };
 
