@@ -20,7 +20,13 @@ import {
 import { formCss } from '../../common.styles';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
-import { AnimalData, BeefCattleData, DairyCattleData, initialBeefFormData, initialDairyFormData } from './types';
+import {
+  AnimalData,
+  BeefCattleData,
+  DairyCattleData,
+  initialBeefFormData,
+  initialDairyFormData,
+} from './types';
 import BeefCattle from './BeefCattle';
 import DairyCattle from './DairyCattle/DairyCattle';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
@@ -62,7 +68,6 @@ export default function AddAnimals() {
     // Prevent default browser page refresh.
     e.preventDefault();
     console.log('onSubmit', formData);
-    console.log('before submit animalList', animalList);
 
     if (isEditingForm) {
       // If editing, find and replace field instead of adding new field
@@ -127,7 +132,7 @@ export default function AddAnimals() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setIsEditingForm(false);
-    setFormData(initialAnimalFormData);
+    setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
   };
 
   const handleNextPage = () => {
@@ -135,6 +140,7 @@ export default function AddAnimals() {
 
     if (animalList.length) {
       saveAnimalsToFile(
+        // Delete the id key in each field to prevent saving into NMPfile
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         animalList.map(({ ...remainingAnimals }) => remainingAnimals),
         state.nmpFile,
@@ -153,15 +159,33 @@ export default function AddAnimals() {
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'AnimalType', headerName: 'Animal Type', width: 200, minWidth: 150, maxWidth: 300 },
       {
-        field: 'AnnualManure',
+        field: 'animal',
+        headerName: 'Animal Type',
+        width: 200,
+        minWidth: 150,
+        maxWidth: 300,
+        valueGetter: (params) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+      },
+      {
+        field: 'manureData',
         headerName: 'Annual Manure',
         width: 150,
         minWidth: 125,
         maxWidth: 300,
       },
-      { field: 'Date', headerName: 'Date', minWidth: 200, maxWidth: 300 },
+      {
+        field: 'date',
+        headerName: 'Date',
+        minWidth: 200,
+        maxWidth: 300,
+        valueGetter: (params) =>
+          new Date(params).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          }),
+      },
       {
         field: '',
         headerName: 'Actions',
