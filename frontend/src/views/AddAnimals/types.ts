@@ -30,7 +30,11 @@ export interface DairyCattleData {
   date?: string;
 }
 
-export type AnimalData = BeefCattleData | DairyCattleData;
+export interface InitialForm {
+  id: '0';
+}
+
+export type AnimalData = BeefCattleData | DairyCattleData | InitialForm;
 
 // TODO: Add interfaces for the manure tab and nutrient tab
 export type AnimalsWorkflowData = AnimalData;
