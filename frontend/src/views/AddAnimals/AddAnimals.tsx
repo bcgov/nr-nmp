@@ -41,9 +41,7 @@ type tempAnimalData = AnimalData & { id?: string };
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
   const [selectedAnimal, setSelectedAnimal] = useState<string>('');
-  const [formData, setFormData] = useState<AnimalData>(
-    selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData,
-  );
+  const [formData, setFormData] = useState<AnimalData>();
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
@@ -71,7 +69,7 @@ export default function AddAnimals() {
 
     if (isEditingForm) {
       // If editing, find and replace field instead of adding new field
-      const replaceIndex = animalList.findIndex((element) => element?.id === formData?.id);
+      const replaceIndex = animalList.findIndex((element) => element?.id === formData?.animalId);
       setAnimalList((prev) => {
         const newList = [...prev];
         newList[replaceIndex] = { ...formData };
@@ -94,32 +92,28 @@ export default function AddAnimals() {
     setShowViewError('');
   };
 
-  const handleFormAnimalChange = (animal: string) => {
-    setFormData((prev) => ({ ...prev, animal }));
-  };
-
+  // sets the animal form for the modal
   const handleAnimalType = (animal: string) => {
-    console.log('Animal Type:', animal);
-    // Only beef or dairy for now
-
     const newForm =
       animal === '1' ? (
         <BeefCattle key={animalList.length} />
       ) : (
         <DairyCattle key={animalList.length} />
       );
-    console.log('animalList.length', animalList.length);
     setAnimalForm(newForm);
-    handleFormAnimalChange(animal);
   };
 
-  // fix
-  const handleEditRow = (e: any) => {
-    setIsEditingForm(true);
-    console.log('handleEditRow', e);
-    setFormData(e.row);
-    setIsDialogOpen(true);
-  };
+  // fix editing
+  const handleEditRow = React.useCallback(
+    (e: any) => {
+      setIsEditingForm(true);
+      console.log('handleEditRow', e.row);
+      setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
+      setFormData(e.row);
+      setIsDialogOpen(true);
+    },
+    [selectedAnimal],
+  );
 
   const handleDeleteRow = (e: any) => {
     setAnimalList((prev) => {
@@ -132,7 +126,7 @@ export default function AddAnimals() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setIsEditingForm(false);
-    setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
+    setFormData(undefined);
   };
 
   const handleNextPage = () => {
@@ -160,7 +154,7 @@ export default function AddAnimals() {
   const columns: GridColDef[] = useMemo(
     () => [
       {
-        field: 'animal',
+        field: 'animalId',
         headerName: 'Animal Type',
         width: 200,
         minWidth: 150,
@@ -187,7 +181,7 @@ export default function AddAnimals() {
           }),
       },
       {
-        field: '',
+        field: 'actions',
         headerName: 'Actions',
         width: 120,
         renderCell: (row: any) => (
@@ -210,7 +204,7 @@ export default function AddAnimals() {
         resizable: false,
       },
     ],
-    [],
+    [handleEditRow],
   );
 
   return (
@@ -285,12 +279,17 @@ export default function AddAnimals() {
                     <Select
                       isRequired
                       name="AnimalType"
-                      value={selectedAnimal}
+                      value={formData?.id}
                       items={animalOptions}
                       onSelectionChange={(e) => {
                         const selectedItem = animalOptions.find((item) => item.label === e);
-                        setSelectedAnimal(e);
-                        handleAnimalType(selectedItem.value);
+                        if (selectedItem) {
+                          setSelectedAnimal(selectedItem.value);
+                          setFormData(
+                            selectedItem.value === '1' ? initialBeefFormData : initialDairyFormData,
+                          );
+                          handleAnimalType(selectedItem.value);
+                        }
                       }}
                       label="Animal Type"
                     />
