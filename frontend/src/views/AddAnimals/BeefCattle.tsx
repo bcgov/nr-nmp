@@ -15,7 +15,7 @@ interface BeefCattleSubtype {
 type tempBeefData = BeefCattleData & { id?: string };
 
 const initialBeefFormData: tempBeefData = {
-  id: '1',
+  animalId: '1',
   subtype: '',
   animalsPerFarm: undefined,
   daysCollected: undefined,

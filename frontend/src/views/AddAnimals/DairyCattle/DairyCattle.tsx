@@ -25,7 +25,7 @@ interface DairyCattleBreed {
 type tempDairyData = DairyCattleData & { id?: string };
 
 const initialDairyFormData: tempDairyData = {
-  id: '2',
+  animalId: '2',
   subtype: '',
   breed: '1',
   manureType: undefined,

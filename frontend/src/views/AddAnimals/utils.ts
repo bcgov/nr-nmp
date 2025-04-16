@@ -1,12 +1,6 @@
 /* eslint-disable default-param-last */
 import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
-import {
-  AnimalData,
-  PER_DAY_PER_ANIMAL_UNIT,
-  WashWaterUnit,
-  BeefCattleData,
-  DairyCattleData,
-} from './types';
+import { AnimalData, PER_DAY_PER_ANIMAL_UNIT, WashWaterUnit } from './types';
 import { NMPFile } from '@/types';
 
 /**

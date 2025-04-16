@@ -1,5 +1,5 @@
 export interface BeefCattleData {
-  id: '1';
+  animalId: '1';
   subtype?: string;
   animalsPerFarm?: number;
   daysCollected?: number | undefined;
@@ -8,7 +8,7 @@ export interface BeefCattleData {
 }
 
 export const initialBeefFormData: BeefCattleData = {
-  id: '1',
+  animalId: '1',
   subtype: '',
   animalsPerFarm: undefined,
   daysCollected: undefined,
@@ -23,7 +23,7 @@ export const PER_DAY_PER_ANIMAL_UNIT = 'PER_DAY_PER_ANIMAL';
 export const PER_DAY_UNIT = 'PER_DAY';
 export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
 export interface DairyCattleData {
-  id: '2';
+  animalId: '2';
   subtype?: string;
   breed?: string;
   manureType?: 'liquid' | 'solid';
@@ -39,7 +39,7 @@ export interface DairyCattleData {
 }
 
 export const initialDairyFormData: DairyCattleData = {
-  id: '2',
+  animalId: '2',
   subtype: '',
   breed: '1',
   manureType: undefined,
