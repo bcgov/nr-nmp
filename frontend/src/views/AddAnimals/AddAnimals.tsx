@@ -24,7 +24,7 @@ import { AnimalData, initialBeefFormData, initialDairyFormData } from './types';
 import BeefCattle from './BeefCattle';
 import DairyCattle from './DairyCattle/DairyCattle';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
-import { customTableStyle, tableActionButtonCss } from '@/views/FieldList/fieldList.styles';
+import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import StyledContent from '../LandingPage/landingPage.styles';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import { initAnimals, saveAnimalsToFile } from './utils';
