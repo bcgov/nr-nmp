@@ -72,7 +72,6 @@ export function calculateAnnualWashWater(
 export const initAnimals = (state: any) => {
   if (state.nmpFile) {
     const parsedData = JSON.parse(state.nmpFile);
-    console.log('parsedData from nmp file', parsedData.years[0].FarmAnimals);
     return parsedData.years[0].FarmAnimals;
   }
   return [];
@@ -92,9 +91,9 @@ export const saveAnimalsToFile = (
   if (nmpFile.years.length > 0 && FarmAnimals.length > 0) {
     // Save based on animal type
     nmpFile.years[0].FarmAnimals = FarmAnimals.map((animal) => {
-      if (animal.id === '1') {
+      if (animal.animalId === '1') {
         return {
-          id: '1',
+          animalId: '1',
           subtype: animal.subtype,
           animalsPerFarm: animal.animalsPerFarm,
           daysCollected: animal.daysCollected,
@@ -102,9 +101,9 @@ export const saveAnimalsToFile = (
           date: animal.date,
         };
       }
-      if (animal.id === '2') {
+      if (animal.animalId === '2') {
         return {
-          ...animal,
+          animalId: '2',
           subtype: animal.subtype,
           breed: animal.breed,
           manureType: animal.manureType,
@@ -120,6 +119,5 @@ export const saveAnimalsToFile = (
       return animal;
     });
   }
-  console.log('npmfile', JSON.stringify(nmpFile.years[0].FarmAnimals), nmpFile.years);
   setNMPFile(JSON.stringify(nmpFile));
 };

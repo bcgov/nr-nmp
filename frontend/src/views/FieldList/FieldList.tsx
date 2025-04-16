@@ -123,7 +123,6 @@ export default function FieldList() {
   };
 
   const handleDeleteRow = (e: any) => {
-    console.log(e);
     setFieldList((prev) => {
       const newList = [...prev];
       if (e?.id === 0 || e?.id) newList.splice(e.id, 1);

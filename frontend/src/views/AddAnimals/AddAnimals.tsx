@@ -73,7 +73,6 @@ export default function AddAnimals() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
-    console.log('onSubmit', formData);
 
     if (isEditingForm) {
       // If editing, find and replace field instead of adding new field
@@ -92,7 +91,6 @@ export default function AddAnimals() {
         } as AnimalData,
       ]);
     }
-    console.log('after animalList', animalList);
     setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
     setAnimalForm(null);
     setIsEditingForm(false);
@@ -115,7 +113,6 @@ export default function AddAnimals() {
   const handleEditRow = React.useCallback(
     (e: any) => {
       setIsEditingForm(true);
-      console.log('handleEditRow', e.row);
       setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
       setFormData(e.row);
       setIsDialogOpen(true);
