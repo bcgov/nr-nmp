@@ -57,8 +57,8 @@ export default function AddAnimals() {
 
   const navigate = useNavigate();
 
+  // Load NMP animals into view, add id key for UI tracking purposes
   const [animalList, setAnimalList] = useState<Array<tempAnimalData>>(
-    // Load NMP animals into view, add id key for UI tracking purposes
     initAnimals(state).map((animalElement: AnimalData, index: number) => ({
       ...animalElement,
       id: index.toString(),
@@ -70,16 +70,19 @@ export default function AddAnimals() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // the child component values arent being saved
+  // onSubmit saves to animalList which saves to nmpFile when user clicks next
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
-
     if (isEditingForm) {
       // If editing, find and replace field instead of adding new field
       const replaceIndex = animalList.findIndex((element) => element?.id === formData?.animalId);
       setAnimalList((prev) => {
         const newList = [...prev];
-        newList[replaceIndex] = { ...formData };
+        if (formData) {
+          newList[replaceIndex] = { ...formData };
+        }
         return newList;
       });
     } else {
@@ -87,10 +90,11 @@ export default function AddAnimals() {
         ...prev,
         {
           ...formData,
-          id: animalList.length.toString(),
-        } as AnimalData,
+          id: (animalList.length + 1).toString(),
+        } as tempAnimalData,
       ]);
     }
+    console.log('animalList', animalList);
     setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
     setAnimalForm(null);
     setIsEditingForm(false);
@@ -102,9 +106,15 @@ export default function AddAnimals() {
   const handleAnimalType = (animal: string) => {
     const newForm =
       animal === '1' ? (
-        <BeefCattle key={animalList.length} />
+        <BeefCattle
+          key={animalList.length}
+          onChange={(data) => setFormData((prev) => ({ ...prev, ...data }))}
+        />
       ) : (
-        <DairyCattle key={animalList.length} />
+        <DairyCattle
+          key={animalList.length}
+          onChange={(data) => setFormData((prev) => ({ ...prev, ...data }))}
+        />
       );
     setAnimalForm(newForm);
   };

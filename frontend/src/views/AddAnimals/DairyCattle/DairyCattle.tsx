@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import { Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { DairyCattleData, MILKING_COW_ID } from '../types';
+import { DairyCattleData, MILKING_COW_ID, initialDairyFormData } from '../types';
 import MilkingFields from './MilkingFields';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 
@@ -22,23 +22,7 @@ interface DairyCattleBreed {
   breedmanurefactor: number;
 }
 
-type tempDairyData = DairyCattleData & { id?: string };
-
-const initialDairyFormData: tempDairyData = {
-  animalId: '2',
-  subtype: '',
-  breed: '1',
-  manureType: undefined,
-  grazingDaysPerYear: 0,
-  animalsPerFarm: undefined,
-  milkProduction: undefined,
-  washWater: undefined,
-  washWaterUnit: undefined,
-  manureData: undefined,
-  date: new Date().toISOString(),
-};
-
-export default function DairyCattle() {
+export default function DairyCattle({ onChange }: { onChange: (data: DairyCattleData) => void }) {
   const apiCache = useContext(APICacheContext);
   const [formData, setFormData] = useState<DairyCattleData>(initialDairyFormData);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
@@ -100,10 +84,14 @@ export default function DairyCattle() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Props for expanded view //
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  // save to form data on change
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev: DairyCattleData) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const updatedData = { ...prev, [name]: value };
+      onChange(updatedData);
+      return updatedData;
+    });
   };
 
   return (
