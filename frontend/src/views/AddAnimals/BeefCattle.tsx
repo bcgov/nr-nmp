@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { BeefCattleData } from './types';
+import { BeefCattleData, initialBeefFormData } from './types';
 import { Dropdown, InputField } from '@/components/common';
 
 interface BeefCattleSubtype {
@@ -12,18 +12,7 @@ interface BeefCattleSubtype {
   solidperpoundperanimalperday: number;
 }
 
-type tempBeefData = BeefCattleData & { id?: string };
-
-const initialBeefFormData: tempBeefData = {
-  animalId: '1',
-  subtype: '',
-  animalsPerFarm: undefined,
-  daysCollected: undefined,
-  manureData: undefined,
-  date: new Date().toISOString(),
-};
-
-export default function BeefCattle() {
+export default function BeefCattle({ onChange }: { onChange: (data: BeefCattleData) => void }) {
   const apiCache = useContext(APICacheContext);
   const [formData, setFormData] = useState<BeefCattleData>(initialBeefFormData);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
@@ -58,7 +47,11 @@ export default function BeefCattle() {
   // save to form data on change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev: BeefCattleData) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      const updatedData = { ...prev, [name]: value };
+      onChange(updatedData);
+      return updatedData;
+    });
   };
 
   return (
