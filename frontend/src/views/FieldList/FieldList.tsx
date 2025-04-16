@@ -145,7 +145,6 @@ export default function FieldList() {
 
   const isManureOptionValid = () =>
     formData?.PreviousYearManureApplicationFrequency !== manureOptions[0].id;
-
   const columns: GridColDef[] = useMemo(
     () => [
       { field: 'FieldName', headerName: 'Field Type', width: 200, minWidth: 150, maxWidth: 300 },

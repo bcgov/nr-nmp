@@ -1,20 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button, Dropdown, InputField } from '@/components/common';
+import React, { useContext, useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { ListItem } from '@/views/FieldList/fieldList.styles';
-import { AnimalData, BeefCattleData } from './types';
-import { useEventfulCollapse } from '@/utils/useEventfulCollapse';
-import {
-  EditListItemBody,
-  EditListItemHeader,
-  FlexRowContainer,
-  ListItemContainer,
-} from './addAnimals.styles';
-import { calculateAnnualSolidManure, getSolidManureDisplay } from './utils';
+import { BeefCattleData, initialBeefFormData } from './types';
+import { Dropdown, InputField } from '@/components/common';
 
 interface BeefCattleSubtype {
   id: number;
@@ -22,48 +12,11 @@ interface BeefCattleSubtype {
   solidperpoundperanimalperday: number;
 }
 
-interface BeefCattleProps {
-  startData: Partial<BeefCattleData>;
-  startExpanded?: boolean;
-  saveData: (data: AnimalData, index: number) => void;
-  onDelete: (index: number) => void;
-  updateIsComplete: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
-  updateIsExpanded: React.Dispatch<React.SetStateAction<(boolean | null)[]>>;
-  myIndex: number;
-}
-
-const initData: (d: Partial<BeefCattleData>) => BeefCattleData = (data) => {
-  if (data.id !== '1') {
-    throw new Error('AddAnimals sent bad data to BeefCattle.');
-  }
-  return { id: '1', ...data };
-};
-
-const isBeefCattleDataComplete: (data: BeefCattleData) => boolean = (data) =>
-  data.subtype !== undefined && data.animalsPerFarm !== undefined;
-
-export default function BeefCattle({
-  startData,
-  startExpanded = false,
-  saveData,
-  onDelete,
-  updateIsComplete,
-  updateIsExpanded,
-  myIndex,
-}: BeefCattleProps) {
-  const [formData, setFormData] = useState<BeefCattleData>(initData(startData));
-  const [lastSaved, setLastSaved] = useState<BeefCattleData>(formData);
+export default function BeefCattle({ onChange }: { onChange: (data: BeefCattleData) => void }) {
   const apiCache = useContext(APICacheContext);
+  const [formData, setFormData] = useState<BeefCattleData>(initialBeefFormData);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
-
-  // Props for the collapsed view //
-  const manureDisplay = useMemo(() => {
-    if (lastSaved.manureData === undefined) {
-      return '';
-    }
-    return getSolidManureDisplay(lastSaved.manureData.annualSolidManure);
-  }, [lastSaved.manureData]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
@@ -91,153 +44,78 @@ export default function BeefCattle({
     typeof formData.animalsPerFarm === 'number',
   );
 
-  const handleSubtypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setFormData((prev) => ({ ...prev, subtype: value }));
-  };
-
+  // save to form data on change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const { getToggleProps, getCollapseProps, isExpanded, setExpanded } = useEventfulCollapse({
-    id: `beef-${myIndex}`,
-    defaultExpanded: startExpanded,
-  });
-
-  const handleSave = (e: FormEvent) => {
-    e.preventDefault();
-
-    // Calculate manure
-    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
-    const withManureCalc = {
-      ...formData,
-      manureData: {
-        name: subtype.name,
-        annualSolidManure: calculateAnnualSolidManure(
-          subtype.solidperpoundperanimalperday,
-          formData.animalsPerFarm!,
-          formData.daysCollected,
-        ),
-      },
-    };
-    saveData(withManureCalc, myIndex);
-    setLastSaved(withManureCalc);
-    setExpanded(false);
-  };
-
-  // When the form is saved or re-opened, update the validity and expanded trackers
-  useEffect(() => {
-    updateIsExpanded((prev) => {
-      const next = [...prev];
-      next[myIndex] = isExpanded;
-      return next;
+    setFormData((prev) => {
+      const updatedData = { ...prev, [name]: value };
+      onChange(updatedData);
+      return updatedData;
     });
-  }, [isExpanded, updateIsExpanded, myIndex]);
-  useEffect(() => {
-    updateIsComplete((prev) => {
-      const next = [...prev];
-      next[myIndex] = isBeefCattleDataComplete(lastSaved);
-      return next;
-    });
-  }, [lastSaved, updateIsComplete, myIndex]);
+  };
 
   return (
-    <>
-      {!isExpanded ? (
-        <ListItemContainer key={`beef-${myIndex}`}>
-          <ListItem>{lastSaved.manureData?.name || ''}</ListItem>
-          <ListItem>{manureDisplay}</ListItem>
-          <ListItem align="right">
-            <button
-              type="button"
-              {...getToggleProps()}
-            >
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
-            <button
-              type="button"
-              onClick={() => onDelete(myIndex)}
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
-          </ListItem>
-        </ListItemContainer>
-      ) : (
-        <EditListItemHeader>Edit Animal</EditListItemHeader>
+    <Grid
+      container
+      spacing={2}
+    >
+      <Dropdown
+        label="Cattle Type"
+        name="subtype"
+        value={formData.subtype ?? ''}
+        options={subtypeOptions}
+        onChange={handleInputChange}
+        required
+      />
+      <InputField
+        label="Average Animal Number on Farm"
+        type="text"
+        name="animalsPerFarm"
+        value={formData.animalsPerFarm?.toString() || ''}
+        onChange={handleInputChange}
+        maxLength={7}
+        required
+        onInput={(e) => {
+          const elem = e.target as HTMLInputElement;
+          const value = Number(elem.value);
+          if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
+            elem.setCustomValidity('Please enter a valid whole number.');
+          } else {
+            elem.setCustomValidity('');
+          }
+        }}
+      />
+      <YesNoRadioButtons
+        orientation="horizontal"
+        text="Do you pile or collect manure from these animals?"
+        value={showCollectionDays}
+        onChange={(val) => {
+          setShowCollectionDays(val);
+          if (!val) {
+            setFormData((prev: BeefCattleData) => ({ ...prev, collectionDays: undefined }));
+          }
+        }}
+      />
+      {showCollectionDays && (
+        <InputField
+          label="How long is the manure collected?"
+          type="text"
+          name="daysCollected"
+          value={formData.daysCollected?.toString() || ''}
+          onChange={handleInputChange}
+          maxLength={3}
+          required
+          onInput={(e) => {
+            const elem = e.target as HTMLInputElement;
+            const value = Number(elem.value);
+            if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
+              elem.setCustomValidity('Please enter a valid number of days. (0-365)');
+            } else {
+              elem.setCustomValidity('');
+            }
+          }}
+        />
       )}
-      <EditListItemBody {...getCollapseProps()}>
-        <form onSubmit={handleSave}>
-          <FlexRowContainer>
-            <Dropdown
-              label="Cattle Type"
-              name="animalSubtype"
-              value={formData.subtype || ''}
-              options={subtypeOptions}
-              onChange={handleSubtypeChange}
-              required
-            />
-            <InputField
-              label="Average Animal Number on Farm"
-              type="text"
-              name="animalsPerFarm"
-              value={formData.animalsPerFarm?.toString() || ''}
-              onChange={handleInputChange}
-              maxLength={7}
-              required
-              onInput={(e) => {
-                const elem = e.target as HTMLInputElement;
-                const value = Number(elem.value);
-                if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
-                  elem.setCustomValidity('Please enter a valid whole number.');
-                } else {
-                  elem.setCustomValidity('');
-                }
-              }}
-            />
-            <YesNoRadioButtons
-              orientation="horizontal"
-              text="Do you pile or collect manure from these animals?"
-              value={showCollectionDays}
-              onChange={(val) => {
-                setShowCollectionDays(val);
-                if (!val) {
-                  setFormData((prev) => ({ ...prev, collectionDays: undefined }));
-                }
-              }}
-            />
-            {showCollectionDays && (
-              <InputField
-                label="How long is the manure collected?"
-                type="text"
-                name="daysCollected"
-                value={formData.daysCollected?.toString() || ''}
-                onChange={handleInputChange}
-                maxLength={3}
-                required
-                onInput={(e) => {
-                  const elem = e.target as HTMLInputElement;
-                  const value = Number(elem.value);
-                  if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
-                    elem.setCustomValidity('Please enter a valid number of days. (0-365)');
-                  } else {
-                    elem.setCustomValidity('');
-                  }
-                }}
-              />
-            )}
-          </FlexRowContainer>
-          <Button
-            text="Submit"
-            aria-label="Submit"
-            variant="primary"
-            size="sm"
-            disabled={false}
-          />
-        </form>
-      </EditListItemBody>
-    </>
+    </Grid>
   );
 }

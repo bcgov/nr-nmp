@@ -72,7 +72,7 @@ export default function ManureAndImports() {
     for (let i = 0; i < farmAnimals.length; i += 1) {
       const animal = farmAnimals[i];
       if (animal.manureData !== undefined) {
-        if (animal.id === DAIRY_COW_ID && animal.subtype === MILKING_COW_ID) {
+        if (animal.animalId === DAIRY_COW_ID && animal.subtype === MILKING_COW_ID) {
           // TODO: Add wash water as manure. We're ignoring a lot of dairy cow stuff for now
         }
 
