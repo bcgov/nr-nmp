@@ -17,7 +17,7 @@ import {
   Form,
   Select,
 } from '@bcgov/design-system-react-components';
-import { formCss } from '../../common.styles';
+import { formCss, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -38,7 +38,6 @@ import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import BeefCattle from './BeefCattle';
 import DairyCattle from './DairyCattle/DairyCattle';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
-import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import StyledContent from '../LandingPage/landingPage.styles';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import { initAnimals, saveAnimalsToFile } from './utils';
@@ -95,6 +94,7 @@ export default function AddAnimals() {
       ]);
     }
     console.log('animalList', animalList);
+    console.log('formData', formData?.manureData);
     setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
     setAnimalForm(null);
     setIsEditingForm(false);
@@ -108,27 +108,50 @@ export default function AddAnimals() {
       animal === '1' ? (
         <BeefCattle
           key={animalList.length}
-          onChange={(data) => setFormData((prev) => ({ ...prev, ...data }))}
+          onChange={(data) =>
+            setFormData((prev) => ({
+              ...prev,
+              ...data,
+              manureData: {
+                ...prev?.manureData,
+                ...data.manureData,
+                name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+                annualSolidManure: data.manureData?.annualSolidManure ?? 0,
+              },
+            }))
+          }
         />
       ) : (
         <DairyCattle
           key={animalList.length}
-          onChange={(data) => setFormData((prev) => ({ ...prev, ...data }))}
+          onChange={(data) =>
+            setFormData((prev) => ({
+              ...prev,
+              ...data,
+              manureData: {
+                ...prev?.manureData,
+                ...data.manureData,
+                name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+                annualSolidManure:
+                  data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
+                annualLiquidManure:
+                  data.manureData?.annualLiquidManure ?? prev?.manureData?.annualLiquidManure ?? 0,
+              },
+            }))
+          }
         />
       );
     setAnimalForm(newForm);
   };
 
   // fix editing
-  const handleEditRow = React.useCallback(
-    (e: any) => {
-      setIsEditingForm(true);
-      setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
-      setFormData(e.row);
-      setIsDialogOpen(true);
-    },
-    [selectedAnimal],
-  );
+  const handleEditRow = React.useCallback((e: any) => {
+    console.log('e', e.row);
+    setIsEditingForm(true);
+    // setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
+    setFormData(e.row);
+    setIsDialogOpen(true);
+  }, []);
 
   const handleDeleteRow = (e: any) => {
     setAnimalList((prev) => {
@@ -166,6 +189,7 @@ export default function AddAnimals() {
     { value: '2', label: 'Dairy Cattle' },
   ];
 
+  // fix manure showing as [object]
   const columns: GridColDef[] = useMemo(
     () => [
       {
@@ -182,6 +206,13 @@ export default function AddAnimals() {
         width: 150,
         minWidth: 125,
         maxWidth: 300,
+        valueGetter: (params) => {
+          // how should we handle liquid and solid?
+          if (params.annualLiquidManure) {
+            return `${params.annualSolidManure ?? 0} tons ${params.annualLiquidManure ?? 0} gallons`;
+          }
+          return `${params.annualSolidManure ?? 0} tons`;
+        },
       },
       {
         field: 'date',
@@ -294,7 +325,7 @@ export default function AddAnimals() {
                     <Select
                       isRequired
                       name="AnimalType"
-                      value={formData?.id}
+                      selectionKey={formData?.animalId}
                       items={animalOptions}
                       onSelectionChange={(e) => {
                         const selectedItem = animalOptions.find((item) => item.label === e);
