@@ -27,7 +27,7 @@ function Modal({ isVisible, title, children, onClose, footer }: ModalProps) {
           <CloseButton onClick={onClose}>&times;</CloseButton>
         </ModalHeader>
         <ModalBody>{children}</ModalBody>
-        {footer && <ModalFooter>{footer}</ModalFooter>}
+        {footer && <ModalFooter id="footer">{footer}</ModalFooter>}
       </ModalContent>
     </ModalWrapper>
   );
