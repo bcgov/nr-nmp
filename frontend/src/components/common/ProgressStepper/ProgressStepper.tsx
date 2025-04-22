@@ -41,15 +41,15 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
   const { state } = useAppService();
 
   const displayAnimalsStep = useCallback(() => {
-    if (state.showAnimals) {
+    if (state.showAnimalsStep) {
       return stepsWithAnimals;
     }
     return stepsWithoutAnimals;
-  }, [state.showAnimals]);
+  }, [state.showAnimalsStep]);
 
   const displayActiveStep = useCallback(() => {
     let stepNumber = 0;
-    if (state.showAnimals) {
+    if (state.showAnimalsStep) {
       switch (step) {
         case LANDING_PAGE:
           break;
@@ -90,7 +90,7 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
       }
     }
     return stepNumber;
-  }, [step, state.showAnimals]);
+  }, [step, state.showAnimalsStep]);
 
   return (
     <Box
