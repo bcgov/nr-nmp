@@ -36,6 +36,12 @@ export default function DairyCattle({
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
 
+  useEffect(() => {
+    if (initialForm) {
+      onChange(initialForm);
+    }
+  }, [initialForm, onChange]);
+
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
     if (subtypes.length === 0) return undefined;
@@ -101,138 +107,82 @@ export default function DairyCattle({
   };
 
   return (
-    <>
-      {!isExpanded ? (
-        <div key={`dairy-${myIndex}`}>
-          <ListItemContainer>
-            <ListItem>{lastSaved.manureData?.name || ''}</ListItem>
-            <ListItem>{manureDisplay}</ListItem>
-            <ListItem align="right">
-              <div
-                className="list-item"
-                style={{ position: 'relative' }}
-                onMouseEnter={() => setIsDropdownOpen(true)}
-                onMouseLeave={() => setIsDropdownOpen(false)}
-              >
-                <FontAwesomeIcon
-                  icon={faEllipsisH}
-                  style={{ cursor: 'pointer' }}
-                />
-                {isDropdownOpen && (
-                  <DropdownMenu className="dropdown-menu">
-                    <DropdownButton
-                      type="button"
-                      {...getToggleProps()}
-                    >
-                      <FontAwesomeIcon icon={faEdit} /> Edit
-                    </DropdownButton>
-                    <DropdownButton
-                      type="button"
-                      onClick={() => onDelete(myIndex)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} /> Delete
-                    </DropdownButton>
-                  </DropdownMenu>
-                )}
-              </div>
-            </ListItem>
-          </ListItemContainer>
-          {formData.washWater && formData.washWaterUnit && (
-            <ListItemContainer>
-              <ListItem>Milking Centre Wash Water</ListItem>
-              <ListItem>{`${calculateAnnualWashWater(formData.washWater, formData.washWaterUnit, formData.animalsPerFarm || 0)} U.S. gallons`}</ListItem>
-              <div />
-            </ListItemContainer>
-          )}
-        </div>
-      ) : (
-        <EditListItemHeader>Edit Animal</EditListItemHeader>
-      )}
-      <EditListItemBody {...getCollapseProps()}>
-        <form onSubmit={handleSave}>
-          <FlexRowContainer>
-            <Dropdown
-              label="Sub Type"
-              name="subtype"
-              value={formData.subtype || ''}
-              options={subtypeOptions}
-              onChange={handleChange}
-              required
-            />
-            <Dropdown
-              label="Breed"
-              name="breed"
-              value={formData.breed || ''}
-              options={breedOptions}
-              onChange={handleChange}
-              required
-            />
-            <InputField
-              label="Average Animal Number on Farm"
-              type="text"
-              name="animalsPerFarm"
-              value={formData.animalsPerFarm?.toString() || ''}
-              onChange={handleChange}
-              maxLength={7}
-              required
-              onInput={(e) => {
-                const elem = e.target as HTMLInputElement;
-                const value = Number(elem.value);
-                if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
-                  elem.setCustomValidity('Please enter a valid whole number.');
-                } else {
-                  elem.setCustomValidity('');
-                }
-              }}
-            />
-            <Dropdown
-              label="Manure Type"
-              name="manureType"
-              value={formData.manureType || ''}
-              options={manureTypeOptions}
-              onChange={handleChange}
-              required
-            />
-            <InputField
-              label="Grazing Days per Year"
-              type="text"
-              name="grazingDaysPerYear"
-              value={formData.grazingDaysPerYear?.toString() || ''}
-              onChange={handleChange}
-              maxLength={3}
-              required
-              onInput={(e) => {
-                const elem = e.target as HTMLInputElement;
-                const value = Number(elem.value);
-                if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
-                  elem.setCustomValidity('Please enter a valid number of days. (0-365)');
-                } else {
-                  elem.setCustomValidity('');
-                }
-              }}
-            />
-            {formData.subtype === MILKING_COW_ID &&
-              milkProductionInit !== undefined &&
-              washWaterInit !== undefined && (
-                <MilkingFields
-                  milkProductionInit={milkProductionInit}
-                  washWaterInit={washWaterInit}
-                  animalsPerFarm={formData.animalsPerFarm || 0}
-                  washWaterUnit={formData.washWaterUnit}
-                  handleChange={handleChange}
-                  setFormData={setFormData}
-                />
-              )}
-          </FlexRowContainer>
-          <Button
-            text="Submit"
-            aria-label="Submit"
-            variant="primary"
-            size="sm"
-            disabled={false}
+    <Grid
+      container
+      spacing={2}
+    >
+      <Dropdown
+        label="Sub Type"
+        name="subtype"
+        value={formData.subtype || ''}
+        options={subtypeOptions}
+        onChange={handleChange}
+        required
+      />
+      <Dropdown
+        label="Breed"
+        name="breed"
+        value={formData.breed || ''}
+        options={breedOptions}
+        onChange={handleChange}
+        required
+      />
+      <InputField
+        label="Average Animal Number on Farm"
+        type="text"
+        name="animalsPerFarm"
+        value={formData.animalsPerFarm?.toString() || ''}
+        onChange={handleChange}
+        maxLength={7}
+        required
+        onInput={(e) => {
+          const elem = e.target as HTMLInputElement;
+          const value = Number(elem.value);
+          if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
+            elem.setCustomValidity('Please enter a valid whole number.');
+          } else {
+            elem.setCustomValidity('');
+          }
+        }}
+      />
+      <Dropdown
+        label="Manure Type"
+        name="manureType"
+        value={formData.manureType || ''}
+        options={manureTypeOptions}
+        onChange={handleChange}
+        required
+      />
+      <InputField
+        label="Grazing Days per Year"
+        type="text"
+        name="grazingDaysPerYear"
+        value={formData.grazingDaysPerYear?.toString() || ''}
+        onChange={handleChange}
+        maxLength={3}
+        required
+        onInput={(e) => {
+          const elem = e.target as HTMLInputElement;
+          const value = Number(elem.value);
+          if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
+            elem.setCustomValidity('Please enter a valid number of days. (0-365)');
+          } else {
+            elem.setCustomValidity('');
+          }
+        }}
+      />
+      {formData.subtype === MILKING_COW_ID &&
+        milkProductionInit !== undefined &&
+        washWaterInit !== undefined && (
+          <MilkingFields
+            milkProductionInit={milkProductionInit}
+            washWaterInit={washWaterInit}
+            animalsPerFarm={formData.animalsPerFarm || 0}
+            washWaterUnit={formData.washWaterUnit}
+            handleChange={handleChange}
+            setFormData={setFormData}
           />
-        </form>
-      </EditListItemBody>
-    </>
+        )}
+    </Grid>
   );
 }

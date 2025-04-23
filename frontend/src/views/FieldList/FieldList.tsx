@@ -3,8 +3,6 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
-import { useEffect, useMemo, useState } from 'react';
-import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -25,13 +23,9 @@ import { customTableStyle, formCss, tableActionButtonCss } from '../../common.st
 import { ErrorText, StyledContent } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 import { FARM_INFORMATION, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
-import { FARM_INFORMATION, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
 import useAppService from '@/services/app/useAppService';
 
-type tempNMPFileFieldData = NMPFileFieldData & { id?: string };
-
-const initialFieldFormData: tempNMPFileFieldData = {
 type tempNMPFileFieldData = NMPFileFieldData & { id?: string };
 
 const initialFieldFormData: tempNMPFileFieldData = {
@@ -148,6 +142,9 @@ export default function FieldList() {
       setShowViewError('Must enter at least 1 field');
     }
   };
+
+  const isManureOptionValid = () =>
+    formData?.PreviousYearManureApplicationFrequency !== manureOptions[0].id;
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -278,10 +275,9 @@ export default function FieldList() {
                       onChange={(e) => handleFormFieldChange('Area', e?.trim())}
                     />
                   </Grid>
-
                   <Grid size={6}>
                     <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.PreviousYearManureApplicationFrequency ? '--error' : ''}`}
+                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !isManureOptionValid() ? '--error' : ''}`}
                     >
                       Manure Application
                     </span>
@@ -290,6 +286,7 @@ export default function FieldList() {
                       name="manureApplication"
                       items={manureOptions}
                       selectedKey={formData?.PreviousYearManureApplicationFrequency}
+                      validate={() => (!isManureOptionValid() ? 'required' : '')}
                       onSelectionChange={(e) => {
                         handleFormFieldChange(
                           'PreviousYearManureApplicationFrequency',

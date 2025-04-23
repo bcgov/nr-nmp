@@ -20,25 +20,17 @@ import {
 import { formCss, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
-import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData } from './types';
-import NMPFile from '@/types/NMPFile';
-import BeefCattle from './BeefCattle';
 import {
-  Header,
-  FlexContainer,
-  AddButton,
-  MarginWrapperOne,
-  MarginWrapperTwo,
-} from './addAnimals.styles';
-import { Column } from '@/views/FieldList/fieldList.styles';
-import StyledContent from '../LandingPage/landingPage.styles';
-import defaultNMPFile from '@/constants/DefaultNMPFile';
-import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
+  AnimalData,
+  BeefCattleData,
+  DairyCattleData,
+  initialBeefFormData,
+  initialDairyFormData,
+} from './types';
 import BeefCattle from './BeefCattle';
+import { StyledContent } from '../LandingPage/landingPage.styles';
 import DairyCattle from './DairyCattle/DairyCattle';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
-import StyledContent from '../LandingPage/landingPage.styles';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import { initAnimals, saveAnimalsToFile } from './utils';
 import { ErrorText } from './addAnimals.styles';
@@ -105,6 +97,36 @@ export default function AddAnimals() {
     setShowViewError('');
   };
 
+  const handleBeefCattleChange = (data: BeefCattleData) => {
+    console.log('Updating formData:', data);
+    setFormData((prev) => ({
+      ...prev,
+      ...data,
+      manureData: {
+        ...prev?.manureData,
+        ...data.manureData,
+        name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+        annualSolidManure: data.manureData?.annualSolidManure ?? 0,
+      },
+    }));
+  };
+
+  const handleDairyCattleChange = (data: DairyCattleData) => {
+    setFormData((prev) => ({
+      ...prev,
+      ...data,
+      manureData: {
+        ...prev?.manureData,
+        ...data.manureData,
+        name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+        annualSolidManure:
+          data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
+        annualLiquidManure:
+          data.manureData?.annualLiquidManure ?? prev?.manureData?.annualLiquidManure ?? 0,
+      },
+    }));
+  };
+
   // sets the animal form for the modal
   const handleAnimalType = useCallback(
     (animal: string) => {
@@ -112,40 +134,13 @@ export default function AddAnimals() {
         animal === '1' ? (
           <BeefCattle
             key={animalList.length}
-            onChange={(data) =>
-              setFormData((prev) => ({
-                ...prev,
-                ...data,
-                manureData: {
-                  ...prev?.manureData,
-                  ...data.manureData,
-                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-                  annualSolidManure: data.manureData?.annualSolidManure ?? 0,
-                },
-              }))
-            }
+            onChange={handleBeefCattleChange}
             initialForm={initialBeefFormData}
           />
         ) : (
           <DairyCattle
             key={animalList.length}
-            onChange={(data) =>
-              setFormData((prev) => ({
-                ...prev,
-                ...data,
-                manureData: {
-                  ...prev?.manureData,
-                  ...data.manureData,
-                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-                  annualSolidManure:
-                    data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
-                  annualLiquidManure:
-                    data.manureData?.annualLiquidManure ??
-                    prev?.manureData?.annualLiquidManure ??
-                    0,
-                },
-              }))
-            }
+            onChange={handleDairyCattleChange}
             initialForm={initialDairyFormData}
           />
         );
