@@ -36,7 +36,7 @@ export default function ViewCard({
         </Banner>
       </CardHeader>
       <ChildrenWrapper>{children}</ChildrenWrapper>
-      {handleNext && (
+      {handleNext !== undefined && (
         <ButtonWrapper position="right">
           <Button
             text="Next"
@@ -48,7 +48,7 @@ export default function ViewCard({
           />
         </ButtonWrapper>
       )}
-      {handlePrevious && (
+      {handlePrevious !== undefined && (
         <ButtonWrapper position="left">
           <Button
             text="Back"
