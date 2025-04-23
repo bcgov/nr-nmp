@@ -255,7 +255,7 @@ export default function AddAnimals() {
         width: 200,
         minWidth: 150,
         maxWidth: 300,
-        valueGetter: (params) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        valueGetter: (params: any) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
       },
       {
         field: 'manureData',
@@ -263,7 +263,7 @@ export default function AddAnimals() {
         width: 150,
         minWidth: 125,
         maxWidth: 300,
-        valueGetter: (params) => {
+        valueGetter: (params: any) => {
           // how should we handle liquid and solid?
           if (params.annualLiquidManure) {
             return `${params.annualSolidManure ?? 0} tons ${params.annualLiquidManure ?? 0} gallons`;
@@ -276,12 +276,7 @@ export default function AddAnimals() {
         headerName: 'Date',
         minWidth: 200,
         maxWidth: 300,
-        valueGetter: (params) =>
-          new Date(params).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          }),
+        valueGetter: (params: any) => params,
       },
       {
         field: 'actions',
@@ -384,7 +379,7 @@ export default function AddAnimals() {
                       name="AnimalType"
                       selectionKey={formData?.animalId}
                       items={animalOptions}
-                      onSelectionChange={(e) => {
+                      onSelectionChange={(e: any) => {
                         const selectedItem = animalOptions.find((item) => item.label === e);
                         if (selectedItem) {
                           setSelectedAnimal(selectedItem.value);
