@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { APICacheContext } from '@/context/APICacheContext';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { BeefCattleData, initialBeefFormData } from './types';
+import { BeefCattleData } from './types';
 import { Dropdown, InputField } from '@/components/common';
 
 interface BeefCattleSubtype {
@@ -12,9 +12,15 @@ interface BeefCattleSubtype {
   solidperpoundperanimalperday: number;
 }
 
-export default function BeefCattle({ onChange }: { onChange: (data: BeefCattleData) => void }) {
+export default function BeefCattle({
+  onChange,
+  initialForm,
+}: {
+  onChange: (data: BeefCattleData) => void;
+  initialForm: BeefCattleData;
+}) {
   const apiCache = useContext(APICacheContext);
-  const [formData, setFormData] = useState<BeefCattleData>(initialBeefFormData);
+  const [formData, setFormData] = useState<BeefCattleData>(initialForm);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
 

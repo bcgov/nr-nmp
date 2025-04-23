@@ -2,7 +2,7 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -64,6 +64,11 @@ export default function AddAnimals() {
     })),
   );
 
+  const animalOptions = [
+    { value: '1', label: 'Beef Cattle' },
+    { value: '2', label: 'Dairy Cattle' },
+  ];
+
   useEffect(() => {
     setProgressStep(2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,8 +98,6 @@ export default function AddAnimals() {
         } as tempAnimalData,
       ]);
     }
-    console.log('animalList', animalList);
-    console.log('formData', formData?.manureData);
     setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
     setAnimalForm(null);
     setIsEditingForm(false);
@@ -103,55 +106,118 @@ export default function AddAnimals() {
   };
 
   // sets the animal form for the modal
-  const handleAnimalType = (animal: string) => {
-    const newForm =
-      animal === '1' ? (
-        <BeefCattle
-          key={animalList.length}
-          onChange={(data) =>
-            setFormData((prev) => ({
-              ...prev,
-              ...data,
-              manureData: {
-                ...prev?.manureData,
-                ...data.manureData,
-                name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-                annualSolidManure: data.manureData?.annualSolidManure ?? 0,
-              },
-            }))
-          }
-        />
-      ) : (
-        <DairyCattle
-          key={animalList.length}
-          onChange={(data) =>
-            setFormData((prev) => ({
-              ...prev,
-              ...data,
-              manureData: {
-                ...prev?.manureData,
-                ...data.manureData,
-                name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-                annualSolidManure:
-                  data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
-                annualLiquidManure:
-                  data.manureData?.annualLiquidManure ?? prev?.manureData?.annualLiquidManure ?? 0,
-              },
-            }))
-          }
-        />
-      );
-    setAnimalForm(newForm);
-  };
+  const handleAnimalType = useCallback(
+    (animal: string) => {
+      const newForm =
+        animal === '1' ? (
+          <BeefCattle
+            key={animalList.length}
+            onChange={(data) =>
+              setFormData((prev) => ({
+                ...prev,
+                ...data,
+                manureData: {
+                  ...prev?.manureData,
+                  ...data.manureData,
+                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+                  annualSolidManure: data.manureData?.annualSolidManure ?? 0,
+                },
+              }))
+            }
+            initialForm={initialBeefFormData}
+          />
+        ) : (
+          <DairyCattle
+            key={animalList.length}
+            onChange={(data) =>
+              setFormData((prev) => ({
+                ...prev,
+                ...data,
+                manureData: {
+                  ...prev?.manureData,
+                  ...data.manureData,
+                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+                  annualSolidManure:
+                    data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
+                  annualLiquidManure:
+                    data.manureData?.annualLiquidManure ??
+                    prev?.manureData?.annualLiquidManure ??
+                    0,
+                },
+              }))
+            }
+            initialForm={initialDairyFormData}
+          />
+        );
+      setAnimalForm(newForm);
+    },
+    [animalList.length],
+  );
 
-  // fix editing
-  const handleEditRow = React.useCallback((e: any) => {
-    console.log('e', e.row);
-    setIsEditingForm(true);
-    // setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
-    setFormData(e.row);
-    setIsDialogOpen(true);
-  }, []);
+  const handleEditRow = React.useCallback(
+    (e: { row: AnimalData }) => {
+      setIsEditingForm(true);
+
+      // set the inital form data to the row data
+      if (e.row.animalId === '1') {
+        setFormData({
+          ...initialBeefFormData,
+          ...e.row,
+        });
+        setSelectedAnimal('1');
+        setAnimalForm(
+          <BeefCattle
+            key={animalList.length}
+            onChange={(data) =>
+              setFormData((prev) => ({
+                ...prev,
+                ...data,
+                manureData: {
+                  ...prev?.manureData,
+                  ...data.manureData,
+                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+                  annualSolidManure: data.manureData?.annualSolidManure ?? 0,
+                },
+              }))
+            }
+            initialForm={e.row}
+          />,
+        );
+      }
+      if (e.row.animalId === '2') {
+        setFormData({
+          ...initialDairyFormData,
+          ...e.row,
+        });
+        setSelectedAnimal('2');
+        setAnimalForm(
+          <DairyCattle
+            key={animalList.length}
+            onChange={(data) =>
+              setFormData((prev) => ({
+                ...prev,
+                ...data,
+                manureData: {
+                  ...prev?.manureData,
+                  ...data.manureData,
+                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
+                  annualSolidManure:
+                    data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
+                  annualLiquidManure:
+                    data.manureData?.annualLiquidManure ??
+                    prev?.manureData?.annualLiquidManure ??
+                    0,
+                },
+              }))
+            }
+            initialForm={e.row}
+          />,
+        );
+      }
+      setIsDialogOpen(true);
+    },
+    [animalList.length],
+  );
 
   const handleDeleteRow = (e: any) => {
     setAnimalList((prev) => {
@@ -165,6 +231,7 @@ export default function AddAnimals() {
     setIsDialogOpen(false);
     setIsEditingForm(false);
     setFormData(undefined);
+    setAnimalForm(null);
   };
 
   const handleNextPage = () => {
@@ -183,11 +250,6 @@ export default function AddAnimals() {
       setShowViewError('You must add at least one animal before continuing.');
     }
   };
-
-  const animalOptions = [
-    { value: '1', label: 'Beef Cattle' },
-    { value: '2', label: 'Dairy Cattle' },
-  ];
 
   // fix manure showing as [object]
   const columns: GridColDef[] = useMemo(

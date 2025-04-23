@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Dropdown, InputField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { DairyCattleData, MILKING_COW_ID, initialDairyFormData } from '../types';
+import { DairyCattleData, MILKING_COW_ID } from '../types';
 import MilkingFields from './MilkingFields';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 
@@ -22,9 +22,15 @@ interface DairyCattleBreed {
   breedmanurefactor: number;
 }
 
-export default function DairyCattle({ onChange }: { onChange: (data: DairyCattleData) => void }) {
+export default function DairyCattle({
+  onChange,
+  initialForm,
+}: {
+  onChange: (data: DairyCattleData) => void;
+  initialForm: DairyCattleData;
+}) {
   const apiCache = useContext(APICacheContext);
-  const [formData, setFormData] = useState<DairyCattleData>(initialDairyFormData);
+  const [formData, setFormData] = useState<DairyCattleData>(initialForm);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
