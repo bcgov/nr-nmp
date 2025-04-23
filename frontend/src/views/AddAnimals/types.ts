@@ -4,7 +4,6 @@ export interface BeefCattleData {
   animalsPerFarm?: number;
   daysCollected?: number | undefined;
   manureData?: { name: string; annualSolidManure: number } | undefined;
-  date?: string;
 }
 
 export const initialBeefFormData: BeefCattleData = {
@@ -13,7 +12,6 @@ export const initialBeefFormData: BeefCattleData = {
   animalsPerFarm: undefined,
   daysCollected: undefined,
   manureData: undefined,
-  date: new Date().toISOString(),
 };
 
 export const BEEF_COW_ID: string = '1';
@@ -49,7 +47,6 @@ export const initialDairyFormData: DairyCattleData = {
   washWater: undefined,
   washWaterUnit: undefined,
   manureData: undefined,
-  date: new Date().toISOString(),
 };
 
 export type AnimalData = BeefCattleData | DairyCattleData;

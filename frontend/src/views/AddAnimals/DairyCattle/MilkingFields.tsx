@@ -7,7 +7,7 @@ interface MilkingFieldsProps {
   washWaterInit: number;
   animalsPerFarm: number;
   washWaterUnit: 'PER_DAY_PER_ANIMAL' | 'PER_DAY' | undefined;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   setFormData: (value: React.SetStateAction<DairyCattleData>) => void;
 }
 
