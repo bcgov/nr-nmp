@@ -377,6 +377,7 @@ export default function AddAnimals() {
                     <Select
                       isRequired
                       name="AnimalType"
+                      placeholder="Select Animal Type"
                       selectionKey={formData?.animalId}
                       items={animalOptions}
                       onSelectionChange={(e: any) => {
