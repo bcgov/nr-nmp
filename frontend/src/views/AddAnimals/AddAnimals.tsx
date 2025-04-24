@@ -26,6 +26,7 @@ import {
   DairyCattleData,
   initialBeefFormData,
   initialDairyFormData,
+  initialEmptyData,
 } from './types';
 import BeefCattle from './BeefCattle';
 import { StyledContent } from '../LandingPage/landingPage.styles';
@@ -35,16 +36,20 @@ import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper
 import { initAnimals, saveAnimalsToFile } from './utils';
 import { ErrorText } from './addAnimals.styles';
 
+// need a row id
 type tempAnimalData = AnimalData & { id?: string };
 
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
-  const [selectedAnimal, setSelectedAnimal] = useState<string>('');
-  const [formData, setFormData] = useState<AnimalData>();
+  const [formData, setFormData] = useState<tempAnimalData>(
+    initialBeefFormData || initialDairyFormData,
+  );
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
+  // array of all livestck entered by the user so far
   const [animalForm, setAnimalForm] = useState<React.ReactNode | null>(null);
+  const [selectedAnimal, setSelectedAnimal] = useState<string>();
 
   const navigate = useNavigate();
 
@@ -66,64 +71,26 @@ export default function AddAnimals() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // the child component values arent being saved
-  // onSubmit saves to animalList which saves to nmpFile when user clicks next
+  // // onSubmit saves to animalList which saves to nmpFile when user clicks next
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
+
     if (isEditingForm) {
       // If editing, find and replace field instead of adding new field
-      const replaceIndex = animalList.findIndex((element) => element?.id === formData?.animalId);
+      const replaceIndex = animalList.findIndex((element) => element?.id === formData?.id);
       setAnimalList((prev) => {
         const newList = [...prev];
-        if (formData) {
-          newList[replaceIndex] = { ...formData };
-        }
+        newList[replaceIndex] = { ...formData };
         return newList;
       });
     } else {
-      setAnimalList((prev) => [
-        ...prev,
-        {
-          ...formData,
-          id: (animalList.length + 1).toString(),
-        } as tempAnimalData,
-      ]);
+      setAnimalList((prev) => [...prev, { ...formData, id: prev?.length.toString() ?? '0' }]);
     }
-    setFormData(selectedAnimal === 'BeefCattle' ? initialBeefFormData : initialDairyFormData);
-    setAnimalForm(null);
+    setFormData(initialEmptyData);
     setIsEditingForm(false);
     setIsDialogOpen(false);
     setShowViewError('');
-  };
-
-  const handleBeefCattleChange = (data: BeefCattleData) => {
-    setFormData((prev) => ({
-      ...prev,
-      ...data,
-      manureData: {
-        ...prev?.manureData,
-        ...data.manureData,
-        name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-        annualSolidManure: data.manureData?.annualSolidManure ?? 0,
-      },
-    }));
-  };
-
-  const handleDairyCattleChange = (data: DairyCattleData) => {
-    setFormData((prev) => ({
-      ...prev,
-      ...data,
-      manureData: {
-        ...prev?.manureData,
-        ...data.manureData,
-        name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-        annualSolidManure:
-          data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
-        annualLiquidManure:
-          data.manureData?.annualLiquidManure ?? prev?.manureData?.annualLiquidManure ?? 0,
-      },
-    }));
   };
 
   // sets the animal form for the modal
@@ -133,82 +100,56 @@ export default function AddAnimals() {
         animal === '1' ? (
           <BeefCattle
             key={animalList.length}
-            onChange={handleBeefCattleChange}
-            initialForm={initialBeefFormData}
+            formData={formData as BeefCattleData}
+            setFormData={setFormData as React.Dispatch<React.SetStateAction<BeefCattleData>>}
           />
         ) : (
           <DairyCattle
             key={animalList.length}
-            onChange={handleDairyCattleChange}
-            initialForm={initialDairyFormData}
+            formData={formData as DairyCattleData}
+            setFormData={setFormData as React.Dispatch<React.SetStateAction<DairyCattleData>>}
           />
         );
       setAnimalForm(newForm);
     },
-    [animalList.length],
+    [animalList.length, formData],
   );
 
   const handleEditRow = React.useCallback(
     (e: { row: AnimalData }) => {
       setIsEditingForm(true);
+      setIsDialogOpen(true);
 
-      // set the inital form data to the row data
       if (e.row.animalId === '1') {
-        setFormData({
+        const newFormData = {
           ...initialBeefFormData,
           ...e.row,
-        });
-        setSelectedAnimal('1');
+        };
+        setFormData(newFormData);
+        setSelectedAnimal('Beef Cattle');
         setAnimalForm(
           <BeefCattle
             key={animalList.length}
-            onChange={(data) =>
-              setFormData((prev) => ({
-                ...prev,
-                ...data,
-                manureData: {
-                  ...prev?.manureData,
-                  ...data.manureData,
-                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-                  annualSolidManure: data.manureData?.annualSolidManure ?? 0,
-                },
-              }))
-            }
-            initialForm={e.row}
+            formData={newFormData as BeefCattleData}
+            setFormData={setFormData as React.Dispatch<React.SetStateAction<BeefCattleData>>}
           />,
         );
       }
       if (e.row.animalId === '2') {
-        setFormData({
+        const newFormData = {
           ...initialDairyFormData,
           ...e.row,
-        });
-        setSelectedAnimal('2');
+        };
+        setFormData(newFormData);
+        setSelectedAnimal('Dairy Cattle');
         setAnimalForm(
           <DairyCattle
             key={animalList.length}
-            onChange={(data) =>
-              setFormData((prev) => ({
-                ...prev,
-                ...data,
-                manureData: {
-                  ...prev?.manureData,
-                  ...data.manureData,
-                  name: data.manureData?.name ?? prev?.manureData?.name ?? '',
-                  annualSolidManure:
-                    data.manureData?.annualSolidManure ?? prev?.manureData?.annualSolidManure ?? 0,
-                  annualLiquidManure:
-                    data.manureData?.annualLiquidManure ??
-                    prev?.manureData?.annualLiquidManure ??
-                    0,
-                },
-              }))
-            }
-            initialForm={e.row}
+            formData={newFormData as DairyCattleData}
+            setFormData={setFormData as React.Dispatch<React.SetStateAction<DairyCattleData>>}
           />,
         );
       }
-      setIsDialogOpen(true);
     },
     [animalList.length],
   );
@@ -224,7 +165,7 @@ export default function AddAnimals() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setIsEditingForm(false);
-    setFormData(undefined);
+    setFormData(initialEmptyData);
     setAnimalForm(null);
   };
 
@@ -263,11 +204,19 @@ export default function AddAnimals() {
         minWidth: 125,
         maxWidth: 300,
         valueGetter: (params: any) => {
-          // how should we handle liquid and solid?
-          if (params.annualLiquidManure) {
-            return `${params.annualSolidManure ?? 0} tons ${params.annualLiquidManure ?? 0} gallons`;
+          const solid = params?.annualSolidManure ?? 0;
+          const liquid = params?.annualLiquidManure ?? 0;
+          // for displaying solid and or liquid
+          if (solid && liquid) {
+            return `${solid} tons/ ${liquid} gal`;
           }
-          return `${params.annualSolidManure ?? 0} tons`;
+          if (solid) {
+            return `${solid} tons`;
+          }
+          if (liquid) {
+            return `${liquid} gal`;
+          }
+          return '0';
         },
       },
       {
@@ -376,20 +325,22 @@ export default function AddAnimals() {
                     <Select
                       isRequired
                       name="AnimalType"
+                      label="Animal Type"
                       placeholder="Select Animal Type"
-                      selectionKey={formData?.animalId}
+                      selectionKey={selectedAnimal}
                       items={animalOptions}
+                      // e is a the animal type name string
                       onSelectionChange={(e: string) => {
                         const selectedItem = animalOptions.find((item) => item.label === e);
                         if (selectedItem) {
-                          setSelectedAnimal(selectedItem.value);
                           setFormData(
                             selectedItem.value === '1' ? initialBeefFormData : initialDairyFormData,
                           );
+                          console.log('selectedItem.label', selectedItem.label);
+                          setSelectedAnimal(selectedItem.label);
                           handleAnimalType(selectedItem.value);
                         }
                       }}
-                      label="Animal Type"
                     />
                     <div style={{ marginTop: '0.5rem' }}>{animalForm}</div>
                   </Grid>
@@ -433,6 +384,7 @@ export default function AddAnimals() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={animalList}
         columns={columns}
+        getRowId={(row: any) => row.id}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

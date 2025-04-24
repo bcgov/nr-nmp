@@ -1,10 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
+import { TextField, Select, Checkbox } from '@bcgov/design-system-react-components';
 import { APICacheContext } from '@/context/APICacheContext';
-import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { BeefCattleData } from './types';
-import { Dropdown, InputField } from '@/components/common';
+import { BeefCattleData, initialBeefFormData } from './types';
 
 interface BeefCattleSubtype {
   id: number;
@@ -13,24 +12,23 @@ interface BeefCattleSubtype {
 }
 
 export default function BeefCattle({
-  onChange,
-  initialForm,
+  setFormData,
+  formData,
 }: {
-  onChange: (data: BeefCattleData) => void;
-  initialForm: BeefCattleData;
+  setFormData: React.Dispatch<React.SetStateAction<BeefCattleData>>;
+  formData: BeefCattleData;
 }) {
   const apiCache = useContext(APICacheContext);
-  const [formData, setFormData] = useState<BeefCattleData>(initialForm);
   const [, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
+  const [showCollectionDays, setShowCollectionDays] = useState<boolean>();
 
+  // only run on initial mount
   useEffect(() => {
-    if (initialForm) {
-      onChange(initialForm);
-    }
-  }, [initialForm, onChange]);
-
-  useEffect(() => {
+    setFormData((prev: BeefCattleData) => ({
+      ...initialBeefFormData,
+      ...prev,
+    }));
     apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
@@ -51,17 +49,15 @@ export default function BeefCattle({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Props for expanded view //
-  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(
-    typeof formData.animalsPerFarm === 'number',
-  );
+  useEffect(() => {
+    setShowCollectionDays(Boolean(formData.daysCollected));
+  }, [formData.daysCollected]);
 
   // save to form data on change
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const handleInputChange = (name: string, value: string | number | undefined) => {
     setFormData((prev) => {
       const updatedData = { ...prev, [name]: value };
-      onChange(updatedData);
+      console.log('updatedData', updatedData);
       return updatedData;
     });
   };
@@ -71,61 +67,53 @@ export default function BeefCattle({
       container
       spacing={2}
     >
-      <Dropdown
+      <Select
+        style={{ maxWidth: '12em' }}
         label="Cattle Type"
         name="subtype"
-        value={formData.subtype ?? ''}
-        options={subtypeOptions}
-        onChange={handleInputChange}
+        placeholder="Select a cattle type"
+        selectionKey={formData?.subtype}
+        items={subtypeOptions}
+        onSelectionChange={(e: string) => {
+          const selectedItem = subtypeOptions.find((item) => item.label === e);
+          handleInputChange('subtype', selectedItem?.value.toString());
+          console.log(selectedItem);
+        }}
         required
       />
-      <InputField
+      <TextField
+        style={{ maxWidth: '20em' }}
+        isRequired
         label="Average Animal Number on Farm"
-        type="text"
+        type="number"
         name="animalsPerFarm"
-        value={formData.animalsPerFarm?.toString() || ''}
-        onChange={handleInputChange}
+        size="small"
+        value={formData?.animalsPerFarm}
+        onChange={(e: number) => {
+          handleInputChange('animalsPerFarm', e);
+        }}
         maxLength={7}
-        required
-        onInput={(e) => {
-          const elem = e.target as HTMLInputElement;
-          const value = Number(elem.value);
-          if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
-            elem.setCustomValidity('Please enter a valid whole number.');
-          } else {
-            elem.setCustomValidity('');
-          }
-        }}
       />
-      <YesNoRadioButtons
-        orientation="horizontal"
-        text="Do you pile or collect manure from these animals?"
+      Do you pile or collect manure from these animals?
+      <Checkbox
         value={showCollectionDays}
-        onChange={(val) => {
-          setShowCollectionDays(val);
-          if (!val) {
-            setFormData((prev: BeefCattleData) => ({ ...prev, collectionDays: undefined }));
-          }
-        }}
+        orientation="horizontal"
+        isSelected={showCollectionDays}
+        onChange={setShowCollectionDays}
       />
       {showCollectionDays && (
-        <InputField
+        <TextField
+          style={{ maxWidth: '20em' }}
           label="How many days is the manure collected?"
-          type="text"
+          type="number"
           name="daysCollected"
-          value={formData.daysCollected?.toString() || ''}
-          onChange={handleInputChange}
+          size="small"
+          value={formData?.daysCollected}
+          onChange={(e: number) => {
+            handleInputChange('daysCollected', e);
+          }}
           maxLength={3}
           required
-          onInput={(e) => {
-            const elem = e.target as HTMLInputElement;
-            const value = Number(elem.value);
-            if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
-              elem.setCustomValidity('Please enter a valid number of days. (0-365)');
-            } else {
-              elem.setCustomValidity('');
-            }
-          }}
         />
       )}
     </Grid>

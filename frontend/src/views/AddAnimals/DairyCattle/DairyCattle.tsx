@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Dropdown, InputField } from '@/components/common';
+import { TextField, Select } from '@bcgov/design-system-react-components';
 import { APICacheContext } from '@/context/APICacheContext';
-import { DairyCattleData, MILKING_COW_ID } from '../types';
+import { DairyCattleData, initialDairyFormData, MILKING_COW_ID } from '../types';
 import MilkingFields from './MilkingFields';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 
@@ -23,24 +23,24 @@ interface DairyCattleBreed {
 }
 
 export default function DairyCattle({
-  onChange,
-  initialForm,
+  setFormData,
+  formData,
 }: {
-  onChange: (data: DairyCattleData) => void;
-  initialForm: DairyCattleData;
+  setFormData: React.Dispatch<React.SetStateAction<DairyCattleData>>;
+  formData: DairyCattleData;
 }) {
   const apiCache = useContext(APICacheContext);
-  const [formData, setFormData] = useState<DairyCattleData>(initialForm);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
 
   useEffect(() => {
-    if (initialForm) {
-      onChange(initialForm);
-    }
-  }, [initialForm, onChange]);
+    setFormData((prev: DairyCattleData) => ({
+      ...initialDairyFormData,
+      ...prev,
+    }));
+  }, []);
 
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
@@ -54,11 +54,14 @@ export default function DairyCattle({
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     const breed = breeds.find((b) => b.id.toString() === formData.breed);
-    if (breed === undefined) throw new Error('Chosen breed is missing from list.');
-    return milkingCow.milkproduction * breed.breedmanurefactor;
+    if (breed) return milkingCow.milkproduction * breed.breedmanurefactor;
   }, [subtypes, breeds, formData.breed]);
 
   useEffect(() => {
+    setFormData((prev: DairyCattleData) => ({
+      ...initialDairyFormData,
+      ...prev,
+    }));
     apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
@@ -97,11 +100,9 @@ export default function DairyCattle({
   }, []);
 
   // save to form data on change
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const handleInputChange = (name: string, value: string | number | undefined) => {
     setFormData((prev) => {
       const updatedData = { ...prev, [name]: value };
-      onChange(updatedData);
       return updatedData;
     });
   };
@@ -111,65 +112,61 @@ export default function DairyCattle({
       container
       spacing={2}
     >
-      <Dropdown
+      <Select
+        style={{ maxWidth: '15em' }}
         label="Sub Type"
         name="subtype"
-        value={formData.subtype || ''}
-        options={subtypeOptions}
-        onChange={handleChange}
+        value={formData?.subtype}
+        items={subtypeOptions}
+        onChange={(e: number) => {
+          handleInputChange('subtype', e);
+        }}
         required
       />
-      <Dropdown
+      <Select
         label="Breed"
         name="breed"
-        value={formData.breed || ''}
-        options={breedOptions}
-        onChange={handleChange}
+        value={formData?.breed}
+        items={breedOptions}
+        onChange={(e) => {
+          console.log(e, 'e');
+          handleInputChange('breed', e.value);
+        }}
         required
       />
-      <InputField
+      <TextField
+        style={{ maxWidth: '15em' }}
         label="Average Animal Number on Farm"
-        type="text"
+        type="number"
         name="animalsPerFarm"
-        value={formData.animalsPerFarm?.toString() || ''}
-        onChange={handleChange}
+        value={formData?.animalsPerFarm?.toString()}
+        onChange={(e: number) => {
+          handleInputChange('animalsPerFarm', e);
+        }}
         maxLength={7}
         required
-        onInput={(e) => {
-          const elem = e.target as HTMLInputElement;
-          const value = Number(elem.value);
-          if (Number.isNaN(value) || !Number.isInteger(value) || value! < 0) {
-            elem.setCustomValidity('Please enter a valid whole number.');
-          } else {
-            elem.setCustomValidity('');
-          }
-        }}
       />
-      <Dropdown
+      <Select
         label="Manure Type"
         name="manureType"
-        value={formData.manureType || ''}
-        options={manureTypeOptions}
-        onChange={handleChange}
+        value={formData?.manureType}
+        items={manureTypeOptions}
+        onChange={(e: number) => {
+          handleInputChange('manureType', e);
+        }}
         required
       />
-      <InputField
+      <TextField
+        style={{ maxWidth: '12em' }}
         label="Grazing Days per Year"
-        type="text"
+        type="number"
         name="grazingDaysPerYear"
-        value={formData.grazingDaysPerYear?.toString() || ''}
-        onChange={handleChange}
+        value={formData?.grazingDaysPerYear?.toString()}
+        onChange={(e: number) => {
+          handleInputChange('grazingDaysPerYear', e);
+        }}
         maxLength={3}
         required
-        onInput={(e) => {
-          const elem = e.target as HTMLInputElement;
-          const value = Number(elem.value);
-          if (Number.isNaN(value) || !Number.isInteger(value) || value < 0 || value > 365) {
-            elem.setCustomValidity('Please enter a valid number of days. (0-365)');
-          } else {
-            elem.setCustomValidity('');
-          }
-        }}
       />
       {formData.subtype === MILKING_COW_ID &&
         milkProductionInit !== undefined &&
@@ -179,7 +176,9 @@ export default function DairyCattle({
             washWaterInit={washWaterInit}
             animalsPerFarm={formData.animalsPerFarm || 0}
             washWaterUnit={formData.washWaterUnit}
-            handleChange={handleChange}
+            handleChange={(e: number) => {
+              handleInputChange('grazingDaysPerYear', e);
+            }}
             setFormData={setFormData}
           />
         )}
