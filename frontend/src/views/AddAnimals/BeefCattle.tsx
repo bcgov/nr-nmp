@@ -21,7 +21,7 @@ export default function BeefCattle({
 }) {
   const apiCache = useContext(APICacheContext);
   const [formData, setFormData] = useState<BeefCattleData>(initialForm);
-  const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
+  const [, setSubtypes] = useState<BeefCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
 
   useEffect(() => {

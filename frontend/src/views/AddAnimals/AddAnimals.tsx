@@ -98,7 +98,6 @@ export default function AddAnimals() {
   };
 
   const handleBeefCattleChange = (data: BeefCattleData) => {
-    console.log('Updating formData:', data);
     setFormData((prev) => ({
       ...prev,
       ...data,
@@ -380,7 +379,7 @@ export default function AddAnimals() {
                       placeholder="Select Animal Type"
                       selectionKey={formData?.animalId}
                       items={animalOptions}
-                      onSelectionChange={(e: any) => {
+                      onSelectionChange={(e: string) => {
                         const selectedItem = animalOptions.find((item) => item.label === e);
                         if (selectedItem) {
                           setSelectedAnimal(selectedItem.value);
