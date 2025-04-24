@@ -243,6 +243,7 @@ export default function FarmInformation() {
               name="FarmName"
               value={formData?.FarmName}
               onInput={handleInputChange}
+              id='farmName'
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

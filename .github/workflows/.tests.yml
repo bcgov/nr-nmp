@@ -44,8 +44,8 @@ jobs:
   #         npm ci
   #         node src/main.js
     
-  jest-tests:
-    name: Jest
+  frontend-tests:
+    name: Frontend Tests
     defaults:
       run:
         working-directory: frontend

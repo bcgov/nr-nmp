@@ -48,3 +48,9 @@ export default tseslint.config({
   },
 });
 ```
+
+### Running Tests
+
+Both Jest and Cypress tests are used to test the code.
+
+To run all tests, run `npm run test`. You can run just the Jest or Cypress tests with `npm run test:jest` or `npm run test:cypress` respectively. 
