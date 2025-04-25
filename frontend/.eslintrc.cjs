@@ -4,6 +4,7 @@ module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
+    'plugin:cypress/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
