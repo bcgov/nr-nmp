@@ -29,6 +29,13 @@
   "include": ["src"],
   "exclude": ["**/*.cy.tsx"],
   "references": [
+    // I can't get this to work altogether
+    // Uncomment when developing Cypress tests, recomment before pushing
+    /*
+    {
+      "path": "./tsconfig.cypress.json"
+    },
+    */
     {
       "path": "./tsconfig.node.json"
     }
