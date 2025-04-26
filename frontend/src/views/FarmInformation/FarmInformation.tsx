@@ -302,7 +302,6 @@ export default function FarmInformation() {
               }}
               orientation="horizontal"
             />
-            {/* <div>{JSON.stringify(formData)}</div> */}
             <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
               <Checkbox
                 value="HasVegetables"

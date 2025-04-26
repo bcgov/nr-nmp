@@ -19,8 +19,8 @@ const useAppService = () => {
     const setNMPFile = async (nmpFile: string | ArrayBuffer) => {
       try {
         saveDataToLocalStorage(constants.NMP_FILE_KEY, nmpFile);
-        console.log('dispatch');
-        console.log('dispatch', nmpFile);
+        // console.log('dispatch');
+        // console.log('dispatch', nmpFile);
         dispatch({ type: SET_NMP_FILE, payload: nmpFile });
       } catch (e) {
         console.error(e);

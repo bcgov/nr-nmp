@@ -144,7 +144,7 @@ export async function getRecommendations(
  * @param {NMPFileFieldData} field - Field data to check
  * @param {Function} setFields - Function to update field data
  */
-export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (fields: any[]) => void) {
+export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (fields: any) => void) {
   const updatedField = { ...field };
   if (field.SoilTest == null || Object.keys(field.SoilTest).length === 0) {
     updatedField.SoilTest.valNO3H = defaultSoilTestData.valNO3H;
@@ -153,8 +153,16 @@ export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (field
     updatedField.SoilTest.valPH = defaultSoilTestData.valPH;
     updatedField.SoilTest.convertedKelownaK = defaultSoilTestData.convertedKelownaK;
     updatedField.SoilTest.convertedKelownaP = defaultSoilTestData.convertedKelownaP;
-    setFields([updatedField]);
   }
+  setFields((prev: NMPFileFieldData[]): NMPFileFieldData[] => {
+    const newFieldList: Array<any> = prev.map((fieldEle: NMPFileFieldData) => {
+      if (fieldEle.FieldName === updatedField.FieldName) {
+        return updatedField;
+      }
+      return fieldEle;
+    });
+    return newFieldList;
+  });
 }
 
 /**

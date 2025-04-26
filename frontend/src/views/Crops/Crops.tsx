@@ -21,7 +21,8 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppService from '@/services/app/useAppService';
-import { Modal, InputField, Dropdown, RadioButton, Button } from '../../components/common';
+import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
+import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import {
   getRegion,
   getCrop,
@@ -32,25 +33,7 @@ import {
   getCropRemovalP205,
   getCropRemovalK20,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
-import {
-  ContentWrapper,
-  Header,
-  Column,
-  ListItemContainer,
-  ListItem,
-  ButtonWrapper,
-  LeftJustifiedText,
-  ModalContent,
-  FlexContainer,
-  RightJustifiedText,
-  FlexRowContainer,
-  HeaderText,
-  ValueText,
-  ColumnContainer,
-  RowContainer,
-  ErrorText,
-  StyledContent,
-} from './crops.styles';
+import { StyledContent } from './crops.styles';
 import {
   CropTypesDatabase,
   NMPFileCropData,
@@ -60,16 +43,17 @@ import {
 } from '@/types';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 import { APICacheContext } from '@/context/APICacheContext';
-import ViewCard from '@/components/common/ViewCard/ViewCard';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
 import { MANURE_IMPORTS, SOIL_TESTS } from '@/constants/RouteConstants';
 import {
   customTableStyle,
   formCss,
   formGridBreakpoints,
+  modalDividerStyle,
+  modalHeaderStyle,
   tableActionButtonCss,
+  // tableActionButtonCss,
 } from '../../common.styles';
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 
 /**
  * Crops component for managing crop data associated with fields
@@ -97,12 +81,14 @@ function Crops() {
    * - fields: Array of field data
    */
   const [ncredit, setNcredit] = useState<number>(0);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
   const [combinedCropsData, setCombinedCropsData] =
     useState<NMPFileCropData>(defaultNMPFileCropsData);
-  const [filteredCrops, setFilteredCrops] = useState<{ value: number; label: string }[]>([]);
-  const [cropTypesDatabase, setCropTypesDatabase] = useState<CropTypesDatabase[]>([]);
+  const [filteredCrops, setFilteredCrops] = useState<{ id: number; label: string }[]>([]);
+  const [cropTypesDatabase, setCropTypesDatabase] = useState<any>([]);
+  // const [cropTypesDatabaseTemp, setCropTypesDatabaseTemp] = useState<Array<any>>([]);
+
   const [cropsDatabase, setCropsDatabase] = useState<CropsDatabase[]>([]);
   const [previousCropDatabase, setPreviousCropDatabase] = useState<PreviousCropsDatabase[]>([]);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
@@ -115,9 +101,6 @@ function Crops() {
       id: index.toString(),
     })),
   );
-
-  const [formData, setFormData] = useState({});
-  const [formErrors, setFormErrors] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   /**
@@ -127,29 +110,61 @@ function Crops() {
    * @param {string} e.target.name - Name of the input field
    * @param {any} e.target.value - New value of the input field
    */
-  const handleChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target;
+  // const handleChange = (e: { target: { name: any; value: any } }) => {
+  //   const { name, value } = e.target;
+  //   setCombinedCropsData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+
+  //   // Clear the error for the field being changed
+  //   if (errors[name]) {
+  //     setErrors((prev) => ({ ...prev, [name]: '' }));
+  //   }
+
+  //   // Handle special case for cropTypeId - filter available crops based on type
+  //   if (name === 'cropTypeId') {
+  //     const selectedCropType = cropsDatabase.filter(
+  //       (type) => type.croptypeid === parseInt(value, 10),
+  //     );
+  //     setFilteredCrops(selectedCropType.map((crop) => ({ id: crop.id, label: crop.cropname })));
+  //   }
+
+  //   // Handle special case for cropId - set the crop name for display
+  //   if (name === 'cropId') {
+  //     const selectedCrop = cropsDatabase.find((crop) => crop.id === parseInt(value, 10));
+  //     setCombinedCropsData((prevData) => ({
+  //       ...prevData,
+  //       cropName: selectedCrop?.cropname,
+  //     }));
+  //   }
+  // };
+
+  const handleFormFieldChange = (field: string, value: string | number) => {
+    // setFormData((prev) => ({ ...prev, [field]: value }));
+
     setCombinedCropsData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [field]: value,
     }));
 
     // Clear the error for the field being changed
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: '' }));
     }
 
     // Handle special case for cropTypeId - filter available crops based on type
-    if (name === 'cropTypeId') {
+    if (field === 'cropTypeId') {
       const selectedCropType = cropsDatabase.filter(
         (type) => type.croptypeid === parseInt(value, 10),
       );
-      setFilteredCrops(selectedCropType.map((crop) => ({ value: crop.id, label: crop.cropname })));
+      setFilteredCrops(selectedCropType.map((crop) => ({ id: crop.id, label: crop.cropname })));
     }
 
     // Handle special case for cropId - set the crop name for display
-    if (name === 'cropId') {
+    if (field === 'cropId') {
       const selectedCrop = cropsDatabase.find((crop) => crop.id === parseInt(value, 10));
+
       setCombinedCropsData((prevData) => ({
         ...prevData,
         cropName: selectedCrop?.cropname,
@@ -167,8 +182,14 @@ function Crops() {
     setCombinedCropsData(fields[fieldIndex].Crops[0] || combinedCropsData);
     setCalculationsPerformed(false);
     setErrors({}); // Clear errors when modal is opened
-    setIsModalVisible(true);
   };
+
+  // const handleEditCropTemp = (fieldIndex: number) => {
+  //   setCurrentFieldIndex(fieldIndex);
+
+  //   setCombinedCropsData(fields[fieldIndex].Crops[0] || combinedCropsData);
+  //   setCalculationsPerformed(false);
+  // };
 
   /**
    * Deletes crop data for a specific field
@@ -176,10 +197,11 @@ function Crops() {
    * @param {number} fieldIndex - Index of the field whose crop to delete
    */
   const handleDeleteCrop = (fieldIndex: number) => {
-    const updatedFields = fields.map((field, index) =>
-      index === fieldIndex ? { ...field, Crops: [] } : field,
-    );
-    setFields(updatedFields);
+    setFields((prev) => {
+      const newFieldsList = [...prev];
+      newFieldsList[fieldIndex].Crops = [];
+      return newFieldsList;
+    });
   };
 
   /**
@@ -324,15 +346,20 @@ function Crops() {
    */
   const handleSubmit = () => {
     if (currentFieldIndex !== null) {
-      const updatedFields = fields.map((field, index) => {
-        if (index === currentFieldIndex) {
-          return { ...field, Crops: [combinedCropsData] };
-        }
-        return field;
+      setFields((prevFields) => {
+        const newFields = prevFields.map((field, index) => {
+          if (index === currentFieldIndex) {
+            return { ...field, Crops: [combinedCropsData] };
+          }
+          return field;
+        });
+
+        return newFields;
       });
 
-      setFields(updatedFields);
-      setIsModalVisible(false);
+      setIsDialogOpen(false);
+      // setFields(updatedFields);
+      // setIsModalVisible(false);
       setCalculationsPerformed(false);
       setErrors({}); // Clear all errors
     }
@@ -355,13 +382,13 @@ function Crops() {
     apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setCropTypesDatabase(data);
+        setCropTypesDatabase(data.map((ele: CropTypesDatabase) => ({ ...ele, label: ele.name })));
       }
     });
     apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setCropsDatabase(data);
+        setCropsDatabase(data.map((ele: CropsDatabase) => ({ ...ele, label: ele.cropname })));
       }
     });
     apiCache
@@ -369,7 +396,9 @@ function Crops() {
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           const { data } = response;
-          setPreviousCropDatabase(data);
+          setPreviousCropDatabase(
+            data.map((ele: PreviousCropsDatabase) => ({ ...ele, label: ele.name })),
+          );
         }
       });
   }, []);
@@ -410,6 +439,7 @@ function Crops() {
             .then((response: { status?: any; data: any }) => {
               if (response.status === 200) {
                 const { data } = response;
+                // TBD: selecting CropType: other, Crop: other will cause error here
                 setCombinedCropsData((prevData) => ({
                   ...prevData,
                   yield: data[0].amount,
@@ -445,89 +475,102 @@ function Crops() {
     setProgressStep(3);
   }, []);
 
-  const handleFormFieldChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setFormErrors({});
-    setFormData({});
+    setErrors({});
   };
 
-  const columns: GridColDef[] = useMemo(
-    () => [
-      { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
-      {
-        field: 'Crops',
-        headerName: 'Crops',
-        valueGetter: (_value, row) => row?.Crops[0]?.cropName,
-        width: 150,
-        minWidth: 150,
-        maxWidth: 300,
-        sortable: false,
-      },
-      {
-        field: 'cropTypeName',
-        headerName: 'Crop Type',
-        valueGetter: (_value, row) => row?.Crops[0]?.cropTypeName,
-        width: 120,
-        minWidth: 100,
-        maxWidth: 300,
-      },
-      {
-        field: '',
-        headerName: 'Actions',
-        width: 150,
-        renderCell: (cell: any) => {
-          // const isRowHasSoilTest = Object.keys(fields[cell?.row?.id].SoilTest)?.length;
-          const handleEditRowBtnClick = () => {
-            // console.log(cell);
-            // setFormData(() => {
-            //   if (isRowHasSoilTest) {
-            //     return fields[cell?.row?.id].SoilTest;
-            //   }
-            //   return EMPTY_SOIL_TEST_FORM;
-            // });
-            setCurrentFieldIndex(cell?.row?.id?.toString());
-            setIsDialogOpen(true);
-          };
-          // const handleDeleteRowBtnClick = () => {
-          // if (isRowHasSoilTest) {
-          //   setFields((prev) => {
-          //     const newList = [...prev];
-          //     newList[cell?.row?.id].SoilTest = {};
-          //     return newList;
-          //   });
-          // }
-          // };
-          return (
-            <div>
-              {/* {isRowHasSoilTest ? (
-                <div>
-                  <FontAwesomeIcon
-                    css={tableActionButtonCss}
-                    onClick={handleEditRowBtnClick}
-                    icon={faEdit}
-                  />
-                  <FontAwesomeIcon
-                    css={tableActionButtonCss}
-                    onClick={handleDeleteRowBtnClick}
-                    icon={faTrash}
-                  />
-                </div>
-              ) : ( */}
+  const fieldColumns: GridColDef[] = [
+    { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
+    {
+      field: 'Crops',
+      headerName: 'Crops',
+      valueGetter: (_value, row) => row?.Crops[0]?.cropName,
+      width: 150,
+      minWidth: 150,
+      maxWidth: 300,
+      sortable: false,
+    },
+    {
+      field: 'cropTypeName',
+      headerName: 'Crop Type',
+      valueGetter: (_value, row) => row?.Crops[0]?.cropTypeName,
+      width: 120,
+      minWidth: 100,
+      maxWidth: 300,
+    },
+    {
+      field: '',
+      headerName: 'Actions',
+      width: 150,
+      renderCell: (cell: any) => {
+        const isRowHasSoilTest = Object.keys(fields[cell?.row?.id]?.Crops)?.length;
+
+        const handleEditRowBtnClick = () => {
+          handleEditCrop(parseInt(cell?.row?.id, 10));
+          setIsDialogOpen(true);
+        };
+        const handleDeleteRowBtnClick = () => {
+          handleDeleteCrop(parseInt(cell?.row?.id, 10));
+        };
+        return (
+          <div>
+            {isRowHasSoilTest ? (
+              <div>
+                <FontAwesomeIcon
+                  css={tableActionButtonCss}
+                  onClick={handleEditRowBtnClick}
+                  icon={faEdit}
+                />
+                <FontAwesomeIcon
+                  css={tableActionButtonCss}
+                  onClick={handleDeleteRowBtnClick}
+                  icon={faTrash}
+                />
+              </div>
+            ) : (
               <ButtonGov
                 variant="primary"
                 size="small"
                 onPress={handleEditRowBtnClick}
               >
-                Add soil test
+                Add crop
               </ButtonGov>
-              {/* )} */}
-            </div>
-          );
-        },
+            )}
+          </div>
+        );
+      },
+      sortable: false,
+      resizable: false,
+    },
+  ];
+
+  const requireAndRemoveColumns: GridColDef[] = useMemo(
+    () => [
+      {
+        field: 'reqN',
+        headerName: 'N',
+        width: 75,
+        minWidth: 75,
+        maxWidth: 200,
+        sortable: false,
+        resizable: false,
+      },
+      {
+        field: 'reqP2o5',
+        headerName: 'P2O5',
+        width: 75,
+        minWidth: 75,
+        maxWidth: 200,
+        sortable: false,
+        resizable: false,
+      },
+      {
+        field: 'reqK2o',
+        headerName: 'K2O',
+        width: 75,
+        minWidth: 75,
+        maxWidth: 200,
         sortable: false,
         resizable: false,
       },
@@ -535,410 +578,278 @@ function Crops() {
     [],
   );
 
-  /**
-   * Modal footer component with Cancel and Calculate/Submit buttons
-   * Button text changes based on whether calculations have been performed
-   */
-  const modalFooter = (
-    <ButtonWrapper>
-      <Button
-        text="Cancel"
-        handleClick={() => {
-          setIsModalVisible(false);
-          setCalculationsPerformed(false);
-        }}
-        aria-label="Cancel"
-        variant="secondary"
-        size="sm"
-        disabled={false}
-      />
-      <Button
-        text={calculationsPerformed ? 'Submit' : 'Calculate'}
-        handleClick={calculationsPerformed ? handleSubmit : handleCalculate}
-        aria-label={calculationsPerformed ? 'Submit' : 'Calculate'}
-        variant="primary"
-        size="sm"
-        disabled={false}
-      />
-    </ButtonWrapper>
-  );
+  // const requirementRows = [{ id: 0, reqN: 9, reqP2o5: 9, reqK2o: 9 }];
+  const requirementRows = useMemo(() => {
+    const { reqN, reqP2o5, reqK2o } = combinedCropsData;
+    return [{ id: Math.random(), reqN, reqP2o5, reqK2o }];
+  }, [fields, combinedCropsData]);
+
+  const removeRows = useMemo(() => {
+    const { remN, remP2o5, remK2o } = combinedCropsData;
+    return [{ id: Math.random(), reqN: remN, reqP2o5: remP2o5, reqK2o: remK2o }];
+  }, [fields, combinedCropsData]);
 
   return (
-    <>
-      <StyledContent>
-        <ProgressStepper step={SOIL_TESTS} />
-        <AppTitle />
-        <PageTitle title="Field Information" />
-
-        <TabsMaterial
-          activeTab={2}
-          tabLabel={['Field List', 'Soil Tests', 'Crops']}
-        />
-        <ModalGov
-          isDismissable
-          isOpen={isDialogOpen}
-          onOpenChange={handleDialogClose}
+    <StyledContent>
+      <ProgressStepper step={SOIL_TESTS} />
+      <AppTitle />
+      <PageTitle title="Field Information" />
+      <TabsMaterial
+        activeTab={2}
+        tabLabel={['Field List', 'Soil Tests', 'Crops']}
+      />
+      <ModalGov
+        isDismissable
+        isOpen={isDialogOpen}
+        onOpenChange={handleDialogClose}
+      >
+        <Dialog
+          isCloseable
+          role="dialog"
         >
-          <Dialog
-            isCloseable
-            role="dialog"
-          >
-            <div
-              style={{
-                padding: '1rem',
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: '700',
-                  fontSize: '1.25rem',
-                }}
+          <div style={{ padding: '1rem' }}>
+            <span css={modalHeaderStyle}>Edit Crop</span>
+            <Divider
+              aria-hidden="true"
+              component="div"
+              css={modalDividerStyle}
+            />
+            <div css={formCss}>
+              <Grid
+                container
+                spacing={1}
               >
-                Add Field
-              </span>
+                <Grid size={formGridBreakpoints}>
+                  <span
+                    className={`bcds-react-aria-Select--Label ${errors?.cropTypeId ? '--error' : ''}`}
+                  >
+                    Crop Type
+                  </span>
+                  <Select
+                    name="cropTypeId"
+                    items={cropTypesDatabase}
+                    selectedKey={combinedCropsData?.cropTypeId}
+                    onSelectionChange={(e) => {
+                      handleFormFieldChange('cropTypeId', e as number);
+                    }}
+                  />
+                </Grid>
+                <Grid size={formGridBreakpoints}>
+                  <span
+                    className={`bcds-react-aria-Select--Label ${errors?.cropId ? '--error' : ''}`}
+                  >
+                    Crop
+                  </span>
+                  <Select
+                    name="cropId"
+                    key={combinedCropsData?.cropId}
+                    items={filteredCrops}
+                    isDisabled={!filteredCrops?.length}
+                    selectedKey={combinedCropsData?.cropId}
+                    onSelectionChange={(e) => {
+                      handleFormFieldChange('cropId', e);
+                    }}
+                  />
+                </Grid>
+                {/* Each of these are a conditional render based on the cropTypeId of the select crop type */}
+                {combinedCropsData.cropTypeId != 6 && (
+                  <>
+                    {(() => {
+                      const availablePreviousCrops = previousCropDatabase.filter(
+                        (crop) => crop.cropid === Number(combinedCropsData.cropId),
+                      );
+
+                      return availablePreviousCrops.length > 0 ? (
+                        <Grid size={formGridBreakpoints}>
+                          <span
+                            className={`bcds-react-aria-Select--Label ${errors.prevCropId ? '--error' : ''}`}
+                          >
+                            Previous crop ploughed down (N credit)
+                          </span>
+                          <Select
+                            name="prevCropId"
+                            items={filteredCrops}
+                            // selectedKey={combinedCropsData?.cropName}
+                            onSelectionChange={(e) => {
+                              handleFormFieldChange('prevCropId', e);
+                            }}
+                          />
+                        </Grid>
+                      ) : null;
+                    })()}
+                  </>
+                )}
+                {combinedCropsData.cropTypeId == 6 && (
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      className={`bcds-react-aria-Select--Label ${errors.cropOther ? '--error' : ''}`}
+                    >
+                      Crop Description
+                    </span>
+                    <TextField
+                      type="text"
+                      name="cropOther"
+                      value={combinedCropsData.cropOther || ''}
+                      onChange={(e) => handleFormFieldChange('cropOther', e)}
+                    />
+                  </Grid>
+                )}
+                <Grid size={formGridBreakpoints}>
+                  <span
+                    className={`bcds-react-aria-Select--Label ${errors.yield ? '--error' : ''}`}
+                  >
+                    Yield
+                  </span>
+                  <TextField
+                    type="number"
+                    name="yield"
+                    value={combinedCropsData.yield?.toString() || ''}
+                    onChange={(e) => handleFormFieldChange('yield', e)}
+                  />
+                </Grid>
+                {combinedCropsData.cropTypeId == 1 && (
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      className={`bcds-react-aria-Select--Label ${errors.crudeProtien ? '--error' : ''}`}
+                    >
+                      Crude Protein
+                    </span>
+                    <TextField
+                      type="number"
+                      name="crudeProtien"
+                      value={combinedCropsData.crudeProtien?.toString() || ''}
+                      onChange={(e) => handleFormFieldChange('crudeProtien', e)}
+                    />
+                  </Grid>
+                )}
+                {combinedCropsData.cropTypeId == 2 && (
+                  <Grid size={formGridBreakpoints}>
+                    <YesNoRadioButtons
+                      value={!!combinedCropsData?.coverCropHarvested}
+                      text="Cover Crop Harvested"
+                      onChange={(b) => {
+                        handleFormFieldChange('coverCropHarvested', b as any);
+                      }}
+                      orientation="horizontal"
+                    />
+                  </Grid>
+                )}
+                <Grid size={{ xs: 12 }}>
+                  <Divider
+                    aria-hidden="true"
+                    component="div"
+                    css={{ marginTop: '1rem', marginBottom: '1rem' }}
+                  />
+                </Grid>
+                {combinedCropsData.cropTypeId != 6 && combinedCropsData.cropTypeId != 6 && (
+                  <Grid size={{ xs: 12 }}>
+                    <span css={{ fontWeight: 'bold', marginRight: '1rem' }}>N credit (lb/ac):</span>
+                    <span>{ncredit}</span>
+                  </Grid>
+                )}
+                <Grid size={{ xs: 12 }}>
+                  <div>
+                    <Grid
+                      container
+                      spacing={1}
+                      sx={{ marginTop: '1rem' }}
+                    >
+                      <Grid size={{ xs: 6 }}>
+                        <span css={{ fontWeight: 'bold' }}>Crop Requirement (lb/ac)</span>
+                        <DataGrid
+                          sx={{ ...customTableStyle }}
+                          // rows={combinedCropsData}
+                          columns={requireAndRemoveColumns}
+                          rows={requirementRows}
+                          disableRowSelectionOnClick
+                          disableColumnMenu
+                          hideFooterPagination
+                          hideFooter
+                        />
+                      </Grid>
+                      <Grid size={{ xs: 6 }}>
+                        <span css={{ fontWeight: 'bold' }}>Nutrient Removal (lb/ac)</span>
+                        <DataGrid
+                          sx={{ ...customTableStyle }}
+                          columns={requireAndRemoveColumns}
+                          rows={removeRows}
+                          disableRowSelectionOnClick
+                          disableColumnMenu
+                          hideFooterPagination
+                          hideFooter
+                        />
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Grid>
+              </Grid>
               <Divider
                 aria-hidden="true"
                 component="div"
-                css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
+                css={{ marginTop: '1rem', marginBottom: '1rem' }}
               />
-              <div css={formCss}>
-                <Grid
-                  container
-                  spacing={1}
+              <ButtonGovGroup
+                alignment="end"
+                orientation="horizontal"
+              >
+                <ButtonGov
+                  variant="secondary"
+                  onPress={handleDialogClose}
                 >
-                  <Grid size={formGridBreakpoints}>
-                    <span
-                      className={`bcds-react-aria-Select--Label ${formErrors ? '--error' : ''}`}
-                    >
-                      NO3-N (ppm), nitrate-nitrogen
-                    </span>
-                    <TextField
-                      isRequired
-                      type="number"
-                      name="valNO3H"
-                      value={formData.valNO3H}
-                      onChange={(e) => handleFormFieldChange('valNO3H', e)}
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <span
-                      className={`bcds-react-aria-Select--Label ${formErrors ? '--error' : ''}`}
-                    >
-                      P (ppm), phosphorus
-                    </span>
-                    <TextField
-                      isRequired
-                      type="number"
-                      name="valP"
-                      value={formData.valP}
-                      onChange={(e) => handleFormFieldChange('valP', e)}
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <span
-                      className={`bcds-react-aria-Select--Label ${formErrors.valK ? '--error' : ''}`}
-                    >
-                      K (ppm), potassium
-                    </span>
-                    <TextField
-                      isRequired
-                      type="number"
-                      name="valK"
-                      value={formData.valK}
-                      onChange={(e) => handleFormFieldChange('valK', e)}
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <span
-                      className={`bcds-react-aria-Select--Label ${formErrors ? '--error' : ''}`}
-                    >
-                      pH
-                    </span>
-                    <TextField
-                      isRequired
-                      type="number"
-                      name="valPH"
-                      value={formData.valPH}
-                      onChange={(e) => handleFormFieldChange('valPH', e)}
-                    />
-                  </Grid>
-                </Grid>
-                <Divider
-                  aria-hidden="true"
-                  component="div"
-                  css={{ marginTop: '1rem', marginBottom: '1rem' }}
-                />
-                <ButtonGovGroup
-                  alignment="end"
-                  orientation="horizontal"
+                  Cancel
+                </ButtonGov>
+                <ButtonGov
+                  variant="primary"
+                  onPress={handleCalculate}
                 >
-                  <ButtonGov
-                    variant="secondary"
-                    onPress={handleDialogClose}
-                  >
-                    Cancel
-                  </ButtonGov>
-                  <ButtonGov variant="primary">Confirm</ButtonGov>
-                </ButtonGovGroup>
-              </div>
+                  Calculate
+                </ButtonGov>
+                <ButtonGov
+                  variant="primary"
+                  onPress={handleSubmit}
+                  isDisabled={!calculationsPerformed}
+                >
+                  Submit
+                </ButtonGov>
+              </ButtonGovGroup>
             </div>
-          </Dialog>
-        </ModalGov>
-        <DataGrid
-          sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-          rows={fields}
-          columns={columns}
-          disableRowSelectionOnClick
-          disableColumnMenu
-          hideFooterPagination
-          hideFooter
-        />
+          </div>
+        </Dialog>
+      </ModalGov>
+      <DataGrid
+        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+        rows={fields}
+        columns={fieldColumns}
+        disableRowSelectionOnClick
+        disableColumnMenu
+        hideFooterPagination
+        hideFooter
+      />
 
-        <ButtonGovGroup
-          alignment="start"
-          ariaLabel="A group of buttons"
-          orientation="horizontal"
-        >
-          <ButtonGov
-            size="medium"
-            aria-label="Back"
-            variant="secondary"
-            onPress={handlePrevious}
-          >
-            BACK
-          </ButtonGov>
-          <ButtonGov
-            size="medium"
-            aria-label="Next"
-            variant="primary"
-            onPress={handleNext}
-            type="submit"
-          >
-            Next
-          </ButtonGov>
-        </ButtonGovGroup>
-        {/* <pre>{JSON.stringify(JSON.parse(state.nmpFile), null, 2)}</pre> */}
-      </StyledContent>
-      <ViewCard
-        heading="Crops"
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
-        nextDisabled={fields.length === 0}
+      <ButtonGovGroup
+        alignment="start"
+        ariaLabel="A group of buttons"
+        orientation="horizontal"
       >
-        {/* Crops table listing fields and their associated crops */}
-        <ContentWrapper hasFields={fields.length > 0}>
-          <Header>
-            <Column>Field Name</Column>
-            <Column>Crop Name</Column>
-            <Column align="right">Actions</Column>
-          </Header>
-          {fields.map((field, index) => (
-            <ListItemContainer key={field.FieldName}>
-              <ListItem>{field.FieldName}</ListItem>
-              {field.Crops.length === 0 && <ListItem>None</ListItem>}
-              {field.Crops.length === 0 ? (
-                <ListItem align="right">
-                  <Button
-                    text="Add Crop"
-                    handleClick={() => handleEditCrop(index)}
-                    aria-label={`Add Crop to ${field.FieldName}`}
-                    variant="primary"
-                    size="sm"
-                    disabled={false}
-                  />
-                </ListItem>
-              ) : (
-                <>
-                  <ListItem>{field.Crops[0].cropName}</ListItem>
-                  <ListItem align="right">
-                    <button
-                      type="button"
-                      onClick={() => handleEditCrop(index)}
-                      aria-label={`Edit Crop ${field.Crops[0].cropName}`}
-                    >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteCrop(index)}
-                      aria-label={`Delete Crop ${field.Crops[0].cropName}`}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </ListItem>
-                </>
-              )}
-            </ListItemContainer>
-          ))}
-        </ContentWrapper>
-
-        {/* Crop edit modal */}
-        {isModalVisible && (
-          <Modal
-            isVisible={isModalVisible}
-            title="Edit Crop"
-            onClose={() => {
-              setIsModalVisible(false);
-              setCalculationsPerformed(false);
-              setErrors({});
-            }}
-            footer={modalFooter}
-          >
-            <ModalContent>
-              {errors.cropTypeId && <ErrorText>{errors.cropTypeId}</ErrorText>}
-
-              <Dropdown
-                label="Crop Type"
-                name="cropTypeId"
-                value={combinedCropsData.cropTypeId || ''}
-                options={cropTypesDatabase.map((cropType) => ({
-                  value: cropType.id,
-                  label: cropType.name,
-                }))}
-                onChange={handleChange}
-              />
-              {errors.cropId && <ErrorText>{errors.cropId}</ErrorText>}
-              <Dropdown
-                label="Crop"
-                name="cropId"
-                value={combinedCropsData.cropId || ''}
-                options={filteredCrops}
-                onChange={handleChange}
-              />
-              {/* Each of these are a conditional render based on the cropTypeId of the select crop type */}
-              {combinedCropsData.cropTypeId != 6 && (
-                <>
-                  {(() => {
-                    const availablePreviousCrops = previousCropDatabase.filter(
-                      (crop) => crop.cropid === Number(combinedCropsData.cropId),
-                    );
-
-                    return availablePreviousCrops.length > 0 ? (
-                      <>
-                        {errors.prevCropId && <ErrorText>{errors.prevCropId}</ErrorText>}
-                        <Dropdown
-                          label="Previous crop ploughed down (N credit)"
-                          name="prevCropId"
-                          value={combinedCropsData.prevCropId || ''}
-                          options={availablePreviousCrops.map((crop) => ({
-                            value: crop.id,
-                            label: crop.name,
-                          }))}
-                          onChange={handleChange}
-                        />
-                      </>
-                    ) : null;
-                  })()}
-                </>
-              )}
-              {combinedCropsData.cropTypeId == 6 && (
-                <>
-                  {errors.cropOther && <ErrorText>{errors.cropOther}</ErrorText>}
-                  <InputField
-                    label="Crop Description"
-                    type="text"
-                    name="cropOther"
-                    value={combinedCropsData.cropOther || ''}
-                    onChange={handleChange}
-                  />
-                </>
-              )}
-              {errors.yield && <ErrorText>{errors.yield}</ErrorText>}
-              <InputField
-                label="Yield"
-                type="text"
-                name="yield"
-                value={combinedCropsData.yield?.toString() || ''}
-                onChange={handleChange}
-              />
-              {combinedCropsData.cropTypeId == 1 && (
-                <>
-                  {errors.crudeProtien && <ErrorText>{errors.crudeProtien}</ErrorText>}
-                  <InputField
-                    label="Crude Protein"
-                    type="text"
-                    name="crudeProtien"
-                    value={combinedCropsData.crudeProtien?.toString() || ''}
-                    onChange={handleChange}
-                  />
-                </>
-              )}
-              {combinedCropsData.cropTypeId != 6 && (
-                <FlexContainer>
-                  <LeftJustifiedText>
-                    N credit (lb/ac)<div>{ncredit}</div>
-                  </LeftJustifiedText>
-                  {combinedCropsData.cropTypeId == 2 && (
-                    <RightJustifiedText>
-                      <span>Cover Crop Harvested?</span>
-                      {errors.coverCropHarvested && (
-                        <ErrorText>{errors.coverCropHarvested}</ErrorText>
-                      )}
-                      <RadioButton
-                        label="Yes"
-                        name="coverCropHarvested"
-                        value="true"
-                        checked={combinedCropsData.coverCropHarvested === 'true'}
-                        onChange={handleChange}
-                      />
-                      <RadioButton
-                        label="No"
-                        name="coverCropHarvested"
-                        value="false"
-                        checked={combinedCropsData.coverCropHarvested === 'false'}
-                        onChange={handleChange}
-                      />
-                      {errors.coverCropHarvested && (
-                        <div style={{ color: 'red', fontSize: '12px' }}>
-                          {errors.coverCropHarvested}
-                        </div>
-                      )}
-                    </RightJustifiedText>
-                  )}
-                </FlexContainer>
-              )}
-
-              <FlexRowContainer>
-                <ColumnContainer>
-                  <HeaderText>Crop Requirement (lb/ac)</HeaderText>
-                  <RowContainer>
-                    <ColumnContainer>
-                      <HeaderText>N</HeaderText>
-                      <ValueText>{combinedCropsData.reqN}</ValueText>
-                    </ColumnContainer>
-                    <ColumnContainer>
-                      <HeaderText>P2O5</HeaderText>
-                      <ValueText>{combinedCropsData.reqP2o5}</ValueText>
-                    </ColumnContainer>
-                    <ColumnContainer>
-                      <HeaderText>K2O</HeaderText>
-                      <ValueText>{combinedCropsData.reqK2o}</ValueText>
-                    </ColumnContainer>
-                  </RowContainer>
-                </ColumnContainer>
-                <ColumnContainer>
-                  <HeaderText>Nutrient Removal (lb/ac)</HeaderText>
-                  <RowContainer>
-                    <ColumnContainer>
-                      <HeaderText>N</HeaderText>
-                      <ValueText>{combinedCropsData.remN}</ValueText>
-                    </ColumnContainer>
-                    <ColumnContainer>
-                      <HeaderText>P2O5</HeaderText>
-                      <ValueText>{combinedCropsData.remP2o5}</ValueText>
-                    </ColumnContainer>
-                    <ColumnContainer>
-                      <HeaderText>K2O</HeaderText>
-                      <ValueText>{combinedCropsData.remK2o}</ValueText>
-                    </ColumnContainer>
-                  </RowContainer>
-                </ColumnContainer>
-              </FlexRowContainer>
-            </ModalContent>
-          </Modal>
-        )}
-      </ViewCard>
-    </>
+        <ButtonGov
+          size="medium"
+          aria-label="Back"
+          variant="secondary"
+          onPress={handlePrevious}
+        >
+          BACK
+        </ButtonGov>
+        <ButtonGov
+          size="medium"
+          aria-label="Next"
+          variant="primary"
+          onPress={handleNext}
+          type="submit"
+        >
+          Next
+        </ButtonGov>
+      </ButtonGovGroup>
+    </StyledContent>
   );
 }
 
