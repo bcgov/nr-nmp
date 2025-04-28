@@ -1,0 +1,7 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "emitDeclarationOnly": true
+    },
+    "exclude": ["src/**/*.cy.tsx", "src/**/*.test.tsx"]
+  }

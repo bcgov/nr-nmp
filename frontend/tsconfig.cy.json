@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": true,
     "esModuleInterop": true,
@@ -8,14 +9,12 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "baseUrl": ".",
-    "types": ["@emotion/react/types/css-prop", "node", "react", "react-dom", "typography", "cypress"],
+    "types": [ "cypress", "@cypress/react"],
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "emitDeclarationOnly": true,
-    "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
     /* Linting */
     "strict": true,
@@ -26,8 +25,6 @@
       "@": ["src"],
       "@/*": ["src/*"]
     },
-    "outDir": "./out-cy",
   },
-  "include": ["node_modules/cypress", "cypress", "**/*.cy.tsx", "cypress.config.ts", "cypress.d.ts", "src/**/*.tsx", "src/**/*.ts"],
-  "exclude": ["**/*.test.tsx"]
+  "include": ["src/**/*.cy.tsx", "cypress", "cypress.config.ts", "cypress.d.ts"]
 }
