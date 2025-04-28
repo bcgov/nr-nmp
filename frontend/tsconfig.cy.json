@@ -28,6 +28,6 @@
     },
     "outDir": "./out-cy",
   },
-  "include": ["../node_modules/cypress", "cypress", "**/*.cy.tsx", "./cypress.config.ts", "./cypress.d.ts", "src/**/*.tsx", "src/**/*.ts"],
+  "include": ["node_modules/cypress", "cypress", "**/*.cy.tsx", "cypress.config.ts", "cypress.d.ts", "src/**/*.tsx", "src/**/*.ts"],
   "exclude": ["**/*.test.tsx"]
 }
