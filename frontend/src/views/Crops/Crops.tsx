@@ -52,7 +52,6 @@ import {
   modalDividerStyle,
   modalHeaderStyle,
   tableActionButtonCss,
-  // tableActionButtonCss,
 } from '../../common.styles';
 
 /**
@@ -81,14 +80,11 @@ function Crops() {
    * - fields: Array of field data
    */
   const [ncredit, setNcredit] = useState<number>(0);
-  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
   const [combinedCropsData, setCombinedCropsData] =
     useState<NMPFileCropData>(defaultNMPFileCropsData);
   const [filteredCrops, setFilteredCrops] = useState<{ id: number; label: string }[]>([]);
   const [cropTypesDatabase, setCropTypesDatabase] = useState<any>([]);
-  // const [cropTypesDatabaseTemp, setCropTypesDatabaseTemp] = useState<Array<any>>([]);
-
   const [cropsDatabase, setCropsDatabase] = useState<CropsDatabase[]>([]);
   const [previousCropDatabase, setPreviousCropDatabase] = useState<PreviousCropsDatabase[]>([]);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
@@ -110,39 +106,7 @@ function Crops() {
    * @param {string} e.target.name - Name of the input field
    * @param {any} e.target.value - New value of the input field
    */
-  // const handleChange = (e: { target: { name: any; value: any } }) => {
-  //   const { name, value } = e.target;
-  //   setCombinedCropsData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-
-  //   // Clear the error for the field being changed
-  //   if (errors[name]) {
-  //     setErrors((prev) => ({ ...prev, [name]: '' }));
-  //   }
-
-  //   // Handle special case for cropTypeId - filter available crops based on type
-  //   if (name === 'cropTypeId') {
-  //     const selectedCropType = cropsDatabase.filter(
-  //       (type) => type.croptypeid === parseInt(value, 10),
-  //     );
-  //     setFilteredCrops(selectedCropType.map((crop) => ({ id: crop.id, label: crop.cropname })));
-  //   }
-
-  //   // Handle special case for cropId - set the crop name for display
-  //   if (name === 'cropId') {
-  //     const selectedCrop = cropsDatabase.find((crop) => crop.id === parseInt(value, 10));
-  //     setCombinedCropsData((prevData) => ({
-  //       ...prevData,
-  //       cropName: selectedCrop?.cropname,
-  //     }));
-  //   }
-  // };
-
-  const handleFormFieldChange = (field: string, value: string | number) => {
-    // setFormData((prev) => ({ ...prev, [field]: value }));
-
+  const handleFormFieldChange = (field: string, value: string | number | boolean) => {
     setCombinedCropsData((prevData) => ({
       ...prevData,
       [field]: value,
@@ -156,14 +120,21 @@ function Crops() {
     // Handle special case for cropTypeId - filter available crops based on type
     if (field === 'cropTypeId') {
       const selectedCropType = cropsDatabase.filter(
-        (type) => type.croptypeid === parseInt(value, 10),
+        (type) => type.croptypeid === parseInt(value as string, 10),
       );
       setFilteredCrops(selectedCropType.map((crop) => ({ id: crop.id, label: crop.cropname })));
+
+      if (value === 2 && !combinedCropsData.coverCropHarvested) {
+        setCombinedCropsData((prevData) => ({
+          ...prevData,
+          coverCropHarvested: 'false',
+        }));
+      }
     }
 
     // Handle special case for cropId - set the crop name for display
     if (field === 'cropId') {
-      const selectedCrop = cropsDatabase.find((crop) => crop.id === parseInt(value, 10));
+      const selectedCrop = cropsDatabase.find((crop) => crop.id === parseInt(value as string, 10));
 
       setCombinedCropsData((prevData) => ({
         ...prevData,
@@ -183,13 +154,6 @@ function Crops() {
     setCalculationsPerformed(false);
     setErrors({}); // Clear errors when modal is opened
   };
-
-  // const handleEditCropTemp = (fieldIndex: number) => {
-  //   setCurrentFieldIndex(fieldIndex);
-
-  //   setCombinedCropsData(fields[fieldIndex].Crops[0] || combinedCropsData);
-  //   setCalculationsPerformed(false);
-  // };
 
   /**
    * Deletes crop data for a specific field
@@ -216,7 +180,7 @@ function Crops() {
     if (!combinedCropsData.cropTypeId) {
       newErrors.cropTypeId = 'Crop Type is required';
     }
-
+    console.log('cropId', combinedCropsData.cropId);
     if (!combinedCropsData.cropId) {
       newErrors.cropId = 'Crop is required';
     }
@@ -358,8 +322,6 @@ function Crops() {
       });
 
       setIsDialogOpen(false);
-      // setFields(updatedFields);
-      // setIsModalVisible(false);
       setCalculationsPerformed(false);
       setErrors({}); // Clear all errors
     }
@@ -480,6 +442,10 @@ function Crops() {
     setErrors({});
   };
 
+  /**
+   * Define column headings for Field list table
+   * Contains logic for editing/deleting crops for each row
+   */
   const fieldColumns: GridColDef[] = [
     { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
     {
@@ -545,6 +511,7 @@ function Crops() {
     },
   ];
 
+  // Define column headings for Nutrient added/removed tables
   const requireAndRemoveColumns: GridColDef[] = useMemo(
     () => [
       {
@@ -578,12 +545,13 @@ function Crops() {
     [],
   );
 
-  // const requirementRows = [{ id: 0, reqN: 9, reqP2o5: 9, reqK2o: 9 }];
+  // Set data for nutrients added table
   const requirementRows = useMemo(() => {
     const { reqN, reqP2o5, reqK2o } = combinedCropsData;
     return [{ id: Math.random(), reqN, reqP2o5, reqK2o }];
   }, [fields, combinedCropsData]);
 
+  // Set data for nutrients removed table
   const removeRows = useMemo(() => {
     const { remN, remP2o5, remK2o } = combinedCropsData;
     return [{ id: Math.random(), reqN: remN, reqP2o5: remP2o5, reqK2o: remK2o }];
@@ -669,7 +637,7 @@ function Crops() {
                           <Select
                             name="prevCropId"
                             items={filteredCrops}
-                            // selectedKey={combinedCropsData?.cropName}
+                            selectedKey={combinedCropsData?.prevCropId}
                             onSelectionChange={(e) => {
                               handleFormFieldChange('prevCropId', e);
                             }}
@@ -724,11 +692,17 @@ function Crops() {
                 )}
                 {combinedCropsData.cropTypeId == 2 && (
                   <Grid size={formGridBreakpoints}>
+                    <div
+                      style={{ marginBottom: '0.15rem' }}
+                      className={`bcds-react-aria-Select--Label ${errors.coverCropHarvested ? '--error' : ''}`}
+                    >
+                      Cover Crop Harvested
+                    </div>
                     <YesNoRadioButtons
                       value={!!combinedCropsData?.coverCropHarvested}
-                      text="Cover Crop Harvested"
-                      onChange={(b) => {
-                        handleFormFieldChange('coverCropHarvested', b as any);
+                      text=""
+                      onChange={(b: boolean) => {
+                        handleFormFieldChange('coverCropHarvested', b);
                       }}
                       orientation="horizontal"
                     />

@@ -41,7 +41,7 @@ export default function NutrientAnalysis() {
       return JSON.parse(state.nmpFile);
     }
     // TODO: Once we cache state, throw error if uninitialized
-    return { ...defaultNMPFile, years: [{...defaultNMPFileYear}] };
+    return { ...defaultNMPFile, years: [{ ...defaultNMPFileYear }] };
   }, [state.nmpFile]);
   const manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[] = useMemo(
     () =>
