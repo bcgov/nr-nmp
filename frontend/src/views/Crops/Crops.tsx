@@ -130,6 +130,21 @@ function Crops() {
           coverCropHarvested: 'false',
         }));
       }
+      console.log(
+        cropTypesDatabase.find(
+          (cropTypeElement: NMPFileCropData) =>
+            cropTypeElement.id === parseInt(value as string, 10),
+        ),
+      );
+
+      // Handle special case for cropTypeId - set the crop name for display cropTypesDatabase
+      setCombinedCropsData((prevData) => ({
+        ...prevData,
+        cropTypeName: cropTypesDatabase.find(
+          (cropTypeElement: NMPFileCropData) =>
+            cropTypeElement.id === parseInt(value as string, 10),
+        )?.label,
+      }));
     }
 
     // Handle special case for cropId - set the crop name for display
@@ -449,6 +464,14 @@ function Crops() {
   const fieldColumns: GridColDef[] = [
     { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
     {
+      field: 'cropTypeName',
+      headerName: 'Crop Type',
+      valueGetter: (_value, row) => row?.Crops[0]?.cropTypeName,
+      width: 120,
+      minWidth: 100,
+      maxWidth: 300,
+    },
+    {
       field: 'Crops',
       headerName: 'Crops',
       valueGetter: (_value, row) => row?.Crops[0]?.cropName,
@@ -456,14 +479,6 @@ function Crops() {
       minWidth: 150,
       maxWidth: 300,
       sortable: false,
-    },
-    {
-      field: 'cropTypeName',
-      headerName: 'Crop Type',
-      valueGetter: (_value, row) => row?.Crops[0]?.cropTypeName,
-      width: 120,
-      minWidth: 100,
-      maxWidth: 300,
     },
     {
       field: '',
@@ -732,7 +747,6 @@ function Crops() {
                         <span css={{ fontWeight: 'bold' }}>Crop Requirement (lb/ac)</span>
                         <DataGrid
                           sx={{ ...customTableStyle }}
-                          // rows={combinedCropsData}
                           columns={requireAndRemoveColumns}
                           rows={requirementRows}
                           disableRowSelectionOnClick
