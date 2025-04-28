@@ -28,7 +28,7 @@
     },
     "outDir": "./out-cy",
   },
-  "files": ["cypress.config.ts"],
+  "files": ["./cypress.config.ts"],
   "include": ["../node_modules/cypress", "cypress", "**/*.cy.tsx", "./cypress.d.ts", "src/**/*.tsx", "src/**/*.ts"],
   "exclude": ["**/*.test.tsx"]
 }
