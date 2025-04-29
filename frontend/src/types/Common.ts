@@ -1,5 +1,5 @@
 // Export for Select dropdown type
 export type SelectOption = {
-  id: string;
+  id: string | number;
   label: string;
 };
