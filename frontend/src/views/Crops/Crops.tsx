@@ -54,6 +54,39 @@ import {
   tableActionButtonCss,
 } from '../../common.styles';
 
+type tempNMPFileFieldData = NMPFileFieldData & { id?: string };
+
+// Define constants for column headings for Nutrient added/removed tables
+const requireAndRemoveColumns: GridColDef[] = [
+  {
+    field: 'reqN',
+    headerName: 'N',
+    width: 75,
+    minWidth: 75,
+    maxWidth: 200,
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'reqP2o5',
+    headerName: 'P2O5',
+    width: 75,
+    minWidth: 75,
+    maxWidth: 200,
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'reqK2o',
+    headerName: 'K2O',
+    width: 75,
+    minWidth: 75,
+    maxWidth: 200,
+    sortable: false,
+    resizable: false,
+  },
+];
+
 /**
  * Crops component for managing crop data associated with fields
  *
@@ -83,15 +116,15 @@ function Crops() {
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
   const [combinedCropsData, setCombinedCropsData] =
     useState<NMPFileCropData>(defaultNMPFileCropsData);
-  const [filteredCrops, setFilteredCrops] = useState<{ id: number; label: string }[]>([]);
-  const [cropTypesDatabase, setCropTypesDatabase] = useState<any>([]);
+  const [filteredCrops, setFilteredCrops] = useState<CropsDatabase[]>([]);
+  const [cropTypesDatabase, setCropTypesDatabase] = useState<CropTypesDatabase[]>([]);
   const [cropsDatabase, setCropsDatabase] = useState<CropsDatabase[]>([]);
   const [previousCropDatabase, setPreviousCropDatabase] = useState<PreviousCropsDatabase[]>([]);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // TBD, todo Temp init state for dev work, to be removed
-  const [fields, setFields] = useState<NMPFileFieldData[]>(
+  const [fields, setFields] = useState<tempNMPFileFieldData[]>(
     initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
       ...fieldElement,
       id: index.toString(),
@@ -122,7 +155,7 @@ function Crops() {
       const selectedCropType = cropsDatabase.filter(
         (type) => type.croptypeid === parseInt(value as string, 10),
       );
-      setFilteredCrops(selectedCropType.map((crop) => ({ id: crop.id, label: crop.cropname })));
+      setFilteredCrops(selectedCropType);
 
       if (value === 2 && !combinedCropsData.coverCropHarvested) {
         setCombinedCropsData((prevData) => ({
@@ -130,12 +163,6 @@ function Crops() {
           coverCropHarvested: 'false',
         }));
       }
-      console.log(
-        cropTypesDatabase.find(
-          (cropTypeElement: NMPFileCropData) =>
-            cropTypeElement.id === parseInt(value as string, 10),
-        ),
-      );
 
       // Handle special case for cropTypeId - set the crop name for display cropTypesDatabase
       setCombinedCropsData((prevData) => ({
@@ -143,7 +170,7 @@ function Crops() {
         cropTypeName: cropTypesDatabase.find(
           (cropTypeElement: NMPFileCropData) =>
             cropTypeElement.id === parseInt(value as string, 10),
-        )?.label,
+        )?.name,
       }));
     }
 
@@ -195,7 +222,7 @@ function Crops() {
     if (!combinedCropsData.cropTypeId) {
       newErrors.cropTypeId = 'Crop Type is required';
     }
-    console.log('cropId', combinedCropsData.cropId);
+
     if (!combinedCropsData.cropId) {
       newErrors.cropId = 'Crop is required';
     }
@@ -338,12 +365,15 @@ function Crops() {
 
       setIsDialogOpen(false);
       setCalculationsPerformed(false);
+      setCombinedCropsData(defaultNMPFileCropsData);
       setErrors({}); // Clear all errors
     }
   };
 
   const handleNext = () => {
-    saveFieldsToFile(fields, state.nmpFile, setNMPFile);
+    // Delete the id key in each field to prevent saving into NMPfile
+    const tempFields = fields.map(({ id, ...remainingFields }) => remainingFields);
+    saveFieldsToFile(tempFields, state.nmpFile, setNMPFile);
     navigate(MANURE_IMPORTS);
   };
 
@@ -359,13 +389,13 @@ function Crops() {
     apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setCropTypesDatabase(data.map((ele: CropTypesDatabase) => ({ ...ele, label: ele.name })));
+        setCropTypesDatabase(data);
       }
     });
     apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setCropsDatabase(data.map((ele: CropsDatabase) => ({ ...ele, label: ele.cropname })));
+        setCropsDatabase(data);
       }
     });
     apiCache
@@ -373,9 +403,7 @@ function Crops() {
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           const { data } = response;
-          setPreviousCropDatabase(
-            data.map((ele: PreviousCropsDatabase) => ({ ...ele, label: ele.name })),
-          );
+          setPreviousCropDatabase(data as PreviousCropsDatabase[]);
         }
       });
   }, []);
@@ -454,6 +482,7 @@ function Crops() {
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
+    setCombinedCropsData(defaultNMPFileCropsData);
     setErrors({});
   };
 
@@ -526,40 +555,6 @@ function Crops() {
     },
   ];
 
-  // Define column headings for Nutrient added/removed tables
-  const requireAndRemoveColumns: GridColDef[] = useMemo(
-    () => [
-      {
-        field: 'reqN',
-        headerName: 'N',
-        width: 75,
-        minWidth: 75,
-        maxWidth: 200,
-        sortable: false,
-        resizable: false,
-      },
-      {
-        field: 'reqP2o5',
-        headerName: 'P2O5',
-        width: 75,
-        minWidth: 75,
-        maxWidth: 200,
-        sortable: false,
-        resizable: false,
-      },
-      {
-        field: 'reqK2o',
-        headerName: 'K2O',
-        width: 75,
-        minWidth: 75,
-        maxWidth: 200,
-        sortable: false,
-        resizable: false,
-      },
-    ],
-    [],
-  );
-
   // Set data for nutrients added table
   const requirementRows = useMemo(() => {
     const { reqN, reqP2o5, reqK2o } = combinedCropsData;
@@ -610,7 +605,7 @@ function Crops() {
                   </span>
                   <Select
                     name="cropTypeId"
-                    items={cropTypesDatabase}
+                    items={cropTypesDatabase.map((ele) => ({ id: ele.id, label: ele.name }))}
                     selectedKey={combinedCropsData?.cropTypeId}
                     onSelectionChange={(e) => {
                       handleFormFieldChange('cropTypeId', e as number);
@@ -626,7 +621,7 @@ function Crops() {
                   <Select
                     name="cropId"
                     key={combinedCropsData?.cropId}
-                    items={filteredCrops}
+                    items={filteredCrops.map((ele) => ({ id: ele.id, label: ele.cropname }))}
                     isDisabled={!filteredCrops?.length}
                     selectedKey={combinedCropsData?.cropId}
                     onSelectionChange={(e) => {
@@ -651,7 +646,10 @@ function Crops() {
                           </span>
                           <Select
                             name="prevCropId"
-                            items={filteredCrops}
+                            items={filteredCrops.map((ele) => ({
+                              id: ele.id,
+                              label: ele.cropname,
+                            }))}
                             selectedKey={combinedCropsData?.prevCropId}
                             onSelectionChange={(e) => {
                               handleFormFieldChange('prevCropId', e);

@@ -144,7 +144,10 @@ export async function getRecommendations(
  * @param {NMPFileFieldData} field - Field data to check
  * @param {Function} setFields - Function to update field data
  */
-export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (fields: any) => void) {
+export function checkExistingSoilTest(
+  field: NMPFileFieldData, 
+  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
+) {
   const updatedField = { ...field };
   if (field.SoilTest == null || Object.keys(field.SoilTest).length === 0) {
     updatedField.SoilTest.valNO3H = defaultSoilTestData.valNO3H;
@@ -154,8 +157,8 @@ export function checkExistingSoilTest(field: NMPFileFieldData, setFields: (field
     updatedField.SoilTest.convertedKelownaK = defaultSoilTestData.convertedKelownaK;
     updatedField.SoilTest.convertedKelownaP = defaultSoilTestData.convertedKelownaP;
   }
-  setFields((prev: NMPFileFieldData[]): NMPFileFieldData[] => {
-    const newFieldList: Array<any> = prev.map((fieldEle: NMPFileFieldData) => {
+  setFields((prev: NMPFileFieldData[]) => {
+    const newFieldList: Array<NMPFileFieldData> = prev.map((fieldEle: NMPFileFieldData) => {
       if (fieldEle.FieldName === updatedField.FieldName) {
         return updatedField;
       }
@@ -333,7 +336,7 @@ export async function getCropRemovalN(
  */
 export async function getCropRequirementN(
   field: NMPFileFieldData,
-  setFields: (fields: any[]) => void,
+  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {
@@ -394,7 +397,7 @@ export async function getCropRequirementN(
  */
 export async function getCropRequirementK2O(
   field: NMPFileFieldData,
-  setFields: (fields: any[]) => void,
+  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {
@@ -445,7 +448,7 @@ export async function getCropRequirementK2O(
  */
 export async function getCropRequirementP205(
   field: NMPFileFieldData,
-  setFields: (fields: any[]) => void,
+  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {

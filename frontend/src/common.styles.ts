@@ -46,6 +46,10 @@ export const formCss = css({
     '+ div > div > input': {
       borderColor: 'var(--support-border-color-danger) !important;',
     },
+
+    '+ div > .bcds-react-aria-Select--Button': {
+      borderColor: 'var(--support-border-color-danger) !important;',
+    },
   },
 });
 
