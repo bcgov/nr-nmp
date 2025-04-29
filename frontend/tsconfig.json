@@ -29,6 +29,12 @@
   "include": ["src"],
   "exclude": ["**/*.cy.tsx"],
   "references": [
+    // Uncomment to work on Cypress tests, recomment when running the frontend or pushing to GitHub
+    /*
+    {
+      "path": "./tsconfig.cy.json"
+    },
+    */
     {
       "path": "./tsconfig.node.json"
     }
