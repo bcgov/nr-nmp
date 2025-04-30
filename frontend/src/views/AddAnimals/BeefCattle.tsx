@@ -82,7 +82,7 @@ export default function BeefCattle({
         placeholder="Select a cattle type"
         items={subtypeOptions}
         selectedKey={selectedSubtypeLabel}
-        onSelectionChange={(e: string) => {
+        onSelectionChange={(e: any) => {
           handleInputChange('subtype', e);
         }}
       />
@@ -94,7 +94,7 @@ export default function BeefCattle({
         name="animalsPerFarm"
         size="small"
         value={formData?.animalsPerFarm}
-        onChange={(e: number) => {
+        onChange={(e: any) => {
           handleInputChange('animalsPerFarm', e);
         }}
         maxLength={7}
@@ -114,7 +114,7 @@ export default function BeefCattle({
           name="daysCollected"
           size="small"
           value={formData?.daysCollected}
-          onChange={(e: number) => {
+          onChange={(e: any) => {
             handleInputChange('daysCollected', e);
           }}
           maxLength={3}

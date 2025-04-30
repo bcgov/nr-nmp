@@ -1,7 +1,6 @@
 /**
  * @summary A reusable Dropdown component
  */
-import React from 'react';
 import { DropdownWrapper, StyledLabel, StyledSelect } from './dropdown.styles';
 
 interface DropdownProps {
@@ -9,7 +8,7 @@ interface DropdownProps {
   name: string;
   value: number | string;
   options: { value: number | string | undefined; label: string | undefined }[];
-  onChange: Function;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
   flex?: string;
   required?: true;
 }

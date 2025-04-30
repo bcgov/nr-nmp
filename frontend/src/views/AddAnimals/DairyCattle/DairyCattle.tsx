@@ -33,7 +33,7 @@ export default function DairyCattle({
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
-  const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
+  const [breedOptions, setBreedOptions] = useState<{ value: {key: number}; label: string }[]>([]);
 
   useEffect(() => {
     setFormData((prev: DairyCattleData) => ({
@@ -92,7 +92,11 @@ export default function DairyCattle({
           breedmanurefactor: row.breedmanurefactor,
         }));
         setBreeds(breedz);
-        const breedOptionz = breedz.map((breed) => ({ value: breed.id, label: breed.breedname }));
+        // const breedOptionz = breedz.map((breed) => ({ value: breed.id, label: breed.breedname }));
+        const breedOptionz = breedz.map((breed) => ({
+          value: breed.id.toString(),
+          label: breed.breedname,
+        }));
         setBreedOptions(breedOptionz);
       }
     });
@@ -134,7 +138,7 @@ export default function DairyCattle({
       <Select
         label="Breed"
         name="breed"
-        selectedKey={formData?.breed}
+        selectedKey={formData?.breed?.toString()}
         items={breedOptions}
         onSelectionChange={(e: any) => {
           handleInputChange('breed', e);

@@ -3,7 +3,6 @@ import defaultNMPFile from '@/constants/DefaultNMPFile';
 import NMPFile from '@/types/NMPFile';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-import { AnimalData } from '@/views/AddAnimals/types';
 
 export const initFields = (state: any) => {
   if (state.nmpFile) {
