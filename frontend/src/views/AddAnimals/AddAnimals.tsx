@@ -42,14 +42,14 @@ type tempAnimalData = AnimalData & { id?: string };
 export default function AddAnimals() {
   const { state, setNMPFile, setProgressStep } = useAppService();
   const [formData, setFormData] = useState<tempAnimalData>(
-    initialBeefFormData || initialDairyFormData,
+    initialBeefFormData || initialDairyFormData || initialEmptyData,
   );
+  // const [formData, setFormData] = useState(EMPTY_SOIL_TEST_FORM);
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
   // array of all livestck entered by the user so far
   const [animalForm, setAnimalForm] = useState<React.ReactNode | null>(null);
-  const [selectedAnimal, setSelectedAnimal] = useState<string>();
 
   const navigate = useNavigate();
 
@@ -126,7 +126,6 @@ export default function AddAnimals() {
           ...e.row,
         };
         setFormData(newFormData);
-        setSelectedAnimal('Beef Cattle');
         setAnimalForm(
           <BeefCattle
             key={animalList.length}
@@ -141,7 +140,6 @@ export default function AddAnimals() {
           ...e.row,
         };
         setFormData(newFormData);
-        setSelectedAnimal('Dairy Cattle');
         setAnimalForm(
           <DairyCattle
             key={animalList.length}
@@ -165,7 +163,7 @@ export default function AddAnimals() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setIsEditingForm(false);
-    setFormData(initialEmptyData || null);
+    setFormData(initialEmptyData);
     setAnimalForm(null);
   };
 
@@ -185,6 +183,10 @@ export default function AddAnimals() {
       setShowViewError('You must add at least one animal before continuing.');
     }
   };
+
+  const selectedAnimalLabel = animalOptions.find(
+    (item) => item.value === formData?.animalId
+  )?.label;
 
   // fix manure showing as [object]
   const columns: GridColDef[] = useMemo(
@@ -250,7 +252,7 @@ export default function AddAnimals() {
         resizable: false,
       },
     ],
-    [handleEditRow],
+    [],
   );
 
   return (
@@ -325,10 +327,10 @@ export default function AddAnimals() {
                     <Select
                       isRequired
                       name="AnimalType"
+                      items={animalOptions}
                       label="Animal Type"
                       placeholder="Select Animal Type"
-                      selectedKey={selectedAnimal}
-                      items={animalOptions}
+                      selectedKey={selectedAnimalLabel}
                       // e is a the animal type name string
                       onSelectionChange={(e: string) => {
                         const selectedItem = animalOptions.find((item) => item.label === e);
@@ -336,7 +338,6 @@ export default function AddAnimals() {
                           setFormData(
                             selectedItem.value === '1' ? initialBeefFormData : initialDairyFormData,
                           );
-                          setSelectedAnimal(selectedItem.label);
                           handleAnimalType(selectedItem.value);
                         }
                       }}

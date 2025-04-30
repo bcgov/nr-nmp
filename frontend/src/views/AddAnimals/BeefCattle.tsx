@@ -55,15 +55,20 @@ export default function BeefCattle({
 
   // save to form data on change
   const handleInputChange = (name: string, value: string | number | undefined) => {
+    // get subtype number value by searching for label
     const selectedItem =
-      name === 'subtype' ? subtypeOptions.find((item) => item.label === value)?.value : value;
+      name === 'subtype' ? subtypeOptions.find((item) => item.label === value)?.value.toString() : value;
 
     setFormData((prev) => {
       const updatedData = { ...prev, [name]: selectedItem };
-      console.log('updatedData', updatedData);
       return updatedData;
     });
   };
+
+  const selectedSubtypeLabel = subtypeOptions.find(
+    (item) => item.value.toString() === formData?.subtype
+  )?.label;
+
 
   return (
     <Grid
@@ -76,7 +81,7 @@ export default function BeefCattle({
         label="Cattle Type"
         placeholder="Select a cattle type"
         items={subtypeOptions}
-        selectedKey={formData?.subtype}
+        selectedKey={selectedSubtypeLabel}
         onSelectionChange={(e: string) => {
           handleInputChange('subtype', e);
         }}
