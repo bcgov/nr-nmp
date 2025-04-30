@@ -55,8 +55,11 @@ export default function BeefCattle({
 
   // save to form data on change
   const handleInputChange = (name: string, value: string | number | undefined) => {
+    const selectedItem =
+      name === 'subtype' ? subtypeOptions.find((item) => item.label === value)?.value : value;
+
     setFormData((prev) => {
-      const updatedData = { ...prev, [name]: value };
+      const updatedData = { ...prev, [name]: selectedItem };
       console.log('updatedData', updatedData);
       return updatedData;
     });
@@ -69,17 +72,14 @@ export default function BeefCattle({
     >
       <Select
         style={{ maxWidth: '12em' }}
+        isRequired
         label="Cattle Type"
-        name="subtype"
         placeholder="Select a cattle type"
-        selectionKey={formData?.subtype}
         items={subtypeOptions}
+        selectedKey={formData?.subtype}
         onSelectionChange={(e: string) => {
-          const selectedItem = subtypeOptions.find((item) => item.label === e);
-          handleInputChange('subtype', selectedItem?.value.toString());
-          console.log(selectedItem);
+          handleInputChange('subtype', e);
         }}
-        required
       />
       <TextField
         style={{ maxWidth: '20em' }}
@@ -113,7 +113,7 @@ export default function BeefCattle({
             handleInputChange('daysCollected', e);
           }}
           maxLength={3}
-          required
+          isRequired
         />
       )}
     </Grid>

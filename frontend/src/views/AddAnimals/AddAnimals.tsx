@@ -165,7 +165,7 @@ export default function AddAnimals() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setIsEditingForm(false);
-    setFormData(initialEmptyData);
+    setFormData(initialEmptyData || null);
     setAnimalForm(null);
   };
 
@@ -327,7 +327,7 @@ export default function AddAnimals() {
                       name="AnimalType"
                       label="Animal Type"
                       placeholder="Select Animal Type"
-                      selectionKey={selectedAnimal}
+                      selectedKey={selectedAnimal}
                       items={animalOptions}
                       // e is a the animal type name string
                       onSelectionChange={(e: string) => {
@@ -336,7 +336,6 @@ export default function AddAnimals() {
                           setFormData(
                             selectedItem.value === '1' ? initialBeefFormData : initialDairyFormData,
                           );
-                          console.log('selectedItem.label', selectedItem.label);
                           setSelectedAnimal(selectedItem.label);
                           handleAnimalType(selectedItem.value);
                         }

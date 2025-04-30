@@ -101,6 +101,7 @@ export default function DairyCattle({
 
   // save to form data on change
   const handleInputChange = (name: string, value: string | number | undefined) => {
+    console.log(name, value);
     setFormData((prev) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
@@ -116,23 +117,22 @@ export default function DairyCattle({
         style={{ maxWidth: '15em' }}
         label="Sub Type"
         name="subtype"
-        value={formData?.subtype}
+        selectedKey={formData?.subtype}
         items={subtypeOptions}
-        onChange={(e: number) => {
+        onSelectionChange={(e: any) => {
           handleInputChange('subtype', e);
         }}
-        required
+        isRequired
       />
       <Select
         label="Breed"
         name="breed"
-        value={formData?.breed}
+        selectedKey={formData?.breed}
         items={breedOptions}
-        onChange={(e) => {
-          console.log(e, 'e');
-          handleInputChange('breed', e.value);
+        onSelectionChange={(e: string) => {
+          handleInputChange('breed', e);
         }}
-        required
+        isRequired
       />
       <TextField
         style={{ maxWidth: '15em' }}
@@ -144,17 +144,17 @@ export default function DairyCattle({
           handleInputChange('animalsPerFarm', e);
         }}
         maxLength={7}
-        required
+        isRequired
       />
       <Select
         label="Manure Type"
         name="manureType"
-        value={formData?.manureType}
+        selectedKey={formData?.manureType}
         items={manureTypeOptions}
-        onChange={(e: number) => {
+        onSelectionChange={(e: number) => {
           handleInputChange('manureType', e);
         }}
-        required
+        isRequired
       />
       <TextField
         style={{ maxWidth: '12em' }}
@@ -166,7 +166,7 @@ export default function DairyCattle({
           handleInputChange('grazingDaysPerYear', e);
         }}
         maxLength={3}
-        required
+        isRequired
       />
       {formData.subtype === MILKING_COW_ID &&
         milkProductionInit !== undefined &&
@@ -176,7 +176,7 @@ export default function DairyCattle({
             washWaterInit={washWaterInit}
             animalsPerFarm={formData.animalsPerFarm || 0}
             washWaterUnit={formData.washWaterUnit}
-            handleChange={(e: number) => {
+            handleChange={(e: any) => {
               handleInputChange('grazingDaysPerYear', e);
             }}
             setFormData={setFormData}
