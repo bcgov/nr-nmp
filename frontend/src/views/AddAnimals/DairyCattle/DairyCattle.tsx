@@ -147,7 +147,7 @@ export default function DairyCattle({
         type="number"
         name="animalsPerFarm"
         value={formData?.animalsPerFarm?.toString()}
-        onChange={(e: number) => {
+        onChange={(e: any) => {
           handleInputChange('animalsPerFarm', e);
         }}
         maxLength={7}

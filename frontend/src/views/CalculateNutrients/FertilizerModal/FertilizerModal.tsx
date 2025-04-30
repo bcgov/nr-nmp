@@ -167,7 +167,7 @@ export default function FertilizerModal({
             value: fertilizer.id,
             label: fertilizer.name,
           }))}
-          onChange={(e) => handleChange(e)}
+          onChange={(e: any) => handleChange(e)}
         />
         <InputField
           label="Application Rate"
