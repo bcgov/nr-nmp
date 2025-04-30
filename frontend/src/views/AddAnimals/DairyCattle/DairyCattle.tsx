@@ -33,7 +33,7 @@ export default function DairyCattle({
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
-  const [breedOptions, setBreedOptions] = useState<{ value: {key: number}; label: string }[]>([]);
+  const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
 
   useEffect(() => {
     setFormData((prev: DairyCattleData) => ({
@@ -92,11 +92,7 @@ export default function DairyCattle({
           breedmanurefactor: row.breedmanurefactor,
         }));
         setBreeds(breedz);
-        // const breedOptionz = breedz.map((breed) => ({ value: breed.id, label: breed.breedname }));
-        const breedOptionz = breedz.map((breed) => ({
-          value: breed.id.toString(),
-          label: breed.breedname,
-        }));
+        const breedOptionz = breedz.map((breed) => ({ value: breed.id, label: breed.breedname }));
         setBreedOptions(breedOptionz);
       }
     });
@@ -138,9 +134,9 @@ export default function DairyCattle({
       <Select
         label="Breed"
         name="breed"
-        selectedKey={formData?.breed?.toString()}
+        selectedKey={formData?.breed}
         items={breedOptions}
-        onSelectionChange={(e: any) => {
+        onSelectionChange={(e: string) => {
           handleInputChange('breed', e);
         }}
         isRequired
@@ -151,7 +147,7 @@ export default function DairyCattle({
         type="number"
         name="animalsPerFarm"
         value={formData?.animalsPerFarm?.toString()}
-        onChange={(e: any) => {
+        onChange={(e: number) => {
           handleInputChange('animalsPerFarm', e);
         }}
         maxLength={7}
@@ -162,7 +158,7 @@ export default function DairyCattle({
         name="manureType"
         selectedKey={formData?.manureType}
         items={manureTypeOptions}
-        onSelectionChange={(e: any) => {
+        onSelectionChange={(e: number) => {
           handleInputChange('manureType', e);
         }}
         isRequired
@@ -173,7 +169,7 @@ export default function DairyCattle({
         type="number"
         name="grazingDaysPerYear"
         value={formData?.grazingDaysPerYear?.toString()}
-        onChange={(e: any) => {
+        onChange={(e: number) => {
           handleInputChange('grazingDaysPerYear', e);
         }}
         maxLength={3}

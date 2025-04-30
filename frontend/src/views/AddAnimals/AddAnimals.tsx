@@ -62,8 +62,8 @@ export default function AddAnimals() {
   );
 
   const animalOptions = [
-    { value: {key: '1'}, label: 'Beef Cattle' },
-    { value: {key: '2'}, label: 'Dairy Cattle' },
+    { value: '1', label: 'Beef Cattle' },
+    { value: '2', label: 'Dairy Cattle' },
   ];
 
   useEffect(() => {
@@ -185,7 +185,7 @@ export default function AddAnimals() {
   };
 
   const selectedAnimalLabel = animalOptions.find(
-    (item) => item.value.key === formData?.animalId
+    (item) => item.value === formData?.animalId
   )?.label;
 
   // fix manure showing as [object]
@@ -336,9 +336,9 @@ export default function AddAnimals() {
                         const selectedItem = animalOptions.find((item) => item.label === e);
                         if (selectedItem) {
                           setFormData(
-                            selectedItem.value.key === '1' ? initialBeefFormData : initialDairyFormData,
+                            selectedItem.value === '1' ? initialBeefFormData : initialDairyFormData,
                           );
-                          handleAnimalType(selectedItem.value.key);
+                          handleAnimalType(selectedItem.value);
                         }
                       }}
                     />
