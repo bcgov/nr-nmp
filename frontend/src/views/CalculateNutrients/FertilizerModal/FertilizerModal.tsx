@@ -174,7 +174,7 @@ export default function FertilizerModal({
           type="number"
           name="applicationRate"
           value={fertilizerForm.applicationRate}
-          onChange={(e) => handleChange(e)}
+          onChange={(e: any) => handleChange(e)}
           flex="0.5"
         />
         <Dropdown
@@ -187,7 +187,7 @@ export default function FertilizerModal({
               value: unit.id,
               label: unit.name,
             }))}
-          onChange={(e) => handleChange(e)}
+          onChange={(e: any) => handleChange(e)}
         />
         {(fertilizerForm.fertilizerType === 3 || 4) && (
           <>
@@ -204,7 +204,7 @@ export default function FertilizerModal({
               name="densityUnits"
               value={fertilizerForm.densityUnits}
               options={densityOptions}
-              onChange={(e) => handleChange(e)}
+              onChange={(e: any) => handleChange(e)}
             />
           </>
         )}

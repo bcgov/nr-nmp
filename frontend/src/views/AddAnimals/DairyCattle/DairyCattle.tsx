@@ -158,7 +158,7 @@ export default function DairyCattle({
         name="manureType"
         selectedKey={formData?.manureType}
         items={manureTypeOptions}
-        onSelectionChange={(e: number) => {
+        onSelectionChange={(e: any) => {
           handleInputChange('manureType', e);
         }}
         isRequired
@@ -169,7 +169,7 @@ export default function DairyCattle({
         type="number"
         name="grazingDaysPerYear"
         value={formData?.grazingDaysPerYear?.toString()}
-        onChange={(e: number) => {
+        onChange={(e: any) => {
           handleInputChange('grazingDaysPerYear', e);
         }}
         maxLength={3}
