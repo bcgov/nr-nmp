@@ -136,7 +136,7 @@ export default function DairyCattle({
         name="breed"
         selectedKey={formData?.breed}
         items={breedOptions}
-        onSelectionChange={(e: string) => {
+        onSelectionChange={(e: any) => {
           handleInputChange('breed', e);
         }}
         isRequired
