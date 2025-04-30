@@ -63,10 +63,12 @@ export const initialDairyFormData: DairyCattleData = {
 
 export interface EmptyData {
   animalId: undefined;
+  manureData: undefined;
 }
 
 export const initialEmptyData: EmptyData = {
   animalId: undefined,
+  manureData: undefined,
 };
 
 export type AnimalData = BeefCattleData | DairyCattleData | EmptyData;
