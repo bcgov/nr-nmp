@@ -11,7 +11,7 @@ on:
         description: GitHub environment; e.g. PR number (omit), TEST or PROD
         default: "dev"
         type: string
-      tag:
+      tag: 
         description: Image tag; e.g. PR number or latest
         default: ${{ github.event.number }}
         type: string
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Initialize
-        uses: bcgov-nr/action-deployer-openshift@v4.0.0
+        uses: bcgov-nr/action-deployer-openshift@v3.2.0
         with:
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
@@ -53,14 +53,15 @@ jobs:
           oc_version: "4.14.37"
           file: common/openshift.init.yml
           overwrite: true
-          parameters: -p TARGET=${{ inputs.target }}
+          parameters:
+            -p TARGET=${{ inputs.target }}
             -p ENV=${{inputs.environment}}
             -p DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             -p DB_USER=${{ secrets.DB_USER }}
             -p DB_NAME=${{ secrets.DB_NAME }}
             -p SSO_CLIENT_ID=${{ vars.SSO_CLIENT_ID }}
             -p SSO_CLIENT_SECRET=${{ secrets.SSO_CLIENT_SECRET }}
-
+  
   deploy:
     name: Deploy
     environment: ${{ inputs.environment }}
@@ -73,25 +74,29 @@ jobs:
         include:
           - name: database
             overwrite: true
-            parameters: -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
+            parameters:
+              -p DB_PVC_SIZE=${{ inputs.db-pvc-size }}
               -p CPU_REQUEST=${{ inputs.db-cpu-request }}
           - name: backend
             overwrite: true
-            parameters: -p SSO_AUTH_SERVER_URL=${{ vars.SSO_AUTH_SERVER_URL }}
+            parameters:
+              -p SSO_AUTH_SERVER_URL=${{ vars.SSO_AUTH_SERVER_URL }}
               -p CPU_REQUEST=${{ inputs.backend-cpu-request }}
             verification_path: /healthcheck/
           - name: frontend
             overwrite: true
-            parameters: -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
+            parameters:
+              -p CPU_REQUEST=${{ inputs.frontend-cpu-request }}
     steps:
-      - uses: bcgov-nr/action-deployer-openshift@v4.0.0
+      - uses: bcgov-nr/action-deployer-openshift@v3.2.0
         with:
           file: ${{ matrix.name }}/openshift.deploy.yml
           oc_namespace: ${{ secrets.OC_NAMESPACE }}
           oc_server: ${{ vars.OC_SERVER }}
           oc_token: ${{ secrets.OC_TOKEN }}
           overwrite: true
-          parameters: -p TAG=${{ inputs.tag }}
+          parameters: 
+            -p TAG=${{ inputs.tag }} 
             -p TARGET=${{ inputs.target }}
             ${{ matrix.parameters }}
           verification_path: ${{ matrix.verification_path }}
