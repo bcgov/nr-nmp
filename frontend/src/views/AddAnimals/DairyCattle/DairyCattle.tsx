@@ -31,9 +31,9 @@ export default function DairyCattle({
 }) {
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ value: string; label: string }[]>([]);
+  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
-  const [breedOptions, setBreedOptions] = useState<{ value: string; label: string }[]>([]);
+  const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
 
   useEffect(() => {
     setFormData((prev: DairyCattleData) => ({
@@ -75,9 +75,9 @@ export default function DairyCattle({
           milkproduction: row.milkproduction,
         }));
         setSubtypes(subtypez);
-        const subtypeOptionz: { value: string; label: string }[] = (
+        const subtypeOptionz: { id: string; label: string }[] = (
           data as { id: number; name: string }[]
-        ).map((row) => ({ value: row.id.toString(), label: row.name }));
+        ).map((row) => ({ id: row.id.toString(), label: row.name }));
         setSubtypeOptions(subtypeOptionz);
       }
     });
@@ -92,7 +92,7 @@ export default function DairyCattle({
           breedmanurefactor: row.breedmanurefactor,
         }));
         setBreeds(breedz);
-        const breedOptionz = breedz.map((breed) => ({ value: breed.id.toString(), label: breed.breedname }));
+        const breedOptionz = breedz.map((breed) => ({ id: breed.id.toString(), label: breed.breedname }));
         setBreedOptions(breedOptionz);
       }
     });
@@ -119,9 +119,7 @@ export default function DairyCattle({
         selectedKey={formData?.subtype}
         items={subtypeOptions}
         onSelectionChange={(e: any) => {
-          const selectedItem =
-          subtypeOptions.find((item) => item.label === e)?.value.toString();
-          handleInputChange('subtype', selectedItem);
+          handleInputChange('subtype', e);
         }}
         isRequired
       />

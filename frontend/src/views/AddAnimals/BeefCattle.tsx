@@ -20,7 +20,7 @@ export default function BeefCattle({
 }) {
   const apiCache = useContext(APICacheContext);
   const [, setSubtypes] = useState<BeefCattleSubtype[]>([]);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ value: string; label: string }[]>([]);
+  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>();
 
   // only run on initial mount
@@ -40,9 +40,9 @@ export default function BeefCattle({
           solidperpoundperanimalperday: row.solidperpoundperanimalperday,
         }));
         setSubtypes(s);
-        const sOptions: { value: string; label: string }[] = (
+        const sOptions: { id: string; label: string }[] = (
           data as { id: number; name: string }[]
-        ).map((row) => ({ value: row.id.toString(), label: row.name }));
+        ).map((row) => ({ id: row.id.toString(), label: row.name }));
         setSubtypeOptions(sOptions);
       }
     });
@@ -93,13 +93,12 @@ export default function BeefCattle({
         }}
         maxLength={7}
       />
-      Do you pile or collect manure from these animals?
-      <Checkbox
-        value={String(showCollectionDays)}
-        orientation="horizontal"
-        isSelected={showCollectionDays}
-        onChange={setShowCollectionDays}
-      />
+        <Checkbox
+          isSelected={showCollectionDays}
+          onChange={setShowCollectionDays}
+        >
+          Do you pile or collect manure from these animals?
+        </Checkbox>
       {showCollectionDays && (
         <TextField
           style={{ maxWidth: '20em' }}
