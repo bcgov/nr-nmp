@@ -1,6 +1,6 @@
-const manureTypeOptions: { value: string; label: string }[] = [
-  { value: 'Liquid', label: 'Liquid' },
-  { value: 'Solid', label: 'Solid' },
+const manureTypeOptions: { id: string; label: string }[] = [
+  { id: 'Liquid', label: 'Liquid' },
+  { id: 'Solid', label: 'Solid' },
 ];
 
 export default manureTypeOptions;

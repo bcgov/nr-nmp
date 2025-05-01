@@ -76,7 +76,7 @@ export default function BeefCattle({
         items={subtypeOptions}
         onSelectionChange={(e: any) => {
           const selectedItem =
-          subtypeOptions.find((item) => item.label === e)?.value.toString();
+          subtypeOptions.find((item) => item.label === e)?.id.toString();
           handleInputChange('subtype', selectedItem);
         }}
       />
