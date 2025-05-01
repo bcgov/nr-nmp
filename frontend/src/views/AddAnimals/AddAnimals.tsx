@@ -62,8 +62,8 @@ export default function AddAnimals() {
   );
 
   const animalOptions = [
-    { value: '1', label: 'Beef Cattle' },
-    { value: '2', label: 'Dairy Cattle' },
+    { id: '1', label: 'Beef Cattle' },
+    { id: '2', label: 'Dairy Cattle' },
   ];
 
   useEffect(() => {
@@ -183,10 +183,6 @@ export default function AddAnimals() {
       setShowViewError('You must add at least one animal before continuing.');
     }
   };
-
-  const selectedAnimalLabel = animalOptions.find(
-    (item) => item.value === formData?.animalId
-  )?.label;
 
   // fix manure showing as [object]
   const columns: GridColDef[] = useMemo(
@@ -330,15 +326,14 @@ export default function AddAnimals() {
                       items={animalOptions}
                       label="Animal Type"
                       placeholder="Select Animal Type"
-                      selectedKey={selectedAnimalLabel}
-                      // e is a the animal type name string
-                      onSelectionChange={(e: string) => {
-                        const selectedItem = animalOptions.find((item) => item.label === e);
+                      selectedKey={formData.animalId}
+                      onSelectionChange={(e: any) => {
+                        const selectedItem = animalOptions.find((item) => item.id === e);
                         if (selectedItem) {
                           setFormData(
-                            selectedItem.value === '1' ? initialBeefFormData : initialDairyFormData,
+                            selectedItem.id === '1' ? initialBeefFormData : initialDairyFormData,
                           );
-                          handleAnimalType(selectedItem.value);
+                          handleAnimalType(selectedItem.id);
                         }
                       }}
                     />
