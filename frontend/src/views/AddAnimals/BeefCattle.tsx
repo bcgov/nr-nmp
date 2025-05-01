@@ -20,7 +20,7 @@ export default function BeefCattle({
 }) {
   const apiCache = useContext(APICacheContext);
   const [, setSubtypes] = useState<BeefCattleSubtype[]>([]);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
+  const [subtypeOptions, setSubtypeOptions] = useState<{ value: string; label: string }[]>([]);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>();
 
   // only run on initial mount
@@ -40,9 +40,9 @@ export default function BeefCattle({
           solidperpoundperanimalperday: row.solidperpoundperanimalperday,
         }));
         setSubtypes(s);
-        const sOptions: { value: number; label: string }[] = (
+        const sOptions: { value: string; label: string }[] = (
           data as { id: number; name: string }[]
-        ).map((row) => ({ value: row.id, label: row.name }));
+        ).map((row) => ({ value: row.id.toString(), label: row.name }));
         setSubtypeOptions(sOptions);
       }
     });
@@ -87,7 +87,7 @@ export default function BeefCattle({
         type="number"
         name="animalsPerFarm"
         size="small"
-        value={formData?.animalsPerFarm}
+        value={formData?.animalsPerFarm?.toString()}
         onChange={(e: any) => {
           handleInputChange('animalsPerFarm', e);
         }}
@@ -95,7 +95,7 @@ export default function BeefCattle({
       />
       Do you pile or collect manure from these animals?
       <Checkbox
-        value={showCollectionDays}
+        value={String(showCollectionDays)}
         orientation="horizontal"
         isSelected={showCollectionDays}
         onChange={setShowCollectionDays}
@@ -107,7 +107,7 @@ export default function BeefCattle({
           type="number"
           name="daysCollected"
           size="small"
-          value={formData?.daysCollected}
+          value={formData?.daysCollected?.toString()}
           onChange={(e: any) => {
             handleInputChange('daysCollected', e);
           }}

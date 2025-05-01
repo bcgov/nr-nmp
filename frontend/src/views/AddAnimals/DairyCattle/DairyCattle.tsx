@@ -31,9 +31,9 @@ export default function DairyCattle({
 }) {
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ value: number; label: string }[]>([]);
+  const [subtypeOptions, setSubtypeOptions] = useState<{ value: string; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
-  const [breedOptions, setBreedOptions] = useState<{ value: number; label: string }[]>([]);
+  const [breedOptions, setBreedOptions] = useState<{ value: string; label: string }[]>([]);
 
   useEffect(() => {
     setFormData((prev: DairyCattleData) => ({
@@ -75,9 +75,9 @@ export default function DairyCattle({
           milkproduction: row.milkproduction,
         }));
         setSubtypes(subtypez);
-        const subtypeOptionz: { value: number; label: string }[] = (
+        const subtypeOptionz: { value: string; label: string }[] = (
           data as { id: number; name: string }[]
-        ).map((row) => ({ value: row.id, label: row.name }));
+        ).map((row) => ({ value: row.id.toString(), label: row.name }));
         setSubtypeOptions(subtypeOptionz);
       }
     });
@@ -92,7 +92,7 @@ export default function DairyCattle({
           breedmanurefactor: row.breedmanurefactor,
         }));
         setBreeds(breedz);
-        const breedOptionz = breedz.map((breed) => ({ value: breed.id, label: breed.breedname }));
+        const breedOptionz = breedz.map((breed) => ({ value: breed.id.toString(), label: breed.breedname }));
         setBreedOptions(breedOptionz);
       }
     });
@@ -121,7 +121,6 @@ export default function DairyCattle({
         onSelectionChange={(e: any) => {
           const selectedItem =
           subtypeOptions.find((item) => item.label === e)?.value.toString();
-          console.log(selectedItem)
           handleInputChange('subtype', selectedItem);
         }}
         isRequired
@@ -131,7 +130,7 @@ export default function DairyCattle({
         name="breed"
         selectedKey={formData?.breed}
         items={breedOptions}
-        onSelectionChange={(e: string) => {
+        onSelectionChange={(e: any) => {
           handleInputChange('breed', e);
         }}
         isRequired
@@ -142,7 +141,7 @@ export default function DairyCattle({
         type="number"
         name="animalsPerFarm"
         value={formData?.animalsPerFarm?.toString()}
-        onChange={(e: number) => {
+        onChange={(e: any) => {
           handleInputChange('animalsPerFarm', e);
         }}
         maxLength={7}
@@ -153,7 +152,7 @@ export default function DairyCattle({
         name="manureType"
         selectedKey={formData?.manureType}
         items={manureTypeOptions}
-        onSelectionChange={(e: number) => {
+        onSelectionChange={(e: any) => {
           handleInputChange('manureType', e);
         }}
         isRequired
@@ -164,7 +163,7 @@ export default function DairyCattle({
         type="number"
         name="grazingDaysPerYear"
         value={formData?.grazingDaysPerYear?.toString()}
-        onChange={(e: number) => {
+        onChange={(e: any) => {
           handleInputChange('grazingDaysPerYear', e);
         }}
         maxLength={3}
