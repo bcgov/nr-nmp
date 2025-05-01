@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {
-  Button as ButtonGov,
-  ButtonGroup as ButtonGovGroup,
+  Button as Button,
+  ButtonGroup,
   Dialog,
-  Modal as ModalGov,
+  Modal,
   TextField,
   Select,
 } from '@bcgov/design-system-react-components';
@@ -43,7 +43,7 @@ import {
 } from '@/types';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 import { APICacheContext } from '@/context/APICacheContext';
-import { initFields, saveFieldsToFile } from '../../utils/utils';
+import { booleanChecker, initFields, saveFieldsToFile } from '../../utils/utils';
 import { MANURE_IMPORTS, SOIL_TESTS } from '@/constants/RouteConstants';
 import {
   customTableStyle,
@@ -157,10 +157,19 @@ function Crops() {
       );
       setFilteredCrops(selectedCropType);
 
-      if (value === 2 && !combinedCropsData.coverCropHarvested) {
+      // If cropTypeId is set to 2 (Cover crops), default to false
+      // If changed away from 2, reset to null
+      if (value === 2) {
+        if (combinedCropsData.coverCropHarvested === null) {
+          setCombinedCropsData((prevData) => ({
+            ...prevData,
+            coverCropHarvested: 'false',
+          }));
+        }
+      } else {
         setCombinedCropsData((prevData) => ({
           ...prevData,
-          coverCropHarvested: 'false',
+          coverCropHarvested: null,
         }));
       }
 
@@ -539,13 +548,13 @@ function Crops() {
                 />
               </div>
             ) : (
-              <ButtonGov
+              <Button
                 variant="primary"
                 size="small"
                 onPress={handleEditRowBtnClick}
               >
                 Add crop
-              </ButtonGov>
+              </Button>
             )}
           </div>
         );
@@ -576,7 +585,7 @@ function Crops() {
         activeTab={2}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />
-      <ModalGov
+      <Modal
         isDismissable
         isOpen={isDialogOpen}
         onOpenChange={handleDialogClose}
@@ -712,10 +721,10 @@ function Crops() {
                       Cover Crop Harvested
                     </div>
                     <YesNoRadioButtons
-                      value={!!combinedCropsData?.coverCropHarvested}
+                      value={booleanChecker(combinedCropsData?.coverCropHarvested)}
                       text=""
                       onChange={(b: boolean) => {
-                        handleFormFieldChange('coverCropHarvested', b);
+                        handleFormFieldChange('coverCropHarvested', b.toString());
                       }}
                       orientation="horizontal"
                     />
@@ -774,34 +783,34 @@ function Crops() {
                 component="div"
                 css={{ marginTop: '1rem', marginBottom: '1rem' }}
               />
-              <ButtonGovGroup
+              <ButtonGroup
                 alignment="end"
                 orientation="horizontal"
               >
-                <ButtonGov
+                <Button
                   variant="secondary"
                   onPress={handleDialogClose}
                 >
                   Cancel
-                </ButtonGov>
-                <ButtonGov
+                </Button>
+                <Button
                   variant="primary"
                   onPress={handleCalculate}
                 >
                   Calculate
-                </ButtonGov>
-                <ButtonGov
+                </Button>
+                <Button
                   variant="primary"
                   onPress={handleSubmit}
                   isDisabled={!calculationsPerformed}
                 >
                   Submit
-                </ButtonGov>
-              </ButtonGovGroup>
+                </Button>
+              </ButtonGroup>
             </div>
           </div>
         </Dialog>
-      </ModalGov>
+      </Modal>
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={fields}
@@ -812,20 +821,20 @@ function Crops() {
         hideFooter
       />
 
-      <ButtonGovGroup
+      <ButtonGroup
         alignment="start"
         ariaLabel="A group of buttons"
         orientation="horizontal"
       >
-        <ButtonGov
+        <Button
           size="medium"
           aria-label="Back"
           variant="secondary"
           onPress={handlePrevious}
         >
           BACK
-        </ButtonGov>
-        <ButtonGov
+        </Button>
+        <Button
           size="medium"
           aria-label="Next"
           variant="primary"
@@ -833,8 +842,8 @@ function Crops() {
           type="submit"
         >
           Next
-        </ButtonGov>
-      </ButtonGovGroup>
+        </Button>
+      </ButtonGroup>
     </StyledContent>
   );
 }

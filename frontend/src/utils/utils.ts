@@ -50,3 +50,15 @@ export const saveFarmManuresToFile = (
   }
   setNMPFile(JSON.stringify(nmpFile));
 };
+
+export const booleanChecker = (value: any): boolean => {
+  if (!value) {
+    // value was empty string, false, 0, null, undefined
+    return false
+  } else {
+    if (typeof value == 'string' && value.toLowerCase() == 'false') {
+      return false;
+    } 
+  }
+  return true
+}
