@@ -55,19 +55,11 @@ export default function BeefCattle({
 
   // save to form data on change
   const handleInputChange = (name: string, value: string | number | undefined) => {
-    // get subtype number value by searching for label
-    const selectedItem =
-      name === 'subtype' ? subtypeOptions.find((item) => item.label === value)?.value.toString() : value;
-
     setFormData((prev) => {
-      const updatedData = { ...prev, [name]: selectedItem };
+      const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
   };
-
-  const selectedSubtypeLabel = subtypeOptions.find(
-    (item) => item.value.toString() === formData?.subtype
-  )?.label;
 
 
   return (
@@ -80,10 +72,12 @@ export default function BeefCattle({
         isRequired
         label="Cattle Type"
         placeholder="Select a cattle type"
+        selectedKey={formData?.subtype}
         items={subtypeOptions}
-        selectedKey={selectedSubtypeLabel}
         onSelectionChange={(e: any) => {
-          handleInputChange('subtype', e);
+          const selectedItem =
+          subtypeOptions.find((item) => item.label === e)?.value.toString();
+          handleInputChange('subtype', selectedItem);
         }}
       />
       <TextField

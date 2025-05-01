@@ -101,19 +101,11 @@ export default function DairyCattle({
 
   // save to form data on change
   const handleInputChange = (name: string, value: string | number | undefined) => {
-      // get subtype number value by searching for label
-      const selectedItem =
-      name === 'subtype' ? subtypeOptions.find((item) => item.label === value)?.value.toString() : value;
-
     setFormData((prev) => {
-      const updatedData = { ...prev, [name]: selectedItem };
+      const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
   };
-
-  const selectedSubtypeLabel = subtypeOptions.find(
-    (item) => item.value.toString() === formData?.subtype
-  )?.label;
 
   return (
     <Grid
@@ -124,10 +116,13 @@ export default function DairyCattle({
         style={{ maxWidth: '15em' }}
         label="Sub Type"
         name="subtype"
-        selectedKey={selectedSubtypeLabel}
+        selectedKey={formData?.subtype}
         items={subtypeOptions}
         onSelectionChange={(e: any) => {
-          handleInputChange('subtype', e);
+          const selectedItem =
+          subtypeOptions.find((item) => item.label === e)?.value.toString();
+          console.log(selectedItem)
+          handleInputChange('subtype', selectedItem);
         }}
         isRequired
       />
