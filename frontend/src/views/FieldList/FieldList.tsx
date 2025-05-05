@@ -19,7 +19,12 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-import { customTableStyle, formCss, tableActionButtonCss } from '../../common.styles';
+import {
+  customTableStyle,
+  formCss,
+  formGridBreakpoints,
+  tableActionButtonCss,
+} from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 import { FARM_INFORMATION, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
@@ -247,7 +252,7 @@ export default function FieldList() {
                   container
                   spacing={1}
                 >
-                  <Grid size={6}>
+                  <Grid size={formGridBreakpoints}>
                     <span
                       className={`bcds-react-aria-Select--Label ${isFormInvalid && validateUniqueField() ? '--error' : ''}`}
                     >
@@ -261,7 +266,7 @@ export default function FieldList() {
                       onChange={(e) => handleFormFieldChange('FieldName', e)}
                     />
                   </Grid>
-                  <Grid size={6}>
+                  <Grid size={formGridBreakpoints}>
                     <span
                       className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.Area ? '--error' : ''}`}
                     >
@@ -295,7 +300,7 @@ export default function FieldList() {
                       }}
                     />
                   </Grid>
-                  <Grid size={6}>
+                  <Grid size={formGridBreakpoints}>
                     <span>Comment (Optional)</span>
                     <TextField
                       name="Comment"
