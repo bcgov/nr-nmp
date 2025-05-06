@@ -31,7 +31,7 @@ export default function DairyCattle({
   formData: DairyCattleData;
 }) {
   const apiCache = useContext(APICacheContext);
-  const [subFormData, setSubFormData] = useState<DairyCattleData>(formData);
+  const [localFormData, setLocalFormData] = useState<DairyCattleData>(formData);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
@@ -48,9 +48,9 @@ export default function DairyCattle({
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
-    const breed = breeds.find((b) => b.id.toString() === subFormData.breed);
+    const breed = breeds.find((b) => b.id.toString() === localFormData.breed);
     if (breed) return milkingCow.milkproduction * breed.breedmanurefactor;
-  }, [subtypes, breeds, subFormData.breed]);
+  }, [subtypes, breeds, localFormData.breed]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
@@ -99,7 +99,7 @@ export default function DairyCattle({
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
-    setSubFormData((prev) => {
+    setLocalFormData((prev) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
@@ -114,7 +114,7 @@ export default function DairyCattle({
         <Select
           label="Sub Type"
           name="subtype"
-          selectedKey={subFormData?.subtype}
+          selectedKey={localFormData?.subtype}
           items={subtypeOptions}
           onSelectionChange={(e: any) => {
             handleInputChange('subtype', e);
@@ -126,7 +126,7 @@ export default function DairyCattle({
         <Select
           label="Breed"
           name="breed"
-          selectedKey={subFormData?.breed}
+          selectedKey={localFormData?.breed}
           items={breedOptions}
           onSelectionChange={(e: any) => {
             handleInputChange('breed', e);
@@ -139,7 +139,7 @@ export default function DairyCattle({
           label="Average Animal Number on Farm"
           type="number"
           name="animalsPerFarm"
-          value={subFormData?.animalsPerFarm?.toString()}
+          value={localFormData?.animalsPerFarm?.toString()}
           onChange={(e: any) => {
             handleInputChange('animalsPerFarm', e);
           }}
@@ -151,7 +151,7 @@ export default function DairyCattle({
         <Select
           label="Manure Type"
           name="manureType"
-          selectedKey={subFormData?.manureType}
+          selectedKey={localFormData?.manureType}
           items={manureTypeOptions}
           onSelectionChange={(e: any) => {
             handleInputChange('manureType', e);
@@ -164,7 +164,7 @@ export default function DairyCattle({
           label="Grazing Days per Year"
           type="number"
           name="grazingDaysPerYear"
-          value={subFormData?.grazingDaysPerYear?.toString()}
+          value={localFormData?.grazingDaysPerYear?.toString()}
           onChange={(e: any) => {
             handleInputChange('grazingDaysPerYear', e);
           }}
@@ -172,21 +172,20 @@ export default function DairyCattle({
           isRequired
         />
       </Grid>
-      {subFormData.subtype === MILKING_COW_ID &&
+      {localFormData.subtype === MILKING_COW_ID &&
         milkProductionInit !== undefined &&
         washWaterInit !== undefined && (
           <MilkingFields
             milkProductionInit={milkProductionInit}
             washWaterInit={washWaterInit}
-            animalsPerFarm={subFormData.animalsPerFarm || 0}
-            washWaterUnit={subFormData.washWaterUnit}
+            animalsPerFarm={localFormData.animalsPerFarm || 0}
+            washWaterUnit={localFormData.washWaterUnit}
             handleChange={(e: any) => {
               handleInputChange('grazingDaysPerYear', e);
             }}
             setFormData={setFormData}
           />
         )}
-      <pre>{JSON.stringify(subFormData, null, 2)}</pre>
     </Grid>
   );
 }
