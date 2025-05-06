@@ -236,7 +236,7 @@ export default function FieldList() {
                   fontSize: '1.25rem',
                 }}
               >
-                {isEditingForm ? 'Edit Field' : 'Add Field'}
+                {isEditingForm ? 'Edit animal' : 'Add animal'}
               </span>
               <Divider
                 aria-hidden="true"

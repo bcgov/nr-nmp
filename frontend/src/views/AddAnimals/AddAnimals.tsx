@@ -29,12 +29,11 @@ import {
   initialEmptyData,
 } from './types';
 import BeefCattle from './BeefCattle';
-import { StyledContent } from '../LandingPage/landingPage.styles';
 import DairyCattle from './DairyCattle/DairyCattle';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import { initAnimals, saveAnimalsToFile } from './utils';
-import { ErrorText } from './addAnimals.styles';
+import { ErrorText, StyledContent } from './addAnimals.styles';
 
 // need a row id
 type tempAnimalData = AnimalData & { id?: string };
@@ -218,13 +217,6 @@ export default function AddAnimals() {
         },
       },
       {
-        field: 'date',
-        headerName: 'Date',
-        minWidth: 200,
-        maxWidth: 300,
-        valueGetter: (params: any) => params,
-      },
-      {
         field: 'actions',
         headerName: 'Actions',
         width: 120,
@@ -306,13 +298,14 @@ export default function AddAnimals() {
                   fontSize: '1.25rem',
                 }}
               >
-                {isEditingForm ? 'Edit Field' : 'Add Field'}
+                {isEditingForm ? 'Edit animal' : 'Add animal'}
               </span>
               <Divider
                 aria-hidden="true"
                 component="div"
                 css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
               />
+              <pre>{JSON.stringify(formData, null, 2)}</pre>
               <Form
                 css={formCss}
                 onSubmit={onSubmit}
@@ -322,13 +315,14 @@ export default function AddAnimals() {
                     {/* dynamically renders the form fields depending on the users choice of animal in the select below */}
                     <Select
                       isRequired
-                      name="AnimalType"
+                      name="animalId"
                       items={animalOptions}
                       label="Animal Type"
                       placeholder="Select Animal Type"
                       selectedKey={formData.animalId}
                       onSelectionChange={(e: any) => {
                         const selectedItem = animalOptions.find((item) => item.id === e);
+
                         if (selectedItem) {
                           setFormData(
                             selectedItem.id === '1' ? initialBeefFormData : initialDairyFormData,

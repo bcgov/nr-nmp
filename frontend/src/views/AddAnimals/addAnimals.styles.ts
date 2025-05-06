@@ -2,6 +2,7 @@
  * @summary Styling for AddAnimals view
  */
 import styled from '@emotion/styled';
+import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
 
 export const Container = styled.div`
   overflow: visible;
@@ -31,4 +32,13 @@ export const DropdownButton = styled.button`
   width: 100%;
   text-align: left;
   cursor: pointer;
+`;
+
+export const StyledContent = styled.div`
+  margin-bottom: 1rem;
+  ${componentContainer}
+
+  ${paragraphCss}
+
+  ${buttonGroup}
 `;
