@@ -2,6 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { ProgressStepper } from '..';
 import { FARM_INFORMATION } from '@/constants/RouteConstants';
 import useAppService from '@/services/app/useAppService';
+import { BrowserRouter } from 'react-router-dom';
+
+// NOTE for future test writers:
+// ProgressStepper uses useLocation hook
+// Requires renders to wrap component in <BrowserRouter>
 
 jest.mock('@/services/app/useAppService');
 const mockUseAppService = jest.mocked(useAppService);
@@ -13,7 +18,11 @@ describe('ProgressStepper tests', () => {
       setShowAnimalsStep: () => {},
       state: { nmpFile: '', step: '', showAnimalsStep: false },
     }));
-    render(<ProgressStepper step={FARM_INFORMATION} />);
+    render(
+      <BrowserRouter>
+        <ProgressStepper step={FARM_INFORMATION} />
+      </BrowserRouter>,
+    );
     const elem = screen.queryByText('Animals and Manure');
     expect(elem).toBeNull();
   });
@@ -24,7 +33,11 @@ describe('ProgressStepper tests', () => {
       setShowAnimalsStep: () => {},
       state: { nmpFile: '', step: '', showAnimalsStep: true },
     }));
-    render(<ProgressStepper step={FARM_INFORMATION} />);
+    render(
+      <BrowserRouter>
+        <ProgressStepper step={FARM_INFORMATION} />
+      </BrowserRouter>,
+    );
     const elem = screen.getByText('Animals and Manure');
     expect(elem).toBeInTheDocument();
   });

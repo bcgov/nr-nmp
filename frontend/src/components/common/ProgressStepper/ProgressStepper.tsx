@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';

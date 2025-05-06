@@ -1,7 +1,6 @@
 /**
  * @summary The landing page for the application
  */
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import constants from '../../constants/Constants';
