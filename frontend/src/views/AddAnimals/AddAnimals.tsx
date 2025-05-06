@@ -17,7 +17,14 @@ import {
   Form,
   Select,
 } from '@bcgov/design-system-react-components';
-import { formCss, customTableStyle, tableActionButtonCss } from '../../common.styles';
+import {
+  formCss,
+  customTableStyle,
+  tableActionButtonCss,
+  addRecordGroupStyle,
+  modalHeaderStyle,
+  modalPaddingStyle,
+} from '../../common.styles';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
 import {
@@ -39,11 +46,8 @@ import { ErrorText, StyledContent } from './addAnimals.styles';
 type tempAnimalData = AnimalData & { id?: string };
 
 export default function AddAnimals() {
-  const { state, setNMPFile, setProgressStep } = useAppService();
-  const [formData, setFormData] = useState<tempAnimalData>(
-    initialBeefFormData || initialDairyFormData || initialEmptyData,
-  );
-  // const [formData, setFormData] = useState(EMPTY_SOIL_TEST_FORM);
+  const { state, setNMPFile, setShowAnimalsStep } = useAppService();
+  const [formData, setFormData] = useState<tempAnimalData>(initialEmptyData);
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
@@ -66,7 +70,7 @@ export default function AddAnimals() {
   ];
 
   useEffect(() => {
-    setProgressStep(2);
+    setShowAnimalsStep(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -86,9 +90,7 @@ export default function AddAnimals() {
     } else {
       setAnimalList((prev) => [...prev, { ...formData, id: prev?.length.toString() ?? '0' }]);
     }
-    setFormData(initialEmptyData);
-    setIsEditingForm(false);
-    setIsDialogOpen(false);
+    handleDialogClose();
     setShowViewError('');
   };
 
@@ -173,7 +175,7 @@ export default function AddAnimals() {
       saveAnimalsToFile(
         // Delete the id key in each field to prevent saving into NMPfile
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        animalList.map(({ ...remainingAnimals }) => remainingAnimals),
+        animalList.map(({ id, ...remainingAnimals }) => remainingAnimals),
         state.nmpFile,
         setNMPFile,
       );
@@ -249,19 +251,7 @@ export default function AddAnimals() {
       <AppTitle />
       <PageTitle title="Livestock Information" />
       <>
-        <div
-          css={{
-            '.bcds-ButtonGroup': {
-              overflow: 'visible',
-              height: '0rem',
-              '> button': {
-                position: 'relative',
-                bottom: '-0.25rem',
-                zIndex: '10',
-              },
-            },
-          }}
-        >
+        <div css={addRecordGroupStyle}>
           <ButtonGroup
             alignment="end"
             ariaLabel="A group of buttons"
@@ -281,31 +271,20 @@ export default function AddAnimals() {
           isDismissable
           isOpen={isDialogOpen}
           onOpenChange={handleDialogClose}
+          style={{ width: '700px' }}
         >
           <Dialog
             isCloseable
             role="dialog"
             aria-labelledby="add-animal-dialog"
           >
-            <div
-              style={{
-                padding: '1rem',
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: '700',
-                  fontSize: '1.25rem',
-                }}
-              >
-                {isEditingForm ? 'Edit animal' : 'Add animal'}
-              </span>
+            <div css={modalPaddingStyle}>
+              <span css={modalHeaderStyle}>{isEditingForm ? 'Edit animal' : 'Add animal'}</span>
               <Divider
                 aria-hidden="true"
                 component="div"
                 css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
               />
-              <pre>{JSON.stringify(formData, null, 2)}</pre>
               <Form
                 css={formCss}
                 onSubmit={onSubmit}

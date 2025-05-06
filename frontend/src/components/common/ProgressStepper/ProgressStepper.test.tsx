@@ -9,7 +9,6 @@ const mockUseAppService = jest.mocked(useAppService);
 describe('ProgressStepper tests', () => {
   test('Animal step absent when showAnimalsStep is false', () => {
     mockUseAppService.mockImplementation(() => ({
-      setProgressStep: () => {},
       setNMPFile: () => Promise.resolve(),
       setShowAnimalsStep: () => {},
       state: { nmpFile: '', step: '', showAnimalsStep: false },
@@ -21,7 +20,6 @@ describe('ProgressStepper tests', () => {
 
   test('Animal step present when showAnimalsStep is true', () => {
     mockUseAppService.mockImplementation(() => ({
-      setProgressStep: () => {},
       setNMPFile: () => Promise.resolve(),
       setShowAnimalsStep: () => {},
       state: { nmpFile: '', step: '', showAnimalsStep: true },

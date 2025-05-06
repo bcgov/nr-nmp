@@ -21,7 +21,7 @@ export default function BeefCattle({
 }) {
   const apiCache = useContext(APICacheContext);
   const [, Modal] = useState<BeefCattleSubtype[]>([]);
-  const [subFormData, setSubFormData] = useState<BeefCattleData>(formData);
+  const [localFormData, setLocalFormData] = useState<BeefCattleData>(formData);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>();
 
@@ -57,7 +57,7 @@ export default function BeefCattle({
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
-    setSubFormData((prev) => {
+    setLocalFormData((prev) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
@@ -74,7 +74,7 @@ export default function BeefCattle({
             isRequired
             label="Cattle Type"
             placeholder="Select a cattle type"
-            selectedKey={subFormData?.subtype}
+            selectedKey={localFormData?.subtype}
             items={subtypeOptions}
             onSelectionChange={(e: any) => {
               handleInputChange('subtype', e?.toString());
@@ -87,7 +87,7 @@ export default function BeefCattle({
             label="Average Animal Number on Farm"
             type="number"
             name="animalsPerFarm"
-            value={subFormData?.animalsPerFarm?.toString()}
+            value={localFormData?.animalsPerFarm?.toString()}
             onChange={(e: any) => {
               handleInputChange('animalsPerFarm', e);
             }}
@@ -109,7 +109,7 @@ export default function BeefCattle({
               type="number"
               name="daysCollected"
               size="small"
-              value={subFormData?.daysCollected?.toString()}
+              value={localFormData?.daysCollected?.toString()}
               onChange={(e: any) => {
                 handleInputChange('daysCollected', e);
               }}

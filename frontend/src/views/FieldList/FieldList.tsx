@@ -20,9 +20,12 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import {
+  addRecordGroupStyle,
   customTableStyle,
   formCss,
   formGridBreakpoints,
+  modalPaddingStyle,
+  modalHeaderStyle,
   tableActionButtonCss,
 } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
@@ -50,7 +53,7 @@ const manureOptions = [
 ];
 
 export default function FieldList() {
-  const { state, setNMPFile, setProgressStep } = useAppService();
+  const { state, setNMPFile } = useAppService();
   const [formData, setFormData] = useState<tempNMPFileFieldData>(initialFieldFormData);
   const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -67,11 +70,6 @@ export default function FieldList() {
       id: index.toString(),
     })),
   );
-
-  useEffect(() => {
-    setProgressStep(3);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
@@ -187,19 +185,7 @@ export default function FieldList() {
       <AppTitle />
       <PageTitle title="Field Information" />
       <>
-        <div
-          css={{
-            '.bcds-ButtonGroup': {
-              overflow: 'visible',
-              height: '0rem',
-              '> button': {
-                position: 'relative',
-                bottom: '-0.25rem',
-                zIndex: '10',
-              },
-            },
-          }}
-        >
+        <div css={addRecordGroupStyle}>
           <ButtonGroup
             alignment="end"
             ariaLabel="A group of buttons"
@@ -225,19 +211,8 @@ export default function FieldList() {
             isCloseable
             role="dialog"
           >
-            <div
-              style={{
-                padding: '1rem',
-              }}
-            >
-              <span
-                style={{
-                  fontWeight: '700',
-                  fontSize: '1.25rem',
-                }}
-              >
-                {isEditingForm ? 'Edit animal' : 'Add animal'}
-              </span>
+            <div css={modalPaddingStyle}>
+              <span css={modalHeaderStyle}>{isEditingForm ? 'Edit field' : 'Add field'}</span>
               <Divider
                 aria-hidden="true"
                 component="div"

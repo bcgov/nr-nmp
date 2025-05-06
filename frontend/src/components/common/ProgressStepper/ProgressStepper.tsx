@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -13,6 +14,8 @@ import {
   FARM_INFORMATION,
   FIELD_LIST,
   LANDING_PAGE,
+  MANURE_IMPORTS,
+  NUTRIENT_ANALYSIS,
   SOIL_TESTS,
 } from '@/constants/RouteConstants';
 
@@ -39,6 +42,7 @@ const stepsWithoutAnimals = [
 
 export default function HorizontalLinearAlternativeLabelStepper({ step }: ProgressStepperProps) {
   const { state } = useAppService();
+  const { pathname } = useLocation();
 
   const displayAnimalsStep = useCallback(() => {
     if (state.showAnimalsStep) {
@@ -48,49 +52,25 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
   }, [state.showAnimalsStep]);
 
   const displayActiveStep = useCallback(() => {
-    let stepNumber = 0;
-    if (state.showAnimalsStep) {
-      switch (step) {
-        case LANDING_PAGE:
-          break;
-        case FARM_INFORMATION:
-          stepNumber = 1;
-          break;
-        case ADD_ANIMALS:
-          stepNumber = 2;
-          break;
-        case FIELD_LIST:
-        case SOIL_TESTS:
-        case CROPS:
-          stepNumber = 3;
-          break;
-        case CALCULATE_NUTRIENTS:
-          stepNumber = 4;
-          break;
-        default:
-          break;
-      }
-    } else {
-      switch (step) {
-        case LANDING_PAGE:
-          break;
-        case FARM_INFORMATION:
-          stepNumber = 1;
-          break;
-        case FIELD_LIST:
-        case SOIL_TESTS:
-        case CROPS:
-          stepNumber = 2;
-          break;
-        case CALCULATE_NUTRIENTS:
-          stepNumber = 3;
-          break;
-        default:
-          break;
-      }
+    const animalStepIncrease = state.showAnimalsStep ? 1 : 0;
+
+    switch (pathname) {
+      case LANDING_PAGE:
+        return 0;
+      case FARM_INFORMATION:
+        return 1;
+      case ADD_ANIMALS:
+      case MANURE_IMPORTS:
+      case NUTRIENT_ANALYSIS:
+        return 2;
+      case FIELD_LIST:
+      case SOIL_TESTS:
+      case CROPS:
+        return 2 + animalStepIncrease;
+      case CALCULATE_NUTRIENTS:
+        return 3 + animalStepIncrease;
     }
-    return stepNumber;
-  }, [step, state.showAnimalsStep]);
+  }, [pathname, state.showAnimalsStep]);
 
   return (
     <Box

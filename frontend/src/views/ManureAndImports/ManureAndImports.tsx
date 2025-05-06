@@ -46,7 +46,7 @@ const manureTypeOptions = [
 ];
 
 export default function ManureAndImports() {
-  const { state, setNMPFile, setProgressStep } = useAppService();
+  const { state, setNMPFile } = useAppService();
   const parsedFile: NMPFile = useMemo(() => {
     if (state.nmpFile) {
       return JSON.parse(state.nmpFile);
@@ -281,11 +281,6 @@ export default function ManureAndImports() {
           setSolidManureDropdownOptions(data);
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    setProgressStep(4);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

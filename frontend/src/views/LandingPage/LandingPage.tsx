@@ -12,7 +12,7 @@ import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import { LANDING_PAGE } from '@/constants/RouteConstants';
 
 export default function LandingPage() {
-  const { setNMPFile, setProgressStep } = useAppService();
+  const { setNMPFile } = useAppService();
   const navigate = useNavigate();
 
   const handleUpload = () => {
@@ -43,11 +43,6 @@ export default function LandingPage() {
     deleteLocalStorageKey(constants.NMP_FILE_KEY);
     navigate('/farm-information');
   };
-
-  useEffect(() => {
-    setProgressStep(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <StyledContent>
