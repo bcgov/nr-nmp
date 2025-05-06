@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "dom", "ES2015"],
+    "types": ["@emotion/react/types/css-prop", "node", "react", "react-dom", "typography", "cypress"],
+    "baseUrl": ".",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "paths": {
+      "@": ["../src"],
+      "@/*": ["../src/*"]
+    }
+  },
+  "include": ["**/**.ts", "**/**.tsx", "../cypress.config.ts"]
+}
