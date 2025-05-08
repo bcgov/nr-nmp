@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useMemo, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -30,6 +30,7 @@ import {
   ListItemContainer,
   GeneratedListItemContainer,
   GeneratedHeader,
+  StyledContent,
 } from './manureAndImports.styles';
 import useAppService from '@/services/app/useAppService';
 import ViewCard from '@/components/common/ViewCard/ViewCard';
@@ -38,6 +39,28 @@ import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { DAIRY_COW_ID, MILKING_COW_ID } from '../AddAnimals/types';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '../AddAnimals/utils';
+import { FARM_INFORMATION, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import {
+  Button as ButtonGov,
+  ButtonGroup as ButtonGovGroup,
+  Dialog as DialogGov,
+  Modal as ModalGov,
+  Form,
+  Select,
+} from '@bcgov/design-system-react-components';
+
+import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import {
+  addRecordGroupStyle,
+  customTableStyle,
+  formCss,
+  modalHeaderStyle,
+  modalPaddingStyle,
+  tableActionButtonCss,
+} from '@/common.styles';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 const manureTypeOptions = [
   { label: 'Select', value: 0 },
@@ -46,7 +69,7 @@ const manureTypeOptions = [
 ];
 
 export default function ManureAndImports() {
-  const { state, setNMPFile } = useAppService();
+  const { state, setNMPFile, setShowAnimalsStep } = useAppService();
   const parsedFile: NMPFile = useMemo(() => {
     if (state.nmpFile) {
       return JSON.parse(state.nmpFile);
@@ -265,11 +288,15 @@ export default function ManureAndImports() {
   };
 
   useEffect(() => {
+    // Load animals step to progress stepper
+    setShowAnimalsStep(true);
+
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           const { data } = response;
+          console.log('liquid', data);
           setLiquidManureDropdownOptions(data);
         }
       });
@@ -278,179 +305,430 @@ export default function ManureAndImports() {
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           const { data } = response;
+          console.log('solid', data);
+
           setSolidManureDropdownOptions(data);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <ViewCard
-      heading="Manure and Imports"
-      height="700px"
-      handlePrevious={handlePrevious}
-      handleNext={handleNext}
-    >
-      {generatedManures.length > 0 && (
-        <>
-          <span>Manure Generated</span>
-          <ContentWrapper hasManure>
-            <GeneratedHeader>
-              <Column>Animal Sub Type</Column>
-              <Column align="right">Amount collected per year</Column>
-            </GeneratedHeader>
-            {generatedManures.map((manure) => (
-              <GeneratedListItemContainer key={manure.UniqueMaterialName}>
-                <ListItem>{manure.UniqueMaterialName}</ListItem>
-                <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
-              </GeneratedListItemContainer>
-            ))}
-          </ContentWrapper>
-          <hr className="solid" />
-          <span>Manure/Compost Imported</span>
-        </>
-      )}
-      <ButtonContainer hasManure={manures.length > 0}>
-        <Button
-          text="Add Manure"
-          handleClick={handleAddManure}
-          aria-label="Add Imported Manure"
-          variant="primary"
-          size="sm"
-          disabled={false}
-        />
-      </ButtonContainer>
-      <ContentWrapper hasManure={manures.length > 0}>
-        {manures.length > 0 && (
-          <Header>
-            <Column>Material Type</Column>
-            <Column>Annual Amount (Volume)</Column>
-            <Column>Annual Amount (Weight)</Column>
-            <Column>Stored</Column>
-            <Column align="right">Actions</Column>
-          </Header>
-        )}
-        {manures.map((manure, index) => (
-          <ListItemContainer key={manure.UniqueMaterialName}>
-            <ListItem>
-              {manure.UniqueMaterialName} {manure.ManureTypeName === '1' ? '(Liquid)' : '(Solid)'}
-            </ListItem>
-            <ListItem>{manure.AnnualAmountDisplayVolume}</ListItem>
-            <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
-            <ListItem>{manure.IsMaterialStored ? 'Yes' : 'No'}</ListItem>
-            <ListItem align="right">
-              <button
-                type="button"
-                onClick={() => handleEdit(index)}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDelete(index)}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </ListItem>
-          </ListItemContainer>
-        ))}
-      </ContentWrapper>
-      <Modal
-        isVisible={isModalVisible}
-        title={editIndex !== null ? 'Edit Field' : 'Add Field'}
-        onClose={() => setIsModalVisible(false)}
-        footer={
-          <>
-            <ButtonWrapper>
-              <Button
-                text="Cancel"
-                handleClick={() => setIsModalVisible(false)}
-                aria-label="Cancel"
-                variant="secondary"
-                size="sm"
-                disabled={false}
-              />
-            </ButtonWrapper>
-            <ButtonWrapper>
-              <Button
-                text="Submit"
-                handleClick={handleSubmit}
-                aria-label="Submit"
-                variant="primary"
-                size="sm"
-                disabled={false}
-              />
-            </ButtonWrapper>
-          </>
-        }
-      >
-        {errors.FieldName && <ErrorText>{errors.FieldName}</ErrorText>}
-        <InputField
-          label="Material Name"
-          type="text"
-          name="UniqueMaterialName"
-          value={manureFormData.UniqueMaterialName || ''}
-          onChange={handleChange}
-        />
-        {errors.ManureTypeName && <ErrorText>{errors.ManureTypeName}</ErrorText>}
-        <Dropdown
-          label="Manure Type"
-          name="ManureTypeName"
-          value={manureFormData.ManureTypeName || ''}
-          options={manureTypeOptions}
-          onChange={handleChange}
-        />
-        {errors.AnnualAmount && <ErrorText>{errors.AnnualAmount}</ErrorText>}
-        <InputField
-          label="Amount per year"
-          type="text"
-          name="AnnualAmount"
-          value={(manureFormData.AnnualAmount ?? 0).toString() || ''}
-          onChange={handleChange}
-        />
-        {manureFormData.ManureTypeName === '1' ? (
-          <>
-            {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
-            <Dropdown
-              label="Units"
-              name="Units"
-              value={manureFormData.Units || ''}
-              options={liquidManureDropdownOptions.map((manure) => ({
-                value: manure.inputunit ?? 0,
-                label: manure.inputunitname ?? '',
-              }))}
-              onChange={handleChange}
-            />
-          </>
-        ) : (
-          <>
-            {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-            <Dropdown
-              label="Units"
-              name="Units"
-              value={manureFormData.Units || ''}
-              options={solidManureDropdownOptions.map((manure) => ({
-                value: manure.inputunit ?? 0,
-                label: manure.inputunitname ?? '',
-              }))}
-              onChange={handleChange}
-            />
-          </>
-        )}
-        {manureFormData.ManureTypeName === '2' && (
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    // setIsEditingForm(false);
+    // setFormData(initialEmptyData);
+    // setAnimalForm(null);
+  };
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    // Prevent default browser page refresh.
+    e.preventDefault();
+  };
+
+  const handleEditRow = (e: any) => {
+    console.log('handleEditRow', e);
+  };
+
+  const handleDeleteRow = (e: any) => {
+    console.log('handleEditRow', e);
+  };
+
+  const columnsAnimalManure: GridColDef[] = useMemo(
+    () => [
+      {
+        field: 'animalId',
+        headerName: 'Animal Sub Type',
+        width: 200,
+        minWidth: 150,
+        maxWidth: 300,
+      },
+      {
+        field: 'manureData',
+        headerName: 'Amount Collected Per Year',
+        width: 150,
+        minWidth: 125,
+        maxWidth: 300,
+      },
+      {
+        field: 'date',
+        headerName: 'Date',
+        width: 150,
+        minWidth: 125,
+        maxWidth: 300,
+      },
+      {
+        field: 'actions',
+        headerName: 'Actions',
+        width: 120,
+        renderCell: (row: any) => (
           <>
-            {errors.Moisture && <ErrorText>{errors.Moisture}</ErrorText>}
-            <InputField
-              label="Moisture (%)"
-              type="text"
-              name="Moisture"
-              value={manureFormData.Moisture || ''}
-              onChange={handleChange}
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => handleEditRow(row)}
+              icon={faEdit}
+              aria-label="Edit"
+            />
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => handleDeleteRow(row)}
+              icon={faTrash}
+              aria-label="Delete"
             />
           </>
+        ),
+        sortable: false,
+        resizable: false,
+      },
+    ],
+    [],
+  );
+
+  const columnsImportedManure: GridColDef[] = useMemo(
+    () => [
+      {
+        field: 'animalId',
+        headerName: 'Material Type',
+        width: 200,
+        minWidth: 150,
+        maxWidth: 300,
+      },
+      {
+        field: 'manureData',
+        headerName: 'Annual Amount (Vol)',
+        width: 150,
+        minWidth: 125,
+        maxWidth: 300,
+      },
+      {
+        field: 'date',
+        headerName: 'Animal Amount (Weight)',
+        width: 150,
+        minWidth: 125,
+        maxWidth: 300,
+      },
+      {
+        field: 'stored',
+        headerName: 'Stored',
+        width: 150,
+        minWidth: 125,
+        maxWidth: 300,
+      },
+      {
+        field: 'actions',
+        headerName: 'Actions',
+        width: 120,
+        renderCell: (row: any) => (
+          <>
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => handleEditRow(row)}
+              icon={faEdit}
+              aria-label="Edit"
+            />
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => handleDeleteRow(row)}
+              icon={faTrash}
+              aria-label="Delete"
+            />
+          </>
+        ),
+        sortable: false,
+        resizable: false,
+      },
+    ],
+    [],
+  );
+
+  return (
+    <>
+      <StyledContent>
+        <ProgressStepper step={FIELD_LIST} />
+        <AppTitle />
+        <PageTitle title="Manure & Imports" />
+
+        <>
+          <div css={addRecordGroupStyle}>
+            <ButtonGovGroup
+              alignment="end"
+              ariaLabel="A group of buttons"
+              orientation="horizontal"
+            >
+              <ButtonGov
+                size="medium"
+                aria-label="Add Animal"
+                onPress={() => setIsDialogOpen(true)}
+                variant="secondary"
+              >
+                Add Animal
+              </ButtonGov>
+            </ButtonGovGroup>
+          </div>
+          <ModalGov
+            isDismissable
+            isOpen={isDialogOpen}
+            onOpenChange={handleDialogClose}
+          >
+            <DialogGov
+              isCloseable
+              role="dialog"
+              aria-labelledby="add-animal-dialog"
+            >
+              <div css={modalPaddingStyle}>
+                <span css={modalHeaderStyle}>Add manure</span>
+                <Divider
+                  aria-hidden="true"
+                  component="div"
+                  css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
+                />
+                <Form
+                  css={formCss}
+                  onSubmit={onSubmit}
+                >
+                  <Grid>
+                    <Grid size={6}>
+                      {/* dynamically renders the form fields depending on the users choice of animal in the select below */}
+                      <Select
+                        isRequired
+                        name="animalId"
+                        items={[
+                          { id: 1, label: 'test1' },
+                          { id: 2, label: 'test2' },
+                        ]}
+                        label="Animal Type"
+                        placeholder="Select Animal Type"
+                        // selectedKey={formData.animalId}
+                        onSelectionChange={(e: any) => {
+                          console.log(e);
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Divider
+                    aria-hidden="true"
+                    component="div"
+                    css={{ marginTop: '1rem', marginBottom: '1rem' }}
+                  />
+                  <ButtonGovGroup
+                    alignment="end"
+                    orientation="horizontal"
+                  >
+                    <ButtonGov
+                      type="reset"
+                      variant="secondary"
+                      onPress={handleDialogClose}
+                      aria-label="reset"
+                    >
+                      Cancel
+                    </ButtonGov>
+                    {/* can we use the components save function? */}
+                    <ButtonGov
+                      type="submit"
+                      variant="primary"
+                      aria-label="submit"
+                    >
+                      Confirm
+                    </ButtonGov>
+                  </ButtonGovGroup>
+                </Form>
+              </div>
+            </DialogGov>
+          </ModalGov>
+          <TabsMaterial
+            activeTab={1}
+            tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+          />
+        </>
+        <DataGrid
+          sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+          rows={[]}
+          columns={columnsAnimalManure}
+          getRowId={(row: any) => row.id}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          hideFooterPagination
+          hideFooter
+        />
+        <DataGrid
+          sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+          rows={[]}
+          columns={columnsImportedManure}
+          getRowId={(row: any) => row.id}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          hideFooterPagination
+          hideFooter
+        />
+      </StyledContent>
+      <ViewCard
+        heading="Manure and Imports"
+        height="700px"
+        handlePrevious={handlePrevious}
+        handleNext={handleNext}
+      >
+        {generatedManures.length > 0 && (
+          <>
+            <span>Manure Generated</span>
+            <ContentWrapper hasManure>
+              <GeneratedHeader>
+                <Column>Animal Sub Type</Column>
+                <Column align="right">Amount collected per year</Column>
+              </GeneratedHeader>
+              {generatedManures.map((manure) => (
+                <GeneratedListItemContainer key={manure.UniqueMaterialName}>
+                  <ListItem>{manure.UniqueMaterialName}</ListItem>
+                  <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
+                </GeneratedListItemContainer>
+              ))}
+            </ContentWrapper>
+            <hr className="solid" />
+            <span>Manure/Compost Imported</span>
+          </>
         )}
-      </Modal>
-    </ViewCard>
+        <ButtonContainer hasManure={manures.length > 0}>
+          <Button
+            text="Add Manure"
+            handleClick={handleAddManure}
+            aria-label="Add Imported Manure"
+            variant="primary"
+            size="sm"
+            disabled={false}
+          />
+        </ButtonContainer>
+        <ContentWrapper hasManure={manures.length > 0}>
+          {manures.length > 0 && (
+            <Header>
+              <Column>Material Type</Column>
+              <Column>Annual Amount (Volume)</Column>
+              <Column>Annual Amount (Weight)</Column>
+              <Column>Stored</Column>
+              <Column align="right">Actions</Column>
+            </Header>
+          )}
+          {manures.map((manure, index) => (
+            <ListItemContainer key={manure.UniqueMaterialName}>
+              <ListItem>
+                {manure.UniqueMaterialName} {manure.ManureTypeName === '1' ? '(Liquid)' : '(Solid)'}
+              </ListItem>
+              <ListItem>{manure.AnnualAmountDisplayVolume}</ListItem>
+              <ListItem>{manure.AnnualAmountDisplayWeight}</ListItem>
+              <ListItem>{manure.IsMaterialStored ? 'Yes' : 'No'}</ListItem>
+              <ListItem align="right">
+                <button
+                  type="button"
+                  onClick={() => handleEdit(index)}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(index)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </ListItem>
+            </ListItemContainer>
+          ))}
+        </ContentWrapper>
+        <Modal
+          isVisible={isModalVisible}
+          title={editIndex !== null ? 'Edit Field' : 'Add Field'}
+          onClose={() => setIsModalVisible(false)}
+          footer={
+            <>
+              <ButtonWrapper>
+                <Button
+                  text="Cancel"
+                  handleClick={() => setIsModalVisible(false)}
+                  aria-label="Cancel"
+                  variant="secondary"
+                  size="sm"
+                  disabled={false}
+                />
+              </ButtonWrapper>
+              <ButtonWrapper>
+                <Button
+                  text="Submit"
+                  handleClick={handleSubmit}
+                  aria-label="Submit"
+                  variant="primary"
+                  size="sm"
+                  disabled={false}
+                />
+              </ButtonWrapper>
+            </>
+          }
+        >
+          {errors.FieldName && <ErrorText>{errors.FieldName}</ErrorText>}
+          <InputField
+            label="Material Name"
+            type="text"
+            name="UniqueMaterialName"
+            value={manureFormData.UniqueMaterialName || ''}
+            onChange={handleChange}
+          />
+          {errors.ManureTypeName && <ErrorText>{errors.ManureTypeName}</ErrorText>}
+          <Dropdown
+            label="Manure Type"
+            name="ManureTypeName"
+            value={manureFormData.ManureTypeName || ''}
+            options={manureTypeOptions}
+            onChange={handleChange}
+          />
+          {errors.AnnualAmount && <ErrorText>{errors.AnnualAmount}</ErrorText>}
+          <InputField
+            label="Amount per year"
+            type="text"
+            name="AnnualAmount"
+            value={(manureFormData.AnnualAmount ?? 0).toString() || ''}
+            onChange={handleChange}
+          />
+          {manureFormData.ManureTypeName === '1' ? (
+            <>
+              {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
+              <Dropdown
+                label="Units"
+                name="Units"
+                value={manureFormData.Units || ''}
+                options={liquidManureDropdownOptions.map((manure) => ({
+                  value: manure.inputunit ?? 0,
+                  label: manure.inputunitname ?? '',
+                }))}
+                onChange={handleChange}
+              />
+            </>
+          ) : (
+            <>
+              {errors.Units && <ErrorText>{errors.Units}</ErrorText>}
+
+              <Dropdown
+                label="Units"
+                name="Units"
+                value={manureFormData.Units || ''}
+                options={solidManureDropdownOptions.map((manure) => ({
+                  value: manure.inputunit ?? 0,
+                  label: manure.inputunitname ?? '',
+                }))}
+                onChange={handleChange}
+              />
+            </>
+          )}
+          {manureFormData.ManureTypeName === '2' && (
+            <>
+              {errors.Moisture && <ErrorText>{errors.Moisture}</ErrorText>}
+              <InputField
+                label="Moisture (%)"
+                type="text"
+                name="Moisture"
+                value={manureFormData.Moisture || ''}
+                onChange={handleChange}
+              />
+            </>
+          )}
+        </Modal>
+      </ViewCard>
+    </>
   );
 }
