@@ -14,7 +14,7 @@ export default defineConfig({
     },
     setupNodeEvents(on) {
       LogToOutput.install(on);
-      on('file:preprocessor', vitePreprocessor({ configFile: './vite.config.ts' }));
+      // on('file:preprocessor', vitePreprocessor({ configFile: './vite.config.ts' }));
     }
   },
 });
