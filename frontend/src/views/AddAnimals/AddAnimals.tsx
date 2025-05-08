@@ -113,7 +113,6 @@ export default function AddAnimals() {
     }
   };
 
-  // fix manure showing as [object]
   const columns: GridColDef[] = useMemo(
     () => [
       {
