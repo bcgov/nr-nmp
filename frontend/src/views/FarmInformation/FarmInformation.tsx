@@ -102,6 +102,7 @@ export default function FarmInformation() {
     }
   }, [state.nmpFile]);
 
+
   useEffect(() => {
     // No error handling yet as I'm unsure how NMP is supposed to handle errors
     // If an endpoint like this fails, I think we need to display a message like
@@ -123,7 +124,7 @@ export default function FarmInformation() {
         setRawAnimalNames(animalDict);
       }
     });
-
+    /*
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
       const regions = (data as { id: number; name: string }[]).map((row) => ({
@@ -132,9 +133,11 @@ export default function FarmInformation() {
       }));
       setRegionOptions(regions as Array<SelectOption>);
     });
+    */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /*
   useEffect(() => {
     const region = formData.FarmRegion;
     if (region === 0) {
@@ -151,6 +154,7 @@ export default function FarmInformation() {
       setSubregionOptions(subregions as Array<SelectOption>);
     });
   }, [formData.FarmRegion, apiCache]);
+  */
 
   const animalCheckboxes = useMemo(() => {
     if (Object.keys(rawAnimalNames).length === 0) {
@@ -243,7 +247,7 @@ export default function FarmInformation() {
               name="FarmName"
               value={formData?.FarmName}
               onInput={handleInputChange}
-              id='farmName'
+              id="farmName"
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -259,6 +263,7 @@ export default function FarmInformation() {
               items={yearOptions}
               selectedKey={formData?.Year}
               onSelectionChange={(e) => handleChange('Year', e)}
+              id="year"
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -301,6 +306,7 @@ export default function FarmInformation() {
                 handleChange('HasHorticulturalCrops', b);
               }}
               orientation="horizontal"
+              id="hasHorticulturalCrops"
             />
             <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
               <Checkbox
@@ -332,6 +338,7 @@ export default function FarmInformation() {
                   }));
               }}
               orientation="horizontal"
+              id='hasAnimals'
             />
             <CheckboxGroup
               css={

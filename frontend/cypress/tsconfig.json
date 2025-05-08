@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["es5", "dom", "ES2015"],
+    "esModuleInterop": true,
     "types": ["@emotion/react/types/css-prop", "node", "react", "react-dom", "typography", "cypress"],
     "baseUrl": ".",
     "allowJs": true,

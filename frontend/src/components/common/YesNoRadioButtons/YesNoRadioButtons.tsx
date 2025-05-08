@@ -5,6 +5,7 @@ interface YesNoRadioButtonProps {
   value: boolean;
   onChange: (value: boolean) => void;
   orientation?: 'vertical' | 'horizontal';
+  id?: string;
 }
 
 function YesNoRadioButtons({
@@ -12,6 +13,7 @@ function YesNoRadioButtons({
   value,
   onChange,
   orientation = 'vertical',
+  id,
 }: YesNoRadioButtonProps) {
   return (
     <RadioGroup
@@ -21,6 +23,7 @@ function YesNoRadioButtons({
         onChange(val === 'true');
       }}
       label={text}
+      id={id}
     >
       <Radio value="true">Yes</Radio>
       <Radio value="false">No</Radio>

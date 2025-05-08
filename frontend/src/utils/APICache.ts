@@ -10,6 +10,7 @@ class APICache {
       return cachedValue;
     }
     const response = await axios.get(`${env.VITE_BACKEND_URL}/${endpoint}`);
+    throw new Error(response.data);
     this.endpointCache[endpoint] = response;
     return response;
   }
