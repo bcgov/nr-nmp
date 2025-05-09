@@ -23,6 +23,7 @@ import {
   formGridBreakpoints,
   modalDividerStyle,
   modalHeaderStyle,
+  modalPaddingStyle,
   tableActionButtonCss,
 } from '../../common.styles';
 import {
@@ -41,7 +42,7 @@ import { initFields, saveFieldsToFile } from '@/utils/utils';
 import { CROPS, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
 
 export default function SoilTests() {
-  const { state, setNMPFile, setProgressStep } = useAppService();
+  const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
@@ -170,10 +171,6 @@ export default function SoilTests() {
     });
   }, []);
 
-  useEffect(() => {
-    setProgressStep(3);
-  }, []);
-
   const columns: GridColDef[] = useMemo(
     () => [
       { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
@@ -291,11 +288,7 @@ export default function SoilTests() {
           isCloseable
           role="dialog"
         >
-          <div
-            style={{
-              padding: '1rem',
-            }}
-          >
+          <div css={modalPaddingStyle}>
             <span css={modalHeaderStyle}>Add Field</span>
             <Divider
               aria-hidden="true"

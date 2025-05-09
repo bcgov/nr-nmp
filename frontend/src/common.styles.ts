@@ -114,3 +114,19 @@ export const modalHeaderStyle = css({
 });
 
 export const modalDividerStyle = css({ marginTop: '0.5rem', marginBottom: '0.5rem' });
+
+export const addRecordGroupStyle = css({
+  '.bcds-ButtonGroup': {
+    overflow: 'visible',
+    height: '0rem',
+    '> button': {
+      position: 'relative',
+      bottom: '-0.25rem',
+      zIndex: '10',
+    },
+  },
+})
+
+export const modalPaddingStyle = css({
+  padding: '1rem'
+});

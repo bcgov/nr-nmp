@@ -35,7 +35,7 @@ import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
 import ManureType from '@/types/ManureType';
 
 export default function NutrientAnalysis() {
-  const { state, setNMPFile, setProgressStep } = useAppService();
+  const { state, setNMPFile } = useAppService();
   const parsedFile: NMPFile = useMemo(() => {
     if (state.nmpFile) {
       return JSON.parse(state.nmpFile);
@@ -190,11 +190,6 @@ export default function NutrientAnalysis() {
       }
     });
   }, [apiCache]);
-
-  useEffect(() => {
-    setProgressStep(4);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <ViewCard

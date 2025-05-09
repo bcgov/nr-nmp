@@ -38,7 +38,7 @@ import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioB
 import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 
 export default function FarmInformation() {
-  const { state, setNMPFile, setProgressStep, setShowAnimalsStep } = useAppService();
+  const { state, setNMPFile, setShowAnimalsStep } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
@@ -71,11 +71,6 @@ export default function FarmInformation() {
     }
 
     return yearArray;
-  }, []);
-
-  useEffect(() => {
-    setProgressStep(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Flagging for potential state issues if the state.nmpFile object can change
@@ -243,7 +238,7 @@ export default function FarmInformation() {
               name="FarmName"
               value={formData?.FarmName}
               onInput={handleInputChange}
-              id='farmName'
+              id="farmName"
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

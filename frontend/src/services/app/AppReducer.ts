@@ -1,6 +1,6 @@
 import AppActionType from './AppActions';
 
-const { SET_NMP_FILE, SET_PROGRESS_STEP, SET_SHOW_ANIMALS_STEP } = AppActionType;
+const { SET_NMP_FILE, SET_SHOW_ANIMALS_STEP } = AppActionType;
 
 export type AppAction = {
   type: AppActionType;
@@ -24,8 +24,6 @@ export const reducer = (state: object, action: AppAction): object => {
   switch (action.type) {
     case SET_NMP_FILE:
       return { ...state, nmpFile: action.payload };
-    case SET_PROGRESS_STEP:
-      return { ...state, step: action.payload };
     case SET_SHOW_ANIMALS_STEP:
       return { ...state, showAnimalsStep: action.payload };
     default:

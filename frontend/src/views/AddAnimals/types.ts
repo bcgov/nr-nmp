@@ -11,13 +11,8 @@ export const initialBeefFormData: BeefCattleData = {
   animalId: '1',
   subtype: '',
   animalsPerFarm: undefined,
-  daysCollected: undefined,
+  daysCollected: 0,
   manureData: undefined,
-  date: new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }),
 };
 
 export const BEEF_COW_ID: string = '1';
@@ -40,7 +35,6 @@ export interface DairyCattleData {
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
     | { name: string; annualSolidManure: undefined; annualLiquidManure: number }
     | undefined;
-  date?: string;
 }
 
 export const initialDairyFormData: DairyCattleData = {
@@ -54,11 +48,6 @@ export const initialDairyFormData: DairyCattleData = {
   washWater: undefined,
   washWaterUnit: undefined,
   manureData: undefined,
-  date: new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }),
 };
 
 export interface EmptyData {
