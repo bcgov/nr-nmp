@@ -9,6 +9,7 @@ import {
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
   NMPFile,
+  SelectOption,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
@@ -61,6 +62,12 @@ import {
   tableActionButtonCss,
 } from '@/common.styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import ManureImportModal from './ManureImportModal';
+import { initAnimals } from '../AddAnimals/utils';
+
+import type { AnimalData } from '../AddAnimals/types';
+type tempAnimalData = AnimalData & { id?: string };
+type tempManureData = NMPFileImportedManureData & { id?: string };
 
 const manureTypeOptions = [
   { label: 'Select', value: 0 },
@@ -80,10 +87,18 @@ export default function ManureAndImports() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
+  const [animalList, setAnimalList] = useState<Array<tempAnimalData>>(
+    initAnimals(state).map((animalElement: AnimalData, index: number) => ({
+      ...animalElement,
+      id: index.toString(),
+    })),
+  );
+
+  const [cattleSubtypeList, setCattleSubtypeList] = useState<SelectOption[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [manures, setManures] = useState<NMPFileImportedManureData[]>(
+  const [manures, setManures] = useState<tempManureData[]>(
     parsedFile.years[0]?.ImportedManures || [],
   );
   const generatedManures: NMPFileGeneratedManureData[] = useMemo(() => {
@@ -250,7 +265,7 @@ export default function ManureAndImports() {
       setManures(updatedManures);
       setEditIndex(null);
     } else {
-      setManures([...manures, updatedManureFormData]);
+      setManures([...manures, { ...updatedManureFormData, id: manures.length.toString() ?? '0' }]);
     }
     setManureFormData(DefaultManureFormData);
     setIsModalVisible(false);
@@ -296,7 +311,6 @@ export default function ManureAndImports() {
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           const { data } = response;
-          console.log('liquid', data);
           setLiquidManureDropdownOptions(data);
         }
       });
@@ -305,11 +319,29 @@ export default function ManureAndImports() {
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           const { data } = response;
-          console.log('solid', data);
-
           setSolidManureDropdownOptions(data);
         }
       });
+
+    apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const subType: { id: string; label: string }[] = (
+          data as { id: number; name: string }[]
+        ).map((row) => ({ id: row.id.toString(), label: row.name }));
+        setCattleSubtypeList((prev) => [...prev, ...subType]);
+      }
+    });
+
+    apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const subType: { id: string; label: string }[] = (
+          data as { id: number; name: string }[]
+        ).map((row) => ({ id: row.id.toString(), label: row.name }));
+        setCattleSubtypeList((prev) => [...prev, ...subType]);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -339,47 +371,28 @@ export default function ManureAndImports() {
     () => [
       {
         field: 'animalId',
+        headerName: 'Animal Type',
+        width: 200,
+        minWidth: 150,
+        maxWidth: 300,
+        valueGetter: (param: string | number) => (param === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+      },
+      {
+        field: 'subtype',
         headerName: 'Animal Sub Type',
         width: 200,
         minWidth: 150,
         maxWidth: 300,
+        valueGetter: (param: string | number) => {
+          return cattleSubtypeList?.find((ele) => ele.id === param)?.label ?? param;
+        },
       },
       {
         field: 'manureData',
         headerName: 'Amount Collected Per Year',
-        width: 150,
+        width: 500,
         minWidth: 125,
-        maxWidth: 300,
-      },
-      {
-        field: 'date',
-        headerName: 'Date',
-        width: 150,
-        minWidth: 125,
-        maxWidth: 300,
-      },
-      {
-        field: 'actions',
-        headerName: 'Actions',
-        width: 120,
-        renderCell: (row: any) => (
-          <>
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleEditRow(row)}
-              icon={faEdit}
-              aria-label="Edit"
-            />
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleDeleteRow(row)}
-              icon={faTrash}
-              aria-label="Delete"
-            />
-          </>
-        ),
-        sortable: false,
-        resizable: false,
+        maxWidth: 500,
       },
     ],
     [],
@@ -458,92 +471,32 @@ export default function ManureAndImports() {
             >
               <ButtonGov
                 size="medium"
-                aria-label="Add Animal"
+                aria-label="Add manure"
                 onPress={() => setIsDialogOpen(true)}
                 variant="secondary"
               >
-                Add Animal
+                Add Manure
               </ButtonGov>
             </ButtonGovGroup>
           </div>
-          <ModalGov
-            isDismissable
+          <ManureImportModal
+            key={isDialogOpen.toString()}
+            initialModalData={manureFormData}
+            handleDialogClose={handleDialogClose}
+            handleSubmit={handleSubmit}
             isOpen={isDialogOpen}
             onOpenChange={handleDialogClose}
-          >
-            <DialogGov
-              isCloseable
-              role="dialog"
-              aria-labelledby="add-animal-dialog"
-            >
-              <div css={modalPaddingStyle}>
-                <span css={modalHeaderStyle}>Add manure</span>
-                <Divider
-                  aria-hidden="true"
-                  component="div"
-                  css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
-                />
-                <Form
-                  css={formCss}
-                  onSubmit={onSubmit}
-                >
-                  <Grid>
-                    <Grid size={6}>
-                      {/* dynamically renders the form fields depending on the users choice of animal in the select below */}
-                      <Select
-                        isRequired
-                        name="animalId"
-                        items={[
-                          { id: 1, label: 'test1' },
-                          { id: 2, label: 'test2' },
-                        ]}
-                        label="Animal Type"
-                        placeholder="Select Animal Type"
-                        // selectedKey={formData.animalId}
-                        onSelectionChange={(e: any) => {
-                          console.log(e);
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Divider
-                    aria-hidden="true"
-                    component="div"
-                    css={{ marginTop: '1rem', marginBottom: '1rem' }}
-                  />
-                  <ButtonGovGroup
-                    alignment="end"
-                    orientation="horizontal"
-                  >
-                    <ButtonGov
-                      type="reset"
-                      variant="secondary"
-                      onPress={handleDialogClose}
-                      aria-label="reset"
-                    >
-                      Cancel
-                    </ButtonGov>
-                    {/* can we use the components save function? */}
-                    <ButtonGov
-                      type="submit"
-                      variant="primary"
-                      aria-label="submit"
-                    >
-                      Confirm
-                    </ButtonGov>
-                  </ButtonGovGroup>
-                </Form>
-              </div>
-            </DialogGov>
-          </ModalGov>
+            isDismissable
+          />
           <TabsMaterial
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
           />
         </>
+        {/* <pre>{JSON.stringify(cattleSubtypeList, null, 2)}</pre> */}
         <DataGrid
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-          rows={[]}
+          rows={animalList}
           columns={columnsAnimalManure}
           getRowId={(row: any) => row.id}
           disableRowSelectionOnClick
@@ -553,7 +506,7 @@ export default function ManureAndImports() {
         />
         <DataGrid
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-          rows={[]}
+          rows={manures}
           columns={columnsImportedManure}
           getRowId={(row: any) => row.id}
           disableRowSelectionOnClick

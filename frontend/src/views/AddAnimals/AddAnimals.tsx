@@ -113,6 +113,7 @@ export default function AddAnimals() {
     }
   };
 
+  // Same columns are in ManureAndImports.tsx
   const columns: GridColDef[] = useMemo(
     () => [
       {
