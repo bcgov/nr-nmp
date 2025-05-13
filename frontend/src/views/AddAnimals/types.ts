@@ -11,7 +11,7 @@ export const initialBeefFormData: BeefCattleData = {
   animalId: '1',
   subtype: '',
   animalsPerFarm: undefined,
-  daysCollected: 0,
+  daysCollected: undefined,
   manureData: undefined,
 };
 
