@@ -245,8 +245,8 @@ coverage.xml
 cover/
 
 # Cypress downloads and screenshots
-cypress/downloads/
-cypress/screenshots/
+frontend/cypress/downloads/
+frontend/cypress/screenshots/
 
 # Translations
 *.mo

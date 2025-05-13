@@ -50,7 +50,7 @@
     "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react": "^4.3.4",
     "babel-jest": "^29.7.0",
-    "cypress": "^14.3.1",
+    "cypress": "^14.3.3",
     "cypress-log-to-output": "^1.1.2",
     "cypress-vite": "^1.6.0",
     "eslint": "^8.57.1",

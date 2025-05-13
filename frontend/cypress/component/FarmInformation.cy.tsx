@@ -4,9 +4,9 @@ import AppProvider from '@/context/AppProvider';
 
 describe('FarmInformation tests', () => {
   before(() => {
-    cy.intercept('GET', 'http://localhost:5173/__cypress/iframes/undefined/api/animals/', { statusCode: 200, body: { id: 1, name: 'Beef Cattle' } }).as('getAnimals');
-    cy.intercept('GET', 'http://localhost:5173/__cypress/iframes/undefined/api/regions/', { statusCode: 200, body: { id: 1, name: 'Bulkley-Nechako' } }).as('getRegions');
-    cy.intercept('GET', 'http://localhost:5173/__cypress/iframes/undefined/api/subregions/**', {statusCode: 200, body: { id: 1, name: 'Fort St. James' } }).as('getSubregions');
+    cy.intercept('GET', '/api/animals/', { statusCode: 200, body: { id: 1, name: 'Beef Cattle' } }).as('getAnimals');
+    cy.intercept('GET', '/api/regions/', { statusCode: 200, body: { id: 1, name: 'Bulkley-Nechako' } }).as('getRegions');
+    cy.intercept('GET', '/api/subregions/**', {statusCode: 200, body: { id: 1, name: 'Fort St. James' } }).as('getSubregions');
   });
 
   it('Farm Name allows any input', () => {

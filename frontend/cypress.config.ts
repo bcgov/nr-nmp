@@ -2,8 +2,7 @@
 import { defineConfig } from 'cypress';
 // @ts-ignore
 import * as LogToOutput from 'cypress-log-to-output/src/log-to-output';
-import { setupWorker } from 'msw/browser';
-import vitePreprocessor from 'cypress-vite';
+import defineViteConfig from './vite.config';
 
 export default defineConfig({
   component: {
@@ -11,10 +10,10 @@ export default defineConfig({
     devServer: {
       framework: 'react',
       bundler: 'vite',
+      viteConfig: defineViteConfig({ command: 'serve', mode: '' }), // Should do the same thing as running 'npx vite serve' locally
     },
     setupNodeEvents(on) {
       LogToOutput.install(on);
-      // on('file:preprocessor', vitePreprocessor({ configFile: './vite.config.ts' }));
     }
   },
 });
