@@ -1,8 +1,7 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { ComponentProps, FormEvent, Key, useContext, useState } from 'react';
-import { APICacheContext } from '@/context/APICacheContext';
+import { ComponentProps, FormEvent, Key, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
