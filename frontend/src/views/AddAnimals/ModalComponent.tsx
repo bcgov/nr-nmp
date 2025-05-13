@@ -1,9 +1,8 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { ComponentProps, FormEvent, Key, useContext, useEffect, useState } from 'react';
+import { ComponentProps, FormEvent, Key, useContext, useState } from 'react';
 import { APICacheContext } from '@/context/APICacheContext';
-import manureTypeOptions from '@/constants/ManureTypeOptions';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -13,15 +12,13 @@ import {
   Modal,
   Form,
   Select,
-  Checkbox,
-  TextField,
 } from '@bcgov/design-system-react-components';
-import {
-  formCss,
-  modalHeaderStyle,
-  modalPaddingStyle,
-  formGridBreakpoints,
-} from '../../common.styles';
+import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.styles';
+{
+  /* Importing additional animal form subcomponents here */
+}
+import BeefCattle from './AnimalFormComponents/BeefCattle';
+import DairyCattle from './AnimalFormComponents/DairyCattle';
 import { AnimalData, initialEmptyData } from './types';
 
 // need a row id
@@ -38,70 +35,13 @@ type ModalComponentProps = {
   handleSubmit: (formData: tempAnimalData) => void;
 };
 
-interface DairyCattleBreed {
-  id: number;
-  breedname: string;
-  breedmanurefactor: number;
-}
-
 export default function ModalComponent({
   initialModalData,
   handleDialogClose,
   handleSubmit,
   ...props
 }: ModalComponentProps & ComponentProps<typeof Modal>) {
-  const apiCache = useContext(APICacheContext);
-
   const [formData, setFormData] = useState<tempAnimalData>(initialModalData);
-  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(false);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
-
-  // only run on initial mount
-  useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const sOptions: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setSubtypeOptions(sOptions);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
-
-  useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const subtypeOptionz: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setSubtypeOptions(subtypeOptionz);
-      }
-    });
-
-    apiCache.callEndpoint('api/breeds/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        // The data in the response has more properties, but we want to trim it down
-        const breedz: DairyCattleBreed[] = (data as DairyCattleBreed[]).map((row) => ({
-          id: row.id,
-          breedname: row.breedname,
-          breedmanurefactor: row.breedmanurefactor,
-        }));
-        // setBreeds(breedz);
-        const breedOptionz = breedz.map((breed) => ({
-          id: breed.id.toString(),
-          label: breed.breedname,
-        }));
-        setBreedOptions(breedOptionz);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
@@ -153,129 +93,18 @@ export default function ModalComponent({
                   }}
                 />
               </Grid>
-              {formData?.animalId === '1' ? (
-                <>
-                  <Grid size={formGridBreakpoints}>
-                    <Select
-                      isRequired
-                      label="Cattle Type"
-                      placeholder="Select a cattle type"
-                      selectedKey={formData?.subtype}
-                      items={subtypeOptions}
-                      onSelectionChange={(e: Key) => {
-                        handleInputChange('subtype', e?.toString());
-                      }}
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <TextField
-                      isRequired
-                      label="Average Animal Number on Farm"
-                      type="number"
-                      name="animalsPerFarm"
-                      value={formData?.animalsPerFarm?.toString()}
-                      onChange={(e: string) => {
-                        handleInputChange('animalsPerFarm', e);
-                      }}
-                      maxLength={7}
-                    />
-                  </Grid>
-                  <Grid size={12}>
-                    <Checkbox
-                      isSelected={showCollectionDays}
-                      onChange={setShowCollectionDays}
-                    >
-                      Do you pile or collect manure from these animals?
-                    </Checkbox>
-                  </Grid>
-                  {showCollectionDays && (
-                    <Grid size={formGridBreakpoints}>
-                      <TextField
-                        label="How many days is the manure collected?"
-                        type="number"
-                        name="daysCollected"
-                        size="small"
-                        value={formData?.daysCollected?.toString()}
-                        onChange={(e: string) => {
-                          handleInputChange('daysCollected', e);
-                        }}
-                        maxLength={3}
-                        isRequired={showCollectionDays}
-                      />
-                    </Grid>
-                  )}
-                </>
-              ) : (
-                ''
+              {/* Insert additional animal form subcomponents here */}
+              {formData?.animalId === '1' && (
+                <BeefCattle
+                  handleInputChange={handleInputChange}
+                  initialFormData={formData}
+                />
               )}
-
-              {formData?.animalId === '2' ? (
-                <>
-                  <Grid size={formGridBreakpoints}>
-                    <Select
-                      label="Sub Type"
-                      name="subtype"
-                      selectedKey={formData?.subtype}
-                      items={subtypeOptions}
-                      onSelectionChange={(e: Key) => {
-                        handleInputChange('subtype', e?.toString());
-                      }}
-                      isRequired
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <Select
-                      label="Breed"
-                      name="breed"
-                      selectedKey={formData?.breed}
-                      items={breedOptions}
-                      onSelectionChange={(e: Key) => {
-                        handleInputChange('breed', e?.toString());
-                      }}
-                      isRequired
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <TextField
-                      label="Average Animal Number on Farm"
-                      type="number"
-                      name="animalsPerFarm"
-                      value={formData?.animalsPerFarm?.toString()}
-                      onChange={(e: string) => {
-                        handleInputChange('animalsPerFarm', e);
-                      }}
-                      maxLength={7}
-                      isRequired
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <Select
-                      label="Manure Type"
-                      name="manureType"
-                      selectedKey={formData?.manureType}
-                      items={manureTypeOptions}
-                      onSelectionChange={(e: Key) => {
-                        handleInputChange('manureType', e?.toString());
-                      }}
-                      isRequired
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <TextField
-                      label="Grazing Days per Year"
-                      type="number"
-                      name="grazingDaysPerYear"
-                      value={formData?.grazingDaysPerYear?.toString()}
-                      onChange={(e: string) => {
-                        handleInputChange('grazingDaysPerYear', e);
-                      }}
-                      maxLength={3}
-                      isRequired
-                    />
-                  </Grid>
-                </>
-              ) : (
-                ''
+              {formData?.animalId === '2' && (
+                <DairyCattle
+                  handleInputChange={handleInputChange}
+                  initialFormData={formData}
+                />
               )}
             </Grid>
             <Divider
