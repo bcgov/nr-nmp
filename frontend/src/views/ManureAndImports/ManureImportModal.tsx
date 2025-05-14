@@ -2,8 +2,11 @@
  * @summary This is the Add Animal list Tab
  */
 import { ComponentProps, FormEvent, Key, useContext, useEffect, useState } from 'react';
+import {
+  DefaultSolidManureConversionFactors,
+  DefaultLiquidManureConversionFactors,
+} from '@/constants';
 import { APICacheContext } from '@/context/APICacheContext';
-import manureTypeOptions from '@/constants/ManureTypeOptions';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -13,7 +16,6 @@ import {
   Modal,
   Form,
   Select,
-  Checkbox,
   TextField,
 } from '@bcgov/design-system-react-components';
 import {
@@ -22,101 +24,85 @@ import {
   modalPaddingStyle,
   formGridBreakpoints,
 } from '../../common.styles';
-import { DAIRY_COW_ID, MILKING_COW_ID } from '../AddAnimals/types';
-// import { AnimalData, initialEmptyData } from './types';
 import {
   NMPFileImportedManureData,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
 } from '@/types';
 
-// need a row id
-type tempManureData = NMPFileImportedManureData & { id?: string };
-
-const animalOptions = [
-  { id: '1', label: 'Beef Cattle' },
-  { id: '2', label: 'Dairy Cattle' },
+const manureTypeOptions = [
+  { label: 'Liquid', id: 1 },
+  { label: 'Solid', id: 2 },
 ];
 
 type ModalComponentProps = {
-  initialModalData: tempManureData;
+  initialModalData: NMPFileImportedManureData;
   handleDialogClose: () => void;
-  handleSubmit: (formData: tempManureData) => void;
+  handleSubmit: (formData: NMPFileImportedManureData) => void;
+  manuresList: any;
 };
-
-interface DairyCattleBreed {
-  id: number;
-  breedname: string;
-  breedmanurefactor: number;
-}
 
 export default function ManureImportModal({
   initialModalData,
   handleDialogClose,
   handleSubmit,
+  manuresList,
   ...props
 }: ModalComponentProps & ComponentProps<typeof Modal>) {
   const apiCache = useContext(APICacheContext);
 
-  const [formData, setFormData] = useState<tempManureData>(initialModalData);
-  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(false);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
+  const [formData, setFormData] = useState<NMPFileImportedManureData>(initialModalData);
+  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
+  // const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
 
-  // only run on initial mount
-  useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const sOptions: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setSubtypeOptions(sOptions);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
+  const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
+    SolidManureConversionFactors[]
+  >([DefaultSolidManureConversionFactors]);
+  const [liquidManureDropdownOptions, setLiquidManureDropdownOptions] = useState<
+    LiquidManureConversionFactors[]
+  >([DefaultLiquidManureConversionFactors]);
 
   useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const subtypeOptionz: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setSubtypeOptions(subtypeOptionz);
-      }
-    });
-
-    apiCache.callEndpoint('api/breeds/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        // The data in the response has more properties, but we want to trim it down
-        const breedz: DairyCattleBreed[] = (data as DairyCattleBreed[]).map((row) => ({
-          id: row.id,
-          breedname: row.breedname,
-          breedmanurefactor: row.breedmanurefactor,
-        }));
-        // setBreeds(breedz);
-        const breedOptionz = breedz.map((breed) => ({
-          id: breed.id.toString(),
-          label: breed.breedname,
-        }));
-        setBreedOptions(breedOptionz);
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    apiCache
+      .callEndpoint('api/liquidmaterialsconversionfactors/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setLiquidManureDropdownOptions(data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/solidmaterialsconversionfactors/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setSolidManureDropdownOptions(data);
+        }
+      });
   }, []);
+
+  const notUniqueNameCheck = () => {
+    if (isEditingExistingEntry) return false;
+    else
+      return manuresList.some(
+        (ele: NMPFileImportedManureData) => ele.UniqueMaterialName === formData.UniqueMaterialName,
+      );
+  };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
-    handleSubmit(formData);
+
+    if (notUniqueNameCheck()) {
+      console.log('not unique name');
+    } else {
+      handleSubmit(formData);
+      handleDialogClose();
+    }
   };
 
   const handleInputChange = (name: string, value: string | number | undefined) => {
-    setFormData((prev: tempManureData) => {
+    setFormData((prev: NMPFileImportedManureData) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
@@ -145,51 +131,107 @@ export default function ManureImportModal({
               spacing={2}
             >
               <Grid size={formGridBreakpoints}>
+                <span
+                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
+                ></span>
                 <TextField
                   isRequired
-                  label="Manure name"
-                  type="number"
-                  name="animalsPerFarm"
+                  label="Material name"
+                  name="UniqueMaterialName"
                   value={formData?.UniqueMaterialName}
                   onChange={(e: string) => {
                     handleInputChange('UniqueMaterialName', e);
                   }}
                   maxLength={100}
                 />
+                {notUniqueNameCheck() && (
+                  <span className="--error">Unique material name required</span>
+                )}
               </Grid>
               <Grid size={formGridBreakpoints}>
                 <Select
                   isRequired
-                  label="Cattle Type"
-                  placeholder="Select a cattle type"
-                  // selectedKey={formData?.subtype}
-                  items={subtypeOptions}
+                  label="Manure Type"
+                  placeholder="Select manure type"
+                  selectedKey={formData?.ManureType}
+                  items={manureTypeOptions}
                   onSelectionChange={(e: Key) => {
-                    handleInputChange('subtype', e?.toString());
+                    console.log(e);
+                    handleInputChange('ManureType', Number(e) ?? '');
+                    handleInputChange(
+                      'ManureTypeName',
+                      manureTypeOptions.find((ele) => ele.id === e)?.label,
+                    );
+                    // Reset dependent inputs on changes
+                    handleInputChange('Units', '');
+                    handleInputChange('Moisture', '');
                   }}
                 />
               </Grid>
               <Grid size={formGridBreakpoints}>
                 <TextField
                   isRequired
-                  label="Average Animal Number on Farm"
+                  label="Amount per year"
                   type="number"
-                  name="animalsPerFarm"
-                  // value={formData?.animalsPerFarm?.toString()}
+                  name="AnnualAmount"
+                  value={formData?.AnnualAmount?.toString()}
                   onChange={(e: string) => {
-                    handleInputChange('animalsPerFarm', e);
+                    handleInputChange('AnnualAmount', e);
                   }}
                   maxLength={7}
                 />
               </Grid>
-              <Grid size={12}>
-                <Checkbox
-                  isSelected={showCollectionDays}
-                  onChange={setShowCollectionDays}
-                >
-                  Do you pile or collect manure from these animals?
-                </Checkbox>
-              </Grid>
+
+              {formData.ManureType === 2 && (
+                <Grid size={formGridBreakpoints}>
+                  <Select
+                    isRequired
+                    label="Units"
+                    placeholder="Select a unit"
+                    selectedKey={formData?.Units}
+                    items={solidManureDropdownOptions.map((ele) => ({
+                      id: ele.id,
+                      label: ele.inputunitname ?? '',
+                    }))}
+                    onSelectionChange={(e: Key) => {
+                      handleInputChange('Units', e as number);
+                    }}
+                  />
+                </Grid>
+              )}
+
+              {formData.ManureType === 1 && (
+                <>
+                  <Grid size={formGridBreakpoints}>
+                    <Select
+                      isRequired
+                      label="Units"
+                      placeholder="Select a unit"
+                      selectedKey={formData?.Units}
+                      items={liquidManureDropdownOptions.map((ele) => ({
+                        id: ele.id,
+                        label: ele.inputunitname ?? '',
+                      }))}
+                      onSelectionChange={(e: Key) => {
+                        handleInputChange('Units', e as number);
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <TextField
+                      isRequired
+                      label="Moisture (%)"
+                      type="number"
+                      name="Moisture"
+                      value={formData?.Moisture}
+                      onChange={(e: string) => {
+                        handleInputChange('Moisture', e);
+                      }}
+                      maxLength={7}
+                    />
+                  </Grid>
+                </>
+              )}
             </Grid>
             <Divider
               aria-hidden="true"
