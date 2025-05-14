@@ -8,6 +8,7 @@ describe('YesNoRadioButton', () => {
         text=""
         value={false}
         onChange={() => {}}
+        aria-label="test"
       />,
     );
     const no = screen.getByText('No');
@@ -20,6 +21,7 @@ describe('YesNoRadioButton', () => {
         text=""
         value
         onChange={() => {}}
+        aria-label="test"
       />,
     );
     const yes = screen.getByText('Yes');
@@ -33,6 +35,7 @@ describe('YesNoRadioButton', () => {
         text=""
         value={false}
         onChange={onChange}
+        aria-label="test"
       />,
     );
     const yes = screen.getByText('Yes');

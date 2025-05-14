@@ -12,7 +12,7 @@ import NMPFileFieldData from '@/types/NMPFileFieldData';
 import { NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
 
 export default function CalculateNutrients() {
-  const { state, setProgressStep } = useAppService();
+  const { state } = useAppService();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [fields, setFields] = useState<NMPFileFieldData[]>([]);
@@ -41,11 +41,6 @@ export default function CalculateNutrients() {
       setFields(JSON.parse(state.nmpFile).years[0].Fields);
     }
   }, [state]);
-
-  useEffect(() => {
-    setProgressStep(5);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <Card

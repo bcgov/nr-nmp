@@ -94,7 +94,7 @@ const requireAndRemoveColumns: GridColDef[] = [
  * @returns {JSX.Element} Rendered Crops component
  */
 function Crops() {
-  const { state, setNMPFile, setProgressStep } = useAppService();
+  const { state, setNMPFile } = useAppService();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
@@ -484,10 +484,6 @@ function Crops() {
       }
     }
   }, [combinedCropsData.cropId]);
-
-  useEffect(() => {
-    setProgressStep(3);
-  }, []);
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
