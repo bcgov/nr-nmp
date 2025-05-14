@@ -263,7 +263,6 @@ export default function ManureAndImports() {
     if (typeof Number(e?.id) !== 'number') {
       throw new Error('Invalid manure row index');
     }
-    console.log(e);
     setEditMaterialName(e.row.UniqueMaterialName);
     setManureFormData(e.row);
     setIsDialogOpen(true);
@@ -372,7 +371,7 @@ export default function ManureAndImports() {
         resizable: false,
       },
     ],
-    [],
+    [cattleSubtypeList],
   );
 
   return (
@@ -380,7 +379,6 @@ export default function ManureAndImports() {
       <ProgressStepper step={FIELD_LIST} />
       <AppTitle />
       <PageTitle title="Manure & Imports" />
-
       <>
         <div css={addRecordGroupStyle}>
           <ButtonGovGroup

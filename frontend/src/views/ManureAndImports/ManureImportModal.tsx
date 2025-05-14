@@ -94,7 +94,7 @@ export default function ManureImportModal({
     e.preventDefault();
 
     if (notUniqueNameCheck()) {
-      console.log('not unique name');
+      console.error('not unique name');
     } else {
       handleSubmit(formData);
       handleDialogClose();
@@ -156,7 +156,6 @@ export default function ManureImportModal({
                   selectedKey={formData?.ManureType}
                   items={manureTypeOptions}
                   onSelectionChange={(e: Key) => {
-                    console.log(e);
                     handleInputChange('ManureType', Number(e) ?? '');
                     handleInputChange(
                       'ManureTypeName',
@@ -183,24 +182,6 @@ export default function ManureImportModal({
               </Grid>
 
               {formData.ManureType === 2 && (
-                <Grid size={formGridBreakpoints}>
-                  <Select
-                    isRequired
-                    label="Units"
-                    placeholder="Select a unit"
-                    selectedKey={formData?.Units}
-                    items={solidManureDropdownOptions.map((ele) => ({
-                      id: ele.id,
-                      label: ele.inputunitname ?? '',
-                    }))}
-                    onSelectionChange={(e: Key) => {
-                      handleInputChange('Units', e as number);
-                    }}
-                  />
-                </Grid>
-              )}
-
-              {formData.ManureType === 1 && (
                 <>
                   <Grid size={formGridBreakpoints}>
                     <Select
@@ -208,8 +189,8 @@ export default function ManureImportModal({
                       label="Units"
                       placeholder="Select a unit"
                       selectedKey={formData?.Units}
-                      items={liquidManureDropdownOptions.map((ele) => ({
-                        id: ele.id,
+                      items={solidManureDropdownOptions.map((ele) => ({
+                        id: ele.inputunit,
                         label: ele.inputunitname ?? '',
                       }))}
                       onSelectionChange={(e: Key) => {
@@ -228,6 +209,26 @@ export default function ManureImportModal({
                         handleInputChange('Moisture', e);
                       }}
                       maxLength={7}
+                    />
+                  </Grid>
+                </>
+              )}
+
+              {formData.ManureType === 1 && (
+                <>
+                  <Grid size={formGridBreakpoints}>
+                    <Select
+                      isRequired
+                      label="Units"
+                      placeholder="Select a unit"
+                      selectedKey={formData?.Units}
+                      items={liquidManureDropdownOptions.map((ele) => ({
+                        id: ele.inputunit,
+                        label: ele.inputunitname ?? '',
+                      }))}
+                      onSelectionChange={(e: Key) => {
+                        handleInputChange('Units', e as number);
+                      }}
                     />
                   </Grid>
                 </>
