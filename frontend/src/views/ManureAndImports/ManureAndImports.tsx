@@ -21,7 +21,7 @@ import {
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
 import useAppService from '@/services/app/useAppService';
-import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
+import { ADD_ANIMALS, FARM_INFORMATION, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { DAIRY_COW_ID, MILKING_COW_ID } from '../AddAnimals/types';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
@@ -195,7 +195,7 @@ export default function ManureAndImports() {
     ) {
       navigate(ADD_ANIMALS);
     } else {
-      navigate(CROPS);
+      navigate(FARM_INFORMATION);
     }
   };
 
@@ -306,7 +306,7 @@ export default function ManureAndImports() {
         maxWidth: 500,
       },
     ],
-    [],
+    [animalList, cattleSubtypeList.length],
   );
 
   const columnsImportedManure: GridColDef[] = useMemo(
@@ -371,7 +371,7 @@ export default function ManureAndImports() {
         resizable: false,
       },
     ],
-    [cattleSubtypeList],
+    [manures],
   );
 
   return (
