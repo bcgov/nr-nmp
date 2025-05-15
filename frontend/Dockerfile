@@ -1,5 +1,5 @@
 # Base image for the container
-FROM node:20.18.3 AS build
+FROM node:20.19.1@sha256:6f076db82169a365abca591093bdf020f9e8827a8add8ea3826556c290b340c0 AS build
 
 # Set the working directory
 WORKDIR /app/
@@ -16,7 +16,7 @@ COPY . /app
 # Ensure TypeScript is installed and compile the project
 RUN npm run build
 
-FROM caddy:2.9.1-alpine
+FROM caddy:2.10.0-alpine@sha256:e2e3a089760c453bc51c4e718342bd7032d6714f15b437db7121bfc2de2654a6
 RUN apk add --no-cache ca-certificates
 
 # Copy static files, verify Caddyfile formatting
