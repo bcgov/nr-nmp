@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {
-  Button as Button,
+  Button,
   ButtonGroup,
   Dialog,
   Modal,
@@ -381,6 +381,7 @@ function Crops() {
 
   const handleNext = () => {
     // Delete the id key in each field to prevent saving into NMPfile
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const tempFields = fields.map(({ id, ...remainingFields }) => remainingFields);
     saveFieldsToFile(tempFields, state.nmpFile, setNMPFile);
     navigate(MANURE_IMPORTS);

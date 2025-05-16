@@ -14,14 +14,12 @@ import {
   ListItemContainer,
   ListItem,
   Header,
-  ButtonWrapper,
   NutrientContent,
   NutrientInputField,
   NutrientRadioWrapper,
   NutrientContainer,
   CenterButtonWrapper,
 } from './nutrientAnalsysis.styles';
-import { ModalContent } from '@/components/common/Modal/modal.styles';
 import { DropdownWrapper } from '@/components/common/Dropdown/dropdown.styles';
 import { ColumnContainer, HeaderText, RowContainer, ValueText } from '@/views/Crops/crops.styles';
 import { NMPFile, NMPFileImportedManureData } from '@/types';
@@ -33,6 +31,7 @@ import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
 import ManureType from '@/types/ManureType';
+import Form from '@/components/common/Form/Form';
 
 export default function NutrientAnalysis() {
   const { state, setNMPFile } = useAppService();
@@ -249,44 +248,23 @@ export default function NutrientAnalysis() {
         />
       </CenterButtonWrapper>
       <Modal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
+        isOpen={isModalVisible}
+        onOpenChange={(isOpen) => setIsModalVisible(isOpen)}
         title={editIndex !== null ? 'Edit Field' : 'Add a Nutrient Analysis'}
-        footer={
-          <>
-            <ButtonWrapper>
-              <Button
-                text="Cancel"
-                handleClick={() => {
-                  setIsModalVisible(false);
-                  setAnalysisForm({
-                    ManureSource: '',
-                    MaterialType: '',
-                    BookLab: '',
-                    UniqueMaterialName: '',
-                    Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
-                  });
-                }}
-                aria-label="Cancel"
-                variant="secondary"
-                size="sm"
-                disabled={false}
-              />
-            </ButtonWrapper>
-            <ButtonWrapper>
-              <Button
-                text="Submit"
-                handleClick={handleSubmit}
-                aria-label="Submit"
-                variant="primary"
-                size="sm"
-                disabled={false}
-              />
-            </ButtonWrapper>
-          </>
-        }
       >
-        <ModalContent>
+        <Form
+          onCancel={() => {
+            setIsModalVisible(false);
+            setAnalysisForm({
+              ManureSource: '',
+              MaterialType: '',
+              BookLab: '',
+              UniqueMaterialName: '',
+              Nutrients: { Moisture: '', N: 0, NH4N: 0, P: 0, K: 0 },
+            });
+          }}
+          onConfirm={handleSubmit}
+        >
           {/* // modal has "Source of Material" dropdown which maps users manures input from ManureAndCompost page */}
           <Dropdown
             label="Source of Material"
@@ -427,7 +405,7 @@ export default function NutrientAnalysis() {
               )}
             </>
           )}
-        </ModalContent>
+        </Form>
       </Modal>
     </ViewCard>
   );

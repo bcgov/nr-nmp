@@ -125,8 +125,8 @@ export const addRecordGroupStyle = css({
       zIndex: '10',
     },
   },
-})
+});
 
 export const modalPaddingStyle = css({
-  padding: '1rem'
+  padding: '1rem',
 });
