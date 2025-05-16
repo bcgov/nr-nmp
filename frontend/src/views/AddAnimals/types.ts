@@ -1,5 +1,13 @@
+export const BEEF_COW_ID: string = '1';
+export const DAIRY_COW_ID: string = '2';
+export const MILKING_COW_ID: string = '9';
+export const PER_DAY_PER_ANIMAL_UNIT = 'PER_DAY_PER_ANIMAL';
+export const PER_DAY_UNIT = 'PER_DAY';
+export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
+
 export interface BeefCattleData {
   animalId: '1';
+  index?: number;
   subtype?: string;
   animalsPerFarm?: number;
   daysCollected?: number | undefined;
@@ -11,18 +19,13 @@ export const initialBeefFormData: BeefCattleData = {
   animalId: '1',
   subtype: '',
   animalsPerFarm: undefined,
-  daysCollected: undefined,
+  daysCollected: 0,
   manureData: undefined,
 };
 
-export const BEEF_COW_ID: string = '1';
-export const DAIRY_COW_ID: string = '2';
-export const MILKING_COW_ID: string = '9';
-export const PER_DAY_PER_ANIMAL_UNIT = 'PER_DAY_PER_ANIMAL';
-export const PER_DAY_UNIT = 'PER_DAY';
-export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
 export interface DairyCattleData {
   animalId: '2';
+  index?: number;
   subtype?: string;
   breed?: string;
   manureType?: 'liquid' | 'solid';
@@ -40,7 +43,9 @@ export interface DairyCattleData {
 export const initialDairyFormData: DairyCattleData = {
   animalId: '2',
   subtype: '',
-  breed: undefined,
+  // Breed MUST start defined bc of weird milking cow logic
+  // This is how it worked in old NMP
+  breed: '1',
   manureType: undefined,
   grazingDaysPerYear: 0,
   animalsPerFarm: undefined,
@@ -50,17 +55,7 @@ export const initialDairyFormData: DairyCattleData = {
   manureData: undefined,
 };
 
-export interface EmptyData {
-  animalId: undefined;
-  manureData: undefined;
-}
-
-export const initialEmptyData: EmptyData = {
-  animalId: undefined,
-  manureData: undefined,
-};
-
-export type AnimalData = BeefCattleData | DairyCattleData | EmptyData;
+export type AnimalData = BeefCattleData | DairyCattleData;
 
 // TODO: Add interfaces for the manure tab and nutrient tab
 export type AnimalsWorkflowData = AnimalData;

@@ -1,16 +1,29 @@
-import { Key, useContext, useEffect, useState } from 'react';
+import { FormEvent, Key, useContext, useEffect, useMemo, useState } from 'react';
+import { Select, TextField } from '@bcgov/design-system-react-components';
+import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
-import { Select, TextField } from '@bcgov/design-system-react-components';
-import Grid from '@mui/material/Grid';
-import { AnimalData } from '../types';
+import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID } from '../types';
+import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
+import MilkingFields from './MilkingFields';
+import AnimalFormWrapper from './AnimalFormWrapper';
 
-type tempAnimalData = AnimalData & { id?: string; daysCollected?: string };
-type ComponentProps = {
-  handleInputChange: (fieldName: string, fieldValue: any) => void;
-  initialFormData: tempAnimalData;
+type DairyCattleProps = {
+  formData: DairyCattleData;
+  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
+  handleSubmit: (newFormData: AnimalData) => void;
+  onCancel: () => void;
 };
+
+interface DairyCattleSubtype {
+  id: number;
+  name: string;
+  liquidpergalperanimalperday: number;
+  solidperpoundperanimalperday: number;
+  washwater: number;
+  milkproduction: number;
+}
 
 interface DairyCattleBreed {
   id: number;
@@ -18,19 +31,113 @@ interface DairyCattleBreed {
   breedmanurefactor: number;
 }
 
-export default function DairyCattleFields({ handleInputChange, initialFormData }: ComponentProps) {
+export default function DairyCattle({
+  formData,
+  handleInputChanges,
+  handleSubmit,
+  onCancel,
+}: DairyCattleProps) {
   const apiCache = useContext(APICacheContext);
-  const [formData] = useState<any>(initialFormData);
+  const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
+  const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
+
+  // Initial values for milking fields, if "Milking cow" is selected //
+  const washWaterInit = useMemo(() => {
+    if (subtypes.length === 0) return undefined;
+    const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
+    if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
+    return milkingCow.washwater;
+  }, [subtypes]);
+  const milkProductionInit = useMemo(() => {
+    if (subtypes.length === 0 || breeds.length === 0) return undefined;
+    const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
+    if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
+    const breed = breeds.find((b) => b.id.toString() === formData.breed);
+    if (breed === undefined) throw new Error(`Breed ${breed} is missing from list.`);
+    return milkingCow.milkproduction * breed.breedmanurefactor;
+  }, [subtypes, breeds, formData.breed]);
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    // Calculate manure
+    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    const breed = breeds.find((b) => b.id.toString() === formData.breed);
+    if (breed === undefined) throw new Error('Chosen breed is missing from list.');
+    const nonGrazingDays = 365 - formData.grazingDaysPerYear!;
+
+    let extraCoefficient;
+    if (formData.subtype === MILKING_COW_ID) {
+      if (formData.milkProduction === undefined) {
+        extraCoefficient = 0;
+      } else {
+        const expectedMilkProduction = subtype.milkproduction * breed.breedmanurefactor;
+        // Due to potential floating point issues, round factor to 1 if numbers are close
+        const milkProdPercent =
+          Math.abs(expectedMilkProduction - formData.milkProduction) < 1
+            ? 1
+            : formData.milkProduction / expectedMilkProduction;
+        extraCoefficient = breed.breedmanurefactor * milkProdPercent;
+      }
+    } else {
+      extraCoefficient = breed.breedmanurefactor;
+    }
+
+    let withManureCalc: DairyCattleData;
+    if (formData.manureType === 'liquid') {
+      withManureCalc = {
+        ...formData,
+        manureData: {
+          name: subtype.name,
+          annualLiquidManure: calculateAnnualLiquidManure(
+            subtype.liquidpergalperanimalperday,
+            formData.animalsPerFarm!,
+            nonGrazingDays,
+            extraCoefficient,
+          ),
+          annualSolidManure: undefined,
+        },
+      };
+    } else {
+      withManureCalc = {
+        ...formData,
+        manureData: {
+          name: subtype.name,
+          annualSolidManure: calculateAnnualSolidManure(
+            subtype.solidperpoundperanimalperday,
+            formData.animalsPerFarm!,
+            nonGrazingDays,
+            extraCoefficient,
+          ),
+          annualLiquidManure: undefined,
+        },
+      };
+    }
+
+    handleSubmit(withManureCalc);
+  };
 
   useEffect(() => {
     apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        const subtypeOptionz: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
+        // The data in the response has more properties, but we want to trim it down
+        const subtypez: DairyCattleSubtype[] = (data as DairyCattleSubtype[]).map((row) => ({
+          id: row.id,
+          name: row.name,
+          solidperpoundperanimalperday: row.solidperpoundperanimalperday,
+          liquidpergalperanimalperday: row.liquidpergalperanimalperday,
+          washwater: row.washwater,
+          milkproduction: row.milkproduction,
+        }));
+        setSubtypes(subtypez);
+        const subtypeOptionz: { id: string; label: string }[] = subtypez.map((row) => ({
+          id: row.id.toString(),
+          label: row.name,
+        }));
         setSubtypeOptions(subtypeOptionz);
       }
     });
@@ -44,7 +151,7 @@ export default function DairyCattleFields({ handleInputChange, initialFormData }
           breedname: row.breedname,
           breedmanurefactor: row.breedmanurefactor,
         }));
-        // setBreeds(breedz);
+        setBreeds(breedz);
         const breedOptionz = breedz.map((breed) => ({
           id: breed.id.toString(),
           label: breed.breedname,
@@ -56,7 +163,12 @@ export default function DairyCattleFields({ handleInputChange, initialFormData }
   }, []);
 
   return (
-    <>
+    <AnimalFormWrapper
+      selectedAnimalId={DAIRY_COW_ID}
+      handleInputChanges={handleInputChanges}
+      onCancel={onCancel}
+      onSubmit={onSubmit}
+    >
       <Grid size={formGridBreakpoints}>
         <Select
           label="Sub Type"
@@ -64,7 +176,7 @@ export default function DairyCattleFields({ handleInputChange, initialFormData }
           selectedKey={formData?.subtype}
           items={subtypeOptions}
           onSelectionChange={(e: Key) => {
-            handleInputChange('subtype', e?.toString());
+            handleInputChanges({ subtype: e.toString() });
           }}
           isRequired
         />
@@ -76,7 +188,7 @@ export default function DairyCattleFields({ handleInputChange, initialFormData }
           selectedKey={formData?.breed}
           items={breedOptions}
           onSelectionChange={(e: Key) => {
-            handleInputChange('breed', e?.toString());
+            handleInputChanges({ breed: e.toString() });
           }}
           isRequired
         />
@@ -88,7 +200,7 @@ export default function DairyCattleFields({ handleInputChange, initialFormData }
           name="animalsPerFarm"
           value={formData?.animalsPerFarm?.toString()}
           onChange={(e: string) => {
-            handleInputChange('animalsPerFarm', e);
+            handleInputChanges({ animalsPerFarm: e });
           }}
           maxLength={7}
           isRequired
@@ -101,7 +213,7 @@ export default function DairyCattleFields({ handleInputChange, initialFormData }
           selectedKey={formData?.manureType}
           items={manureTypeOptions}
           onSelectionChange={(e: Key) => {
-            handleInputChange('manureType', e?.toString());
+            handleInputChanges({ manureType: e.toString() });
           }}
           isRequired
         />
@@ -113,12 +225,23 @@ export default function DairyCattleFields({ handleInputChange, initialFormData }
           name="grazingDaysPerYear"
           value={formData?.grazingDaysPerYear?.toString()}
           onChange={(e: string) => {
-            handleInputChange('grazingDaysPerYear', e);
+            handleInputChanges({ grazingDaysPerYear: e });
           }}
           maxLength={3}
           isRequired
         />
       </Grid>
-    </>
+      {formData.subtype === MILKING_COW_ID &&
+        milkProductionInit !== undefined &&
+        washWaterInit !== undefined && (
+          <MilkingFields
+            milkProductionInit={milkProductionInit}
+            washWaterInit={washWaterInit}
+            animalsPerFarm={formData.animalsPerFarm || 0}
+            washWaterUnit={formData.washWaterUnit}
+            handleInputChanges={handleInputChanges}
+          />
+        )}
+    </AnimalFormWrapper>
   );
 }

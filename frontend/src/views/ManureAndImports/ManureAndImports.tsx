@@ -3,6 +3,13 @@ import { useState, useEffect, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  Button,
+  Button as ButtonGov,
+  ButtonGroup as ButtonGovGroup,
+  ButtonGroup,
+} from '@bcgov/design-system-react-components';
+import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
   NMPFileImportedManureData,
@@ -27,21 +34,15 @@ import { DAIRY_COW_ID, MILKING_COW_ID } from '../AddAnimals/types';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '../AddAnimals/utils';
 import { FIELD_LIST } from '@/constants/RouteConstants';
-import {
-  Button,
-  Button as ButtonGov,
-  ButtonGroup as ButtonGovGroup,
-  ButtonGroup,
-} from '@bcgov/design-system-react-components';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import ManureImportModal from './ManureImportModal';
 import { initAnimals } from '../AddAnimals/utils';
 
 import type { AnimalData } from '../AddAnimals/types';
 import { booleanChecker } from '@/utils/utils';
+
 type tempAnimalData = AnimalData & { id?: string };
 
 export default function ManureAndImports() {
@@ -269,9 +270,7 @@ export default function ManureAndImports() {
   };
 
   const handleDeleteRow = (e: GridRenderCellParams) => {
-    setManures((prev) => {
-      return prev.filter((ele) => ele.UniqueMaterialName !== e.row.UniqueMaterialName);
-    });
+    setManures((prev) => prev.filter((ele) => ele.UniqueMaterialName !== e.row.UniqueMaterialName));
   };
 
   const columnsAnimalManure: GridColDef[] = useMemo(

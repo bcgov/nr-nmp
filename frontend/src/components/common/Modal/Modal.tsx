@@ -1,35 +1,38 @@
 import React from 'react';
-import {
-  ModalWrapper,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  CloseButton,
-} from './modal.styles';
+import { Dialog, Modal as BcGovModal } from '@bcgov/design-system-react-components';
+import Divider from '@mui/material/Divider';
 
-interface ModalProps {
-  isVisible: boolean;
+export interface ModalProps {
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
   title: string;
   children: React.ReactNode;
-  onClose: () => void;
-  footer?: React.ReactNode;
+  modalStyle?: React.CSSProperties;
 }
 
-function Modal({ isVisible, title, children, onClose, footer }: ModalProps) {
-  if (!isVisible) return null;
-
+function Modal({ isOpen, onOpenChange, title, children, modalStyle }: ModalProps) {
   return (
-    <ModalWrapper>
-      <ModalContent>
-        <ModalHeader>
-          <h2>{title}</h2>
-          <CloseButton onClick={onClose}>&times;</CloseButton>
-        </ModalHeader>
-        <ModalBody>{children}</ModalBody>
-        {footer && <ModalFooter id="footer">{footer}</ModalFooter>}
-      </ModalContent>
-    </ModalWrapper>
+    <BcGovModal
+      isDismissable
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      style={modalStyle}
+    >
+      <Dialog
+        isCloseable
+        role="dialog"
+      >
+        <div style={{ padding: '1rem' }}>
+          <span style={{ fontWeight: '700', fontSize: '1.25rem' }}>{title}</span>
+          <Divider
+            aria-hidden="true"
+            component="div"
+            css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
+          />
+          {children}
+        </div>
+      </Dialog>
+    </BcGovModal>
   );
 }
 

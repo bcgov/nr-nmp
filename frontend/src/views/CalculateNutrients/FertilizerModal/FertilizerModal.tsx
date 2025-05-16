@@ -3,8 +3,8 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, InputField } from '@/components/common';
-import { ModalContent } from '@/components/common/Modal/modal.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { ModalContent } from './fertilizerModal.styles';
 
 interface FertilizerModalProps {
   field: NMPFileFieldData;

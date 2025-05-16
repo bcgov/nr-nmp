@@ -1,4 +1,5 @@
 /* eslint-disable eqeqeq */
+import React from 'react';
 import axios from 'axios';
 import { env } from '@/env';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
@@ -145,7 +146,7 @@ export async function getRecommendations(
  * @param {Function} setFields - Function to update field data
  */
 export function checkExistingSoilTest(
-  field: NMPFileFieldData, 
+  field: NMPFileFieldData,
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
 ) {
   const updatedField = { ...field };

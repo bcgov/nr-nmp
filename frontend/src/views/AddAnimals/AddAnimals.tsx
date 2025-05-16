@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 /**
  * @summary This is the Add Animal list Tab
  */
@@ -11,30 +10,26 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
-import { AnimalData, initialBeefFormData, initialDairyFormData, initialEmptyData } from './types';
+import { AnimalData } from './types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import { initAnimals, saveAnimalsToFile } from './utils';
 import { ErrorText, StyledContent } from './addAnimals.styles';
-import ModalComponent from './ModalComponent';
-
-// need a row id
-type tempAnimalData = AnimalData & { id?: string };
+import AddAnimalsModal from './AddAnimalsModal';
 
 export default function AddAnimals() {
   const { state, setNMPFile, setShowAnimalsStep } = useAppService();
-  const [formData, setFormData] = useState<tempAnimalData>(initialEmptyData);
-  const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
+  const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
 
   const navigate = useNavigate();
 
-  // Load NMP animals into view, add id key for UI tracking purposes
-  const [animalList, setAnimalList] = useState<Array<tempAnimalData>>(
+  // Load NMP animals into view, add index for UI tracking purposes
+  const [animalList, setAnimalList] = useState<Array<AnimalData>>(
     initAnimals(state).map((animalElement: AnimalData, index: number) => ({
       ...animalElement,
-      id: index.toString(),
+      index: index,
     })),
   );
 
@@ -43,67 +38,32 @@ export default function AddAnimals() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = (newFormData: tempAnimalData) => {
-    if (isEditingForm) {
-      // If editing, find and replace field instead of adding new field
-      const replaceIndex = animalList.findIndex((element) => element?.id === formData?.id);
-      setAnimalList((prev) => {
-        const newList = [...prev];
-        newList[replaceIndex] = { ...newFormData };
-        return newList;
-      });
-    } else {
-      setAnimalList((prev) => [...prev, { ...newFormData, id: prev?.length.toString() ?? '0' }]);
-    }
-    handleDialogClose();
-    setShowViewError('');
-  };
+  const handleEditRow = React.useCallback((e: { row: AnimalData }) => {
+    setRowEditIndex(e.row.index);
+    setIsDialogOpen(true);
+  }, []);
 
-  const handleEditRow = React.useCallback(
-    (e: { row: AnimalData }) => {
-      setIsEditingForm(true);
-      setIsDialogOpen(true);
-
-      if (e.row.animalId === '1') {
-        const newFormData = {
-          ...initialBeefFormData,
-          ...e.row,
-        };
-        setFormData(newFormData);
-      }
-      if (e.row.animalId === '2') {
-        const newFormData = {
-          ...initialDairyFormData,
-          ...e.row,
-        };
-        setFormData(newFormData);
-      }
-    },
-    [animalList.length],
-  );
-
-  const handleDeleteRow = (e: any) => {
+  // ... what????
+  const handleDeleteRow = (e: { row: AnimalData }) => {
     setAnimalList((prev) => {
+      const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
       const newList = [...prev];
-      if (e?.id === 0 || e?.id) newList.splice(e.id, 1);
+      newList.splice(deleteSpot, 1);
       return newList;
     });
   };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setIsEditingForm(false);
-    setFormData(initialEmptyData);
+    setRowEditIndex(undefined);
   };
 
   const handleNextPage = () => {
-    setShowViewError('');
-
     if (animalList.length) {
       saveAnimalsToFile(
-        // Delete the id key in each field to prevent saving into NMPfile
+        // Delete the index key in each field to prevent saving into NMPfile
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        animalList.map(({ id, ...remainingAnimals }) => remainingAnimals),
+        animalList.map(({ index, ...remainingAnimals }) => remainingAnimals),
         state.nmpFile,
         setNMPFile,
       );
@@ -170,7 +130,7 @@ export default function AddAnimals() {
         resizable: false,
       },
     ],
-    [],
+    [handleEditRow],
   );
 
   return (
@@ -195,16 +155,20 @@ export default function AddAnimals() {
             </Button>
           </ButtonGroup>
         </div>
-        <ModalComponent
-          key={isDialogOpen.toString()}
-          initialModalData={formData}
-          handleDialogClose={handleDialogClose}
-          handleSubmit={handleSubmit}
-          isOpen={isDialogOpen}
-          onOpenChange={handleDialogClose}
-          isDismissable
-          style={{ width: '700px' }}
-        />
+        {isDialogOpen && (
+          <AddAnimalsModal
+            initialModalData={
+              rowEditIndex !== undefined
+                ? animalList.find((v) => v.index === rowEditIndex)
+                : undefined
+            }
+            rowEditIndex={rowEditIndex}
+            setAnimalList={setAnimalList}
+            isOpen={isDialogOpen}
+            onCancel={handleDialogClose}
+            modalStyle={{ width: '700px' }}
+          />
+        )}
       </>
       <TabsMaterial
         activeTab={0}
@@ -214,7 +178,7 @@ export default function AddAnimals() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={animalList}
         columns={columns}
-        getRowId={(row: any) => row.id}
+        getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
@@ -240,6 +204,8 @@ export default function AddAnimals() {
           variant="primary"
           onPress={handleNextPage}
           type="submit"
+          // imo this button should be disabled instead of showing error text on click
+          // isDisabled={animalList.length === 0}
         >
           Next
         </Button>

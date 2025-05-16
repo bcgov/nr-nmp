@@ -12,7 +12,13 @@ describe('FarmInformation tests', () => {
   */
 
   it('Farm Name allows any input', () => {
-    cy.mount(<AppProvider><BrowserRouter><FarmInformation /></BrowserRouter></AppProvider>);
+    cy.mount(
+      <AppProvider>
+        <BrowserRouter>
+          <FarmInformation />
+        </BrowserRouter>
+      </AppProvider>,
+    );
     cy.get('#farmName');
     cy.get('#--error').should('not.exist');
   });

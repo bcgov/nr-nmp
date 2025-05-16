@@ -4,7 +4,6 @@ module.exports = {
   extends: [
     'airbnb',
     'airbnb/hooks',
-    'plugin:cypress/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
@@ -48,6 +47,7 @@ module.exports = {
         'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
         'react/react-in-jsx-scope': 'off',
         'react/jsx-uses-react': 'off',
+        'react/jsx-props-no-spreading': 'off',
         'import/no-unresolved': 'off',
         'import/no-absolute-path': 'off',
         'import/no-undef': 'off',

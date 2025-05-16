@@ -34,7 +34,6 @@ export const Heading = styled.h2`
   text-decoration: none;
 `;
 
-// eslint-disable-next-line import/prefer-default-export
 export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
   position: absolute;
   bottom: 16px;

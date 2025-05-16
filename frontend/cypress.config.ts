@@ -13,6 +13,6 @@ export default defineConfig({
     },
     setupNodeEvents(on, _config) {
       LogToOutput.install(on);
-    }
+    },
   },
 });

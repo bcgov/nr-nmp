@@ -5,11 +5,11 @@ import InputField from './InputField/InputField';
 import RadioButton from './RadioButton/RadioButton';
 import Dropdown from './Dropdown/Dropdown';
 import Card from './Card/Card';
-import Modal from './Modal/Modal';
 import ProgressStepper from './ProgressStepper/ProgressStepper';
 import AppTitle from './AppTitle/AppTitle';
 import PageTitle from './PageTitle/PageTitle';
 import TabsMaterial from './TabsMaterial/TabsMaterial';
+import Modal from './Modal/Modal';
 
 export {
   Header,

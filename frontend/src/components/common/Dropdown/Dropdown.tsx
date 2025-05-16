@@ -1,6 +1,7 @@
 /**
  * @summary A reusable Dropdown component
  */
+import React from 'react';
 import { DropdownWrapper, StyledLabel, StyledSelect } from './dropdown.styles';
 
 interface DropdownProps {
