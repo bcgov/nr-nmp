@@ -1,7 +1,11 @@
 /**
  * @summary Styling for ManureAndCompost view
  */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
+import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
+
 
 export const ContentWrapper = styled.div<{ hasManure: boolean }>`
   margin-bottom: ${({ hasManure }) => (hasManure ? '170px' : '0')};
@@ -95,4 +99,13 @@ export const ListItem = styled.div<{ align?: string }>`
 
 export const ErrorText = styled.div`
   color: red;
+`;
+
+export const StyledContent = styled.div`
+  margin-bottom: 1rem;
+  ${componentContainer}
+
+  ${paragraphCss}
+
+  ${buttonGroup}
 `;

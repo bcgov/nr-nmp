@@ -3,6 +3,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { ProgressStepper } from '..';
 import { FARM_INFORMATION } from '@/constants/RouteConstants';
 import useAppService from '@/services/app/useAppService';
+import { BrowserRouter } from 'react-router-dom';
+
+// NOTE for future test writers:
+// ProgressStepper uses useLocation hook
+// Requires renders to wrap component in <BrowserRouter>
 
 // NOTE for future test writers:
 // ProgressStepper uses useLocation hook
