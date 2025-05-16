@@ -59,9 +59,3 @@ export type AnimalData = BeefCattleData | DairyCattleData;
 
 // TODO: Add interfaces for the manure tab and nutrient tab
 export type AnimalsWorkflowData = AnimalData;
-
-// TEMPORARY! TODO: Use the database once we add all the animals
-export const ANIMAL_OPTIONS = [
-  { id: '1', label: 'Beef Cattle' },
-  { id: '2', label: 'Dairy Cattle' },
-];
