@@ -28,20 +28,23 @@ import {
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
 import useAppService from '@/services/app/useAppService';
-import { ADD_ANIMALS, FARM_INFORMATION, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
+import {
+  ADD_ANIMALS,
+  FARM_INFORMATION,
+  FIELD_LIST,
+  NUTRIENT_ANALYSIS,
+} from '@/constants/RouteConstants';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { DAIRY_COW_ID, MILKING_COW_ID } from '../AddAnimals/types';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
-import { getLiquidManureDisplay, getSolidManureDisplay } from '../AddAnimals/utils';
-import { FIELD_LIST } from '@/constants/RouteConstants';
+import { getLiquidManureDisplay, getSolidManureDisplay, initAnimals } from '../AddAnimals/utils';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
-import { initAnimals } from '../AddAnimals/utils';
 
 import type { AnimalData } from '../AddAnimals/types';
-import { booleanChecker } from '@/utils/utils';
+import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
 
 type tempAnimalData = AnimalData & { id?: string };
 
@@ -303,6 +306,7 @@ export default function ManureAndImports() {
         width: 175,
         minWidth: 125,
         maxWidth: 500,
+        valueGetter: (params: any) => liquidSolidManureDisplay(params),
       },
     ],
     [animalList, cattleSubtypeList.length],

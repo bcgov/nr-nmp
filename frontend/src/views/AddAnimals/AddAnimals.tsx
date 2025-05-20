@@ -16,6 +16,7 @@ import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper
 import { initAnimals, saveAnimalsToFile } from './utils';
 import { ErrorText, StyledContent } from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
+import { liquidSolidManureDisplay } from '@/utils/utils';
 
 export default function AddAnimals() {
   const { state, setNMPFile, setShowAnimalsStep } = useAppService();
@@ -87,24 +88,10 @@ export default function AddAnimals() {
       {
         field: 'manureData',
         headerName: 'Annual Manure',
-        width: 150,
-        minWidth: 125,
+        width: 200,
+        minWidth: 155,
         maxWidth: 300,
-        valueGetter: (params: any) => {
-          const solid = params?.annualSolidManure ?? 0;
-          const liquid = params?.annualLiquidManure ?? 0;
-          // for displaying solid and or liquid
-          if (solid && liquid) {
-            return `${solid} tons/ ${liquid} gal`;
-          }
-          if (solid) {
-            return `${solid} tons`;
-          }
-          if (liquid) {
-            return `${liquid} gal`;
-          }
-          return '0';
-        },
+        valueGetter: (params: any) => liquidSolidManureDisplay(params),
       },
       {
         field: 'actions',
@@ -127,7 +114,6 @@ export default function AddAnimals() {
           </>
         ),
         sortable: false,
-        resizable: false,
       },
     ],
     [handleEditRow],

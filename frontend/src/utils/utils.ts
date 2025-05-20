@@ -62,3 +62,20 @@ export const booleanChecker = (value: any): boolean => {
 
   return true;
 };
+
+// Used in AddAnimals.tsx and ManureAndImports.tsx
+export const liquidSolidManureDisplay = (manureObj: { [key: string]: number | string }) => {
+  const solid = manureObj?.annualSolidManure ?? 0;
+  const liquid = manureObj?.annualLiquidManure ?? 0;
+  // for displaying solid and or liquid
+  if (solid && liquid) {
+    return `${solid} tons/ ${liquid} gal`;
+  }
+  if (solid) {
+    return `${solid} tons`;
+  }
+  if (liquid) {
+    return `${liquid} gal`;
+  }
+  return '0';
+};
