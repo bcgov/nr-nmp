@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react';
 import AppTitle from './AppTitle';
 
 describe('AppTitle tests', () => {

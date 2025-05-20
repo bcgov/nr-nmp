@@ -1,6 +1,7 @@
 /**
  * @summary Reusable Input Field Component
  */
+// TODO: Delete once this component becomes obsolete
 import React from 'react';
 import { InputWrapper, StyledLabel, StyledInput } from './inputField.styles';
 
