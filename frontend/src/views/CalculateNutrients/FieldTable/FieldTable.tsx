@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ButtonWrapper, TableWrapper } from '../CalculateNutrients.styles';
 import { Button, Modal } from '@/components/common';
-import FertilizerModal from '../FertilizerModal/FertilizerModal';
+import FertilizerModal from '../CalculateNutrientsComponents/FertilizerModal';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
 
 interface FieldTableProps {
