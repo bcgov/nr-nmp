@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { StyledInput } from '@/components/common/InputField/inputField.styles';
 import { RadioButtonWrapper } from '@/components/common/RadioButton/radioButton.styles';
 import { ColumnContainer } from '@/views/Crops/crops.styles';
+import { buttonGroup, componentContainer, paragraphCss } from '../../common.styles';
 
 export const ContentWrapper = styled.div<{ hasAnalysis: boolean }>`
   margin-bottom: ${({ hasAnalysis }) => (hasAnalysis ? '170px' : '0')};
@@ -104,4 +105,12 @@ export const ListItem = styled.div<{ align?: string }>`
 
 export const ErrorText = styled.div`
   color: red;
+`;
+
+export const StyledContent = styled.div`
+  ${componentContainer}
+
+  ${paragraphCss}
+
+  ${buttonGroup}
 `;
