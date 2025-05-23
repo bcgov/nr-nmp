@@ -29,7 +29,6 @@ export default function NutrientAnalysis() {
     // TODO: Once we cache state, throw error if uninitialized
     return { ...defaultNMPFile, years: [{ ...defaultNMPFileYear }] };
   }, [state.nmpFile]);
-  console.log('state', parsedFile);
 
   const manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[] = useMemo(
     () =>
@@ -39,13 +38,10 @@ export default function NutrientAnalysis() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  console.log('manures', manures);
   const navigate = useNavigate();
-
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editName, setEditName] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
-  // replace with nmpfile
   const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileFarmManureData[]>(
     parsedFile.years[0]?.FarmManures || [],
   );
@@ -59,7 +55,8 @@ export default function NutrientAnalysis() {
   };
 
   const handleDelete = (name: string) => {
-    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.ManureSource === name));
+    console.log(name);
+    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.ManureSource !== name));
   };
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -190,7 +187,10 @@ export default function NutrientAnalysis() {
             const existingList = nutrientAnalysisData.map(
               (nutrientEle) => nutrientEle.ManureSource,
             );
-            return !existingList.some((ele) => ele === manureEle.UniqueMaterialName);
+            // Disallow manurer sources already entered, unless it is being edited
+            return !existingList.some(
+              (ele) => ele === manureEle.UniqueMaterialName && ele !== editName,
+            );
           })}
           handleSubmit={handleModalSubmit}
           isOpen={isDialogOpen}
