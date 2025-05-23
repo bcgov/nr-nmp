@@ -29,6 +29,8 @@ export default function NutrientAnalysis() {
     // TODO: Once we cache state, throw error if uninitialized
     return { ...defaultNMPFile, years: [{ ...defaultNMPFileYear }] };
   }, [state.nmpFile]);
+  console.log('state', parsedFile);
+
   const manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[] = useMemo(
     () =>
       (parsedFile.years[0]?.ImportedManures || []).concat(
@@ -37,13 +39,16 @@ export default function NutrientAnalysis() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+  console.log('manures', manures);
   const navigate = useNavigate();
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editName, setEditName] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
   // replace with nmpfile
-  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileFarmManureData[]>([]);
+  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileFarmManureData[]>(
+    parsedFile.years[0]?.FarmManures || [],
+  );
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
 

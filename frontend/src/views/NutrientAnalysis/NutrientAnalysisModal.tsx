@@ -215,7 +215,7 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={{ xs: 12 }}>
             <TextField
-              isDisabled={!formData?.MaterialType}
+              isDisabled={formData?.BookLab !== 'lab'}
               isRequired={formData?.BookLab === 'lab'}
               label="Material name"
               name="UniqueMaterialName"
