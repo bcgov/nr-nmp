@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
-import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './nutrientAnalsysis.styles';
 import { NMPFile, NMPFileImportedManureData } from '@/types';
 import useAppService from '@/services/app/useAppService';
@@ -17,7 +17,7 @@ import { saveFarmManuresToFile } from '@/utils/utils';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
-import { customTableStyle, tableActionButtonCss } from '@/common.styles';
+import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import NutrientAnalysisModal from './NutrientAnalysisModal';
 
 export default function NutrientAnalysis() {
@@ -166,20 +166,22 @@ export default function NutrientAnalysis() {
       <ProgressStepper step={NUTRIENT_ANALYSIS} />
       <AppTitle />
       <PageTitle title="Nutrient Analysis" />
-      <ButtonGroup
-        alignment="end"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <ButtonGov
-          size="medium"
-          aria-label="Add Nutrient Anaylsis"
-          onPress={() => setIsDialogOpen(true)}
-          variant="secondary"
+      <div css={addRecordGroupStyle}>
+        <ButtonGroup
+          alignment="end"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
         >
-          Add Nutrient Anaylsis
-        </ButtonGov>
-      </ButtonGroup>
+          <ButtonGov
+            size="medium"
+            aria-label="Add Nutrient Anaylsis"
+            onPress={() => setIsDialogOpen(true)}
+            variant="secondary"
+          >
+            Add Nutrient Anaylsis
+          </ButtonGov>
+        </ButtonGroup>
+      </div>
       {isDialogOpen && (
         <NutrientAnalysisModal
           initialModalData={analysisForm}
@@ -198,6 +200,10 @@ export default function NutrientAnalysis() {
           modalStyle={{ width: '700px' }}
         />
       )}
+      <TabsMaterial
+        activeTab={2}
+        tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+      />
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={nutrientAnalysisData.map((ele) => ({ ...ele, ...ele.Nutrients }))}
