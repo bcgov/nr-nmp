@@ -18,6 +18,11 @@ import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
 import { initFields } from '../../utils/utils';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 
+type NMPFileField = NMPFileFieldData & {
+  index: number;
+  id: string;
+};
+
 // calculates the field nutrients based on the crops and manure
 export default function CalculateNutrients() {
   const { state, setNMPFile, setShowAnimalsStep } = useAppService();
@@ -29,11 +34,12 @@ export default function CalculateNutrients() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
+  const [fieldList, setFieldList] = useState<Array<NMPFileField>>(
     // Load NMP fields into view, add id key for UI tracking purposes
     // id key removed on save
     initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
       ...fieldElement,
+      index,
       id: index.toString(),
     })),
   );
@@ -43,12 +49,12 @@ export default function CalculateNutrients() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleEditRow = React.useCallback((e: { row: fieldElement }) => {
+  const handleEditRow = React.useCallback((e: { row: NMPFileField }) => {
     setRowEditIndex(e.row.index);
     setIsDialogOpen(true);
   }, []);
 
-  const handleDeleteRow = (e: { row: fieldElement }) => {
+  const handleDeleteRow = (e: { row: NMPFileField }) => {
     setFieldList((prev) => {
       const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
       const newList = [...prev];
@@ -210,16 +216,16 @@ export default function CalculateNutrients() {
           isDialogOpen && buttonClicked === 'fertilizer' && (
             // if fertilizer button clicked
             <FertilizerModal
-              // initialModalData={
-              //   rowEditIndex !== undefined
-              //     ? fieldList.find((v) => v.index === rowEditIndex)
-              //     : undefined
-              // }
-              // rowEditIndex={rowEditIndex}
-              // setFieldList={setFieldList}
+              initialModalData={
+                rowEditIndex !== undefined
+                  ? fieldList.find((v) => v.index === rowEditIndex)
+                  : undefined
+              }
+              rowEditIndex={rowEditIndex}
+              setFieldList={setFieldList}
               isOpen={isDialogOpen}
               onCancel={handleDialogClose}
-              // modalStyle={{ width: '700px' }}
+              modalStyle={{ width: '700px' }}
             />
           )
           // else if manure button clicked

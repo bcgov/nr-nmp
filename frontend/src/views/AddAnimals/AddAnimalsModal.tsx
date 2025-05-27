@@ -8,7 +8,7 @@ import { AnimalData, initialBeefFormData, initialDairyFormData } from './types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 
-type AddAnimalsModaltProps = {
+type AddAnimalsModalProps = {
   initialModalData: AnimalData | undefined;
   rowEditIndex: number | undefined;
   setAnimalList: React.Dispatch<React.SetStateAction<AnimalData[]>>;
@@ -21,7 +21,7 @@ export default function AddAnimalsModal({
   setAnimalList,
   onCancel,
   ...props
-}: AddAnimalsModaltProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+}: AddAnimalsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState<AnimalData | undefined>(initialModalData);
 
   const handleSubmit = (newFormData: AnimalData) => {
