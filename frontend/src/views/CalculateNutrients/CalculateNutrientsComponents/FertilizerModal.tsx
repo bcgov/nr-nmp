@@ -8,7 +8,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { formGridBreakpoints } from '@/common.styles';
 import Form from '@/components/common/Form/Form';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-import { ModalContent } from './fertilizerModal.styles';
+import { ModalContent } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 
 type NMPFileField = NMPFileFieldData & {

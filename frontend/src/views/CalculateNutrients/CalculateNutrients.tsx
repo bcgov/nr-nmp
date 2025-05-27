@@ -17,6 +17,9 @@ import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
 import { initFields } from '../../utils/utils';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
+import ManureModal from './CalculateNutrientsComponents/ManureModal';
+import OtherModal from './CalculateNutrientsComponents/OtherModal';
+import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 
 type NMPFileField = NMPFileFieldData & {
   index: number;
@@ -200,6 +203,18 @@ export default function CalculateNutrients() {
             </Button>
             <Button
               size="medium"
+              aria-label="Add Fertigation"
+              onPress={() => {
+                setButtonClicked('fertigation');
+                setIsDialogOpen(true);
+              }}
+              variant="secondary"
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              Add Fertigation
+            </Button>
+            <Button
+              size="medium"
               aria-label="Add Other"
               onPress={() => {
                 setButtonClicked('other');
@@ -212,25 +227,63 @@ export default function CalculateNutrients() {
             </Button>
           </ButtonGroup>
         </div>
-        {
-          isDialogOpen && buttonClicked === 'fertilizer' && (
-            // if fertilizer button clicked
-            <FertilizerModal
-              initialModalData={
-                rowEditIndex !== undefined
-                  ? fieldList.find((v) => v.index === rowEditIndex)
-                  : undefined
-              }
-              rowEditIndex={rowEditIndex}
-              setFieldList={setFieldList}
-              isOpen={isDialogOpen}
-              onCancel={handleDialogClose}
-              modalStyle={{ width: '700px' }}
-            />
-          )
-          // else if manure button clicked
-        }
-        {/* {isDialogOpen && buttonClicked === 'manure' && ()} */}
+        {isDialogOpen && buttonClicked === 'fertilizer' && (
+          // if fertilizer button clicked
+          <FertilizerModal
+            initialModalData={
+              rowEditIndex !== undefined
+                ? fieldList.find((v) => v.index === rowEditIndex)
+                : undefined
+            }
+            rowEditIndex={rowEditIndex}
+            setFieldList={setFieldList}
+            isOpen={isDialogOpen}
+            onCancel={handleDialogClose}
+            modalStyle={{ width: '700px' }}
+          />
+        )}
+        {isDialogOpen && buttonClicked === 'manure' && (
+          <ManureModal
+            initialModalData={
+              rowEditIndex !== undefined
+                ? fieldList.find((v) => v.index === rowEditIndex)
+                : undefined
+            }
+            rowEditIndex={rowEditIndex}
+            setFieldList={setFieldList}
+            isOpen={isDialogOpen}
+            onCancel={handleDialogClose}
+            modalStyle={{ width: '700px' }}
+          />
+        )}
+        {isDialogOpen && buttonClicked === 'fertigation' && (
+          <FertigationModal
+            initialModalData={
+              rowEditIndex !== undefined
+                ? fieldList.find((v) => v.index === rowEditIndex)
+                : undefined
+            }
+            rowEditIndex={rowEditIndex}
+            setFieldList={setFieldList}
+            isOpen={isDialogOpen}
+            onCancel={handleDialogClose}
+            modalStyle={{ width: '700px' }}
+          />
+        )}
+        {isDialogOpen && buttonClicked === 'other' && (
+          <OtherModal
+            initialModalData={
+              rowEditIndex !== undefined
+                ? fieldList.find((v) => v.index === rowEditIndex)
+                : undefined
+            }
+            rowEditIndex={rowEditIndex}
+            setFieldList={setFieldList}
+            isOpen={isDialogOpen}
+            onCancel={handleDialogClose}
+            modalStyle={{ width: '700px' }}
+          />
+        )}
       </>
       {/* tabs = the fields the user has entered */}
       <TabsMaterial
