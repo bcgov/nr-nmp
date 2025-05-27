@@ -43,12 +43,12 @@ export default function CalculateNutrients() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleEditRow = React.useCallback((e: { row: AnimalData }) => {
+  const handleEditRow = React.useCallback((e: { row: fieldElement }) => {
     setRowEditIndex(e.row.index);
     setIsDialogOpen(true);
   }, []);
 
-  const handleDeleteRow = (e: { row: AnimalData }) => {
+  const handleDeleteRow = (e: { row: fieldElement }) => {
     setFieldList((prev) => {
       const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
       const newList = [...prev];
@@ -73,6 +73,7 @@ export default function CalculateNutrients() {
     //     state.nmpFile,
     //     setNMPFile,
     //   );
+    //   // next page is reporting
     //   navigate(/);
     // } else {
     //   setShowViewError('Must enter at least 1 field');
@@ -81,19 +82,54 @@ export default function CalculateNutrients() {
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'Crop', headerName: 'Crop', width: 200, minWidth: 150, maxWidth: 300 },
+      { field: 'cropName', headerName: 'Crop', width: 250, minWidth: 200, maxWidth: 300 },
       {
-        field: 'Agronomic',
-        headerName: 'Agronomic (lb/ac)',
-        width: 150,
-        minWidth: 125,
-        maxWidth: 300,
+        field: 'reqN',
+        headerName: 'N',
+        width: 60,
+        minWidth: 60,
+        maxWidth: 100,
+        description: 'Nitrogen',
       },
       {
-        field: 'Crop Removal (lb/ac)',
-        headerName: 'Crop Removal (lb/ac)',
-        minWidth: 200,
-        maxWidth: 300,
+        field: 'reqP2o5',
+        headerName: 'P2o5',
+        width: 60,
+        minWidth: 60,
+        maxWidth: 100,
+        description: 'Phosphorous',
+      },
+      {
+        field: 'reqK2o',
+        headerName: 'K2o',
+        width: 110,
+        minWidth: 100,
+        maxWidth: 110,
+        description: 'Nitrogen',
+      },
+      {
+        field: 'remN',
+        headerName: 'N',
+        width: 60,
+        minWidth: 60,
+        maxWidth: 100,
+        description: 'Nitrogen',
+      },
+      {
+        field: 'remP2o5',
+        headerName: 'P2o5',
+        width: 60,
+        minWidth: 60,
+        maxWidth: 100,
+        description: 'Nitrogen',
+      },
+      {
+        field: 'remK2o',
+        headerName: 'K2o',
+        width: 180,
+        minWidth: 60,
+        maxWidth: 180,
+        description: 'Nitrogen',
       },
       {
         field: '',
@@ -190,14 +226,22 @@ export default function CalculateNutrients() {
         }
         {/* {isDialogOpen && buttonClicked === 'manure' && ()} */}
       </>
-      {/* make the tabs = the fields the user has entered */}
+      {/* tabs = the fields the user has entered */}
       <TabsMaterial
         activeTab={activeField}
         tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.FieldName) : ['Field 1']}
       />
+      <div
+        style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
+      >
+        <div style={{ width: 230 }} />
+        <div style={{ width: 210 }}>Agronomic (lb/ac)</div>
+        <div style={{ width: 250 }}>Crop Removal (lb/ac)</div>
+      </div>
+      {/* display crops belonging to the field of the tab the user is on */}
       <DataGrid
-        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={fieldList}
+        sx={{ ...customTableStyle }}
+        rows={fieldList[activeField].Crops ? fieldList[activeField].Crops : []}
         columns={columns}
         disableRowSelectionOnClick
         disableColumnMenu
