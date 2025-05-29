@@ -12,7 +12,12 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { StyledContent } from './nutrientAnalsysis.styles';
 import { NMPFile, NMPFileImportedManureData } from '@/types';
 import useAppService from '@/services/app/useAppService';
-import { CALCULATE_NUTRIENTS, NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '@/constants/RouteConstants';
+import {
+  CALCULATE_NUTRIENTS,
+  NUTRIENT_ANALYSIS,
+  MANURE_IMPORTS,
+  FIELD_LIST,
+} from '@/constants/RouteConstants';
 import { saveFarmManuresToFile } from '@/utils/utils';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
@@ -85,7 +90,7 @@ export default function NutrientAnalysis() {
 
   const handleNext = () => {
     saveFarmManuresToFile(nutrientAnalysisData, state.nmpFile, setNMPFile);
-    navigate(CALCULATE_NUTRIENTS);
+    navigate(FIELD_LIST);
   };
 
   const nutrientTableColumns: GridColDef[] = useMemo(

@@ -1,6 +1,7 @@
 /**
- * @summary Styling for FieldList view
+ * @summary Styling for CalculateNutrients view
  */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import screenSizes from '../../constants/screenSizes';
 
@@ -69,3 +70,15 @@ export const ButtonWrapper = styled.div<{ position?: 'left' | 'right' }>`
 export const TableWrapper = styled.div`
   margin-top: 3em;
 `;
+
+export const addRecordGroupStyle = css({
+  '.bcds-ButtonGroup': {
+    overflow: 'visible',
+    height: '0rem',
+    '> button': {
+      position: 'relative',
+      bottom: '-0.25rem',
+      zIndex: '10',
+    },
+  },
+});

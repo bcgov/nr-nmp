@@ -170,63 +170,67 @@ export default function CalculateNutrients() {
       <ProgressStepper step={FIELD_LIST} />
       <AppTitle />
       <PageTitle title="Calculate Nutrients" />
+      {/* tabs = the fields the user has entered */}
+      <TabsMaterial
+        activeTab={activeField}
+        tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.FieldName) : ['Field 1']}
+      />
       <>
-        <div css={addRecordGroupStyle}>
-          <ButtonGroup
-            alignment="end"
-            ariaLabel="A group of buttons"
-            orientation="horizontal"
+        <ButtonGroup
+          alignment="end"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            aria-label="Add Manure"
+            onPress={() => {
+              setButtonClicked('manure');
+              setIsDialogOpen(true);
+            }}
+            variant="secondary"
           >
-            <Button
-              size="medium"
-              aria-label="Add Manure"
-              onPress={() => {
-                setButtonClicked('manure');
-                setIsDialogOpen(true);
-              }}
-              variant="secondary"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-              Add Manure
-            </Button>
-            <Button
-              size="medium"
-              aria-label="Add Fertilizer"
-              onPress={() => {
-                setButtonClicked('fertilizer');
-                setIsDialogOpen(true);
-              }}
-              variant="secondary"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-              Add Fertilizer
-            </Button>
-            <Button
-              size="medium"
-              aria-label="Add Fertigation"
-              onPress={() => {
-                setButtonClicked('fertigation');
-                setIsDialogOpen(true);
-              }}
-              variant="secondary"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-              Add Fertigation
-            </Button>
-            <Button
-              size="medium"
-              aria-label="Add Other"
-              onPress={() => {
-                setButtonClicked('other');
-                setIsDialogOpen(true);
-              }}
-              variant="secondary"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-              Add Other
-            </Button>
-          </ButtonGroup>
-        </div>
+            <FontAwesomeIcon icon={faPlus} />
+            Add Manure
+          </Button>
+          <Button
+            size="medium"
+            aria-label="Add Fertilizer"
+            onPress={() => {
+              setButtonClicked('fertilizer');
+              setIsDialogOpen(true);
+            }}
+            variant="secondary"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Add Fertilizer
+          </Button>
+          <Button
+            size="medium"
+            aria-label="Add Fertigation"
+            onPress={() => {
+              setButtonClicked('fertigation');
+              setIsDialogOpen(true);
+            }}
+            variant="secondary"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Add Fertigation
+          </Button>
+          <Button
+            size="medium"
+            aria-label="Add Other"
+            onPress={() => {
+              setButtonClicked('other');
+              setIsDialogOpen(true);
+            }}
+            variant="secondary"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Add Other
+          </Button>
+        </ButtonGroup>
+
         {isDialogOpen && buttonClicked === 'fertilizer' && (
           // if fertilizer button clicked
           <FertilizerModal
@@ -285,11 +289,6 @@ export default function CalculateNutrients() {
           />
         )}
       </>
-      {/* tabs = the fields the user has entered */}
-      <TabsMaterial
-        activeTab={activeField}
-        tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.FieldName) : ['Field 1']}
-      />
       <div
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >

@@ -30,7 +30,12 @@ import {
 } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-import { FARM_INFORMATION, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
+import {
+  FARM_INFORMATION,
+  FIELD_LIST,
+  MANURE_IMPORTS,
+  SOIL_TESTS,
+} from '@/constants/RouteConstants';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
 import useAppService from '@/services/app/useAppService';
 
@@ -143,6 +148,20 @@ export default function FieldList() {
       navigate(SOIL_TESTS);
     } else {
       setShowViewError('Must enter at least 1 field');
+    }
+  };
+
+  const handleBack = () => {
+    try {
+      const nmpState = JSON.parse(state.nmpFile);
+      if (nmpState.farmDetails.FarmAnimals.length === 0) {
+        navigate(FARM_INFORMATION);
+      } else {
+        navigate(MANURE_IMPORTS);
+      }
+    } catch {
+      console.log("Couldn't parse");
+      navigate(FARM_INFORMATION);
     }
   };
 
@@ -335,7 +354,7 @@ export default function FieldList() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={() => navigate(FARM_INFORMATION)}
+          onPress={handleBack}
         >
           BACK
         </Button>
