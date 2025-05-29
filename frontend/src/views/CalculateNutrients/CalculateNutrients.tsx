@@ -17,9 +17,11 @@ import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
 import { initFields } from '../../utils/utils';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
+import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
+import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 
 type NMPFileField = NMPFileFieldData & {
   index: number;
@@ -227,8 +229,16 @@ export default function CalculateNutrients() {
             Add Other
           </Button>
         </ButtonGroup>
-
         {isDialogOpen && buttonClicked === 'fertilizer' && (
+          <NewFertilizerModal
+            initialModalData={undefined}
+            isOpen={isDialogOpen}
+            onCancel={handleDialogClose}
+            modalStyle={{ width: '700px' }}
+            handleSubmit={() => {}}
+          />
+        )}
+        {/* {isDialogOpen && buttonClicked === 'fertilizer' && (
           // if fertilizer button clicked
           <FertilizerModal
             initialModalData={
@@ -242,7 +252,7 @@ export default function CalculateNutrients() {
             onCancel={handleDialogClose}
             modalStyle={{ width: '700px' }}
           />
-        )}
+        )} */}
         {isDialogOpen && buttonClicked === 'manure' && (
           <ManureModal
             initialModalData={
@@ -296,7 +306,7 @@ export default function CalculateNutrients() {
       {/* display crops belonging to the field of the tab the user is on */}
       <DataGrid
         sx={{ ...customTableStyle }}
-        rows={fieldList[activeField].Crops ? fieldList[activeField].Crops : []}
+        rows={fieldList[activeField]?.Crops ? fieldList[activeField].Crops : []}
         columns={columns}
         disableRowSelectionOnClick
         disableColumnMenu
