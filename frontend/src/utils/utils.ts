@@ -2,7 +2,7 @@ import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import NMPFile from '@/types/NMPFile';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 
 export const initFields = (state: any) => {
   if (state.nmpFile) {

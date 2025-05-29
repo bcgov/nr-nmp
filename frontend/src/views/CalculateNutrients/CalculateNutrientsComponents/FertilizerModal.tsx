@@ -7,19 +7,14 @@ import Grid from '@mui/material/Grid';
 import { APICacheContext } from '@/context/APICacheContext';
 import { formGridBreakpoints } from '@/common.styles';
 import Form from '@/components/common/Form/Form';
-import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { ModalContent } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 
-type NMPFileField = NMPFileFieldData & {
-  index: number;
-  id: string;
-};
-
 type AddFertilizerModalProps = {
-  initialModalData: NMPFileField | undefined;
+  initialModalData: NMPFileFieldData | undefined;
   rowEditIndex: number | undefined;
-  setFieldList: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
+  setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
 };
 

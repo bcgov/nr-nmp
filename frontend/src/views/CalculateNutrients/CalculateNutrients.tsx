@@ -2,7 +2,7 @@
  * @summary The calculate nutrients page for the application
  * calculates the field nutrients based on the crops and manure
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
@@ -20,11 +20,7 @@ import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
-
-type NMPFileField = NMPFileFieldData & {
-  index: number;
-  id: string;
-};
+import FieldListModal from '../FieldList/FieldListModal';
 
 // calculates the field nutrients based on the crops and manure
 export default function CalculateNutrients() {
@@ -39,22 +35,20 @@ export default function CalculateNutrients() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileField>>(
-    // Load NMP fields into view, add id key for UI tracking purposes
-    // id key removed on save
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
+    // Index is removed on save
     initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
       ...fieldElement,
       index,
-      id: index.toString(),
     })),
   );
 
-  const handleEditRow = React.useCallback((e: { row: NMPFileField }) => {
+  const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
     setIsDialogOpen(true);
   }, []);
 
-  const handleDeleteRow = (e: { row: NMPFileField }) => {
+  const handleDeleteRow = (e: { row: NMPFileFieldData }) => {
     setFieldList((prev) => {
       const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
       const newList = [...prev];
@@ -85,6 +79,14 @@ export default function CalculateNutrients() {
     //   setShowViewError('Must enter at least 1 field');
     // }
   };
+
+  const isFieldNameUnique = useCallback(
+    (data: NMPFileFieldData) =>
+      !fieldList.some(
+        (fieldRow) => fieldRow.FieldName === data.FieldName && fieldRow.index !== data.index,
+      ),
+    [fieldList],
+  );
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -167,6 +169,17 @@ export default function CalculateNutrients() {
       <ProgressStepper step={FIELD_LIST} />
       <AppTitle />
       <PageTitle title="Calculate Nutrients" />
+      <Button
+        size="medium"
+        aria-label="Add Field"
+        onPress={() => {
+          setButtonClicked('field');
+          setIsDialogOpen(true);
+        }}
+      >
+        <FontAwesomeIcon icon={faPlus} />
+        Add Field
+      </Button>
       {/* tabs = the fields the user has entered */}
       <TabsMaterial
         activeTab={activeField}
@@ -228,6 +241,16 @@ export default function CalculateNutrients() {
           </Button>
         </ButtonGroup>
 
+        {isDialogOpen && buttonClicked === 'field' && (
+          <FieldListModal
+            initialModalData={undefined}
+            rowEditIndex={undefined}
+            setFieldList={setFieldList}
+            isFieldNameUnique={isFieldNameUnique}
+            isOpen={isDialogOpen}
+            onClose={handleDialogClose}
+          />
+        )}
         {isDialogOpen && buttonClicked === 'fertilizer' && (
           // if fertilizer button clicked
           <FertilizerModal

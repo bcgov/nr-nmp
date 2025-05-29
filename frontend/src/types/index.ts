@@ -10,7 +10,7 @@ import {
   PreviousCropsDatabase,
   soilTestMethodsData,
 } from './Crops';
-import NMPFileFieldData from './NMPFileFieldData';
+import { NMPFileFieldData } from './NMPFileFieldData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 import SolidManureConversionFactors from './SolidManureConversionFactors';
 import Region from './Region';
