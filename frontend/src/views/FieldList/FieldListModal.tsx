@@ -101,7 +101,7 @@ export default function FieldListModal({
               isRequired
               name="FieldName"
               value={formData.FieldName}
-              isInvalid={!!validateUniqueName()}
+              isInvalid={!!validateUniqueName()} // Note: this turns the textbox border red, looks odd but will only change if we get complaints
               onChange={(e) => handleFormFieldChange('FieldName', e)}
             />
           </Grid>
