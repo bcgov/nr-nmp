@@ -44,7 +44,7 @@ import {
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 import { APICacheContext } from '@/context/APICacheContext';
 import { booleanChecker, initFields, saveFieldsToFile } from '../../utils/utils';
-import { MANURE_IMPORTS, SOIL_TESTS } from '@/constants/RouteConstants';
+import { CALCULATE_NUTRIENTS, SOIL_TESTS } from '@/constants/RouteConstants';
 import {
   customTableStyle,
   formCss,
@@ -384,7 +384,7 @@ function Crops() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const tempFields = fields.map(({ id, ...remainingFields }) => remainingFields);
     saveFieldsToFile(tempFields, state.nmpFile, setNMPFile);
-    navigate(MANURE_IMPORTS);
+    navigate(CALCULATE_NUTRIENTS);
   };
 
   const handlePrevious = () => {
