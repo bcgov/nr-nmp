@@ -2,7 +2,7 @@
  * @summary The calculate nutrients page for the application
  * calculates the field nutrients based on the crops and manure
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -11,9 +11,9 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import NMPFileFieldData from '@/types/NMPFileFieldData';
-import { NUTRIENT_ANALYSIS, FIELD_LIST } from '@/constants/RouteConstants';
+import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
 
-import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
+import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
 import { initFields } from '../../utils/utils';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
@@ -28,7 +28,9 @@ type NMPFileField = NMPFileFieldData & {
 
 // calculates the field nutrients based on the crops and manure
 export default function CalculateNutrients() {
-  const { state, setNMPFile, setShowAnimalsStep } = useAppService();
+  // setNMPFile not yet used
+  // const { state, setNMPFile } = useAppService();
+  const { state } = useAppService();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
@@ -46,11 +48,6 @@ export default function CalculateNutrients() {
       id: index.toString(),
     })),
   );
-
-  useEffect(() => {
-    setShowAnimalsStep(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleEditRow = React.useCallback((e: { row: NMPFileField }) => {
     setRowEditIndex(e.row.index);
@@ -321,7 +318,7 @@ export default function CalculateNutrients() {
             if (activeField > 0) {
               setActiveField(activeField - 1);
             } else {
-              navigate(NUTRIENT_ANALYSIS);
+              navigate(CROPS);
             }
           }}
         >
