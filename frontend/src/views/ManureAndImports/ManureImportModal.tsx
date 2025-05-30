@@ -9,15 +9,7 @@ import {
 import { APICacheContext } from '@/context/APICacheContext';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import {
-  Button,
-  ButtonGroup,
-  Dialog,
-  Modal,
-  Form,
-  Select,
-  TextField,
-} from '@bcgov/design-system-react-components';
+import { Dialog, Modal, Select, TextField } from '@bcgov/design-system-react-components';
 import {
   formCss,
   modalHeaderStyle,
@@ -29,6 +21,7 @@ import {
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
 } from '@/types';
+import Form from '@/components/common/Form/Form';
 
 const manureTypeOptions = [
   { label: 'Liquid', id: 1 },
@@ -125,6 +118,7 @@ export default function ManureImportModal({
           <Form
             css={formCss}
             onSubmit={onSubmit}
+            onCancel={handleDialogClose}
           >
             <Grid
               container
@@ -234,31 +228,6 @@ export default function ManureImportModal({
                 </>
               )}
             </Grid>
-            <Divider
-              aria-hidden="true"
-              component="div"
-              css={{ marginTop: '1rem', marginBottom: '1rem' }}
-            />
-            <ButtonGroup
-              alignment="end"
-              orientation="horizontal"
-            >
-              <Button
-                type="reset"
-                variant="secondary"
-                onPress={handleDialogClose}
-                aria-label="reset"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                aria-label="submit"
-              >
-                Confirm
-              </Button>
-            </ButtonGroup>
           </Form>
         </div>
       </Dialog>

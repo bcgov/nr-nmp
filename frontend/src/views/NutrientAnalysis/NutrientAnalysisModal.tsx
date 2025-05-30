@@ -3,19 +3,11 @@
  */
 import { FormEvent, Key, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import {
-  Button,
-  ButtonGroup,
-  Checkbox,
-  Form,
-  Select,
-  TextField,
-} from '@bcgov/design-system-react-components';
-import Divider from '@mui/material/Divider';
+import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { ManureNutrients, NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import { formCss, formGridBreakpoints } from '@/common.styles';
-// import Form from '@/components/common/Form/Form';
+import Form from '@/components/common/Form/Form';
 import ManureType from '@/types/ManureType';
 import { APICacheContext } from '@/context/APICacheContext';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
@@ -153,6 +145,7 @@ export default function NutrientAnalysisModal({
       <Form
         css={formCss}
         onSubmit={handleModalSubmit}
+        onCancel={onCancel}
       >
         <Grid
           container
@@ -296,31 +289,6 @@ export default function NutrientAnalysisModal({
             />
           </Grid>
         </Grid>
-        <Divider
-          aria-hidden="true"
-          component="div"
-          css={{ marginTop: '1rem', marginBottom: '1rem' }}
-        />
-        <ButtonGroup
-          alignment="end"
-          orientation="horizontal"
-        >
-          <Button
-            type="reset"
-            variant="secondary"
-            onPress={onCancel}
-            aria-label="reset"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            aria-label="submit"
-          >
-            Confirm
-          </Button>
-        </ButtonGroup>
       </Form>
     </Modal>
   );
