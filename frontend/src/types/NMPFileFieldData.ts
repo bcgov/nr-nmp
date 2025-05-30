@@ -1,6 +1,7 @@
 import { NMPFileCropData, SoilTestData } from './Crops';
 
-interface NMPFileFieldData {
+export interface NMPFileFieldData {
+  index?: number;
   FieldName: string;
   Area: string;
   PreviousYearManureApplicationFrequency: string;
@@ -9,4 +10,11 @@ interface NMPFileFieldData {
   Crops: NMPFileCropData[];
 }
 
-export default NMPFileFieldData;
+export const initialFieldFormData: NMPFileFieldData = {
+  FieldName: '',
+  Area: '',
+  PreviousYearManureApplicationFrequency: '0',
+  Comment: '',
+  SoilTest: {},
+  Crops: [],
+};

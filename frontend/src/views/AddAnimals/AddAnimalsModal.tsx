@@ -12,14 +12,14 @@ type AddAnimalsModalProps = {
   initialModalData: AnimalData | undefined;
   rowEditIndex: number | undefined;
   setAnimalList: React.Dispatch<React.SetStateAction<AnimalData[]>>;
-  onCancel: () => void;
+  onClose: () => void;
 };
 
 export default function AddAnimalsModal({
   initialModalData,
   rowEditIndex,
   setAnimalList,
-  onCancel,
+  onClose,
   ...props
 }: AddAnimalsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState<AnimalData | undefined>(initialModalData);
@@ -39,7 +39,7 @@ export default function AddAnimalsModal({
         { ...newFormData, index: prev.length === 0 ? 0 : (prev[prev.length - 1].index || 0) + 1 },
       ]);
     }
-    onCancel();
+    onClose();
   };
 
   const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
@@ -70,7 +70,7 @@ export default function AddAnimalsModal({
       {formData === undefined && (
         <UnselectedAnimal
           handleInputChanges={handleInputChanges}
-          onCancel={onCancel}
+          onCancel={onClose}
         />
       )}
       {formData?.animalId === '1' && (
@@ -78,7 +78,7 @@ export default function AddAnimalsModal({
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
-          onCancel={onCancel}
+          onCancel={onClose}
         />
       )}
       {formData?.animalId === '2' && (
@@ -86,7 +86,7 @@ export default function AddAnimalsModal({
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
-          onCancel={onCancel}
+          onCancel={onClose}
         />
       )}
     </Modal>

@@ -1,35 +1,16 @@
 /**
  * @summary This is the Field list Tab
  */
-import { useMemo, useState } from 'react';
-import type { FormEvent } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
-import {
-  Button,
-  ButtonGroup,
-  Dialog,
-  Modal,
-  Form,
-  TextField,
-  Select,
-} from '@bcgov/design-system-react-components';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-import {
-  addRecordGroupStyle,
-  customTableStyle,
-  formCss,
-  formGridBreakpoints,
-  modalPaddingStyle,
-  modalHeaderStyle,
-  tableActionButtonCss,
-} from '../../common.styles';
+import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
-import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import {
   FARM_INFORMATION,
   FIELD_LIST,
@@ -38,110 +19,49 @@ import {
 } from '@/constants/RouteConstants';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
 import useAppService from '@/services/app/useAppService';
-
-type tempNMPFileFieldData = NMPFileFieldData & { id?: string };
-
-const initialFieldFormData: tempNMPFileFieldData = {
-  FieldName: '',
-  Area: '',
-  PreviousYearManureApplicationFrequency: '0',
-  Comment: '',
-  SoilTest: {},
-  Crops: [],
-};
-
-const manureOptions = [
-  { id: '0', label: 'Select' },
-  { id: '1', label: 'No Manure in the last 2 years' },
-  { id: '2', label: 'Manure applied in 1 of the 2 years' },
-  { id: '3', label: 'Manure applied in each of the 2 years' },
-];
+import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 
 export default function FieldList() {
   const { state, setNMPFile } = useAppService();
-  const [formData, setFormData] = useState<tempNMPFileFieldData>(initialFieldFormData);
-  const [isEditingForm, setIsEditingForm] = useState<boolean>(false);
+  const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<tempNMPFileFieldData>>(
-    // Load NMP fields into view, add id key for UI tracking purposes
-    // id key removed on save
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
+    // Index is removed on save
     initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
       ...fieldElement,
-      id: index.toString(),
+      index,
     })),
   );
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    // Prevent default browser page refresh.
-    e.preventDefault();
-
-    if (isEditingForm) {
-      // If editing, find and replace field instead of adding new field
-      const replaceIndex = fieldList.findIndex((element) => element?.id === formData?.id);
-      setFieldList((prev) => {
-        const newList = [...prev];
-        newList[replaceIndex] = { ...formData };
-        return newList;
-      });
-    } else {
-      //
-      setFieldList((prev) => [...prev, { ...formData, id: prev?.length.toString() ?? '0' }]);
-    }
-    setFormData(initialFieldFormData);
-    setIsEditingForm(false);
-    setIsDialogOpen(false);
-    setShowViewError('');
-  };
-
-  const handleFormFieldChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const validateUniqueField = (): string => {
-    // Trigger validation error if blank, replaces default isRequired
-    if (!formData?.FieldName) return ' ';
-
-    // Check if field name is unique, with exception of editing the same field
-    const isNameValid = fieldList.some(
-      (fieldRow) => fieldRow.FieldName === formData.FieldName && fieldRow.id !== formData?.id,
-    );
-    return isNameValid ? ' must be unique' : '';
-  };
-
-  const handleEditRow = (e: any) => {
-    setIsEditingForm(true);
-    setFormData(e.row);
+  const handleEditRow = useCallback((e: { row: NMPFileFieldData }) => {
+    setRowEditIndex(e.row.index);
     setIsDialogOpen(true);
-  };
+  }, []);
 
   const handleDeleteRow = (e: any) => {
     setFieldList((prev) => {
+      const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
       const newList = [...prev];
-      if (e?.id === 0 || e?.id) newList.splice(e.id, 1);
+      newList.splice(deleteSpot, 1);
       return newList;
     });
   };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setIsEditingForm(false);
-    setIsFormInvalid(false);
-    setFormData(initialFieldFormData);
+    setRowEditIndex(undefined);
   };
 
   const handleNextPage = () => {
-    setShowViewError('');
-
     if (fieldList.length) {
       saveFieldsToFile(
-        // Delete the id key in each field to prevent saving into NMPfile
+        // Delete the index key in each field to prevent saving into NMPfile
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        fieldList.map(({ id, ...remainingFields }) => remainingFields),
+        fieldList.map(({ index, ...remainingFields }) => remainingFields),
         state.nmpFile,
         setNMPFile,
       );
@@ -165,8 +85,13 @@ export default function FieldList() {
     }
   };
 
-  const isManureOptionValid = () =>
-    formData?.PreviousYearManureApplicationFrequency !== manureOptions[0].id;
+  const isFieldNameUnique = useCallback(
+    (data: NMPFileFieldData) =>
+      !fieldList.some(
+        (fieldRow) => fieldRow.FieldName === data.FieldName && fieldRow.index !== data.index,
+      ),
+    [fieldList],
+  );
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -195,7 +120,7 @@ export default function FieldList() {
         resizable: false,
       },
     ],
-    [],
+    [handleEditRow],
   );
 
   return (
@@ -221,115 +146,20 @@ export default function FieldList() {
             </Button>
           </ButtonGroup>
         </div>
-        <Modal
-          isDismissable
-          isOpen={isDialogOpen}
-          onOpenChange={handleDialogClose}
-        >
-          <Dialog
-            isCloseable
-            role="dialog"
-          >
-            <div css={modalPaddingStyle}>
-              <span css={modalHeaderStyle}>{isEditingForm ? 'Edit field' : 'Add field'}</span>
-              <Divider
-                aria-hidden="true"
-                component="div"
-                css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
-              />
-              <Form
-                css={formCss}
-                onSubmit={onSubmit}
-                onInvalid={() => setIsFormInvalid(true)}
-              >
-                <Grid
-                  container
-                  spacing={1}
-                >
-                  <Grid size={formGridBreakpoints}>
-                    <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid && validateUniqueField() ? '--error' : ''}`}
-                    >
-                      Field name {isFormInvalid && validateUniqueField()}
-                    </span>
-                    <TextField
-                      isRequired
-                      name="FieldName"
-                      value={formData?.FieldName}
-                      validate={() => (isFormInvalid ? validateUniqueField() : '')}
-                      onChange={(e) => handleFormFieldChange('FieldName', e)}
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.Area ? '--error' : ''}`}
-                    >
-                      Area
-                    </span>
-                    <TextField
-                      isRequired
-                      type="number"
-                      name="Area"
-                      value={formData?.Area?.toString()}
-                      onChange={(e) => handleFormFieldChange('Area', e?.trim())}
-                    />
-                  </Grid>
-                  <Grid size={6}>
-                    <span
-                      className={`bcds-react-aria-Select--Label ${isFormInvalid && !isManureOptionValid() ? '--error' : ''}`}
-                    >
-                      Manure Application
-                    </span>
-                    <Select
-                      isRequired
-                      name="manureApplication"
-                      items={manureOptions}
-                      selectedKey={formData?.PreviousYearManureApplicationFrequency}
-                      validate={() => (!isManureOptionValid() ? 'required' : '')}
-                      onSelectionChange={(e) => {
-                        handleFormFieldChange(
-                          'PreviousYearManureApplicationFrequency',
-                          e.toString(),
-                        );
-                      }}
-                    />
-                  </Grid>
-                  <Grid size={formGridBreakpoints}>
-                    <span>Comment (Optional)</span>
-                    <TextField
-                      name="Comment"
-                      value={formData.Comment}
-                      onChange={(e) => handleFormFieldChange('Comment', e)}
-                    />
-                  </Grid>
-                </Grid>
-                <Divider
-                  aria-hidden="true"
-                  component="div"
-                  css={{ marginTop: '1rem', marginBottom: '1rem' }}
-                />
-                <ButtonGroup
-                  alignment="end"
-                  orientation="horizontal"
-                >
-                  <Button
-                    type="reset"
-                    variant="secondary"
-                    onPress={handleDialogClose}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                  >
-                    Confirm
-                  </Button>
-                </ButtonGroup>
-              </Form>
-            </div>
-          </Dialog>
-        </Modal>
+        {isDialogOpen && (
+          <FieldListModal
+            initialModalData={
+              rowEditIndex !== undefined
+                ? fieldList.find((v) => v.index === rowEditIndex)
+                : undefined
+            }
+            rowEditIndex={rowEditIndex}
+            setFieldList={setFieldList}
+            isFieldNameUnique={isFieldNameUnique}
+            isOpen={isDialogOpen}
+            onClose={handleDialogClose}
+          />
+        )}
       </>
       <TabsMaterial
         activeTab={0}
@@ -339,6 +169,7 @@ export default function FieldList() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={fieldList}
         columns={columns}
+        getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

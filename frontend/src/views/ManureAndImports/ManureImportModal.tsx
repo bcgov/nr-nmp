@@ -2,11 +2,6 @@
  * @summary This is the Add Animal list Tab
  */
 import { ComponentProps, FormEvent, Key, useContext, useEffect, useState } from 'react';
-import {
-  DefaultSolidManureConversionFactors,
-  DefaultLiquidManureConversionFactors,
-} from '@/constants';
-import { APICacheContext } from '@/context/APICacheContext';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -18,6 +13,11 @@ import {
   Select,
   TextField,
 } from '@bcgov/design-system-react-components';
+import { APICacheContext } from '@/context/APICacheContext';
+import {
+  DefaultSolidManureConversionFactors,
+  DefaultLiquidManureConversionFactors,
+} from '@/constants';
 import {
   formCss,
   modalHeaderStyle,
@@ -83,10 +83,9 @@ export default function ManureImportModal({
 
   const notUniqueNameCheck = () => {
     if (isEditingExistingEntry) return false;
-    else
-      return manuresList.some(
-        (ele: NMPFileImportedManureData) => ele.UniqueMaterialName === formData.UniqueMaterialName,
-      );
+    return manuresList.some(
+      (ele: NMPFileImportedManureData) => ele.UniqueMaterialName === formData.UniqueMaterialName,
+    );
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -133,7 +132,7 @@ export default function ManureImportModal({
               <Grid size={formGridBreakpoints}>
                 <span
                   className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
-                ></span>
+                />
                 <TextField
                   isRequired
                   label="Material name"
@@ -215,23 +214,21 @@ export default function ManureImportModal({
               )}
 
               {formData.ManureType === 1 && (
-                <>
-                  <Grid size={formGridBreakpoints}>
-                    <Select
-                      isRequired
-                      label="Units"
-                      placeholder="Select a unit"
-                      selectedKey={formData?.Units}
-                      items={liquidManureDropdownOptions.map((ele) => ({
-                        id: ele.inputunit,
-                        label: ele.inputunitname ?? '',
-                      }))}
-                      onSelectionChange={(e: Key) => {
-                        handleInputChange('Units', e as number);
-                      }}
-                    />
-                  </Grid>
-                </>
+                <Grid size={formGridBreakpoints}>
+                  <Select
+                    isRequired
+                    label="Units"
+                    placeholder="Select a unit"
+                    selectedKey={formData?.Units}
+                    items={liquidManureDropdownOptions.map((ele) => ({
+                      id: ele.inputunit,
+                      label: ele.inputunitname ?? '',
+                    }))}
+                    onSelectionChange={(e: Key) => {
+                      handleInputChange('Units', e as number);
+                    }}
+                  />
+                </Grid>
               )}
             </Grid>
             <Divider

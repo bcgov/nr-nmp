@@ -6,19 +6,14 @@ import { Select } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import Form from '@/components/common/Form/Form';
-import NMPFileFieldData from '@/types/NMPFileFieldData';
+import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { ModalContent } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 
-type NMPFileField = NMPFileFieldData & {
-  index: number;
-  id: string;
-};
-
 type AddOtherModalProps = {
-  initialModalData: NMPFileField | undefined;
+  initialModalData: NMPFileFieldData | undefined;
   rowEditIndex: number | undefined;
-  setFieldList: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
+  setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
 };
 
