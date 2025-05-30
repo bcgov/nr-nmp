@@ -9,7 +9,7 @@ import {
 } from '@bcgov/design-system-react-components';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import { formCss, formGridBreakpoints } from '../../common.styles';
+import { formCss, formGridBreakpoints } from '../../../common.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NMPFileFieldData, initialFieldFormData } from '@/types/NMPFileFieldData';
 

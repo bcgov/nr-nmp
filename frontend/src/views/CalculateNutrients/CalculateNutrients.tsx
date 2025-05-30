@@ -20,7 +20,7 @@ import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
-import FieldListModal from '../FieldList/FieldListModal';
+import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 
 // calculates the field nutrients based on the crops and manure
 export default function CalculateNutrients() {

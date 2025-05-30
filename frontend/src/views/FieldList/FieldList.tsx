@@ -19,7 +19,7 @@ import {
 } from '@/constants/RouteConstants';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
 import useAppService from '@/services/app/useAppService';
-import FieldListModal from './FieldListModal';
+import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 
 export default function FieldList() {
   const { state, setNMPFile } = useAppService();
