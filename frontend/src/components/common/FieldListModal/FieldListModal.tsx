@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import type { FormEvent } from 'react';
-import {
-  Button,
-  ButtonGroup,
-  Form,
-  TextField,
-  Select,
-} from '@bcgov/design-system-react-components';
-import Divider from '@mui/material/Divider';
+import { TextField, Select } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formCss, formGridBreakpoints } from '../../../common.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NMPFileFieldData, initialFieldFormData } from '@/types/NMPFileFieldData';
+import Form from '../Form/Form';
 
 // NOTE: Move into a const file if this is needed elsewhere
 const manureOptions = [
@@ -86,6 +80,7 @@ export default function FieldListModal({
         onSubmit={onSubmit}
         validationBehavior="native"
         onInvalid={() => setIsFormInvalid(true)}
+        onCancel={onClose}
       >
         <Grid
           container
@@ -145,29 +140,6 @@ export default function FieldListModal({
             />
           </Grid>
         </Grid>
-        <Divider
-          aria-hidden="true"
-          component="div"
-          css={{ marginTop: '1rem', marginBottom: '1rem' }}
-        />
-        <ButtonGroup
-          alignment="end"
-          orientation="horizontal"
-        >
-          <Button
-            type="reset"
-            variant="secondary"
-            onPress={onClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-          >
-            Confirm
-          </Button>
-        </ButtonGroup>
       </Form>
     </Modal>
   );
