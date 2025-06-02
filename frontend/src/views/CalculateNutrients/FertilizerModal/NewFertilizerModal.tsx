@@ -17,24 +17,24 @@ import { formCss, formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { InputField } from '@/components/common';
 
-type NutrientObject = { N: number; P: number; K: number };
-
-type FertilizerFormData = {
-  fieldName: string;
-  fertilizerType: number;
-  fertilizerId: number;
-  applicationRate: number;
-  applUnit: number;
-  liquidDensity: number;
-  densityUnits: number;
-  availableNutrients: NutrientObject;
-  nutrientsStillRequired: NutrientObject;
-};
+import type { FertilizerFormData } from '../types';
 
 type FertilizerModalProps = {
-  initialModalData?: FertilizerFormData | undefined;
+  initialModalData: FertilizerFormData | undefined;
   handleSubmit?: (data: NMPFileFarmManureData) => void;
   onCancel: () => void;
+};
+
+const EMPTY_FERTILIZER_FORM_DATA: FertilizerFormData = {
+  fieldName: '',
+  fertilizerType: 0,
+  fertilizerId: 0,
+  applicationRate: 1,
+  applUnit: 1,
+  liquidDensity: 1,
+  densityUnits: 0,
+  availableNutrients: { N: 0, P: 0, K: 0 },
+  nutrientsStillRequired: { N: 0, P: 0, K: 0 },
 };
 
 const FERTILIZER_METHOD: Array<{ id: string; label: string }> = [
@@ -97,17 +97,7 @@ export default function FertilizerModal({
   >([]);
 
   const [formData, setFormData] = useState<FertilizerFormData>(
-    initialModalData ?? {
-      fieldName: '',
-      fertilizerType: 0,
-      fertilizerId: 0,
-      applicationRate: 1,
-      applUnit: 1,
-      liquidDensity: 1,
-      densityUnits: 0,
-      availableNutrients: { N: 0, P: 0, K: 0 },
-      nutrientsStillRequired: { N: 0, P: 0, K: 0 },
-    },
+    initialModalData ?? EMPTY_FERTILIZER_FORM_DATA,
   );
   const apiCache = useContext(APICacheContext);
 

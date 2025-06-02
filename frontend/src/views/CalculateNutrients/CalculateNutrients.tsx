@@ -261,21 +261,6 @@ export default function CalculateNutrients() {
             handleSubmit={() => {}}
           />
         )}
-        {/* {isDialogOpen && buttonClicked === 'fertilizer' && (
-          // if fertilizer button clicked
-          <FertilizerModal
-            initialModalData={
-              rowEditIndex !== undefined
-                ? fieldList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
-            rowEditIndex={rowEditIndex}
-            setFieldList={setFieldList}
-            isOpen={isDialogOpen}
-            onCancel={handleDialogClose}
-            modalStyle={{ width: '700px' }}
-          />
-        )} */}
         {isDialogOpen && buttonClicked === 'manure' && (
           <ManureModal
             initialModalData={
