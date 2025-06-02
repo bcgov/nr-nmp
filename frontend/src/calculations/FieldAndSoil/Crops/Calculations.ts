@@ -2,8 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { env } from '@/env';
-import NMPFileFieldData from '@/types/NMPFileFieldData';
-import { NMPFileCropData } from '@/types';
+import { NMPFileFieldData, NMPFileCropData } from '@/types';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 
 /**

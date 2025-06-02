@@ -30,7 +30,7 @@ export default function AddAnimals() {
   const [animalList, setAnimalList] = useState<Array<AnimalData>>(
     initAnimals(state).map((animalElement: AnimalData, index: number) => ({
       ...animalElement,
-      index: index,
+      index,
     })),
   );
 
@@ -44,7 +44,6 @@ export default function AddAnimals() {
     setIsDialogOpen(true);
   }, []);
 
-  // ... what????
   const handleDeleteRow = (e: { row: AnimalData }) => {
     setAnimalList((prev) => {
       const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
@@ -151,7 +150,7 @@ export default function AddAnimals() {
             rowEditIndex={rowEditIndex}
             setAnimalList={setAnimalList}
             isOpen={isDialogOpen}
-            onCancel={handleDialogClose}
+            onClose={handleDialogClose}
             modalStyle={{ width: '700px' }}
           />
         )}
