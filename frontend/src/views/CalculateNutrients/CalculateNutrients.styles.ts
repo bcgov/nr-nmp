@@ -82,3 +82,9 @@ export const addRecordGroupStyle = css({
     },
   },
 });
+
+export const Error = styled.div`
+  color: red;
+  font-size: 12px;
+  box-shadow: 0 0 2px red;
+`;
