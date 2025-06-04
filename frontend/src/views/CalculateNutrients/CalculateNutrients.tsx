@@ -16,7 +16,7 @@ import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
-import { Error } from './CalculateNutrients.styles';
+import { Error, Message } from './CalculateNutrients.styles';
 import { NutrientMessage, nutrientMessages } from './nutrientMessages';
 import { initFields } from '../../utils/utils';
 import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
@@ -76,7 +76,7 @@ export default function CalculateNutrients() {
         ...prev,
         {
           ...message,
-          Text: message.Text.replace('{0}', Math.abs(balanceValue).toFixed(1)),
+          Text: message.Text.replace('{0}', Math.abs(balanceValue ?? 0).toFixed(1)),
           Icon: message.Icon,
         },
       ]);
@@ -85,23 +85,15 @@ export default function CalculateNutrients() {
 
   // When balance row changes, clear previous messages and calculate new balances and set new messages based on the balances
   useEffect(() => {
-    setBalanceMessages([]); // Clear previous messages
+    setBalanceMessages([]);
 
-    const balanceRow = {
-      id: 'balance',
-      cropName: 'Balance',
-      reqN: crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
-      reqP2o5: crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
-      reqK2o: crops.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
-      remN: crops.reduce((sum, row) => sum + (row.remN ?? 0), 0),
-      remP2o5: crops.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
-      remK2o: crops.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
-    };
-    const rowsWithBalance = crops.length > 0 ? [...crops, balanceRow] : [];
-
-    Object.entries(balances).forEach(([type, value]) => {
-      getMessage(type, value);
-    });
+    // go over each balance value and get the appropriate message
+    getMessage('reqN', balanceRow.reqN);
+    getMessage('reqP2o5', balanceRow.reqP2o5);
+    getMessage('reqK2o', balanceRow.reqK2o);
+    getMessage('remN', balanceRow.remN);
+    getMessage('remP2o5', balanceRow.remP2o5);
+    getMessage('remK2o', balanceRow.remK2o);
   }, [balanceRow]);
 
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
@@ -174,7 +166,7 @@ export default function CalculateNutrients() {
         width: 110,
         minWidth: 100,
         maxWidth: 110,
-        description: 'Nitrogen',
+        description: 'Potassium',
       },
       {
         field: 'remN',
@@ -190,7 +182,7 @@ export default function CalculateNutrients() {
         width: 60,
         minWidth: 60,
         maxWidth: 100,
-        description: 'Nitrogen',
+        description: 'Phosphorous',
       },
       {
         field: 'remK2o',
@@ -198,7 +190,7 @@ export default function CalculateNutrients() {
         width: 180,
         minWidth: 60,
         maxWidth: 180,
-        description: 'Nitrogen',
+        description: 'Potassium',
       },
       {
         field: '',
@@ -237,7 +229,7 @@ export default function CalculateNutrients() {
       <Button
         size="medium"
         aria-label="Add Field"
-        onPress={() => {
+        onClick={() => {
           setButtonClicked('field');
           setIsDialogOpen(true);
         }}
@@ -389,12 +381,19 @@ export default function CalculateNutrients() {
       {balanceMessages.map((msg) => (
         <Error key={msg.Id}>
           {/* based on msg get appropriate icon // frontend/public/stop triangle.svg */}
+          <Icon
+            key={msg.Id}
+            sx={{ width: '1.5rem', height: '1.5rem', marginRight: '0.5rem' }}
+            component="img"
+            src={msg.Icon}
+            alt="Nutrient balance icon"
+          />
           <img
             key={msg.Id}
             src={msg.Icon}
             alt="Nutrient balance icon"
           />
-          <ErrorText key={msg.Id}>{msg.Text}</ErrorText>
+          <Message key={msg.Id}>{msg.Text}</Message>
         </Error>
       ))}
       <ButtonGroup

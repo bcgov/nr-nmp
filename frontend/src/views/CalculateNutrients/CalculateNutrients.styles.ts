@@ -84,7 +84,17 @@ export const addRecordGroupStyle = css({
 });
 
 export const Error = styled.div`
-  color: red;
+  border: 1px solid #c81212;
+  width: 100%;
+  margin-bottom: 9px;
+  box-shadow:
+    0 2px 3px rgba(0, 0, 0, 0.4),
+    0 0 45px rgba(255, 255, 255, 0.7) inset;
+`;
+
+export const Message = styled.p`
+  color: black;
   font-size: 12px;
-  box-shadow: 0 0 2px red;
+  font-weight: bold;
+  margin: 0.5em;
 `;
