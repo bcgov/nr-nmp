@@ -1,9 +1,6 @@
-import { AnimalData } from '@/views/AddAnimals/types';
-import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
-import NMPFileImportedManureData from './NMPFileImportedManureData';
-import { NMPFileFarmManureData } from './NMPFileFarmManureData';
+import NMPFileYear from './NMPFileYear';
 /**
- * @summary Type definition for NMP File
+ * @summary Type definitions for NMP File
  */
 type NMPFile = {
   farmDetails: {
@@ -11,84 +8,28 @@ type NMPFile = {
     FarmName?: string;
     FarmRegion?: number;
     FarmSubRegion?: number | null;
-    SoilTests?: any | null;
-    TestingMethod?: any | null;
-    Manure?: any | null;
-    HasSelectedFarmType?: boolean;
-    ImportsManureCompost?: boolean;
     FarmAnimals?: string[];
     HasHorticulturalCrops?: boolean;
     HasBerries?: boolean;
     HasVegetables?: boolean;
+    /*
+    Fields from old NMP, currently unused, feel free to re-add
+    Manure?: any | null;
+    HasSelectedFarmType?: boolean;
+    ImportsManureCompost?: boolean;
+    TestingMethod?: any | null;
+    SoilTests?: any | null;
     LeafTests?: any | null;
     LeafTestingMethod?: any | null;
     UserJourney?: number;
+    */
   };
+  years: NMPFileYear[];
+  /*
+  Fields from old NMP, currently unused, feel free to re-add
   unsaved?: boolean;
-  years: Array<{
-    Year?: string;
-    Fields?: Array<{
-      Id?: number;
-      FieldName?: string;
-      Area?: number;
-      Comment?: string | null;
-      Nutrients?: any | null;
-      HasNutrients?: boolean;
-      Crops?: Array<{
-        id?: number;
-        cropId?: string;
-        cropTypeId?: number;
-        cropName?: string;
-        cropTypeName?: string;
-        cropOther?: string | null;
-        yield?: number;
-        reqN?: number;
-        stdN?: number;
-        reqP2o5?: number;
-        reqK2o?: number;
-        remN?: number;
-        remP2o5?: number;
-        remK2o?: number;
-        crudeProtien?: number;
-        prevCropId?: number;
-        coverCropHarvested?: string | null;
-        prevYearManureAppl_volCatCd?: number;
-        yieldHarvestUnit?: number;
-        yieldByHarvestUnit?: number;
-        plantAgeYears?: number | null;
-        numberOfPlantsPerAcre?: number;
-        distanceBtwnPlantsRows?: number | null;
-        willPlantsBePruned?: boolean;
-        whereWillPruningsGo?: string | null;
-        willSawdustBeApplied?: boolean;
-      }>;
-      FeedForageAnalyses?: any[];
-      SoilTest?: any | null;
-      LeafTest?: any | null;
-      HasSoilTest?: boolean;
-      PreviousYearManureApplicationFrequency?: string;
-      PreviousYearManureApplicationNitrogenCredit?: any | null;
-      SoilTestNitrateOverrideNitrogenCredit?: any | null;
-      IsSeasonalFeedingArea?: boolean;
-      SeasonalFeedingArea?: any | null;
-      FeedingDaysSpentInFeedingArea?: any | null;
-      FeedingPercentageOutsideFeeingArea?: any | null;
-      MatureAnimalCount?: any | null;
-      GrowingAnimalCount?: any | null;
-      MatureAnimalAverageWeight?: any | null;
-      GrowingAnimalAverageWeight?: any | null;
-      MatureAnimalDailyFeedRequirementId?: number;
-      GrowingAnimalDailyFeedRequirementId?: number;
-    }>;
-    FarmAnimals?: AnimalData[];
-    FarmManures?: NMPFileFarmManureData[];
-    GeneratedManures?: NMPFileGeneratedManureData[];
-    ImportedManures?: NMPFileImportedManureData[];
-    SeparatedSolidManures?: any[];
-    ManureStorageSystems?: any[];
-  }>;
   LastAppliedFarmManureId?: any | null;
   NMPReleaseVersion?: number;
+  */
 };
-
 export default NMPFile;

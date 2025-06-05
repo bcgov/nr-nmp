@@ -4,8 +4,9 @@ import { TextField, Select } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formCss, formGridBreakpoints } from '../../../common.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { NMPFileFieldData, initialFieldFormData } from '@/types/NMPFileFieldData';
+import { NMPFileFieldData } from '@/types';
 import Form from '../Form/Form';
+import initialFieldFormData from '@/constants/DefaultNMPFileFieldData';
 
 // NOTE: Move into a const file if this is needed elsewhere
 const manureOptions = [

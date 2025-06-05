@@ -1,20 +1,29 @@
-import { NMPFileCropData, SoilTestData } from './Crops';
+import { NMPFileCropData, NMPFileSoilTestData } from './Crops';
 
-export interface NMPFileFieldData {
+export type NMPFileFieldData = {
   index?: number;
   FieldName: string;
-  Area: string;
+  Area: number;
   PreviousYearManureApplicationFrequency: string;
   Comment: string;
-  SoilTest: SoilTestData;
+  SoilTest: NMPFileSoilTestData;
   Crops: NMPFileCropData[];
-}
-
-export const initialFieldFormData: NMPFileFieldData = {
-  FieldName: '',
-  Area: '',
-  PreviousYearManureApplicationFrequency: '0',
-  Comment: '',
-  SoilTest: {},
-  Crops: [],
+  /*
+  Fields from old NMP, currently unused, feel free to re-add
+  Nutrients?: any | null;
+  FeedForageAnalyses?: any[];
+  LeafTest?: any | null;
+  PreviousYearManureApplicationNitrogenCredit?: any | null;
+  SoilTestNitrateOverrideNitrogenCredit?: any | null;
+  IsSeasonalFeedingArea?: boolean;
+  SeasonalFeedingArea?: any | null;
+  FeedingDaysSpentInFeedingArea?: any | null;
+  FeedingPercentageOutsideFeeingArea?: any | null;
+  MatureAnimalCount?: any | null;
+  GrowingAnimalCount?: any | null;
+  MatureAnimalAverageWeight?: any | null;
+  GrowingAnimalAverageWeight?: any | null;
+  MatureAnimalDailyFeedRequirementId?: number;
+  GrowingAnimalDailyFeedRequirementId?: number;
+  */
 };

@@ -13,10 +13,9 @@ import {
 } from '@bcgov/design-system-react-components';
 import Divider from '@mui/material/Divider';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { ManureNutrients, NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
+import { ManureNutrients, NMPFileFarmManureData, ManureType } from '@/types';
 import { formCss, formGridBreakpoints } from '@/common.styles';
 // import Form from '@/components/common/Form/Form';
-import ManureType from '@/types/ManureType';
 import { APICacheContext } from '@/context/APICacheContext';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';

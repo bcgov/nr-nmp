@@ -12,6 +12,7 @@ export interface FormProps extends BaseFormProps {
   // Should be defined if onSubmit is undefined
   onConfirm?: ((e: PressEvent) => void) | undefined;
   isConfirmDisabled?: boolean;
+  submitButtonText?: string;
 }
 
 export default function Form({
@@ -19,6 +20,7 @@ export default function Form({
   onCancel,
   onConfirm,
   isConfirmDisabled,
+  submitButtonText,
   ...props
 }: FormProps) {
   return (
@@ -48,7 +50,7 @@ export default function Form({
           isDisabled={isConfirmDisabled}
           type="submit"
         >
-          Confirm
+          {submitButtonText || 'Confirm'}
         </Button>
       </ButtonGroup>
     </BcGovForm>

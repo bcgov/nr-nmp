@@ -36,10 +36,10 @@ import {
 import { StyledContent } from './crops.styles';
 import {
   CropTypesDatabase,
-  NMPFileCropData,
   NMPFileFieldData,
   CropsDatabase,
   PreviousCropsDatabase,
+  NMPFileCropData,
 } from '@/types';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 import { APICacheContext } from '@/context/APICacheContext';

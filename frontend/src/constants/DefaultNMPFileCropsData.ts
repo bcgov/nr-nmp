@@ -18,15 +18,6 @@ const defaultNMPFileCropsData: NMPFileCropData = {
   crudeProtien: 0,
   prevCropId: 0,
   coverCropHarvested: null,
-  prevYearManureAppl_volCatCd: 0,
-  yieldHarvestUnit: 0,
-  yieldByHarvestUnit: 0,
-  plantAgeYears: null,
-  numberOfPlantsPerAcre: 0,
-  distanceBtwnPlantsRows: null,
-  willPlantsBePruned: false,
-  whereWillPruningsGo: null,
-  willSawdustBeApplied: false,
 };
 
 export default defaultNMPFileCropsData;

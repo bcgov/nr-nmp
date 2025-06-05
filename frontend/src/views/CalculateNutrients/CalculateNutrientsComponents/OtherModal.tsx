@@ -2,28 +2,28 @@
  * @summary The field table on the calculate nutrients page
  */
 import React, { useState } from 'react';
-import { Select } from '@bcgov/design-system-react-components';
+import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import Form from '@/components/common/Form/Form';
-import { NMPFileFieldData } from '@/types/NMPFileFieldData';
+import { NMPFileFieldData } from '@/types';
 import { ModalContent } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 
-type AddOtherModalProps = {
+type OtherModalProps = {
   initialModalData: NMPFileFieldData | undefined;
   rowEditIndex: number | undefined;
   setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
 };
 
-export default function FertilizerModal({
+export default function OtherModal({
   initialModalData,
   // rowEditIndex,
   // setFieldList,
   onCancel,
   ...props
-}: AddOtherModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+}: OtherModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [otherForm, setOtherForm] = useState({
     fieldName: initialModalData?.FieldName,
     manureType: 0,
@@ -44,7 +44,7 @@ export default function FertilizerModal({
 
   return (
     <Modal
-      title="Add Other"
+      title="Other Details - Add"
       onOpenChange={() => {}}
       {...props}
     >
@@ -53,19 +53,17 @@ export default function FertilizerModal({
           onCancel={() => onCancel()}
           onSubmit={() => handleSubmit()}
           isConfirmDisabled={false}
+          submitButtonText="Add to Field"
         >
           <Grid
             container
             spacing={2}
           />
           <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              label="Other Type"
-              placeholder="Select a other type"
-              selectedKey={otherForm?.manureType}
-              // items={}
-              onSelectionChange={(e: any) => handleChange(e)}
+            <TextField
+              label="Nutrient Source"
+              type="text"
+              name="name"
             />
           </Grid>
         </Form>

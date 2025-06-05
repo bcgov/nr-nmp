@@ -35,7 +35,7 @@ import {
 } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
-import { NMPFileFieldData, SoilTestData, soilTestMethodsData } from '@/types';
+import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
 import { InfoBox, StyledContent } from './soilTests.styles';
 import useAppService from '@/services/app/useAppService';
 import { initFields, saveFieldsToFile } from '@/utils/utils';
@@ -46,9 +46,9 @@ export default function SoilTests() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [soilTestData, setSoilTestData] = useState<SoilTestData>(defaultSoilTestData);
+  const [soilTestData, setSoilTestData] = useState<NMPFileSoilTestData>(defaultSoilTestData);
   const [soilTestId, setSoilTestId] = useState('');
-  const [soilTestMethods, setSoilTestMethods] = useState<soilTestMethodsData[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
   const [fields, setFields] = useState<NMPFileFieldData[]>(
     initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
@@ -57,7 +57,7 @@ export default function SoilTests() {
     })),
   );
 
-  const EMPTY_SOIL_TEST_FORM: SoilTestData = {
+  const EMPTY_SOIL_TEST_FORM: NMPFileSoilTestData = {
     sampleDate: '',
     valNO3H: '',
     valP: '',
