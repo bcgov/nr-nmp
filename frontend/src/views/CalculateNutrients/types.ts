@@ -1,4 +1,4 @@
-export type NutrientObject = { N: number; P: number; K: number };
+import { CropNutrients } from '@/types';
 
 export type FertilizerFormData = {
   fieldName: string;
@@ -8,6 +8,6 @@ export type FertilizerFormData = {
   applUnit: number;
   liquidDensity: number;
   densityUnits: number;
-  availableNutrients: NutrientObject;
-  nutrientsStillRequired: NutrientObject;
+  availableNutrients: CropNutrients;
+  nutrientsStillRequired: CropNutrients;
 };

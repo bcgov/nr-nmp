@@ -16,7 +16,6 @@ import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
 import { initFields } from '../../utils/utils';
-import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
@@ -291,15 +290,10 @@ export default function CalculateNutrients() {
         )}
         {isDialogOpen && buttonClicked === 'other' && (
           <OtherModal
-            initialModalData={
-              rowEditIndex !== undefined
-                ? fieldList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
+            initialModalData={undefined}
             rowEditIndex={rowEditIndex}
-            setFieldList={setFieldList}
             isOpen={isDialogOpen}
-            onCancel={handleDialogClose}
+            onClose={handleDialogClose}
             modalStyle={{ width: '700px' }}
           />
         )}

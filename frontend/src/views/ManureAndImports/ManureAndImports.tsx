@@ -17,6 +17,9 @@ import {
   SolidManureConversionFactors,
   NMPFile,
   SelectOption,
+  DAIRY_COW_ID,
+  MILKING_COW_ID,
+  AnimalData,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
@@ -35,7 +38,6 @@ import {
   NUTRIENT_ANALYSIS,
 } from '@/constants/RouteConstants';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
-import { DAIRY_COW_ID, MILKING_COW_ID } from '../AddAnimals/types';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import { getLiquidManureDisplay, getSolidManureDisplay, initAnimals } from '../AddAnimals/utils';
 
@@ -43,7 +45,7 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 
-import type { AnimalData } from '../AddAnimals/types';
+
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
 
 type tempAnimalData = AnimalData & { id?: string };

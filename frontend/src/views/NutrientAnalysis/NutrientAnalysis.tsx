@@ -19,7 +19,7 @@ import {
   FIELD_LIST,
 } from '@/constants/RouteConstants';
 import { saveFarmManuresToFile } from '@/utils/utils';
-import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
+import { NMPFileFarmManureData } from '@/types/CalculateNutrients';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';

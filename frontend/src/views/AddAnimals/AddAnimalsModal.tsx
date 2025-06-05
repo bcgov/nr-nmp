@@ -4,9 +4,10 @@
 import React, { useState } from 'react';
 import BeefCattle from './AnimalFormComponents/BeefCattle';
 import DairyCattle from './AnimalFormComponents/DairyCattle';
-import { AnimalData, initialBeefFormData, initialDairyFormData } from './types';
+import { AnimalData } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
+import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from '@/constants';
 
 type AddAnimalsModalProps = {
   initialModalData: AnimalData | undefined;
@@ -47,10 +48,10 @@ export default function AddAnimalsModal({
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {
         if (changes.animalId === '1') {
-          return { ...initialBeefFormData, ...changes };
+          return { ...INITIAL_BEEF_FORM_DATA, ...changes };
         }
         if (changes.animalId === '2') {
-          return { ...initialDairyFormData, ...changes };
+          return { ...INITIAL_DAIRY_FORM_DATA, ...changes };
         }
       }
 

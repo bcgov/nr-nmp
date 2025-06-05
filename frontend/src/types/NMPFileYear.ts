@@ -1,6 +1,6 @@
-import { AnimalData } from '@/views/AddAnimals/types';
-import { NMPFileFieldData } from './NMPFileFieldData';
+import { AnimalData } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
+import { NMPFileFieldData } from './NMPFileFieldData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 

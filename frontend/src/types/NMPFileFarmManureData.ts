@@ -1,10 +1,4 @@
-export type ManureNutrients = {
-  Moisture: string;
-  N: number;
-  NH4N: number;
-  P: number;
-  K: number;
-};
+import { ManureNutrients } from './CalculateNutrients';
 
 export type NMPFileFarmManureData = {
   ManureSource: string;

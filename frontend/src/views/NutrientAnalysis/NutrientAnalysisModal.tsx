@@ -3,19 +3,11 @@
  */
 import { FormEvent, Key, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import {
-  Button,
-  ButtonGroup,
-  Checkbox,
-  Form,
-  Select,
-  TextField,
-} from '@bcgov/design-system-react-components';
-import Divider from '@mui/material/Divider';
+import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { ManureNutrients, NMPFileFarmManureData, ManureType } from '@/types';
 import { formCss, formGridBreakpoints } from '@/common.styles';
-// import Form from '@/components/common/Form/Form';
+import Form from '@/components/common/Form/Form';
 import { APICacheContext } from '@/context/APICacheContext';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
@@ -31,8 +23,8 @@ const EMPTY_MANURE_NUTRIENTS: ManureNutrients = {
   Moisture: '',
   N: 0,
   NH4N: 0,
-  P: 0,
-  K: 0,
+  P2O5: 0,
+  K2O: 0,
 };
 
 const EMPTY_MANURE_DATA: NMPFileFarmManureData = {
@@ -98,8 +90,8 @@ export default function NutrientAnalysisModal({
           Moisture: String(selectedManure.moisture),
           N: selectedManure.nitrogen,
           NH4N: selectedManure.ammonia,
-          P: selectedManure.phosphorous,
-          K: selectedManure.potassium,
+          P2O5: selectedManure.phosphorous,
+          K2O: selectedManure.potassium,
         };
         return {
           ...prev,
@@ -122,8 +114,8 @@ export default function NutrientAnalysisModal({
             Moisture: String(selectedManure.moisture),
             N: selectedManure.nitrogen,
             NH4N: selectedManure.ammonia,
-            P: selectedManure.phosphorous,
-            K: selectedManure.potassium,
+            P2O5: selectedManure.phosphorous,
+            K2O: selectedManure.potassium,
           },
         };
       }
@@ -152,6 +144,7 @@ export default function NutrientAnalysisModal({
       <Form
         css={formCss}
         onSubmit={handleModalSubmit}
+        onCancel={onCancel}
       >
         <Grid
           container
@@ -273,7 +266,7 @@ export default function NutrientAnalysisModal({
               label="P (%)"
               name="P"
               type="number"
-              value={formData?.Nutrients?.P?.toString()}
+              value={formData?.Nutrients?.P2O5?.toString()}
               onChange={(e: string) => {
                 handleInputChanges({ P: e });
               }}
@@ -287,7 +280,7 @@ export default function NutrientAnalysisModal({
               label="K (%)"
               name="K"
               type="number"
-              value={formData?.Nutrients?.K?.toString()}
+              value={formData?.Nutrients?.K2O?.toString()}
               onChange={(e: string) => {
                 handleInputChanges({ K: e });
               }}
@@ -295,31 +288,6 @@ export default function NutrientAnalysisModal({
             />
           </Grid>
         </Grid>
-        <Divider
-          aria-hidden="true"
-          component="div"
-          css={{ marginTop: '1rem', marginBottom: '1rem' }}
-        />
-        <ButtonGroup
-          alignment="end"
-          orientation="horizontal"
-        >
-          <Button
-            type="reset"
-            variant="secondary"
-            onPress={onCancel}
-            aria-label="reset"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            aria-label="submit"
-          >
-            Confirm
-          </Button>
-        </ButtonGroup>
       </Form>
     </Modal>
   );

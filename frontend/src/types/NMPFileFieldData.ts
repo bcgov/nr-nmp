@@ -1,3 +1,4 @@
+import { NMPFileNutrientRow } from './CalculateNutrients';
 import { NMPFileCropData, NMPFileSoilTestData } from './Crops';
 
 export type NMPFileFieldData = {
@@ -8,9 +9,9 @@ export type NMPFileFieldData = {
   Comment: string;
   SoilTest: NMPFileSoilTestData;
   Crops: NMPFileCropData[];
+  Nutrients?: NMPFileNutrientRow[]; // concept: these rows will 'link' to the other arrays
   /*
   Fields from old NMP, currently unused, feel free to re-add
-  Nutrients?: any | null;
   FeedForageAnalyses?: any[];
   LeafTest?: any | null;
   PreviousYearManureApplicationNitrogenCredit?: any | null;

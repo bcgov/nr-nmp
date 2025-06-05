@@ -3,7 +3,7 @@ import { Checkbox, Select, TextField } from '@bcgov/design-system-react-componen
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, BEEF_COW_ID, BeefCattleData } from '../types';
+import { AnimalData, BEEF_COW_ID, BeefCattleData } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 
