@@ -84,7 +84,6 @@ export const buttonGroup = css({
 export const formGridBreakpoints = { xs: 12, md: 6 };
 
 export const customTableStyle = {
-  
   borderStyle: 'none',
   '& .MuiDataGrid-columnHeader > .MuiDataGrid-columnSeparator': {
     visibility: 'hidden',
@@ -101,7 +100,7 @@ export const customTableStyle = {
   },
   '& .MuiDataGrid-columnHeaderTitle': {
     fontWeight: '700',
-    whiteSpace: 'break-spaces'
+    whiteSpace: 'break-spaces',
   },
 };
 

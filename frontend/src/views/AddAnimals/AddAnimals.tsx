@@ -10,7 +10,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
-import { AnimalData } from './types';
+import { AnimalData } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import { initAnimals, saveAnimalsToFile } from './utils';

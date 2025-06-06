@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID } from '../types';
+import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID } from '@/types';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import MilkingFields from './MilkingFields';
 import AnimalFormWrapper from './AnimalFormWrapper';
