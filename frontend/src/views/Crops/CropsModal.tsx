@@ -430,7 +430,7 @@ function CropsModal({
                     </span>
                     <Select
                       name="prevCropId"
-                      items={previousCrops.map((ele) => ({
+                      items={availablePreviousCrops.map((ele) => ({
                         id: ele.id,
                         label: ele.name,
                       }))}
