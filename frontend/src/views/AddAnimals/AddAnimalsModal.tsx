@@ -65,7 +65,7 @@ export default function AddAnimalsModal({
   return (
     <Modal
       title="Add animals"
-      onOpenChange={() => {}}
+      onOpenChange={onClose}
       {...props}
     >
       {formData === undefined && (

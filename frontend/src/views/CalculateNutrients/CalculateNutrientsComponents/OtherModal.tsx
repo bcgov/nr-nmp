@@ -54,7 +54,7 @@ export default function OtherModal({
   return (
     <Modal
       title="Other Details - Add"
-      onOpenChange={() => {}}
+      onOpenChange={onClose}
       {...props}
     >
       <ModalContent css={{ width: '100%' }}>

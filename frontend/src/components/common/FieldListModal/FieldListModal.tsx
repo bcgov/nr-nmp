@@ -73,7 +73,7 @@ export default function FieldListModal({
   return (
     <Modal
       title={rowEditIndex !== undefined ? 'Edit field' : 'Add field'}
-      onOpenChange={() => {}}
+      onOpenChange={onClose}
       {...props}
     >
       <Form
