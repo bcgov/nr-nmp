@@ -8,17 +8,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Icon } from '@mui/material';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
+import { renderNutrientCell, initFields } from '../../utils/utils.ts';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
-import { Error, Message } from './CalculateNutrients.styles';
+import { Error, Message, Icon } from './CalculateNutrients.styles';
 import { NutrientMessage, nutrientMessages } from './nutrientMessages';
-import { initFields } from '../../utils/utils';
 import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
@@ -60,17 +59,16 @@ export default function CalculateNutrients() {
   };
   const rowsWithBalance = crops.length > 0 ? [...crops, balanceRow] : [];
 
-  // Set balance messages array with appropriate messages based on the balances
-  const getMessage = useCallback((balanceType: string, balanceValue: number) => {
-    // Find the messages that matches the balanceType and balanceValue
-    const message = nutrientMessages.find(
+  const findBalanceMessage = (balanceType: string, balanceValue: number) =>
+    nutrientMessages.find(
       (msg) =>
         msg.BalanceType === balanceType &&
         balanceValue >= msg.ReqBalanceLow &&
         balanceValue <= msg.ReqBalanceHigh,
     );
-    // populates message with value to meet crop requirement
-    // sets balance messages
+
+  const getMessage = useCallback((balanceType: string, balanceValue: number) => {
+    const message = findBalanceMessage(balanceType, balanceValue);
     if (message) {
       setBalanceMessages((prev) => [
         ...prev,
@@ -83,7 +81,29 @@ export default function CalculateNutrients() {
     }
   }, []);
 
-  // When balance row changes, clear previous messages and calculate new balances and set new messages based on the balances
+  // // Set balance messages array with appropriate messages based on the balances
+  // const getMessage = useCallback((balanceType: string, balanceValue: number) => {
+  //   // Find the messages that matches the balanceType and balanceValue
+  //   const message = nutrientMessages.find(
+  //     (msg) =>
+  //       msg.BalanceType === balanceType &&
+  //       balanceValue >= msg.ReqBalanceLow &&
+  //       balanceValue <= msg.ReqBalanceHigh,
+  //   );
+  //   // sets balance messages with value to meet crop requirement
+  //   if (message) {
+  //     setBalanceMessages((prev) => [
+  //       ...prev,
+  //       {
+  //         ...message,
+  //         Text: message.Text.replace('{0}', Math.abs(balanceValue ?? 0).toFixed(1)),
+  //         Icon: message.Icon,
+  //       },
+  //     ]);
+  //   }
+  // }, []);
+
+  // When balance row changes, clear previous messages and set new messages
   useEffect(() => {
     setBalanceMessages([]);
 
@@ -146,56 +166,62 @@ export default function CalculateNutrients() {
       { field: 'cropName', headerName: 'Crop', width: 250, minWidth: 200, maxWidth: 300 },
       {
         field: 'reqN',
-        headerName: 'N',
+        headerName: '     N',
         width: 60,
         minWidth: 60,
         maxWidth: 100,
         description: 'Nitrogen',
+        renderCell: renderNutrientCell('reqN', findBalanceMessage),
       },
       {
         field: 'reqP2o5',
-        headerName: 'P2o5',
-        width: 60,
-        minWidth: 60,
+        headerName: '   P2o5',
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
         description: 'Phosphorous',
+        renderCell: renderNutrientCell('reqN', findBalanceMessage),
       },
       {
         field: 'reqK2o',
-        headerName: 'K2o',
-        width: 110,
-        minWidth: 100,
-        maxWidth: 110,
+        headerName: '     K2o',
+        width: 120,
+        minWidth: 120,
+        maxWidth: 100,
         description: 'Potassium',
+        renderCell: renderNutrientCell('reqN', findBalanceMessage),
       },
       {
         field: 'remN',
-        headerName: 'N',
-        width: 60,
-        minWidth: 60,
+        headerName: '        N',
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
         description: 'Nitrogen',
+        renderCell: renderNutrientCell('reqN', findBalanceMessage),
       },
       {
         field: 'remP2o5',
-        headerName: 'P2o5',
-        width: 60,
-        minWidth: 60,
+        headerName: '     P2o5',
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
         description: 'Phosphorous',
+        renderCell: renderNutrientCell('reqN', findBalanceMessage),
       },
       {
         field: 'remK2o',
-        headerName: 'K2o',
-        width: 180,
+        headerName: '     K2o',
+        width: 130,
         minWidth: 60,
-        maxWidth: 180,
+        maxWidth: 130,
         description: 'Potassium',
+        renderCell: renderNutrientCell('reqN', findBalanceMessage),
       },
       {
         field: '',
         headerName: 'Actions',
-        width: 120,
+        width: 100,
         renderCell: (row: any) => {
           // If balance row don't show actions
           const isBalanceRow = row.row.cropName === 'Balance';
@@ -363,8 +389,8 @@ export default function CalculateNutrients() {
       <div
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >
-        <div style={{ width: 230 }} />
-        <div style={{ width: 210 }}>Agronomic (lb/ac)</div>
+        <div style={{ width: 220 }} />
+        <div style={{ width: 290 }}>Agronomic (lb/ac)</div>
         <div style={{ width: 250 }}>Crop Removal (lb/ac)</div>
       </div>
       {/* display crops belonging to the field of the tab the user is on */}
@@ -382,18 +408,10 @@ export default function CalculateNutrients() {
         <Error key={msg.Id}>
           {/* based on msg get appropriate icon // frontend/public/stop triangle.svg */}
           <Icon
-            key={msg.Id}
-            sx={{ width: '1.5rem', height: '1.5rem', marginRight: '0.5rem' }}
-            component="img"
             src={msg.Icon}
             alt="Nutrient balance icon"
           />
-          <img
-            key={msg.Id}
-            src={msg.Icon}
-            alt="Nutrient balance icon"
-          />
-          <Message key={msg.Id}>{msg.Text}</Message>
+          <Message>{msg.Text}</Message>
         </Error>
       ))}
       <ButtonGroup

@@ -84,6 +84,7 @@ export const addRecordGroupStyle = css({
 });
 
 export const Error = styled.div`
+  display: flex;
   border: 1px solid #c81212;
   width: 100%;
   margin-bottom: 9px;
@@ -92,9 +93,14 @@ export const Error = styled.div`
     0 0 45px rgba(255, 255, 255, 0.7) inset;
 `;
 
-export const Message = styled.p`
-  color: black;
+export const Message = styled.div`
+  display: flex;
+  color: black !important;
   font-size: 12px;
   font-weight: bold;
-  margin: 0.5em;
+  align-items: center;
+`;
+
+export const Icon = styled.img`
+  margin: 0.25em;
 `;
