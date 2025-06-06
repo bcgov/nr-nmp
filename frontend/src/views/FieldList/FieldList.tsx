@@ -29,13 +29,7 @@ export default function FieldList() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
-    // Index is removed on save
-    initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
-      ...fieldElement,
-      index,
-    })),
-  );
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(initFields(state));
 
   const handleEditRow = useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
@@ -58,13 +52,7 @@ export default function FieldList() {
 
   const handleNextPage = () => {
     if (fieldList.length) {
-      saveFieldsToFile(
-        // Delete the index key in each field to prevent saving into NMPfile
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        fieldList.map(({ index, ...remainingFields }) => remainingFields),
-        state.nmpFile,
-        setNMPFile,
-      );
+      saveFieldsToFile(fieldList, state.nmpFile, setNMPFile);
       navigate(SOIL_TESTS);
     } else {
       setShowViewError('Must enter at least 1 field');
@@ -86,7 +74,7 @@ export default function FieldList() {
   };
 
   const isFieldNameUnique = useCallback(
-    (data: NMPFileFieldData) =>
+    (data: Partial<NMPFileFieldData>) =>
       !fieldList.some(
         (fieldRow) => fieldRow.FieldName === data.FieldName && fieldRow.index !== data.index,
       ),

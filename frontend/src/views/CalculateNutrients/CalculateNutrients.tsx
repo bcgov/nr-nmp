@@ -35,13 +35,7 @@ export default function CalculateNutrients() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
-    // Index is removed on save
-    initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
-      ...fieldElement,
-      index,
-    })),
-  );
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(initFields(state));
 
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
@@ -67,9 +61,7 @@ export default function CalculateNutrients() {
 
     // if (fieldList.length) {
     //   saveFieldsToFile(
-    //     // Delete the id key in each field to prevent saving into NMPfile
-    //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //     fieldList.map(({ id, ...remainingFields }) => remainingFields),
+    //     fieldList,
     //     state.nmpFile,
     //     setNMPFile,
     //   );
@@ -310,6 +302,7 @@ export default function CalculateNutrients() {
         sx={{ ...customTableStyle }}
         rows={fieldList[activeField]?.Crops ? fieldList[activeField].Crops : []}
         columns={columns}
+        getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

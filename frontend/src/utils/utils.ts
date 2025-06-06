@@ -2,6 +2,14 @@ import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
 import defaultNMPFile from '@/constants/DefaultNMPFile';
 import { NMPFile, NMPFileFarmManureData, NMPFileFieldData } from '@/types';
 
+export const initRegion = (state: any) => {
+  if (state.nmpFile) {
+    const parsedData: NMPFile = JSON.parse(state.nmpFile);
+    return parsedData.farmDetails.FarmRegion;
+  }
+  return undefined;
+};
+
 export const initFields = (state: any) => {
   if (state.nmpFile) {
     const parsedData = JSON.parse(state.nmpFile);
@@ -22,14 +30,7 @@ export const saveFieldsToFile = (
     nmpFile.years.push({ ...defaultNMPFileYear });
   }
   if (nmpFile.years.length > 0) {
-    nmpFile.years[0].Fields = fields.map((field) => ({
-      FieldName: field.FieldName,
-      Area: parseFloat(field.Area),
-      PreviousYearManureApplicationFrequency: field.PreviousYearManureApplicationFrequency,
-      Comment: field.Comment,
-      SoilTest: field.SoilTest,
-      Crops: field.Crops,
-    }));
+    nmpFile.years[0].Fields = fields;
   }
   setNMPFile(JSON.stringify(nmpFile));
 };

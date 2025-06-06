@@ -20,7 +20,7 @@ interface FieldListModalProps {
   initialModalData: NMPFileFieldData | undefined;
   rowEditIndex: number | undefined;
   setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
-  isFieldNameUnique: (field: NMPFileFieldData) => boolean;
+  isFieldNameUnique: (field: Partial<NMPFileFieldData>) => boolean;
   onClose: () => void;
 }
 
@@ -32,7 +32,7 @@ export default function FieldListModal({
   onClose,
   ...props
 }: FieldListModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [formData, setFormData] = useState<NMPFileFieldData>(
+  const [formData, setFormData] = useState<Omit<NMPFileFieldData, 'index'>>(
     initialModalData !== undefined ? initialModalData : initialFieldFormData,
   );
   const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
@@ -46,13 +46,13 @@ export default function FieldListModal({
       setFieldList((prev) => {
         const replaceIndex = prev.findIndex((element) => element.index === rowEditIndex);
         const newList = [...prev];
-        newList[replaceIndex] = { ...formData };
+        newList[replaceIndex] = { ...formData, index: rowEditIndex };
         return newList;
       });
     } else {
       setFieldList((prev) => [
         ...prev,
-        { ...formData, index: prev.length === 0 ? 0 : (prev[prev.length - 1].index || 0) + 1 },
+        { ...formData, index: prev.length === 0 ? 0 : prev[prev.length - 1].index + 1 },
       ]);
     }
     onClose();
