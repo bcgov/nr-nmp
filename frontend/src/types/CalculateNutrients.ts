@@ -20,6 +20,12 @@ export type OtherFormData = {
   nutrients: NutrientColumns;
 };
 
+export type CropRow = {
+  index: number;
+  type: 'crop';
+  cropIndex: number;
+};
+
 export type OtherFormRow = {
   index: number;
   type: 'other';
@@ -27,4 +33,4 @@ export type OtherFormRow = {
 };
 
 // TODO: Add in the other types
-export type NMPFileNutrientRow = OtherFormRow;
+export type NMPFileNutrientRow = CropRow | OtherFormRow;

@@ -26,13 +26,7 @@ export default function AddAnimals() {
 
   const navigate = useNavigate();
 
-  // Load NMP animals into view, add index for UI tracking purposes
-  const [animalList, setAnimalList] = useState<Array<AnimalData>>(
-    initAnimals(state).map((animalElement: AnimalData, index: number) => ({
-      ...animalElement,
-      index,
-    })),
-  );
+  const [animalList, setAnimalList] = useState<Array<AnimalData>>(initAnimals(state));
 
   useEffect(() => {
     setShowAnimalsStep(true);
@@ -60,13 +54,7 @@ export default function AddAnimals() {
 
   const handleNextPage = () => {
     if (animalList.length) {
-      saveAnimalsToFile(
-        // Delete the index key in each field to prevent saving into NMPfile
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        animalList.map(({ index, ...remainingAnimals }) => remainingAnimals),
-        state.nmpFile,
-        setNMPFile,
-      );
+      saveAnimalsToFile(animalList, state.nmpFile, setNMPFile);
       navigate(MANURE_IMPORTS);
     } else {
       setShowViewError('You must add at least one animal before continuing.');

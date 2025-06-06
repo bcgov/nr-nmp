@@ -1,6 +1,6 @@
 import { NMPFileFieldData } from '@/types';
 
-const initialFieldFormData: NMPFileFieldData = {
+const initialFieldFormData: Omit<NMPFileFieldData, 'index'> = {
   FieldName: '',
   Area: 0,
   PreviousYearManureApplicationFrequency: '0',
