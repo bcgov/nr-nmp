@@ -46,30 +46,41 @@ export default function CalculateNutrients() {
   );
 
   // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
-  const crops = fieldList[activeField]?.Crops ? fieldList[activeField].Crops : [];
-  const balanceRow = {
-    id: 'balance',
-    cropName: 'Balance',
-    reqN: crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
-    reqP2o5: crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
-    reqK2o: crops.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
-    remN: crops.reduce((sum, row) => sum + (row.remN ?? 0), 0),
-    remP2o5: crops.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
-    remK2o: crops.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
-  };
+  const crops = useMemo(
+    () => (fieldList[activeField]?.Crops ? fieldList[activeField].Crops : []),
+    [fieldList, activeField],
+  );
+  const balanceRow = useMemo(
+    () => ({
+      id: 'balance',
+      cropName: 'Balance',
+      reqN: -crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
+      reqP2o5: -crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
+      reqK2o: -crops.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
+      remN: crops.reduce((sum, row) => sum + (row.remN ?? 0), 0),
+      remP2o5: crops.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
+      remK2o: crops.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
+    }),
+    [crops],
+  );
   const rowsWithBalance = crops.length > 0 ? [...crops, balanceRow] : [];
 
+  // find the appropriate balance message based on the nutrient type and value
   const findBalanceMessage = (balanceType: string, balanceValue: number) =>
-    nutrientMessages.find(
-      (msg) =>
-        msg.BalanceType === balanceType &&
-        balanceValue >= msg.ReqBalanceLow &&
-        balanceValue <= msg.ReqBalanceHigh,
-    );
+    nutrientMessages.find((msg) => {
+      if (msg.BalanceType !== balanceType) return false;
+
+      // either compares balance value to req or rem high low range
+      const isReq = balanceType.startsWith('req');
+      const low = isReq ? msg.ReqBalanceLow : msg.RemBalanceLow;
+      const high = isReq ? msg.ReqBalanceHigh : msg.RemBalanceHigh;
+
+      return balanceValue >= low && balanceValue <= high;
+    });
 
   const getMessage = useCallback((balanceType: string, balanceValue: number) => {
     const message = findBalanceMessage(balanceType, balanceValue);
-    if (message) {
+    if (message && message.Icon !== '/good.svg') {
       setBalanceMessages((prev) => [
         ...prev,
         {
@@ -81,40 +92,16 @@ export default function CalculateNutrients() {
     }
   }, []);
 
-  // // Set balance messages array with appropriate messages based on the balances
-  // const getMessage = useCallback((balanceType: string, balanceValue: number) => {
-  //   // Find the messages that matches the balanceType and balanceValue
-  //   const message = nutrientMessages.find(
-  //     (msg) =>
-  //       msg.BalanceType === balanceType &&
-  //       balanceValue >= msg.ReqBalanceLow &&
-  //       balanceValue <= msg.ReqBalanceHigh,
-  //   );
-  //   // sets balance messages with value to meet crop requirement
-  //   if (message) {
-  //     setBalanceMessages((prev) => [
-  //       ...prev,
-  //       {
-  //         ...message,
-  //         Text: message.Text.replace('{0}', Math.abs(balanceValue ?? 0).toFixed(1)),
-  //         Icon: message.Icon,
-  //       },
-  //     ]);
-  //   }
-  // }, []);
-
   // When balance row changes, clear previous messages and set new messages
   useEffect(() => {
     setBalanceMessages([]);
 
-    // go over each balance value and get the appropriate message
-    getMessage('reqN', balanceRow.reqN);
-    getMessage('reqP2o5', balanceRow.reqP2o5);
-    getMessage('reqK2o', balanceRow.reqK2o);
-    getMessage('remN', balanceRow.remN);
-    getMessage('remP2o5', balanceRow.remP2o5);
-    getMessage('remK2o', balanceRow.remK2o);
-  }, [balanceRow]);
+    Object.entries(balanceRow).forEach(([key, value]) => {
+      if (key !== 'id' && key !== 'cropName') {
+        getMessage(key, value as number);
+      }
+    });
+  }, [balanceRow, getMessage]);
 
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
@@ -180,7 +167,7 @@ export default function CalculateNutrients() {
         minWidth: 80,
         maxWidth: 100,
         description: 'Phosphorous',
-        renderCell: renderNutrientCell('reqN', findBalanceMessage),
+        renderCell: renderNutrientCell('reqP2o5', findBalanceMessage),
       },
       {
         field: 'reqK2o',
@@ -189,7 +176,7 @@ export default function CalculateNutrients() {
         minWidth: 120,
         maxWidth: 100,
         description: 'Potassium',
-        renderCell: renderNutrientCell('reqN', findBalanceMessage),
+        renderCell: renderNutrientCell('reqK2o', findBalanceMessage),
       },
       {
         field: 'remN',
@@ -198,7 +185,7 @@ export default function CalculateNutrients() {
         minWidth: 80,
         maxWidth: 100,
         description: 'Nitrogen',
-        renderCell: renderNutrientCell('reqN', findBalanceMessage),
+        renderCell: renderNutrientCell('remN', findBalanceMessage),
       },
       {
         field: 'remP2o5',
@@ -207,7 +194,7 @@ export default function CalculateNutrients() {
         minWidth: 80,
         maxWidth: 100,
         description: 'Phosphorous',
-        renderCell: renderNutrientCell('reqN', findBalanceMessage),
+        renderCell: renderNutrientCell('remP2o5', findBalanceMessage),
       },
       {
         field: 'remK2o',
@@ -216,7 +203,7 @@ export default function CalculateNutrients() {
         minWidth: 60,
         maxWidth: 130,
         description: 'Potassium',
-        renderCell: renderNutrientCell('reqN', findBalanceMessage),
+        renderCell: renderNutrientCell('remK2o', findBalanceMessage),
       },
       {
         field: '',
@@ -406,7 +393,7 @@ export default function CalculateNutrients() {
       <ErrorText>{showViewError}</ErrorText>
       {balanceMessages.map((msg) => (
         <Error key={msg.Id}>
-          {/* based on msg get appropriate icon // frontend/public/stop triangle.svg */}
+          {/* based on msg get appropriate icon */}
           <Icon
             src={msg.Icon}
             alt="Nutrient balance icon"

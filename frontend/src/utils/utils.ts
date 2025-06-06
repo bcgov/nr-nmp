@@ -81,7 +81,8 @@ export const liquidSolidManureDisplay = (manureObj: { [key: string]: number | st
   return '0';
 };
 
-// use in CalculateNutrients.tsx
+// use in CalculateNutrients.tsx to show icon in balance row only
+// and makes crop nutrients display as a negative value
 export const renderNutrientCell = (
   balanceType: string,
   findBalanceMessage: (type: string, value: number) => { Icon?: string } | undefined,
@@ -103,6 +104,6 @@ export const renderNutrientCell = (
             }),
             React.createElement('span', { key: 'value' }, value),
           ]
-        : React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
+        : React.createElement('span', { style: { marginLeft: '1.5em' } }, -value),
     );
   };
