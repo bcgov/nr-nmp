@@ -21,6 +21,7 @@ import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
+import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 
 // calculates the field nutrients based on the crops and manure
 export default function CalculateNutrients() {
@@ -43,6 +44,12 @@ export default function CalculateNutrients() {
     })),
   );
 
+  const farmManuresList = (): NMPFileFarmManureData[] => {
+    if (state.nmpFile) {
+      return JSON.parse(state.nmpFile).years[0].FarmManures;
+    }
+    return [];
+  };
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
     setIsDialogOpen(true);
@@ -262,16 +269,13 @@ export default function CalculateNutrients() {
         )}
         {isDialogOpen && buttonClicked === 'manure' && (
           <ManureModal
-            initialModalData={
-              rowEditIndex !== undefined
-                ? fieldList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
+            initialModalData={undefined}
+            farmManures={farmManuresList()}
             rowEditIndex={rowEditIndex}
-            setFieldList={setFieldList}
+            // setFieldList={setFieldList}
             isOpen={isDialogOpen}
             onCancel={handleDialogClose}
-            modalStyle={{ width: '700px' }}
+            modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
           />
         )}
         {isDialogOpen && buttonClicked === 'fertigation' && (
