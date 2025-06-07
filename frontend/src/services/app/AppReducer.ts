@@ -23,6 +23,7 @@ export const initialState = {
 export const reducer = (state: object, action: AppAction): object => {
   switch (action.type) {
     case SET_NMP_FILE:
+      console.log(action.payload)
       return { ...state, nmpFile: action.payload };
     case SET_SHOW_ANIMALS_STEP:
       return { ...state, showAnimalsStep: action.payload };

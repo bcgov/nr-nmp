@@ -21,8 +21,6 @@ import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
-import { NMPFile } from '@/types';
-import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 
 // calculates the field nutrients based on the crops and manure
@@ -269,7 +267,7 @@ export default function CalculateNutrients() {
             // setFieldList={setFieldList}
             isOpen={isDialogOpen}
             onCancel={handleDialogClose}
-            modalStyle={{ width: '900px', overflow: 'scroll' }}
+            modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
           />
         )}
         {isDialogOpen && buttonClicked === 'fertigation' && (

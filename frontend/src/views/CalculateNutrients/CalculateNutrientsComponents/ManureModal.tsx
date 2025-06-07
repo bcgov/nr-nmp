@@ -11,23 +11,24 @@ import Form from '@/components/common/Form/Form';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 // Data not seeded in DB.
 import SEASON_APPLICATION from '../unseededData';
+import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
+import { CropNutrients } from '@/types';
 
 type ManureFormFields = {
   MaterialType: string;
   applicationMethod: string;
   applicationRate: number;
   applUnit: number;
-  retentionN: number;
+  retentionAmmoniumN: number;
   organicNAvailable: number;
 };
 
-type AddFertilizerModalProps = {
+type AddManureModalProps = {
   initialModalData: ManureFormFields | undefined;
   farmManures: NMPFileFarmManureData[];
   rowEditIndex: number | undefined;
-  // setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
 };
 
@@ -35,7 +36,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   {
     field: 'N',
     headerName: 'N',
-    width: 85,
+    width: 80,
     minWidth: 75,
     maxWidth: 200,
     sortable: false,
@@ -44,7 +45,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   {
     field: 'P2O5',
     headerName: 'P2O5',
-    width: 85,
+    width: 80,
     minWidth: 75,
     maxWidth: 200,
     sortable: false,
@@ -53,7 +54,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   {
     field: 'K2O',
     headerName: 'K2O',
-    width: 85,
+    width: 80,
     minWidth: 75,
     maxWidth: 200,
     sortable: false,
@@ -61,34 +62,20 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   },
 ];
 
-type CropNutrients = {
-  N: number; // Nitrogen
-  P2O5: number; // Phosphorus pentoxide
-  K2O: number; // Potassium oxide
-};
-
-const DEFAULT_CROP_NUTRIENTS: CropNutrients = {
-  N: 0,
-  P2O5: 0,
-  K2O: 0,
-};
-
 const DEFAULT_MANURE_FORM_FIELDS: ManureFormFields = {
   MaterialType: '',
   applicationMethod: '',
   applicationRate: 0,
   applUnit: 0,
-  retentionN: 0,
+  retentionAmmoniumN: 0,
   organicNAvailable: 0,
 };
 export default function ManureModal({
   initialModalData,
   farmManures,
-  // rowEditIndex,
-  // setFieldList,
   onCancel,
   ...props
-}: AddFertilizerModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+}: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [manureForm, setManureForm] = useState<ManureFormFields>(
     initialModalData ?? DEFAULT_MANURE_FORM_FIELDS,
   );
@@ -103,9 +90,13 @@ export default function ManureModal({
     }[]
   >([]);
 
-  const [availableThisYearTable] = useState<Array<CropNutrients>>([DEFAULT_CROP_NUTRIENTS]);
-  const [availableLongTermTable] = useState<Array<CropNutrients>>([DEFAULT_CROP_NUTRIENTS]);
-  const [stillReqTable] = useState<Array<CropNutrients>>([DEFAULT_CROP_NUTRIENTS]);
+  const [availableThisYearTable, setAvailableThisYearTable] = useState<Array<CropNutrients>>([
+    EMPTY_CROP_NUTRIENTS,
+  ]);
+  const [availableLongTermTable, setAvailableLongTermTable] = useState<Array<CropNutrients>>([
+    EMPTY_CROP_NUTRIENTS,
+  ]);
+  const [stillReqTable, setStillReqTable] = useState<Array<CropNutrients>>([EMPTY_CROP_NUTRIENTS]);
 
   // get fertilizer types, names, and conversion units
   useEffect(() => {
@@ -117,8 +108,16 @@ export default function ManureModal({
     });
   }, [apiCache, manureForm.MaterialType]);
 
-  const handleSubmit = () => {
+  const handleModalClose = () => {
+    setAvailableThisYearTable([EMPTY_CROP_NUTRIENTS]);
+    setAvailableLongTermTable([EMPTY_CROP_NUTRIENTS]);
+    setStillReqTable([EMPTY_CROP_NUTRIENTS]);
     onCancel();
+  };
+
+  const handleSubmit = () => {
+    // TBD: Submit logic here
+    handleModalClose();
   };
 
   const handleChange = (changes: { [name: string]: string | number | undefined }) => {
@@ -133,11 +132,11 @@ export default function ManureModal({
   return (
     <Modal
       title="Add Manure"
-      onOpenChange={onCancel}
+      onOpenChange={handleModalClose}
       {...props}
     >
       <Form
-        onCancel={() => onCancel()}
+        onCancel={() => handleModalClose()}
         onSubmit={() => handleSubmit()}
         isConfirmDisabled={false}
       >
@@ -206,24 +205,24 @@ export default function ManureModal({
             <TextField
               label="Ammonium-N Retention (%)"
               type="number"
-              name="applicationRate"
-              // value={manureForm?.applicationRate?.toString()}
+              name="retentionAmmoniumN"
+              value={manureForm?.retentionAmmoniumN?.toString()}
               onChange={(e: string) => {
-                // handleChange({ applicationRate: e });
+                handleChange({ retentionAmmoniumN: Number.isNaN(Number(e)) ? e : Number(e) });
               }}
-              maxLength={7}
+              maxLength={5}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <TextField
               label="Organic N Available"
               type="number"
-              name="applicationRate"
-              // value={manureForm?.applicationRate?.toString()}
+              name="organicNAvailable"
+              value={manureForm?.organicNAvailable?.toString()}
               onChange={(e: string) => {
-                // handleChange({ applicationRate: e });
+                handleChange({ organicNAvailable: Number.isNaN(Number(e)) ? e : Number(e) });
               }}
-              maxLength={7}
+              maxLength={5}
             />
           </Grid>
           <Grid size={{ ...formGridBreakpoints, md: 4 }}>
