@@ -17,7 +17,7 @@ export type CropsConversionFactors = {
   soiltestppmtopoundperacreconversion?: number;
 };
 
-export type CropsDatabase = {
+export type Crop = {
   cropname: string;
   cropremovalfactork2o: number;
   cropremovalfactornitrogen: number;
@@ -34,7 +34,7 @@ export type CropsDatabase = {
   yieldcd: number;
 };
 
-export type CropTypesDatabase = {
+export type CropType = {
   id: number;
   name: string;
   covercrop: boolean;
@@ -43,7 +43,7 @@ export type CropTypesDatabase = {
   modifynitrogen: boolean;
 };
 
-export type PreviousCropsDatabase = {
+export type PreviousCrop = {
   id: number;
   previouscropcode: number;
   name: string;
@@ -65,11 +65,11 @@ export type NMPFileSoilTestData = {
 };
 
 export type NMPFileCropData = {
-  id?: number;
-  cropId?: string;
-  cropTypeId?: number;
-  cropName?: string;
-  cropTypeName?: string;
+  index: number;
+  cropId: string;
+  cropTypeId: number;
+  cropName: string;
+  cropTypeName: string;
   cropOther?: string | null;
   yield?: number;
   reqN?: number;

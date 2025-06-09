@@ -50,12 +50,7 @@ export default function SoilTests() {
   const [soilTestId, setSoilTestId] = useState('');
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
-  const [fields, setFields] = useState<NMPFileFieldData[]>(
-    initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
-      ...fieldElement,
-      id: index.toString(),
-    })),
-  );
+  const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
 
   const EMPTY_SOIL_TEST_FORM: NMPFileSoilTestData = {
     sampleDate: '',
@@ -220,22 +215,22 @@ export default function SoilTests() {
         headerName: 'Actions',
         width: 150,
         renderCell: (cell: any) => {
-          const isRowHasSoilTest = Object.keys(fields[cell?.row?.id].SoilTest)?.length;
+          const isRowHasSoilTest = Object.keys(fields[cell?.row?.index].SoilTest)?.length;
           const handleEditRowBtnClick = () => {
             setFormData(() => {
               if (isRowHasSoilTest) {
-                return fields[cell?.row?.id].SoilTest;
+                return fields[cell?.row?.index].SoilTest;
               }
               return EMPTY_SOIL_TEST_FORM;
             });
-            setCurrentFieldIndex(cell?.row?.id?.toString());
+            setCurrentFieldIndex(cell?.row?.index?.toString());
             setIsDialogOpen(true);
           };
           const handleDeleteRowBtnClick = () => {
             if (isRowHasSoilTest) {
               setFields((prev) => {
                 const newList = [...prev];
-                newList[cell?.row?.id].SoilTest = {};
+                newList[cell?.row?.index].SoilTest = {};
                 return newList;
               });
             }
@@ -441,6 +436,7 @@ export default function SoilTests() {
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
           rows={fields}
           columns={columns}
+          getRowId={(row: any) => row.index}
           disableRowSelectionOnClick
           disableColumnMenu
           hideFooterPagination

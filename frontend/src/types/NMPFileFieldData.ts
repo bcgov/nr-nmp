@@ -2,7 +2,7 @@ import { NMPFileNutrientRow } from './CalculateNutrients';
 import { NMPFileCropData, NMPFileSoilTestData } from './Crops';
 
 export type NMPFileFieldData = {
-  index?: number;
+  index: number;
   FieldName: string;
   Area: number;
   PreviousYearManureApplicationFrequency: string;

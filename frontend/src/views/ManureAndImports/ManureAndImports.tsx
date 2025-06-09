@@ -44,11 +44,7 @@ import { getLiquidManureDisplay, getSolidManureDisplay, initAnimals } from '../A
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
-
-
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
-
-type tempAnimalData = AnimalData & { id?: string };
 
 export default function ManureAndImports() {
   const { state, setNMPFile, setShowAnimalsStep } = useAppService();
@@ -62,12 +58,7 @@ export default function ManureAndImports() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [animalList] = useState<Array<tempAnimalData>>(
-    initAnimals(state).map((animalElement: AnimalData, index: number) => ({
-      ...animalElement,
-      id: index.toString(),
-    })),
-  );
+  const [animalList] = useState<Array<AnimalData>>(initAnimals(state));
 
   const [cattleSubtypeList, setCattleSubtypeList] = useState<SelectOption[]>([]);
   const [editMaterialName, setEditMaterialName] = useState<string | null>(null);
@@ -90,6 +81,7 @@ export default function ManureAndImports() {
         if (animal.manureData.annualSolidManure !== undefined) {
           gManures.push({
             ...DefaultGeneratedManureFormData,
+            index: gManures.length,
             UniqueMaterialName: animal.manureData.name,
             ManureTypeName: '2',
             AnnualAmount: animal.manureData.annualSolidManure,
@@ -99,6 +91,7 @@ export default function ManureAndImports() {
         } else {
           gManures.push({
             ...DefaultGeneratedManureFormData,
+            index: gManures.length,
             UniqueMaterialName: animal.manureData.name,
             ManureTypeName: '1',
             AnnualAmount: animal.manureData.annualLiquidManure,
@@ -294,13 +287,8 @@ export default function ManureAndImports() {
         width: 325,
         minWidth: 150,
         maxWidth: 500,
-        valueGetter: (param: string | number) => {
-          return (
-            cattleSubtypeList?.find((ele) => {
-              return ele.id === param;
-            })?.label ?? param
-          );
-        },
+        valueGetter: (param: string | number) =>
+          cattleSubtypeList?.find((ele) => ele.id === param)?.label || param,
       },
       {
         field: 'manureData',
@@ -311,7 +299,7 @@ export default function ManureAndImports() {
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
       },
     ],
-    [animalList, cattleSubtypeList.length],
+    [cattleSubtypeList],
   );
 
   const columnsImportedManure: GridColDef[] = useMemo(
@@ -376,7 +364,7 @@ export default function ManureAndImports() {
         resizable: false,
       },
     ],
-    [manures],
+    [],
   );
 
   return (

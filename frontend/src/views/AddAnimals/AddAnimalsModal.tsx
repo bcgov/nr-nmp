@@ -37,7 +37,7 @@ export default function AddAnimalsModal({
     } else {
       setAnimalList((prev) => [
         ...prev,
-        { ...newFormData, index: prev.length === 0 ? 0 : (prev[prev.length - 1].index || 0) + 1 },
+        { ...newFormData, index: prev.length === 0 ? 0 : prev[prev.length - 1].index + 1 },
       ]);
     }
     onClose();

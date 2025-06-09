@@ -6,7 +6,7 @@ module.exports = {
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
 
-  transformIgnorePatterns: ['/node_modules/'],
+  transformIgnorePatterns: ['/node_modules/(?!@bcgov)'],
 
   modulePaths: ['<rootDir>'],
 
