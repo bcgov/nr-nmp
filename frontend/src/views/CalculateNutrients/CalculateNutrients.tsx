@@ -46,7 +46,7 @@ export default function CalculateNutrients() {
   );
   const balanceRow = useMemo(
     () => ({
-      id: 'balance',
+      index: 'balance',
       cropName: 'Balance',
       reqN: -crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
       reqP2o5: -crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
@@ -64,7 +64,7 @@ export default function CalculateNutrients() {
     nutrientMessages.find((msg) => {
       if (msg.BalanceType !== balanceType) return false;
 
-      // either compares balance value to req or rem high low range
+      // either compares balance value to req (agronomic) or rem (crop removal) high low range
       const isReq = balanceType.startsWith('req');
       const low = isReq ? msg.ReqBalanceLow : msg.RemBalanceLow;
       const high = isReq ? msg.ReqBalanceHigh : msg.RemBalanceHigh;
