@@ -1,6 +1,6 @@
-import { SoilTestData } from '@/types';
+import { NMPFileSoilTestData } from '@/types';
 
-const defaultSoilTestData: SoilTestData = {
+const defaultSoilTestData: NMPFileSoilTestData = {
   soilTest: '1',
   valNO3H: '0',
   valP: '250',

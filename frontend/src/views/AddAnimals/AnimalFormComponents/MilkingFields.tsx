@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Select, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import { PER_DAY_UNIT, PER_DAY_PER_ANIMAL_UNIT, WashWaterUnit } from '../types';
+import { PER_DAY_UNIT, PER_DAY_PER_ANIMAL_UNIT, WashWaterUnit } from '@/types';
 import { formGridBreakpoints } from '@/common.styles';
 
 interface MilkingFieldsProps {

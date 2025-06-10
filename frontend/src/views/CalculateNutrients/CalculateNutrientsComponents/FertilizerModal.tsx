@@ -165,7 +165,7 @@ export default function FertilizerModal({
   //     calculateFieldBalances();
   //   };
 
-  const handleSubmit = (newFormData: NMPFileField) => {
+  const handleSubmit = (newFormData: NMPFileFieldData) => {
     setFieldList((prev) => {
       if (rowEditIndex !== undefined) {
         const replaceIndex = prev.findIndex((elem) => (elem as any).index === rowEditIndex);

@@ -18,6 +18,7 @@ import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
 import { Error, Message, Icon } from './CalculateNutrients.styles';
 import { NutrientMessage, nutrientMessages } from './nutrientMessages';
+import { initFields } from '../../utils/utils';
 import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
@@ -37,13 +38,7 @@ export default function CalculateNutrients() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
-    // Index is removed on save
-    initFields(state).map((fieldElement: NMPFileFieldData, index: number) => ({
-      ...fieldElement,
-      index,
-    })),
-  );
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(initFields(state));
 
   // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
   const crops = useMemo(
@@ -127,9 +122,7 @@ export default function CalculateNutrients() {
 
     // if (fieldList.length) {
     //   saveFieldsToFile(
-    //     // Delete the id key in each field to prevent saving into NMPfile
-    //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    //     fieldList.map(({ id, ...remainingFields }) => remainingFields),
+    //     fieldList,
     //     state.nmpFile,
     //     setNMPFile,
     //   );
@@ -360,15 +353,10 @@ export default function CalculateNutrients() {
         )}
         {isDialogOpen && buttonClicked === 'other' && (
           <OtherModal
-            initialModalData={
-              rowEditIndex !== undefined
-                ? fieldList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
+            initialModalData={undefined}
             rowEditIndex={rowEditIndex}
-            setFieldList={setFieldList}
             isOpen={isDialogOpen}
-            onCancel={handleDialogClose}
+            onClose={handleDialogClose}
             modalStyle={{ width: '700px' }}
           />
         )}
@@ -385,6 +373,7 @@ export default function CalculateNutrients() {
         sx={{ ...customTableStyle }}
         rows={rowsWithBalance}
         columns={columns}
+        getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

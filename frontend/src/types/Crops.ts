@@ -1,4 +1,4 @@
-export interface CropsConversionFactors {
+export type CropsConversionFactors = {
   id?: number;
   nitrogenproteinconversion?: number;
   unitconversion?: number;
@@ -15,9 +15,9 @@ export interface CropsConversionFactors {
   poundper1000ftsquaredtopoundperacreconversion?: number;
   defaultapplicationofmanureinprevyears?: number;
   soiltestppmtopoundperacreconversion?: number;
-}
+};
 
-export interface CropsDatabase {
+export type Crop = {
   cropname: string;
   cropremovalfactork2o: number;
   cropremovalfactornitrogen: number;
@@ -32,18 +32,18 @@ export interface CropsDatabase {
   previouscropcode: number;
   sortnumber: number;
   yieldcd: number;
-}
+};
 
-export interface CropTypesDatabase {
+export type CropType = {
   id: number;
   name: string;
   covercrop: boolean;
   crudeproteinrequired: boolean;
   customcrop: boolean;
   modifynitrogen: boolean;
-}
+};
 
-export interface PreviousCropsDatabase {
+export type PreviousCrop = {
   id: number;
   previouscropcode: number;
   name: string;
@@ -51,14 +51,25 @@ export interface PreviousCropsDatabase {
   nitrogencreditimperial: number;
   cropid: number;
   croptypeid: number;
-}
+};
 
-export interface NMPFileCropData {
-  id?: number;
-  cropId?: string;
-  cropTypeId?: number;
-  cropName?: string;
-  cropTypeName?: string;
+export type NMPFileSoilTestData = {
+  soilTest?: string;
+  valNO3H?: string;
+  valP?: string;
+  valK?: string;
+  valPH?: string;
+  convertedKelownaK?: string;
+  convertedKelownaP?: string;
+  sampleDate?: string;
+};
+
+export type NMPFileCropData = {
+  index: number;
+  cropId: string;
+  cropTypeId: number;
+  cropName: string;
+  cropTypeName: string;
   cropOther?: string | null;
   yield?: number;
   reqN?: number;
@@ -71,6 +82,8 @@ export interface NMPFileCropData {
   crudeProtien?: number;
   prevCropId?: number;
   coverCropHarvested?: string | null;
+  /*
+  Fields from old NMP, currently unused, feel free to re-add
   prevYearManureAppl_volCatCd?: number;
   yieldHarvestUnit?: number;
   yieldByHarvestUnit?: number;
@@ -80,24 +93,14 @@ export interface NMPFileCropData {
   willPlantsBePruned?: boolean;
   whereWillPruningsGo?: string | null;
   willSawdustBeApplied?: boolean;
-}
+  */
+};
 
-export interface SoilTestData {
-  soilTest?: string;
-  valNO3H?: string;
-  valP?: string;
-  valK?: string;
-  valPH?: string;
-  convertedKelownaK?: string;
-  convertedKelownaP?: string;
-  sampleDate?: string;
-}
-
-export interface soilTestMethodsData {
+export type SoilTestMethodsData = {
   id: number;
   name: string;
   converttokelownaphlessthan72: number;
   converttokelownaphgreaterthan72: number;
   converttokelownak: number;
   sortnum: number;
-}
+};
