@@ -304,7 +304,11 @@ export default function CalculateNutrients() {
       {/* display crops belonging to the field of the tab the user is on */}
       <DataGrid
         sx={{ ...customTableStyle }}
-        rows={fieldList[activeField]?.Crops ? fieldList[activeField].Crops : []}
+        rows={
+          fieldList[activeField]?.Crops
+            ? fieldList[activeField].Crops.map((ele, index) => ({ ...ele, index }))
+            : []
+        }
         columns={columns}
         getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
