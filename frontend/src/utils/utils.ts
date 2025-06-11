@@ -87,7 +87,7 @@ export const renderNutrientCell = (
   findBalanceMessage: (type: string, value: number) => { Icon?: string } | undefined,
 ) =>
   function renderNutrientCellInner({ value, row }: any) {
-    const isBalanceRow = row.id === 'balance';
+    const isBalanceRow = row.index === 'balance';
     const message = isBalanceRow ? findBalanceMessage(balanceType, value) : null;
 
     return React.createElement(
@@ -101,7 +101,7 @@ export const renderNutrientCell = (
               alt: 'Balance icon',
               style: { width: '1em', height: '1em', marginRight: '0.5em' },
             }),
-            React.createElement('span', { key: 'value' }, value),
+            React.createElement('span', { key: 'value' }, -value),
           ]
         : React.createElement('span', { style: { marginLeft: '1.5em' } }, -value),
     );

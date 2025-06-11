@@ -48,9 +48,9 @@ export default function CalculateNutrients() {
     () => ({
       index: 'balance',
       cropName: 'Balance',
-      reqN: -crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
-      reqP2o5: -crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
-      reqK2o: -crops.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
+      reqN: crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
+      reqP2o5: crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
+      reqK2o: crops.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
       remN: crops.reduce((sum, row) => sum + (row.remN ?? 0), 0),
       remP2o5: crops.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
       remK2o: crops.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
@@ -89,6 +89,7 @@ export default function CalculateNutrients() {
   // When balance row changes, clear previous messages and set new messages
   useEffect(() => {
     setBalanceMessages([]);
+    console.log(balanceRow);
 
     Object.entries(balanceRow).forEach(([key, value]) => {
       if (key !== 'id' && key !== 'cropName') {
