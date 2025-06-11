@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { margin } from 'node_modules/@mui/system/esm/spacing/spacing';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
@@ -141,14 +142,20 @@ export default function CalculateNutrients() {
     [fieldList],
   );
 
+  const customCalcTableStyle = {
+    '& .MuiDataGrid-columnHeader[data-field="reqN"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '2em',
+    },
+  };
+
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'cropName', headerName: 'Crop', width: 250, minWidth: 200, maxWidth: 300 },
+      { field: 'cropName', headerName: 'Crop', width: 230, minWidth: 200, maxWidth: 300 },
       {
         field: 'reqN',
-        headerName: '     N',
-        width: 60,
-        minWidth: 60,
+        headerName: 'N',
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
         description: 'Nitrogen',
         renderCell: renderNutrientCell('reqN', findBalanceMessage),
@@ -370,7 +377,7 @@ export default function CalculateNutrients() {
       </div>
       {/* display crops belonging to the field of the tab the user is on */}
       <DataGrid
-        sx={{ ...customTableStyle }}
+        sx={{ ...customTableStyle, ...customCalcTableStyle }}
         rows={rowsWithBalance}
         columns={columns}
         getRowId={(row: any) => row.index}
