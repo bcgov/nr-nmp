@@ -1,82 +1,115 @@
 /**
- * @summary The field table on the calculate nutrients page
+ * @summary This is the NewFertilizerModal component
  */
-import React, { useContext, useEffect, useState } from 'react';
-import { Select, TextField } from '@bcgov/design-system-react-components';
+import { FormEvent, Key, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { APICacheContext } from '@/context/APICacheContext';
-import { formGridBreakpoints } from '@/common.styles';
-import Form from '@/components/common/Form/Form';
-import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { ModalContent } from './modal.styles';
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  Select,
+  TextField,
+} from '@bcgov/design-system-react-components';
+import Divider from '@mui/material/Divider';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
+import { customTableStyle, formCss, formGridBreakpoints } from '@/common.styles';
+import { APICacheContext } from '@/context/APICacheContext';
+import { InputField } from '@/components/common';
 
-type AddFertilizerModalProps = {
-  initialModalData: NMPFileFieldData | undefined;
-  rowEditIndex: number | undefined;
-  setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+import type { FertilizerFormState } from '../types';
+import type { Fertilizer, FertilizerType, FertilizerUnit } from '@/types/Fertilizers';
+import type { CropNutrients } from '@/types';
+import calcFertBalance from '../utils';
+
+type FertilizerModalProps = {
+  initialModalData: FertilizerFormState | undefined;
+  setDataForParent: (data: CropNutrients) => void;
   onCancel: () => void;
+};
+
+interface FertilizerDetail {
+  fertilizerType: FertilizerType | undefined;
+  fertilizerUnit: FertilizerUnit | undefined;
+  fertilizer: Fertilizer | undefined;
+}
+
+const NUTRIENT_COLUMNS: GridColDef[] = [
+  {
+    field: 'N',
+    headerName: 'N',
+
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'P2O5',
+    headerName: 'P2O5',
+
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'K2O',
+    headerName: 'K2O',
+
+    sortable: false,
+    resizable: false,
+  },
+];
+
+const EMPTY_FERTILIZER_FORM_DATA: FertilizerFormState = {
+  fertilizerTypeId: 0,
+  fertilizerId: 0,
+  applicationRate: 1,
+  applUnitId: 1,
+  applDate: '',
+  applicationMethod: '',
+};
+
+const FERTILIZER_METHOD: Array<{ id: string; label: string }> = [
+  { id: 'Broadcast', label: 'Broadcast' },
+  { id: 'Banded', label: 'Banded' },
+  { id: 'With planter', label: 'With planter' },
+  { id: 'Sidedress', label: 'Sidedress' },
+  { id: 'Fertigation', label: 'Fertigation' },
+  { id: 'Follar', label: 'Follar' },
+];
+
+const EMPTY_FERT_DETAIL_DATA = {
+  fertilizerType: undefined,
+  fertilizerUnit: undefined,
+  fertilizer: undefined,
 };
 
 export default function FertilizerModal({
   initialModalData,
-  rowEditIndex,
-  setFieldList,
+  // Import field and handleSubmit from parent component when ready
+  setDataForParent,
   onCancel,
   ...props
-}: AddFertilizerModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [fertilizerForm, setFertilizerForm] = useState({
-    fieldName: initialModalData?.FieldName,
-    fertilizerType: 0,
-    fertilizerId: 0,
-    applicationRate: 1,
-    applUnit: 1,
-    liquidDensity: 1,
-    densityUnits: 0,
-    availableNutrients: { N: 0, P: 0, K: 0 },
-    nutrientsStillRequired: { N: 0, P: 0, K: 0 },
-  });
+}: FertilizerModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+  const [fertilizerTypes, setFertilizerTypes] = useState<FertilizerType[]>([]);
+  const [fertilizerOptions, setFertilizerOptions] = useState<Fertilizer[]>([]);
+  const [filteredFertilizersOptions, setFilteredFertilizerOptions] = useState<Fertilizer[]>([]);
+  const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
+
+  const [formState, setFormState] = useState<FertilizerFormState>(
+    initialModalData ?? EMPTY_FERTILIZER_FORM_DATA,
+  );
+  const [fertilizerDetailData, setFertilizerDetailData] =
+    useState<FertilizerDetail>(EMPTY_FERT_DETAIL_DATA);
+
   const apiCache = useContext(APICacheContext);
 
-  const [fertilizerTypes, setFertilizerTypes] = useState<
-    {
-      id: number;
-      label: string;
-      name: string;
-      dryliquid: string;
-      custom: boolean;
-    }[]
-  >([]);
-  const [fertilizerOptions, setFertilizerOptions] = useState<
-    {
-      id: number;
-      label: string;
-      name: string;
-      dryliquid: string;
-      nitrogen: number;
-      phosphorous: number;
-      potassium: number;
-      sortnum: number;
-    }[]
-  >([]);
-  const [fertilizerUnits, setFertilizerUnits] = useState<
-    {
-      id: number;
-      name: string;
-      dryliquid: string;
-      conversiontoimperialgallonsperacre: number;
-    }[]
-  >([]);
-  const [filteredFertilizers, setFilteredFertilizers] = useState(fertilizerOptions);
+  const [calculatedData, setCalculateData] = useState<[CropNutrients] | null>(null);
 
-  // const densityOptions = [
-  //   { value: 0, label: 'kg/US Gallon' },
-  //   { value: 1, label: 'kg/L' },
-  //   { value: 2, label: 'lb/US gallon' },
-  //   { value: 3, label: 'lb/imp. gallon' },
-  // ];
+  const dryOrLiquidUnitOptions = fertilizerUnits.filter(
+    (ele) =>
+      ele.dryliquid ===
+      fertilizerTypes.find((fertType) => fertType.id === formState.fertilizerTypeId)?.dryliquid,
+  );
 
-  // get fertilizer types, names, and conversion units
   useEffect(() => {
     apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
@@ -87,6 +120,7 @@ export default function FertilizerModal({
     apiCache.callEndpoint('api/fertilizers/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
+        console.log(data);
         setFertilizerOptions(data);
       }
     });
@@ -96,210 +130,221 @@ export default function FertilizerModal({
         setFertilizerUnits(data);
       }
     });
-    // filters fertilizer based on selected type id
-    const selectedFertilizerType = fertilizerTypes.find(
-      (type) => type.id === fertilizerForm.fertilizerType,
-    );
+  }, [apiCache, fertilizerTypes, fertilizerOptions]);
 
-    if (selectedFertilizerType) {
-      const filtered = fertilizerOptions.filter(
-        (fertilizer) => fertilizer.dryliquid === selectedFertilizerType.dryliquid,
-      );
-      setFilteredFertilizers(filtered);
-    }
-  }, [apiCache, fertilizerForm.fertilizerType, fertilizerTypes, fertilizerOptions]);
-
-  //   // Calculate available nutrients and nutrients still required for the year
-  //   const calculateFieldBalances = () => {
-  //     let fertN = 0;
-  //     let fertP = 0;
-  //     let fertK = 0;
-  //     // calculate available nutrients (agronomic balance + fertilizer)
-  //     field.Crops?.forEach((crop) => {
-  //       fertN += crop.reqN ?? 0;
-  //       fertP += crop.reqP2o5 ?? 0;
-  //       fertK += crop.reqK2o ?? 0;
-  //     });
-  //     // find fertilizer nutrients by matching id's
-  //     const selectedFertilizer = fertilizerOptions.find(
-  //       (fertilizer) => fertilizer.id === fertilizerForm.fertilizerId,
-  //     );
-  //     if (selectedFertilizer) {
-  //       fertN += selectedFertilizer.nitrogen;
-  //       fertP += selectedFertilizer.phosphorous;
-  //       fertK += selectedFertilizer.potassium;
-  //     }
-  //     const availableNutrients = {
-  //       N: fertN,
-  //       P: fertP,
-  //       K: fertK,
-  //     };
-  //     // Calculate crop removal values
-  //     const cropRemoval =
-  //       field.Crops?.map((crop) => ({
-  //         N: crop?.remN ?? 0,
-  //         P: crop?.remP2o5 ?? 0,
-  //         K: crop?.remK2o ?? 0,
-  //       })) ?? [];
-  //     // Nutrients still required (if negative, set to 0)
-  //     const nutrientsStillRequired = {
-  //       N: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.N, 0) - availableNutrients.N, 0),
-  //       P: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.P, 0) - availableNutrients.P, 0),
-  //       K: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.K, 0) - availableNutrients.K, 0),
-  //     };
-  //     setFertilizerForm((prevForm) => ({
-  //       ...prevForm,
-  //       availableNutrients,
-  //       nutrientsStillRequired,
-  //     }));
-  //   };
-
-  //   // fx to get the conversion coefficient for the selected fertilizer unit
-  //   // const getConversionCoefficient = (unitId: number) => {
-  //   //   const unit = fertilizerUnits.find((fUnit) => fUnit.id === unitId);
-  //   //   return unit ? unit.conversiontoimperialgallonsperacre : 1;
-  //   // };
-
-  //   // triggers converting values and calculate function and populates calculated values
-  //   const handleCalculate = () => {
-  //     calculateFieldBalances();
-  //   };
-
-  const handleSubmit = (newFormData: NMPFileFieldData) => {
-    setFieldList((prev) => {
-      if (rowEditIndex !== undefined) {
-        const replaceIndex = prev.findIndex((elem) => (elem as any).index === rowEditIndex);
-        if (replaceIndex === -1) return prev;
-        const newList = [...prev];
-        newList[replaceIndex] = { ...newFormData, index: rowEditIndex };
-        return newList;
-      }
-      const nextIndex = prev.length === 0 ? 0 : ((prev[prev.length - 1] as any).index ?? 0) + 1;
-      return [...prev, { ...newFormData, index: nextIndex }];
-    });
-
-    onCancel();
+  const handleModalCalculate = (e: FormEvent) => {
+    e.preventDefault();
+    if (
+      !fertilizerDetailData.fertilizer ||
+      !formState.applicationRate ||
+      !fertilizerDetailData.fertilizerUnit
+    )
+      return;
+    setCalculateData([
+      calcFertBalance(
+        fertilizerDetailData.fertilizer,
+        formState.applicationRate,
+        fertilizerDetailData.fertilizerUnit,
+      ),
+    ]);
   };
 
-  const handleChange = (changes: { [name: string]: string | number | undefined }) => {
+  const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
     const name = Object.keys(changes)[0];
-    let value = changes[name];
+    const value = changes[name];
 
-    // Convert string inputs to appropriate number types
-    if (typeof value === 'string') {
-      if (name === 'applicationRate' || name === 'liquidDensity') {
-        value = parseFloat(value);
-      } else if (
-        name === 'fertilizerId' ||
-        name === 'fertilizerType' ||
-        name === 'applUnit' ||
-        name === 'densityUnits'
-      ) {
-        value = parseInt(value, 10);
-      }
+    if (name === 'fertilizerTypeId') {
+      setFilteredFertilizerOptions(
+        fertilizerOptions.filter(
+          (ele) =>
+            ele.dryliquid === fertilizerTypes.find((fertType) => fertType.id === value)?.dryliquid,
+        ),
+      );
+
+      setFertilizerDetailData({
+        ...EMPTY_FERT_DETAIL_DATA,
+        fertilizerType: fertilizerTypes.find((ele) => ele.id === Number(value)),
+      });
     }
 
-    setFertilizerForm((prev) => {
-      if (!prev) return prev;
-      return { ...prev, [name]: value };
-    });
+    if (name === 'fertilizerId') {
+      setFertilizerDetailData((prev: any) => ({
+        ...prev,
+        fertilizer: fertilizerOptions.find((ele) => ele.id === Number(value)),
+      }));
+    }
+
+    if (name === 'applUnitId') {
+      setFertilizerDetailData((prev: any) => ({
+        ...prev,
+        fertilizerUnit: fertilizerUnits.find((fertTypeEle) => fertTypeEle.id === Number(value)),
+      }));
+    }
+    setFormState((prev) => ({ ...prev, ...changes }));
+  };
+
+  const handleSubmit = () => {
+    // Call the setData function from CalculateNutrients.tsx parent component
+    if (calculatedData) setDataForParent(...calculatedData);
   };
 
   return (
     <Modal
       title="Add fertilizer"
-      onOpenChange={() => {}}
+      onOpenChange={onCancel}
       {...props}
     >
-      <ModalContent>
-        <Form
-          onCancel={() => onCancel()}
-          onSubmit={(e: any) => handleSubmit(e)}
-          isConfirmDisabled={false}
+      <Form
+        css={formCss}
+        onSubmit={handleModalCalculate}
+      >
+        <Grid
+          container
+          spacing={2}
         >
-          <Grid
-            container
-            spacing={2}
-          />
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
+              name="fertilizerTypeId"
+              items={fertilizerTypes.map((ele) => ({ id: ele.id, label: ele.name }))}
               label="Fertilizer Type"
-              placeholder="Select a fertilizer type"
-              selectedKey={fertilizerForm?.fertilizerType}
-              items={fertilizerTypes}
-              onSelectionChange={(e: any) => handleChange(e)}
-            />
-            <Select
-              isRequired
-              label="fertilizerId"
-              placeholder="Select a fertilizer type"
-              selectedKey={fertilizerForm?.fertilizerId}
-              items={filteredFertilizers}
-              onSelectionChange={(e: any) => handleChange(e)}
-            />
-            <TextField
-              isRequired
-              name="applicationRate"
-              value={String(fertilizerForm?.applicationRate)}
-              onChange={(e: any) => handleChange(e)}
-            />
-            <Select
-              isRequired
-              label="Appl Units"
-              name="applUnit"
-              selectedKey={fertilizerForm?.applUnit}
-              items={fertilizerUnits
-                .filter((unit) => [3, 4, 5, 6].includes(unit.id))
-                .map((unit) => ({
-                  value: { id: unit.id },
-                  label: unit.name,
-                }))}
-              onSelectionChange={(e: any) => handleChange(e)}
+              placeholder="Select Fertilizer Type"
+              selectedKey={formState.fertilizerTypeId}
+              onSelectionChange={(e: Key) => {
+                handleInputChanges({ fertilizerTypeId: parseInt(e.toString(), 10) });
+              }}
             />
           </Grid>
-          {/* {(formData.fertilizerType === 3 || 4) && (
-            <>
-              <TextField
-                label="Density"
-                type="number"
-                name="liquidDensity"
-                value={formData.liquidDensity}
-                onChange={(e) => handleChange(e)}
-                flex="0.5"
-              />
-              <Select
-                label="Density Units"
-                name="densityUnits"
-                value={formData.densityUnits}
-                options={densityOptions}
-                onChange={(e: any) => handleChange(e)}
-              />
-            </>
-          )} */}
-          {/* <div>
-            <h3>Available Nutrients (lb/ac)</h3>
-            <table>
-              <tbody>
-                <tr>
-                  <td>
-                    <h4>N</h4>
-                    <p>{formData.availableNutrients.N}</p>
-                  </td>
-                  <td>
-                    <h4>P2O5</h4>
-                    <p>{formData.availableNutrients.P}</p>
-                  </td>
-                  <td>
-                    <h4>k2O</h4>
-                    <p>{formData.availableNutrients.K}</p>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> */}
-        </Form>
-      </ModalContent>
+          <Grid size={formGridBreakpoints}>
+            <Select
+              isRequired
+              name="Fertilizer"
+              items={filteredFertilizersOptions.map((ele) => ({ id: ele.id, label: ele.name }))}
+              label="Fertilizer"
+              placeholder="Select Fertilizer"
+              selectedKey={formState.fertilizerId}
+              onSelectionChange={(e: Key) => {
+                handleInputChanges({ fertilizerId: parseInt(e.toString(), 10) });
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 6 }}>
+            <TextField
+              isRequired
+              label="Application Rate"
+              type="number"
+              name="Moisture"
+              value={formState?.applicationRate.toString()}
+              onChange={(e: string) => {
+                handleInputChanges({ applicationRate: e });
+              }}
+              maxLength={5}
+            />
+          </Grid>
+          <Grid size={{ xs: 6 }}>
+            <Select
+              isRequired
+              name="applUnitId"
+              items={dryOrLiquidUnitOptions.map((ele) => ({ id: ele.id, label: ele.name }))}
+              label="Application Units"
+              placeholder="Select Units"
+              selectedKey={formState.applUnitId}
+              onSelectionChange={(e: Key) => {
+                handleInputChanges({ applUnitId: parseInt(e.toString(), 10) });
+              }}
+            />
+          </Grid>
+          <Grid size={formGridBreakpoints}>
+            <Select
+              name="applicationMethod"
+              items={FERTILIZER_METHOD}
+              label="Method (optional)"
+              placeholder="Select Method"
+              selectedKey={formState.applicationMethod}
+              onSelectionChange={(e: Key) => {
+                // Current NMP stores this, but not for calculations
+                // Right now not passed to parent componet for storing
+                handleInputChanges({ applicationMethod: e.toString() });
+              }}
+            />
+          </Grid>
+          <Grid size={formGridBreakpoints}>
+            <span className="bcds-react-aria-Select--Label">Date (optional)</span>
+            <InputField
+              label=""
+              type="date"
+              name="applDate"
+              value={formState.applDate ?? 0}
+              onChange={(e: any) => {
+                // Current NMP stores this, but not for calculations
+                // Right now not passed to parent componet for storing.
+                handleInputChanges({ applDate: e?.target?.value });
+              }}
+            />
+          </Grid>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <div>
+            <Grid
+              container
+              spacing={1}
+              sx={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Grid size={formGridBreakpoints}>
+                <div css={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  Available This Year (lb/ac){' '}
+                </div>
+                <DataGrid
+                  sx={{ ...customTableStyle }}
+                  columns={NUTRIENT_COLUMNS}
+                  rows={calculatedData ?? []}
+                  getRowId={() => crypto.randomUUID()}
+                  disableRowSelectionOnClick
+                  disableColumnMenu
+                  hideFooterPagination
+                  hideFooter
+                />
+              </Grid>
+            </Grid>
+          </div>
+        </Grid>
+        <Divider
+          aria-hidden="true"
+          component="div"
+          css={{ marginTop: '1rem', marginBottom: '1rem' }}
+        />
+        <ButtonGroup
+          alignment="end"
+          orientation="horizontal"
+        >
+          <Button
+            type="reset"
+            variant="secondary"
+            onPress={onCancel}
+            aria-label="reset"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            aria-label="submit"
+          >
+            Calculate
+          </Button>
+          <Button
+            isDisabled={!calculatedData}
+            variant="primary"
+            onClick={handleSubmit}
+            aria-label="submit"
+          >
+            Submit
+          </Button>
+        </ButtonGroup>
+      </Form>
     </Modal>
   );
 }
