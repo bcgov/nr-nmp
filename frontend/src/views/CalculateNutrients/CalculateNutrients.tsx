@@ -146,6 +146,21 @@ export default function CalculateNutrients() {
     '& .MuiDataGrid-columnHeader[data-field="reqN"] .MuiDataGrid-columnHeaderTitle': {
       marginLeft: '2em',
     },
+    '& .MuiDataGrid-columnHeader[data-field="reqP2o5"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '.5em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="reqK2o"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '.5em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="remN"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '2em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="remP2o5"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '1em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="remK2o"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '1.5em',
+    },
   };
 
   const columns: GridColDef[] = useMemo(
@@ -162,7 +177,7 @@ export default function CalculateNutrients() {
       },
       {
         field: 'reqP2o5',
-        headerName: '   P2o5',
+        headerName: 'P2o5',
         width: 80,
         minWidth: 80,
         maxWidth: 100,
@@ -171,7 +186,7 @@ export default function CalculateNutrients() {
       },
       {
         field: 'reqK2o',
-        headerName: '     K2o',
+        headerName: 'K2o',
         width: 120,
         minWidth: 120,
         maxWidth: 100,
@@ -180,7 +195,7 @@ export default function CalculateNutrients() {
       },
       {
         field: 'remN',
-        headerName: '        N',
+        headerName: 'N',
         width: 80,
         minWidth: 80,
         maxWidth: 100,
@@ -189,7 +204,7 @@ export default function CalculateNutrients() {
       },
       {
         field: 'remP2o5',
-        headerName: '     P2o5',
+        headerName: 'P2o5',
         width: 80,
         minWidth: 80,
         maxWidth: 100,
@@ -198,7 +213,7 @@ export default function CalculateNutrients() {
       },
       {
         field: 'remK2o',
-        headerName: '     K2o',
+        headerName: 'K2o',
         width: 130,
         minWidth: 60,
         maxWidth: 130,
