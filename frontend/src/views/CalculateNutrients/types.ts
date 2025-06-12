@@ -1,4 +1,4 @@
-export type FertilizerFormData = {
+export type FertilizerFormState = {
   fertilizerTypeId: number;
   fertilizerId: number;
   applicationRate: number;

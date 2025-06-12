@@ -18,7 +18,7 @@ import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
 import { Error, Message, Icon } from './CalculateNutrients.styles';
 import { NutrientMessage, nutrientMessages } from './nutrientMessages';
-import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
+import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
@@ -346,7 +346,7 @@ export default function CalculateNutrients() {
           />
         )}
         {isDialogOpen && buttonClicked === 'fertilizer' && (
-          <NewFertilizerModal
+          <FertilizerModal
             initialModalData={undefined}
             isOpen={isDialogOpen}
             onCancel={handleDialogClose}
