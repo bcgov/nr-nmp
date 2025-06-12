@@ -1,11 +1,11 @@
-export type FertilizerTypeObject = {
+export type FertilizerType = {
   id: number;
   name: string;
   dryliquid: string;
   custom: boolean;
 };
 
-export type FertilizerUnitObject = {
+export type FertilizerUnit = {
   id: number;
   name: string;
   dryliquid: string;
@@ -14,7 +14,7 @@ export type FertilizerUnitObject = {
   farmrequirednutrientsstdunitsareaconversion: number;
 };
 
-export type FertilizerObject = {
+export type Fertilizer = {
   id: number;
   name: string;
   dryliquid: string;
