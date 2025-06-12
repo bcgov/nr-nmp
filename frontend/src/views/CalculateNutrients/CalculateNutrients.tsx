@@ -350,8 +350,8 @@ export default function CalculateNutrients() {
             initialModalData={undefined}
             isOpen={isDialogOpen}
             onCancel={handleDialogClose}
-            modalStyle={{ width: '700px' }}
-            handleSubmit={() => {}}
+            modalStyle={{ width: '800px' }}
+            setDataForParent={() => {}}
           />
         )}
         {isDialogOpen && buttonClicked === 'manure' && (
