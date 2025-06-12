@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { margin } from 'node_modules/@mui/system/esm/spacing/spacing';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
@@ -43,7 +42,10 @@ export default function CalculateNutrients() {
 
   // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
   const crops = useMemo(
-    () => (fieldList[activeField]?.Crops ? fieldList[activeField].Crops.map((ele, index) => ({ ...ele, index })) : []),
+    () =>
+      fieldList[activeField]?.Crops
+        ? fieldList[activeField].Crops.map((ele, index) => ({ ...ele, index }))
+        : [],
     [fieldList, activeField],
   );
   const balanceRow = useMemo(
