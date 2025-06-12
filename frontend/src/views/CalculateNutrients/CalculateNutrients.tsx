@@ -24,6 +24,7 @@ import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
+import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 
 export default function CalculateNutrients() {
   // setNMPFile not yet used
@@ -42,7 +43,7 @@ export default function CalculateNutrients() {
 
   // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
   const crops = useMemo(
-    () => (fieldList[activeField]?.Crops ? fieldList[activeField].Crops : []),
+    () => (fieldList[activeField]?.Crops ? fieldList[activeField].Crops.map((ele, index) => ({ ...ele, index })) : []),
     [fieldList, activeField],
   );
   const balanceRow = useMemo(
@@ -98,6 +99,13 @@ export default function CalculateNutrients() {
       }
     });
   }, [balanceRow, getMessage]);
+
+  const farmManuresList = (): NMPFileFarmManureData[] => {
+    if (state.nmpFile) {
+      return JSON.parse(state.nmpFile).years[0].FarmManures;
+    }
+    return [];
+  };
 
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
@@ -347,16 +355,13 @@ export default function CalculateNutrients() {
         )}
         {isDialogOpen && buttonClicked === 'manure' && (
           <ManureModal
-            initialModalData={
-              rowEditIndex !== undefined
-                ? fieldList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
+            initialModalData={undefined}
+            farmManures={farmManuresList()}
             rowEditIndex={rowEditIndex}
-            setFieldList={setFieldList}
+            // setFieldList={setFieldList}
             isOpen={isDialogOpen}
             onCancel={handleDialogClose}
-            modalStyle={{ width: '700px' }}
+            modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
           />
         )}
         {isDialogOpen && buttonClicked === 'fertigation' && (

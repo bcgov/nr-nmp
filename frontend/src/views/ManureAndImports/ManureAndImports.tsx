@@ -408,7 +408,7 @@ export default function ManureAndImports() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={animalList}
         columns={columnsAnimalManure}
-        getRowId={(row: any) => row.id}
+        getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
