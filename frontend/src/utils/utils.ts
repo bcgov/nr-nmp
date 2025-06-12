@@ -13,7 +13,8 @@ export const initRegion = (state: any) => {
 export const initFields = (state: any) => {
   if (state.nmpFile) {
     const parsedData = JSON.parse(state.nmpFile);
-    return parsedData.years[0].Fields;
+    // Mapping introduces index for DataGrid component to track each field element.
+    return parsedData.years[0].Fields.map((ele: any, index: number) => ({ ...ele, index }));
   }
   return [];
 };

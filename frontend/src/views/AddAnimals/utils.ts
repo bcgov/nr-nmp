@@ -71,7 +71,8 @@ export function calculateAnnualWashWater(
 export const initAnimals = (state: any) => {
   if (state.nmpFile) {
     const parsedData = JSON.parse(state.nmpFile);
-    return parsedData.years[0].FarmAnimals;
+    // Mapping introduces index for DataGrid component to track each animal element.
+    return parsedData.years[0].FarmAnimals.map((ele: any, index: number) => ({ ...ele, index }));
   }
   return [];
 };
