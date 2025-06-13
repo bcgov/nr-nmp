@@ -25,7 +25,7 @@ describe('ProgressStepper tests', () => {
     }));
     render(
       <BrowserRouter>
-        <ProgressStepper step={FARM_INFORMATION} />
+        <ProgressStepper />
       </BrowserRouter>,
     );
     const elem = screen.queryByText('Animals and Manure');
@@ -40,7 +40,7 @@ describe('ProgressStepper tests', () => {
     }));
     render(
       <BrowserRouter>
-        <ProgressStepper step={FARM_INFORMATION} />
+        <ProgressStepper />
       </BrowserRouter>,
     );
     const elem = screen.getByText('Animals and Manure');

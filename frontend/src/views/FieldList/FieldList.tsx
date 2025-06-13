@@ -11,12 +11,7 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import {
-  FARM_INFORMATION,
-  FIELD_LIST,
-  MANURE_IMPORTS,
-  SOIL_TESTS,
-} from '@/constants/RouteConstants';
+import { FARM_INFORMATION, MANURE_IMPORTS, SOIL_TESTS } from '@/constants/RouteConstants';
 import { initFields, saveFieldsToFile } from '../../utils/utils';
 import useAppService from '@/services/app/useAppService';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
@@ -113,7 +108,7 @@ export default function FieldList() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={FIELD_LIST} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Field Information" />
       <>

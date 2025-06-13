@@ -26,12 +26,7 @@ import {
 } from '../../common.styles';
 import { StyledContent, subHeader } from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import {
-  ADD_ANIMALS,
-  FARM_INFORMATION,
-  FIELD_LIST,
-  LANDING_PAGE,
-} from '@/constants/RouteConstants';
+import { ADD_ANIMALS, FIELD_LIST, LANDING_PAGE } from '@/constants/RouteConstants';
 
 import { SelectOption } from '../../types';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
@@ -214,7 +209,7 @@ export default function FarmInformation() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={FARM_INFORMATION} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Farm Information" />
       <Form

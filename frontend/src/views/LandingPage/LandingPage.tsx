@@ -8,7 +8,6 @@ import useAppService from '../../services/app/useAppService';
 import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
 import { StyledContent } from './landingPage.styles';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
-import { LANDING_PAGE } from '@/constants/RouteConstants';
 
 export default function LandingPage() {
   const { setNMPFile } = useAppService();
@@ -45,7 +44,7 @@ export default function LandingPage() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={LANDING_PAGE} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Nutrient Management Calculator" />
       <p>
