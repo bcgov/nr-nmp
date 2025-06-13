@@ -132,7 +132,7 @@ function Crops() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={SOIL_TESTS} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Field Information" />
       <TabsMaterial

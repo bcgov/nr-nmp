@@ -31,12 +31,7 @@ import {
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
 import useAppService from '@/services/app/useAppService';
-import {
-  ADD_ANIMALS,
-  FARM_INFORMATION,
-  FIELD_LIST,
-  NUTRIENT_ANALYSIS,
-} from '@/constants/RouteConstants';
+import { ADD_ANIMALS, FARM_INFORMATION, NUTRIENT_ANALYSIS } from '@/constants/RouteConstants';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import { getLiquidManureDisplay, getSolidManureDisplay, initAnimals } from '../AddAnimals/utils';
@@ -369,7 +364,7 @@ export default function ManureAndImports() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={FIELD_LIST} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Manure & Imports" />
       <>

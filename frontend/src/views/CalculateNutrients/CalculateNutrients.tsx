@@ -11,7 +11,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
+import { CROPS } from '@/constants/RouteConstants';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
@@ -165,7 +165,7 @@ export default function CalculateNutrients() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={FIELD_LIST} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Calculate Nutrients" />
       <Button

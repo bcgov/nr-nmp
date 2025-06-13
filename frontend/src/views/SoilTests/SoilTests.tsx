@@ -39,7 +39,7 @@ import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/ty
 import { InfoBox, StyledContent } from './soilTests.styles';
 import useAppService from '@/services/app/useAppService';
 import { initFields, saveFieldsToFile } from '@/utils/utils';
-import { CROPS, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
+import { CROPS, FIELD_LIST } from '@/constants/RouteConstants';
 
 export default function SoilTests() {
   const { state, setNMPFile } = useAppService();
@@ -271,7 +271,7 @@ export default function SoilTests() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={SOIL_TESTS} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Field Information" />
       <Modal

@@ -7,3 +7,4 @@ export const CROPS = '/crops';
 export const MANURE_IMPORTS = '/manure-and-imports';
 export const NUTRIENT_ANALYSIS = '/nutrient-analysis';
 export const CALCULATE_NUTRIENTS = '/calculate-nutrients';
+export const REPORTING = '/reporting';

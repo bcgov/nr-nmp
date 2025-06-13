@@ -12,7 +12,7 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { StyledContent } from './nutrientAnalsysis.styles';
 import { NMPFile, NMPFileImportedManureData } from '@/types';
 import useAppService from '@/services/app/useAppService';
-import { NUTRIENT_ANALYSIS, MANURE_IMPORTS, FIELD_LIST } from '@/constants/RouteConstants';
+import { MANURE_IMPORTS, FIELD_LIST } from '@/constants/RouteConstants';
 import { saveFarmManuresToFile } from '@/utils/utils';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
@@ -163,7 +163,7 @@ export default function NutrientAnalysis() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={NUTRIENT_ANALYSIS} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Nutrient Analysis" />
       <div css={addRecordGroupStyle}>

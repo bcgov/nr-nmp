@@ -17,11 +17,8 @@ import {
   MANURE_IMPORTS,
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
+  REPORTING,
 } from '@/constants/RouteConstants';
-
-type ProgressStepperProps = {
-  step: string;
-};
 
 const stepsWithAnimals = [
   'Home',
@@ -40,7 +37,7 @@ const stepsWithoutAnimals = [
   'Reporting',
 ];
 
-export default function HorizontalLinearAlternativeLabelStepper({ step }: ProgressStepperProps) {
+export default function HorizontalLinearAlternativeLabelStepper() {
   const { state } = useAppService();
   const { pathname } = useLocation();
 
@@ -51,9 +48,10 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
     return stepsWithoutAnimals;
   }, [state.showAnimalsStep]);
 
-  const displayActiveStep = useCallback(() => {
+  const displayActiveStep = useCallback((): number | undefined => {
     const animalStepIncrease = state.showAnimalsStep ? 1 : 0;
 
+    // eslint-disable-next-line default-case
     switch (pathname) {
       case LANDING_PAGE:
         return 0;
@@ -69,7 +67,11 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
         return 2 + animalStepIncrease;
       case CALCULATE_NUTRIENTS:
         return 3 + animalStepIncrease;
+      case REPORTING:
+        return 4 + animalStepIncrease;
     }
+
+    return undefined;
   }, [pathname, state.showAnimalsStep]);
 
   return (
