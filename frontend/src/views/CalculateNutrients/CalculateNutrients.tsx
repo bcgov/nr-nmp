@@ -93,7 +93,6 @@ export default function CalculateNutrients() {
   // When balance row changes, clear previous messages and set new messages
   useEffect(() => {
     setBalanceMessages([]);
-    console.log(balanceRow);
 
     Object.entries(balanceRow).forEach(([key, value]) => {
       if (key !== 'id' && key !== 'cropName') {
