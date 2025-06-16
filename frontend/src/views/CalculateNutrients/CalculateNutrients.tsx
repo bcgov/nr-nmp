@@ -144,7 +144,7 @@ export default function CalculateNutrients() {
   };
 
   const isFieldNameUnique = useCallback(
-    (data: NMPFileFieldData) =>
+    (data: Partial<NMPFileFieldData>) =>
       !fieldList.some(
         (fieldRow) => fieldRow.FieldName === data.FieldName && fieldRow.index !== data.index,
       ),
@@ -263,17 +263,20 @@ export default function CalculateNutrients() {
       <ProgressStepper step={FIELD_LIST} />
       <AppTitle />
       <PageTitle title="Calculate Nutrients" />
-      <Button
-        size="medium"
-        aria-label="Add Field"
-        onClick={() => {
-          setButtonClicked('field');
-          setIsDialogOpen(true);
-        }}
-      >
-        <FontAwesomeIcon icon={faPlus} />
-        Add Field
-      </Button>
+      <ButtonGroup>
+        <Button
+          size="medium"
+          aria-label="Duplicate Field"
+          onClick={() => {
+            setButtonClicked('field');
+            setIsDialogOpen(true);
+            console.log('activeField', activeField);
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          Duplicate Field
+        </Button>
+      </ButtonGroup>
       {/* tabs = the fields the user has entered */}
       <TabsMaterial
         activeTab={activeField}
@@ -334,10 +337,13 @@ export default function CalculateNutrients() {
             Add Other
           </Button>
         </ButtonGroup>
-
         {isDialogOpen && buttonClicked === 'field' && (
+          // rowEditIndex = field index
           <FieldListModal
-            initialModalData={undefined}
+            mode="Duplicate Field"
+            initialModalData={
+              activeField !== undefined ? fieldList.find((v) => v.index === activeField) : undefined
+            }
             rowEditIndex={undefined}
             setFieldList={setFieldList}
             isFieldNameUnique={isFieldNameUnique}
