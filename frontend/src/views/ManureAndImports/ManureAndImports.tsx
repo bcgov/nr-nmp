@@ -122,7 +122,6 @@ export default function ManureAndImports() {
     }
   };
 
-  // TODO: Handle Generated Manures via a reducer
   const handlePrevious = () => {
     if (
       state.nmpFile.years[0]?.FarmAnimals !== undefined &&

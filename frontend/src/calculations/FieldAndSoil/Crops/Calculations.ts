@@ -137,32 +137,6 @@ export async function getRecommendations(
   }
 }
 
-/*
-export function checkExistingSoilTest(
-  field: NMPFileFieldData,
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
-) {
-  const updatedField = { ...field };
-  if (field.SoilTest == null || Object.keys(field.SoilTest).length === 0) {
-    updatedField.SoilTest.valNO3H = defaultSoilTestData.valNO3H;
-    updatedField.SoilTest.valP = defaultSoilTestData.valP;
-    updatedField.SoilTest.valK = defaultSoilTestData.valK;
-    updatedField.SoilTest.valPH = defaultSoilTestData.valPH;
-    updatedField.SoilTest.convertedKelownaK = defaultSoilTestData.convertedKelownaK;
-    updatedField.SoilTest.convertedKelownaP = defaultSoilTestData.convertedKelownaP;
-  }
-  setFields((prev: NMPFileFieldData[]) => {
-    const newFieldList: Array<NMPFileFieldData> = prev.map((fieldEle: NMPFileFieldData) => {
-      if (fieldEle.FieldName === updatedField.FieldName) {
-        return updatedField;
-      }
-      return fieldEle;
-    });
-    return newFieldList;
-  });
-}
-*/
-
 /**
  * Fetches crop data by crop ID
  *
