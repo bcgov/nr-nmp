@@ -39,6 +39,7 @@ import {
 } from './animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
+import { FertilizerType, FertilizerUnit } from './Fertilizers';
 
 export { BEEF_COW_ID, DAIRY_COW_ID, MILKING_COW_ID, PER_DAY_PER_ANIMAL_UNIT, PER_DAY_UNIT };
 
@@ -73,4 +74,6 @@ export type {
   OtherFormRow,
   NMPFileNutrientRow,
   Fertilizer,
+  FertilizerType,
+  FertilizerUnit,
 };
