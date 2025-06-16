@@ -337,7 +337,6 @@ export default function CalculateNutrients() {
           </Button>
         </ButtonGroup>
         {isDialogOpen && buttonClicked === 'field' && (
-          // rowEditIndex = field index
           <FieldListModal
             mode="Duplicate Field"
             initialModalData={
