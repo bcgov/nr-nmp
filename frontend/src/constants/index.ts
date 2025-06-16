@@ -4,7 +4,7 @@ import DefaultManureFormData from './DefaultManureFormData';
 import DEFAULT_NMPFILE from './DefaultNMPFile';
 import DEFAULT_NMPFILE_CROPS from './DefaultNMPFileCropsData';
 import DefaultSolidManureConversionFactors from './DefaultSolidManureConversionFactors';
-import { EMPTY_CROP_NUTRIENTS, EMPTY_NUTRIENT_COLUMNS } from './calculateNutrients';
+import { EMPTY_CROP_NUTRIENTS, EMPTY_NUTRIENT_COLUMNS } from './CalculateNutrients';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from './animals';
 import NMP_FILE_KEY from './context';
 
