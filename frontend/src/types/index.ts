@@ -36,7 +36,7 @@ import {
   BeefCattleData,
   DairyCattleData,
   AnimalData,
-} from './animals';
+} from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import { FertilizerType, FertilizerUnit } from './Fertilizers';

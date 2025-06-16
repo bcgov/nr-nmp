@@ -1,4 +1,4 @@
-import { AnimalData } from './animals';
+import { AnimalData } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import { NMPFileFieldData } from './NMPFileFieldData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
