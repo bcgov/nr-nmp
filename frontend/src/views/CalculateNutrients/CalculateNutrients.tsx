@@ -2,7 +2,7 @@
  * @summary The calculate nutrients page for the application
  * calculates the field nutrients based on the crops and manure
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -12,10 +12,12 @@ import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
+import { renderNutrientCell, initFields } from '../../utils/utils.ts';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
-import { initFields } from '../../utils/utils';
+import { Error, Message, Icon } from './CalculateNutrients.styles';
+import { NutrientMessage, nutrientMessages } from './nutrientMessages';
 import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
@@ -23,7 +25,6 @@ import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 
-// calculates the field nutrients based on the crops and manure
 export default function CalculateNutrients() {
   // setNMPFile not yet used
   // const { state, setNMPFile } = useAppService();
@@ -33,10 +34,72 @@ export default function CalculateNutrients() {
   const [showViewError, setShowViewError] = useState<string>('');
   const [buttonClicked, setButtonClicked] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
+  const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
 
   const navigate = useNavigate();
 
   const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(initFields(state));
+
+  // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
+  const crops = useMemo(
+    () =>
+      fieldList[activeField]?.Crops
+        ? fieldList[activeField].Crops.map((ele, index) => ({ ...ele, index }))
+        : [],
+    [fieldList, activeField],
+  );
+  const balanceRow = useMemo(
+    () => ({
+      index: 'balance',
+      cropName: 'Balance',
+      reqN: crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
+      reqP2o5: crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
+      reqK2o: crops.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
+      remN: crops.reduce((sum, row) => sum + (row.remN ?? 0), 0),
+      remP2o5: crops.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
+      remK2o: crops.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
+    }),
+    [crops],
+  );
+  const rowsWithBalance = crops.length > 0 ? [...crops, balanceRow] : [];
+
+  // find the appropriate balance message based on the nutrient type and value
+  const findBalanceMessage = (balanceType: string, balanceValue: number) =>
+    nutrientMessages.find((msg) => {
+      if (msg.BalanceType !== balanceType) return false;
+
+      // either compares balance value to req (agronomic) or rem (crop removal) high low range
+      const isReq = balanceType.startsWith('req');
+      const low = isReq ? msg.ReqBalanceLow : msg.RemBalanceLow;
+      const high = isReq ? msg.ReqBalanceHigh : msg.RemBalanceHigh;
+
+      return balanceValue >= low && balanceValue <= high;
+    });
+
+  const getMessage = useCallback((balanceType: string, balanceValue: number) => {
+    const message = findBalanceMessage(balanceType, balanceValue);
+    if (message && message.Icon !== '/good.svg') {
+      setBalanceMessages((prev) => [
+        ...prev,
+        {
+          ...message,
+          Text: message.Text.replace('{0}', Math.abs(balanceValue ?? 0).toFixed(1)),
+          Icon: message.Icon,
+        },
+      ]);
+    }
+  }, []);
+
+  // When balance row changes, clear previous messages and set new messages
+  useEffect(() => {
+    setBalanceMessages([]);
+
+    Object.entries(balanceRow).forEach(([key, value]) => {
+      if (key !== 'id' && key !== 'cropName') {
+        getMessage(key, value as number);
+      }
+    });
+  }, [balanceRow, getMessage]);
 
   const farmManuresList = (): NMPFileFarmManureData[] => {
     if (state.nmpFile) {
@@ -44,6 +107,7 @@ export default function CalculateNutrients() {
     }
     return [];
   };
+
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
     setIsDialogOpen(true);
@@ -87,75 +151,106 @@ export default function CalculateNutrients() {
     [fieldList],
   );
 
+  const customCalcTableStyle = {
+    '& .MuiDataGrid-columnHeader[data-field="reqN"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '2em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="reqP2o5"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '.5em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="reqK2o"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '.5em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="remN"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '2em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="remP2o5"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '1em',
+    },
+    '& .MuiDataGrid-columnHeader[data-field="remK2o"] .MuiDataGrid-columnHeaderTitle': {
+      marginLeft: '1.5em',
+    },
+  };
+
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'cropName', headerName: 'Crop', width: 250, minWidth: 200, maxWidth: 300 },
+      { field: 'cropName', headerName: 'Crop', width: 230, minWidth: 200, maxWidth: 300 },
       {
         field: 'reqN',
         headerName: 'N',
-        width: 60,
-        minWidth: 60,
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
         description: 'Nitrogen',
+        renderCell: renderNutrientCell('reqN', findBalanceMessage),
       },
       {
         field: 'reqP2o5',
         headerName: 'P2o5',
-        width: 60,
-        minWidth: 60,
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
         description: 'Phosphorous',
+        renderCell: renderNutrientCell('reqP2o5', findBalanceMessage),
       },
       {
         field: 'reqK2o',
         headerName: 'K2o',
-        width: 110,
-        minWidth: 100,
-        maxWidth: 110,
-        description: 'Nitrogen',
+        width: 120,
+        minWidth: 120,
+        maxWidth: 100,
+        description: 'Potassium',
+        renderCell: renderNutrientCell('reqK2o', findBalanceMessage),
       },
       {
         field: 'remN',
         headerName: 'N',
-        width: 60,
-        minWidth: 60,
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
         description: 'Nitrogen',
+        renderCell: renderNutrientCell('remN', findBalanceMessage),
       },
       {
         field: 'remP2o5',
         headerName: 'P2o5',
-        width: 60,
-        minWidth: 60,
+        width: 80,
+        minWidth: 80,
         maxWidth: 100,
-        description: 'Nitrogen',
+        description: 'Phosphorous',
+        renderCell: renderNutrientCell('remP2o5', findBalanceMessage),
       },
       {
         field: 'remK2o',
         headerName: 'K2o',
-        width: 180,
+        width: 130,
         minWidth: 60,
-        maxWidth: 180,
-        description: 'Nitrogen',
+        maxWidth: 130,
+        description: 'Potassium',
+        renderCell: renderNutrientCell('remK2o', findBalanceMessage),
       },
       {
         field: '',
         headerName: 'Actions',
-        width: 120,
-        renderCell: (row: any) => (
-          <>
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleEditRow(row)}
-              icon={faEdit}
-            />
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleDeleteRow(row)}
-              icon={faTrash}
-            />
-          </>
-        ),
+        width: 100,
+        renderCell: (row: any) => {
+          // If balance row don't show actions
+          const isBalanceRow = row.row.cropName === 'Balance';
+          return !isBalanceRow ? (
+            <>
+              <FontAwesomeIcon
+                css={tableActionButtonCss}
+                onClick={() => handleEditRow(row)}
+                icon={faEdit}
+              />
+              <FontAwesomeIcon
+                css={tableActionButtonCss}
+                onClick={() => handleDeleteRow(row)}
+                icon={faTrash}
+              />
+            </>
+          ) : null;
+        },
         sortable: false,
         resizable: false,
       },
@@ -171,7 +266,7 @@ export default function CalculateNutrients() {
       <Button
         size="medium"
         aria-label="Add Field"
-        onPress={() => {
+        onClick={() => {
           setButtonClicked('field');
           setIsDialogOpen(true);
         }}
@@ -297,18 +392,14 @@ export default function CalculateNutrients() {
       <div
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >
-        <div style={{ width: 230 }} />
-        <div style={{ width: 210 }}>Agronomic (lb/ac)</div>
+        <div style={{ width: 220 }} />
+        <div style={{ width: 290 }}>Agronomic (lb/ac)</div>
         <div style={{ width: 250 }}>Crop Removal (lb/ac)</div>
       </div>
       {/* display crops belonging to the field of the tab the user is on */}
       <DataGrid
-        sx={{ ...customTableStyle }}
-        rows={
-          fieldList[activeField]?.Crops
-            ? fieldList[activeField].Crops.map((ele, index) => ({ ...ele, index }))
-            : []
-        }
+        sx={{ ...customTableStyle, ...customCalcTableStyle }}
+        rows={rowsWithBalance}
         columns={columns}
         getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
@@ -317,6 +408,16 @@ export default function CalculateNutrients() {
         hideFooter
       />
       <ErrorText>{showViewError}</ErrorText>
+      {balanceMessages.map((msg) => (
+        <Error key={msg.Id}>
+          {/* based on msg get appropriate icon */}
+          <Icon
+            src={msg.Icon}
+            alt="Nutrient balance icon"
+          />
+          <Message>{msg.Text}</Message>
+        </Error>
+      ))}
       <ButtonGroup
         alignment="start"
         ariaLabel="A group of buttons"
