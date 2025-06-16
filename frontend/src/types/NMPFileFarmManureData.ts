@@ -1,4 +1,4 @@
-import { ManureNutrients } from './CalculateNutrients';
+import { ManureNutrients } from './calculateNutrients';
 
 export type NMPFileFarmManureData = {
   ManureSource: string;

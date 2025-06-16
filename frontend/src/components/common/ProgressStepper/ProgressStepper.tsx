@@ -6,7 +6,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-import useAppService from '../../../services/app/useAppService';
+import useAppState from '../../../hooks/useAppState';
 import {
   ADD_ANIMALS,
   CALCULATE_NUTRIENTS,
@@ -17,7 +17,7 @@ import {
   MANURE_IMPORTS,
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
-} from '@/constants/RouteConstants';
+} from '@/constants/routes';
 
 type ProgressStepperProps = {
   step: string;
@@ -40,8 +40,8 @@ const stepsWithoutAnimals = [
   'Reporting',
 ];
 
-export default function HorizontalLinearAlternativeLabelStepper({ step }: ProgressStepperProps) {
-  const { state } = useAppService();
+export default function ProgressStepper({ step }: ProgressStepperProps) {
+  const { state } = useAppState();
   const { pathname } = useLocation();
 
   const displayAnimalsStep = useCallback(() => {

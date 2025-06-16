@@ -1,54 +1,4 @@
-import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
-import defaultNMPFile from '@/constants/DefaultNMPFile';
-import { NMPFile, NMPFileFarmManureData, NMPFileFieldData } from '@/types';
-
-export const initRegion = (state: any) => {
-  if (state.nmpFile) {
-    const parsedData: NMPFile = JSON.parse(state.nmpFile);
-    return parsedData.farmDetails.FarmRegion;
-  }
-  return undefined;
-};
-
-export const initFields = (state: any) => {
-  if (state.nmpFile) {
-    const parsedData = JSON.parse(state.nmpFile);
-    return parsedData.years[0].Fields;
-  }
-  return [];
-};
-
-export const saveFieldsToFile = (
-  fields: NMPFileFieldData[],
-  prevNMPFile: string,
-  setNMPFile: (nmpFile: string | ArrayBuffer) => Promise<void>,
-) => {
-  let nmpFile: NMPFile;
-  if (prevNMPFile) nmpFile = JSON.parse(prevNMPFile);
-  else {
-    nmpFile = { ...defaultNMPFile };
-    nmpFile.years.push({ ...defaultNMPFileYear });
-  }
-  if (nmpFile.years.length > 0) {
-    nmpFile.years[0].Fields = fields;
-  }
-  setNMPFile(JSON.stringify(nmpFile));
-};
-
-export const saveFarmManuresToFile = (
-  manures: NMPFileFarmManureData[],
-  prevNMPFile: string,
-  setNMPFile: (nmpFile: string | ArrayBuffer) => Promise<void>,
-) => {
-  let nmpFile: NMPFile | null = null;
-  if (prevNMPFile) nmpFile = JSON.parse(prevNMPFile);
-  if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
-    nmpFile.years[0].FarmManures = manures.map((manure) => ({
-      ...manure,
-    }));
-  }
-  setNMPFile(JSON.stringify(nmpFile));
-};
+import { Fertilizer, NMPFileCropData } from '@/types';
 
 export const booleanChecker = (value: any): boolean => {
   if (!value) {
@@ -77,4 +27,53 @@ export const liquidSolidManureDisplay = (manureObj: { [key: string]: number | st
     return `${liquid} gal`;
   }
   return '0';
+};
+
+export function getSolidManureDisplay(amount: number) {
+  const roundedAmount = Math.round(amount);
+  return `${roundedAmount} ton${roundedAmount === 1 ? '' : 's'}`;
+}
+
+export function getLiquidManureDisplay(amount: number) {
+  const roundedAmount = Math.round(amount);
+  return `${roundedAmount} U.S. gallon${roundedAmount === 1 ? '' : 's'}`;
+}
+
+export const calculateFieldBalances = (
+  crops: NMPFileCropData[] | undefined,
+  fertilizer: Fertilizer,
+) => {
+  let fertN = 0;
+  let fertP = 0;
+  let fertK = 0;
+  // calculate available nutrients (agronomic balance + fertilizer)
+  crops?.forEach((crop) => {
+    fertN += crop.reqN ?? 0;
+    fertP += crop.reqP2o5 ?? 0;
+    fertK += crop.reqK2o ?? 0;
+  });
+  if (fertilizer) {
+    fertN += fertilizer.nitrogen;
+    fertP += fertilizer.phosphorous;
+    fertK += fertilizer.potassium;
+  }
+  const availableNutrients = {
+    N: fertN,
+    P: fertP,
+    K: fertK,
+  };
+  // Calculate crop removal values
+  const cropRemoval =
+    crops?.map((crop) => ({
+      N: crop?.remN ?? 0,
+      P: crop?.remP2o5 ?? 0,
+      K: crop?.remK2o ?? 0,
+    })) ?? [];
+  // Nutrients still required (if negative, set to 0)
+  const nutrientsStillRequired = {
+    N: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.N, 0) - availableNutrients.N, 0),
+    P: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.P, 0) - availableNutrients.P, 0),
+    K: Math.max(cropRemoval.reduce((sum, crop) => sum + crop.K, 0) - availableNutrients.K, 0),
+  };
+  return { availableNutrients, nutrientsStillRequired };
 };

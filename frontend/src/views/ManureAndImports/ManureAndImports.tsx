@@ -15,31 +15,18 @@ import {
   NMPFileImportedManureData,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
-  NMPFile,
   SelectOption,
-  DAIRY_COW_ID,
-  MILKING_COW_ID,
   AnimalData,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
   DefaultLiquidManureConversionFactors,
   DefaultManureFormData,
-  defaultNMPFile,
-  defaultNMPFileYear,
 } from '@/constants';
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
-import useAppService from '@/services/app/useAppService';
-import {
-  ADD_ANIMALS,
-  FARM_INFORMATION,
-  FIELD_LIST,
-  NUTRIENT_ANALYSIS,
-} from '@/constants/RouteConstants';
-import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
-import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
-import { getLiquidManureDisplay, getSolidManureDisplay, initAnimals } from '../AddAnimals/utils';
+import useAppState from '@/hooks/useAppState';
+import { ADD_ANIMALS, FARM_INFORMATION, FIELD_LIST, NUTRIENT_ANALYSIS } from '@/constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -47,62 +34,17 @@ import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
 
 export default function ManureAndImports() {
-  const { state, setNMPFile, setShowAnimalsStep } = useAppService();
-  const parsedFile: NMPFile = useMemo(() => {
-    if (state.nmpFile) {
-      return JSON.parse(state.nmpFile);
-    }
-    // TODO: Once we cache state, throw error if uninitialized
-    return { ...defaultNMPFile, years: [{ ...defaultNMPFileYear }] };
-  }, [state.nmpFile]);
+  const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [animalList] = useState<Array<AnimalData>>(initAnimals(state));
+  const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
   const [cattleSubtypeList, setCattleSubtypeList] = useState<SelectOption[]>([]);
   const [editMaterialName, setEditMaterialName] = useState<string | null>(null);
   const [manures, setManures] = useState<NMPFileImportedManureData[]>(
-    parsedFile.years[0]?.ImportedManures || [],
+    state.nmpFile.years[0]?.ImportedManures || [],
   );
-  const generatedManures: NMPFileGeneratedManureData[] = useMemo(() => {
-    const farmAnimals = parsedFile.years[0]?.FarmAnimals;
-    if (farmAnimals === undefined) {
-      return [];
-    }
-    const gManures: NMPFileGeneratedManureData[] = [];
-    for (let i = 0; i < farmAnimals.length; i += 1) {
-      const animal = farmAnimals[i];
-      if (animal.manureData !== undefined) {
-        if (animal.animalId === DAIRY_COW_ID && animal.subtype === MILKING_COW_ID) {
-          // TODO: Add wash water as manure. We're ignoring a lot of dairy cow stuff for now
-        }
-
-        if (animal.manureData.annualSolidManure !== undefined) {
-          gManures.push({
-            ...DefaultGeneratedManureFormData,
-            index: gManures.length,
-            UniqueMaterialName: animal.manureData.name,
-            ManureTypeName: '2',
-            AnnualAmount: animal.manureData.annualSolidManure,
-            AnnualAmountTonsWeight: animal.manureData.annualSolidManure,
-            AnnualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
-          });
-        } else {
-          gManures.push({
-            ...DefaultGeneratedManureFormData,
-            index: gManures.length,
-            UniqueMaterialName: animal.manureData.name,
-            ManureTypeName: '1',
-            AnnualAmount: animal.manureData.annualLiquidManure,
-            AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
-            AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
-          });
-        }
-      }
-    }
-    return gManures;
-  }, [parsedFile.years]);
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
     SolidManureConversionFactors[]
   >([DefaultSolidManureConversionFactors]);
@@ -180,17 +122,11 @@ export default function ManureAndImports() {
     }
   };
 
+  // TODO: Handle Generated Manures via a reducer
   const handlePrevious = () => {
-    // Remove the generated manures, which will be reprocessed when returning to this page
-    if (parsedFile.years[0].GeneratedManures !== undefined) {
-      const nmpFile = { ...parsedFile };
-      nmpFile.years[0].GeneratedManures = undefined;
-      setNMPFile(JSON.stringify(nmpFile));
-    }
-
     if (
-      parsedFile.years[0]?.FarmAnimals !== undefined &&
-      parsedFile.years[0].FarmAnimals.length > 0
+      state.nmpFile.years[0]?.FarmAnimals !== undefined &&
+      state.nmpFile.years[0].FarmAnimals.length > 0
     ) {
       navigate(ADD_ANIMALS);
     } else {
@@ -199,16 +135,21 @@ export default function ManureAndImports() {
   };
 
   const handleNext = () => {
-    const nmpFile = { ...parsedFile };
-    nmpFile.years[0].ImportedManures = structuredClone(manures);
-    nmpFile.years[0].GeneratedManures = structuredClone(generatedManures);
-    setNMPFile(JSON.stringify(nmpFile));
+    if (!state.nmpFile.farmDetails.Year) {
+      // We should show an error popup, but for now force-navigate back to Farm Information
+      navigate(FARM_INFORMATION);
+    }
+    dispatch({
+      type: 'SAVE_IMPORTED_MANURE',
+      year: state.nmpFile.farmDetails.Year!,
+      newManures: manures,
+    });
     navigate(NUTRIENT_ANALYSIS);
   };
 
   useEffect(() => {
     // Load animals step to progress stepper
-    setShowAnimalsStep(true);
+    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
 
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
@@ -408,7 +349,7 @@ export default function ManureAndImports() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={animalList}
         columns={columnsAnimalManure}
-        getRowId={(row: any) => row.id}
+        getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

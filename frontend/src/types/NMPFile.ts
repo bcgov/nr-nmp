@@ -4,9 +4,9 @@ import NMPFileYear from './NMPFileYear';
  */
 type NMPFile = {
   farmDetails: {
-    Year?: string;
-    FarmName?: string;
-    FarmRegion?: number;
+    Year: string;
+    FarmName: string;
+    FarmRegion: number;
     FarmSubRegion?: number | null;
     FarmAnimals?: string[];
     HasHorticulturalCrops?: boolean;

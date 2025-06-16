@@ -1,7 +1,6 @@
 import { NMPFileYear } from '@/types';
 
-const defaultNMPFileYear: NMPFileYear = {
-  Year: '',
+const DEFAULT_NMPFILE_YEAR: Omit<NMPFileYear, 'Year'> = {
   Fields: [],
   FarmAnimals: [],
   FarmManures: [],
@@ -9,4 +8,4 @@ const defaultNMPFileYear: NMPFileYear = {
   ImportedManures: [],
 };
 
-export default defaultNMPFileYear;
+export default DEFAULT_NMPFILE_YEAR;

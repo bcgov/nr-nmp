@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import screenSizes from '@/constants/screenSizes';
+import SCREEN_SIZES from '@/constants/screenSizes';
 
 export const CardHeader = styled.div`
   padding: 0;
@@ -11,7 +11,7 @@ export const CardHeader = styled.div`
   width: 100%;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  @media (min-width: ${screenSizes.tablet}) {
+  @media (min-width: ${SCREEN_SIZES.tablet}) {
     justify-content: flex-start;
     padding-left: 2em;
   }

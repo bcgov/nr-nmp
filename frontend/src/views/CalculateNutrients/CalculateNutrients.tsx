@@ -8,25 +8,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import useAppService from '@/services/app/useAppService';
+import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { FIELD_LIST, CROPS } from '@/constants/RouteConstants';
+import { FIELD_LIST, CROPS } from '@/constants/routes';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
-import { initFields } from '../../utils/utils';
-import NewFertilizerModal from './FertilizerModal/NewFertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
+import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 
 // calculates the field nutrients based on the crops and manure
 export default function CalculateNutrients() {
-  // setNMPFile not yet used
-  // const { state, setNMPFile } = useAppService();
-  const { state } = useAppService();
+  const { state } = useAppState();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
@@ -35,7 +32,9 @@ export default function CalculateNutrients() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(initFields(state));
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
+    state.nmpFile.years[0].Fields || [],
+  );
 
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
@@ -244,7 +243,7 @@ export default function CalculateNutrients() {
           />
         )}
         {isDialogOpen && buttonClicked === 'fertilizer' && (
-          <NewFertilizerModal
+          <FertilizerModal
             initialModalData={undefined}
             isOpen={isDialogOpen}
             onCancel={handleDialogClose}

@@ -1,7 +1,6 @@
 import { NMPFileSoilTestData } from '@/types';
 
-const defaultSoilTestData: NMPFileSoilTestData = {
-  soilTest: '1',
+const defaultSoilTestData: Omit<NMPFileSoilTestData, 'soilTestId'> = {
   valNO3H: '0',
   valP: '250',
   valK: '500',

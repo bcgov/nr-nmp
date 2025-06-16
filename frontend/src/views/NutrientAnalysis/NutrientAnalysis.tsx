@@ -10,30 +10,21 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './nutrientAnalsysis.styles';
-import { NMPFile, NMPFileImportedManureData } from '@/types';
-import useAppService from '@/services/app/useAppService';
-import { NUTRIENT_ANALYSIS, MANURE_IMPORTS, FIELD_LIST } from '@/constants/RouteConstants';
-import { saveFarmManuresToFile } from '@/utils/utils';
+import { NMPFileImportedManureData } from '@/types';
+import useAppState from '@/hooks/useAppState';
+import { NUTRIENT_ANALYSIS, MANURE_IMPORTS, FIELD_LIST } from '@/constants/routes';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
-import { defaultNMPFile, defaultNMPFileYear } from '@/constants';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import NutrientAnalysisModal from './NutrientAnalysisModal';
 
 export default function NutrientAnalysis() {
-  const { state, setNMPFile } = useAppService();
-  const parsedFile: NMPFile = useMemo(() => {
-    if (state.nmpFile) {
-      return JSON.parse(state.nmpFile);
-    }
-    // TODO: Once we cache state, throw error if uninitialized
-    return { ...defaultNMPFile, years: [{ ...defaultNMPFileYear }] };
-  }, [state.nmpFile]);
+  const { state, dispatch } = useAppState();
 
   const manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[] = useMemo(
     () =>
-      (parsedFile.years[0]?.ImportedManures || []).concat(
-        parsedFile.years[0]?.GeneratedManures || [],
+      (state.nmpFile.years[0]?.ImportedManures || []).concat(
+        state.nmpFile.years[0]?.GeneratedManures || [],
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -43,7 +34,7 @@ export default function NutrientAnalysis() {
   const [editName, setEditName] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
   const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileFarmManureData[]>(
-    parsedFile.years[0]?.FarmManures || [],
+    state.nmpFile.years[0]?.FarmManures || [],
   );
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
@@ -84,7 +75,11 @@ export default function NutrientAnalysis() {
   };
 
   const handleNext = () => {
-    saveFarmManuresToFile(nutrientAnalysisData, state.nmpFile, setNMPFile);
+    dispatch({
+      type: 'SAVE_FARM_MANURE',
+      year: state.nmpFile.farmDetails.Year!,
+      newManures: nutrientAnalysisData,
+    });
     navigate(FIELD_LIST);
   };
 

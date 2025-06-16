@@ -1,6 +1,6 @@
 import { NMPFile } from '@/types';
 
-const defaultNMPFile: NMPFile = {
+const DEFAULT_NMPFILE: NMPFile = {
   farmDetails: {
     Year: '',
     FarmName: '',
@@ -14,4 +14,4 @@ const defaultNMPFile: NMPFile = {
   years: [],
 };
 
-export default defaultNMPFile;
+export default DEFAULT_NMPFILE;
