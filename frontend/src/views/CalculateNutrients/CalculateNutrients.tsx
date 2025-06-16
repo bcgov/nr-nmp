@@ -270,7 +270,6 @@ export default function CalculateNutrients() {
           onClick={() => {
             setButtonClicked('field');
             setIsDialogOpen(true);
-            console.log('activeField', activeField);
           }}
         >
           <FontAwesomeIcon icon={faPlus} />

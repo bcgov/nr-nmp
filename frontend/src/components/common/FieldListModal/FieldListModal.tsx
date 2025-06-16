@@ -64,8 +64,6 @@ export default function FieldListModal({
 
   const handleFormFieldChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    console.log('rowEditIndex', rowEditIndex);
-    console.log('initialModalData', initialModalData);
   };
 
   const validateUniqueName = (): string => {
@@ -77,7 +75,6 @@ export default function FieldListModal({
     formData.PreviousYearManureApplicationFrequency !== manureOptions[0].id;
 
   return (
-    // add duplicate field
     <Modal
       title={mode}
       onOpenChange={onClose}
