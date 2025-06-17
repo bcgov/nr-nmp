@@ -21,10 +21,11 @@ export default function BasicTabs({
           value={value}
           aria-label="tab"
         >
-          {tabLabel.map((ele) => (
+          {tabLabel.map((ele, i) => (
             <Tab
               label={ele}
-              key={ele}
+              // eslint-disable-next-line react/no-array-index-key
+              key={`${ele} + ${i}`}
             />
           ))}
         </Tabs>

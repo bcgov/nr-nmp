@@ -1,6 +1,6 @@
 import { NMPFileCropData } from '@/types';
 
-const defaultNMPFileCropsData: Omit<NMPFileCropData, 'index'> = {
+const DEFAULT_NMPFILE_CROPS: Omit<NMPFileCropData, 'index'> = {
   cropId: '',
   cropTypeId: 0,
   cropName: '',
@@ -19,4 +19,4 @@ const defaultNMPFileCropsData: Omit<NMPFileCropData, 'index'> = {
   coverCropHarvested: null,
 };
 
-export default defaultNMPFileCropsData;
+export default DEFAULT_NMPFILE_CROPS;

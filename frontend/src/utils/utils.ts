@@ -1,56 +1,4 @@
 import React from 'react';
-import defaultNMPFileYear from '@/constants/DefaultNMPFileYear';
-import defaultNMPFile from '@/constants/DefaultNMPFile';
-import { NMPFile, NMPFileFarmManureData, NMPFileFieldData } from '@/types';
-
-export const initRegion = (state: any) => {
-  if (state.nmpFile) {
-    const parsedData: NMPFile = JSON.parse(state.nmpFile);
-    return parsedData.farmDetails.FarmRegion;
-  }
-  return undefined;
-};
-
-export const initFields = (state: any) => {
-  if (state.nmpFile) {
-    const parsedData = JSON.parse(state.nmpFile);
-    // Mapping introduces index for DataGrid component to track each field element.
-    return parsedData.years[0].Fields.map((ele: any, index: number) => ({ ...ele, index }));
-  }
-  return [];
-};
-
-export const saveFieldsToFile = (
-  fields: NMPFileFieldData[],
-  prevNMPFile: string,
-  setNMPFile: (nmpFile: string | ArrayBuffer) => Promise<void>,
-) => {
-  let nmpFile: NMPFile;
-  if (prevNMPFile) nmpFile = JSON.parse(prevNMPFile);
-  else {
-    nmpFile = { ...defaultNMPFile };
-    nmpFile.years.push({ ...defaultNMPFileYear });
-  }
-  if (nmpFile.years.length > 0) {
-    nmpFile.years[0].Fields = fields;
-  }
-  setNMPFile(JSON.stringify(nmpFile));
-};
-
-export const saveFarmManuresToFile = (
-  manures: NMPFileFarmManureData[],
-  prevNMPFile: string,
-  setNMPFile: (nmpFile: string | ArrayBuffer) => Promise<void>,
-) => {
-  let nmpFile: NMPFile | null = null;
-  if (prevNMPFile) nmpFile = JSON.parse(prevNMPFile);
-  if (nmpFile && nmpFile.years && nmpFile.years.length > 0 && manures.length > 0) {
-    nmpFile.years[0].FarmManures = manures.map((manure) => ({
-      ...manure,
-    }));
-  }
-  setNMPFile(JSON.stringify(nmpFile));
-};
 
 export const booleanChecker = (value: any): boolean => {
   if (!value) {
@@ -80,6 +28,16 @@ export const liquidSolidManureDisplay = (manureObj: { [key: string]: number | st
   }
   return '0';
 };
+
+export function getSolidManureDisplay(amount: number) {
+  const roundedAmount = Math.round(amount);
+  return `${roundedAmount} ton${roundedAmount === 1 ? '' : 's'}`;
+}
+
+export function getLiquidManureDisplay(amount: number) {
+  const roundedAmount = Math.round(amount);
+  return `${roundedAmount} U.S. gallon${roundedAmount === 1 ? '' : 's'}`;
+}
 
 // use in CalculateNutrients.tsx to show icon in balance row only
 // and makes crop nutrients display as a negative value

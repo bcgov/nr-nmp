@@ -8,14 +8,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import useAppService from '@/services/app/useAppService';
+import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { CROPS, REPORTING } from '@/constants/RouteConstants';
-import { renderNutrientCell, initFields } from '../../utils/utils.ts';
+import { FIELD_LIST, CROPS } from '@/constants/routes';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
+import { renderNutrientCell } from '../../utils/utils.ts';
+
 import { Error, Message, Icon } from './CalculateNutrients.styles';
 import { NutrientMessage, nutrientMessages } from './nutrientMessages';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
@@ -26,9 +27,7 @@ import FieldListModal from '../../components/common/FieldListModal/FieldListModa
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 
 export default function CalculateNutrients() {
-  // setNMPFile not yet used
-  // const { state, setNMPFile } = useAppService();
-  const { state } = useAppService();
+  const { state } = useAppState();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
@@ -38,7 +37,9 @@ export default function CalculateNutrients() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(initFields(state));
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
+    state.nmpFile.years[0].Fields || [],
+  );
 
   // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
   const crops = useMemo(
@@ -101,12 +102,7 @@ export default function CalculateNutrients() {
     });
   }, [balanceRow, getMessage]);
 
-  const farmManuresList = (): NMPFileFarmManureData[] => {
-    if (state.nmpFile) {
-      return JSON.parse(state.nmpFile).years[0].FarmManures;
-    }
-    return [];
-  };
+  const farmManuresList: NMPFileFarmManureData[] = state.nmpFile.years[0].FarmManures || [];
 
   const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
@@ -134,7 +130,7 @@ export default function CalculateNutrients() {
   };
 
   const isFieldNameUnique = useCallback(
-    (data: NMPFileFieldData) =>
+    (data: Partial<NMPFileFieldData>) =>
       !fieldList.some(
         (fieldRow) => fieldRow.FieldName === data.FieldName && fieldRow.index !== data.index,
       ),
@@ -253,17 +249,19 @@ export default function CalculateNutrients() {
       <ProgressStepper />
       <AppTitle />
       <PageTitle title="Calculate Nutrients" />
-      <Button
-        size="medium"
-        aria-label="Add Field"
-        onClick={() => {
-          setButtonClicked('field');
-          setIsDialogOpen(true);
-        }}
-      >
-        <FontAwesomeIcon icon={faPlus} />
-        Add Field
-      </Button>
+      <ButtonGroup>
+        <Button
+          size="medium"
+          aria-label="Duplicate Field"
+          onClick={() => {
+            setButtonClicked('field');
+            setIsDialogOpen(true);
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          Duplicate Field
+        </Button>
+      </ButtonGroup>
       {/* tabs = the fields the user has entered */}
       <TabsMaterial
         activeTab={activeField}
@@ -324,10 +322,12 @@ export default function CalculateNutrients() {
             Add Other
           </Button>
         </ButtonGroup>
-
         {isDialogOpen && buttonClicked === 'field' && (
           <FieldListModal
-            initialModalData={undefined}
+            mode="Duplicate Field"
+            initialModalData={
+              activeField !== undefined ? fieldList.find((v) => v.index === activeField) : undefined
+            }
             rowEditIndex={undefined}
             setFieldList={setFieldList}
             isFieldNameUnique={isFieldNameUnique}
@@ -347,7 +347,7 @@ export default function CalculateNutrients() {
         {isDialogOpen && buttonClicked === 'manure' && (
           <ManureModal
             initialModalData={undefined}
-            farmManures={farmManuresList()}
+            farmManures={farmManuresList}
             rowEditIndex={rowEditIndex}
             // setFieldList={setFieldList}
             isOpen={isDialogOpen}

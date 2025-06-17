@@ -3,14 +3,13 @@
  */
 import { useNavigate } from 'react-router-dom';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import constants from '../../constants/Constants';
-import useAppService from '../../services/app/useAppService';
-import { deleteLocalStorageKey } from '../../utils/AppLocalStorage';
+import useAppState from '../../hooks/useAppState';
 import { StyledContent } from './landingPage.styles';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
+import { LANDING_PAGE } from '@/constants/routes';
 
 export default function LandingPage() {
-  const { setNMPFile } = useAppService();
+  const { dispatch } = useAppState();
   const navigate = useNavigate();
 
   const handleUpload = () => {
@@ -31,14 +30,14 @@ export default function LandingPage() {
     fr.onload = () => {
       const data = fr.result;
       if (data) {
-        setNMPFile(data);
+        dispatch({ type: 'OVERWRITE_NMPFILE', newFile: JSON.parse(data as string) });
         navigate('/farm-information');
       }
     };
   };
 
   const newCalcHandler = () => {
-    deleteLocalStorageKey(constants.NMP_FILE_KEY);
+    dispatch({ type: 'RESET_NMPFILE' });
     navigate('/farm-information');
   };
 

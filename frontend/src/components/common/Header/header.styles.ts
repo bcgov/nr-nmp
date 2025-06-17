@@ -2,7 +2,7 @@
  * @summary Styles for reusable Header component
  */
 import styled from '@emotion/styled';
-import screenSizes from '../../../constants/screenSizes';
+import SCREEN_SIZES from '../../../constants/screenSizes';
 import typography from '../../../typography';
 
 export const HeaderWrapper = styled.header`
@@ -15,7 +15,7 @@ export const HeaderWrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  @media (min-width: ${screenSizes.tablet}) {
+  @media (min-width: ${SCREEN_SIZES.tablet}) {
     justify-content: flex-start;
     padding-left: 2em;
   }
@@ -43,7 +43,7 @@ export const BannerRight = styled.div`
   display: flex;
   padding: 0 0.5em;
   margin: 0;
-  @media (min-width: ${screenSizes.tablet}) {
+  @media (min-width: ${SCREEN_SIZES.tablet}) {
     margin: 0 0 0 auto;
   }
 `;
@@ -60,7 +60,7 @@ export const Image = styled.img`
   position: relative;
   height: 100%;
   padding-right: 10px;
-  @media (max-width: ${screenSizes.tablet}) {
+  @media (max-width: ${SCREEN_SIZES.tablet}) {
     width: 100px;
     padding-right: 5px;
   }

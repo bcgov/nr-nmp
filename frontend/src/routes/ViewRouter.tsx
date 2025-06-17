@@ -12,8 +12,7 @@ import {
   MANURE_IMPORTS,
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
-  REPORTING,
-} from '@/constants/RouteConstants';
+} from '@/constants/routes';
 
 import LandingPage from '@/views/LandingPage/LandingPage';
 import FarmInformation from '@/views/FarmInformation/FarmInformation';

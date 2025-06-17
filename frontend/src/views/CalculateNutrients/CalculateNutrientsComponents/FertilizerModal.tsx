@@ -18,8 +18,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { InputField } from '@/components/common';
 
 import type { FertilizerFormState } from '../types';
-import type { Fertilizer, FertilizerType, FertilizerUnit } from '@/types/Fertilizers';
-import type { CropNutrients } from '@/types';
+import type { Fertilizer, FertilizerType, FertilizerUnit, CropNutrients } from '@/types';
 import calcFertBalance from '../utils';
 
 type FertilizerModalProps = {

@@ -13,13 +13,3 @@ export type FertilizerUnit = {
   farmrequirednutrientsstdunitsconversion: number;
   farmrequirednutrientsstdunitsareaconversion: number;
 };
-
-export type Fertilizer = {
-  id: number;
-  name: string;
-  dryliquid: string;
-  nitrogen: number;
-  phosphorous: number;
-  potassium: number;
-  sortnum: number;
-};
