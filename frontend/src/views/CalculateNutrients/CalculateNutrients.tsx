@@ -26,6 +26,17 @@ import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 
+type TableRow = {
+  index: number;
+  name: string;
+  reqN: number;
+  reqP2o5: number;
+  reqK2o: number;
+  remN: number;
+  remP2o5: number;
+  remK2o: number;
+};
+
 export default function CalculateNutrients() {
   const { state } = useAppState();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
@@ -41,6 +52,11 @@ export default function CalculateNutrients() {
     state.nmpFile.years[0].Fields || [],
   );
 
+  const tableRows: TableRow[] = useMemo(() => {
+    const field = fieldList[activeField];
+  }, [fieldList, activeField]);
+
+  /*
   // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
   const crops = useMemo(
     () =>
@@ -49,6 +65,8 @@ export default function CalculateNutrients() {
         : [],
     [fieldList, activeField],
   );
+  */
+
   const balanceRow = useMemo(
     () => ({
       index: 'balance',
