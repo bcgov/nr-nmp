@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ProgressStepper } from '..';
-import { FARM_INFORMATION } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
 import { DEFAULT_NMPFILE } from '@/constants';
 import { AppStateAction } from '@/hooks/reducers/appStateReducer';

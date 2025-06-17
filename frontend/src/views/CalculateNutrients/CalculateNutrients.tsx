@@ -11,7 +11,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { FIELD_LIST, CROPS } from '@/constants/routes';
+import { CROPS, REPORTING } from '@/constants/routes';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';

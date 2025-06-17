@@ -119,7 +119,6 @@ export default function FertilizerModal({
     apiCache.callEndpoint('api/fertilizers/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        console.log(data);
         setFertilizerOptions(data);
       }
     });

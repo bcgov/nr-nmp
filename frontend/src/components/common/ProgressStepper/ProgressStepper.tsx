@@ -17,6 +17,7 @@ import {
   MANURE_IMPORTS,
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
+  REPORTING,
 } from '@/constants/routes';
 
 const stepsWithAnimals = [
@@ -36,7 +37,7 @@ const stepsWithoutAnimals = [
   'Reporting',
 ];
 
-export default function ProgressStepper({ step }: ProgressStepperProps) {
+export default function ProgressStepper() {
   const { state } = useAppState();
   const { pathname } = useLocation();
 

@@ -6,7 +6,6 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import useAppState from '../../hooks/useAppState';
 import { StyledContent } from './landingPage.styles';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
-import { LANDING_PAGE } from '@/constants/routes';
 
 export default function LandingPage() {
   const { dispatch } = useAppState();

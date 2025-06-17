@@ -26,7 +26,7 @@ import {
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
 import useAppState from '@/hooks/useAppState';
-import { ADD_ANIMALS, FARM_INFORMATION, FIELD_LIST, NUTRIENT_ANALYSIS } from '@/constants/routes';
+import { ADD_ANIMALS, FARM_INFORMATION, NUTRIENT_ANALYSIS } from '@/constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';

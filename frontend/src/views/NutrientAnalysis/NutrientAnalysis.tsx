@@ -12,7 +12,7 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { StyledContent } from './nutrientAnalsysis.styles';
 import { NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
-import { NUTRIENT_ANALYSIS, MANURE_IMPORTS, FIELD_LIST } from '@/constants/routes';
+import { MANURE_IMPORTS, FIELD_LIST } from '@/constants/routes';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -46,7 +46,6 @@ export default function NutrientAnalysis() {
   };
 
   const handleDelete = (name: string) => {
-    console.log(name);
     setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.ManureSource !== name));
   };
   const handleDialogClose = () => {
