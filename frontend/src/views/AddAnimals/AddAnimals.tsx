@@ -117,7 +117,7 @@ export default function AddAnimals() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={FARM_INFORMATION} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Livestock Information" />
       <>

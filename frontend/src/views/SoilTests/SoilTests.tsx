@@ -272,7 +272,7 @@ export default function SoilTests() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={SOIL_TESTS} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Field Information" />
       <Modal

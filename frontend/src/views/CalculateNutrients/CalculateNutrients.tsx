@@ -11,7 +11,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { FIELD_LIST, CROPS } from '@/constants/routes';
+import { CROPS, REPORTING } from '@/constants/routes';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
@@ -126,17 +126,7 @@ export default function CalculateNutrients() {
   const handleNextPage = () => {
     setShowViewError('');
 
-    // if (fieldList.length) {
-    //   saveFieldsToFile(
-    //     fieldList,
-    //     state.nmpFile,
-    //     setNMPFile,
-    //   );
-    //   // next page is reporting
-    //   navigate(/);
-    // } else {
-    //   setShowViewError('Must enter at least 1 field');
-    // }
+    navigate(REPORTING);
   };
 
   const isFieldNameUnique = useCallback(
@@ -256,7 +246,7 @@ export default function CalculateNutrients() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={FIELD_LIST} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Calculate Nutrients" />
       <ButtonGroup>
