@@ -142,6 +142,7 @@ export default function FieldList() {
         </div>
         {isDialogOpen && (
           <FieldListModal
+            mode={rowEditIndex !== undefined ? 'Edit Field' : 'Add Field'}
             initialModalData={
               rowEditIndex !== undefined
                 ? fieldList.find((v) => v.index === rowEditIndex)

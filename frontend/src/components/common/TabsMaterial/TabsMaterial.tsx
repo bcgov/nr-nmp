@@ -21,10 +21,10 @@ export default function BasicTabs({
           value={value}
           aria-label="tab"
         >
-          {tabLabel.map((ele) => (
+          {tabLabel.map((ele, i) => (
             <Tab
               label={ele}
-              key={ele}
+              key={`${ele} + ${i}`}
             />
           ))}
         </Tabs>
