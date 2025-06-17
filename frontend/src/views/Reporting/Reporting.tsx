@@ -14,14 +14,14 @@ export default function FieldList() {
 
     const nmpData = JSON.parse(state.nmpFile);
 
-    const url = URL.createObjectURL(new Blob([state.nmpFile], { type: 'text/plain' }));
+    const url = URL.createObjectURL(new Blob([state.nmpFile], { type: 'application/json' }));
     const a = document.createElement('a');
     a.href = url;
 
     const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
     const farmName = nmpData?.farmDetails?.FarmName;
 
-    a.download = `${prependDate}-${farmName}`;
+    a.download = `${prependDate}-${farmName}.nmpFile`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
