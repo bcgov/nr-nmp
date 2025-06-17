@@ -11,7 +11,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppService from '@/services/app/useAppService';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { CROPS } from '@/constants/RouteConstants';
+import { CROPS, REPORTING } from '@/constants/RouteConstants';
 import { renderNutrientCell, initFields } from '../../utils/utils.ts';
 
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
@@ -130,17 +130,7 @@ export default function CalculateNutrients() {
   const handleNextPage = () => {
     setShowViewError('');
 
-    // if (fieldList.length) {
-    //   saveFieldsToFile(
-    //     fieldList,
-    //     state.nmpFile,
-    //     setNMPFile,
-    //   );
-    //   // next page is reporting
-    //   navigate(/);
-    // } else {
-    //   setShowViewError('Must enter at least 1 field');
-    // }
+    navigate(REPORTING);
   };
 
   const isFieldNameUnique = useCallback(
