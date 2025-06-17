@@ -219,7 +219,7 @@ export default function SoilTests() {
           const isRowHasSoilTest = fields[cell?.row?.index].SoilTest !== undefined;
           const handleEditRowBtnClick = () => {
             setFormData(() => {
-              if (fields[cell?.row?.index]) {
+              if (fields[cell?.row?.index].SoilTest !== undefined) {
                 return fields[cell?.row?.index].SoilTest!;
               }
               return EMPTY_SOIL_TEST_FORM;
