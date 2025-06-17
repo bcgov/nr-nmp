@@ -1,3 +1,13 @@
+export interface Fertilizer {
+  id: number;
+  name: string;
+  dryliquid: 'dry' | 'liquid';
+  nitrogen: number;
+  phosphorous: number;
+  potassium: number;
+  sortnum: number;
+}
+
 export interface CropNutrients {
   N: number; // Nitrogen
   P2O5: number; // Phosphorus pentoxide

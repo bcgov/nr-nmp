@@ -64,74 +64,67 @@ export default function NutrientAnalysisModal({
   };
 
   const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
-    const name = Object.keys(changes)[0];
-    const value = changes[name];
-
     setFormData((prev: NMPFileFarmManureData): NMPFileFarmManureData => {
-      if (name === 'ManureSource') {
-        return {
-          ...EMPTY_MANURE_DATA,
-          BookLab: '',
-          ...changes,
-        };
-      }
-      if (name === 'MaterialType') {
-        const updatedUniqueMaterialName =
-          prev.UniqueMaterialName === '' ||
-          prev.UniqueMaterialName !== `Custom - ${prev.MaterialType}`
-            ? `Custom - ${value}`
-            : prev.UniqueMaterialName;
-        const selectedManure = manureTypesData.find((manure) => manure.name === value);
-        if (!selectedManure) {
-          throw new Error(`Manure type "${value}" not found.`);
+      let next = { ...prev };
+      Object.entries(changes).forEach(([name, value]) => {
+        if (name === 'ManureSource') {
+          next = {
+            ...EMPTY_MANURE_DATA,
+            BookLab: '',
+            ...changes,
+          };
         }
+        if (name === 'MaterialType') {
+          const updatedUniqueMaterialName =
+            next.UniqueMaterialName === '' ||
+            next.UniqueMaterialName !== `Custom - ${next.MaterialType}`
+              ? `Custom - ${value}`
+              : next.UniqueMaterialName;
+          const selectedManure = manureTypesData.find((manure) => manure.name === value);
+          if (!selectedManure) {
+            throw new Error(`Manure type "${value}" not found.`);
+          }
 
-        const Nutrients: ManureNutrients = {
-          Moisture: String(selectedManure.moisture),
-          N: selectedManure.nitrogen,
-          NH4N: selectedManure.ammonia,
-          P2O5: selectedManure.phosphorous,
-          K2O: selectedManure.potassium,
-        };
-        return {
-          ...prev,
-          MaterialType: value ? value.toString() : '',
-          UniqueMaterialName: updatedUniqueMaterialName,
-          Nutrients,
-        };
-      }
-
-      // reset nutrient values when book value is selected
-      if (name === 'BookLab' && prev.BookLab !== value) {
-        const selectedManure = manureTypesData.find((manure) => manure.name === prev.MaterialType);
-        if (!selectedManure) {
-          throw new Error(`Manure type "${value}" not found.`);
-        }
-        return {
-          ...prev,
-          BookLab: value ? value.toString() : '',
-          Nutrients: {
+          const Nutrients: ManureNutrients = {
             Moisture: String(selectedManure.moisture),
             N: selectedManure.nitrogen,
             NH4N: selectedManure.ammonia,
             P2O5: selectedManure.phosphorous,
             K2O: selectedManure.potassium,
-          },
-        };
-      }
+          };
+          next.MaterialType = value ? value.toString() : '';
+          next.UniqueMaterialName = updatedUniqueMaterialName;
+          next.Nutrients = Nutrients;
+        }
 
-      // update nutrients if changed
-      if (name in prev.Nutrients) {
-        return {
-          ...prev,
-          Nutrients: {
-            ...prev.Nutrients,
+        // reset nutrient values when book value is selected
+        if (name === 'BookLab' && next.BookLab !== value) {
+          const selectedManure = manureTypesData.find(
+            (manure) => manure.name === next.MaterialType,
+          );
+          if (!selectedManure) {
+            throw new Error(`Manure type "${value}" not found.`);
+          }
+          next.BookLab = value ? value.toString() : '';
+          next.Nutrients = {
+            Moisture: String(selectedManure.moisture),
+            N: selectedManure.nitrogen,
+            NH4N: selectedManure.ammonia,
+            P2O5: selectedManure.phosphorous,
+            K2O: selectedManure.potassium,
+          };
+        }
+
+        // update nutrients if changed
+        if (name in next.Nutrients) {
+          next.Nutrients = {
+            ...next.Nutrients,
             [name]: value === '' ? '' : Number(value),
-          },
-        };
-      }
+          };
+        }
+      });
 
-      return { ...prev, ...changes };
+      return { ...next, ...changes };
     });
   };
 
@@ -175,7 +168,7 @@ export default function NutrientAnalysisModal({
               placeholder="Select Manure Type"
               selectedKey={formData.MaterialType}
               onSelectionChange={(e: Key) => {
-                handleInputChanges({ MaterialType: e.toString() });
+                handleInputChanges({ MaterialType: e.toString(), BookLab: 'book' });
               }}
             />
           </Grid>

@@ -16,7 +16,7 @@ import {
   getCropRemovalK20,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
-import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
+import DEFAULT_NMPFILE_CROPS from '@/constants/DefaultNMPFileCropsData';
 import { customTableStyle, formCss, formGridBreakpoints } from '../../common.styles';
 import { booleanChecker } from '../../utils/utils';
 import { ModalProps } from '@/components/common/Modal/Modal';
@@ -73,7 +73,7 @@ function CropsModal({
   const apiCache = useContext(APICacheContext);
 
   const [formData, setFormData] = useState<NMPFileCropData>(
-    initialModalData || { ...defaultNMPFileCropsData, index: 0 },
+    initialModalData || { ...DEFAULT_NMPFILE_CROPS, index: 0 },
   );
   const [crops, setCrops] = useState<Crop[]>([]);
   const filteredCrops = useMemo<Crop[]>(() => {
@@ -253,19 +253,9 @@ function CropsModal({
     if (fieldIndex !== null) {
       try {
         // Calculate crop requirements (P2O5, K2O, N)
-        const cropRequirementP205 = await getCropRequirementP205(
-          field,
-          setFields,
-          formData,
-          farmRegion,
-        );
-        const cropRequirementK2O = await getCropRequirementK2O(
-          field,
-          setFields,
-          formData,
-          farmRegion,
-        );
-        const cropRequirementN = await getCropRequirementN(field, setFields, formData, farmRegion);
+        const cropRequirementP205 = await getCropRequirementP205(field, formData, farmRegion);
+        const cropRequirementK2O = await getCropRequirementK2O(field, formData, farmRegion);
+        const cropRequirementN = await getCropRequirementN(formData, farmRegion);
 
         // Calculate crop removals (N, P2O5, K2O)
         const cropRemovalN = await getCropRemovalN(formData, farmRegion);

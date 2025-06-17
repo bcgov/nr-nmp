@@ -5,7 +5,7 @@ import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 
 type NMPFileYear = {
-  Year?: string;
+  Year: string;
   Fields?: NMPFileFieldData[];
   FarmAnimals?: AnimalData[];
   FarmManures?: NMPFileFarmManureData[];

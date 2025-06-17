@@ -5,7 +5,7 @@ const initialFieldFormData: Omit<NMPFileFieldData, 'index'> = {
   Area: 0,
   PreviousYearManureApplicationFrequency: '0',
   Comment: '',
-  SoilTest: {},
+  SoilTest: undefined,
   Crops: [],
 };
 

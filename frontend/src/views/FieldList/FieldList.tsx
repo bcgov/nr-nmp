@@ -11,25 +11,21 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import {
-  FARM_INFORMATION,
-  FIELD_LIST,
-  MANURE_IMPORTS,
-  SOIL_TESTS,
-} from '@/constants/RouteConstants';
-import { initFields, saveFieldsToFile } from '../../utils/utils';
-import useAppService from '@/services/app/useAppService';
+import { FARM_INFORMATION, FIELD_LIST, MANURE_IMPORTS, SOIL_TESTS } from '@/constants/routes';
+import useAppState from '@/hooks/useAppState';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 
 export default function FieldList() {
-  const { state, setNMPFile } = useAppService();
+  const { state, dispatch } = useAppState();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(initFields(state));
+  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
+    state.nmpFile.years[0].Fields || [],
+  );
 
   const handleEditRow = useCallback((e: { row: NMPFileFieldData }) => {
     setRowEditIndex(e.row.index);
@@ -51,8 +47,16 @@ export default function FieldList() {
   };
 
   const handleNextPage = () => {
+    if (!state.nmpFile.farmDetails.Year) {
+      // We should show an error popup, but for now force-navigate back to Farm Information
+      navigate(FARM_INFORMATION);
+    }
     if (fieldList.length) {
-      saveFieldsToFile(fieldList, state.nmpFile, setNMPFile);
+      dispatch({
+        type: 'SAVE_FIELDS',
+        year: state.nmpFile.farmDetails.Year!,
+        newFields: fieldList,
+      });
       navigate(SOIL_TESTS);
     } else {
       setShowViewError('Must enter at least 1 field');
@@ -61,8 +65,10 @@ export default function FieldList() {
 
   const handleBack = () => {
     try {
-      const nmpState = JSON.parse(state.nmpFile);
-      if (nmpState.farmDetails.FarmAnimals.length === 0) {
+      if (
+        state.nmpFile.farmDetails.FarmAnimals === undefined ||
+        state.nmpFile.farmDetails.FarmAnimals.length === 0
+      ) {
         navigate(FARM_INFORMATION);
       } else {
         navigate(MANURE_IMPORTS);

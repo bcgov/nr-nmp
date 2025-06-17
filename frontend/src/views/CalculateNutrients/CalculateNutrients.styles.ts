@@ -3,7 +3,7 @@
  */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import screenSizes from '../../constants/screenSizes';
+import SCREEN_SIZES from '../../constants/screenSizes';
 
 export const CardHeader = styled.div`
   background-color: rgba(200, 200, 200, 0.3);
@@ -19,7 +19,7 @@ export const CardHeader = styled.div`
   left: 0;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  @media (min-width: ${screenSizes.tablet}) {
+  @media (min-width: ${SCREEN_SIZES.tablet}) {
     justify-content: flex-start;
     padding-left: 2em;
   }

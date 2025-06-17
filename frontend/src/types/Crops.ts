@@ -54,7 +54,7 @@ export type PreviousCrop = {
 };
 
 export type NMPFileSoilTestData = {
-  soilTest?: string;
+  soilTestId: string;
   valNO3H?: string;
   valP?: string;
   valK?: string;
