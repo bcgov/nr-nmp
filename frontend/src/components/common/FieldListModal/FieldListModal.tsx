@@ -16,7 +16,10 @@ const manureOptions = [
   { id: '3', label: 'Manure applied in each of the 2 years' },
 ];
 
+type Mode = 'Add Field' | 'Edit Field' | 'Duplicate Field';
+
 interface FieldListModalProps {
+  mode: Mode;
   initialModalData: NMPFileFieldData | undefined;
   rowEditIndex: number | undefined;
   setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
@@ -25,6 +28,7 @@ interface FieldListModalProps {
 }
 
 export default function FieldListModal({
+  mode,
   initialModalData,
   rowEditIndex,
   setFieldList,
@@ -72,7 +76,7 @@ export default function FieldListModal({
 
   return (
     <Modal
-      title={rowEditIndex !== undefined ? 'Edit field' : 'Add field'}
+      title={mode}
       onOpenChange={onClose}
       {...props}
     >
