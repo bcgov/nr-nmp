@@ -53,15 +53,17 @@ const requireAndRemoveColumns: GridColDef[] = [
 ];
 
 type CropsModalProps = {
+  mode: string;
   field: NMPFileFieldData;
   fieldIndex: number;
-  initialModalData: NMPFileCropData | undefined;
+  initialModalData: NMPFileCropData;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
   farmRegion: number;
 };
 
 function CropsModal({
+  mode,
   field,
   fieldIndex,
   initialModalData,
@@ -72,10 +74,8 @@ function CropsModal({
 }: CropsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const apiCache = useContext(APICacheContext);
 
-  const [formData, setFormData] = useState<NMPFileCropData>(
-    initialModalData || { ...defaultNMPFileCropsData, index: 0 },
-  );
   const [crops, setCrops] = useState<Crop[]>([]);
+  const [formData, setFormData] = useState<NMPFileCropData>(initialModalData);
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
     return crops.filter((type) => type.croptypeid === Number(formData.cropTypeId));
@@ -376,7 +376,7 @@ function CropsModal({
   return (
     <Modal
       onOpenChange={onClose}
-      title="Edit Crop"
+      title={mode}
       {...props}
     >
       <div css={formCss}>
