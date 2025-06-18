@@ -21,7 +21,7 @@ export default function FieldList() {
     const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
     const farmName = state.nmpFile?.farmDetails?.FarmName;
 
-    a.download = `${prependDate}-${farmName}.nmpFile`;
+    a.download = `${prependDate}-${farmName}.nmp`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

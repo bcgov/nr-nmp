@@ -1,4 +1,4 @@
-export const LANDING_PAGE = '';
+export const LANDING_PAGE = '/';
 export const FARM_INFORMATION = '/farm-information';
 export const ADD_ANIMALS = '/add-animals';
 export const FIELD_LIST = '/field-list';
