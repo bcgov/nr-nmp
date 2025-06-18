@@ -74,9 +74,9 @@ function Crops() {
   const fieldColumns: GridColDef[] = [
     { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
     {
-      field: 'Crops[0]',
+      field: 'Crops1',
       headerName: 'Crop 1',
-      valueGetter: (_value, row) => row?.Crops[0]?.cropName,
+      valueGetter: (_value, row) => row?.Crops?.[0]?.cropName || '',
       width: 170,
       minWidth: 100,
       maxWidth: 300,
@@ -87,7 +87,7 @@ function Crops() {
       width: 150,
       renderCell: (cell) => {
         const fieldIndex = parseInt(cell?.row?.index, 10);
-        const crop = fields[fieldIndex]?.Crops[0];
+        const crop = fields[fieldIndex]?.Crops?.[0];
 
         return (
           <div>
@@ -125,9 +125,9 @@ function Crops() {
       resizable: false,
     },
     {
-      field: 'Crops[1]',
+      field: 'Crops2',
       headerName: 'Crop 2',
-      valueGetter: (_value, row) => row?.Crops[1]?.cropName,
+      valueGetter: (_value, row) => row?.Crops?.[1]?.cropName || '',
       width: 170,
       minWidth: 100,
       maxWidth: 300,
@@ -139,7 +139,6 @@ function Crops() {
       width: 200,
       renderCell: (cell) => {
         const fieldIndex = parseInt(cell?.row?.index, 10);
-        // const rowHasCrop = Object.keys(fields[cell?.row?.index]?.Crops)?.length;
         const rowHasCrop = !!fields[fieldIndex]?.Crops?.[0];
         const crop = fields[fieldIndex]?.Crops[1];
 

@@ -87,18 +87,22 @@ function CropsModal({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // Only called after calculations have been performed
+  // A field can have up to 2 crops
   const handleSubmit = () => {
+    console.log('field', field);
     setFields((prevFields) => {
       const newFields = prevFields.map((prevField, index) => {
         if (index === fieldIndex) {
-          return { ...prevField, Crops: [formData] };
+          // Add the crop data to the existing Crops array
+          const updatedCrops = [...prevField.Crops, formData];
+          return { ...prevField, Crops: updatedCrops };
         }
         return prevField;
       });
 
       return newFields;
     });
-
+    console.log('field', field);
     onClose();
   };
 
