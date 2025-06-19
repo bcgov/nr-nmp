@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ProgressStepper } from '..';
-import { FARM_INFORMATION } from '@/constants/RouteConstants';
-import useAppService from '@/services/app/useAppService';
-import { BrowserRouter } from 'react-router-dom';
+import useAppState from '@/hooks/useAppState';
+import { DEFAULT_NMPFILE } from '@/constants';
+import { AppStateAction } from '@/hooks/reducers/appStateReducer';
 
 // NOTE for future test writers:
 // ProgressStepper uses useLocation hook
@@ -13,19 +13,19 @@ import { BrowserRouter } from 'react-router-dom';
 // ProgressStepper uses useLocation hook
 // Requires renders to wrap component in <BrowserRouter>
 
-jest.mock('@/services/app/useAppService');
-const mockUseAppService = jest.mocked(useAppService);
+jest.mock('@/hooks/useAppState');
+const mockUseAppService = jest.mocked(useAppState);
 
 describe('ProgressStepper tests', () => {
   test('Animal step absent when showAnimalsStep is false', () => {
     mockUseAppService.mockImplementation(() => ({
-      setNMPFile: () => Promise.resolve(),
-      setShowAnimalsStep: () => {},
-      state: { nmpFile: '', step: '', showAnimalsStep: false },
+      state: { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: false },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      dispatch: (_action: AppStateAction) => {},
     }));
     render(
       <BrowserRouter>
-        <ProgressStepper step={FARM_INFORMATION} />
+        <ProgressStepper />
       </BrowserRouter>,
     );
     const elem = screen.queryByText('Animals and Manure');
@@ -34,13 +34,13 @@ describe('ProgressStepper tests', () => {
 
   test('Animal step present when showAnimalsStep is true', () => {
     mockUseAppService.mockImplementation(() => ({
-      setNMPFile: () => Promise.resolve(),
-      setShowAnimalsStep: () => {},
-      state: { nmpFile: '', step: '', showAnimalsStep: true },
+      state: { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: true },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      dispatch: (_action: AppStateAction) => {},
     }));
     render(
       <BrowserRouter>
-        <ProgressStepper step={FARM_INFORMATION} />
+        <ProgressStepper />
       </BrowserRouter>,
     );
     const elem = screen.getByText('Animals and Manure');

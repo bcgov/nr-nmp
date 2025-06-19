@@ -11,23 +11,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import useAppService from '@/services/app/useAppService';
+import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './crops.styles';
 import { NMPFileFieldData } from '@/types';
-import { initFields, initRegion, saveFieldsToFile } from '../../utils/utils';
-import { CALCULATE_NUTRIENTS, SOIL_TESTS } from '@/constants/RouteConstants';
+import { CALCULATE_NUTRIENTS, FARM_INFORMATION, SOIL_TESTS } from '@/constants/routes';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import CropsModal from './CropsModal';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 
 function Crops() {
-  const { state, setNMPFile } = useAppService();
+  const { state, dispatch } = useAppState();
   const navigate = useNavigate();
-  const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
+  const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
   const farmRegion = useMemo(() => {
     // The region should be set before reaching this page and cannot be changed on this page
-    const region = initRegion(state);
+    const region = state.nmpFile.farmDetails.FarmRegion;
     if (region === undefined) throw new Error('Region is not set in NMP file.');
     return region;
   }, []);
@@ -52,7 +51,11 @@ function Crops() {
   };
 
   const handleNext = () => {
-    saveFieldsToFile(fields, state.nmpFile, setNMPFile);
+    if (!state.nmpFile.farmDetails.Year) {
+      // We should show an error popup, but for now force-navigate back to Farm Information
+      navigate(FARM_INFORMATION);
+    }
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
     navigate(CALCULATE_NUTRIENTS);
   };
 
@@ -183,7 +186,7 @@ function Crops() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={SOIL_TESTS} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Field Information" />
       <TabsMaterial

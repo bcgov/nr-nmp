@@ -6,7 +6,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-import useAppService from '../../../services/app/useAppService';
+import useAppState from '../../../hooks/useAppState';
 import {
   ADD_ANIMALS,
   CALCULATE_NUTRIENTS,
@@ -17,11 +17,8 @@ import {
   MANURE_IMPORTS,
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
-} from '@/constants/RouteConstants';
-
-type ProgressStepperProps = {
-  step: string;
-};
+  REPORTING,
+} from '@/constants/routes';
 
 const stepsWithAnimals = [
   'Home',
@@ -40,8 +37,8 @@ const stepsWithoutAnimals = [
   'Reporting',
 ];
 
-export default function HorizontalLinearAlternativeLabelStepper({ step }: ProgressStepperProps) {
-  const { state } = useAppService();
+export default function ProgressStepper() {
+  const { state } = useAppState();
   const { pathname } = useLocation();
 
   const displayAnimalsStep = useCallback(() => {
@@ -51,9 +48,10 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
     return stepsWithoutAnimals;
   }, [state.showAnimalsStep]);
 
-  const displayActiveStep = useCallback(() => {
+  const displayActiveStep = useCallback((): number | undefined => {
     const animalStepIncrease = state.showAnimalsStep ? 1 : 0;
 
+    // eslint-disable-next-line default-case
     switch (pathname) {
       case LANDING_PAGE:
         return 0;
@@ -69,7 +67,11 @@ export default function HorizontalLinearAlternativeLabelStepper({ step }: Progre
         return 2 + animalStepIncrease;
       case CALCULATE_NUTRIENTS:
         return 3 + animalStepIncrease;
+      case REPORTING:
+        return 4 + animalStepIncrease;
     }
+
+    return undefined;
   }, [pathname, state.showAnimalsStep]);
 
   return (

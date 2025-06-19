@@ -34,34 +34,36 @@ import {
   TabsMaterial,
 } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
 import { InfoBox, StyledContent } from './soilTests.styles';
-import useAppService from '@/services/app/useAppService';
-import { initFields, saveFieldsToFile } from '@/utils/utils';
-import { CROPS, FIELD_LIST, SOIL_TESTS } from '@/constants/RouteConstants';
+import useAppState from '@/hooks/useAppState';
+import { CROPS, FIELD_LIST, SOIL_TESTS } from '@/constants/routes';
+
+const EMPTY_SOIL_TEST_FORM: Omit<NMPFileSoilTestData, 'soilTestId'> = {
+  sampleDate: '',
+  valNO3H: '',
+  valP: '',
+  valK: '',
+  valPH: '',
+};
 
 export default function SoilTests() {
-  const { state, setNMPFile } = useAppService();
+  const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [soilTestData, setSoilTestData] = useState<NMPFileSoilTestData>(defaultSoilTestData);
-  const [soilTestId, setSoilTestId] = useState('');
+  const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
+  const [soilTestId, setSoilTestId] = useState(
+    fields?.find((field) => field.SoilTest !== undefined)?.SoilTest?.soilTestId || '',
+  );
+
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
-  const [fields, setFields] = useState<NMPFileFieldData[]>(initFields(state));
 
-  const EMPTY_SOIL_TEST_FORM: NMPFileSoilTestData = {
-    sampleDate: '',
-    valNO3H: '',
-    valP: '',
-    valK: '',
-    valPH: '',
-    soilTest: '', // soilTestid
-  };
-  const [formData, setFormData] = useState(EMPTY_SOIL_TEST_FORM);
-  const [formErrors, setFormErrors] = useState(EMPTY_SOIL_TEST_FORM);
+  const [formData, setFormData] =
+    useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
+  const [formErrors, setFormErrors] =
+    useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleDialogClose = () => {
@@ -70,9 +72,8 @@ export default function SoilTests() {
     setFormData(EMPTY_SOIL_TEST_FORM);
   };
 
-  const soilTestMethodSelect = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, soilTest: value }));
-    setSoilTestData({ ...soilTestData, [field]: value });
+  // IMPORTANT QUESTION: when the user changes the soil test method do we update the existing field.SoilTest values?
+  const soilTestMethodSelect = (value: string) => {
     setSoilTestId(value);
   };
 
@@ -137,19 +138,19 @@ export default function SoilTests() {
       ...prev,
       convertedKelownaP,
       convertedKelownaK,
-      soilTest: soilTestId,
     }));
 
     setFields((prev) => {
       const newList = [...prev];
-      if (currentFieldIndex !== null) newList[currentFieldIndex].SoilTest = { ...formData };
+      if (currentFieldIndex !== null)
+        newList[currentFieldIndex].SoilTest = { ...formData, soilTestId };
       return newList;
     });
     handleDialogClose();
   };
 
   const handleNext = () => {
-    saveFieldsToFile(fields, state.nmpFile, setNMPFile);
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
     navigate(CROPS);
   };
 
@@ -215,11 +216,11 @@ export default function SoilTests() {
         headerName: 'Actions',
         width: 150,
         renderCell: (cell: any) => {
-          const isRowHasSoilTest = Object.keys(fields[cell?.row?.index].SoilTest)?.length;
+          const isRowHasSoilTest = fields[cell?.row?.index].SoilTest !== undefined;
           const handleEditRowBtnClick = () => {
             setFormData(() => {
-              if (isRowHasSoilTest) {
-                return fields[cell?.row?.index].SoilTest;
+              if (fields[cell?.row?.index].SoilTest !== undefined) {
+                return fields[cell?.row?.index].SoilTest!;
               }
               return EMPTY_SOIL_TEST_FORM;
             });
@@ -230,7 +231,7 @@ export default function SoilTests() {
             if (isRowHasSoilTest) {
               setFields((prev) => {
                 const newList = [...prev];
-                newList[cell?.row?.index].SoilTest = {};
+                newList[cell?.row?.index].SoilTest = undefined;
                 return newList;
               });
             }
@@ -271,7 +272,7 @@ export default function SoilTests() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={SOIL_TESTS} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Field Information" />
       <Modal
@@ -425,7 +426,7 @@ export default function SoilTests() {
             }))}
             selectedKey={soilTestId}
             onSelectionChange={(e) => {
-              soilTestMethodSelect('soilTest', e?.toString() as string);
+              soilTestMethodSelect(e?.toString() as string);
             }}
           />
         </Grid>

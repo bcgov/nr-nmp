@@ -1,11 +1,9 @@
 /**
  * @summary Styling for ManureAndCompost view
  */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
-
 
 export const ContentWrapper = styled.div<{ hasManure: boolean }>`
   margin-bottom: ${({ hasManure }) => (hasManure ? '170px' : '0')};

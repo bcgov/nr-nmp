@@ -8,28 +8,29 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
-import useAppService from '@/services/app/useAppService';
+import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
 import { AnimalData } from '@/types';
-import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/RouteConstants';
+import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
-import { initAnimals, saveAnimalsToFile } from './utils';
 import { ErrorText, StyledContent } from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
 import { liquidSolidManureDisplay } from '@/utils/utils';
 
 export default function AddAnimals() {
-  const { state, setNMPFile, setShowAnimalsStep } = useAppService();
+  const { state, dispatch } = useAppState();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
 
   const navigate = useNavigate();
 
-  const [animalList, setAnimalList] = useState<Array<AnimalData>>(initAnimals(state));
+  const [animalList, setAnimalList] = useState<Array<AnimalData>>(
+    state.nmpFile.years[0].FarmAnimals || [],
+  );
 
   useEffect(() => {
-    setShowAnimalsStep(true);
+    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,8 +54,16 @@ export default function AddAnimals() {
   };
 
   const handleNextPage = () => {
+    if (!state.nmpFile.farmDetails.Year) {
+      // We should show an error popup, but for now force-navigate back to Farm Information
+      navigate(FARM_INFORMATION);
+    }
     if (animalList.length) {
-      saveAnimalsToFile(animalList, state.nmpFile, setNMPFile);
+      dispatch({
+        type: 'SAVE_ANIMALS',
+        year: state.nmpFile.farmDetails.Year!,
+        newAnimals: animalList,
+      });
       navigate(MANURE_IMPORTS);
     } else {
       setShowViewError('You must add at least one animal before continuing.');
@@ -108,7 +117,7 @@ export default function AddAnimals() {
 
   return (
     <StyledContent>
-      <ProgressStepper step={FARM_INFORMATION} />
+      <ProgressStepper />
       <AppTitle />
       <PageTitle title="Livestock Information" />
       <>

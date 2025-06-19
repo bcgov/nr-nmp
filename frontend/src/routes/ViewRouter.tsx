@@ -12,7 +12,8 @@ import {
   MANURE_IMPORTS,
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
-} from '@/constants/RouteConstants';
+  REPORTING,
+} from '@/constants/routes';
 
 import LandingPage from '@/views/LandingPage/LandingPage';
 import FarmInformation from '@/views/FarmInformation/FarmInformation';
@@ -23,6 +24,7 @@ import FieldList from '@/views/FieldList/FieldList';
 import SoilTests from '@/views/SoilTests/SoilTests';
 import Crops from '@/views/Crops/Crops';
 import NutrientAnalysis from '@/views/NutrientAnalysis/NutrientAnalysis';
+import Reporting from '@/views/Reporting/Reporting';
 
 export default function ViewRouter() {
   return (
@@ -62,6 +64,10 @@ export default function ViewRouter() {
       <Route
         path={CALCULATE_NUTRIENTS}
         Component={CalculateNutrients}
+      />
+      <Route
+        path={REPORTING}
+        Component={Reporting}
       />
     </Routes>
   );

@@ -1,6 +1,6 @@
 import { BrowserRouter } from 'react-router-dom';
 import FarmInformation from '../../src/views/FarmInformation/FarmInformation';
-import AppProvider from '@/context/AppProvider';
+import { AppStateProvider } from '@/context/AppStateContext';
 
 describe('FarmInformation tests', () => {
   /*
@@ -13,11 +13,11 @@ describe('FarmInformation tests', () => {
 
   it('Farm Name allows any input', () => {
     cy.mount(
-      <AppProvider>
+      <AppStateProvider>
         <BrowserRouter>
           <FarmInformation />
         </BrowserRouter>
-      </AppProvider>,
+      </AppStateProvider>,
     );
     cy.get('#farmName');
     cy.get('#--error').should('not.exist');

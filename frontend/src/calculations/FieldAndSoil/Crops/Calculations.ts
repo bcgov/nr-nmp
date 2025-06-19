@@ -1,5 +1,4 @@
 /* eslint-disable eqeqeq */
-import React from 'react';
 import axios from 'axios';
 import { env } from '@/env';
 import { NMPFileFieldData, NMPFileCropData } from '@/types';
@@ -136,36 +135,6 @@ export async function getRecommendations(
     console.error(error);
     return null;
   }
-}
-
-/**
- * Checks if a field has existing soil test data, populates with defaults if not
- *
- * @param {NMPFileFieldData} field - Field data to check
- * @param {Function} setFields - Function to update field data
- */
-export function checkExistingSoilTest(
-  field: NMPFileFieldData,
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
-) {
-  const updatedField = { ...field };
-  if (field.SoilTest == null || Object.keys(field.SoilTest).length === 0) {
-    updatedField.SoilTest.valNO3H = defaultSoilTestData.valNO3H;
-    updatedField.SoilTest.valP = defaultSoilTestData.valP;
-    updatedField.SoilTest.valK = defaultSoilTestData.valK;
-    updatedField.SoilTest.valPH = defaultSoilTestData.valPH;
-    updatedField.SoilTest.convertedKelownaK = defaultSoilTestData.convertedKelownaK;
-    updatedField.SoilTest.convertedKelownaP = defaultSoilTestData.convertedKelownaP;
-  }
-  setFields((prev: NMPFileFieldData[]) => {
-    const newFieldList: Array<NMPFileFieldData> = prev.map((fieldEle: NMPFileFieldData) => {
-      if (fieldEle.FieldName === updatedField.FieldName) {
-        return updatedField;
-      }
-      return fieldEle;
-    });
-    return newFieldList;
-  });
 }
 
 /**
@@ -335,8 +304,6 @@ export async function getCropRemovalN(
  * @returns {Promise<number>} Required N application in lbs/acre, rounded to nearest integer
  */
 export async function getCropRequirementN(
-  field: NMPFileFieldData,
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {
@@ -344,7 +311,6 @@ export async function getCropRequirementN(
   const crop = await getCrop(Number(combinedCropData.cropId));
   const ncredit = await getNCredit(Number(combinedCropData.prevCropId));
   const cropYield = await getCropYield(Number(combinedCropData.cropId), region.locationid);
-  checkExistingSoilTest(field, setFields);
 
   let nRequirement;
   // Different calculation methods based on nitrogen recommendation ID
@@ -397,16 +363,14 @@ export async function getCropRequirementN(
  */
 export async function getCropRequirementK2O(
   field: NMPFileFieldData,
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {
   const conversionFactors = await getConversionFactors();
   const region = await getRegion(regionId);
-  checkExistingSoilTest(field, setFields);
 
   // Use default if soil test data is missing
-  let STK = field.SoilTest.convertedKelownaK;
+  let STK = field.SoilTest?.convertedKelownaK || defaultSoilTestData.convertedKelownaK;
   if (STK == '0' || STK == null) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
   const cropSTKRegionCd = await getCropSoilTestRegions(
@@ -448,17 +412,14 @@ export async function getCropRequirementK2O(
  */
 export async function getCropRequirementP205(
   field: NMPFileFieldData,
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>,
   combinedCropData: NMPFileCropData,
   regionId: number,
 ): Promise<number> {
   const conversionFactors = await getConversionFactors();
   const region = await getRegion(regionId);
 
-  checkExistingSoilTest(field, setFields);
-
   // Use default if soil test data is missing
-  let STP = field.SoilTest.convertedKelownaP;
+  let STP = field.SoilTest?.convertedKelownaP || defaultSoilTestData.convertedKelownaP;
   if (STP == '0' || STP == null) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 
   const cropSTPRegionCd = await getCropSoilTestRegions(

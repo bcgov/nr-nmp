@@ -18,8 +18,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { InputField } from '@/components/common';
 
 import type { FertilizerFormState } from '../types';
-import type { Fertilizer, FertilizerType, FertilizerUnit } from '@/types/Fertilizers';
-import type { CropNutrients } from '@/types';
+import type { Fertilizer, FertilizerType, FertilizerUnit, CropNutrients } from '@/types';
 import calcFertBalance from '../utils';
 
 type FertilizerModalProps = {
@@ -120,7 +119,6 @@ export default function FertilizerModal({
     apiCache.callEndpoint('api/fertilizers/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        console.log(data);
         setFertilizerOptions(data);
       }
     });
