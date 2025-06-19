@@ -89,7 +89,6 @@ function CropsModal({
   // Only called after calculations have been performed
   // A field can have up to 2 crops
   const handleSubmit = () => {
-    console.log('field', field);
     setFields((prevFields) => {
       const newFields = prevFields.map((prevField, index) => {
         if (index === fieldIndex) {
@@ -102,7 +101,6 @@ function CropsModal({
 
       return newFields;
     });
-    console.log('field', field);
     onClose();
   };
 
