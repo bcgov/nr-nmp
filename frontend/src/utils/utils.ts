@@ -38,30 +38,3 @@ export function getLiquidManureDisplay(amount: number) {
   const roundedAmount = Math.round(amount);
   return `${roundedAmount} U.S. gallon${roundedAmount === 1 ? '' : 's'}`;
 }
-
-// use in CalculateNutrients.tsx to show icon in balance row only
-// and makes crop nutrients display as a negative value
-export const renderNutrientCell = (
-  balanceType: string,
-  findBalanceMessage: (type: string, value: number) => { Icon?: string } | undefined,
-) =>
-  function renderNutrientCellInner({ value, row }: any) {
-    const isBalanceRow = row.index === 'balance';
-    const message = isBalanceRow ? findBalanceMessage(balanceType, value) : null;
-
-    return React.createElement(
-      'div',
-      { style: { display: 'flex', alignItems: 'center' } },
-      message?.Icon
-        ? [
-            React.createElement('img', {
-              key: 'icon',
-              src: message.Icon,
-              alt: 'Balance icon',
-              style: { width: '1em', height: '1em', marginRight: '0.5em' },
-            }),
-            React.createElement('span', { key: 'value' }, -value),
-          ]
-        : React.createElement('span', { style: { marginLeft: '1.5em' } }, -value),
-    );
-  };

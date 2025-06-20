@@ -73,7 +73,7 @@ function CropsModal({
   const apiCache = useContext(APICacheContext);
 
   const [formData, setFormData] = useState<NMPFileCropData>(
-    initialModalData || { ...DEFAULT_NMPFILE_CROPS, index: 0 },
+    initialModalData || DEFAULT_NMPFILE_CROPS,
   );
   const [crops, setCrops] = useState<Crop[]>([]);
   const filteredCrops = useMemo<Crop[]>(() => {
@@ -170,7 +170,7 @@ function CropsModal({
       setFormData((prevData) => ({
         ...prevData,
         cropId: value as string,
-        cropName: selectedCrop.cropname,
+        name: selectedCrop.cropname,
       }));
       return;
     }

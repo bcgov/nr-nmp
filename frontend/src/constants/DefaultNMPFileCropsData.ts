@@ -1,9 +1,9 @@
 import { NMPFileCropData } from '@/types';
 
-const DEFAULT_NMPFILE_CROPS: Omit<NMPFileCropData, 'index'> = {
+const DEFAULT_NMPFILE_CROPS: NMPFileCropData = {
   cropId: '',
   cropTypeId: 0,
-  cropName: '',
+  name: '',
   cropTypeName: '',
   cropOther: null,
   yield: 0,

@@ -1,5 +1,4 @@
 interface NMPFileGeneratedManureData {
-  index: number;
   UniqueMaterialName: string;
   ManureTypeName: string;
   AnnualAmount: number;

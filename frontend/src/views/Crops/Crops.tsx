@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './crops.styles';
@@ -32,17 +33,16 @@ function Crops() {
   const [editingFieldIndex, setEditingFieldIndex] = useState<number | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  // TODO: Make this handle two crops
-  const handleEditCrop = (fieldIndex: number) => {
-    setEditingFieldIndex(fieldIndex);
+  const handleEditCrop = (e: { id: GridRowId; api: GridApiCommunity }) => {
+    setEditingFieldIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
     setIsDialogOpen(true);
   };
 
-  // TODO: Make this handle two crops
-  const handleDeleteCrop = (fieldIndex: number) => {
+  const handleDeleteCrop = (e: { id: GridRowId; api: GridApiCommunity }) => {
     setFields((prev) => {
+      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
       const newFieldsList = [...prev];
-      newFieldsList[fieldIndex].Crops = [];
+      newFieldsList[index].Crops = [];
       return newFieldsList;
     });
   };
@@ -81,7 +81,7 @@ function Crops() {
     {
       field: 'Crops',
       headerName: 'Crops',
-      valueGetter: (_value, row) => row?.Crops[0]?.cropName,
+      valueGetter: (_value, row) => row?.Crops[0]?.name,
       width: 150,
       minWidth: 150,
       maxWidth: 300,
@@ -91,28 +91,22 @@ function Crops() {
       field: '',
       headerName: 'Actions',
       width: 150,
-      renderCell: (cell: any) => {
-        const rowHasCrop = Object.keys(fields[cell?.row?.index]?.Crops)?.length;
+      renderCell: (e: any) => {
+        const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+        const rowHasCrop = fields[index].Crops.length > 0;
 
-        const handleEditRowBtnClick = () => {
-          handleEditCrop(parseInt(cell?.row?.index, 10));
-          setIsDialogOpen(true);
-        };
-        const handleDeleteRowBtnClick = () => {
-          handleDeleteCrop(parseInt(cell?.row?.index, 10));
-        };
         return (
           <div>
             {rowHasCrop ? (
               <div>
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={handleEditRowBtnClick}
+                  onClick={() => handleEditCrop(e)}
                   icon={faEdit}
                 />
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={handleDeleteRowBtnClick}
+                  onClick={() => handleDeleteCrop(e)}
                   icon={faTrash}
                 />
               </div>
@@ -120,7 +114,7 @@ function Crops() {
               <Button
                 variant="primary"
                 size="small"
-                onPress={handleEditRowBtnClick}
+                onClick={() => handleEditCrop(e)}
               >
                 Add crop
               </Button>
@@ -157,7 +151,7 @@ function Crops() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={fields}
         columns={fieldColumns}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

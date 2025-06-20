@@ -29,16 +29,12 @@ export default function AddAnimalsModal({
     if (rowEditIndex !== undefined) {
       // If editing, find and replace field instead of adding new field
       setAnimalList((prev) => {
-        const replaceIndex = prev.findIndex((elem) => elem.index === rowEditIndex);
         const newList = [...prev];
-        newList[replaceIndex] = { ...newFormData };
+        newList[rowEditIndex] = { ...newFormData };
         return newList;
       });
     } else {
-      setAnimalList((prev) => [
-        ...prev,
-        { ...newFormData, index: prev.length === 0 ? 0 : prev[prev.length - 1].index + 1 },
-      ]);
+      setAnimalList((prev) => [...prev, { ...newFormData }]);
     }
     onClose();
   };

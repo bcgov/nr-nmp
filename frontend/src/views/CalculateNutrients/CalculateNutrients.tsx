@@ -2,47 +2,35 @@
  * @summary The calculate nutrients page for the application
  * calculates the field nutrients based on the crops and manure
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { FIELD_LIST, CROPS } from '@/constants/routes';
 
-import { customTableStyle, tableActionButtonCss } from '../../common.styles';
+import { customTableStyle } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
-import { renderNutrientCell } from '../../utils/utils.ts';
 
 import { Error, Message, Icon } from './CalculateNutrients.styles';
-import { NutrientMessage, nutrientMessages } from './nutrientMessages';
+import { NutrientMessage } from './nutrientMessages';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
-import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
+// import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
-import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-
-type TableRow = {
-  index: number;
-  name: string;
-  reqN: number;
-  reqP2o5: number;
-  reqK2o: number;
-  remN: number;
-  remP2o5: number;
-  remK2o: number;
-};
+import { findBalanceMessage, generateColumns, genHandleDeleteRow } from './utils.tsx';
+import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 
 export default function CalculateNutrients() {
   const { state } = useAppState();
-  const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<[string, number | undefined]>(['', undefined]);
   const [showViewError, setShowViewError] = useState<string>('');
-  const [buttonClicked, setButtonClicked] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
 
@@ -52,48 +40,52 @@ export default function CalculateNutrients() {
     state.nmpFile.years[0].Fields || [],
   );
 
-  const tableRows: TableRow[] = useMemo(() => {
-    const field = fieldList[activeField];
-  }, [fieldList, activeField]);
+  const cropColumns: GridColDef[] = useMemo(() => {
+    const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setOpenDialog(['crop', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
+    };
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'Crops', setFieldList);
+    return generateColumns(handleEditRow, handleDeleteRow);
+  }, [activeField]);
 
   /*
-  // Var for table rows for the crops and their total balance, if no crops then array is empty and there is no balance row
-  const crops = useMemo(
-    () =>
-      fieldList[activeField]?.Crops
-        ? fieldList[activeField].Crops.map((ele, index) => ({ ...ele, index }))
-        : [],
-    [fieldList, activeField],
-  );
+  const manureColumns: GridColDef[] = useMemo(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleEditRow = (_e: { row: NMPFileFarmManureData }) => {
+      setOpenDialog(['manure', 0]);
+    };
+    const handleDeleteRow = genHandleDeleteRow(-1, 'Crops', setFieldList);
+    return generateColumns('', handleEditRow, handleDeleteRow);
+  }, [activeField]);
   */
+  const fertilizerColumns: GridColDef[] = useMemo(() => {
+    const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setOpenDialog(['fertilizer', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
+    };
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'Fertilizers', setFieldList);
+    return generateColumns(handleEditRow, handleDeleteRow);
+  }, [activeField]);
 
-  const balanceRow = useMemo(
-    () => ({
-      index: 'balance',
-      cropName: 'Balance',
-      reqN: crops.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
-      reqP2o5: crops.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
-      reqK2o: crops.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
-      remN: crops.reduce((sum, row) => sum + (row.remN ?? 0), 0),
-      remP2o5: crops.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
-      remK2o: crops.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
-    }),
-    [crops],
-  );
-  const rowsWithBalance = crops.length > 0 ? [...crops, balanceRow] : [];
+  const otherColumns: GridColDef[] = useMemo(() => {
+    const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setOpenDialog(['other', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
+    };
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'OtherNutrients', setFieldList);
+    return generateColumns(handleEditRow, handleDeleteRow);
+  }, [activeField]);
 
-  // find the appropriate balance message based on the nutrient type and value
-  const findBalanceMessage = (balanceType: string, balanceValue: number) =>
-    nutrientMessages.find((msg) => {
-      if (msg.BalanceType !== balanceType) return false;
-
-      // either compares balance value to req (agronomic) or rem (crop removal) high low range
-      const isReq = balanceType.startsWith('req');
-      const low = isReq ? msg.ReqBalanceLow : msg.RemBalanceLow;
-      const high = isReq ? msg.ReqBalanceHigh : msg.RemBalanceHigh;
-
-      return balanceValue >= low && balanceValue <= high;
-    });
+  const balanceRow: CalculateNutrientsColumn = useMemo(() => {
+    const allRows = [...fieldList[activeField].Crops, ...fieldList[activeField].OtherNutrients];
+    return {
+      name: 'Balance',
+      reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
+      reqP2o5: allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
+      reqK2o: allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
+      remN: allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0),
+      remP2o5: allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
+      remK2o: allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
+    };
+  }, [fieldList, activeField]);
 
   const getMessage = useCallback((balanceType: string, balanceValue: number) => {
     const message = findBalanceMessage(balanceType, balanceValue);
@@ -114,32 +106,20 @@ export default function CalculateNutrients() {
     setBalanceMessages([]);
 
     Object.entries(balanceRow).forEach(([key, value]) => {
-      if (key !== 'id' && key !== 'cropName') {
+      if (key !== 'id' && key !== 'name') {
         getMessage(key, value as number);
       }
     });
   }, [balanceRow, getMessage]);
 
-  const farmManuresList: NMPFileFarmManureData[] = state.nmpFile.years[0].FarmManures || [];
+  // useCallback prevents unnecessary rerenders
+  const handleDialogClose = useCallback(() => setOpenDialog(['', undefined]), []);
 
-  const handleEditRow = React.useCallback((e: { row: NMPFileFieldData }) => {
-    setRowEditIndex(e.row.index);
-    setIsDialogOpen(true);
-  }, []);
-
-  const handleDeleteRow = (e: { row: NMPFileFieldData }) => {
-    setFieldList((prev) => {
-      const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
-      const newList = [...prev];
-      newList.splice(deleteSpot, 1);
-      return newList;
-    });
-  };
-
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-    setRowEditIndex(undefined);
-  };
+  const isFieldNameUnique = useCallback(
+    (data: Partial<NMPFileFieldData>, index: number) =>
+      !fieldList.some((fieldRow, idx) => fieldRow.FieldName === data.FieldName && index !== idx),
+    [fieldList],
+  );
 
   const handleNextPage = () => {
     setShowViewError('');
@@ -156,14 +136,6 @@ export default function CalculateNutrients() {
     //   setShowViewError('Must enter at least 1 field');
     // }
   };
-
-  const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileFieldData>) =>
-      !fieldList.some(
-        (fieldRow) => fieldRow.FieldName === data.FieldName && fieldRow.index !== data.index,
-      ),
-    [fieldList],
-  );
 
   const customCalcTableStyle = {
     '& .MuiDataGrid-columnHeader[data-field="reqN"] .MuiDataGrid-columnHeaderTitle': {
@@ -186,92 +158,6 @@ export default function CalculateNutrients() {
     },
   };
 
-  const columns: GridColDef[] = useMemo(
-    () => [
-      { field: 'cropName', headerName: 'Crop', width: 230, minWidth: 200, maxWidth: 300 },
-      {
-        field: 'reqN',
-        headerName: 'N',
-        width: 80,
-        minWidth: 80,
-        maxWidth: 100,
-        description: 'Nitrogen',
-        renderCell: renderNutrientCell('reqN', findBalanceMessage),
-      },
-      {
-        field: 'reqP2o5',
-        headerName: 'P2o5',
-        width: 80,
-        minWidth: 80,
-        maxWidth: 100,
-        description: 'Phosphorous',
-        renderCell: renderNutrientCell('reqP2o5', findBalanceMessage),
-      },
-      {
-        field: 'reqK2o',
-        headerName: 'K2o',
-        width: 120,
-        minWidth: 120,
-        maxWidth: 100,
-        description: 'Potassium',
-        renderCell: renderNutrientCell('reqK2o', findBalanceMessage),
-      },
-      {
-        field: 'remN',
-        headerName: 'N',
-        width: 80,
-        minWidth: 80,
-        maxWidth: 100,
-        description: 'Nitrogen',
-        renderCell: renderNutrientCell('remN', findBalanceMessage),
-      },
-      {
-        field: 'remP2o5',
-        headerName: 'P2o5',
-        width: 80,
-        minWidth: 80,
-        maxWidth: 100,
-        description: 'Phosphorous',
-        renderCell: renderNutrientCell('remP2o5', findBalanceMessage),
-      },
-      {
-        field: 'remK2o',
-        headerName: 'K2o',
-        width: 130,
-        minWidth: 60,
-        maxWidth: 130,
-        description: 'Potassium',
-        renderCell: renderNutrientCell('remK2o', findBalanceMessage),
-      },
-      {
-        field: '',
-        headerName: 'Actions',
-        width: 100,
-        renderCell: (row: any) => {
-          // If balance row don't show actions
-          const isBalanceRow = row.row.cropName === 'Balance';
-          return !isBalanceRow ? (
-            <>
-              <FontAwesomeIcon
-                css={tableActionButtonCss}
-                onClick={() => handleEditRow(row)}
-                icon={faEdit}
-              />
-              <FontAwesomeIcon
-                css={tableActionButtonCss}
-                onClick={() => handleDeleteRow(row)}
-                icon={faTrash}
-              />
-            </>
-          ) : null;
-        },
-        sortable: false,
-        resizable: false,
-      },
-    ],
-    [handleEditRow],
-  );
-
   return (
     <StyledContent>
       <ProgressStepper step={FIELD_LIST} />
@@ -281,8 +167,7 @@ export default function CalculateNutrients() {
         size="medium"
         aria-label="Add Field"
         onClick={() => {
-          setButtonClicked('field');
-          setIsDialogOpen(true);
+          setOpenDialog(['field', undefined]);
         }}
       >
         <FontAwesomeIcon icon={faPlus} />
@@ -303,8 +188,7 @@ export default function CalculateNutrients() {
             size="medium"
             aria-label="Add Manure"
             onPress={() => {
-              setButtonClicked('manure');
-              setIsDialogOpen(true);
+              setOpenDialog(['manure', undefined]);
             }}
             variant="secondary"
           >
@@ -315,8 +199,7 @@ export default function CalculateNutrients() {
             size="medium"
             aria-label="Add Fertilizer"
             onPress={() => {
-              setButtonClicked('fertilizer');
-              setIsDialogOpen(true);
+              setOpenDialog(['manure', undefined]);
             }}
             variant="secondary"
           >
@@ -327,8 +210,7 @@ export default function CalculateNutrients() {
             size="medium"
             aria-label="Add Fertigation"
             onPress={() => {
-              setButtonClicked('fertigation');
-              setIsDialogOpen(true);
+              setOpenDialog(['fertigation', undefined]);
             }}
             variant="secondary"
           >
@@ -339,8 +221,7 @@ export default function CalculateNutrients() {
             size="medium"
             aria-label="Add Other"
             onPress={() => {
-              setButtonClicked('other');
-              setIsDialogOpen(true);
+              setOpenDialog(['other', undefined]);
             }}
             variant="secondary"
           >
@@ -349,55 +230,55 @@ export default function CalculateNutrients() {
           </Button>
         </ButtonGroup>
 
-        {isDialogOpen && buttonClicked === 'field' && (
+        {openDialog[0] === 'field' && (
           <FieldListModal
             initialModalData={undefined}
-            rowEditIndex={undefined}
+            rowEditIndex={openDialog[1]}
             setFieldList={setFieldList}
             isFieldNameUnique={isFieldNameUnique}
-            isOpen={isDialogOpen}
+            isOpen={openDialog[0] === 'field'}
             onClose={handleDialogClose}
           />
         )}
-        {isDialogOpen && buttonClicked === 'fertilizer' && (
+        {openDialog[0] === 'fertilizer' && (
           <FertilizerModal
             initialModalData={undefined}
-            isOpen={isDialogOpen}
+            isOpen={openDialog[0] === 'fertilizer'}
             onCancel={handleDialogClose}
             modalStyle={{ width: '800px' }}
             setDataForParent={() => {}}
           />
         )}
-        {isDialogOpen && buttonClicked === 'manure' && (
+        {openDialog[0] === 'manure' && (
           <ManureModal
             initialModalData={undefined}
-            farmManures={farmManuresList}
-            rowEditIndex={rowEditIndex}
-            // setFieldList={setFieldList}
-            isOpen={isDialogOpen}
+            farmManures={state.nmpFile.years[0].FarmManures || []}
+            rowEditIndex={openDialog[1]}
+            isOpen={openDialog[0] === 'manure'}
             onCancel={handleDialogClose}
             modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
           />
         )}
-        {isDialogOpen && buttonClicked === 'fertigation' && (
-          <FertigationModal
-            initialModalData={
-              rowEditIndex !== undefined
-                ? fieldList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
-            rowEditIndex={rowEditIndex}
-            setFieldList={setFieldList}
-            isOpen={isDialogOpen}
-            onCancel={handleDialogClose}
-            modalStyle={{ width: '700px' }}
-          />
-        )}
-        {isDialogOpen && buttonClicked === 'other' && (
+        {/*
+          // Note: this is currently unimplemented
+          openDialog[0] === 'fertigation' && (
+            <FertigationModal
+              initialModalData={undefined}
+              rowEditIndex={openDialog[1]}
+              setFieldList={setFieldList}
+              isOpen={openDialog[0] === 'fertigation'}
+              onCancel={handleDialogClose}
+              modalStyle={{ width: '700px' }}
+            />
+          )
+        */}
+        {openDialog[0] === 'other' && (
           <OtherModal
+            fieldIndex={activeField}
             initialModalData={undefined}
-            rowEditIndex={rowEditIndex}
-            isOpen={isDialogOpen}
+            rowEditIndex={openDialog[1]}
+            setFields={setFieldList}
+            isOpen={openDialog[0] === 'other'}
             onClose={handleDialogClose}
             modalStyle={{ width: '700px' }}
           />
@@ -411,16 +292,32 @@ export default function CalculateNutrients() {
         <div style={{ width: 250 }}>Crop Removal (lb/ac)</div>
       </div>
       {/* display crops belonging to the field of the tab the user is on */}
-      <DataGrid
-        sx={{ ...customTableStyle, ...customCalcTableStyle }}
-        rows={rowsWithBalance}
-        columns={columns}
-        getRowId={(row: any) => row.index}
-        disableRowSelectionOnClick
-        disableColumnMenu
-        hideFooterPagination
-        hideFooter
-      />
+      {fieldList[activeField].Crops.length > 0 && (
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={fieldList[activeField].Crops}
+          columns={cropColumns}
+          getRowId={() => crypto.randomUUID()}
+          slots={{ columnHeaders: () => null }}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          hideFooterPagination
+          hideFooter
+        />
+      )}
+      {fieldList[activeField].OtherNutrients.length > 0 && (
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={fieldList[activeField].OtherNutrients}
+          columns={otherColumns}
+          getRowId={() => crypto.randomUUID()}
+          slots={{ columnHeaders: () => null }}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          hideFooterPagination
+          hideFooter
+        />
+      )}
       <ErrorText>{showViewError}</ErrorText>
       {balanceMessages.map((msg) => (
         <Error key={msg.Id}>
