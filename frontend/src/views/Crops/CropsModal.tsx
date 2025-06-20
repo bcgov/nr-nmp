@@ -16,7 +16,10 @@ import {
   getCropRemovalK20,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
+<<<<<<< HEAD
 import DEFAULT_NMPFILE_CROPS from '@/constants/DefaultNMPFileCropsData';
+=======
+>>>>>>> 1990f65 (can edit)
 import { customTableStyle, formCss, formGridBreakpoints } from '../../common.styles';
 import { booleanChecker } from '../../utils/utils';
 import { ModalProps } from '@/components/common/Modal/Modal';
@@ -87,20 +90,28 @@ function CropsModal({
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // Only called after calculations have been performed
-  // A field can have up to 2 crops
   const handleSubmit = () => {
     setFields((prevFields) => {
       const newFields = prevFields.map((prevField, index) => {
         if (index === fieldIndex) {
-          // Add the crop data to the existing Crops array
-          const updatedCrops = [...prevField.Crops, formData];
+          // Check if we're editing an existing crop or adding a new crop
+          let updatedCrops;
+          if (mode === 'Edit') {
+            updatedCrops = prevField.Crops.map((crop) =>
+              crop.index === initialModalData.index ? { ...formData } : crop,
+            );
+          } else {
+            updatedCrops = [...prevField.Crops, formData];
+          }
           return { ...prevField, Crops: updatedCrops };
         }
         return prevField;
       });
-
+      console.log(initialModalData);
+      console.log(newFields);
       return newFields;
     });
+
     onClose();
   };
 
@@ -368,7 +379,7 @@ function CropsModal({
   return (
     <Modal
       onOpenChange={onClose}
-      title={mode}
+      title={`${mode} Crop`}
       {...props}
     >
       <div css={formCss}>
@@ -467,11 +478,11 @@ function CropsModal({
               <span
                 className={`bcds-react-aria-Select--Label ${errors.crudeProtien ? '--error' : ''}`}
               >
-                Crude Protein
+                Crude Protien
               </span>
               <TextField
                 type="number"
-                name="crudeProtien"
+                name="crudeProtein"
                 value={formData.crudeProtien?.toString() || ''}
                 onChange={(e) => handleFormFieldChange('crudeProtien', e)}
               />

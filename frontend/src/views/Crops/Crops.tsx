@@ -14,8 +14,9 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './crops.styles';
-import { NMPFileFieldData } from '@/types';
-import { CALCULATE_NUTRIENTS, FARM_INFORMATION, SOIL_TESTS } from '@/constants/routes';
+import { NMPFileCropData, NMPFileFieldData } from '@/types';
+import { initFields, initRegion, saveFieldsToFile } from '../../utils/utils';
+import { CALCULATE_NUTRIENTS, SOIL_TESTS } from '@/constants/RouteConstants';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import CropsModal from './CropsModal';
 import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
@@ -30,14 +31,19 @@ function Crops() {
     if (region === undefined) throw new Error('Region is not set in NMP file.');
     return region;
   }, []);
-  const [editingFieldIndex, setEditingFieldIndex] = useState<number | null>(null);
+  const [editingFieldIndex, setEditingFieldIndex] = useState<number>(0);
   const [editingCropIndex, setEditingCropIndex] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [modalMode, setModalMode] = useState<string>('Add Field');
+  const [initialModalData, setInitialModalData] = useState<NMPFileCropData>({
+    ...defaultNMPFileCropsData,
+    index: editingCropIndex,
+  });
 
   const handleEditCrop = (fieldIndex: number, cropIndex: number) => {
     setEditingFieldIndex(fieldIndex);
     setEditingCropIndex(cropIndex);
+    setInitialModalData(fields[editingFieldIndex].Crops[editingCropIndex]);
     setModalMode('Edit');
     setIsDialogOpen(true);
   };
@@ -194,6 +200,7 @@ function Crops() {
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />
       {editingFieldIndex !== null && isDialogOpen && (
+        // affter editing in modal changes not showing on reopen
         <CropsModal
           mode={modalMode}
           farmRegion={farmRegion}
@@ -201,11 +208,8 @@ function Crops() {
           fieldIndex={editingFieldIndex}
           setFields={setFields}
           initialModalData={
-            modalMode === 'Add'
-              ? createNewCrop(editingCropIndex)
-              : fields[editingFieldIndex].Crops[editingCropIndex]
+            modalMode === 'Add' ? createNewCrop(editingCropIndex) : initialModalData
           }
-          // initialModalData={fields[editingFieldIndex].Crops[editingCropIndex]}
           onClose={handleDialogClose}
           isOpen={isDialogOpen}
         />
