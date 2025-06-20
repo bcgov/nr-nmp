@@ -317,12 +317,12 @@ function CropsModal({
   }, [formData.prevCropId]);
 
   /**
-   * Effect: Auto-fill yield and crude protein values when crop changes
+   * Effect: Auto-fill yield and crude protein values when crop changes on add crop
    * Fetches yield data based on selected crop and region
    * Calculates crude protein for forage crops
    */
   useEffect(() => {
-    if (formData.cropId && Number(formData.cropId) !== 0) {
+    if (formData.cropId && Number(formData.cropId) !== 0 && mode === 'Add') {
       try {
         (async () => {
           const region = await getRegion(farmRegion);
