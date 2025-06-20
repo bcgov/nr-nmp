@@ -16,10 +16,6 @@ import {
   getCropRemovalK20,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
-<<<<<<< HEAD
-import DEFAULT_NMPFILE_CROPS from '@/constants/DefaultNMPFileCropsData';
-=======
->>>>>>> 1990f65 (can edit)
 import { customTableStyle, formCss, formGridBreakpoints } from '../../common.styles';
 import { booleanChecker } from '../../utils/utils';
 import { ModalProps } from '@/components/common/Modal/Modal';
@@ -107,8 +103,6 @@ function CropsModal({
         }
         return prevField;
       });
-      console.log(initialModalData);
-      console.log(newFields);
       return newFields;
     });
 
