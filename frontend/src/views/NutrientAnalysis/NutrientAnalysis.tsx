@@ -2,7 +2,7 @@
  * @summary The nutrient analysis tab on the manure page for the application
  */
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,7 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './nutrientAnalsysis.styles';
-import { NMPFileImportedManureData } from '@/types';
+import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST } from '@/constants/routes';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
@@ -38,6 +38,26 @@ export default function NutrientAnalysis() {
   );
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
+
+  const [tabs, setTabs] = useState<string[]>([
+    'Add Animals',
+    'Manure & Imports',
+    'Nutrient Analysis',
+  ]);
+
+  useEffect(() => {
+    const hasDairyCattle = state.nmpFile.years[0]?.FarmAnimals?.some(
+      (animal: AnimalData) => animal.animalId === '2',
+    );
+    if (hasDairyCattle) {
+      setTabs(['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']);
+    } else {
+      setTabs(['Add Animals', 'Manure & Imports', 'Nutrient Analysis']);
+    }
+
+    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.nmpFile.years[0]?.FarmAnimals]);
 
   const handleEdit = (name: string) => {
     setEditName(name);
@@ -196,7 +216,7 @@ export default function NutrientAnalysis() {
       )}
       <TabsMaterial
         activeTab={2}
-        tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+        tabLabel={tabs}
       />
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}

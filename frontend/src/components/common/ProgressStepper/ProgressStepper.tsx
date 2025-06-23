@@ -18,6 +18,7 @@ import {
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
   REPORTING,
+  STORAGE,
 } from '@/constants/routes';
 
 const stepsWithAnimals = [
@@ -59,6 +60,7 @@ export default function ProgressStepper() {
         return 1;
       case ADD_ANIMALS:
       case MANURE_IMPORTS:
+      case STORAGE:
       case NUTRIENT_ANALYSIS:
         return 2;
       case FIELD_LIST:

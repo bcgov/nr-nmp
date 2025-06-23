@@ -29,10 +29,23 @@ export default function AddAnimals() {
     state.nmpFile.years[0].FarmAnimals || [],
   );
 
+  const [tabs, setTabs] = useState<string[]>([
+    'Add Animals',
+    'Manure & Imports',
+    'Nutrient Analysis',
+  ]);
+
   useEffect(() => {
+    const hasDairyCattle = animalList.some((animal: AnimalData) => animal.animalId === '2');
+    if (hasDairyCattle) {
+      setTabs(['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']);
+    } else {
+      setTabs(['Add Animals', 'Manure & Imports', 'Nutrient Analysis']);
+    }
+
     dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [animalList]);
 
   const handleEditRow = React.useCallback((e: { row: AnimalData }) => {
     setRowEditIndex(e.row.index);
@@ -154,7 +167,7 @@ export default function AddAnimals() {
       </>
       <TabsMaterial
         activeTab={0}
-        tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+        tabLabel={tabs}
       />
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
