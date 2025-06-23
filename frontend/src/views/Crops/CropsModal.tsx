@@ -16,7 +16,6 @@ import {
   getCropRemovalK20,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
-import DEFAULT_NMPFILE_CROPS from '@/constants/DefaultNMPFileCropsData';
 import { customTableStyle, formCss, formGridBreakpoints } from '../../common.styles';
 import { booleanChecker } from '../../utils/utils';
 import { ModalProps } from '@/components/common/Modal/Modal';
@@ -53,15 +52,17 @@ const requireAndRemoveColumns: GridColDef[] = [
 ];
 
 type CropsModalProps = {
+  mode: string;
   field: NMPFileFieldData;
   fieldIndex: number;
-  initialModalData: NMPFileCropData | undefined;
+  initialModalData: NMPFileCropData;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
   farmRegion: number;
 };
 
 function CropsModal({
+  mode,
   field,
   fieldIndex,
   initialModalData,
@@ -72,10 +73,8 @@ function CropsModal({
 }: CropsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const apiCache = useContext(APICacheContext);
 
-  const [formData, setFormData] = useState<NMPFileCropData>(
-    initialModalData || { ...DEFAULT_NMPFILE_CROPS, index: 0 },
-  );
   const [crops, setCrops] = useState<Crop[]>([]);
+  const [formData, setFormData] = useState<NMPFileCropData>(initialModalData);
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
     return crops.filter((type) => type.croptypeid === Number(formData.cropTypeId));
@@ -91,11 +90,19 @@ function CropsModal({
     setFields((prevFields) => {
       const newFields = prevFields.map((prevField, index) => {
         if (index === fieldIndex) {
-          return { ...prevField, Crops: [formData] };
+          // Check if we're editing an existing crop or adding a new crop
+          let updatedCrops;
+          if (mode === 'Edit') {
+            updatedCrops = prevField.Crops.map((crop) =>
+              crop.index === initialModalData.index ? { ...formData } : crop,
+            );
+          } else {
+            updatedCrops = [...prevField.Crops, formData];
+          }
+          return { ...prevField, Crops: updatedCrops };
         }
         return prevField;
       });
-
       return newFields;
     });
 
@@ -304,12 +311,16 @@ function CropsModal({
   }, [formData.prevCropId]);
 
   /**
-   * Effect: Auto-fill yield and crude protein values when crop changes
+   * Effect: Auto-fill yield and crude protein values when crop changes on add crop
    * Fetches yield data based on selected crop and region
    * Calculates crude protein for forage crops
    */
   useEffect(() => {
-    if (formData.cropId && Number(formData.cropId) !== 0) {
+    if (
+      formData.cropId &&
+      Number(formData.cropId) !== 0 &&
+      initialModalData.cropId !== formData.cropId
+    ) {
       try {
         (async () => {
           const region = await getRegion(farmRegion);
@@ -366,7 +377,7 @@ function CropsModal({
   return (
     <Modal
       onOpenChange={onClose}
-      title="Edit Crop"
+      title={`${mode} Crop`}
       {...props}
     >
       <div css={formCss}>
@@ -465,11 +476,11 @@ function CropsModal({
               <span
                 className={`bcds-react-aria-Select--Label ${errors.crudeProtien ? '--error' : ''}`}
               >
-                Crude Protein
+                Crude Protien
               </span>
               <TextField
                 type="number"
-                name="crudeProtien"
+                name="crudeProtein"
                 value={formData.crudeProtien?.toString() || ''}
                 onChange={(e) => handleFormFieldChange('crudeProtien', e)}
               />
