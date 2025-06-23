@@ -123,7 +123,7 @@ export default function StorageModal({
       <Dialog
         isCloseable
         role="dialog"
-        aria-labelledby="add-storage-dialog"
+        aria-labelledby="add-animal-dialog"
       >
         <div css={modalPaddingStyle}>
           <span css={modalHeaderStyle}>Storage System Details</span>
