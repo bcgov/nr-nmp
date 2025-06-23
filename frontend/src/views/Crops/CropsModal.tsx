@@ -316,7 +316,11 @@ function CropsModal({
    * Calculates crude protein for forage crops
    */
   useEffect(() => {
-    if (formData.cropId && Number(formData.cropId) !== 0 && mode === 'Add') {
+    if (
+      formData.cropId &&
+      Number(formData.cropId) !== 0 &&
+      initialModalData.cropId !== formData.cropId
+    ) {
       try {
         (async () => {
           const region = await getRegion(farmRegion);
