@@ -12,7 +12,7 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { StyledContent } from './nutrientAnalsysis.styles';
 import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
-import { MANURE_IMPORTS, FIELD_LIST } from '@/constants/routes';
+import { MANURE_IMPORTS, FIELD_LIST, STORAGE } from '@/constants/routes';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -39,25 +39,29 @@ export default function NutrientAnalysis() {
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
 
+  const [activeTab, setActiveTab] = useState<number>(2);
   const [tabs, setTabs] = useState<string[]>([
     'Add Animals',
     'Manure & Imports',
     'Nutrient Analysis',
   ]);
 
+  const hasDairyCattle = state.nmpFile.years[0]?.FarmAnimals?.some(
+    (animal: AnimalData) => animal.animalId === '2',
+  );
+
   useEffect(() => {
-    const hasDairyCattle = state.nmpFile.years[0]?.FarmAnimals?.some(
-      (animal: AnimalData) => animal.animalId === '2',
-    );
     if (hasDairyCattle) {
       setTabs(['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']);
+      setActiveTab(3);
     } else {
       setTabs(['Add Animals', 'Manure & Imports', 'Nutrient Analysis']);
+      setActiveTab(2);
     }
 
     dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.nmpFile.years[0]?.FarmAnimals]);
+  }, [hasDairyCattle]);
 
   const handleEdit = (name: string) => {
     setEditName(name);
@@ -90,7 +94,11 @@ export default function NutrientAnalysis() {
   };
 
   const handlePrevious = () => {
-    navigate(MANURE_IMPORTS);
+    if (hasDairyCattle) {
+      navigate(STORAGE);
+    } else {
+      navigate(MANURE_IMPORTS);
+    }
   };
 
   const handleNext = () => {
@@ -215,7 +223,7 @@ export default function NutrientAnalysis() {
         />
       )}
       <TabsMaterial
-        activeTab={2}
+        activeTab={activeTab}
         tabLabel={tabs}
       />
       <DataGrid

@@ -66,7 +66,7 @@ export default function Storage() {
         maxWidth: 300,
       },
       {
-        field: 'storageType',
+        field: 'storageName',
         headerName: 'Storage Name',
         width: 325,
         minWidth: 150,

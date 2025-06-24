@@ -74,10 +74,10 @@ export default function StorageModal({
       <Dialog
         isCloseable
         role="dialog"
-        aria-labelledby="add-animal-dialog"
+        aria-labelledby="add-storage-dialog"
       >
         <div css={modalPaddingStyle}>
-          <span css={modalHeaderStyle}>Add manure</span>
+          <span css={modalHeaderStyle}>Add Storage System</span>
           <Divider
             aria-hidden="true"
             component="div"
@@ -108,6 +108,17 @@ export default function StorageModal({
                         'ManureTypeName',
                         manureTypeOptions.find((ele) => ele.id === e)?.label,
                       );
+                    }}
+                  />
+                </Grid>
+                <Grid>
+                  <TextField
+                    isRequired
+                    label="Storage Name"
+                    type="string"
+                    name="storageName"
+                    onChange={(e: Key) => {
+                      handleInputChange('StorageName', String(e) ?? '');
                     }}
                   />
                 </Grid>
