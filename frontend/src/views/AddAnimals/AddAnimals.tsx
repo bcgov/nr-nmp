@@ -50,16 +50,9 @@ export default function AddAnimals() {
   );
 
   useEffect(() => {
-    const hasDairyCattle = animalList.some((animal: AnimalData) => animal.animalId === '2');
-    if (hasDairyCattle) {
-      setTabs(['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']);
-    } else {
-      setTabs(['Add Animals', 'Manure & Imports', 'Nutrient Analysis']);
-    }
-
     dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animalList]);
+  }, []);
 
   const handleEditRow = React.useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
