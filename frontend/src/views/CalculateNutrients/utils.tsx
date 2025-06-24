@@ -44,13 +44,14 @@ export const generateColumns = (
   handleDeleteRow: (e: any) => void,
   renderCell: (params: GridRenderCellParams<any, any, any>) => React.ReactNode,
 ): GridColDef[] => [
-  { field: 'name', width: 230, minWidth: 200, maxWidth: 300 },
+  { field: 'name', width: 230, minWidth: 200, maxWidth: 300, renderHeader: () => null },
   {
     field: 'reqN',
     width: 80,
     minWidth: 80,
     maxWidth: 100,
     description: 'Nitrogen',
+    renderHeader: () => null,
     renderCell,
   },
   {
@@ -59,6 +60,7 @@ export const generateColumns = (
     minWidth: 80,
     maxWidth: 100,
     description: 'Phosphorous',
+    renderHeader: () => null,
     renderCell,
   },
   {
@@ -67,6 +69,7 @@ export const generateColumns = (
     minWidth: 120,
     maxWidth: 100,
     description: 'Potassium',
+    renderHeader: () => null,
     renderCell,
   },
   {
@@ -75,6 +78,7 @@ export const generateColumns = (
     minWidth: 80,
     maxWidth: 100,
     description: 'Nitrogen',
+    renderHeader: () => null,
     renderCell,
   },
   {
@@ -83,6 +87,7 @@ export const generateColumns = (
     minWidth: 80,
     maxWidth: 100,
     description: 'Phosphorous',
+    renderHeader: () => null,
     renderCell,
   },
   {
@@ -91,11 +96,13 @@ export const generateColumns = (
     minWidth: 60,
     maxWidth: 130,
     description: 'Potassium',
+    renderHeader: () => null,
     renderCell,
   },
   {
     field: '',
     width: 100,
+    renderHeader: () => null,
     renderCell: (row: any) => (
       <>
         <FontAwesomeIcon

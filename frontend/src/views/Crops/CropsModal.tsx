@@ -501,7 +501,7 @@ function CropsModal({
           )}
           <Grid size={formGridBreakpoints}>
             <span className={`bcds-react-aria-Select--Label ${errors.yield ? '--error' : ''}`}>
-              Yield
+              Yield (tons/ac)
             </span>
             <TextField
               type="number"

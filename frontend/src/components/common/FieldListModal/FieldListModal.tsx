@@ -93,7 +93,7 @@ export default function FieldListModal({
             <span
               className={`bcds-react-aria-Select--Label ${isFormInvalid && (!formData.FieldName || validateUniqueName()) ? '--error' : ''}`}
             >
-              Field name {isFormInvalid && validateUniqueName()}
+              Field Name {isFormInvalid && validateUniqueName()}
             </span>
             <TextField
               isRequired
@@ -107,7 +107,7 @@ export default function FieldListModal({
             <span
               className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.Area ? '--error' : ''}`}
             >
-              Area
+              Area (acres)
             </span>
             <TextField
               isRequired

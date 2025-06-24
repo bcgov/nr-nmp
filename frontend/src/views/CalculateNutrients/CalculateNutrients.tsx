@@ -9,6 +9,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
+import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
@@ -156,16 +157,18 @@ export default function CalculateNutrients() {
       <ProgressStepper />
       <AppTitle />
       <PageTitle title="Calculate Nutrients" />
-      <Button
-        size="medium"
-        aria-label="Duplicate Field"
-        onClick={() => {
-          setOpenDialog(['field', undefined]);
-        }}
-      >
-        <FontAwesomeIcon icon={faPlus} />
-        Add Field
-      </Button>
+      <ButtonGroup>
+        <Button
+          size="medium"
+          aria-label="Duplicate Field"
+          onClick={() => {
+            setOpenDialog(['field', undefined]);
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          Duplicate Field
+        </Button>
+      </ButtonGroup>
       {/* tabs = the fields the user has entered */}
       <TabsMaterial
         activeTab={activeField}
@@ -303,8 +306,44 @@ export default function CalculateNutrients() {
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >
         <div style={{ width: 220 }} />
-        <div style={{ width: 290 }}>Agronomic (lb/ac)</div>
-        <div style={{ width: 250 }}>Crop Removal (lb/ac)</div>
+        <div style={{ width: 290 }}>
+          Agronomic (lb/ac)
+          <br />
+          <Grid container>
+            <Grid size="grow">
+              <span>N</span>
+            </Grid>
+            <Grid size="grow">
+              <span>
+                P<sub>2</sub>O<sub>5</sub>
+              </span>
+            </Grid>
+            <Grid size="grow">
+              <span>
+                K<sub>2</sub>O
+              </span>
+            </Grid>
+          </Grid>
+        </div>
+        <div style={{ width: 250 }}>
+          Crop Removal (lb/ac)
+          <br />
+          <Grid container>
+            <Grid size="grow">
+              <span>N</span>
+            </Grid>
+            <Grid size="grow">
+              <span>
+                P<sub>2</sub>O<sub>5</sub>
+              </span>
+            </Grid>
+            <Grid size="grow">
+              <span>
+                K<sub>2</sub>O
+              </span>
+            </Grid>
+          </Grid>
+        </div>
       </div>
 
       {fieldList[activeField].Crops.length > 0 && (
@@ -315,9 +354,9 @@ export default function CalculateNutrients() {
             rows={fieldList[activeField].Crops}
             columns={cropColumns}
             getRowId={() => crypto.randomUUID()}
-            slots={{ columnHeaders: () => null }}
             disableRowSelectionOnClick
             disableColumnMenu
+            columnHeaderHeight={0}
             hideFooterPagination
             hideFooter
           />
@@ -331,9 +370,9 @@ export default function CalculateNutrients() {
             rows={fieldList[activeField].Fertilizers}
             columns={fertilizerColumns}
             getRowId={() => crypto.randomUUID()}
-            slots={{ columnHeaders: () => null }}
             disableRowSelectionOnClick
             disableColumnMenu
+            columnHeaderHeight={0}
             hideFooterPagination
             hideFooter
           />
@@ -347,9 +386,9 @@ export default function CalculateNutrients() {
             rows={fieldList[activeField].OtherNutrients}
             columns={otherColumns}
             getRowId={() => crypto.randomUUID()}
-            slots={{ columnHeaders: () => null }}
             disableRowSelectionOnClick
             disableColumnMenu
+            columnHeaderHeight={0}
             hideFooterPagination
             hideFooter
           />
@@ -360,9 +399,9 @@ export default function CalculateNutrients() {
         rows={[balanceRow]}
         columns={BALANCE_COLUMNS}
         getRowId={() => crypto.randomUUID()}
-        slots={{ columnHeaders: () => null }}
         disableRowSelectionOnClick
         disableColumnMenu
+        columnHeaderHeight={0}
         hideFooterPagination
         hideFooter
       />

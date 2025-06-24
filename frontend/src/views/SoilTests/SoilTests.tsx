@@ -54,8 +54,8 @@ export default function SoilTests() {
   const apiCache = useContext(APICacheContext);
 
   const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
-  const [soilTestId, setSoilTestId] = useState(
-    fields?.find((field) => field.SoilTest !== undefined)?.SoilTest?.soilTestId || '',
+  const [soilTestId, setSoilTestId] = useState<number>(
+    fields?.find((field) => field.SoilTest !== undefined)?.SoilTest?.soilTestId || 0,
   );
 
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
@@ -95,7 +95,7 @@ export default function SoilTests() {
   };
 
   // IMPORTANT QUESTION: when the user changes the soil test method do we update the existing field.SoilTest values?
-  const soilTestMethodSelect = (value: string) => {
+  const soilTestMethodSelect = (value: number) => {
     setSoilTestId(value);
   };
 
@@ -405,7 +405,7 @@ export default function SoilTests() {
         activeTab={1}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />
-      {soilTestId === '' && (
+      {!soilTestId && (
         <InfoBox>
           Do you have soil test from within the past 3 years?
           <ul>
@@ -429,14 +429,14 @@ export default function SoilTests() {
               label: method.name,
             }))}
             selectedKey={soilTestId}
-            onSelectionChange={(e) => {
-              soilTestMethodSelect(e?.toString() as string);
+            onSelectionChange={(id) => {
+              soilTestMethodSelect(id as number);
             }}
           />
         </Grid>
       </Grid>
 
-      {soilTestId !== '' && (
+      {soilTestId && (
         <DataGrid
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
           rows={fields}
