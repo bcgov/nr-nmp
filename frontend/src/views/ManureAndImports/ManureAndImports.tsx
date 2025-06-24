@@ -198,10 +198,6 @@ export default function ManureAndImports() {
   };
 
   const handleEditRow = (e: GridRenderCellParams) => {
-    // Check Invalid row id
-    if (typeof Number(e?.id) !== 'number') {
-      throw new Error('Invalid manure row id');
-    }
     setEditMaterialName(e.row.UniqueMaterialName);
     setManureFormData(e.row);
     setIsDialogOpen(true);

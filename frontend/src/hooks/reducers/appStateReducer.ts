@@ -132,12 +132,6 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   if (year === undefined) throw new Error(`Reducer received nonexistent year: ${action.year}`);
   if (action.type === 'SAVE_FIELDS') {
     year.Fields = structuredClone(action.newFields);
-    // Put each field through the updateCropNutrients function
-    /*
-    year.Fields.forEach((field) => {
-      updateCropNutrients(field);
-    });
-    */
   } else if (action.type === 'SAVE_FARM_MANURE') {
     year.FarmManures = structuredClone(action.newManures);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {
