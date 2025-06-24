@@ -54,21 +54,17 @@ export default function ManureAndImports() {
   const [manureFormData, setManureFormData] =
     useState<NMPFileImportedManureData>(DefaultManureFormData);
 
-  const [tab, setTab] = useState<Array<string>>([
-    'Add Animals',
-    'Manure & Imports',
-    'Nutrient Analysis',
-  ]);
-
-  // If dairy cattles add storage tab
-  useEffect(() => {
-    if (animalList.some((animal) => animal.animalId === '2')) {
-      setTab(['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']);
-    } else {
-      setTab(['Add Animals', 'Manure & Imports', 'Nutrient Analysis']);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animalList]);
+  const hasDairyCattle = useMemo(
+    () => animalList.some((animal) => animal.animalId === '2'),
+    [animalList],
+  );
+  const tabs = useMemo(
+    () =>
+      hasDairyCattle
+        ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
+        : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
+    [hasDairyCattle],
+  );
 
   const handleSubmit = (data: NMPFileImportedManureData) => {
     let updatedManureFormData: NMPFileImportedManureData;
@@ -361,7 +357,7 @@ export default function ManureAndImports() {
         />
         <TabsMaterial
           activeTab={1}
-          tabLabel={tab}
+          tabLabel={tabs}
         />
       </>
       <DataGrid

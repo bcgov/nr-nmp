@@ -10,8 +10,8 @@ import {
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { NMPFileImportedManureData } from '../../types';
-import { DefaultManureFormData } from '../../constants';
+import { NMPFileFarmManureData } from '../../types';
+import { DEFAULT_NMPFILE_YEAR, DefaultManureFormData } from '../../constants';
 import { StyledContent } from './storage.styles';
 import useAppState from '../../hooks/useAppState';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
@@ -24,11 +24,18 @@ export default function Storage() {
   const { state } = useAppState();
   const navigate = useNavigate();
 
-  const [storageList, setStorageList] = useState<NMPFileImportedManureData[]>(
-    state.nmpFile.years[0]?.ImportedManures || [],
+  // TODO: make correct file type
+  const [storageList, setStorageList] = useState<NMPFileFarmManureData[]>(
+    state.nmpFile.years[0]?.FarmManures || [],
   );
-  const [storageFormData, setstorageFormData] =
-    useState<NMPFileImportedManureData>(DefaultManureFormData);
+  // Not sure if NMPFileFarmManureData is the right file type
+  const [storageFormData, setstorageFormData] = useState<NMPFileFarmManureData>({
+    ManureSource: '',
+    MaterialType: '',
+    BookLab: '',
+    UniqueMaterialName: '',
+    Nutrients: { N: 0, P2O5: 0, K2O: 0, Moisture: '', NH4N: 0 },
+  });
 
   const handleSubmit = () => {};
 
@@ -47,10 +54,6 @@ export default function Storage() {
   };
 
   const handleEditRow = (e: GridRenderCellParams) => {
-    // Check Invalid row index
-    if (typeof Number(e?.id) !== 'number') {
-      throw new Error('Invalid manure row index');
-    }
     setIsDialogOpen(true);
   };
 

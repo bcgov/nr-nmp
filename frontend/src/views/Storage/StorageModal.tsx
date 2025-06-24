@@ -19,13 +19,11 @@ import {
   modalPaddingStyle,
   formGridBreakpoints,
 } from '../../common.styles';
+import manureTypeOptions from '@/constants/ManureTypeOptions';
 import { NMPFileImportedManureData } from '@/types';
 
-const manureTypeOptions = [
-  { label: 'Liquid', id: 1 },
-  { label: 'Solid', id: 2 },
-];
-
+// NMPFileImportedManureData is not the final type
+// TODO: determine type of data for initialModalData
 type ModalComponentProps = {
   initialModalData: NMPFileImportedManureData;
   handleDialogClose: () => void;
@@ -92,9 +90,6 @@ export default function StorageModal({
               spacing={2}
             >
               <Grid size={formGridBreakpoints}>
-                <span
-                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
-                />
                 <Grid size={formGridBreakpoints}>
                   <Select
                     isRequired
@@ -103,7 +98,7 @@ export default function StorageModal({
                     selectedKey={formData?.ManureType}
                     items={manureTypeOptions}
                     onSelectionChange={(e: Key) => {
-                      handleInputChange('ManureType', Number(e) ?? '');
+                      handleInputChange('ManureType', String(e));
                       handleInputChange(
                         'ManureTypeName',
                         manureTypeOptions.find((ele) => ele.id === e)?.label,
@@ -111,6 +106,9 @@ export default function StorageModal({
                     }}
                   />
                 </Grid>
+                <span
+                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
+                />
                 <Grid>
                   <TextField
                     isRequired

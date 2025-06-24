@@ -39,29 +39,25 @@ export default function NutrientAnalysis() {
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
 
-  const [activeTab, setActiveTab] = useState<number>(2);
-  const [tabs, setTabs] = useState<string[]>([
-    'Add Animals',
-    'Manure & Imports',
-    'Nutrient Analysis',
-  ]);
+  const hasDairyCattle = useMemo(
+    () =>
+      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+    [state.nmpFile.years],
+  );
 
-  const hasDairyCattle = state.nmpFile.years[0]?.FarmAnimals?.some(
-    (animal: AnimalData) => animal.animalId === '2',
+  const activeTab = useMemo(() => (hasDairyCattle ? 3 : 2), [hasDairyCattle]);
+  const tabs = useMemo(
+    () =>
+      hasDairyCattle
+        ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
+        : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
+    [hasDairyCattle],
   );
 
   useEffect(() => {
-    if (hasDairyCattle) {
-      setTabs(['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']);
-      setActiveTab(3);
-    } else {
-      setTabs(['Add Animals', 'Manure & Imports', 'Nutrient Analysis']);
-      setActiveTab(2);
-    }
-
     dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasDairyCattle]);
+  }, []);
 
   const handleEdit = (name: string) => {
     setEditName(name);
