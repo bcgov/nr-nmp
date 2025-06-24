@@ -23,7 +23,7 @@ interface FieldListModalProps {
   initialModalData: NMPFileFieldData | undefined;
   rowEditIndex: number | undefined;
   setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
-  isFieldNameUnique: (field: Partial<NMPFileFieldData>) => boolean;
+  isFieldNameUnique: (field: Partial<NMPFileFieldData>, index: number) => boolean;
   onClose: () => void;
 }
 
@@ -36,7 +36,7 @@ export default function FieldListModal({
   onClose,
   ...props
 }: FieldListModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [formData, setFormData] = useState<Omit<NMPFileFieldData, 'index'>>(
+  const [formData, setFormData] = useState<NMPFileFieldData>(
     initialModalData !== undefined ? initialModalData : initialFieldFormData,
   );
   const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
@@ -48,16 +48,12 @@ export default function FieldListModal({
     if (rowEditIndex !== undefined) {
       // If editing, find and replace field instead of adding new field
       setFieldList((prev) => {
-        const replaceIndex = prev.findIndex((element) => element.index === rowEditIndex);
         const newList = [...prev];
-        newList[replaceIndex] = { ...formData, index: rowEditIndex };
+        newList[rowEditIndex] = { ...formData };
         return newList;
       });
     } else {
-      setFieldList((prev) => [
-        ...prev,
-        { ...formData, index: prev.length === 0 ? 0 : prev[prev.length - 1].index + 1 },
-      ]);
+      setFieldList((prev) => [...prev, { ...formData }]);
     }
     onClose();
   };
@@ -68,7 +64,9 @@ export default function FieldListModal({
 
   const validateUniqueName = (): string => {
     if (!formData.FieldName) return '';
-    return !isFieldNameUnique(formData) ? ' must be unique' : '';
+    return !isFieldNameUnique(formData, rowEditIndex === undefined ? -1 : rowEditIndex)
+      ? ' must be unique'
+      : '';
   };
 
   const isManureOptionValid = () =>
@@ -95,7 +93,7 @@ export default function FieldListModal({
             <span
               className={`bcds-react-aria-Select--Label ${isFormInvalid && (!formData.FieldName || validateUniqueName()) ? '--error' : ''}`}
             >
-              Field name {isFormInvalid && validateUniqueName()}
+              Field Name {isFormInvalid && validateUniqueName()}
             </span>
             <TextField
               isRequired
@@ -109,7 +107,7 @@ export default function FieldListModal({
             <span
               className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.Area ? '--error' : ''}`}
             >
-              Area
+              Area (acres)
             </span>
             <TextField
               isRequired

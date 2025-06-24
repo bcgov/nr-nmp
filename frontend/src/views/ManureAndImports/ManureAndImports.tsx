@@ -198,10 +198,6 @@ export default function ManureAndImports() {
   };
 
   const handleEditRow = (e: GridRenderCellParams) => {
-    // Check Invalid row index
-    if (typeof Number(e?.id) !== 'number') {
-      throw new Error('Invalid manure row index');
-    }
     setEditMaterialName(e.row.UniqueMaterialName);
     setManureFormData(e.row);
     setIsDialogOpen(true);
@@ -348,7 +344,7 @@ export default function ManureAndImports() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={animalList}
         columns={columnsAnimalManure}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
@@ -358,7 +354,7 @@ export default function ManureAndImports() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={manures}
         columns={columnsImportedManure}
-        getRowId={(row: any) => row.UniqueMaterialName}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
