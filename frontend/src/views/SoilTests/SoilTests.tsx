@@ -2,13 +2,14 @@
 /**
  * @summary This is the Soil Tests Tab
  */
-import { useState, useEffect, useContext, useMemo } from 'react';
+import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import {
   Button,
   ButtonGroup,
@@ -37,7 +38,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
 import { InfoBox, StyledContent } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
-import { CROPS, FIELD_LIST, SOIL_TESTS } from '@/constants/routes';
+import { CROPS, FIELD_LIST } from '@/constants/routes';
 
 const EMPTY_SOIL_TEST_FORM: Omit<NMPFileSoilTestData, 'soilTestId'> = {
   sampleDate: '',
@@ -65,6 +66,27 @@ export default function SoilTests() {
   const [formErrors, setFormErrors] =
     useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const handleEditRow = useCallback(
+    (e: { id: GridRowId; api: GridApiCommunity }) => {
+      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+      setCurrentFieldIndex(index);
+      setFormData(fields[index].SoilTest || EMPTY_SOIL_TEST_FORM);
+      setIsDialogOpen(true);
+    },
+    [fields],
+  );
+
+  const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+    setFields((prev) => {
+      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+      if (fields[index].SoilTest === undefined) return prev;
+
+      const newList = [...prev];
+      newList[index].SoilTest = undefined;
+      return newList;
+    });
+  };
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -215,39 +237,21 @@ export default function SoilTests() {
         field: '',
         headerName: 'Actions',
         width: 150,
-        renderCell: (cell: any) => {
-          const isRowHasSoilTest = fields[cell?.row?.index].SoilTest !== undefined;
-          const handleEditRowBtnClick = () => {
-            setFormData(() => {
-              if (fields[cell?.row?.index].SoilTest !== undefined) {
-                return fields[cell?.row?.index].SoilTest!;
-              }
-              return EMPTY_SOIL_TEST_FORM;
-            });
-            setCurrentFieldIndex(cell?.row?.index?.toString());
-            setIsDialogOpen(true);
-          };
-          const handleDeleteRowBtnClick = () => {
-            if (isRowHasSoilTest) {
-              setFields((prev) => {
-                const newList = [...prev];
-                newList[cell?.row?.index].SoilTest = undefined;
-                return newList;
-              });
-            }
-          };
+        renderCell: (e: { id: GridRowId; api: GridApiCommunity }) => {
+          const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+          const isRowHasSoilTest = fields[index].SoilTest !== undefined;
           return (
             <div>
               {isRowHasSoilTest ? (
                 <div>
                   <FontAwesomeIcon
                     css={tableActionButtonCss}
-                    onClick={handleEditRowBtnClick}
+                    onClick={() => handleEditRow(e)}
                     icon={faEdit}
                   />
                   <FontAwesomeIcon
                     css={tableActionButtonCss}
-                    onClick={handleDeleteRowBtnClick}
+                    onClick={() => handleDeleteRow(e)}
                     icon={faTrash}
                   />
                 </div>
@@ -255,7 +259,7 @@ export default function SoilTests() {
                 <Button
                   variant="primary"
                   size="small"
-                  onPress={handleEditRowBtnClick}
+                  onClick={() => handleEditRow(e)}
                 >
                   Add soil test
                 </Button>
@@ -437,7 +441,7 @@ export default function SoilTests() {
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
           rows={fields}
           columns={columns}
-          getRowId={(row: any) => row.index}
+          getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
           disableColumnMenu
           hideFooterPagination

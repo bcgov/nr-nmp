@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
@@ -27,16 +28,16 @@ export default function FieldList() {
     state.nmpFile.years[0].Fields || [],
   );
 
-  const handleEditRow = useCallback((e: { row: NMPFileFieldData }) => {
-    setRowEditIndex(e.row.index);
+  const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
+    setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
     setIsDialogOpen(true);
   }, []);
 
-  const handleDeleteRow = (e: any) => {
+  const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
     setFieldList((prev) => {
-      const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
+      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
       const newList = [...prev];
-      newList.splice(deleteSpot, 1);
+      newList.splice(index, 1);
       return newList;
     });
   };
@@ -80,10 +81,8 @@ export default function FieldList() {
   };
 
   const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileFieldData>) =>
-      !fieldList.some(
-        (fieldRow) => fieldRow.FieldName === data.FieldName && fieldRow.index !== data.index,
-      ),
+    (data: Partial<NMPFileFieldData>, index: number) =>
+      !fieldList.some((fieldRow, idx) => fieldRow.FieldName === data.FieldName && index !== idx),
     [fieldList],
   );
 
@@ -143,11 +142,7 @@ export default function FieldList() {
         {isDialogOpen && (
           <FieldListModal
             mode={rowEditIndex !== undefined ? 'Edit Field' : 'Add Field'}
-            initialModalData={
-              rowEditIndex !== undefined
-                ? fieldList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
+            initialModalData={rowEditIndex !== undefined ? fieldList[rowEditIndex] : undefined}
             rowEditIndex={rowEditIndex}
             setFieldList={setFieldList}
             isFieldNameUnique={isFieldNameUnique}
@@ -164,7 +159,7 @@ export default function FieldList() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={fieldList}
         columns={columns}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

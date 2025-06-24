@@ -1,3 +1,13 @@
+export interface CalculateNutrientsColumn {
+  name: string;
+  reqN: number;
+  reqP2o5: number;
+  reqK2o: number;
+  remN: number;
+  remP2o5: number;
+  remK2o: number;
+}
+
 export interface Fertilizer {
   id: number;
   name: string;
@@ -6,6 +16,31 @@ export interface Fertilizer {
   phosphorous: number;
   potassium: number;
   sortnum: number;
+}
+
+export type FertilizerType = {
+  id: number;
+  name: string;
+  dryliquid: string;
+  custom: boolean;
+};
+
+export type FertilizerUnit = {
+  id: number;
+  name: string;
+  dryliquid: string;
+  conversiontoimperialgallonsperacre: number;
+  farmrequirednutrientsstdunitsconversion: number;
+  farmrequirednutrientsstdunitsareaconversion: number;
+};
+
+export interface NMPFileFertilizer extends CalculateNutrientsColumn {
+  fertilizerTypeId: number;
+  fertilizerId: number;
+  applicationRate: number;
+  applUnitId: number;
+  applDate?: string;
+  applicationMethod: string;
 }
 
 export interface CropNutrients {
@@ -24,23 +59,3 @@ export interface ManureNutrients extends CropNutrients {
   Moisture: string;
   NH4N: number; // Ammonium
 }
-
-export type OtherFormData = {
-  name: string;
-  nutrients: NutrientColumns;
-};
-
-export type CropRow = {
-  index: number;
-  type: 'crop';
-  cropIndex: number;
-};
-
-export type OtherFormRow = {
-  index: number;
-  type: 'other';
-  data: OtherFormData;
-};
-
-// TODO: Add in the other types
-export type NMPFileNutrientRow = CropRow | OtherFormRow;

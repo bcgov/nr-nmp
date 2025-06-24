@@ -1,3 +1,5 @@
+import { CalculateNutrientsColumn } from './calculateNutrients';
+
 export type CropsConversionFactors = {
   id?: number;
   nitrogenproteinconversion?: number;
@@ -64,21 +66,13 @@ export type NMPFileSoilTestData = {
   sampleDate?: string;
 };
 
-export type NMPFileCropData = {
-  index: number;
+export interface NMPFileCropData extends CalculateNutrientsColumn {
   cropId: string;
   cropTypeId: number;
-  cropName: string;
   cropTypeName: string;
   cropOther?: string | null;
   yield?: number;
-  reqN?: number;
   stdN?: number;
-  reqP2o5?: number;
-  reqK2o?: number;
-  remN?: number;
-  remP2o5?: number;
-  remK2o?: number;
   crudeProtien?: number;
   prevCropId?: number;
   coverCropHarvested?: string | null;
@@ -94,7 +88,7 @@ export type NMPFileCropData = {
   whereWillPruningsGo?: string | null;
   willSawdustBeApplied?: boolean;
   */
-};
+}
 
 export type SoilTestMethodsData = {
   id: number;

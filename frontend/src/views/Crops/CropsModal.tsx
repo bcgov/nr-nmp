@@ -19,6 +19,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formCss, formGridBreakpoints } from '../../common.styles';
 import { booleanChecker } from '../../utils/utils';
 import { ModalProps } from '@/components/common/Modal/Modal';
+import { DEFAULT_NMPFILE_CROPS } from '@/constants';
 
 // Define constants for column headings for Nutrient added/removed tables
 const requireAndRemoveColumns: GridColDef[] = [
@@ -51,20 +52,57 @@ const requireAndRemoveColumns: GridColDef[] = [
   },
 ];
 
+/**
+ * Turn all of the nutrient values positive so the modal only handles
+ * positive values. When these values are saved to fields, they
+ * are saved as negative numbers.
+ * @param data The initialModalData
+ * @returns Identical data with all nutrient values positive
+ */
+function preprocessModalData(data: NMPFileCropData): NMPFileCropData {
+  return {
+    ...data,
+    reqN: Math.abs(data.reqN),
+    reqP2o5: Math.abs(data.reqP2o5),
+    reqK2o: Math.abs(data.reqK2o),
+    remN: Math.abs(data.remN),
+    remP2o5: Math.abs(data.remP2o5),
+    remK2o: Math.abs(data.remK2o),
+  };
+}
+
+/**
+ * Turns all of the nutrient values negative for CalculateNutrients.
+ * Crops only remove, not add, nutrients from the soil.
+ * @param data The formData
+ * @returns Identical data with all nutrient values negative
+ */
+function postprocessModalData(data: NMPFileCropData): NMPFileCropData {
+  return {
+    ...data,
+    reqN: -1 * data.reqN,
+    reqP2o5: -1 * data.reqP2o5,
+    reqK2o: -1 * data.reqK2o,
+    remN: -1 * data.remN,
+    remP2o5: -1 * data.remP2o5,
+    remK2o: -1 * data.remK2o,
+  };
+}
+
 type CropsModalProps = {
-  mode: string;
   field: NMPFileFieldData;
   fieldIndex: number;
-  initialModalData: NMPFileCropData;
+  cropIndex: number | undefined;
+  initialModalData: NMPFileCropData | undefined;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
   farmRegion: number;
 };
 
 function CropsModal({
-  mode,
   field,
   fieldIndex,
+  cropIndex,
   initialModalData,
   setFields,
   onClose,
@@ -73,8 +111,10 @@ function CropsModal({
 }: CropsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const apiCache = useContext(APICacheContext);
 
+  const [formData, setFormData] = useState<NMPFileCropData>(
+    initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
+  );
   const [crops, setCrops] = useState<Crop[]>([]);
-  const [formData, setFormData] = useState<NMPFileCropData>(initialModalData);
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
     return crops.filter((type) => type.croptypeid === Number(formData.cropTypeId));
@@ -92,12 +132,11 @@ function CropsModal({
         if (index === fieldIndex) {
           // Check if we're editing an existing crop or adding a new crop
           let updatedCrops;
-          if (mode === 'Edit') {
-            updatedCrops = prevField.Crops.map((crop) =>
-              crop.index === initialModalData.index ? { ...formData } : crop,
-            );
+          if (cropIndex !== undefined) {
+            updatedCrops = [...prevField.Crops];
+            updatedCrops[cropIndex] = postprocessModalData(formData);
           } else {
-            updatedCrops = [...prevField.Crops, formData];
+            updatedCrops = [...prevField.Crops, postprocessModalData(formData)];
           }
           return { ...prevField, Crops: updatedCrops };
         }
@@ -177,7 +216,7 @@ function CropsModal({
       setFormData((prevData) => ({
         ...prevData,
         cropId: value as string,
-        cropName: selectedCrop.cropname,
+        name: selectedCrop.cropname,
       }));
       return;
     }
@@ -319,7 +358,7 @@ function CropsModal({
     if (
       formData.cropId &&
       Number(formData.cropId) !== 0 &&
-      initialModalData.cropId !== formData.cropId
+      initialModalData?.cropId !== formData.cropId
     ) {
       try {
         (async () => {
@@ -377,7 +416,7 @@ function CropsModal({
   return (
     <Modal
       onOpenChange={onClose}
-      title={`${mode} Crop`}
+      title={`${cropIndex !== undefined ? 'Edit' : 'Add'} Crop`}
       {...props}
     >
       <div css={formCss}>

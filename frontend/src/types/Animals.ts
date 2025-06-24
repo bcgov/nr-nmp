@@ -7,7 +7,6 @@ export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
 
 export type BeefCattleData = {
   animalId: '1';
-  index: number;
   subtype?: string;
   animalsPerFarm?: number;
   daysCollected?: number | undefined;
@@ -17,7 +16,6 @@ export type BeefCattleData = {
 
 export type DairyCattleData = {
   animalId: '2';
-  index: number;
   subtype?: string;
   breed?: string;
   manureType?: 'liquid' | 'solid';

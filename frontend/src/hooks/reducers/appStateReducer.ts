@@ -2,7 +2,6 @@
 import { DEFAULT_NMPFILE, NMP_FILE_KEY } from '@/constants';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import {
-  NMPFileNutrientRow,
   NMPFileFieldData,
   NMPFileFarmManureData,
   NMPFileImportedManureData,
@@ -70,37 +69,6 @@ export type AppStateAction =
   | OverwriteNMPFileAction
   | ResetNMPFileAction;
 
-function updateCropNutrients(field: NMPFileFieldData) {
-  let nutrients = field.Nutrients;
-  if (nutrients !== undefined) {
-    nutrients = nutrients.reduce((acc, row) => {
-      if (row.type === 'crop') {
-        // Remove rows of deleted crops
-        if (field.Crops.some((crop) => crop.index === row.cropIndex)) {
-          acc.push(row);
-        }
-      } else {
-        // Don't touch non-crop rows
-        acc.push(row);
-      }
-      return acc;
-    }, [] as NMPFileNutrientRow[]);
-  } else {
-    nutrients = [];
-  }
-  // Add rows for new crops
-  field.Crops.forEach((crop) => {
-    if (!nutrients!.some((row) => row.type === 'crop' && row.cropIndex === crop.index)) {
-      nutrients?.push({
-        index: nutrients.length === 0 ? 0 : nutrients[nutrients.length - 1].index + 1,
-        type: 'crop',
-        cropIndex: crop.index,
-      });
-    }
-  });
-  field.Nutrients = nutrients;
-}
-
 function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
   newFileYear.FarmAnimals = structuredClone(newAnimals);
 
@@ -116,7 +84,6 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
       if (animal.manureData.annualSolidManure !== undefined) {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
-          index: generatedManures.length,
           UniqueMaterialName: animal.manureData.name,
           ManureTypeName: '2',
           AnnualAmount: animal.manureData.annualSolidManure,
@@ -126,7 +93,6 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
       } else {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
-          index: generatedManures.length,
           UniqueMaterialName: animal.manureData.name,
           ManureTypeName: '1',
           AnnualAmount: animal.manureData.annualLiquidManure,
@@ -167,9 +133,11 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   if (action.type === 'SAVE_FIELDS') {
     year.Fields = structuredClone(action.newFields);
     // Put each field through the updateCropNutrients function
+    /*
     year.Fields.forEach((field) => {
       updateCropNutrients(field);
     });
+    */
   } else if (action.type === 'SAVE_FARM_MANURE') {
     year.FarmManures = structuredClone(action.newManures);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {

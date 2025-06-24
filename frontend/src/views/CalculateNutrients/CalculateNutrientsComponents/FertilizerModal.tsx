@@ -1,7 +1,7 @@
 /**
  * @summary This is the NewFertilizerModal component
  */
-import { FormEvent, Key, useContext, useEffect, useState } from 'react';
+import React, { FormEvent, Key, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import {
   Button,
@@ -17,21 +17,23 @@ import { customTableStyle, formCss, formGridBreakpoints } from '@/common.styles'
 import { APICacheContext } from '@/context/APICacheContext';
 import { InputField } from '@/components/common';
 
-import type { FertilizerFormState } from '../types';
-import type { Fertilizer, FertilizerType, FertilizerUnit, CropNutrients } from '@/types';
-import calcFertBalance from '../utils';
+import type {
+  Fertilizer,
+  FertilizerType,
+  FertilizerUnit,
+  CropNutrients,
+  NMPFileFieldData,
+} from '@/types';
+import { calcFertBalance } from '../utils';
+import { NMPFileFertilizer } from '@/types/calculateNutrients';
 
 type FertilizerModalProps = {
-  initialModalData: FertilizerFormState | undefined;
-  setDataForParent: (data: CropNutrients) => void;
-  onCancel: () => void;
+  fieldIndex: number;
+  initialModalData: NMPFileFertilizer | undefined;
+  rowEditIndex: number | undefined;
+  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+  onClose: () => void;
 };
-
-interface FertilizerDetail {
-  fertilizerType: FertilizerType | undefined;
-  fertilizerUnit: FertilizerUnit | undefined;
-  fertilizer: Fertilizer | undefined;
-}
 
 const NUTRIENT_COLUMNS: GridColDef[] = [
   {
@@ -57,13 +59,20 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   },
 ];
 
-const EMPTY_FERTILIZER_FORM_DATA: FertilizerFormState = {
+const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
+  name: '',
   fertilizerTypeId: 0,
   fertilizerId: 0,
   applicationRate: 1,
-  applUnitId: 1,
+  applUnitId: 0,
   applDate: '',
   applicationMethod: '',
+  reqN: 0,
+  reqP2o5: 0,
+  reqK2o: 0,
+  remN: 0,
+  remP2o5: 0,
+  remK2o: 0,
 };
 
 const FERTILIZER_METHOD: Array<{ id: string; label: string }> = [
@@ -75,17 +84,12 @@ const FERTILIZER_METHOD: Array<{ id: string; label: string }> = [
   { id: 'Follar', label: 'Follar' },
 ];
 
-const EMPTY_FERT_DETAIL_DATA = {
-  fertilizerType: undefined,
-  fertilizerUnit: undefined,
-  fertilizer: undefined,
-};
-
 export default function FertilizerModal({
+  fieldIndex,
   initialModalData,
-  // Import field and handleSubmit from parent component when ready
-  setDataForParent,
-  onCancel,
+  rowEditIndex,
+  setFields,
+  onClose,
   ...props
 }: FertilizerModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [fertilizerTypes, setFertilizerTypes] = useState<FertilizerType[]>([]);
@@ -93,15 +97,17 @@ export default function FertilizerModal({
   const [filteredFertilizersOptions, setFilteredFertilizerOptions] = useState<Fertilizer[]>([]);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
 
-  const [formState, setFormState] = useState<FertilizerFormState>(
+  const [formState, setFormState] = useState<NMPFileFertilizer>(
     initialModalData ?? EMPTY_FERTILIZER_FORM_DATA,
   );
-  const [fertilizerDetailData, setFertilizerDetailData] =
-    useState<FertilizerDetail>(EMPTY_FERT_DETAIL_DATA);
 
   const apiCache = useContext(APICacheContext);
 
-  const [calculatedData, setCalculateData] = useState<[CropNutrients] | null>(null);
+  const [calculatedData, setCalculateData] = useState<CropNutrients | null>(
+    initialModalData
+      ? { N: initialModalData.reqN, P2O5: initialModalData.reqP2o5, K2O: initialModalData.reqK2o }
+      : null,
+  );
 
   const dryOrLiquidUnitOptions = fertilizerUnits.filter(
     (ele) =>
@@ -109,17 +115,62 @@ export default function FertilizerModal({
       fertilizerTypes.find((fertType) => fertType.id === formState.fertilizerTypeId)?.dryliquid,
   );
 
+  const handleSubmit = () => {
+    setFields((prevFields) => {
+      const newFields = prevFields.map((prev, index) => {
+        if (index !== fieldIndex) return prev;
+
+        if (rowEditIndex !== undefined) {
+          const newFertilizers = [...prev.Fertilizers];
+          newFertilizers[rowEditIndex] = { ...formState };
+          return { ...prev, Fertilizers: newFertilizers };
+        }
+
+        // For case where this is a new fertilizer
+        return {
+          ...prev,
+          Fertilizers: [
+            ...prev.Fertilizers,
+            {
+              ...formState,
+            },
+          ],
+        };
+      });
+
+      return newFields;
+    });
+
+    onClose();
+  };
+
   useEffect(() => {
     apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
-        const { data } = response;
-        setFertilizerTypes(data);
-      }
-    });
-    apiCache.callEndpoint('api/fertilizers/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        const { data } = response;
-        setFertilizerOptions(data);
+        const fertilizerTs: FertilizerType[] = response.data;
+        setFertilizerTypes(fertilizerTs);
+
+        // Fetch fertilizers sequentially, after fertilizer types
+        apiCache
+          .callEndpoint('api/fertilizers/')
+          .then((secondResponse: { status?: any; data: any }) => {
+            if (secondResponse.status === 200) {
+              const { data } = secondResponse;
+              setFertilizerOptions(data);
+
+              // If the fertilizerTypeId is already set, set the filtered options as well
+              if (formState.fertilizerTypeId) {
+                setFilteredFertilizerOptions(
+                  data.filter(
+                    (ele: Fertilizer) =>
+                      ele.dryliquid ===
+                      fertilizerTs.find((fertType) => fertType.id === formState.fertilizerTypeId)
+                        ?.dryliquid,
+                  ),
+                );
+              }
+            }
+          });
       }
     });
     apiCache.callEndpoint('api/fertilizerunits/').then((response: { status?: any; data: any }) => {
@@ -128,23 +179,39 @@ export default function FertilizerModal({
         setFertilizerUnits(data);
       }
     });
-  }, [apiCache, fertilizerTypes, fertilizerOptions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleModalCalculate = (e: FormEvent) => {
     e.preventDefault();
     if (
-      !fertilizerDetailData.fertilizer ||
+      !formState.fertilizerId ||
+      !formState.applUnitId ||
       !formState.applicationRate ||
-      !fertilizerDetailData.fertilizerUnit
+      fertilizerOptions.length === 0 ||
+      fertilizerUnits.length === 0
     )
       return;
-    setCalculateData([
-      calcFertBalance(
-        fertilizerDetailData.fertilizer,
-        formState.applicationRate,
-        fertilizerDetailData.fertilizerUnit,
-      ),
-    ]);
+
+    const fertilizer = fertilizerOptions.find((ele) => ele.id === formState.fertilizerId);
+    if (fertilizer === undefined)
+      throw new Error(`Fertilizer ${formState.fertilizerId} is missing from list.`);
+    const fertilizerUnit = fertilizerUnits.find(
+      (fertTypeEle) => fertTypeEle.id === formState.applUnitId,
+    );
+    if (fertilizerUnit === undefined)
+      throw new Error(`Fertilizer unit ${formState.applUnitId} is missing from list.`);
+    const cropNutrients = calcFertBalance(fertilizer, formState.applicationRate, fertilizerUnit);
+    setCalculateData(cropNutrients);
+    setFormState((prev) => ({
+      ...prev,
+      reqN: cropNutrients.N,
+      reqP2o5: cropNutrients.P2O5,
+      reqK2o: cropNutrients.K2O,
+      remN: cropNutrients.N,
+      remP2o5: cropNutrients.P2O5,
+      remK2o: cropNutrients.K2O,
+    }));
   };
 
   const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
@@ -158,38 +225,20 @@ export default function FertilizerModal({
             ele.dryliquid === fertilizerTypes.find((fertType) => fertType.id === value)?.dryliquid,
         ),
       );
-
-      setFertilizerDetailData({
-        ...EMPTY_FERT_DETAIL_DATA,
-        fertilizerType: fertilizerTypes.find((ele) => ele.id === Number(value)),
-      });
     }
 
     if (name === 'fertilizerId') {
-      setFertilizerDetailData((prev: any) => ({
-        ...prev,
-        fertilizer: fertilizerOptions.find((ele) => ele.id === Number(value)),
-      }));
+      // eslint-disable-next-line no-param-reassign
+      changes.name = filteredFertilizersOptions.find((f) => f.id === value)!.name;
     }
 
-    if (name === 'applUnitId') {
-      setFertilizerDetailData((prev: any) => ({
-        ...prev,
-        fertilizerUnit: fertilizerUnits.find((fertTypeEle) => fertTypeEle.id === Number(value)),
-      }));
-    }
     setFormState((prev) => ({ ...prev, ...changes }));
-  };
-
-  const handleSubmit = () => {
-    // Call the setData function from CalculateNutrients.tsx parent component
-    if (calculatedData) setDataForParent(...calculatedData);
   };
 
   return (
     <Modal
       title="Add fertilizer"
-      onOpenChange={onCancel}
+      onOpenChange={onClose}
       {...props}
     >
       <Form
@@ -298,7 +347,7 @@ export default function FertilizerModal({
                 <DataGrid
                   sx={{ ...customTableStyle }}
                   columns={NUTRIENT_COLUMNS}
-                  rows={calculatedData ?? []}
+                  rows={calculatedData != null ? [calculatedData] : []}
                   getRowId={() => crypto.randomUUID()}
                   disableRowSelectionOnClick
                   disableColumnMenu
@@ -321,7 +370,7 @@ export default function FertilizerModal({
           <Button
             type="reset"
             variant="secondary"
-            onPress={onCancel}
+            onPress={onClose}
             aria-label="reset"
           >
             Cancel

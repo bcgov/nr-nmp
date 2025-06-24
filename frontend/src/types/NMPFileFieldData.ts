@@ -1,15 +1,17 @@
-import { NMPFileNutrientRow } from './calculateNutrients';
+import { CalculateNutrientsColumn, NMPFileFertilizer } from './calculateNutrients';
 import { NMPFileCropData, NMPFileSoilTestData } from './crops';
 
+export type NMPFileOtherNutrient = CalculateNutrientsColumn;
+
 export type NMPFileFieldData = {
-  index: number;
   FieldName: string;
   Area: number;
   PreviousYearManureApplicationFrequency: string;
   Comment: string;
   SoilTest?: NMPFileSoilTestData;
   Crops: NMPFileCropData[];
-  Nutrients?: NMPFileNutrientRow[]; // concept: these rows will 'link' to the other arrays
+  Fertilizers: NMPFileFertilizer[];
+  OtherNutrients: NMPFileOtherNutrient[];
   /*
   Fields from old NMP, currently unused, feel free to re-add
   FeedForageAnalyses?: any[];
