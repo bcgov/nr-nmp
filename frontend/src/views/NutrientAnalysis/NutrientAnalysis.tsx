@@ -2,7 +2,7 @@
  * @summary The nutrient analysis tab on the manure page for the application
  */
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -10,9 +10,9 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './nutrientAnalsysis.styles';
-import { NMPFileImportedManureData } from '@/types';
+import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
-import { MANURE_IMPORTS, FIELD_LIST } from '@/constants/routes';
+import { MANURE_IMPORTS, FIELD_LIST, STORAGE } from '@/constants/routes';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -38,6 +38,26 @@ export default function NutrientAnalysis() {
   );
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
+
+  const hasDairyCattle = useMemo(
+    () =>
+      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+    [state.nmpFile.years],
+  );
+
+  const activeTab = useMemo(() => (hasDairyCattle ? 3 : 2), [hasDairyCattle]);
+  const tabs = useMemo(
+    () =>
+      hasDairyCattle
+        ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
+        : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
+    [hasDairyCattle],
+  );
+
+  useEffect(() => {
+    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleEdit = (name: string) => {
     setEditName(name);
@@ -70,7 +90,11 @@ export default function NutrientAnalysis() {
   };
 
   const handlePrevious = () => {
-    navigate(MANURE_IMPORTS);
+    if (hasDairyCattle) {
+      navigate(STORAGE);
+    } else {
+      navigate(MANURE_IMPORTS);
+    }
   };
 
   const handleNext = () => {
@@ -195,8 +219,8 @@ export default function NutrientAnalysis() {
         />
       )}
       <TabsMaterial
-        activeTab={2}
-        tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+        activeTab={activeTab}
+        tabLabel={tabs}
       />
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
