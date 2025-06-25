@@ -41,31 +41,37 @@ export default function ProgressStepper() {
     }
 
     if (state.showAnimalsStep) {
-      return [
-        ...baseSteps,
-        {
-          name: 'Animals and Manure',
-          paths: [ADD_ANIMALS, MANURE_IMPORTS, STORAGE, NUTRIENT_ANALYSIS],
-        },
-        { name: 'Fields and Soil', paths: [FIELD_LIST, SOIL_TESTS, CROPS] },
-        { name: 'Calculate Nutrients', paths: [CALCULATE_NUTRIENTS] },
-        { name: 'Reporting', paths: [REPORTING] },
-      ];
+      return stepsWithAnimals;
+    }
+    return stepsWithoutAnimals;
+  }, [state.showAnimalsStep]);
+
+  const displayActiveStep = useCallback((): number | undefined => {
+    const animalStepIncrease = state.showAnimalsStep ? 1 : 0;
+
+    // eslint-disable-next-line default-case
+    switch (pathname) {
+      case LANDING_PAGE:
+        return 0;
+      case FARM_INFORMATION:
+        return 1;
+      case ADD_ANIMALS:
+      case MANURE_IMPORTS:
+      case STORAGE:
+      case NUTRIENT_ANALYSIS:
+        return 2;
+      case FIELD_LIST:
+      case SOIL_TESTS:
+      case CROPS:
+        return 2 + animalStepIncrease;
+      case CALCULATE_NUTRIENTS:
+        return 3 + animalStepIncrease;
+      case REPORTING:
+        return 4 + animalStepIncrease;
     }
 
-    return [
-      ...baseSteps,
-      { name: 'Fields and Soil', paths: [FIELD_LIST, SOIL_TESTS, CROPS] },
-      { name: 'Manure and Compost', paths: [MANURE_IMPORTS, NUTRIENT_ANALYSIS] },
-      { name: 'Calculate Nutrients', paths: [CALCULATE_NUTRIENTS] },
-      { name: 'Reporting', paths: [REPORTING] },
-    ];
-  }, [state.showAnimalsStep, pathname]);
-
-  const activeStep = useMemo(
-    () => steps.findIndex((step) => step.paths.includes(pathname)),
-    [steps, pathname],
-  );
+    return undefined;
+  }, [pathname, state.showAnimalsStep]);
 
   return (
     <Box

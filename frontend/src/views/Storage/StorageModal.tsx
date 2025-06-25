@@ -1,7 +1,11 @@
 /**
  * @summary This is the Add Animal list Tab
  */
+<<<<<<< HEAD
 import { ComponentProps, FormEvent, Key, useEffect, useState } from 'react';
+=======
+import { ComponentProps, FormEvent, Key, useState } from 'react';
+>>>>>>> 76c95c3 (feat(NMP-290): Storage Page and Modal if Dairy Cattle (#331))
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -13,6 +17,7 @@ import {
   Select,
   TextField,
 } from '@bcgov/design-system-react-components';
+<<<<<<< HEAD
 import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.styles';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
@@ -24,12 +29,31 @@ type ModalComponentProps = {
   initialModalData: StorageForm;
   handleDialogClose: () => void;
   handleSubmit: (formData: StorageForm) => void;
+=======
+import {
+  formCss,
+  modalHeaderStyle,
+  modalPaddingStyle,
+  formGridBreakpoints,
+} from '../../common.styles';
+import manureTypeOptions from '@/constants/ManureTypeOptions';
+import { NMPFileImportedManureData } from '@/types';
+
+// NMPFileImportedManureData is not the final type
+// TODO: determine type of data for initialModalData
+type ModalComponentProps = {
+  initialModalData: NMPFileImportedManureData;
+  handleDialogClose: () => void;
+  handleSubmit: (formData: NMPFileImportedManureData) => void;
+  storageList: any;
+>>>>>>> 76c95c3 (feat(NMP-290): Storage Page and Modal if Dairy Cattle (#331))
 };
 
 export default function StorageModal({
   initialModalData,
   handleDialogClose,
   handleSubmit,
+<<<<<<< HEAD
   ...props
 }: ModalComponentProps & ComponentProps<typeof Modal>) {
   const { state } = useAppState();
@@ -54,17 +78,44 @@ export default function StorageModal({
 
     setManureList(items);
   }, [formData?.ManureType, state.nmpFile.years]);
+=======
+  storageList,
+  ...props
+}: ModalComponentProps & ComponentProps<typeof Modal>) {
+  const [formData, setFormData] = useState<NMPFileImportedManureData>(initialModalData);
+  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
+
+  const notUniqueNameCheck = () => {
+    if (isEditingExistingEntry) return false;
+    return storageList.some(
+      (ele: NMPFileImportedManureData) => ele.UniqueMaterialName === formData.UniqueMaterialName,
+    );
+  };
+>>>>>>> 76c95c3 (feat(NMP-290): Storage Page and Modal if Dairy Cattle (#331))
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
 
+<<<<<<< HEAD
     handleSubmit(formData);
     handleDialogClose();
   };
 
   const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
     setFormData((prev: StorageForm) => {
+=======
+    if (notUniqueNameCheck()) {
+      console.error('not unique name');
+    } else {
+      handleSubmit(formData);
+      handleDialogClose();
+    }
+  };
+
+  const handleInputChange = (name: string, value: string | number | undefined) => {
+    setFormData((prev: NMPFileImportedManureData) => {
+>>>>>>> 76c95c3 (feat(NMP-290): Storage Page and Modal if Dairy Cattle (#331))
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
@@ -78,7 +129,11 @@ export default function StorageModal({
         aria-labelledby="add-storage-dialog"
       >
         <div css={modalPaddingStyle}>
+<<<<<<< HEAD
           <span css={modalHeaderStyle}>Storage System Details</span>
+=======
+          <span css={modalHeaderStyle}>Add Storage System</span>
+>>>>>>> 76c95c3 (feat(NMP-290): Storage Page and Modal if Dairy Cattle (#331))
           <Divider
             aria-hidden="true"
             component="div"
@@ -91,6 +146,7 @@ export default function StorageModal({
             <Grid
               container
               spacing={2}
+<<<<<<< HEAD
               size={12}
             >
               <Grid
@@ -105,6 +161,15 @@ export default function StorageModal({
                   <Select
                     isRequired
                     label="Manure Type"
+=======
+            >
+              <Grid size={formGridBreakpoints}>
+                <Grid size={formGridBreakpoints}>
+                  <Select
+                    isRequired
+                    label="Manure Type"
+                    placeholder="Select manure type"
+>>>>>>> 76c95c3 (feat(NMP-290): Storage Page and Modal if Dairy Cattle (#331))
                     selectedKey={formData?.ManureType}
                     items={manureTypeOptions}
                     onSelectionChange={(e: Key) => {
@@ -115,6 +180,7 @@ export default function StorageModal({
                       );
                     }}
                   />
+<<<<<<< HEAD
                   <TextField
                     isRequired
                     label="System Name"
@@ -208,6 +274,23 @@ export default function StorageModal({
                     )}
                   </Grid>
                 </Grid>
+=======
+                </Grid>
+                <span
+                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
+                />
+                <Grid>
+                  <TextField
+                    isRequired
+                    label="Storage Name"
+                    type="string"
+                    name="storageName"
+                    onChange={(e: Key) => {
+                      handleInputChange('StorageName', String(e) ?? '');
+                    }}
+                  />
+                </Grid>
+>>>>>>> 76c95c3 (feat(NMP-290): Storage Page and Modal if Dairy Cattle (#331))
               </Grid>
             </Grid>
             <Divider
