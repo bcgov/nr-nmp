@@ -56,12 +56,3 @@ export function calculateAnnualWashWater(
 ) {
   return washWater * 365 * (washWaterUnit === PER_DAY_PER_ANIMAL_UNIT ? animalsPerFarm : 1);
 }
-
-export const initAnimals = (state: any) => {
-  if (state.nmpFile) {
-    const parsedData = JSON.parse(state.nmpFile);
-    // Mapping introduces index for DataGrid component to track each animal element.
-    return parsedData.years[0].FarmAnimals.map((ele: any, index: number) => ({ ...ele, index }));
-  }
-  return [];
-};

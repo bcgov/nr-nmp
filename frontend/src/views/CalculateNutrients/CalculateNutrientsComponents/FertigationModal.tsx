@@ -17,7 +17,7 @@ type AddFertigationModalProps = {
   onCancel: () => void;
 };
 
-export default function FertilizerModal({
+export default function FertigationModal({
   initialModalData,
   // rowEditIndex,
   // setFieldList,

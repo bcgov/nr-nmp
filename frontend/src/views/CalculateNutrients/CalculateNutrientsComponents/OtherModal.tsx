@@ -1,36 +1,68 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import Form from '@/components/common/Form/Form';
-import { OtherFormData } from '@/types';
+import { NMPFileFieldData, NMPFileOtherNutrient } from '@/types';
 import { ModalContent, SectionTitle } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { EMPTY_NUTRIENT_COLUMNS } from '@/constants';
 
 type OtherModalProps = {
-  initialModalData: OtherFormData | undefined;
+  fieldIndex: number;
+  initialModalData: NMPFileOtherNutrient | undefined;
   rowEditIndex: number | undefined;
+  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
 };
 
-const defaultFormData: OtherFormData = {
+const defaultFormData: NMPFileOtherNutrient = {
   name: '',
-  nutrients: { ...EMPTY_NUTRIENT_COLUMNS },
+  reqN: 0,
+  reqP2o5: 0,
+  reqK2o: 0,
+  remN: 0,
+  remP2o5: 0,
+  remK2o: 0,
 };
 
 export default function OtherModal({
+  fieldIndex,
   initialModalData,
-  // rowEditIndex,
-  // setNutrientRows, // Hypothetical function for setting the rows
+  rowEditIndex,
+  setFields,
   onClose,
   ...props
 }: OtherModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState(initialModalData || defaultFormData);
 
   const handleSubmit = () => {
+    setFields((prevFields) => {
+      const newFields = prevFields.map((prev, index) => {
+        if (index !== fieldIndex) return prev;
+
+        if (rowEditIndex !== undefined) {
+          const newOther = [...prev.OtherNutrients];
+          newOther[rowEditIndex] = { ...formData };
+          return { ...prev, OtherNutrients: newOther };
+        }
+
+        // For case where this is a new nutrient source
+        return {
+          ...prev,
+          OtherNutrients: [
+            ...prev.OtherNutrients,
+            {
+              ...formData,
+            },
+          ],
+        };
+      });
+
+      return newFields;
+    });
+
     onClose();
   };
 
@@ -39,16 +71,8 @@ export default function OtherModal({
     setFormData((prev) => ({ ...prev, name: newName }));
   };
 
-  const handleNutrientChange = (
-    type: 'agronomic' | 'cropRemoval',
-    nutrient: 'N' | 'P2O5' | 'K2O',
-    value: string,
-  ) => {
-    setFormData((prev) => {
-      const newNutrients = { ...prev.nutrients };
-      newNutrients[type][nutrient] = Number(value);
-      return { name: prev.name, nutrients: newNutrients };
-    });
+  const handleNutrientChange = (prop: keyof NMPFileOtherNutrient, value: string) => {
+    setFormData((prev) => ({ ...prev, [prop]: Number(value) }));
   };
 
   return (
@@ -85,8 +109,9 @@ export default function OtherModal({
                 <TextField
                   isRequired
                   type="number"
-                  value={formData.nutrients.agronomic.N.toString()}
-                  onChange={(v) => handleNutrientChange('agronomic', 'N', v)}
+                  aria-label="N"
+                  value={formData.reqN.toString()}
+                  onChange={(v) => handleNutrientChange('reqN', v)}
                 />
               </Grid>
               <Grid size="grow">
@@ -96,8 +121,9 @@ export default function OtherModal({
                 <TextField
                   isRequired
                   type="number"
-                  value={formData.nutrients.agronomic.P2O5.toString()}
-                  onChange={(v) => handleNutrientChange('agronomic', 'P2O5', v)}
+                  aria-label="P2O5"
+                  value={formData.reqP2o5.toString()}
+                  onChange={(v) => handleNutrientChange('reqP2o5', v)}
                 />
               </Grid>
               <Grid size="grow">
@@ -107,8 +133,9 @@ export default function OtherModal({
                 <TextField
                   isRequired
                   type="number"
-                  value={formData.nutrients.agronomic.K2O.toString()}
-                  onChange={(v) => handleNutrientChange('agronomic', 'K2O', v)}
+                  aria-label="K2O"
+                  value={formData.reqK2o.toString()}
+                  onChange={(v) => handleNutrientChange('reqK2o', v)}
                 />
               </Grid>
             </Grid>
@@ -121,8 +148,9 @@ export default function OtherModal({
                 <TextField
                   isRequired
                   type="number"
-                  value={formData.nutrients.cropRemoval.N.toString()}
-                  onChange={(v) => handleNutrientChange('cropRemoval', 'N', v)}
+                  aria-label="N"
+                  value={formData.remN.toString()}
+                  onChange={(v) => handleNutrientChange('remN', v)}
                 />
               </Grid>
               <Grid size="grow">
@@ -132,8 +160,9 @@ export default function OtherModal({
                 <TextField
                   isRequired
                   type="number"
-                  value={formData.nutrients.cropRemoval.P2O5.toString()}
-                  onChange={(v) => handleNutrientChange('cropRemoval', 'P2O5', v)}
+                  aria-label="P2O5"
+                  value={formData.remP2o5.toString()}
+                  onChange={(v) => handleNutrientChange('remP2o5', v)}
                 />
               </Grid>
               <Grid size="grow">
@@ -143,8 +172,9 @@ export default function OtherModal({
                 <TextField
                   isRequired
                   type="number"
-                  value={formData.nutrients.cropRemoval.K2O.toString()}
-                  onChange={(v) => handleNutrientChange('cropRemoval', 'K2O', v)}
+                  aria-label="K2O"
+                  value={formData.remK2o.toString()}
+                  onChange={(v) => handleNutrientChange('remK2o', v)}
                 />
               </Grid>
             </Grid>

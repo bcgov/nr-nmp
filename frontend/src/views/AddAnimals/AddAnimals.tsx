@@ -5,7 +5,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
@@ -47,16 +48,16 @@ export default function AddAnimals() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleEditRow = React.useCallback((e: { row: AnimalData }) => {
-    setRowEditIndex(e.row.index);
+  const handleEditRow = React.useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
+    setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
     setIsDialogOpen(true);
   }, []);
 
-  const handleDeleteRow = (e: { row: AnimalData }) => {
+  const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
     setAnimalList((prev) => {
-      const deleteSpot = prev.findIndex((elem) => elem.index === e.row.index);
+      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
       const newList = [...prev];
-      newList.splice(deleteSpot, 1);
+      newList.splice(index, 1);
       return newList;
     });
   };
@@ -152,11 +153,7 @@ export default function AddAnimals() {
         </div>
         {isDialogOpen && (
           <AddAnimalsModal
-            initialModalData={
-              rowEditIndex !== undefined
-                ? animalList.find((v) => v.index === rowEditIndex)
-                : undefined
-            }
+            initialModalData={rowEditIndex !== undefined ? animalList[rowEditIndex] : undefined}
             rowEditIndex={rowEditIndex}
             setAnimalList={setAnimalList}
             isOpen={isDialogOpen}
@@ -173,7 +170,7 @@ export default function AddAnimals() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={animalList}
         columns={columns}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

@@ -9,7 +9,7 @@ export interface NutrientMessage {
   RemBalanceHigh: number;
 }
 
-export const nutrientMessages: NutrientMessage[] = [
+export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   {
     Id: 1,
     Text: 'Reduce N input by {0} lb/ac',

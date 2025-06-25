@@ -10,15 +10,15 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './crops.styles';
-import { NMPFileCropData, NMPFileFieldData } from '@/types';
+import { NMPFileFieldData } from '@/types';
 import { CALCULATE_NUTRIENTS, SOIL_TESTS, FARM_INFORMATION } from '@/constants/routes';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import CropsModal from './CropsModal';
-import defaultNMPFileCropsData from '@/constants/DefaultNMPFileCropsData';
 
 function Crops() {
   const { state, dispatch } = useAppState();
@@ -31,24 +31,18 @@ function Crops() {
     return region;
   }, []);
   const [editingFieldIndex, setEditingFieldIndex] = useState<number>(0);
-  const [editingCropIndex, setEditingCropIndex] = useState<number>(0);
+  const [editingCropIndex, setEditingCropIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [modalMode, setModalMode] = useState<string>('Add Field');
-  const [initialModalData, setInitialModalData] = useState<NMPFileCropData>({
-    ...defaultNMPFileCropsData,
-    index: editingCropIndex,
-  });
 
-  const handleEditCrop = (fieldIndex: number, cropIndex: number) => {
-    setEditingFieldIndex(fieldIndex);
+  const handleEditCrop = (e: { id: GridRowId; api: GridApiCommunity }, cropIndex: number) => {
+    setEditingFieldIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
     setEditingCropIndex(cropIndex);
-    setInitialModalData(fields[editingFieldIndex].Crops[editingCropIndex]);
-    setModalMode('Edit');
     setIsDialogOpen(true);
   };
 
-  const handleDeleteCrop = (fieldIndex: number, cropIndex: number) => {
+  const handleDeleteCrop = (e: { id: GridRowId; api: GridApiCommunity }, cropIndex: number) => {
     setFields((prev) => {
+      const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
       const newFieldsList = [...prev];
       newFieldsList[fieldIndex].Crops.splice(cropIndex, 1);
       return newFieldsList;
@@ -73,18 +67,13 @@ function Crops() {
     setEditingCropIndex(0);
   };
 
-  const createNewCrop = (index: number) => ({
-    ...defaultNMPFileCropsData,
-    index,
-  });
-
   // each field can have up to 2 crops, render another add crop button after first crop inputted
   const fieldColumns: GridColDef[] = [
     { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
     {
       field: 'Crops1',
       headerName: 'Crop 1',
-      valueGetter: (_value, row) => row?.Crops?.[0]?.cropName || '',
+      valueGetter: (_value, row) => row?.Crops?.[0]?.name || '',
       width: 170,
       minWidth: 100,
       maxWidth: 300,
@@ -93,8 +82,8 @@ function Crops() {
       field: 'ActionsCrop1',
       headerName: 'Actions',
       width: 150,
-      renderCell: (cell) => {
-        const fieldIndex = parseInt(cell?.row?.index, 10);
+      renderCell: (e) => {
+        const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
         const crop = fields[fieldIndex]?.Crops?.[0];
 
         return (
@@ -103,12 +92,12 @@ function Crops() {
               <>
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={() => handleEditCrop(fieldIndex, 0)}
+                  onClick={() => handleEditCrop(e, 0)}
                   icon={faEdit}
                 />
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={() => handleDeleteCrop(fieldIndex, 0)}
+                  onClick={() => handleDeleteCrop(e, 0)}
                   icon={faTrash}
                 />
               </>
@@ -118,8 +107,8 @@ function Crops() {
                 size="small"
                 onClick={() => {
                   setEditingFieldIndex(fieldIndex);
-                  setEditingCropIndex(0);
-                  setModalMode('Add');
+                  // Set editing index to undefined because this is a new crop
+                  setEditingCropIndex(undefined);
                   setIsDialogOpen(true);
                 }}
               >
@@ -135,7 +124,7 @@ function Crops() {
     {
       field: 'Crops2',
       headerName: 'Crop 2',
-      valueGetter: (_value, row) => row?.Crops?.[1]?.cropName || '',
+      valueGetter: (_value, row) => row?.Crops?.[1]?.name || '',
       width: 170,
       minWidth: 100,
       maxWidth: 300,
@@ -145,8 +134,8 @@ function Crops() {
       field: 'ActionsCrop2',
       headerName: 'Actions',
       width: 200,
-      renderCell: (cell) => {
-        const fieldIndex = parseInt(cell?.row?.index, 10);
+      renderCell: (e) => {
+        const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
         const rowHasCrop = !!fields[fieldIndex]?.Crops?.[0];
         const crop = fields[fieldIndex]?.Crops[1];
 
@@ -158,12 +147,12 @@ function Crops() {
               <>
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={() => handleEditCrop(fieldIndex, 1)}
+                  onClick={() => handleEditCrop(e, 1)}
                   icon={faEdit}
                 />
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={() => handleDeleteCrop(fieldIndex, 1)}
+                  onClick={() => handleDeleteCrop(e, 1)}
                   icon={faTrash}
                 />
               </>
@@ -173,8 +162,8 @@ function Crops() {
                 size="small"
                 onClick={() => {
                   setEditingFieldIndex(fieldIndex);
-                  setEditingCropIndex(1);
-                  setModalMode('Add');
+                  // Set editing index to undefined because this is a new crop
+                  setEditingCropIndex(undefined);
                   setIsDialogOpen(true);
                 }}
               >
@@ -201,13 +190,15 @@ function Crops() {
       {editingFieldIndex !== null && isDialogOpen && (
         // affter editing in modal changes not showing on reopen
         <CropsModal
-          mode={modalMode}
           farmRegion={farmRegion}
           field={fields[editingFieldIndex]}
           fieldIndex={editingFieldIndex}
+          cropIndex={editingCropIndex}
           setFields={setFields}
           initialModalData={
-            modalMode === 'Add' ? createNewCrop(editingCropIndex) : initialModalData
+            editingCropIndex !== undefined
+              ? fields[editingFieldIndex].Crops[editingCropIndex]
+              : undefined
           }
           onClose={handleDialogClose}
           isOpen={isDialogOpen}
@@ -217,7 +208,7 @@ function Crops() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={fields}
         columns={fieldColumns}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

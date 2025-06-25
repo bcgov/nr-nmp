@@ -226,7 +226,7 @@ export default function NutrientAnalysis() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={nutrientAnalysisData.map((ele) => ({ ...ele, ...ele.Nutrients }))}
         columns={nutrientTableColumns}
-        getRowId={(row: any) => row.ManureSource}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
