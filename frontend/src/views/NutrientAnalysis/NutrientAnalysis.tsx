@@ -139,14 +139,14 @@ export default function NutrientAnalysis() {
       },
       {
         headerName: 'P (%)',
-        field: 'P',
+        field: 'P2O5',
         width: 100,
         minWidth: 100,
         maxWidth: 300,
       },
       {
         headerName: 'K (%)',
-        field: 'K',
+        field: 'K2O',
         width: 100,
         minWidth: 100,
         maxWidth: 300,
