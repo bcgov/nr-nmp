@@ -63,7 +63,9 @@ export default function NutrientAnalysisModal({
     handleSubmit(formData);
   };
 
-  const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
+  const handleInputChanges = (
+    changes: Partial<NMPFileFarmManureData> | Partial<ManureNutrients>,
+  ) => {
     setFormData((prev: NMPFileFarmManureData): NMPFileFarmManureData => {
       let next = { ...prev };
       Object.entries(changes).forEach(([name, value]) => {
@@ -119,7 +121,7 @@ export default function NutrientAnalysisModal({
         if (name in next.Nutrients) {
           next.Nutrients = {
             ...next.Nutrients,
-            [name]: value === '' ? '' : Number(value),
+            [name]: value,
           };
         }
       });
@@ -233,7 +235,7 @@ export default function NutrientAnalysisModal({
               type="number"
               value={formData?.Nutrients?.N?.toString()}
               onChange={(e: string) => {
-                handleInputChanges({ N: e });
+                handleInputChanges({ N: Number(e) });
               }}
               maxLength={3}
             />
@@ -247,7 +249,7 @@ export default function NutrientAnalysisModal({
               type="number"
               value={formData?.Nutrients?.NH4N?.toString()}
               onChange={(e: string) => {
-                handleInputChanges({ NH4N: e });
+                handleInputChanges({ NH4N: Number(e) });
               }}
               maxLength={3}
             />
@@ -257,11 +259,11 @@ export default function NutrientAnalysisModal({
               isDisabled={formData?.BookLab !== 'lab'}
               isRequired={formData?.BookLab === 'lab'}
               label="P (%)"
-              name="P"
+              name="P2O5"
               type="number"
               value={formData?.Nutrients?.P2O5?.toString()}
               onChange={(e: string) => {
-                handleInputChanges({ P: e });
+                handleInputChanges({ P2O5: Number(e) });
               }}
               maxLength={3}
             />
@@ -271,11 +273,11 @@ export default function NutrientAnalysisModal({
               isDisabled={formData?.BookLab !== 'lab'}
               isRequired={formData?.BookLab === 'lab'}
               label="K (%)"
-              name="K"
+              name="K2O"
               type="number"
               value={formData?.Nutrients?.K2O?.toString()}
               onChange={(e: string) => {
-                handleInputChanges({ K: e });
+                handleInputChanges({ K2O: Number(e) });
               }}
               maxLength={3}
             />
