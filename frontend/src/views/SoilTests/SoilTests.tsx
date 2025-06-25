@@ -436,7 +436,7 @@ export default function SoilTests() {
         </Grid>
       </Grid>
 
-      {soilTestId && (
+      {soilTestId !== 0 && (
         <DataGrid
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
           rows={fields}
