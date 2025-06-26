@@ -137,17 +137,19 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
 
   if (action.type === 'SAVE_FARM_DETAILS') {
     // Years *is* an array, but we don't like that and cheat to make it a single-value array
-    if (action.newFarmDetails.Year === newAppState.nmpFile.years[0].Year) {
-      if (
-        action.newFarmDetails.FarmAnimals === undefined ||
-        action.newFarmDetails.FarmAnimals.length === 0
-      ) {
-        // Clear the animals array if animals have been removed
-        saveAnimals(newAppState.nmpFile.years[0], []);
-      }
-    } else {
-      // Replace the years array with a blank year
+    // Make new blank year if no year exists or if we have a different year saved
+    if (
+      newAppState.nmpFile.years.length === 0 ||
+      action.newFarmDetails.Year !== newAppState.nmpFile.years[0].Year
+    ) {
       newAppState.nmpFile.years = [{ ...DEFAULT_NMPFILE_YEAR, Year: action.newFarmDetails.Year }];
+      // Otherwise, keep the existing year and edit as necessary
+    } else if (
+      action.newFarmDetails.FarmAnimals === undefined ||
+      action.newFarmDetails.FarmAnimals.length === 0
+    ) {
+      // Clear the animals array if animals have been removed
+      saveAnimals(newAppState.nmpFile.years[0], []);
     }
     newAppState.nmpFile.farmDetails = structuredClone(action.newFarmDetails);
     saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
