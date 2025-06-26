@@ -1,4 +1,4 @@
-import NMPFile from './NMPFile';
+import { NMPFile } from './NMPFile';
 
 type AppState = {
   nmpFile: NMPFile;
