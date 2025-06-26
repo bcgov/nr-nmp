@@ -36,7 +36,7 @@ import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 import CropsModal from '../Crops/CropsModal.tsx';
 
 export default function CalculateNutrients() {
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
   const [openDialog, setOpenDialog] = useState<[string, number | undefined]>(['', undefined]);
   const [showViewError, setShowViewError] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
@@ -127,6 +127,11 @@ export default function CalculateNutrients() {
 
   const handleNextPage = () => {
     setShowViewError('');
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.Year!,
+      newFields: fieldList,
+    });
 
     navigate(REPORTING);
   };
@@ -427,6 +432,11 @@ export default function CalculateNutrients() {
           aria-label="Back"
           variant="secondary"
           onPress={() => {
+            dispatch({
+              type: 'SAVE_FIELDS',
+              year: state.nmpFile.farmDetails.Year!,
+              newFields: fieldList,
+            });
             if (activeField > 0) {
               setActiveField(activeField - 1);
             } else {
