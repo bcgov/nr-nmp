@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { DEFAULT_NMPFILE, NMP_FILE_KEY } from '@/constants';
+import { DEFAULT_NMPFILE, DEFAULT_NMPFILE_YEAR, NMP_FILE_KEY } from '@/constants';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import {
   NMPFileFieldData,
@@ -12,6 +12,7 @@ import {
   NMPFileGeneratedManureData,
   AppState,
   NMPFile,
+  NMPFileFarmDetails,
 } from '@/types';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
@@ -19,6 +20,11 @@ import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
 type SetShowAnimalsStepAction = {
   type: 'SET_SHOW_ANIMALS_STEP';
   showAnimalsStep: boolean;
+};
+
+type SaveFarmDetailsAction = {
+  type: 'SAVE_FARM_DETAILS';
+  newFarmDetails: NMPFileFarmDetails;
 };
 
 type SaveFieldsAction = {
@@ -61,6 +67,7 @@ type ResetNMPFileAction = {
 
 export type AppStateAction =
   | SetShowAnimalsStepAction
+  | SaveFarmDetailsAction
   | SaveFieldsAction
   | SaveFarmManureAction
   | SaveImportedManureAction
@@ -110,23 +117,44 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   // This allows us to clone the state and then edit it in-place
   const newAppState = structuredClone(state);
 
-  // First check is this action doesn't involve changing the NMPFile
+  // These actions alter more than the NMPFile years array
   if (action.type === 'SET_SHOW_ANIMALS_STEP') {
     newAppState.showAnimalsStep = action.showAnimalsStep;
     return newAppState;
   }
+
   if (action.type === 'OVERWRITE_NMPFILE') {
     newAppState.nmpFile = structuredClone(action.newFile);
     saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
     return newAppState;
   }
+
   if (action.type === 'RESET_NMPFILE') {
     newAppState.nmpFile = structuredClone(DEFAULT_NMPFILE);
     saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
     return newAppState;
   }
 
-  // Everything else sets the NMPFile
+  if (action.type === 'SAVE_FARM_DETAILS') {
+    // Years *is* an array, but we don't like that and cheat to make it a single-value array
+    if (action.newFarmDetails.Year === newAppState.nmpFile.years[0].Year) {
+      if (
+        action.newFarmDetails.FarmAnimals === undefined ||
+        action.newFarmDetails.FarmAnimals.length === 0
+      ) {
+        // Clear the animals array if animals have been removed
+        saveAnimals(newAppState.nmpFile.years[0], []);
+      }
+    } else {
+      // Replace the years array with a blank year
+      newAppState.nmpFile.years = [{ ...DEFAULT_NMPFILE_YEAR, Year: action.newFarmDetails.Year }];
+    }
+    newAppState.nmpFile.farmDetails = structuredClone(action.newFarmDetails);
+    saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
+    return newAppState;
+  }
+
+  // These actions alter one index of the NMPFile years array
   // Remember: all the below steps edit the NMPFile in-place! So functions don't return anything
   const year = newAppState.nmpFile.years.find((y) => y.Year === action.year);
   if (year === undefined) throw new Error(`Reducer received nonexistent year: ${action.year}`);

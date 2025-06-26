@@ -14,8 +14,9 @@ import {
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import type { Key } from 'react-aria-components';
+
 import useAppState from '@/hooks/useAppState';
-import NMPFile from '@/types/NMPFile';
+import { NMPFileFarmDetails } from '@/types/NMPFile';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import {
   formCss,
@@ -26,10 +27,8 @@ import {
 import { StyledContent, subHeader } from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ADD_ANIMALS, FIELD_LIST, LANDING_PAGE } from '@/constants/routes';
-
 import { SelectOption } from '../../types';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import DEFAULT_NMPFILE_YEAR from '@/constants/DefaultNMPFileYear';
 
 export default function FarmInformation() {
   const { state, dispatch } = useAppState();
@@ -37,16 +36,22 @@ export default function FarmInformation() {
   const apiCache = useContext(APICacheContext);
 
   // Initialize non-bool values to prevent errors on first render
-  const [formData, setFormData] = useState<{ [name: string]: any }>({
-    Year: '',
-    FarmName: '',
-    FarmRegion: 0,
-    FarmSubRegion: null,
-    FarmAnimals: [],
+  const [formData, setFormData] = useState<NMPFileFarmDetails>({
+    Year: state.nmpFile.farmDetails.Year || '',
+    FarmName: state.nmpFile.farmDetails.FarmName || '',
+    FarmRegion: state.nmpFile.farmDetails.FarmRegion || 0,
+    FarmSubRegion: state.nmpFile.farmDetails.FarmSubRegion || null,
+    FarmAnimals: state.nmpFile.farmDetails.FarmAnimals || [],
+    HasVegetables: state.nmpFile.farmDetails.HasVegetables || false,
+    HasBerries: state.nmpFile.farmDetails.HasBerries || false,
+    HasHorticulturalCrops: state.nmpFile.farmDetails.HasHorticulturalCrops || false,
   });
 
   // Props for animal selections
-  const [hasAnimals, setHasAnimals] = useState<boolean>(false);
+  const [hasAnimals, setHasAnimals] = useState<boolean>(
+    state.nmpFile.farmDetails.FarmAnimals !== undefined &&
+      state.nmpFile.farmDetails.FarmAnimals.length > 0,
+  );
   const [rawAnimalNames, setRawAnimalNames] = useState<{ [id: string]: string }>({});
 
   // Props for region selections
@@ -66,24 +71,6 @@ export default function FarmInformation() {
 
     return yearArray;
   }, []);
-
-  // Flagging for potential state issues if the state.nmpFile object can change
-  useEffect(() => {
-    setFormData({
-      Year: state.nmpFile.farmDetails.Year || '',
-      FarmName: state.nmpFile.farmDetails.FarmName || '',
-      FarmRegion: state.nmpFile.farmDetails.FarmRegion || 0,
-      FarmSubRegion: state.nmpFile.farmDetails.FarmSubRegion || null,
-      FarmAnimals: state.nmpFile.farmDetails.FarmAnimals || [],
-      HasVegetables: state.nmpFile.farmDetails.HasVegetables || false,
-      HasBerries: state.nmpFile.farmDetails.HasBerries || false,
-      HasHorticulturalCrops: state.nmpFile.farmDetails.HasHorticulturalCrops || false,
-    });
-    setHasAnimals(
-      state.nmpFile.farmDetails.FarmAnimals !== undefined &&
-        state.nmpFile.farmDetails.FarmAnimals.length > 0,
-    );
-  }, [state.nmpFile]);
 
   useEffect(() => {
     // No error handling yet as I'm unsure how NMP is supposed to handle errors
@@ -179,18 +166,9 @@ export default function FarmInformation() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
+    dispatch({ type: 'SAVE_FARM_DETAILS', newFarmDetails: formData });
 
-    const nmpFile: NMPFile = { ...state.nmpFile };
-
-    // TODO: Investigate bug where hitting back on Add Animals and then next on Farm Information gets rid of the animals
-    nmpFile.farmDetails = { ...nmpFile.farmDetails, ...formData };
-    const year = { ...DEFAULT_NMPFILE_YEAR, Year: formData.Year };
-    // Ideally we only need to deal with one year, add back if Josh says we need to support multiple
-    // nmpFile.years.push(year);
-    nmpFile.years = [year];
-    dispatch({ type: 'OVERWRITE_NMPFILE', newFile: nmpFile });
-
-    if (formData.FarmAnimals.length === 0) {
+    if (formData.FarmAnimals === undefined || formData.FarmAnimals.length === 0) {
       dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: false });
       navigate(FIELD_LIST);
     } else {
