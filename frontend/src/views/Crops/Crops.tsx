@@ -16,7 +16,12 @@ import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './crops.styles';
 import { NMPFileFieldData } from '@/types';
-import { CALCULATE_NUTRIENTS, SOIL_TESTS, FARM_INFORMATION } from '@/constants/routes';
+import {
+  CALCULATE_NUTRIENTS,
+  SOIL_TESTS,
+  FARM_INFORMATION,
+  MANURE_IMPORTS,
+} from '@/constants/routes';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import CropsModal from './CropsModal';
 
@@ -49,16 +54,20 @@ function Crops() {
     });
   };
 
-  const handleNext = () => {
+  const handleNextPage = () => {
     if (!state.nmpFile.farmDetails.Year) {
       // We should show an error popup, but for now force-navigate back to Farm Information
       navigate(FARM_INFORMATION);
     }
     dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
-    navigate(CALCULATE_NUTRIENTS);
+    if (!state.showAnimalsStep) {
+      navigate(MANURE_IMPORTS);
+    } else {
+      navigate(CALCULATE_NUTRIENTS);
+    }
   };
 
-  const handlePrevious = () => {
+  const handlePreviousPage = () => {
     navigate(SOIL_TESTS);
   };
 
@@ -224,7 +233,7 @@ function Crops() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onClick={handlePrevious}
+          onClick={handlePreviousPage}
         >
           BACK
         </Button>
@@ -232,7 +241,7 @@ function Crops() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onClick={handleNext}
+          onClick={handleNextPage}
           type="submit"
         >
           Next

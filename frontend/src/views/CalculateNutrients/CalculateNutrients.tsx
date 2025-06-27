@@ -13,7 +13,7 @@ import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { CROPS, REPORTING } from '@/constants/routes';
+import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
 import { customTableStyle } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
@@ -134,6 +134,23 @@ export default function CalculateNutrients() {
     });
 
     navigate(REPORTING);
+  };
+
+  const handlePreviousPage = () => {
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.Year!,
+      newFields: fieldList,
+    });
+    if (activeField > 0) {
+      setActiveField(activeField - 1);
+    }
+
+    if (!state.showAnimalsStep) {
+      navigate(NUTRIENT_ANALYSIS);
+    } else {
+      navigate(CROPS);
+    }
   };
 
   const customCalcTableStyle = {
@@ -431,18 +448,7 @@ export default function CalculateNutrients() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={() => {
-            dispatch({
-              type: 'SAVE_FIELDS',
-              year: state.nmpFile.farmDetails.Year!,
-              newFields: fieldList,
-            });
-            if (activeField > 0) {
-              setActiveField(activeField - 1);
-            } else {
-              navigate(CROPS);
-            }
-          }}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>

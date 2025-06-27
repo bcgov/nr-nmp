@@ -2,7 +2,7 @@
  * @summary The nutrient analysis tab on the manure page for the application
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { StyledContent } from './nutrientAnalsysis.styles';
 import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
-import { MANURE_IMPORTS, FIELD_LIST, STORAGE } from '@/constants/routes';
+import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -45,20 +45,6 @@ export default function NutrientAnalysis() {
     [state.nmpFile.years],
   );
 
-  const activeTab = useMemo(() => (hasDairyCattle ? 3 : 2), [hasDairyCattle]);
-  const tabs = useMemo(
-    () =>
-      hasDairyCattle
-        ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
-        : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
-    [hasDairyCattle],
-  );
-
-  useEffect(() => {
-    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleEdit = (name: string) => {
     setEditName(name);
     setAnalysisForm(nutrientAnalysisData.find((ele) => ele.ManureSource === name));
@@ -89,21 +75,25 @@ export default function NutrientAnalysis() {
     setEditName(null);
   };
 
-  const handlePrevious = () => {
-    if (hasDairyCattle) {
-      navigate(STORAGE);
-    } else {
-      navigate(MANURE_IMPORTS);
-    }
-  };
-
-  const handleNext = () => {
+  const handleNextPage = () => {
     dispatch({
       type: 'SAVE_FARM_MANURE',
       year: state.nmpFile.farmDetails.Year!,
       newManures: nutrientAnalysisData,
     });
-    navigate(FIELD_LIST);
+    if (!state.showAnimalsStep) {
+      navigate(CALCULATE_NUTRIENTS);
+    } else {
+      navigate(FIELD_LIST);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (hasDairyCattle) {
+      navigate(STORAGE);
+    } else {
+      navigate(MANURE_IMPORTS);
+    }
   };
 
   const nutrientTableColumns: GridColDef[] = useMemo(
@@ -218,10 +208,22 @@ export default function NutrientAnalysis() {
           modalStyle={{ width: '700px' }}
         />
       )}
-      <TabsMaterial
-        activeTab={activeTab}
-        tabLabel={tabs}
-      />
+      {state.showAnimalsStep && hasDairyCattle ? (
+        <TabsMaterial
+          activeTab={3}
+          tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+        />
+      ) : state.showAnimalsStep ? (
+        <TabsMaterial
+          activeTab={2}
+          tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+        />
+      ) : (
+        <TabsMaterial
+          activeTab={1}
+          tabLabel={['Manure & Imports', 'Nutrient Analysis']}
+        />
+      )}
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={nutrientAnalysisData.map((ele) => ({ ...ele, ...ele.Nutrients }))}
@@ -241,7 +243,7 @@ export default function NutrientAnalysis() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={handlePrevious}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>
@@ -249,7 +251,7 @@ export default function NutrientAnalysis() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onPress={handleNext}
+          onPress={handleNextPage}
           type="submit"
         >
           Next
