@@ -13,7 +13,7 @@ import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { CROPS, REPORTING } from '@/constants/routes';
+import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
 import { customTableStyle } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
@@ -34,6 +34,7 @@ import {
 } from './utils.tsx';
 import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 import CropsModal from '../Crops/CropsModal.tsx';
+import { AnimalData } from '@/types/Animals.ts';
 
 export default function CalculateNutrients() {
   const { state } = useAppState();
@@ -41,6 +42,7 @@ export default function CalculateNutrients() {
   const [showViewError, setShowViewError] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
+  const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
   const navigate = useNavigate();
 
@@ -129,6 +131,18 @@ export default function CalculateNutrients() {
     setShowViewError('');
 
     navigate(REPORTING);
+  };
+
+  const handlePreviousPage = () => {
+    if (activeField > 0) {
+      setActiveField(activeField - 1);
+    }
+
+    if (animalList.length === 0) {
+      navigate(NUTRIENT_ANALYSIS);
+    } else {
+      navigate(CROPS);
+    }
   };
 
   const customCalcTableStyle = {
@@ -426,13 +440,7 @@ export default function CalculateNutrients() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={() => {
-            if (activeField > 0) {
-              setActiveField(activeField - 1);
-            } else {
-              navigate(CROPS);
-            }
-          }}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>

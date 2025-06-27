@@ -26,7 +26,7 @@ import {
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
 import useAppState from '@/hooks/useAppState';
-import { ADD_ANIMALS, FARM_INFORMATION, NUTRIENT_ANALYSIS } from '@/constants/routes';
+import { ADD_ANIMALS, CROPS, FARM_INFORMATION, NUTRIENT_ANALYSIS } from '@/constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -124,13 +124,10 @@ export default function ManureAndImports() {
   };
 
   const handlePrevious = () => {
-    if (
-      state.nmpFile.years[0]?.FarmAnimals !== undefined &&
-      state.nmpFile.years[0].FarmAnimals.length > 0
-    ) {
+    if (animalList.length > 0) {
       navigate(ADD_ANIMALS);
     } else {
-      navigate(FARM_INFORMATION);
+      navigate(CROPS);
     }
   };
 
