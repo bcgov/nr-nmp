@@ -33,6 +33,7 @@ import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/c
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
 
+// Create a new component for crops manure and imports for now
 export default function ManureAndImports() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
@@ -148,7 +149,7 @@ export default function ManureAndImports() {
 
   useEffect(() => {
     // Load animals step to progress stepper
-    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
+    // dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
 
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
@@ -307,7 +308,11 @@ export default function ManureAndImports() {
     <StyledContent>
       <ProgressStepper />
       <AppTitle />
-      <PageTitle title="Manure & Imports" />
+      {animalList.length > 0 ? (
+        <PageTitle title="Animals and Manure" />
+      ) : (
+        <PageTitle title="Manure and Compost" />
+      )}
       <>
         <div css={addRecordGroupStyle}>
           <ButtonGovGroup
@@ -335,21 +340,30 @@ export default function ManureAndImports() {
           onOpenChange={handleDialogClose}
           isDismissable
         />
-        <TabsMaterial
-          activeTab={1}
-          tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
-        />
+        {animalList.length > 0 ? (
+          <TabsMaterial
+            activeTab={1}
+            tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+          />
+        ) : (
+          <TabsMaterial
+            activeTab={0}
+            tabLabel={['Manure & Imports', 'Nutrient Analysis']}
+          />
+        )}
       </>
-      <DataGrid
-        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={animalList}
-        columns={columnsAnimalManure}
-        getRowId={() => crypto.randomUUID()}
-        disableRowSelectionOnClick
-        disableColumnMenu
-        hideFooterPagination
-        hideFooter
-      />
+      {animalList.length > 0 ? (
+        <DataGrid
+          sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+          rows={animalList}
+          columns={columnsAnimalManure}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          hideFooterPagination
+          hideFooter
+        />
+      ) : null}
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={manures}

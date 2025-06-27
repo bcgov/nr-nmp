@@ -10,9 +10,9 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './nutrientAnalsysis.styles';
-import { NMPFileImportedManureData } from '@/types';
+import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
-import { MANURE_IMPORTS, FIELD_LIST } from '@/constants/routes';
+import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS } from '@/constants/routes';
 import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -20,6 +20,7 @@ import NutrientAnalysisModal from './NutrientAnalysisModal';
 
 export default function NutrientAnalysis() {
   const { state, dispatch } = useAppState();
+  const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
   const manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[] = useMemo(
     () =>
@@ -79,7 +80,11 @@ export default function NutrientAnalysis() {
       year: state.nmpFile.farmDetails.Year!,
       newManures: nutrientAnalysisData,
     });
-    navigate(FIELD_LIST);
+    if (animalList.length === 0) {
+      navigate(CALCULATE_NUTRIENTS);
+    } else {
+      navigate(FIELD_LIST);
+    }
   };
 
   const nutrientTableColumns: GridColDef[] = useMemo(
@@ -194,10 +199,17 @@ export default function NutrientAnalysis() {
           modalStyle={{ width: '700px' }}
         />
       )}
-      <TabsMaterial
-        activeTab={2}
-        tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
-      />
+      {animalList.length > 0 ? (
+        <TabsMaterial
+          activeTab={2}
+          tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+        />
+      ) : (
+        <TabsMaterial
+          activeTab={1}
+          tabLabel={['Manure & Imports', 'Nutrient Analysis']}
+        />
+      )}
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={nutrientAnalysisData.map((ele) => ({ ...ele, ...ele.Nutrients }))}

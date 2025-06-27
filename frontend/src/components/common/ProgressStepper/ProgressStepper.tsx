@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -20,59 +20,48 @@ import {
   REPORTING,
 } from '@/constants/routes';
 
-const stepsWithAnimals = [
-  'Home',
-  'Farm Information',
-  'Animals and Manure',
-  'Fields and Soil',
-  'Calculate Nutrients',
-  'Reporting',
-];
-
-const stepsWithoutAnimals = [
-  'Home',
-  'Farm Information',
-  'Fields and Soil',
-  'Calculate Nutrients',
-  'Reporting',
-];
+interface StepConfig {
+  name: string;
+  paths: string[];
+}
 
 export default function ProgressStepper() {
   const { state } = useAppState();
   const { pathname } = useLocation();
 
-  const displayAnimalsStep = useCallback(() => {
+  const steps: StepConfig[] = useMemo(() => {
+    const baseSteps = [
+      { name: 'Home', paths: [LANDING_PAGE] },
+      { name: 'Farm Information', paths: [FARM_INFORMATION] },
+    ];
+
+    if (pathname === LANDING_PAGE || pathname === FARM_INFORMATION) {
+      return baseSteps;
+    }
+
     if (state.showAnimalsStep) {
-      return stepsWithAnimals;
-    }
-    return stepsWithoutAnimals;
-  }, [state.showAnimalsStep]);
-
-  const displayActiveStep = useCallback((): number | undefined => {
-    const animalStepIncrease = state.showAnimalsStep ? 1 : 0;
-
-    // eslint-disable-next-line default-case
-    switch (pathname) {
-      case LANDING_PAGE:
-        return 0;
-      case FARM_INFORMATION:
-        return 1;
-      case ADD_ANIMALS:
-      case MANURE_IMPORTS:
-      case NUTRIENT_ANALYSIS:
-        return 2;
-      case FIELD_LIST:
-      case SOIL_TESTS:
-      case CROPS:
-        return 2 + animalStepIncrease;
-      case CALCULATE_NUTRIENTS:
-        return 3 + animalStepIncrease;
-      case REPORTING:
-        return 4 + animalStepIncrease;
+      return [
+        ...baseSteps,
+        { name: 'Animals and Manure', paths: [ADD_ANIMALS, MANURE_IMPORTS, NUTRIENT_ANALYSIS] },
+        { name: 'Fields and Soil', paths: [FIELD_LIST, SOIL_TESTS, CROPS] },
+        { name: 'Calculate Nutrients', paths: [CALCULATE_NUTRIENTS] },
+        { name: 'Reporting', paths: [REPORTING] },
+      ];
     }
 
-    return undefined;
-  }, [pathname, state.showAnimalsStep]);
+    return [
+      ...baseSteps,
+      { name: 'Fields and Soil', paths: [FIELD_LIST, SOIL_TESTS, CROPS] },
+      { name: 'Manure and Compost', paths: [MANURE_IMPORTS, NUTRIENT_ANALYSIS] },
+      { name: 'Calculate Nutrients', paths: [CALCULATE_NUTRIENTS] },
+      { name: 'Reporting', paths: [REPORTING] },
+    ];
+  }, [state.showAnimalsStep, pathname]);
+
+  const activeStep = useMemo(
+    () => steps.findIndex((step) => step.paths.includes(pathname)),
+    [steps, pathname],
+  );
 
   return (
     <Box
@@ -84,15 +73,15 @@ export default function ProgressStepper() {
     >
       <Stepper
         sx={{ width: '100%' }}
-        activeStep={displayActiveStep()}
+        activeStep={activeStep}
         alternativeLabel
       >
-        {displayAnimalsStep().map((label) => (
+        {steps.map((step) => (
           <Step
             sx={{ paddingX: '0' }}
-            key={label}
+            key={step.name}
           >
-            <StepLabel>{label}</StepLabel>
+            <StepLabel>{step.name}</StepLabel>
           </Step>
         ))}
       </Stepper>
