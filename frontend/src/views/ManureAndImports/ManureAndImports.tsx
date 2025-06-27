@@ -137,7 +137,7 @@ export default function ManureAndImports() {
   };
 
   const handlePreviousPage = () => {
-    if (animalList.length > 0) {
+    if (state.showAnimalsStep) {
       navigate(ADD_ANIMALS);
     } else {
       navigate(CROPS);
@@ -145,9 +145,6 @@ export default function ManureAndImports() {
   };
 
   useEffect(() => {
-    // Load animals step to progress stepper
-    // dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
-
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
       .then((response: { status?: any; data: any }) => {
@@ -305,7 +302,7 @@ export default function ManureAndImports() {
     <StyledContent>
       <ProgressStepper />
       <AppTitle />
-      {animalList.length > 0 ? (
+      {state.showAnimalsStep ? (
         <PageTitle title="Animals and Manure" />
       ) : (
         <PageTitle title="Manure and Compost" />
@@ -337,7 +334,7 @@ export default function ManureAndImports() {
           onOpenChange={handleDialogClose}
           isDismissable
         />
-        {animalList.length > 0 ? (
+        {state.showAnimalsStep ? (
           <TabsMaterial
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
@@ -349,7 +346,7 @@ export default function ManureAndImports() {
           />
         )}
       </>
-      {animalList.length > 0 ? (
+      {state.showAnimalsStep ? (
         <DataGrid
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
           rows={animalList}

@@ -15,7 +15,7 @@ import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { StyledContent } from './crops.styles';
-import { AnimalData, NMPFileFieldData } from '@/types';
+import { NMPFileFieldData } from '@/types';
 import {
   CALCULATE_NUTRIENTS,
   SOIL_TESTS,
@@ -38,7 +38,6 @@ function Crops() {
   const [editingFieldIndex, setEditingFieldIndex] = useState<number>(0);
   const [editingCropIndex, setEditingCropIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
   const handleEditCrop = (e: { id: GridRowId; api: GridApiCommunity }, cropIndex: number) => {
     setEditingFieldIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
@@ -61,7 +60,7 @@ function Crops() {
       navigate(FARM_INFORMATION);
     }
     dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
-    if (animalList.length === 0) {
+    if (!state.showAnimalsStep) {
       navigate(MANURE_IMPORTS);
     } else {
       navigate(CALCULATE_NUTRIENTS);

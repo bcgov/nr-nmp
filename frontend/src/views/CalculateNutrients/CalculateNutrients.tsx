@@ -34,7 +34,6 @@ import {
 } from './utils.tsx';
 import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 import CropsModal from '../Crops/CropsModal.tsx';
-import { AnimalData } from '@/types/Animals.ts';
 
 export default function CalculateNutrients() {
   const { state } = useAppState();
@@ -42,7 +41,6 @@ export default function CalculateNutrients() {
   const [showViewError, setShowViewError] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
-  const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
   const navigate = useNavigate();
 
@@ -138,7 +136,7 @@ export default function CalculateNutrients() {
       setActiveField(activeField - 1);
     }
 
-    if (animalList.length === 0) {
+    if (!state.showAnimalsStep) {
       navigate(NUTRIENT_ANALYSIS);
     } else {
       navigate(CROPS);

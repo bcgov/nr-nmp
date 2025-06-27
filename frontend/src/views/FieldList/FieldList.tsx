@@ -15,14 +15,12 @@ import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { FARM_INFORMATION, NUTRIENT_ANALYSIS, SOIL_TESTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
-import { AnimalData } from '@/types';
 
 export default function FieldList() {
   const { state, dispatch } = useAppState();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
-  const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
   const navigate = useNavigate();
 
@@ -68,7 +66,7 @@ export default function FieldList() {
 
   const handlePreviousPage = () => {
     try {
-      if (animalList.length === 0) {
+      if (!state.showAnimalsStep) {
         navigate(FARM_INFORMATION);
       } else {
         navigate(NUTRIENT_ANALYSIS);
