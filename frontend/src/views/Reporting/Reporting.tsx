@@ -28,6 +28,10 @@ export default function FieldList() {
     URL.revokeObjectURL(url);
   }
 
+  const handlePreviousPage = () => {
+    navigate(CALCULATE_NUTRIENTS);
+  };
+
   return (
     <StyledContent>
       <ProgressStepper />
@@ -81,9 +85,7 @@ export default function FieldList() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={() => {
-            navigate(CALCULATE_NUTRIENTS);
-          }}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>

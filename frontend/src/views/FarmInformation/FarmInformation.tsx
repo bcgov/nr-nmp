@@ -177,6 +177,10 @@ export default function FarmInformation() {
     }
   };
 
+  const handlePeviousPage = () => {
+    navigate(LANDING_PAGE);
+  };
+
   return (
     <StyledContent>
       <ProgressStepper />
@@ -318,7 +322,7 @@ export default function FarmInformation() {
           <Button
             size="medium"
             aria-label="Back"
-            onPress={() => navigate(LANDING_PAGE)}
+            onPress={handlePeviousPage}
             variant="secondary"
           >
             BACK
