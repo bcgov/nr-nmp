@@ -18,6 +18,7 @@ import {
   NUTRIENT_ANALYSIS,
   SOIL_TESTS,
   REPORTING,
+  STORAGE,
 } from '@/constants/routes';
 
 interface StepConfig {
@@ -42,7 +43,7 @@ export default function ProgressStepper() {
     if (state.showAnimalsStep) {
       return [
         ...baseSteps,
-        { name: 'Animals and Manure', paths: [ADD_ANIMALS, MANURE_IMPORTS, NUTRIENT_ANALYSIS] },
+        { name: 'Animals and Manure', paths: [ADD_ANIMALS, MANURE_IMPORTS, STORAGE, NUTRIENT_ANALYSIS] },
         { name: 'Fields and Soil', paths: [FIELD_LIST, SOIL_TESTS, CROPS] },
         { name: 'Calculate Nutrients', paths: [CALCULATE_NUTRIENTS] },
         { name: 'Reporting', paths: [REPORTING] },

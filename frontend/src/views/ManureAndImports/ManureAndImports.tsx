@@ -26,7 +26,7 @@ import {
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
 import useAppState from '@/hooks/useAppState';
-import { ADD_ANIMALS, CROPS, FARM_INFORMATION, NUTRIENT_ANALYSIS } from '@/constants/routes';
+import { ADD_ANIMALS, CROPS, FARM_INFORMATION, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
@@ -54,6 +54,11 @@ export default function ManureAndImports() {
   >([DefaultLiquidManureConversionFactors]);
   const [manureFormData, setManureFormData] =
     useState<NMPFileImportedManureData>(DefaultManureFormData);
+
+  const hasDairyCattle = useMemo(
+    () => animalList.some((animal) => animal.animalId === '2'),
+    [animalList],
+  );
 
   const handleSubmit = (data: NMPFileImportedManureData) => {
     let updatedManureFormData: NMPFileImportedManureData;
@@ -133,7 +138,11 @@ export default function ManureAndImports() {
       year: state.nmpFile.farmDetails.Year!,
       newManures: manures,
     });
-    navigate(NUTRIENT_ANALYSIS);
+    if (animalList.some((animal) => animal.animalId === '2')) {
+      navigate(STORAGE);
+    } else {
+      navigate(NUTRIENT_ANALYSIS);
+    }
   };
 
   const handlePreviousPage = () => {
@@ -334,7 +343,12 @@ export default function ManureAndImports() {
           onOpenChange={handleDialogClose}
           isDismissable
         />
-        {state.showAnimalsStep ? (
+        {state.showAnimalsStep && hasDairyCattle ? (
+          <TabsMaterial
+            activeTab={1}
+            tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+          />
+        ) : state.showAnimalsStep ? (
           <TabsMaterial
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
