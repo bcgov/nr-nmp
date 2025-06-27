@@ -45,10 +45,10 @@ describe('ProgressStepper tests', () => {
         <ProgressStepper />
       </BrowserRouter>,
     );
-    const elem1 = screen.getByText('Animals and Manure');
-    const elem2 = screen.getByText('Fields and Soil');
-    const elem3 = screen.getByText('Calculate Nutrients');
-    const elem4 = screen.getByText('Reporting');
+    const elem1 = screen.queryByText('Animals and Manure');
+    const elem2 = screen.queryByText('Fields and Soil');
+    const elem3 = screen.queryByText('Calculate Nutrients');
+    const elem4 = screen.queryByText('Reporting');
     expect(elem1).toBeNull();
     expect(elem2).toBeNull();
     expect(elem3).toBeNull();
