@@ -55,7 +55,7 @@ function Crops() {
     });
   };
 
-  const handleNext = () => {
+  const handleNextPage = () => {
     if (!state.nmpFile.farmDetails.Year) {
       // We should show an error popup, but for now force-navigate back to Farm Information
       navigate(FARM_INFORMATION);
@@ -68,7 +68,7 @@ function Crops() {
     }
   };
 
-  const handlePrevious = () => {
+  const handlePreviousPage = () => {
     navigate(SOIL_TESTS);
   };
 
@@ -234,7 +234,7 @@ function Crops() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onClick={handlePrevious}
+          onClick={handlePreviousPage}
         >
           BACK
         </Button>
@@ -242,7 +242,7 @@ function Crops() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onClick={handleNext}
+          onClick={handleNextPage}
           type="submit"
         >
           Next

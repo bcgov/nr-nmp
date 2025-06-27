@@ -71,6 +71,10 @@ export default function AddAnimals() {
     }
   };
 
+  const handlePreviousPage = () => {
+    navigate(FARM_INFORMATION);
+  };
+
   // Same columns are in ManureAndImports.tsx
   const columns: GridColDef[] = useMemo(
     () => [
@@ -173,7 +177,7 @@ export default function AddAnimals() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={() => navigate(FARM_INFORMATION)}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>

@@ -123,15 +123,7 @@ export default function ManureAndImports() {
     }
   };
 
-  const handlePrevious = () => {
-    if (animalList.length > 0) {
-      navigate(ADD_ANIMALS);
-    } else {
-      navigate(CROPS);
-    }
-  };
-
-  const handleNext = () => {
+  const handleNextPage = () => {
     if (!state.nmpFile.farmDetails.Year) {
       // We should show an error popup, but for now force-navigate back to Farm Information
       navigate(FARM_INFORMATION);
@@ -142,6 +134,14 @@ export default function ManureAndImports() {
       newManures: manures,
     });
     navigate(NUTRIENT_ANALYSIS);
+  };
+
+  const handlePreviousPage = () => {
+    if (animalList.length > 0) {
+      navigate(ADD_ANIMALS);
+    } else {
+      navigate(CROPS);
+    }
   };
 
   useEffect(() => {
@@ -380,7 +380,7 @@ export default function ManureAndImports() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={handlePrevious}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>
@@ -388,7 +388,7 @@ export default function ManureAndImports() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onPress={handleNext}
+          onPress={handleNextPage}
           type="submit"
         >
           Next

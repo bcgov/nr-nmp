@@ -66,7 +66,7 @@ export default function FieldList() {
     }
   };
 
-  const handleBack = () => {
+  const handlePreviousPage = () => {
     try {
       if (animalList.length === 0) {
         navigate(FARM_INFORMATION);
@@ -174,7 +174,7 @@ export default function FieldList() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={handleBack}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>

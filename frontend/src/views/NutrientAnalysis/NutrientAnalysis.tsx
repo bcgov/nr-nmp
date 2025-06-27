@@ -70,11 +70,7 @@ export default function NutrientAnalysis() {
     setEditName(null);
   };
 
-  const handlePrevious = () => {
-    navigate(MANURE_IMPORTS);
-  };
-
-  const handleNext = () => {
+  const handleNextPage = () => {
     dispatch({
       type: 'SAVE_FARM_MANURE',
       year: state.nmpFile.farmDetails.Year!,
@@ -85,6 +81,10 @@ export default function NutrientAnalysis() {
     } else {
       navigate(FIELD_LIST);
     }
+  };
+
+  const handlePreviousPage = () => {
+    navigate(MANURE_IMPORTS);
   };
 
   const nutrientTableColumns: GridColDef[] = useMemo(
@@ -229,7 +229,7 @@ export default function NutrientAnalysis() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={handlePrevious}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>
@@ -237,7 +237,7 @@ export default function NutrientAnalysis() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onPress={handleNext}
+          onPress={handleNextPage}
           type="submit"
         >
           Next
