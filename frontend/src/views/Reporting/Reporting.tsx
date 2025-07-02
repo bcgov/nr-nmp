@@ -1,14 +1,19 @@
+import { useRef } from 'react';
+import { jsPDF } from 'jspdf';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import { SectionHeader, StyledContent } from './reporting.styles';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
+import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
 
 import useAppState from '@/hooks/useAppState';
 
 export default function FieldList() {
-  const { state } = useAppState(); // setNMPFile
+  const reportRef = useRef(null);
+
+  const { state } = useAppState();
   const navigate = useNavigate();
 
   async function downloadBlob() {
@@ -27,6 +32,29 @@ export default function FieldList() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
+  const makePdf = async () => {
+    // eslint-disable-next-line new-cap
+    const doc = new jsPDF({
+      orientation: 'p',
+      unit: 'px',
+      format: 'a4',
+      putOnlyUsedFonts: true,
+      floatPrecision: 16,
+      hotfixes: ['px_scaling'],
+    });
+    if (reportRef.current) {
+      doc.html(reportRef.current, {
+        callback(output) {
+          const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
+          const farmName = state.nmpFile?.farmDetails?.FarmName;
+          output.save(`${prependDate}-${farmName}-Full-Report.pdf`);
+        },
+        margin: [24, 24, 24, 24],
+        width: 1024,
+        windowWidth: 1024,
+      });
+    }
+  };
 
   const handlePreviousPage = () => {
     navigate(CALCULATE_NUTRIENTS);
@@ -56,7 +84,7 @@ export default function FieldList() {
               ariaLabel="A group of buttons"
               orientation="vertical"
             >
-              <Button>Complete report</Button>
+              <Button onPress={() => makePdf()}>Complete report</Button>
               <Button>Record keeping sheets</Button>
             </ButtonGroup>
           </div>
@@ -96,13 +124,19 @@ export default function FieldList() {
           variant="primary"
           onPress={() => {
             navigate(
-              'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing',
+              'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-' +
+                'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing',
             );
           }}
         >
           Finished
         </Button>
       </ButtonGroup>
+      <div style={{ height: '0px', overflow: 'hidden' }}>
+        <div ref={reportRef}>
+          <CompleteReportTemplate />
+        </div>
+      </div>
     </StyledContent>
   );
 }
