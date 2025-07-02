@@ -17,7 +17,7 @@ import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.style
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { AnimalData } from '@/types';
+import { AnimalData, NMPFileImportedManureData } from '@/types';
 
 interface StorageForm {
   ManureType: string;
@@ -25,6 +25,7 @@ interface StorageForm {
   SystemName: string;
   StorageName: string;
   IsMaterialStored: boolean;
+  IsUncovered: boolean;
   UncoveredArea?: number;
   ManagedManure: string;
   UniqueMaterialName: string;
@@ -47,37 +48,18 @@ export default function StorageModal({
   const { state } = useAppState();
   const [formData, setFormData] = useState<StorageForm>(initialModalData);
   const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
-  // should we get included materials choices from importedManures.managedManures currently blank though
-  // const animalList = useMemo(
-  //   () =>
-  //     state.nmpFile.years[0]?.FarmAnimals?.map((animal: AnimalData) => ({
-  //       id: animal.animalId ?? '',
-  //       label:
-  //         animal && animal.animalId === '2' && animal.manureType === 'solid'
-  //           ? [animal.subtype, animal.manureType].filter(Boolean).join(' ') || ''
-  //           : [animal.subtype, animal.manureData?.name].filter(Boolean).join(' ') || '',
-  //     })) || [],
-  //   [state.nmpFile.years],
-  // );
-
-  // only show beef cattle or dairy cattle with solid manure for solid manure
-  const animalList = useMemo(
+  // Show available manures for selection from generated and imported
+  // generated ManagedManureName => AnimalSubTypeName
+  // imported ManagedManureName => MaterialName
+  const manureList = useMemo(
     () =>
-      state.nmpFile.years[0]?.FarmAnimals?.filter((animal: AnimalData) => {
-        if (formData.ManureType === 'Solid') {
-          return (
-            animal.animalId === '1' || (animal.animalId === '2' && animal.manureType === 'solid')
-          );
-        }
-        if (formData.ManureType === 'Liquid') {
-          return animal.animalId === '2' && animal.manureType === 'liquid';
-        }
-        return false;
-      }).map((animal: AnimalData) => ({
-        id: animal.animalId,
-        label: [animal.subtype, animal.manureData?.name].filter(Boolean).join(' '),
-      })) || [],
-    [state.nmpFile.years, formData.ManureType],
+      (
+        (state.nmpFile.years[0]?.ImportedManures && state.nmpFile.years[0]?.GeneratedManures) ||
+        []
+      ).map((manure: NMPFileImportedManureData) => ({
+        label: manure.ManagedManureName,
+      })),
+    [state.nmpFile.years],
   );
 
   const notUniqueNameCheck = () => {
@@ -100,8 +82,8 @@ export default function StorageModal({
   };
 
   const handleInputChange = (name: string, value: string | number | undefined) => {
-    console.log(state.nmpFile.years[0]?.FarmAnimals);
-    console.log(animalList);
+    console.log(state.nmpFile.years[0].GeneratedManures);
+    console.log('manureList', manureList);
     setFormData((prev: StorageForm) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
@@ -169,7 +151,7 @@ export default function StorageModal({
                     label="Included Materials"
                     placeholder="Select a manure type"
                     selectedKey={formData?.ManagedManure}
-                    items={animalList}
+                    items={manureList}
                     onSelectionChange={(e: Key) => {
                       handleInputChange('ManagedManure', String(e));
                       handleInputChange(
@@ -225,7 +207,7 @@ export default function StorageModal({
                       Is the storage covered?
                       <YesNoRadioButtons
                         text=""
-                        value={false}
+                        value={formData.IsUncovered}
                         onChange={(e: boolean) => {
                           handleInputChange('UncoveredArea', e.toString());
                         }}
