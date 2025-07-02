@@ -7,11 +7,13 @@ import { SectionHeader, StyledContent } from './reporting.styles';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
 import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
+import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 
 import useAppState from '@/hooks/useAppState';
 
 export default function FieldList() {
   const reportRef = useRef(null);
+  const recordRef = useRef(null);
 
   const { state } = useAppState();
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export default function FieldList() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
-  const makePdf = async () => {
+  const makeFullReportPdf = async () => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF({
       orientation: 'p',
@@ -48,6 +50,30 @@ export default function FieldList() {
           const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
           const farmName = state.nmpFile?.farmDetails?.FarmName;
           output.save(`${prependDate}-${farmName}-Full-Report.pdf`);
+        },
+        margin: [24, 24, 24, 24],
+        width: 1024,
+        windowWidth: 1024,
+      });
+    }
+  };
+
+  const makeRecordPdf = async () => {
+    // eslint-disable-next-line new-cap
+    const doc = new jsPDF({
+      orientation: 'p',
+      unit: 'px',
+      format: 'a4',
+      putOnlyUsedFonts: true,
+      floatPrecision: 16,
+      hotfixes: ['px_scaling'],
+    });
+    if (recordRef.current) {
+      doc.html(recordRef.current, {
+        callback(output) {
+          const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
+          const farmName = state.nmpFile?.farmDetails?.FarmName;
+          output.save(`${prependDate}-${farmName}-Record-Keeping.pdf`);
         },
         margin: [24, 24, 24, 24],
         width: 1024,
@@ -84,8 +110,8 @@ export default function FieldList() {
               ariaLabel="A group of buttons"
               orientation="vertical"
             >
-              <Button onPress={() => makePdf()}>Complete report</Button>
-              <Button>Record keeping sheets</Button>
+              <Button onPress={() => makeFullReportPdf()}>Complete report</Button>
+              <Button onPress={() => makeRecordPdf()}>Record keeping sheets</Button>
             </ButtonGroup>
           </div>
         </Grid>
@@ -135,6 +161,9 @@ export default function FieldList() {
       <div style={{ height: '0px', overflow: 'hidden' }}>
         <div ref={reportRef}>
           <CompleteReportTemplate />
+        </div>
+        <div ref={recordRef}>
+          <RecordKeepingSheets />
         </div>
       </div>
     </StyledContent>
