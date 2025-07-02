@@ -161,6 +161,11 @@ export default function ManureImportModal({
                       'ManureTypeName',
                       manureTypeOptions.find((ele) => ele.id === e)?.label,
                     );
+                    handleInputChange(
+                      'ManagedManureName',
+                      String(formData?.UniqueMaterialName ?? '') +
+                        String(manureTypeOptions.find((ele) => ele.id === e)?.label ?? ''),
+                    );
                     // Reset dependent inputs on changes
                     handleInputChange('Units', '');
                     handleInputChange('Moisture', '');

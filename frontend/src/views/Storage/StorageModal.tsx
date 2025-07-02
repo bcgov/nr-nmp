@@ -1,7 +1,7 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { ComponentProps, FormEvent, Key, useMemo, useState } from 'react';
+import { ComponentProps, FormEvent, Key, useEffect, useMemo, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -17,7 +17,9 @@ import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.style
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { AnimalData, NMPFileImportedManureData } from '@/types';
+import { NMPFileImportedManureData, NMPFileGeneratedManureData } from '@/types';
+import { booleanChecker } from '@/utils/utils';
+import { ListBoxItemProps } from 'react-aria-components';
 
 interface StorageForm {
   ManureType: string;
@@ -25,7 +27,7 @@ interface StorageForm {
   SystemName: string;
   StorageName: string;
   IsMaterialStored: boolean;
-  IsUncovered: boolean;
+  IsUncovered: string | null;
   UncoveredArea?: number;
   ManagedManure: string;
   UniqueMaterialName: string;
@@ -48,19 +50,26 @@ export default function StorageModal({
   const { state } = useAppState();
   const [formData, setFormData] = useState<StorageForm>(initialModalData);
   const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
-  // Show available manures for selection from generated and imported
-  // generated ManagedManureName => AnimalSubTypeName
-  // imported ManagedManureName => MaterialName
-  const manureList = useMemo(
-    () =>
-      (
-        (state.nmpFile.years[0]?.ImportedManures && state.nmpFile.years[0]?.GeneratedManures) ||
-        []
-      ).map((manure: NMPFileImportedManureData) => ({
-        label: manure.ManagedManureName,
-      })),
-    [state.nmpFile.years],
-  );
+
+  const [manureList, setManureList] = useState<{ id: string; label: string }[]>([]);
+
+  // gets imported and generated manures then filters manures based on manure type
+  useEffect(() => {
+    const imported = state.nmpFile.years[0]?.ImportedManures ?? [];
+    const generated = state.nmpFile.years[0]?.GeneratedManures ?? [];
+    const manures = [...imported, ...generated];
+
+    const filteredManures = manures.filter(
+      (manure) => manure.ManureTypeName === formData?.ManureType,
+    );
+
+    const items = filteredManures.map((manure, index) => ({
+      id: `${manure.UniqueMaterialName}-${index}`,
+      label: manure.ManagedManureName ?? '',
+    }));
+
+    setManureList(items);
+  }, [formData?.ManureType, state.nmpFile.years]);
 
   const notUniqueNameCheck = () => {
     if (isEditingExistingEntry) return false;
@@ -69,6 +78,7 @@ export default function StorageModal({
     );
   };
 
+  // fix onsubmit so it populates to data grid
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
@@ -82,8 +92,6 @@ export default function StorageModal({
   };
 
   const handleInputChange = (name: string, value: string | number | undefined) => {
-    console.log(state.nmpFile.years[0].GeneratedManures);
-    console.log('manureList', manureList);
     setFormData((prev: StorageForm) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
@@ -154,10 +162,6 @@ export default function StorageModal({
                     items={manureList}
                     onSelectionChange={(e: Key) => {
                       handleInputChange('ManagedManure', String(e));
-                      handleInputChange(
-                        'ManagedManure',
-                        manureTypeOptions.find((ele) => ele.id === e)?.label,
-                      );
                     }}
                   />
                 </Grid>
@@ -204,17 +208,18 @@ export default function StorageModal({
                       style={{ marginBottom: '0.15rem' }}
                       className="bcds-react-aria-Select--Label"
                     >
+                      {/* fix radio yes no */}
                       Is the storage covered?
                       <YesNoRadioButtons
+                        value={booleanChecker(formData.IsUncovered)}
                         text=""
-                        value={formData.IsUncovered}
-                        onChange={(e: boolean) => {
-                          handleInputChange('UncoveredArea', e.toString());
+                        onChange={(b: boolean) => {
+                          console.log(b);
                         }}
                         orientation="horizontal"
                       />
                     </div>
-                    {!formData.IsMaterialStored && (
+                    {!formData.IsUncovered && (
                       <TextField
                         isRequired
                         label="Uncovered Area of Storage (ft2)"
