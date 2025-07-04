@@ -7,14 +7,7 @@ import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NMPFileFieldData } from '@/types';
 import Form from '../Form/Form';
 import initialFieldFormData from '@/constants/DefaultNMPFileFieldData';
-
-// NOTE: Move into a const file if this is needed elsewhere
-const manureOptions = [
-  { id: '0', label: 'Select' },
-  { id: '1', label: 'No Manure in the last 2 years' },
-  { id: '2', label: 'Manure applied in 1 of the 2 years' },
-  { id: '3', label: 'Manure applied in each of the 2 years' },
-];
+import { MANURE_APPLICATION_FREQ } from '@/constants';
 
 type Mode = 'Add Field' | 'Edit Field' | 'Duplicate Field';
 
@@ -70,7 +63,7 @@ export default function FieldListModal({
   };
 
   const isManureOptionValid = () =>
-    formData.PreviousYearManureApplicationFrequency !== manureOptions[0].id;
+    formData.PreviousYearManureApplicationFrequency !== MANURE_APPLICATION_FREQ[0].id;
 
   return (
     <Modal
@@ -126,7 +119,7 @@ export default function FieldListModal({
             <Select
               isRequired
               name="manureApplication"
-              items={manureOptions}
+              items={MANURE_APPLICATION_FREQ}
               selectedKey={formData.PreviousYearManureApplicationFrequency}
               validate={() => (!isManureOptionValid() ? 'required' : '')}
               onSelectionChange={(e) => {

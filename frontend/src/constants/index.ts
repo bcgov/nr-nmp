@@ -5,6 +5,7 @@ import DEFAULT_NMPFILE from './DefaultNMPFile';
 import DEFAULT_NMPFILE_CROPS from './DefaultNMPFileCropsData';
 import DefaultSolidManureConversionFactors from './DefaultSolidManureConversionFactors';
 import { EMPTY_CROP_NUTRIENTS, EMPTY_NUTRIENT_COLUMNS } from './CalculateNutrients';
+import MANURE_APPLICATION_FREQ from './ManureApplication';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from './Animals';
 import NMP_FILE_KEY from './context';
 
@@ -21,4 +22,5 @@ export {
   EMPTY_NUTRIENT_COLUMNS,
   INITIAL_BEEF_FORM_DATA,
   INITIAL_DAIRY_FORM_DATA,
+  MANURE_APPLICATION_FREQ,
 };
