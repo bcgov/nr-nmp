@@ -11,10 +11,6 @@ import {
 } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { StyledContent } from './storage.styles';
-import { NMPFileFarmManureData } from '../../types';
-import { DEFAULT_NMPFILE_YEAR, DefaultManureFormData } from '../../constants';
-import { StyledContent } from './storage.styles';
-import useAppState from '../../hooks/useAppState';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
@@ -60,6 +56,8 @@ export default function Storage() {
     navigate(MANURE_IMPORTS);
   };
 
+  // fix dispatch where are we saving the storage form info
+  // either imported or generated manure do we save IsMaterialStored and AssignedToStoredSystem booleans
   const handleNext = () => {
     navigate(NUTRIENT_ANALYSIS);
   };
@@ -81,7 +79,6 @@ export default function Storage() {
     setStorageList((prev) =>
       prev.filter((row) => row.UniqueMaterialName !== e.row.UniqueMaterialName),
     );
-    setIsDialogOpen(false);
   };
 
   const columnsAnimalManure: GridColDef[] = useMemo(
@@ -152,7 +149,6 @@ export default function Storage() {
         <StorageModal
           key={isDialogOpen.toString()}
           initialModalData={storageFormData}
-          storageList={storageList}
           handleDialogClose={handleDialogClose}
           handleSubmit={handleSubmit}
           isOpen={isDialogOpen}

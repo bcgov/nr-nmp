@@ -1,7 +1,6 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-
 import { ComponentProps, FormEvent, Key, useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
@@ -25,15 +24,7 @@ type ModalComponentProps = {
   initialModalData: StorageForm;
   handleDialogClose: () => void;
   handleSubmit: (formData: StorageForm) => void;
-
-import {
-  formCss,
-  modalHeaderStyle,
-  modalPaddingStyle,
-  formGridBreakpoints,
-} from '../../common.styles';
-import manureTypeOptions from '@/constants/ManureTypeOptions';
-import { NMPFileImportedManureData } from '@/types';
+};
 
 export default function StorageModal({
   initialModalData,
@@ -67,18 +58,16 @@ export default function StorageModal({
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
+
     handleSubmit(formData);
     handleDialogClose();
   };
 
   const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
     setFormData((prev: StorageForm) => {
-    if (notUniqueNameCheck()) {
-      console.error('not unique name');
-    } else {
-      handleSubmit(formData);
-      handleDialogClose();
-    }
+      const updatedData = { ...prev, [name]: value };
+      return updatedData;
+    });
   };
 
   return (
@@ -116,13 +105,6 @@ export default function StorageModal({
                   <Select
                     isRequired
                     label="Manure Type"
-            >
-              <Grid size={formGridBreakpoints}>
-                <Grid size={formGridBreakpoints}>
-                  <Select
-                    isRequired
-                    label="Manure Type"
-                    placeholder="Select manure type"
                     selectedKey={formData?.ManureType}
                     items={manureTypeOptions}
                     onSelectionChange={(e: Key) => {
