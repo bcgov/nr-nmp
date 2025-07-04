@@ -84,7 +84,6 @@ export interface NMPFileCropData extends CalculateNutrientsColumn {
   /*
   Fields from old NMP, currently unused, feel free to re-add
   prevYearManureAppl_volCatCd?: number;
-  yieldByHarvestUnit?: number;
   plantAgeYears?: number | null;
   numberOfPlantsPerAcre?: number;
   distanceBtwnPlantsRows?: number | null;

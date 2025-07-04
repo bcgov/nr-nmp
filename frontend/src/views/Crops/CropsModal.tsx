@@ -25,7 +25,7 @@ import {
 import { booleanChecker } from '../../utils/utils';
 import { ModalProps } from '@/components/common/Modal/Modal';
 import { DEFAULT_NMPFILE_CROPS } from '@/constants';
-import { COVER_CROP_ID, CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/types/crops';
+import { COVER_CROP_ID, CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/types/Crops';
 import { HARVEST_UNIT_OPTIONS, HarvestUnit } from '../../constants/harvestUnits';
 
 // Define constants for column headings for Nutrient added/removed tables
