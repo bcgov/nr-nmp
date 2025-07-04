@@ -50,6 +50,7 @@ This script:
 - Reads CSV files from `database/db/trimmed_tables/`
 - Converts them to JSON fixtures in `backend/apps/shared/fixtures/`
 - Creates both individual model fixtures and a combined `all_data.json`
+- May have to change this script to use integers instead of floating number
 
 ### 2. Load All Data
 To load all fixture data:
