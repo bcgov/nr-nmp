@@ -1,7 +1,7 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { ComponentProps, FormEvent, Key, useState } from 'react';
+import { ComponentProps, FormEvent, Key, useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -13,55 +13,58 @@ import {
   Select,
   TextField,
 } from '@bcgov/design-system-react-components';
-import {
-  formCss,
-  modalHeaderStyle,
-  modalPaddingStyle,
-  formGridBreakpoints,
-} from '../../common.styles';
+import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.styles';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
-import { NMPFileImportedManureData } from '@/types';
+import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
+import useAppState from '@/hooks/useAppState';
+import { booleanChecker } from '@/utils/utils';
+import type { StorageForm } from './Storage';
 
-// NMPFileImportedManureData is not the final type
-// TODO: determine type of data for initialModalData
 type ModalComponentProps = {
-  initialModalData: NMPFileImportedManureData;
+  initialModalData: StorageForm;
   handleDialogClose: () => void;
-  handleSubmit: (formData: NMPFileImportedManureData) => void;
-  storageList: any;
+  handleSubmit: (formData: StorageForm) => void;
 };
 
 export default function StorageModal({
   initialModalData,
   handleDialogClose,
   handleSubmit,
-  storageList,
   ...props
 }: ModalComponentProps & ComponentProps<typeof Modal>) {
-  const [formData, setFormData] = useState<NMPFileImportedManureData>(initialModalData);
-  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
+  const { state } = useAppState();
+  const [formData, setFormData] = useState<StorageForm>(initialModalData);
 
-  const notUniqueNameCheck = () => {
-    if (isEditingExistingEntry) return false;
-    return storageList.some(
-      (ele: NMPFileImportedManureData) => ele.UniqueMaterialName === formData.UniqueMaterialName,
+  const [manureList, setManureList] = useState<{ id: string; label: string }[]>([]);
+
+  // gets imported and generated manures then filters manures based on manure type
+  useEffect(() => {
+    const imported = state.nmpFile.years[0]?.ImportedManures ?? [];
+    const generated = state.nmpFile.years[0]?.GeneratedManures ?? [];
+    const manures = [...imported, ...generated];
+
+    const filteredManures = manures.filter(
+      (manure) => manure.ManureTypeName === formData?.ManureType,
     );
-  };
+
+    const items = filteredManures.map((manure, index) => ({
+      id: `${manure.UniqueMaterialName}-${index}`,
+      label: manure.ManagedManureName ?? '',
+    }));
+
+    setManureList(items);
+  }, [formData?.ManureType, state.nmpFile.years]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
 
-    if (notUniqueNameCheck()) {
-      console.error('not unique name');
-    } else {
-      handleSubmit(formData);
-      handleDialogClose();
-    }
+    handleSubmit(formData);
+    handleDialogClose();
   };
 
-  const handleInputChange = (name: string, value: string | number | undefined) => {
-    setFormData((prev: NMPFileImportedManureData) => {
+  const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
+    setFormData((prev: StorageForm) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
@@ -75,7 +78,7 @@ export default function StorageModal({
         aria-labelledby="add-storage-dialog"
       >
         <div css={modalPaddingStyle}>
-          <span css={modalHeaderStyle}>Add Storage System</span>
+          <span css={modalHeaderStyle}>Storage System Details</span>
           <Divider
             aria-hidden="true"
             component="div"
@@ -88,13 +91,20 @@ export default function StorageModal({
             <Grid
               container
               spacing={2}
+              size={12}
             >
-              <Grid size={formGridBreakpoints}>
-                <Grid size={formGridBreakpoints}>
+              <Grid
+                container
+                size={12}
+                direction="row"
+              >
+                <Grid
+                  container
+                  size={5}
+                >
                   <Select
                     isRequired
                     label="Manure Type"
-                    placeholder="Select manure type"
                     selectedKey={formData?.ManureType}
                     items={manureTypeOptions}
                     onSelectionChange={(e: Key) => {
@@ -105,20 +115,98 @@ export default function StorageModal({
                       );
                     }}
                   />
-                </Grid>
-                <span
-                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
-                />
-                <Grid>
                   <TextField
                     isRequired
-                    label="Storage Name"
+                    label="System Name"
                     type="string"
-                    name="storageName"
+                    name="SystemName"
+                    value={formData.SystemName}
                     onChange={(e: Key) => {
-                      handleInputChange('StorageName', String(e) ?? '');
+                      handleInputChange('SystemName', String(e) ?? '');
                     }}
                   />
+                </Grid>
+                <Grid size={6}>
+                  <Select
+                    isRequired
+                    label="Included Materials"
+                    placeholder="Select a manure type"
+                    selectedKey={formData?.ManagedManure}
+                    items={manureList}
+                    onSelectionChange={(e: Key) => {
+                      handleInputChange('ManagedManure', String(e));
+                      handleInputChange('UniqueMaterialName', String(e));
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                size={12}
+                direction="column"
+              >
+                <Divider
+                  aria-hidden="true"
+                  component="div"
+                  css={{ marginTop: '1rem', marginBottom: '1rem' }}
+                />
+                <Grid
+                  container
+                  size={12}
+                  direction="row"
+                >
+                  <Grid
+                    container
+                    size={5}
+                    direction="row"
+                  >
+                    <TextField
+                      isRequired
+                      label="Storage Name"
+                      type="string"
+                      name="StorageName"
+                      value={formData.StorageName}
+                      onChange={(e: Key) => {
+                        handleInputChange('StorageName', String(e) ?? '');
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    container
+                    size={5}
+                    direction="row"
+                  >
+                    <div
+                      style={{ marginBottom: '0.15rem' }}
+                      className="bcds-react-aria-Select--Label"
+                    >
+                      Is the storage covered?
+                      <YesNoRadioButtons
+                        value={booleanChecker(formData.IsCovered)}
+                        text=""
+                        onChange={(e: boolean) => {
+                          handleInputChange('IsCovered', e ?? '');
+                        }}
+                        orientation="horizontal"
+                      />
+                    </div>
+                    {!formData.IsCovered && (
+                      <TextField
+                        isRequired
+                        label="Uncovered Area of Storage (ft2)"
+                        type="number"
+                        name="UncoveredArea"
+                        value={
+                          formData.UncoveredArea !== undefined
+                            ? String(formData.UncoveredArea)
+                            : '0'
+                        }
+                        onChange={(e: Key) => {
+                          handleInputChange('UncoveredArea', Number(e) ?? '');
+                        }}
+                      />
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>

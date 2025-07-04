@@ -10,39 +10,54 @@ import {
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { NMPFileFarmManureData } from '../../types';
-import { DEFAULT_NMPFILE_YEAR, DefaultManureFormData } from '../../constants';
 import { StyledContent } from './storage.styles';
-import useAppState from '../../hooks/useAppState';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
 
+export interface StorageForm {
+  ManureType: string;
+  ManureTypeName: string;
+  SystemName: string;
+  StorageName: string;
+  IsMaterialStored: boolean;
+  IsCovered: boolean;
+  UncoveredArea?: number;
+  AssignedToStoredSystem?: boolean;
+  ManagedManure: string;
+  UniqueMaterialName: string;
+}
+
+const EMPTY_STORAGE: StorageForm = {
+  ManureType: '',
+  ManureTypeName: '',
+  SystemName: '',
+  StorageName: '',
+  IsMaterialStored: false,
+  IsCovered: false,
+  AssignedToStoredSystem: false,
+  ManagedManure: '',
+  UniqueMaterialName: '',
+};
+
 export default function Storage() {
-  const { state } = useAppState();
   const navigate = useNavigate();
+  const [storageList, setStorageList] = useState<StorageForm[]>([]);
+  // Not sure if this is the right file type
+  const [storageFormData, setStorageFormData] = useState<StorageForm>(EMPTY_STORAGE);
 
-  // TODO: make correct file type
-  const [storageList, setStorageList] = useState<NMPFileFarmManureData[]>(
-    state.nmpFile.years[0]?.FarmManures || [],
-  );
-  // Not sure if NMPFileFarmManureData is the right file type
-  const [storageFormData, setstorageFormData] = useState<NMPFileFarmManureData>({
-    ManureSource: '',
-    MaterialType: '',
-    BookLab: '',
-    UniqueMaterialName: '',
-    Nutrients: { N: 0, P2O5: 0, K2O: 0, Moisture: '', NH4N: 0 },
-  });
-
-  const handleSubmit = () => {};
+  const handleSubmit = (formData: StorageForm) => {
+    setStorageList([...storageList, formData]);
+  };
 
   const handlePrevious = () => {
     navigate(MANURE_IMPORTS);
   };
 
+  // fix dispatch where are we saving the storage form info
+  // either imported or generated manure do we save IsMaterialStored and AssignedToStoredSystem booleans
   const handleNext = () => {
     navigate(NUTRIENT_ANALYSIS);
   };
@@ -50,26 +65,33 @@ export default function Storage() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleDialogClose = () => {
+    setStorageFormData(EMPTY_STORAGE);
     setIsDialogOpen(false);
   };
 
+  // on edit text fields dont show up
   const handleEditRow = (e: GridRenderCellParams) => {
+    setStorageFormData(e.row);
     setIsDialogOpen(true);
   };
 
-  const handleDeleteRow = (e: GridRenderCellParams) => {};
+  const handleDeleteRow = (e: GridRenderCellParams) => {
+    setStorageList((prev) =>
+      prev.filter((row) => row.UniqueMaterialName !== e.row.UniqueMaterialName),
+    );
+  };
 
   const columnsAnimalManure: GridColDef[] = useMemo(
     () => [
       {
-        field: 'storageType',
-        headerName: 'Storage Type',
+        field: 'SystemName',
+        headerName: 'System Name',
         width: 200,
         minWidth: 150,
         maxWidth: 300,
       },
       {
-        field: 'storageName',
+        field: 'StorageName',
         headerName: 'Storage Name',
         width: 325,
         minWidth: 150,
@@ -127,7 +149,6 @@ export default function Storage() {
         <StorageModal
           key={isDialogOpen.toString()}
           initialModalData={storageFormData}
-          storageList={storageList}
           handleDialogClose={handleDialogClose}
           handleSubmit={handleSubmit}
           isOpen={isDialogOpen}
@@ -143,7 +164,7 @@ export default function Storage() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={storageList}
         columns={columnsAnimalManure}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
