@@ -1,6 +1,6 @@
 import AppState from './AppState';
 import LiquidManureConversionFactors from './LiquidManureConversionFactors';
-import NMPFile from './NMPFile';
+import { NMPFile, NMPFileFarmDetails } from './NMPFile';
 import { SelectOption } from './Common';
 import {
   CropsConversionFactors,
@@ -47,6 +47,7 @@ export type {
   SelectOption,
   LiquidManureConversionFactors,
   NMPFile,
+  NMPFileFarmDetails,
   NMPFileYear,
   NMPFileFieldData,
   NMPFileImportedManureData,

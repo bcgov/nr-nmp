@@ -26,13 +26,20 @@ import {
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import { StyledContent } from './manureAndImports.styles';
 import useAppState from '@/hooks/useAppState';
-import { ADD_ANIMALS, FARM_INFORMATION, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/routes';
+import {
+  ADD_ANIMALS,
+  CROPS,
+  FARM_INFORMATION,
+  NUTRIENT_ANALYSIS,
+  STORAGE,
+} from '@/constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
 
+// Create a new component for crops manure and imports for now
 export default function ManureAndImports() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
@@ -57,13 +64,6 @@ export default function ManureAndImports() {
   const hasDairyCattle = useMemo(
     () => animalList.some((animal) => animal.animalId === '2'),
     [animalList],
-  );
-  const tabs = useMemo(
-    () =>
-      hasDairyCattle
-        ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
-        : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
-    [hasDairyCattle],
   );
 
   const handleSubmit = (data: NMPFileImportedManureData) => {
@@ -134,18 +134,7 @@ export default function ManureAndImports() {
     }
   };
 
-  const handlePrevious = () => {
-    if (
-      state.nmpFile.years[0]?.FarmAnimals !== undefined &&
-      state.nmpFile.years[0].FarmAnimals.length > 0
-    ) {
-      navigate(ADD_ANIMALS);
-    } else {
-      navigate(FARM_INFORMATION);
-    }
-  };
-
-  const handleNext = () => {
+  const handleNextPage = () => {
     if (!state.nmpFile.farmDetails.Year) {
       // We should show an error popup, but for now force-navigate back to Farm Information
       navigate(FARM_INFORMATION);
@@ -162,10 +151,15 @@ export default function ManureAndImports() {
     }
   };
 
-  useEffect(() => {
-    // Load animals step to progress stepper
-    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
+  const handlePreviousPage = () => {
+    if (state.showAnimalsStep) {
+      navigate(ADD_ANIMALS);
+    } else {
+      navigate(CROPS);
+    }
+  };
 
+  useEffect(() => {
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
       .then((response: { status?: any; data: any }) => {
@@ -323,7 +317,11 @@ export default function ManureAndImports() {
     <StyledContent>
       <ProgressStepper />
       <AppTitle />
-      <PageTitle title="Manure & Imports" />
+      {state.showAnimalsStep ? (
+        <PageTitle title="Animals and Manure" />
+      ) : (
+        <PageTitle title="Manure and Compost" />
+      )}
       <>
         <div css={addRecordGroupStyle}>
           <ButtonGovGroup
@@ -351,21 +349,35 @@ export default function ManureAndImports() {
           onOpenChange={handleDialogClose}
           isDismissable
         />
-        <TabsMaterial
-          activeTab={1}
-          tabLabel={tabs}
-        />
+        {state.showAnimalsStep && hasDairyCattle ? (
+          <TabsMaterial
+            activeTab={1}
+            tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+          />
+        ) : state.showAnimalsStep ? (
+          <TabsMaterial
+            activeTab={1}
+            tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+          />
+        ) : (
+          <TabsMaterial
+            activeTab={0}
+            tabLabel={['Manure & Imports', 'Nutrient Analysis']}
+          />
+        )}
       </>
-      <DataGrid
-        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={animalList}
-        columns={columnsAnimalManure}
-        getRowId={() => crypto.randomUUID()}
-        disableRowSelectionOnClick
-        disableColumnMenu
-        hideFooterPagination
-        hideFooter
-      />
+      {state.showAnimalsStep ? (
+        <DataGrid
+          sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+          rows={animalList}
+          columns={columnsAnimalManure}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          hideFooterPagination
+          hideFooter
+        />
+      ) : null}
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={manures}
@@ -385,7 +397,7 @@ export default function ManureAndImports() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={handlePrevious}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>
@@ -393,7 +405,7 @@ export default function ManureAndImports() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onPress={handleNext}
+          onPress={handleNextPage}
           type="submit"
         >
           Next

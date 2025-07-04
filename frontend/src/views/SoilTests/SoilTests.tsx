@@ -171,12 +171,12 @@ export default function SoilTests() {
     handleDialogClose();
   };
 
-  const handleNext = () => {
+  const handleNextPage = () => {
     dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
     navigate(CROPS);
   };
 
-  const handlePrevious = () => {
+  const handlePreviousPage = () => {
     navigate(FIELD_LIST);
   };
 
@@ -456,7 +456,7 @@ export default function SoilTests() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={handlePrevious}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>
@@ -464,7 +464,7 @@ export default function SoilTests() {
           size="medium"
           aria-label="Next"
           variant="primary"
-          onPress={handleNext}
+          onPress={handleNextPage}
           type="submit"
         >
           Next

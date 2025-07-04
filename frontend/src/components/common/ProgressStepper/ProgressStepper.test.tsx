@@ -17,7 +17,7 @@ jest.mock('@/hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
 
 describe('ProgressStepper tests', () => {
-  test('Animal step absent when showAnimalsStep is false', () => {
+  test('Only the Home and Farm Information steps should be visible initially', () => {
     mockUseAppService.mockImplementation(() => ({
       state: { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: false },
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,11 +28,13 @@ describe('ProgressStepper tests', () => {
         <ProgressStepper />
       </BrowserRouter>,
     );
-    const elem = screen.queryByText('Animals and Manure');
-    expect(elem).toBeNull();
+    const elem1 = screen.queryByText('Home');
+    const elem2 = screen.queryByText('Farm Information');
+    expect(elem1).toBeInTheDocument();
+    expect(elem2).toBeInTheDocument();
   });
 
-  test('Animal step present when showAnimalsStep is true', () => {
+  test('All other steps should not be present initially', () => {
     mockUseAppService.mockImplementation(() => ({
       state: { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: true },
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -43,7 +45,13 @@ describe('ProgressStepper tests', () => {
         <ProgressStepper />
       </BrowserRouter>,
     );
-    const elem = screen.getByText('Animals and Manure');
-    expect(elem).toBeInTheDocument();
+    const elem1 = screen.queryByText('Animals and Manure');
+    const elem2 = screen.queryByText('Fields and Soil');
+    const elem3 = screen.queryByText('Calculate Nutrients');
+    const elem4 = screen.queryByText('Reporting');
+    expect(elem1).toBeNull();
+    expect(elem2).toBeNull();
+    expect(elem3).toBeNull();
+    expect(elem4).toBeNull();
   });
 });

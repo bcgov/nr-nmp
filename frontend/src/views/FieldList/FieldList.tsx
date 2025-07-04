@@ -12,7 +12,7 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { FARM_INFORMATION, MANURE_IMPORTS, SOIL_TESTS } from '@/constants/routes';
+import { FARM_INFORMATION, NUTRIENT_ANALYSIS, SOIL_TESTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 
@@ -64,15 +64,12 @@ export default function FieldList() {
     }
   };
 
-  const handleBack = () => {
+  const handlePreviousPage = () => {
     try {
-      if (
-        state.nmpFile.farmDetails.FarmAnimals === undefined ||
-        state.nmpFile.farmDetails.FarmAnimals.length === 0
-      ) {
+      if (!state.showAnimalsStep) {
         navigate(FARM_INFORMATION);
       } else {
-        navigate(MANURE_IMPORTS);
+        navigate(NUTRIENT_ANALYSIS);
       }
     } catch {
       console.log("Couldn't parse");
@@ -175,7 +172,7 @@ export default function FieldList() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={handleBack}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>

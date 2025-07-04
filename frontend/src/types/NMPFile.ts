@@ -1,18 +1,15 @@
 import NMPFileYear from './NMPFileYear';
-/**
- * @summary Type definitions for NMP File
- */
-type NMPFile = {
-  farmDetails: {
-    Year: string;
-    FarmName: string;
-    FarmRegion: number;
-    FarmSubRegion?: number | null;
-    FarmAnimals?: string[];
-    HasHorticulturalCrops?: boolean;
-    HasBerries?: boolean;
-    HasVegetables?: boolean;
-    /*
+
+export type NMPFileFarmDetails = {
+  Year: string;
+  FarmName: string;
+  FarmRegion: number;
+  FarmSubRegion?: number | null;
+  FarmAnimals?: string[];
+  HasHorticulturalCrops?: boolean;
+  HasBerries?: boolean;
+  HasVegetables?: boolean;
+  /*
     Fields from old NMP, currently unused, feel free to re-add
     Manure?: any | null;
     HasSelectedFarmType?: boolean;
@@ -23,7 +20,13 @@ type NMPFile = {
     LeafTestingMethod?: any | null;
     UserJourney?: number;
     */
-  };
+};
+
+/**
+ * @summary Type definitions for NMP File
+ */
+export type NMPFile = {
+  farmDetails: NMPFileFarmDetails;
   years: NMPFileYear[];
   /*
   Fields from old NMP, currently unused, feel free to re-add
@@ -32,4 +35,3 @@ type NMPFile = {
   NMPReleaseVersion?: number;
   */
 };
-export default NMPFile;

@@ -13,7 +13,7 @@ import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
-import { CROPS, REPORTING } from '@/constants/routes';
+import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
 import { customTableStyle } from '../../common.styles';
 import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
@@ -36,7 +36,7 @@ import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 import CropsModal from '../Crops/CropsModal.tsx';
 
 export default function CalculateNutrients() {
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
   const [openDialog, setOpenDialog] = useState<[string, number | undefined]>(['', undefined]);
   const [showViewError, setShowViewError] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
@@ -127,8 +127,30 @@ export default function CalculateNutrients() {
 
   const handleNextPage = () => {
     setShowViewError('');
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.Year!,
+      newFields: fieldList,
+    });
 
     navigate(REPORTING);
+  };
+
+  const handlePreviousPage = () => {
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.Year!,
+      newFields: fieldList,
+    });
+    if (activeField > 0) {
+      setActiveField(activeField - 1);
+    }
+
+    if (!state.showAnimalsStep) {
+      navigate(NUTRIENT_ANALYSIS);
+    } else {
+      navigate(CROPS);
+    }
   };
 
   const customCalcTableStyle = {
@@ -426,13 +448,7 @@ export default function CalculateNutrients() {
           size="medium"
           aria-label="Back"
           variant="secondary"
-          onPress={() => {
-            if (activeField > 0) {
-              setActiveField(activeField - 1);
-            } else {
-              navigate(CROPS);
-            }
-          }}
+          onPress={handlePreviousPage}
         >
           BACK
         </Button>
