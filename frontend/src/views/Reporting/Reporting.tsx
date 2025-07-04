@@ -86,10 +86,6 @@ export default function FieldList() {
     navigate(CALCULATE_NUTRIENTS);
   };
 
-  const handlePreviousPage = () => {
-    navigate(CALCULATE_NUTRIENTS);
-  };
-
   return (
     <StyledContent>
       <ProgressStepper />
