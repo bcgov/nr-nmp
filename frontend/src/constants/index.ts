@@ -7,6 +7,7 @@ import DefaultSolidManureConversionFactors from './DefaultSolidManureConversionF
 import { EMPTY_CROP_NUTRIENTS, EMPTY_NUTRIENT_COLUMNS } from './CalculateNutrients';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from './Animals';
 import NMP_FILE_KEY from './context';
+import { HarvestUnit, HARVEST_UNIT_OPTIONS } from './harvestUnits';
 
 // TODO: Standardize these variable names. Global constants should be in all caps
 export {
@@ -21,4 +22,6 @@ export {
   EMPTY_NUTRIENT_COLUMNS,
   INITIAL_BEEF_FORM_DATA,
   INITIAL_DAIRY_FORM_DATA,
+  HarvestUnit,
+  HARVEST_UNIT_OPTIONS,
 };

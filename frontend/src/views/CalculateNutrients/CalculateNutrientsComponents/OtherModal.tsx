@@ -8,6 +8,7 @@ import Form from '@/components/common/Form/Form';
 import { NMPFileFieldData, NMPFileOtherNutrient } from '@/types';
 import { ModalContent, SectionTitle } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
+import { textFieldStyle } from '@/common.styles';
 
 type OtherModalProps = {
   fieldIndex: number;
@@ -112,6 +113,7 @@ export default function OtherModal({
                   aria-label="N"
                   value={formData.reqN.toString()}
                   onChange={(v) => handleNutrientChange('reqN', v)}
+                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
@@ -124,6 +126,7 @@ export default function OtherModal({
                   aria-label="P2O5"
                   value={formData.reqP2o5.toString()}
                   onChange={(v) => handleNutrientChange('reqP2o5', v)}
+                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
@@ -136,6 +139,7 @@ export default function OtherModal({
                   aria-label="K2O"
                   value={formData.reqK2o.toString()}
                   onChange={(v) => handleNutrientChange('reqK2o', v)}
+                  css={textFieldStyle}
                 />
               </Grid>
             </Grid>
@@ -151,6 +155,7 @@ export default function OtherModal({
                   aria-label="N"
                   value={formData.remN.toString()}
                   onChange={(v) => handleNutrientChange('remN', v)}
+                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
@@ -163,6 +168,7 @@ export default function OtherModal({
                   aria-label="P2O5"
                   value={formData.remP2o5.toString()}
                   onChange={(v) => handleNutrientChange('remP2o5', v)}
+                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
@@ -175,6 +181,7 @@ export default function OtherModal({
                   aria-label="K2O"
                   value={formData.remK2o.toString()}
                   onChange={(v) => handleNutrientChange('remK2o', v)}
+                  css={textFieldStyle}
                 />
               </Grid>
             </Grid>
