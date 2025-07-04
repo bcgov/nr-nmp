@@ -31,19 +31,23 @@ export default function AddAnimals() {
   );
 
   // If there are animals show the manure storage tab
-  const hasAnimal = useMemo(
+  const hasDairyCattle = useMemo(
     () =>
-      Array.isArray(state.nmpFile.years[0]?.FarmAnimals) &&
-      state.nmpFile.years[0].FarmAnimals.length > 0,
+      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
     [state.nmpFile.years],
   );
   const tabs = useMemo(
     () =>
-      hasAnimal
+      hasDairyCattle
         ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
         : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
-    [hasAnimal],
+    [hasDairyCattle],
   );
+
+  useEffect(() => {
+    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleEditRow = React.useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));

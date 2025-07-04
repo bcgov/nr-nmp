@@ -39,10 +39,9 @@ export default function NutrientAnalysis() {
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
 
-  const hasAnimal = useMemo(
+  const hasDairyCattle = useMemo(
     () =>
-      Array.isArray(state.nmpFile.years[0]?.FarmAnimals) &&
-      state.nmpFile.years[0]?.FarmAnimals.length > 0,
+      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
     [state.nmpFile.years],
   );
 
@@ -90,7 +89,7 @@ export default function NutrientAnalysis() {
   };
 
   const handlePreviousPage = () => {
-    if (hasAnimal) {
+    if (hasDairyCattle) {
       navigate(STORAGE);
     } else {
       navigate(MANURE_IMPORTS);
@@ -209,7 +208,7 @@ export default function NutrientAnalysis() {
           modalStyle={{ width: '700px' }}
         />
       )}
-      {state.showAnimalsStep && hasAnimal ? (
+      {state.showAnimalsStep && hasDairyCattle ? (
         <TabsMaterial
           activeTab={3}
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
