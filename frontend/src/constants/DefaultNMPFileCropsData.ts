@@ -1,11 +1,9 @@
 import { NMPFileCropData } from '@/types';
 
 const DEFAULT_NMPFILE_CROPS: NMPFileCropData = {
-  cropId: '',
+  cropId: 0,
   cropTypeId: 0,
   name: '',
-  cropTypeName: '',
-  cropOther: null,
   yield: 0,
   reqN: 0,
   stdN: 0,
@@ -14,7 +12,7 @@ const DEFAULT_NMPFILE_CROPS: NMPFileCropData = {
   remN: 0,
   remP2o5: 0,
   remK2o: 0,
-  crudeProtien: 0,
+  crudeProtein: 0,
   prevCropId: 0,
   coverCropHarvested: null,
 };

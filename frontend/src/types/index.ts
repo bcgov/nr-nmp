@@ -10,7 +10,7 @@ import {
   SoilTestMethodsData,
   NMPFileSoilTestData,
   NMPFileCropData,
-} from './crops';
+} from './Crops';
 import { NMPFileFieldData, NMPFileOtherNutrient } from './NMPFileFieldData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 import SolidManureConversionFactors from './SolidManureConversionFactors';

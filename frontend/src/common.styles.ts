@@ -131,3 +131,9 @@ export const addRecordGroupStyle = css({
 export const modalPaddingStyle = css({
   padding: '1rem',
 });
+
+export const textFieldStyle = css({
+  '.bcds-react-aria-TextField--Input': {
+    width: '100%',
+  },
+});
