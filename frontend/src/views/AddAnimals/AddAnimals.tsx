@@ -30,17 +30,19 @@ export default function AddAnimals() {
     state.nmpFile.years[0].FarmAnimals || [],
   );
 
-  const hasDairyCattle = useMemo(
+  // If there are animals show the manure storage tab
+  const hasAnimal = useMemo(
     () =>
-      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+      Array.isArray(state.nmpFile.years[0]?.FarmAnimals) &&
+      state.nmpFile.years[0].FarmAnimals.length > 0,
     [state.nmpFile.years],
   );
   const tabs = useMemo(
     () =>
-      hasDairyCattle
+      hasAnimal
         ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
         : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
-    [hasDairyCattle],
+    [hasAnimal],
   );
 
   const handleEditRow = React.useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {

@@ -61,10 +61,7 @@ export default function ManureAndImports() {
   const [manureFormData, setManureFormData] =
     useState<NMPFileImportedManureData>(DefaultManureFormData);
 
-  const hasDairyCattle = useMemo(
-    () => animalList.some((animal) => animal.animalId === '2'),
-    [animalList],
-  );
+  const hasAnimal = useMemo(() => animalList && animalList.length > 0, [animalList]);
 
   const handleSubmit = (data: NMPFileImportedManureData) => {
     let updatedManureFormData: NMPFileImportedManureData;
@@ -349,7 +346,7 @@ export default function ManureAndImports() {
           onOpenChange={handleDialogClose}
           isDismissable
         />
-        {state.showAnimalsStep && hasDairyCattle ? (
+        {state.showAnimalsStep && hasAnimal ? (
           <TabsMaterial
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
