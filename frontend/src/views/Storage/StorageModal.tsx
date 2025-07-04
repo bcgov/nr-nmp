@@ -1,7 +1,7 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { ComponentProps, FormEvent, Key, useEffect, useMemo, useState } from 'react';
+import { ComponentProps, FormEvent, Key, useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -17,39 +17,23 @@ import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.style
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { NMPFileImportedManureData, NMPFileGeneratedManureData } from '@/types';
 import { booleanChecker } from '@/utils/utils';
-import { ListBoxItemProps } from 'react-aria-components';
-
-interface StorageForm {
-  ManureType: string;
-  ManureTypeName: string;
-  SystemName: string;
-  StorageName: string;
-  IsMaterialStored: boolean;
-  IsUncovered: string | null;
-  UncoveredArea?: number;
-  ManagedManure: string;
-  UniqueMaterialName: string;
-}
+import type { StorageForm } from './Storage';
 
 type ModalComponentProps = {
   initialModalData: StorageForm;
   handleDialogClose: () => void;
   handleSubmit: (formData: StorageForm) => void;
-  storageList: any;
 };
 
 export default function StorageModal({
   initialModalData,
   handleDialogClose,
   handleSubmit,
-  storageList,
   ...props
 }: ModalComponentProps & ComponentProps<typeof Modal>) {
   const { state } = useAppState();
   const [formData, setFormData] = useState<StorageForm>(initialModalData);
-  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
 
   const [manureList, setManureList] = useState<{ id: string; label: string }[]>([]);
 
@@ -71,27 +55,15 @@ export default function StorageModal({
     setManureList(items);
   }, [formData?.ManureType, state.nmpFile.years]);
 
-  const notUniqueNameCheck = () => {
-    if (isEditingExistingEntry) return false;
-    return storageList.some(
-      (ele: StorageForm) => ele.UniqueMaterialName === formData.UniqueMaterialName,
-    );
-  };
-
-  // fix onsubmit so it populates to data grid
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
 
-    if (notUniqueNameCheck()) {
-      console.error('not unique name');
-    } else {
-      handleSubmit(formData);
-      handleDialogClose();
-    }
+    handleSubmit(formData);
+    handleDialogClose();
   };
 
-  const handleInputChange = (name: string, value: string | number | undefined) => {
+  const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
     setFormData((prev: StorageForm) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
@@ -147,7 +119,8 @@ export default function StorageModal({
                     isRequired
                     label="System Name"
                     type="string"
-                    name="systemName"
+                    name="SystemName"
+                    value={formData.SystemName}
                     onChange={(e: Key) => {
                       handleInputChange('SystemName', String(e) ?? '');
                     }}
@@ -162,6 +135,7 @@ export default function StorageModal({
                     items={manureList}
                     onSelectionChange={(e: Key) => {
                       handleInputChange('ManagedManure', String(e));
+                      handleInputChange('UniqueMaterialName', String(e));
                     }}
                   />
                 </Grid>
@@ -175,9 +149,6 @@ export default function StorageModal({
                   aria-hidden="true"
                   component="div"
                   css={{ marginTop: '1rem', marginBottom: '1rem' }}
-                />
-                <span
-                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
                 />
                 <Grid
                   container
@@ -193,7 +164,8 @@ export default function StorageModal({
                       isRequired
                       label="Storage Name"
                       type="string"
-                      name="storageName"
+                      name="StorageName"
+                      value={formData.StorageName}
                       onChange={(e: Key) => {
                         handleInputChange('StorageName', String(e) ?? '');
                       }}
@@ -208,23 +180,27 @@ export default function StorageModal({
                       style={{ marginBottom: '0.15rem' }}
                       className="bcds-react-aria-Select--Label"
                     >
-                      {/* fix radio yes no */}
                       Is the storage covered?
                       <YesNoRadioButtons
-                        value={booleanChecker(formData.IsUncovered)}
+                        value={booleanChecker(formData.IsCovered)}
                         text=""
-                        onChange={(b: boolean) => {
-                          console.log(b);
+                        onChange={(e: boolean) => {
+                          handleInputChange('IsCovered', e ?? '');
                         }}
                         orientation="horizontal"
                       />
                     </div>
-                    {!formData.IsUncovered && (
+                    {!formData.IsCovered && (
                       <TextField
                         isRequired
                         label="Uncovered Area of Storage (ft2)"
                         type="number"
-                        name="uncoveredArea"
+                        name="UncoveredArea"
+                        value={
+                          formData.UncoveredArea !== undefined
+                            ? String(formData.UncoveredArea)
+                            : '0'
+                        }
                         onChange={(e: Key) => {
                           handleInputChange('UncoveredArea', Number(e) ?? '');
                         }}
