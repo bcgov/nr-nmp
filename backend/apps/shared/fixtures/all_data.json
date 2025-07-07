@@ -7499,7 +7499,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.0,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7519,7 +7519,7 @@
       "sortnum": 50.0,
       "cubicyardconversion": 0.5,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7539,7 +7539,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.45,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7559,7 +7559,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.4,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7579,7 +7579,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.5,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7599,7 +7599,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.4,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7619,7 +7619,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.4,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7639,7 +7639,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.59,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7659,7 +7659,7 @@
       "sortnum": 100.0,
       "cubicyardconversion": 0.7,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7679,7 +7679,7 @@
       "sortnum": 110.0,
       "cubicyardconversion": 0.0,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7699,7 +7699,7 @@
       "sortnum": 111.0,
       "cubicyardconversion": 0.0,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7719,7 +7719,7 @@
       "sortnum": 112.0,
       "cubicyardconversion": 0.0,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7739,7 +7739,7 @@
       "sortnum": 113.0,
       "cubicyardconversion": 0.0,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7759,7 +7759,7 @@
       "sortnum": 300.0,
       "cubicyardconversion": 0.7,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7779,7 +7779,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.7,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7799,7 +7799,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.0,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7819,7 +7819,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.7,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7839,7 +7839,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.7,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7859,7 +7859,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.5,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7879,7 +7879,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.7,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7899,7 +7899,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.33,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7919,7 +7919,7 @@
       "sortnum": 200.0,
       "cubicyardconversion": 0.33,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7939,7 +7939,7 @@
       "sortnum": 10.0,
       "cubicyardconversion": 0.5,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
@@ -7959,7 +7959,7 @@
       "sortnum": 10.0,
       "cubicyardconversion": 0.0,
       "nitrate": 0.0,
-      "defaultsolidmoisture": null
+      "defaultsolidmoisture": 0.0
     }
   },
   {
