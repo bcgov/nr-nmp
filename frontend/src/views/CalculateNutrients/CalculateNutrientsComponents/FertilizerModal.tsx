@@ -1,7 +1,15 @@
 /**
  * @summary This is the NewFertilizerModal component
  */
-import React, { FormEvent, Key, useContext, useEffect, useState } from 'react';
+import React, {
+  FormEvent,
+  Key,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import Grid from '@mui/material/Grid';
 import {
   Button,
@@ -67,6 +75,8 @@ const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
   applUnitId: 0,
   applDate: '',
   applicationMethod: '',
+  density: undefined,
+  densityUnitId: undefined,
   reqN: 0,
   reqP2o5: 0,
   reqK2o: 0,
@@ -214,26 +224,106 @@ export default function FertilizerModal({
     }));
   };
 
-  const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
-    const name = Object.keys(changes)[0];
-    const value = changes[name];
+  const handleInputChanges = useCallback(
+    (changes: { [name: string]: string | number | undefined }) => {
+      const name = Object.keys(changes)[0];
+      const value = changes[name];
 
-    if (name === 'fertilizerTypeId') {
-      setFilteredFertilizerOptions(
-        fertilizerOptions.filter(
-          (ele) =>
-            ele.dryliquid === fertilizerTypes.find((fertType) => fertType.id === value)?.dryliquid,
-        ),
+      if (name === 'fertilizerTypeId') {
+        setFilteredFertilizerOptions(
+          fertilizerOptions.filter(
+            (ele) =>
+              ele.dryliquid ===
+              fertilizerTypes.find((fertType) => fertType.id === value)?.dryliquid,
+          ),
+        );
+      }
+
+      if (name === 'fertilizerId') {
+        // eslint-disable-next-line no-param-reassign
+        changes.name = filteredFertilizersOptions.find((f) => f.id === value)!.name;
+      }
+
+      setFormState((prev) => ({ ...prev, ...changes }));
+    },
+    [fertilizerOptions, fertilizerTypes, filteredFertilizersOptions],
+  );
+
+  const CustomeFertilizerEntry = useMemo(() => {
+    if (formState.fertilizerTypeId === 2 || formState.fertilizerTypeId === 4) {
+      return (
+        <Grid size={{ xs: 12 }}>
+          <div>
+            <Grid
+              container
+              spacing={2}
+            >
+              <Grid size={{ xs: 4 }}>
+                <TextField
+                  isRequired
+                  label="N (%)"
+                  type="number"
+                  name="N"
+                  value={formState?.applicationRate.toString()}
+                  onChange={(e: string) => {
+                    handleInputChanges({ applicationRate: e });
+                  }}
+                  maxLength={5}
+                />
+              </Grid>
+              <Grid size={{ xs: 4 }}>
+                <TextField
+                  isRequired
+                  label="P2O5 (%)"
+                  type="number"
+                  name="N"
+                  value={formState?.applicationRate.toString()}
+                  onChange={(e: string) => {
+                    handleInputChanges({ applicationRate: e });
+                  }}
+                  maxLength={5}
+                />
+              </Grid>
+              <Grid size={{ xs: 4 }}>
+                <TextField
+                  isRequired
+                  label="K2O"
+                  type="number"
+                  name="N"
+                  value={formState?.applicationRate.toString()}
+                  onChange={(e: string) => {
+                    handleInputChanges({ applicationRate: e });
+                  }}
+                  maxLength={5}
+                />
+              </Grid>
+            </Grid>
+          </div>
+        </Grid>
       );
     }
-
-    if (name === 'fertilizerId') {
-      // eslint-disable-next-line no-param-reassign
-      changes.name = filteredFertilizersOptions.find((f) => f.id === value)!.name;
-    }
-
-    setFormState((prev) => ({ ...prev, ...changes }));
-  };
+    return (
+      <Grid size={formGridBreakpoints}>
+        <Select
+          isRequired
+          name="Fertilizer"
+          items={filteredFertilizersOptions.map((ele) => ({ id: ele.id, label: ele.name }))}
+          label="Fertilizer"
+          placeholder="Select Fertilizer"
+          selectedKey={formState.fertilizerId}
+          onSelectionChange={(e: Key) => {
+            handleInputChanges({ fertilizerId: parseInt(e.toString(), 10) });
+          }}
+        />
+      </Grid>
+    );
+  }, [
+    filteredFertilizersOptions,
+    formState?.applicationRate,
+    formState.fertilizerId,
+    formState.fertilizerTypeId,
+    handleInputChanges,
+  ]);
 
   return (
     <Modal
@@ -262,19 +352,7 @@ export default function FertilizerModal({
               }}
             />
           </Grid>
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              name="Fertilizer"
-              items={filteredFertilizersOptions.map((ele) => ({ id: ele.id, label: ele.name }))}
-              label="Fertilizer"
-              placeholder="Select Fertilizer"
-              selectedKey={formState.fertilizerId}
-              onSelectionChange={(e: Key) => {
-                handleInputChanges({ fertilizerId: parseInt(e.toString(), 10) });
-              }}
-            />
-          </Grid>
+          {CustomeFertilizerEntry}
           <Grid size={{ xs: 6 }}>
             <TextField
               isRequired
@@ -301,6 +379,36 @@ export default function FertilizerModal({
               }}
             />
           </Grid>
+          {(formState?.fertilizerTypeId === 3 || formState?.fertilizerTypeId === 4) && (
+            <>
+              <Grid size={{ xs: 6 }}>
+                <TextField
+                  isRequired
+                  label="Density"
+                  type="number"
+                  name="Moisture"
+                  value={formState?.density?.toString()}
+                  onChange={(e: string) => {
+                    handleInputChanges({ density: Number(e) });
+                  }}
+                  maxLength={5}
+                />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <Select
+                  isRequired
+                  name="applUnitId"
+                  items={dryOrLiquidUnitOptions.map((ele) => ({ id: ele.id, label: ele.name }))}
+                  label="Density Units"
+                  placeholder="Select Units"
+                  selectedKey={formState.applUnitId}
+                  onSelectionChange={(e: Key) => {
+                    handleInputChanges({ applUnitId: parseInt(e.toString(), 10) });
+                  }}
+                />
+              </Grid>
+            </>
+          )}
           <Grid size={formGridBreakpoints}>
             <Select
               name="applicationMethod"
@@ -340,20 +448,41 @@ export default function FertilizerModal({
                 alignItems: 'center',
               }}
             >
-              <Grid size={formGridBreakpoints}>
-                <div css={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  Available This Year (lb/ac){' '}
+              <Grid
+                size={{ xs: 12, md: 6 }}
+                sx={{ maxWidth: '400px', justifyItems: 'center' }}
+              >
+                <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
+                  Available This Year (lb/ac)
+                  <DataGrid
+                    sx={{ ...customTableStyle }}
+                    columns={NUTRIENT_COLUMNS}
+                    rows={calculatedData != null ? [calculatedData] : []}
+                    getRowId={() => crypto.randomUUID()}
+                    disableRowSelectionOnClick
+                    disableColumnMenu
+                    hideFooterPagination
+                    hideFooter
+                  />
                 </div>
-                <DataGrid
-                  sx={{ ...customTableStyle }}
-                  columns={NUTRIENT_COLUMNS}
-                  rows={calculatedData != null ? [calculatedData] : []}
-                  getRowId={() => crypto.randomUUID()}
-                  disableRowSelectionOnClick
-                  disableColumnMenu
-                  hideFooterPagination
-                  hideFooter
-                />
+              </Grid>
+              <Grid
+                size={{ xs: 6 }}
+                sx={{ maxWidth: '400px', justifyItems: 'center' }}
+              >
+                <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
+                  Still Required This Year (lb/ac)
+                  <DataGrid
+                    sx={{ ...customTableStyle }}
+                    columns={NUTRIENT_COLUMNS}
+                    rows={calculatedData != null ? [calculatedData] : []}
+                    getRowId={() => crypto.randomUUID()}
+                    disableRowSelectionOnClick
+                    disableColumnMenu
+                    hideFooterPagination
+                    hideFooter
+                  />
+                </div>
               </Grid>
             </Grid>
           </div>
