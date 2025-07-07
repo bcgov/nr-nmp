@@ -85,6 +85,16 @@ const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
   remK2o: 0,
 };
 
+const EMPTY_CUSTOM_FERTILIZER: Fertilizer = {
+  id: 0,
+  name: 'Custom fertilizer',
+  dryliquid: 'dry',
+  nitrogen: 0,
+  phosphorous: 0,
+  potassium: 0,
+  sortnum: 0,
+};
+
 const FERTILIZER_METHOD: Array<{ id: string; label: string }> = [
   { id: 'Broadcast', label: 'Broadcast' },
   { id: 'Banded', label: 'Banded' },
@@ -106,30 +116,34 @@ export default function FertilizerModal({
   const [fertilizerOptions, setFertilizerOptions] = useState<Fertilizer[]>([]);
   const [filteredFertilizersOptions, setFilteredFertilizerOptions] = useState<Fertilizer[]>([]);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
+  const [densityUnits, setDensityUnits] = useState<any[]>([]);
+  const [liqDensityFactors, setLiqDensityFactors] = useState<any[]>([]);
 
   const [formState, setFormState] = useState<NMPFileFertilizer>(
     initialModalData ?? EMPTY_FERTILIZER_FORM_DATA,
   );
+  const [formCustomFertilizer, setFormCustomFertilizer] =
+    useState<Fertilizer>(EMPTY_CUSTOM_FERTILIZER);
 
-  useEffect(() => {
-    console.log(
-      'fertilizerTypes',
-      fertilizerTypes.find((ele) => ele.id === formState.fertilizerTypeId),
-    );
-  }, [fertilizerTypes, formState]);
-  useEffect(() => {
-    console.log(
-      'fertilizer',
-      fertilizerOptions.find((ele) => ele.id === formState.fertilizerId),
-    );
-  }, [fertilizerOptions, formState]);
+  // useEffect(() => {
+  //   console.log(
+  //     'fertilizerTypes',
+  //     fertilizerTypes.find((ele) => ele.id === formState.fertilizerTypeId),
+  //   );
+  // }, [fertilizerTypes, formState]);
+  // useEffect(() => {
+  //   console.log(
+  //     'fertilizer',
+  //     fertilizerOptions.find((ele) => ele.id === formState.fertilizerId),
+  //   );
+  // }, [fertilizerOptions, formState]);
 
-  useEffect(() => {
-    console.log(
-      'fertilizerUnits',
-      fertilizerUnits.find((ele) => ele.id === formState.applUnitId),
-    );
-  }, [fertilizerUnits, formState]);
+  // useEffect(() => {
+  //   console.log(
+  //     'fertilizerUnits',
+  //     fertilizerUnits.find((ele) => ele.id === formState.applUnitId),
+  //   );
+  // }, [fertilizerUnits, formState]);
 
   const apiCache = useContext(APICacheContext);
 
@@ -209,29 +223,113 @@ export default function FertilizerModal({
         setFertilizerUnits(data);
       }
     });
+
+    apiCache.callEndpoint('api/densityunits/').then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        console.log(data);
+        setDensityUnits(data);
+      }
+    });
+
+    apiCache.callEndpoint('api/liquidfertilizerdensities/').then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        console.log(data);
+        setLiqDensityFactors(data);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleModalCalculate = (e: FormEvent) => {
-    e.preventDefault();
+  const isCustomFertilizerValid = () => {
     if (
-      !formState.fertilizerId ||
+      [null, undefined, ''].includes(formCustomFertilizer.nitrogen?.toString()) ||
+      [null, undefined, ''].includes(formCustomFertilizer.phosphorous?.toString()) ||
+      [null, undefined, ''].includes(formCustomFertilizer.potassium?.toString())
+    )
+      return false;
+    return true;
+  };
+
+  const isRegularFertilizerValid = () => {
+    if (formState.fertilizerId) return true;
+    return false;
+  };
+
+  const isCommonFertilizerFieldsValid = () => {
+    if (
       !formState.applUnitId ||
       !formState.applicationRate ||
       fertilizerOptions.length === 0 ||
       fertilizerUnits.length === 0
     )
-      return;
+      return false;
+    return true;
+  };
 
-    const fertilizer = fertilizerOptions.find((ele) => ele.id === formState.fertilizerId);
-    if (fertilizer === undefined)
-      throw new Error(`Fertilizer ${formState.fertilizerId} is missing from list.`);
+  const isLiquidFertilizerFieldsValid = () => {
+    if (formState.densityUnitId && formState.density) return true;
+    return false;
+  };
+
+  // useEffect(() => {
+  //   // Load liquid density value when liquid fertilizer selected
+  //   if (formState.fertilizerTypeId === 3 && formState.fertilizerId) {
+  //     const densityValue = liqDensityFactors.find(
+  //       (ele) => ele.fertilizerid === formState.fertilizerId,
+  //     ).value;
+  //     // Default densityUnitId is 3
+  //     setFormState((prev) => ({ ...prev, density: densityValue, densityUnitId: 3 }));
+  //   }
+  // }, [formState.fertilizerTypeId, formState.fertilizerId, liqDensityFactors]);
+
+  const handleModalCalculate = (e: FormEvent) => {
+    e.preventDefault();
+    let fertilizer;
+    let densityConvFactor;
+
+    // Liquid fertilizer requires extra fields
+    if (formState.fertilizerTypeId === 3 || formState.fertilizerTypeId === 4) {
+      if (!isLiquidFertilizerFieldsValid()) return;
+
+      densityConvFactor = densityUnits.find((ele) => ele.id === formState.densityUnitId).convfactor;
+    }
+
+    // Regular fertilizer and custom fertilizer have different logic
+    if (formState.fertilizerTypeId === 2 || formState.fertilizerTypeId === 4) {
+      // Logic for custom fertilizer
+
+      // Check validity
+      if (!isCustomFertilizerValid()) return;
+      if (!isCommonFertilizerFieldsValid()) return;
+
+      fertilizer = formCustomFertilizer;
+    } else {
+      // Logic for regular fertilizer
+
+      // Check validity
+      if (!isRegularFertilizerValid()) return;
+      if (!isCommonFertilizerFieldsValid()) return;
+
+      fertilizer = fertilizerOptions.find((ele) => ele.id === formState.fertilizerId);
+      if (fertilizer === undefined)
+        throw new Error(`Fertilizer ${formState.fertilizerId} is missing from list.`);
+    }
+
     const fertilizerUnit = fertilizerUnits.find(
       (fertTypeEle) => fertTypeEle.id === formState.applUnitId,
     );
     if (fertilizerUnit === undefined)
       throw new Error(`Fertilizer unit ${formState.applUnitId} is missing from list.`);
-    const cropNutrients = calcFertBalance(fertilizer, formState.applicationRate, fertilizerUnit);
+
+    const cropNutrients = calcFertBalance(
+      fertilizer,
+      formState.applicationRate,
+      fertilizerUnit,
+      formState.density,
+      densityConvFactor,
+    );
     setCalculateData(cropNutrients);
     setFormState((prev) => ({
       ...prev,
@@ -245,9 +343,17 @@ export default function FertilizerModal({
   };
 
   const handleInputChanges = useCallback(
-    (changes: { [name: string]: string | number | undefined }) => {
-      const name = Object.keys(changes)[0];
-      const value = changes[name];
+    (updates: { [name: string]: string | number | undefined }) => {
+      const name = Object.keys(updates)[0];
+      const value = updates[name];
+      // eslint-disable-next-line prefer-const
+      let changes = structuredClone(updates);
+
+      console.log('trig', name, value);
+
+      if (['potassium', 'phosphorous', 'nitrogen'].includes(name)) {
+        setFormCustomFertilizer((prev) => ({ ...prev, ...changes }));
+      }
 
       if (name === 'fertilizerTypeId') {
         setFilteredFertilizerOptions(
@@ -257,19 +363,57 @@ export default function FertilizerModal({
               fertilizerTypes.find((fertType) => fertType.id === value)?.dryliquid,
           ),
         );
+
+        // handling for custom fertilizers
+        if (value === 1 || value === 2) {
+          setFormCustomFertilizer((prev) => ({ ...prev, dryliquid: 'dry' }));
+        } else if (value === 3 || value === 4) {
+          setFormCustomFertilizer((prev) => ({ ...prev, dryliquid: 'liquid' }));
+        }
+
+        // Clear density for custom liquid fertilizer
+        if (value === 4) {
+          changes.density = '';
+        }
       }
 
       if (name === 'fertilizerId') {
-        // eslint-disable-next-line no-param-reassign
         changes.name = filteredFertilizersOptions.find((f) => f.id === value)!.name;
+
+        // Load liquid densities.
+        if (formState.fertilizerTypeId === 3) {
+          const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value).value;
+          changes.density = densityValue;
+          changes.densityUnitId = 3;
+        }
+      }
+
+      if (name === 'densityUnitId') {
+        if (formState.fertilizerTypeId === 3) {
+          const densityValue = liqDensityFactors.find(
+            (ele) => ele.fertilizerid === formState.fertilizerId,
+          ).value;
+          const factor = densityUnits.find((ele) => ele.id === value).convfactor;
+
+          changes.density = densityValue * factor;
+          changes.densityUnitId = value;
+        }
       }
 
       setFormState((prev) => ({ ...prev, ...changes }));
     },
-    [fertilizerOptions, fertilizerTypes, filteredFertilizersOptions],
+    [
+      densityUnits,
+      fertilizerOptions,
+      fertilizerTypes,
+      filteredFertilizersOptions,
+      formState.fertilizerId,
+      formState.fertilizerTypeId,
+      liqDensityFactors,
+    ],
   );
 
-  const CustomeFertilizerEntry = useMemo(() => {
+  const CustomFertilizerEntry = useMemo(() => {
     if (formState.fertilizerTypeId === 2 || formState.fertilizerTypeId === 4) {
       return (
         <Grid size={{ xs: 12 }}>
@@ -283,10 +427,10 @@ export default function FertilizerModal({
                   isRequired
                   label="N (%)"
                   type="number"
-                  name="N"
-                  value={formState?.applicationRate.toString()}
+                  name="nitrogen"
+                  value={formCustomFertilizer?.nitrogen.toString()}
                   onChange={(e: string) => {
-                    handleInputChanges({ applicationRate: e });
+                    handleInputChanges({ nitrogen: e });
                   }}
                   maxLength={5}
                 />
@@ -296,10 +440,10 @@ export default function FertilizerModal({
                   isRequired
                   label="P2O5 (%)"
                   type="number"
-                  name="N"
-                  value={formState?.applicationRate.toString()}
+                  name="phosphorous"
+                  value={formCustomFertilizer?.phosphorous.toString()}
                   onChange={(e: string) => {
-                    handleInputChanges({ applicationRate: e });
+                    handleInputChanges({ phosphorous: e });
                   }}
                   maxLength={5}
                 />
@@ -309,10 +453,10 @@ export default function FertilizerModal({
                   isRequired
                   label="K2O"
                   type="number"
-                  name="N"
-                  value={formState?.applicationRate.toString()}
+                  name="potassium"
+                  value={formCustomFertilizer?.potassium.toString()}
                   onChange={(e: string) => {
-                    handleInputChanges({ applicationRate: e });
+                    handleInputChanges({ potassium: e });
                   }}
                   maxLength={5}
                 />
@@ -339,10 +483,12 @@ export default function FertilizerModal({
     );
   }, [
     filteredFertilizersOptions,
-    formState?.applicationRate,
     formState.fertilizerId,
     formState.fertilizerTypeId,
     handleInputChanges,
+    formCustomFertilizer.nitrogen,
+    formCustomFertilizer.phosphorous,
+    formCustomFertilizer.potassium,
   ]);
 
   return (
@@ -372,7 +518,7 @@ export default function FertilizerModal({
               }}
             />
           </Grid>
-          {CustomeFertilizerEntry}
+          {CustomFertilizerEntry}
           <Grid size={{ xs: 6 }}>
             <TextField
               isRequired
@@ -417,13 +563,13 @@ export default function FertilizerModal({
               <Grid size={{ xs: 6 }}>
                 <Select
                   isRequired
-                  name="applUnitId"
-                  items={dryOrLiquidUnitOptions.map((ele) => ({ id: ele.id, label: ele.name }))}
+                  name="densityUnitId"
+                  items={densityUnits.map((ele) => ({ id: ele.id, label: ele.name }))}
                   label="Density Units"
                   placeholder="Select Units"
-                  selectedKey={formState.applUnitId}
+                  selectedKey={formState?.densityUnitId}
                   onSelectionChange={(e: Key) => {
-                    handleInputChanges({ applUnitId: parseInt(e.toString(), 10) });
+                    handleInputChanges({ densityUnitId: parseInt(e.toString(), 10) });
                   }}
                 />
               </Grid>
@@ -458,7 +604,7 @@ export default function FertilizerModal({
             />
           </Grid>
         </Grid>
-        {/* <pre>{JSON.stringify(formState, null, 2)}</pre> */}
+        <div>{JSON.stringify(formState)}</div>
         <Grid size={{ xs: 12 }}>
           <div>
             <Grid

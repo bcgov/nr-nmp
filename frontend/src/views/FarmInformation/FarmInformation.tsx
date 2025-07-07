@@ -94,13 +94,6 @@ export default function FarmInformation() {
       }
     });
 
-    apiCache.callEndpoint('api/liquidfertilizerdensities/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        console.log('fert', data);
-      }
-    });
-
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
       const regions = (data as { id: number; name: string }[]).map((row) => ({

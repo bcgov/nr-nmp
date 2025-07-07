@@ -13,6 +13,8 @@ export const calcFertBalance = (
   fert: Fertilizer,
   applRate: number,
   applUnit: FertilizerUnit,
+  density: number | undefined,
+  densityConvFactor: number | undefined,
 ): CropNutrients => {
   let newFertBalance: CropNutrients = initialAgronomicBalance;
   let convertedApplRate = applRate;
@@ -22,7 +24,9 @@ export const calcFertBalance = (
   // Default unit for calc is lb/ac for dry ferts, imp. gall/ac for liquid
   // this will check for units and adjust accordingly
   if (fert.dryliquid.includes('liquid')) {
-    convertedApplRate *= applUnit.conversiontoimperialgallonsperacre;
+    if (!density || !densityConvFactor)
+      throw new Error('Liquid fertilizer missing density or density units');
+    convertedApplRate *= applUnit.conversiontoimperialgallonsperacre * density * densityConvFactor;
   }
 
   if (fert.dryliquid.includes('dry')) {
