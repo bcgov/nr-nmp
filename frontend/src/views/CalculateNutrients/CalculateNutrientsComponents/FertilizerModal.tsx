@@ -125,26 +125,6 @@ export default function FertilizerModal({
   const [formCustomFertilizer, setFormCustomFertilizer] =
     useState<Fertilizer>(EMPTY_CUSTOM_FERTILIZER);
 
-  // useEffect(() => {
-  //   console.log(
-  //     'fertilizerTypes',
-  //     fertilizerTypes.find((ele) => ele.id === formState.fertilizerTypeId),
-  //   );
-  // }, [fertilizerTypes, formState]);
-  // useEffect(() => {
-  //   console.log(
-  //     'fertilizer',
-  //     fertilizerOptions.find((ele) => ele.id === formState.fertilizerId),
-  //   );
-  // }, [fertilizerOptions, formState]);
-
-  // useEffect(() => {
-  //   console.log(
-  //     'fertilizerUnits',
-  //     fertilizerUnits.find((ele) => ele.id === formState.applUnitId),
-  //   );
-  // }, [fertilizerUnits, formState]);
-
   const apiCache = useContext(APICacheContext);
 
   const [calculatedData, setCalculateData] = useState<CropNutrients | null>(
@@ -227,7 +207,6 @@ export default function FertilizerModal({
     apiCache.callEndpoint('api/densityunits/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        console.log(data);
         setDensityUnits(data);
       }
     });
@@ -235,7 +214,6 @@ export default function FertilizerModal({
     apiCache.callEndpoint('api/liquidfertilizerdensities/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        console.log(data);
         setLiqDensityFactors(data);
       }
     });
@@ -348,8 +326,6 @@ export default function FertilizerModal({
       const value = updates[name];
       // eslint-disable-next-line prefer-const
       let changes = structuredClone(updates);
-
-      console.log('trig', name, value);
 
       if (['potassium', 'phosphorous', 'nitrogen'].includes(name)) {
         setFormCustomFertilizer((prev) => ({ ...prev, ...changes }));
