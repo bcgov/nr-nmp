@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Fertilizers, FertilizerTypes, FertilizerUnits
+from .models import Fertilizers, FertilizerTypes, FertilizerUnits, LiquidFertilizerDensities
 
 
 class FertilizerTypesSerializer(serializers.ModelSerializer):
@@ -18,4 +18,9 @@ class FertilizerUnitsSerializer(serializers.ModelSerializer):
 class FertilizersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fertilizers
+        fields = '__all__'
+
+class LiquidFertilizerDensitiesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LiquidFertilizerDensities
         fields = '__all__'

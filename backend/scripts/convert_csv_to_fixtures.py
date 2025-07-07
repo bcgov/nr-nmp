@@ -30,6 +30,7 @@ MODEL_MAPPINGS = {
     "_Breed": "animals.breed",
     "_Manures": "manures.manures",
     "_LiquidMaterialsConversionFactors": "manures.liquidmaterialsconversionfactors",
+    "_LiquidFertilizerDensities": "fertilizers.liquidfertilizerdensities",
     "_SolidMaterialsConversionFactors": "manures.solidmaterialsconversionfactors",
     "_Fertilizers": "fertilizers.fertilizers",
     "_FertilizerTypes": "fertilizers.fertilizertypes",
