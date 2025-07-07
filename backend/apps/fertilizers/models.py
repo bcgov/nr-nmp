@@ -47,3 +47,12 @@ class LiquidFertilizerDensities(models.Model):
     class Meta:
         managed = True
         db_table = 'liquid_fertilizer_densities'
+
+class DensityUnits(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    convfactor = models.FloatField()
+
+    class Meta:
+        managed = True
+        db_table = 'density_units'

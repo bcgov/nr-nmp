@@ -23,6 +23,7 @@ MODEL_MAPPINGS = {
     "_CropYields": "crops.cropyields",
     "_CropSoilTestPotassiumRegions": "crops.cropsoilpotassiumregions",
     "_CropSoilTestPhosphorousRegions": "crops.cropsoiltestphosphorousregions",
+    "_DensityUnits": "fertilizers.densityunits",
     "_Regions": "shared.regions",
     "_SubRegion": "shared.subregion",
     "_Animals": "animals.animals",
