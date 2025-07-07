@@ -38,6 +38,7 @@ class Fertilizers(models.Model):
         managed = True
         db_table = 'fertilizers'
 
+
 class LiquidFertilizerDensities(models.Model):
     id = models.IntegerField(primary_key=True)
     fertilizerid = models.IntegerField()
@@ -47,6 +48,7 @@ class LiquidFertilizerDensities(models.Model):
     class Meta:
         managed = True
         db_table = 'liquid_fertilizer_densities'
+
 
 class DensityUnits(models.Model):
     id = models.IntegerField(primary_key=True)

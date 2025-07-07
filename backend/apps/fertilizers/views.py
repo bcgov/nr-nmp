@@ -4,9 +4,9 @@ from rest_framework.response import Response
 
 from .models import FertilizerTypes, FertilizerUnits, Fertilizers, LiquidFertilizerDensities, DensityUnits
 from .serializers import (
-  FertilizerTypesSerializer, FertilizerUnitsSerializer, 
-  FertilizersSerializer, LiquidFertilizerDensitiesSerializer,
-  DensityUnitsSerializer
+    FertilizerTypesSerializer, FertilizerUnitsSerializer,
+    FertilizersSerializer, LiquidFertilizerDensitiesSerializer,
+    DensityUnitsSerializer
 )
 
 
@@ -29,7 +29,7 @@ class FertilizersViewset(viewsets.ViewSet):
         fertilizers = Fertilizers.objects.all()
         serializer = FertilizersSerializer(fertilizers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def liquidFertilizerDensities(self, request, pk=None):
         liquid_fertilizer_densities = LiquidFertilizerDensities.objects.all()
@@ -41,4 +41,3 @@ class FertilizersViewset(viewsets.ViewSet):
         density_units = DensityUnits.objects.all()
         serializer = DensityUnitsSerializer(density_units, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
