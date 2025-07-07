@@ -20,10 +20,12 @@ class FertilizersSerializer(serializers.ModelSerializer):
         model = Fertilizers
         fields = '__all__'
 
+
 class LiquidFertilizerDensitiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = LiquidFertilizerDensities
         fields = '__all__'
+
 
 class DensityUnitsSerializer(serializers.ModelSerializer):
     class Meta:
