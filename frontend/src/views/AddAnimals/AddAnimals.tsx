@@ -35,12 +35,18 @@ export default function AddAnimals() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const hasDairyCattle = useMemo(
+    () =>
+      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+    [state.nmpFile.years],
+  );
+
   const tabs = useMemo(
     () =>
-      state.showAnimalsStep
+      hasDairyCattle
         ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
         : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
-    [state.showAnimalsStep],
+    [hasDairyCattle],
   );
 
   const handleEditRow = React.useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {

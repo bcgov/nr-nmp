@@ -18,24 +18,39 @@ import manureTypeOptions from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
 import { booleanChecker } from '@/utils/utils';
-import type { StorageForm } from './Storage';
+import { NMPFileManureStorageSystemsData } from '@/types';
 
 type ModalComponentProps = {
-  initialModalData: StorageForm;
+  initialModalData: NMPFileManureStorageSystemsData;
+  handleSubmit: (formData: NMPFileManureStorageSystemsData) => void;
+  storageList: any;
   handleDialogClose: () => void;
-  handleSubmit: (formData: StorageForm) => void;
 };
 
 export default function StorageModal({
   initialModalData,
-  handleDialogClose,
   handleSubmit,
+  storageList,
+  handleDialogClose,
   ...props
 }: ModalComponentProps & ComponentProps<typeof Modal>) {
   const { state } = useAppState();
-  const [formData, setFormData] = useState<StorageForm>(initialModalData);
+  const [formData, setFormData] = useState<NMPFileManureStorageSystemsData>(initialModalData);
+  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.Name);
+  const [includedMaterial, setIncludedMaterial] = useState<string>('');
+  const [storageStructure, setStorageStructure] = useState<{
+    Id: number;
+    Name: string;
+    IsStructureCovered: boolean;
+    UncoveredAreaSquareFeet?: number;
+  }>({
+    Id: 0,
+    Name: '',
+    IsStructureCovered: false,
+    UncoveredAreaSquareFeet: undefined,
+  });
 
-  const [manureList, setManureList] = useState<{ id: string; label: string }[]>([]);
+  const [manureList, setManureList] = useState<{ id: string; label: string; manure: any }[]>([]);
 
   // gets imported and generated manures then filters manures based on manure type
   useEffect(() => {
@@ -44,30 +59,63 @@ export default function StorageModal({
     const manures = [...imported, ...generated];
 
     const filteredManures = manures.filter(
-      (manure) => manure.ManureTypeName === formData?.ManureType,
+      (manure) => manure.ManureTypeName === formData?.ManureMaterialType,
     );
 
     const items = filteredManures.map((manure, index) => ({
       id: `${manure.UniqueMaterialName}-${index}`,
       label: manure.ManagedManureName ?? '',
+      manure,
     }));
 
     setManureList(items);
-  }, [formData?.ManureType, state.nmpFile.years]);
+  }, [formData?.ManureMaterialType, state.nmpFile.years]);
+
+  const notUniqueNameCheck = () => {
+    if (isEditingExistingEntry) return false;
+    return storageList.some((ele: NMPFileManureStorageSystemsData) => ele.Name === formData.Name);
+  };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // Prevent default browser page refresh.
     e.preventDefault();
 
-    handleSubmit(formData);
-    handleDialogClose();
+    // If saving included material we find includedMaterial in manureList then save the full item as imported or generated
+    const selectedManure = manureList.find((item) => item.id === includedMaterial);
+    console.log(selectedManure?.manure);
+    if (selectedManure) {
+      setFormData((prev: NMPFileManureStorageSystemsData) => {
+        const isGenerated = state.nmpFile.years[0]?.GeneratedManures?.some(
+          (m: any) => m.UniqueMaterialName === selectedManure.manure.UniqueMaterialName,
+        );
+        if (isGenerated) {
+          return {
+            ...prev,
+            GeneratedManuresIncludedInSystem: [selectedManure.manure],
+          };
+        }
+        return {
+          ...prev,
+          ImportedManuresIncludedInSystem: [selectedManure.manure],
+        };
+      });
+    }
+
+    if (notUniqueNameCheck()) {
+      console.error('not unique name');
+    } else {
+      console.log(formData);
+      handleSubmit(formData);
+      handleDialogClose();
+    }
   };
 
   const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
-    setFormData((prev: StorageForm) => {
+    setFormData((prev: NMPFileManureStorageSystemsData) => {
       const updatedData = { ...prev, [name]: value };
       return updatedData;
     });
+    console.log(formData);
   };
 
   return (
@@ -105,24 +153,20 @@ export default function StorageModal({
                   <Select
                     isRequired
                     label="Manure Type"
-                    selectedKey={formData?.ManureType}
+                    selectedKey={formData?.ManureMaterialType === 1 ? 'Liquid' : 'Solid'}
                     items={manureTypeOptions}
                     onSelectionChange={(e: Key) => {
-                      handleInputChange('ManureType', String(e));
-                      handleInputChange(
-                        'ManureTypeName',
-                        manureTypeOptions.find((ele) => ele.id === e)?.label,
-                      );
+                      handleInputChange('ManureMaterialType', e === 'Liquid' ? 1 : 2);
                     }}
                   />
                   <TextField
                     isRequired
                     label="System Name"
                     type="string"
-                    name="SystemName"
-                    value={formData.SystemName}
-                    onChange={(e: Key) => {
-                      handleInputChange('SystemName', String(e) ?? '');
+                    name="Name"
+                    value={formData.Name}
+                    onChange={(e) => {
+                      handleInputChange('Name', e);
                     }}
                   />
                 </Grid>
@@ -130,12 +174,11 @@ export default function StorageModal({
                   <Select
                     isRequired
                     label="Included Materials"
-                    placeholder="Select a manure type"
-                    selectedKey={formData?.ManagedManure}
+                    placeholder="Select a manure type first"
+                    selectedKey={includedMaterial}
                     items={manureList}
-                    onSelectionChange={(e: Key) => {
-                      handleInputChange('ManagedManure', String(e));
-                      handleInputChange('UniqueMaterialName', String(e));
+                    onSelectionChange={(e: any) => {
+                      setIncludedMaterial(e);
                     }}
                   />
                 </Grid>
@@ -164,10 +207,13 @@ export default function StorageModal({
                       isRequired
                       label="Storage Name"
                       type="string"
-                      name="StorageName"
-                      value={formData.StorageName}
-                      onChange={(e: Key) => {
-                        handleInputChange('StorageName', String(e) ?? '');
+                      name="ManureStorageStructures.Name"
+                      value={storageStructure.Name}
+                      onChange={(e: any) => {
+                        setStorageStructure({
+                          ...storageStructure,
+                          Name: e,
+                        });
                       }}
                     />
                   </Grid>
@@ -182,27 +228,30 @@ export default function StorageModal({
                     >
                       Is the storage covered?
                       <YesNoRadioButtons
-                        value={booleanChecker(formData.IsCovered)}
+                        value={booleanChecker(storageStructure.IsStructureCovered)}
                         text=""
-                        onChange={(e: boolean) => {
-                          handleInputChange('IsCovered', e ?? '');
+                        onChange={(e: any) => {
+                          setStorageStructure({
+                            ...storageStructure,
+                            IsStructureCovered: e,
+                          });
                         }}
                         orientation="horizontal"
                       />
                     </div>
-                    {!formData.IsCovered && (
+                    {/* NOT WORKING */}
+                    {storageStructure && (
                       <TextField
                         isRequired
                         label="Uncovered Area of Storage (ft2)"
                         type="number"
                         name="UncoveredArea"
-                        value={
-                          formData.UncoveredArea !== undefined
-                            ? String(formData.UncoveredArea)
-                            : '0'
-                        }
-                        onChange={(e: Key) => {
-                          handleInputChange('UncoveredArea', Number(e) ?? '');
+                        value={storageStructure.UncoveredAreaSquareFeet?.toString()}
+                        onChange={(e: any) => {
+                          setStorageStructure({
+                            ...storageStructure,
+                            UncoveredAreaSquareFeet: e,
+                          });
                         }}
                       />
                     )}

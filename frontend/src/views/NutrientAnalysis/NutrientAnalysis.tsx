@@ -2,7 +2,7 @@
  * @summary The nutrient analysis tab on the manure page for the application
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -38,6 +38,12 @@ export default function NutrientAnalysis() {
   );
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
+
+  const hasDairyCattle = useMemo(
+    () =>
+      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+    [state.nmpFile.years],
+  );
 
   const handleEdit = (name: string) => {
     setEditName(name);
@@ -83,7 +89,7 @@ export default function NutrientAnalysis() {
   };
 
   const handlePreviousPage = () => {
-    if (state.showAnimalsStep) {
+    if (hasDairyCattle) {
       navigate(STORAGE);
     } else {
       navigate(MANURE_IMPORTS);
@@ -202,10 +208,15 @@ export default function NutrientAnalysis() {
           modalStyle={{ width: '700px' }}
         />
       )}
-      {state.showAnimalsStep ? (
+      {state.showAnimalsStep && hasDairyCattle ? (
         <TabsMaterial
           activeTab={3}
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+        />
+      ) : state.showAnimalsStep ? (
+        <TabsMaterial
+          activeTab={2}
+          tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
         />
       ) : (
         <TabsMaterial

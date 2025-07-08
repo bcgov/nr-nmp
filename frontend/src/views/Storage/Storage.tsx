@@ -16,82 +16,80 @@ import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
-
-export interface StorageForm {
-  ManureType: string;
-  ManureTypeName: string;
-  SystemName: string;
-  StorageName: string;
-  IsMaterialStored: boolean;
-  IsCovered: boolean;
-  UncoveredArea?: number;
-  AssignedToStoredSystem?: boolean;
-  ManagedManure: string;
-  UniqueMaterialName: string;
-}
-
-const EMPTY_STORAGE: StorageForm = {
-  ManureType: '',
-  ManureTypeName: '',
-  SystemName: '',
-  StorageName: '',
-  IsMaterialStored: false,
-  IsCovered: false,
-  AssignedToStoredSystem: false,
-  ManagedManure: '',
-  UniqueMaterialName: '',
-};
+import useAppState from '@/hooks/useAppState';
+import { NMPFileManureStorageSystemsData } from '@/types';
+import DefaultNMPFileManureStorageSystemsData from '@/constants/DefaultNMPFileManureStorage';
 
 export default function Storage() {
+  const { state, dispatch } = useAppState();
   const navigate = useNavigate();
-  const [storageList, setStorageList] = useState<StorageForm[]>([]);
-  // Not sure if this is the right file type
-  const [storageFormData, setStorageFormData] = useState<StorageForm>(EMPTY_STORAGE);
-
-  const handleSubmit = (formData: StorageForm) => {
-    setStorageList([...storageList, formData]);
-  };
+  const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [storageList, setStorageList] = useState<NMPFileManureStorageSystemsData[]>(
+    state.nmpFile.years[0]?.ManureStorageSystems || [],
+  );
+  const [storageFormData, setStorageFormData] = useState<NMPFileManureStorageSystemsData>(
+    DefaultNMPFileManureStorageSystemsData,
+  );
 
   const handlePrevious = () => {
     navigate(MANURE_IMPORTS);
   };
 
-  // fix dispatch where are we saving the storage form info
+  // save to NMPFileManureStorageSystemsData
   // either imported or generated manure do we save IsMaterialStored and AssignedToStoredSystem booleans
   const handleNext = () => {
+    dispatch({
+      type: 'SAVE_MANURE_STORAGE_SYSTEMS',
+      year: state.nmpFile.farmDetails.Year!,
+      newManureStorageSystems: storageList,
+    });
     navigate(NUTRIENT_ANALYSIS);
   };
 
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-
   const handleDialogClose = () => {
-    setStorageFormData(EMPTY_STORAGE);
+    setRowEditIndex(null);
+    setStorageFormData(DefaultNMPFileManureStorageSystemsData);
     setIsDialogOpen(false);
   };
 
   // on edit text fields dont show up
   const handleEditRow = (e: GridRenderCellParams) => {
+    setRowEditIndex(e.row);
     setStorageFormData(e.row);
     setIsDialogOpen(true);
   };
 
   const handleDeleteRow = (e: GridRenderCellParams) => {
-    setStorageList((prev) =>
-      prev.filter((row) => row.UniqueMaterialName !== e.row.UniqueMaterialName),
-    );
+    setStorageList((prev) => prev.filter((ele) => ele.Name !== e.row.Name));
+  };
+
+  const handleSubmit = (formData: NMPFileManureStorageSystemsData) => {
+    setStorageList([...storageList, storageFormData]);
+    if (rowEditIndex !== undefined) {
+      // If editing, find and replace field instead of adding new field
+      setStorageList((prev) => {
+        const newList = [...prev];
+        newList[rowEditIndex] = { ...formData };
+        return newList;
+      });
+    } else {
+      setStorageList((prev) => [...prev, { ...formData }]);
+    }
+    handleDialogClose();
   };
 
   const columnsAnimalManure: GridColDef[] = useMemo(
     () => [
       {
-        field: 'SystemName',
+        field: 'Name',
         headerName: 'System Name',
         width: 200,
         minWidth: 150,
         maxWidth: 300,
       },
       {
-        field: 'StorageName',
+        field: 'ManureStorageStructures.Name',
         headerName: 'Storage Name',
         width: 325,
         minWidth: 150,
@@ -149,6 +147,7 @@ export default function Storage() {
         <StorageModal
           key={isDialogOpen.toString()}
           initialModalData={storageFormData}
+          storageList={storageList}
           handleDialogClose={handleDialogClose}
           handleSubmit={handleSubmit}
           isOpen={isDialogOpen}

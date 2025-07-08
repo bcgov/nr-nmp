@@ -5,6 +5,7 @@ import {
   NMPFileFieldData,
   NMPFileFarmManureData,
   NMPFileImportedManureData,
+  NMPFileManureStorageSystemsData,
   AnimalData,
   NMPFileYear,
   DAIRY_COW_ID,
@@ -45,6 +46,12 @@ type SaveImportedManureAction = {
   newManures: NMPFileImportedManureData[];
 };
 
+type SaveManureStorageSystemsAction = {
+  type: 'SAVE_MANURE_STORAGE_SYSTEMS';
+  year: string;
+  newManureStorageSystems: NMPFileManureStorageSystemsData[];
+};
+
 type SaveAnimalsAction = {
   type: 'SAVE_ANIMALS';
   year: string;
@@ -71,6 +78,7 @@ export type AppStateAction =
   | SaveFieldsAction
   | SaveFarmManureAction
   | SaveImportedManureAction
+  | SaveManureStorageSystemsAction
   | SaveAnimalsAction
   | ClearAnimalsAction
   | OverwriteNMPFileAction
@@ -92,19 +100,19 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
           UniqueMaterialName: animal.manureData.name,
-          ManureTypeName: 'Solid',
+          ManureTypeName: 2, // Solid
           AnnualAmount: animal.manureData.annualSolidManure,
           AnnualAmountTonsWeight: animal.manureData.annualSolidManure,
           AnnualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
           // ManagedManureName is the name of the manure, number of animals and manure type
           // Calves (0 to 3 months old)(2 animals), Solid
-          ManagedManureName: `${animal.manureData.name}, ${animal.animalsPerFarm} animals, Solid`,
+          ManagedManureName: `${animal.manureData.name}, ${animal.animalsPerFarm} animal${animal.animalsPerFarm === 1 ? '' : 's'}, Solid`,
         });
       } else {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
           UniqueMaterialName: animal.manureData.name,
-          ManureTypeName: 'Liquid',
+          ManureTypeName: 1, // Liquid
           AnnualAmount: animal.manureData.annualLiquidManure,
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
@@ -170,6 +178,8 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     year.FarmManures = structuredClone(action.newManures);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {
     year.ImportedManures = structuredClone(action.newManures);
+  } else if (action.type === 'SAVE_MANURE_STORAGE_SYSTEMS') {
+    year.ManureStorageSystems = structuredClone(action.newManureStorageSystems);
   } else if (action.type === 'SAVE_ANIMALS') {
     saveAnimals(year, action.newAnimals);
   } else if (action.type === 'CLEAR_ANIMALS') {
