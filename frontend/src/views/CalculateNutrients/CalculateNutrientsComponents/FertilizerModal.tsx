@@ -416,7 +416,6 @@ export default function FertilizerModal({
       onOpenChange={onClose}
       {...props}
     >
-      <div>{JSON.stringify(formState)}</div>
       <Form
         css={formCss}
         onSubmit={handleModalCalculate}
