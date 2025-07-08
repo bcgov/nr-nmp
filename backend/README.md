@@ -102,6 +102,7 @@ docker compose exec backend python manage.py loaddata all_data
 ### OpenShift Deployment Issues
 In some cases, you may need to delete the deployment in OpenShift to allow migrations to run properly. This forces a fresh deployment with the new migration changes.
 
+After that you will re-run the github actions for a successful backend deployment.
 ### Reset Database (Development Only)
 ```bash
 # Delete all data and start fresh
