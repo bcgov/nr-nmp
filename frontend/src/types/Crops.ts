@@ -1,5 +1,11 @@
 import { CalculateNutrientsColumn } from './calculateNutrients';
 
+export const FORAGE_ID = 1;
+export const COVER_CROP_ID = 2;
+export const GRAIN_OILSEED_ID = 4;
+export const CROP_TYPE_OTHER_ID = 6;
+export const CROP_OTHER_ID = 66;
+
 export type CropsConversionFactors = {
   nitrogenproteinconversion: number;
   unitconversion: number;
@@ -66,20 +72,17 @@ export type NMPFileSoilTestData = {
 };
 
 export interface NMPFileCropData extends CalculateNutrientsColumn {
-  cropId: string;
+  cropId: number;
   cropTypeId: number;
-  cropTypeName: string;
-  cropOther?: string | null;
   yield?: number;
   stdN?: number;
-  crudeProtien?: number;
+  crudeProtein?: number;
   prevCropId?: number;
   coverCropHarvested?: string | null;
+  yieldHarvestUnit?: string;
   /*
   Fields from old NMP, currently unused, feel free to re-add
   prevYearManureAppl_volCatCd?: number;
-  yieldHarvestUnit?: number;
-  yieldByHarvestUnit?: number;
   plantAgeYears?: number | null;
   numberOfPlantsPerAcre?: number;
   distanceBtwnPlantsRows?: number | null;

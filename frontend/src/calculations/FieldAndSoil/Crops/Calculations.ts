@@ -240,14 +240,14 @@ export async function getCropRemovalN(combinedCropData: NMPFileCropData): Promis
 
   // Special calculation for forage crops with crude protein data
   if (isForageCrop) {
-    if (!combinedCropData.crudeProtien || combinedCropData.crudeProtien == 0) {
+    if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein == 0) {
       nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield!;
     } else {
       const nToProteinConversionFactor = 0.625;
       const unitConversionFactor = 0.5;
 
       const newCropRemovalFactorNitrogen =
-        combinedCropData.crudeProtien / (nToProteinConversionFactor * unitConversionFactor);
+        combinedCropData.crudeProtein / (nToProteinConversionFactor * unitConversionFactor);
       nRemoval = newCropRemovalFactorNitrogen * combinedCropData.yield!;
     }
   } else if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
@@ -334,7 +334,7 @@ export async function getCropRequirementK2O(
   if (STK == '0' || STK == null) STK = String(conversionFactors.defaultsoiltestkelownapotassium);
 
   const cropSTKRegionCd = await getCropSoilTestRegions(
-    Number(combinedCropData.cropId),
+    combinedCropData.cropId,
     region?.soiltestpotassiumregioncd,
     'cropsoilpotassiumregions',
   );
@@ -383,7 +383,7 @@ export async function getCropRequirementP205(
   if (STP == '0' || STP == null) STP = String(conversionFactors.defaultsoiltestkelownaphosphorous);
 
   const cropSTPRegionCd = await getCropSoilTestRegions(
-    Number(combinedCropData.cropId),
+    combinedCropData.cropId,
     region?.soiltestphosphorousregioncd,
     'cropsoiltestphosphorousregions',
   );
