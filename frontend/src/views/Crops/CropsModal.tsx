@@ -3,6 +3,7 @@ import { Button, ButtonGroup, TextField, Select } from '@bcgov/design-system-rea
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import LoopIcon from '@mui/icons-material/Loop';
 import { Modal, YesNoRadioButtons } from '@/components/common';
 import { CropType, Crop, PreviousCrop, NMPFileCropData, NMPFileFieldData } from '@/types';
 import {
@@ -114,6 +115,7 @@ function CropsModal({
   const [formData, setFormData] = useState<NMPFileCropData>(
     initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
   );
+  const [defaultYield, setDefaultYield] = useState<number|undefined>(formData.yield);
   const [crops, setCrops] = useState<Crop[]>([]);
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
@@ -299,14 +301,22 @@ function CropsModal({
     if (fieldIndex !== null) {
       try {
         // Calculate crop requirements (P2O5, K2O, N)
-        const cropRequirementP205 = await getCropRequirementP205(field, formData, farmRegion);
-        const cropRequirementK2O = await getCropRequirementK2O(field, formData, farmRegion);
-        const cropRequirementN = await getCropRequirementN(formData, farmRegion);
+        const cropRequirementN = await getCropRequirementN(formData);
+        const cropRequirementP205 = await getCropRequirementP205(
+          formData,
+          field.SoilTest,
+          farmRegion,
+        );
+        const cropRequirementK2O = await getCropRequirementK2O(
+          formData,
+          field.SoilTest,
+          farmRegion,
+        );
 
         // Calculate crop removals (N, P2O5, K2O)
-        const cropRemovalN = await getCropRemovalN(formData, farmRegion);
-        const cropRemovalP205 = await getCropRemovalP205(formData, farmRegion);
-        const cropRemovalK20 = await getCropRemovalK20(formData, farmRegion);
+        const cropRemovalN = await getCropRemovalN(formData);
+        const cropRemovalP205 = await getCropRemovalP205(formData);
+        const cropRemovalK20 = await getCropRemovalK20(formData);
 
         // Update the crops data with calculated values
         setFormData((prevData) => ({
@@ -373,6 +383,7 @@ function CropsModal({
                   ...prevData,
                   yield: data[0].amount,
                 }));
+                setDefaultYield(data[0].amount);
               }
             });
         })();
@@ -508,6 +519,7 @@ function CropsModal({
               name="yield"
               value={formData.yield?.toString() || ''}
               onChange={(e) => handleFormFieldChange('yield', e)}
+              iconRight={<LoopIcon />}
             />
           </Grid>
           {formData.cropTypeId === 1 && (
