@@ -354,6 +354,11 @@ export default function ManureAndImports() {
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
           />
+        ) : state.showAnimalsStep ? (
+          <TabsMaterial
+            activeTab={1}
+            tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+          />
         ) : (
           <TabsMaterial
             activeTab={0}

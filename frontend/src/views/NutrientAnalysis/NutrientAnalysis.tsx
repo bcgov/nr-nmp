@@ -213,6 +213,11 @@ export default function NutrientAnalysis() {
           activeTab={3}
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
+      ) : state.showAnimalsStep ? (
+        <TabsMaterial
+          activeTab={2}
+          tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+        />
       ) : (
         <TabsMaterial
           activeTab={1}

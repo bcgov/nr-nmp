@@ -48,7 +48,7 @@ export default function Storage() {
   };
 
   const handleDialogClose = () => {
-    setRowEditIndex(undefined);
+    setRowEditIndex(null);
     setStorageFormData(DefaultNMPFileManureStorageSystemsData);
     setIsDialogOpen(false);
   };
@@ -89,7 +89,7 @@ export default function Storage() {
         maxWidth: 300,
       },
       {
-        field: 'ManureStorageStructures[0].Name',
+        field: 'ManureStorageStructures.Name',
         headerName: 'Storage Name',
         width: 325,
         minWidth: 150,
@@ -163,7 +163,7 @@ export default function Storage() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={storageList}
         columns={columnsAnimalManure}
-        getRowId={() => crypto.randomUUID()}
+        getRowId={(row: any) => row.index}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
