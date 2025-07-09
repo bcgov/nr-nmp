@@ -78,8 +78,9 @@ export interface NMPFileCropData extends CalculateNutrientsColumn {
   stdN?: number;
   crudeProtein?: number;
   prevCropId?: number;
-  coverCropHarvested?: string | null;
+  coverCropHarvested?: boolean;
   yieldHarvestUnit?: string;
+  nCredit: number;
   /*
   Fields from old NMP, currently unused, feel free to re-add
   prevYearManureAppl_volCatCd?: number;

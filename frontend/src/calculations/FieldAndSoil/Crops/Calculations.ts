@@ -180,7 +180,7 @@ export async function getNCredit(cropId: number) {
  * @returns {Promise<number>} Amount of K2O removed in lbs/acre, rounded to nearest integer
  */
 export async function getCropRemovalK20(combinedCropData: NMPFileCropData): Promise<number> {
-  const crop = await getCrop(Number(combinedCropData.cropId));
+  const crop = await getCrop(combinedCropData.cropId);
 
   // For cover crops not harvested, there's no removal
   if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
@@ -206,7 +206,7 @@ export async function getCropRemovalK20(combinedCropData: NMPFileCropData): Prom
  * @returns {Promise<number>} Amount of P2O5 removed in lbs/acre, rounded to nearest integer
  */
 export async function getCropRemovalP205(combinedCropData: NMPFileCropData): Promise<number> {
-  const crop = await getCrop(Number(combinedCropData.cropId));
+  const crop = await getCrop(combinedCropData.cropId);
 
   // For cover crops not harvested, there's no removal
   if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
@@ -234,7 +234,7 @@ export async function getCropRemovalP205(combinedCropData: NMPFileCropData): Pro
  */
 export async function getCropRemovalN(combinedCropData: NMPFileCropData): Promise<number> {
   let nRemoval: number = 0;
-  const crop = await getCrop(Number(combinedCropData.cropId));
+  const crop = await getCrop(combinedCropData.cropId);
   const cropType = await getCropType(crop.croptypeid);
   const isForageCrop = cropType.crudeproteinrequired === true;
 
@@ -267,7 +267,7 @@ export async function getCropRemovalN(combinedCropData: NMPFileCropData): Promis
  * @returns {Promise<number>} Required N application in lbs/acre, rounded to nearest integer
  */
 export async function getCropRequirementN(combinedCropData: NMPFileCropData): Promise<number> {
-  const crop = await getCrop(Number(combinedCropData.cropId));
+  const crop = await getCrop(combinedCropData.cropId);
   const ncredit = await getNCredit(Number(combinedCropData.prevCropId));
 
   let nRequirement;

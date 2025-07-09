@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+/* eslint-disable no-case-declarations */
+import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { Button, ButtonGroup, TextField, Select } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
@@ -7,8 +8,6 @@ import LoopIcon from '@mui/icons-material/Loop';
 import { Modal, YesNoRadioButtons } from '@/components/common';
 import { CropType, Crop, PreviousCrop, NMPFileCropData, NMPFileFieldData } from '@/types';
 import {
-  getRegion,
-  getCrop,
   getCropRequirementP205,
   getCropRequirementK2O,
   getCropRequirementN,
@@ -23,11 +22,12 @@ import {
   formGridBreakpoints,
   textFieldStyle,
 } from '../../common.styles';
-import { booleanChecker } from '../../utils/utils';
 import { ModalProps } from '@/components/common/Modal/Modal';
-import { DEFAULT_NMPFILE_CROPS } from '@/constants';
-import { COVER_CROP_ID, CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/types/Crops';
-import { HARVEST_UNIT_OPTIONS, HarvestUnit } from '../../constants/harvestUnits';
+import { DEFAULT_NMPFILE_CROPS, HarvestUnit } from '@/constants';
+import { CROP_OTHER_ID } from '@/types/Crops';
+import { HARVEST_UNIT_OPTIONS } from '../../constants/harvestUnits';
+import useAppState from '@/hooks/useAppState';
+import { cropsModalReducer, showUnitDropdown } from './utils';
 
 // Define constants for column headings for Nutrient added/removed tables
 const requireAndRemoveColumns: GridColDef[] = [
@@ -62,31 +62,6 @@ const requireAndRemoveColumns: GridColDef[] = [
     flex: 1,
   },
 ];
-
-function showUnitDropdown(cropTypeId: number) {
-  return cropTypeId === GRAIN_OILSEED_ID;
-}
-
-function isCoverCrop(cropTypes: CropType[], cropTypeId: number) {
-  if (cropTypeId === 0) return false;
-  const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
-  if (cropType === undefined) throw new Error(`Crop type ${cropTypeId} is missing from list.`);
-  return cropType.covercrop;
-}
-
-function isCustomCrop(cropTypes: CropType[], cropTypeId: number) {
-  if (cropTypeId === 0) return false;
-  const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
-  if (cropType === undefined) throw new Error(`Crop type ${cropTypeId} is missing from list.`);
-  return cropType.customcrop;
-}
-
-function isCrudeProteinRequired(cropTypes: CropType[], cropTypeId: number) {
-  if (cropTypeId === 0) return false;
-  const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
-  if (cropType === undefined) throw new Error(`Crop type ${cropTypeId} is missing from list.`);
-  return cropType.crudeproteinrequired;
-}
 
 /**
  * Turn all of the nutrient values positive so the modal only handles
@@ -145,12 +120,19 @@ function CropsModal({
   farmRegion,
   ...props
 }: CropsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+  const { nmpFile } = useAppState().state;
   const apiCache = useContext(APICacheContext);
 
-  const [formData, setFormData] = useState<NMPFileCropData>(
-    initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
+  const [{ formData, selectedCropType, isFormYieldEqualToDefault }, dispatch] = useReducer(
+    cropsModalReducer,
+    {
+      formData: initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
+      selectedCropType: undefined,
+      selectedCrop: undefined,
+      defaultYieldInTons: undefined,
+      isFormYieldEqualToDefault: true,
+    },
   );
-  const [defaultYield, setDefaultYield] = useState<number|undefined>(formData.yield);
   const [crops, setCrops] = useState<Crop[]>([]);
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
@@ -158,7 +140,6 @@ function CropsModal({
   }, [crops, formData.cropTypeId]);
   const [cropTypes, setCropTypes] = useState<CropType[]>([]);
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
-  const [ncredit, setNcredit] = useState<number>(0);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -185,80 +166,80 @@ function CropsModal({
     onClose();
   };
 
+  // On load, make API calls to initialize reducer state values
+  useEffect(() => {
+    if (formData.cropTypeId !== 0) {
+      apiCache
+        .callEndpoint(`api/croptypes/${formData.cropTypeId}/`)
+        .then((response: { status: any; data: CropType[] }) => {
+          if (response.status === 200) {
+            dispatch({ type: 'SET_SELECTED_CROP_TYPE', cropType: response.data[0] });
+          }
+        });
+    }
+    if (formData.cropId !== 0) {
+      apiCache
+        .callEndpoint(`api/crops/${formData.cropId}/`)
+        .then((response: { status: any; data: Crop[] }) => {
+          if (response.status === 200) {
+            dispatch({ type: 'SET_SELECTED_CROP', crop: response.data[0] });
+          }
+        });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Populate dropdowns on load
   useEffect(() => {
     apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
-        const { data } = response;
-        setCropTypes(data);
+        setCropTypes(response.data);
       }
     });
     apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
-        const { data } = response;
-        setCrops(data);
+        setCrops(response.data);
       }
     });
     apiCache
       .callEndpoint('api/previouscroptypes/')
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
-          const { data } = response;
-          setPreviousCrops(data);
+          setPreviousCrops(response.data);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFormFieldChange = (name: string, value: string | number | boolean) => {
+  const handleFormFieldChange = (attr: keyof NMPFileCropData, value: string | number | boolean) => {
     // Clear the error for the field being changed
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+    if (errors[attr]) {
+      setErrors((prev) => ({ ...prev, [attr]: '' }));
     }
 
-    // Handle special case for cropTypeId - filter available crops based on type
-    if (name === 'cropTypeId') {
-      // Handle special case for cropTypeId - set the crop name for display cropTypes
-      setFormData((prevData) => ({
-        ...prevData,
-        cropTypeId: value as number,
-        // If this is the Other type, set to Other, otherwise reset value
-        cropId: value === CROP_TYPE_OTHER_ID ? CROP_OTHER_ID : 0,
-        // If cropTypeId is a cover crop, default to false
-        // If it gets changed away, reset to null
-        coverCropHarvested: isCoverCrop(cropTypes, value as number)
-          ? formData.coverCropHarvested === null
-            ? 'false'
-            : prevData.coverCropHarvested
-          : null,
-        // Set default if this crop type shows the harvest unit dropdown
-        // Otherwise clear the value
-        yieldHarvestUnit: showUnitDropdown(value as number)
-          ? HarvestUnit.BushelsPerAcre
-          : undefined,
-      }));
-      return;
+    switch (attr) {
+      case 'cropTypeId':
+        const cropTypeId = value as number;
+        const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
+        if (cropType === undefined)
+          throw new Error(`Crop type ${cropTypeId} is missing from list.`);
+        dispatch({ type: 'SET_CROP_TYPE_ID', cropTypeId, cropType });
+        return;
+      case 'cropId':
+        const cropId = Number(value);
+        const crop = crops.find((c) => c.id === cropId);
+        if (crop === undefined) throw new Error(`Crop id ${cropId} is not in crop list.`);
+        dispatch({ type: 'SET_CROP_ID', cropId, crop });
+        return;
+      case 'yield':
+        dispatch({ type: 'SET_YIELD', yield: value as number });
+        return;
+      case 'yieldHarvestUnit':
+        dispatch({ type: 'SET_YIELD_HARVEST_UNIT', unit: value as HarvestUnit });
+        return;
+      default:
+        dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
     }
-
-    // Handle special case for cropId - set the crop name for display
-    if (name === 'cropId') {
-      const cropId = Number(value);
-      const selectedCrop = crops.find((crop) => crop.id === cropId);
-      if (selectedCrop === undefined) {
-        throw new Error(`Crop id ${cropId} is not in crop list.`);
-      }
-
-      setFormData((prevData) => ({
-        ...prevData,
-        cropId: value as number,
-        name: selectedCrop.cropname,
-      }));
-      return;
-    }
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
   };
 
   /**
@@ -286,7 +267,7 @@ function CropsModal({
     }
 
     // Crude protein validation for forage crops (type 1)
-    if (isCrudeProteinRequired(cropTypes, formData.cropTypeId) && !formData.crudeProtein) {
+    if (selectedCropType?.crudeproteinrequired && !formData.crudeProtein) {
       newErrors.crudeProtein = 'Crude Protein is required';
     } else if (
       formData.cropTypeId === 1 &&
@@ -308,7 +289,7 @@ function CropsModal({
     }
 
     // Special validation for cover crops (type 2)
-    if (formData.cropTypeId === COVER_CROP_ID && !formData.coverCropHarvested) {
+    if (selectedCropType?.covercrop && formData.coverCropHarvested === undefined) {
       newErrors.coverCropHarvested = 'Please specify if cover crop was harvested';
     }
 
@@ -352,15 +333,15 @@ function CropsModal({
         const cropRemovalK20 = await getCropRemovalK20(formData);
 
         // Update the crops data with calculated values
-        setFormData((prevData) => ({
-          ...prevData,
+        dispatch({
+          type: 'SET_CALCULATED_VALUES',
+          reqN: cropRequirementN,
           reqP2o5: cropRequirementP205,
           reqK2o: cropRequirementK2O,
-          reqN: cropRequirementN,
           remN: cropRemovalN,
           remP2o5: cropRemovalP205,
           remK2o: cropRemovalK20,
-        }));
+        });
 
         // Mark calculations as performed
         setCalculationsPerformed(true);
@@ -381,8 +362,11 @@ function CropsModal({
           .callEndpoint(`api/previouscroptypes/${formData.prevCropId}/`)
           .then((response: { status?: any; data: any }) => {
             if (response.status === 200) {
-              const { data } = response;
-              setNcredit(data[0].nitrogencreditimperial || 0);
+              dispatch({
+                type: 'SET_FORM_DATA_ATTR',
+                attr: 'nCredit',
+                value: response.data[0].nitrogencreditimperial || 0,
+              });
             }
           });
       }
@@ -393,54 +377,22 @@ function CropsModal({
   }, [formData.prevCropId]);
 
   /**
-   * Effect: Auto-fill yield and crude protein values when crop changes on add crop
-   * Fetches yield data based on selected crop and region
-   * Calculates crude protein for forage crops
+   * Effect: Auto-fill yield when crop changes on add crop
+   * Fetches default yield based on selected crop and region
    */
   useEffect(() => {
-    if (
-      formData.cropId !== 0 &&
-      formData.cropId !== CROP_OTHER_ID &&
-      initialModalData?.cropId !== formData.cropId
-    ) {
-      try {
-        (async () => {
-          const region = await getRegion(farmRegion);
-          apiCache
-            .callEndpoint(`api/cropyields/${formData.cropId}/${region?.locationid}/`)
-            .then((response: { status?: any; data: any }) => {
-              if (response.status === 200) {
-                const { data } = response;
-                // TBD: selecting CropType: other, Crop: other will cause error here
-                setFormData((prevData) => ({
-                  ...prevData,
-                  yield: data[0].amount,
-                }));
-                setDefaultYield(data[0].amount);
-              }
-            });
-        })();
-      } catch (error) {
-        console.error('Error getting crop yield:', error);
-      }
-      try {
-        (async () => {
-          const nToProteinConversionFactor = 0.625;
-          const unitConversionFactor = 0.5;
-          const crop = await getCrop(Number(formData.cropId));
-
-          if (crop && crop.nitrogenrecommendationid != null) {
-            const crudeProtein =
-              crop.cropremovalfactornitrogen * nToProteinConversionFactor * unitConversionFactor;
-            setFormData((prevData) => ({
-              ...prevData,
-              crudeProtein,
-            }));
+    if (formData.cropId !== 0 && formData.cropId !== CROP_OTHER_ID) {
+      apiCache
+        .callEndpoint(`api/cropyields/${formData.cropId}/${nmpFile.farmDetails.FarmRegion}/`)
+        .then((response) => {
+          if (response.status === 200) {
+            const { data } = response;
+            dispatch({ type: 'SET_DEFAULT_YIELD', amount: data[0].amount });
+            if (initialModalData?.cropId !== formData.cropId) {
+              dispatch({ type: 'SET_YIELD_IN_TONS', yield: data[0].amount });
+            }
           }
-        })();
-      } catch (error) {
-        console.error('Error getting crop protein data:', error);
-      }
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.cropId]);
@@ -485,7 +437,7 @@ function CropsModal({
           </Grid>
           {cropTypes.length === 0 ? null : (
             <>
-              {isCustomCrop(cropTypes, formData.cropTypeId) ? (
+              {selectedCropType?.customcrop ? (
                 <Grid size={formGridBreakpoints}>
                   <span className="bcds-react-aria-Select--Label">Crop Description</span>
                   <TextField
@@ -522,7 +474,17 @@ function CropsModal({
                   name="yield"
                   value={formData.yield?.toString() || ''}
                   onChange={(e) => handleFormFieldChange('yield', e)}
-                  iconRight={<LoopIcon />}
+                  iconRight={
+                    !isFormYieldEqualToDefault ? (
+                      <button
+                        type="button"
+                        css={{ backgroundColor: '#ffa500' }}
+                        onClick={() => dispatch({ type: 'RESTORE_DEFAULT_YIELD' })}
+                      >
+                        <LoopIcon />
+                      </button>
+                    ) : undefined
+                  }
                 />
               </Grid>
               {showUnitDropdown(formData.cropTypeId) && (
@@ -538,12 +500,12 @@ function CropsModal({
                   />
                 </Grid>
               )}
-              {isCrudeProteinRequired(cropTypes, formData.cropTypeId) && (
+              {selectedCropType?.crudeproteinrequired && (
                 <Grid size={formGridBreakpoints}>
                   <span
                     className={`bcds-react-aria-Select--Label ${errors.crudeProtein ? '--error' : ''}`}
                   >
-                    Crude Protein
+                    Crude Protein (%)
                   </span>
                   <TextField
                     type="number"
@@ -553,7 +515,7 @@ function CropsModal({
                   />
                 </Grid>
               )}
-              {!isCustomCrop(cropTypes, formData.cropTypeId) && (
+              {!selectedCropType?.customcrop && (
                 <>
                   {(() => {
                     const availablePreviousCrops = previousCrops.filter(
@@ -583,7 +545,9 @@ function CropsModal({
                         <Grid size={formGridBreakpoints}>
                           <span className="bcds-react-aria-Select--Label">N credit (lb/ac):</span>
                           <div>
-                            <span css={{ display: 'block', marginTop: '8px' }}>{ncredit}</span>
+                            <span css={{ display: 'block', marginTop: '8px' }}>
+                              {formData.nCredit}
+                            </span>
                           </div>
                         </Grid>
                       </>
@@ -591,7 +555,7 @@ function CropsModal({
                   })()}
                 </>
               )}
-              {isCoverCrop(cropTypes, formData.cropTypeId) && (
+              {selectedCropType?.covercrop && (
                 <Grid size={formGridBreakpoints}>
                   <div
                     style={{ marginBottom: '0.15rem' }}
@@ -600,17 +564,17 @@ function CropsModal({
                     Cover Crop Harvested
                   </div>
                   <YesNoRadioButtons
-                    value={booleanChecker(formData.coverCropHarvested)}
+                    value={formData.coverCropHarvested || false}
                     text=""
                     onChange={(b: boolean) => {
-                      handleFormFieldChange('coverCropHarvested', b.toString());
+                      handleFormFieldChange('coverCropHarvested', b);
                     }}
                     orientation="horizontal"
                   />
                 </Grid>
               )}
 
-              {isCustomCrop(cropTypes, formData.cropTypeId) ? (
+              {selectedCropType?.customcrop ? (
                 <div css={{ display: 'block' }}>
                   <Grid
                     container
