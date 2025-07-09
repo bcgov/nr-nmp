@@ -48,7 +48,7 @@ export default function Storage() {
   };
 
   const handleDialogClose = () => {
-    setRowEditIndex(null);
+    setRowEditIndex(undefined);
     setStorageFormData(DefaultNMPFileManureStorageSystemsData);
     setIsDialogOpen(false);
   };
@@ -89,7 +89,7 @@ export default function Storage() {
         maxWidth: 300,
       },
       {
-        field: 'ManureStorageStructures.Name',
+        field: 'ManureStorageStructures[0].Name',
         headerName: 'Storage Name',
         width: 325,
         minWidth: 150,
