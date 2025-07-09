@@ -37,7 +37,10 @@ docker compose exec backend python manage.py migrate
 
 ## Data Seeding Process
 
-### 1. CSV to JSON Conversion
+## 1. CSV to JSON Conversion
+
+**Note**: You may need to remove the `staticVersionID` column from the original CSV files, either with SQL or manually, before conversion.
+
 If you have new CSV data, convert it to JSON fixtures:
 
 ```bash
@@ -50,7 +53,7 @@ This script:
 - Reads CSV files from `database/db/trimmed_tables/`
 - Converts them to JSON fixtures in `backend/apps/shared/fixtures/`
 - Creates both individual model fixtures and a combined `all_data.json`
-- May have to change this script to use integers instead of floating number
+- May need to be modified to use integers instead of floating point numbers
 
 ### 2. Load All Data
 To load all fixture data:
@@ -58,15 +61,7 @@ To load all fixture data:
 docker compose exec backend python manage.py loaddata all_data
 ```
 
-### 3. Load Specific Model Data
-For new migrations with specific models, load individual fixtures:
-```bash
-# Example: Load only crops data
-docker compose exec backend python manage.py loaddata crops
-
-# Example: Load only animals data
-docker compose exec backend python manage.py loaddata animals
-```
+**Important**: Always use `all_data` fixture for loading. Individual model fixtures are not recommended as they may have dependency issues.
 
 ## Adding New Tables with Data
 
@@ -99,18 +94,15 @@ python3 convert_csv_to_fixtures.py
 docker compose exec backend python manage.py migrate
 
 # Load the new data
-docker compose exec backend python manage.py loaddata yournewmodel
+docker compose exec backend python manage.py loaddata all_data
 ```
 
 ## Troubleshooting
 
-### Migration Conflicts in OpenShift
-If you get "table already exists" errors in OpenShift:
-```bash
-# Use fake-initial to handle existing tables, this should be in the Dockerfile already, but can be run in oc if necessary
-docker compose exec backend python manage.py migrate --fake-initial
-```
+### OpenShift Deployment Issues
+In some cases, you may need to delete the deployment in OpenShift to allow migrations to run properly. This forces a fresh deployment with the new migration changes.
 
+After that you will re-run the github actions for a successful backend deployment.
 ### Reset Database (Development Only)
 ```bash
 # Delete all data and start fresh
