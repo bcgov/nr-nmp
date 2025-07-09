@@ -37,20 +37,10 @@ export default function StorageModal({
   const { state } = useAppState();
   const [formData, setFormData] = useState<NMPFileManureStorageSystemsData>(initialModalData);
   const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.Name);
-  const [includedMaterial, setIncludedMaterial] = useState<string>('');
-  const [storageStructure, setStorageStructure] = useState<{
-    Id: number;
-    Name: string;
-    IsStructureCovered: boolean;
-    UncoveredAreaSquareFeet?: number;
-  }>({
-    Id: 0,
-    Name: '',
-    IsStructureCovered: false,
-    UncoveredAreaSquareFeet: undefined,
-  });
 
-  const [manureList, setManureList] = useState<{ id: string; label: string; manure: any }[]>([]);
+  const [manureList, setManureList] = useState<
+    { id: string; label: string; manure: any; selected: boolean }[]
+  >([]);
 
   // gets imported and generated manures then filters manures based on manure type
   useEffect(() => {
@@ -66,6 +56,7 @@ export default function StorageModal({
       id: `${manure.UniqueMaterialName}-${index}`,
       label: manure.ManagedManureName ?? '',
       manure,
+      selected: false,
     }));
 
     setManureList(items);
@@ -80,42 +71,51 @@ export default function StorageModal({
     // Prevent default browser page refresh.
     e.preventDefault();
 
-    // If saving included material we find includedMaterial in manureList then save the full item as imported or generated
-    const selectedManure = manureList.find((item) => item.id === includedMaterial);
-    console.log(selectedManure?.manure);
-    if (selectedManure) {
-      setFormData((prev: NMPFileManureStorageSystemsData) => {
-        const isGenerated = state.nmpFile.years[0]?.GeneratedManures?.some(
-          (m: any) => m.UniqueMaterialName === selectedManure.manure.UniqueMaterialName,
-        );
-        if (isGenerated) {
-          return {
-            ...prev,
-            GeneratedManuresIncludedInSystem: [selectedManure.manure],
-          };
-        }
-        return {
-          ...prev,
-          ImportedManuresIncludedInSystem: [selectedManure.manure],
-        };
-      });
-    }
-
     if (notUniqueNameCheck()) {
       console.error('not unique name');
     } else {
-      console.log(formData);
       handleSubmit(formData);
       handleDialogClose();
     }
   };
 
   const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
-    setFormData((prev: NMPFileManureStorageSystemsData) => {
-      const updatedData = { ...prev, [name]: value };
-      return updatedData;
-    });
-    console.log(formData);
+    if (name === 'ManuresIncludedInSystem') {
+      const cleanValue = value?.toString().split('-');
+      const selectedManure = manureList.find(
+        (item) => item.manure.UniqueMaterialName === cleanValue?.[0],
+      );
+      const isGenerated = state.nmpFile.years[0]?.GeneratedManures?.some(
+        (m: any) => m.UniqueMaterialName === selectedManure?.label,
+      );
+      const updatedManureEntry = {
+        Type: isGenerated ? 'Generated' : 'Imported',
+        Data: selectedManure?.manure,
+      };
+      setFormData((prev: any) => ({
+        ...prev,
+        ManuresIncludedInSystem: [updatedManureEntry],
+      }));
+      return;
+    }
+
+    if (name.includes('ManureStorageStructures')) {
+      const key = name.split('.');
+      setFormData((prev: any) => {
+        const updated = { ...prev };
+        updated.ManureStorageStructures = {
+          ...prev.ManureStorageStructures,
+          [key[1]]: value,
+        };
+        return updated;
+      });
+      return;
+    }
+
+    setFormData((prev: NMPFileManureStorageSystemsData) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -175,12 +175,13 @@ export default function StorageModal({
                     isRequired
                     label="Included Materials"
                     placeholder="Select a manure type first"
-                    selectedKey={includedMaterial}
+                    selectedKey={formData.ManuresIncludedInSystem?.Data?.UniqueMaterialName}
                     items={manureList}
-                    onSelectionChange={(e: any) => {
-                      setIncludedMaterial(e);
+                    onSelectionChange={(e) => {
+                      handleInputChange('ManuresIncludedInSystem', e);
                     }}
                   />
+                  {/* Todo old nmp set manure as selected in manureList */}
                 </Grid>
               </Grid>
               <Grid
@@ -208,12 +209,9 @@ export default function StorageModal({
                       label="Storage Name"
                       type="string"
                       name="ManureStorageStructures.Name"
-                      value={storageStructure.Name}
+                      value={formData.ManureStorageStructures.Name}
                       onChange={(e: any) => {
-                        setStorageStructure({
-                          ...storageStructure,
-                          Name: e,
-                        });
+                        handleInputChange('ManureStorageStructures.Name', e);
                       }}
                     />
                   </Grid>
@@ -228,30 +226,23 @@ export default function StorageModal({
                     >
                       Is the storage covered?
                       <YesNoRadioButtons
-                        value={booleanChecker(storageStructure.IsStructureCovered)}
+                        value={booleanChecker(formData.ManureStorageStructures.IsStructureCovered)}
                         text=""
-                        onChange={(e: any) => {
-                          setStorageStructure({
-                            ...storageStructure,
-                            IsStructureCovered: e,
-                          });
+                        onChange={(e: boolean) => {
+                          handleInputChange('ManureStorageStructures.IsStructureCovered', e);
                         }}
                         orientation="horizontal"
                       />
                     </div>
-                    {/* NOT WORKING */}
-                    {storageStructure && (
+                    {!formData.ManureStorageStructures.IsStructureCovered && (
                       <TextField
                         isRequired
                         label="Uncovered Area of Storage (ft2)"
                         type="number"
-                        name="UncoveredArea"
-                        value={storageStructure.UncoveredAreaSquareFeet?.toString()}
+                        name="ManureStorageStructures.UncoveredAreaSquareFeet"
+                        value={formData.ManureStorageStructures.UncoveredAreaSquareFeet?.toString()}
                         onChange={(e: any) => {
-                          setStorageStructure({
-                            ...storageStructure,
-                            UncoveredAreaSquareFeet: e,
-                          });
+                          handleInputChange('ManureStorageStructures.UncoveredAreaSquareFeet', e);
                         }}
                       />
                     )}

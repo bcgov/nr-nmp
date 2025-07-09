@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -48,7 +48,7 @@ export default function Storage() {
   };
 
   const handleDialogClose = () => {
-    setRowEditIndex(null);
+    setRowEditIndex(undefined);
     setStorageFormData(DefaultNMPFileManureStorageSystemsData);
     setIsDialogOpen(false);
   };
@@ -89,7 +89,7 @@ export default function Storage() {
         maxWidth: 300,
       },
       {
-        field: 'ManureStorageStructures.Name',
+        field: 'ManureStorageStructures[0].Name',
         headerName: 'Storage Name',
         width: 325,
         minWidth: 150,

@@ -1,11 +1,14 @@
 import { NMPFileManureStorageSystemsData } from '@/types';
+import DefaultGeneratedManureFormData from './DefaultGeneratedManureData';
 
 const DefaultNMPFileManureStorageSystemsData: NMPFileManureStorageSystemsData = {
   Id: 0,
   Name: '',
   ManureMaterialType: 0,
-  GeneratedManuresIncludedInSystem: [],
-  ImportedManuresIncludedInSystem: [],
+  ManuresIncludedInSystem: {
+    Type: 'Generated',
+    Data: DefaultGeneratedManureFormData,
+  },
   GetsRunoffFromRoofsOrYards: false,
   RunoffAreaSquareFeet: null,
   ManureStorageStructures: {

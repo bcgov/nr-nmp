@@ -1,11 +1,20 @@
 import { NMPFileGeneratedManureData, NMPFileImportedManureData } from '@/types';
 
+type ManuresIncludedInSystem =
+  | {
+      Type: 'Generated';
+      Data: NMPFileGeneratedManureData;
+    }
+  | {
+      Type: 'Imported';
+      Data: NMPFileImportedManureData;
+    };
+
 interface NMPFileManureStorageSystemsData {
   Id: number;
   Name: string;
   ManureMaterialType: number;
-  GeneratedManuresIncludedInSystem: NMPFileGeneratedManureData[];
-  ImportedManuresIncludedInSystem: NMPFileImportedManureData[];
+  ManuresIncludedInSystem: ManuresIncludedInSystem;
   GetsRunoffFromRoofsOrYards: false;
   RunoffAreaSquareFeet: null;
   ManureStorageStructures: {
