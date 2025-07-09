@@ -110,7 +110,9 @@ export default function FieldList() {
               ariaLabel="A group of buttons"
               orientation="vertical"
             >
-              <Button onPress={() => makeFullReportPdf()}>Complete report</Button>
+              <Button onPress={() => makeFullReportPdf()}>
+                <div style={{ width: '100%', textAlign: 'center' }}>Complete report</div>
+              </Button>
               <Button onPress={() => makeRecordPdf()}>Record keeping sheets</Button>
             </ButtonGroup>
           </div>
@@ -141,7 +143,7 @@ export default function FieldList() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         {/* Go to BC soil nutrient testing site */}
         <Button

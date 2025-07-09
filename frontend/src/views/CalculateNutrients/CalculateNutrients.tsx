@@ -451,7 +451,7 @@ export default function CalculateNutrients() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         {/* go to next tab or if none navigate to next page */}
         <Button

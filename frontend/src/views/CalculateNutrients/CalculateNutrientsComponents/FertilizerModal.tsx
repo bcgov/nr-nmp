@@ -114,6 +114,7 @@ const EMPTY_CUSTOM_FERTILIZER: Fertilizer = {
 };
 
 const FERTILIZER_METHOD: Array<{ id: string; label: string }> = [
+  { id: '', label: 'None' },
   { id: 'Broadcast', label: 'Broadcast' },
   { id: 'Banded', label: 'Banded' },
   { id: 'With planter', label: 'With planter' },
@@ -562,7 +563,6 @@ export default function FertilizerModal({
               name="applicationMethod"
               items={FERTILIZER_METHOD}
               label="Method (optional)"
-              placeholder="Select Method"
               selectedKey={formState.applicationMethod}
               onSelectionChange={(e: Key) => {
                 handleInputChanges({ applicationMethod: e as number });
