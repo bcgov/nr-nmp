@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -163,7 +163,7 @@ export default function Storage() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={storageList}
         columns={columnsAnimalManure}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
