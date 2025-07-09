@@ -1,7 +1,13 @@
 /* eslint-disable eqeqeq */
 import axios from 'axios';
 import { env } from '@/env';
-import { CropsConversionFactors, NMPFileCropData, NMPFileSoilTestData } from '@/types';
+import {
+  Crop,
+  CropsConversionFactors,
+  CropType,
+  NMPFileCropData,
+  NMPFileSoilTestData,
+} from '@/types';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 
 /**
@@ -137,38 +143,16 @@ export async function getRecommendations(
   }
 }
 
-/**
- * Fetches crop data by crop ID
- *
- * @param {number} cropId - ID of the crop to fetch
- * @returns {Promise<any>} Crop data
- */
-export async function getCrop(cropId: number) {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/crops/${cropId}/`);
-    return response.data[0];
-  } catch (error) {
-    console.error(error);
-    return null;
+function validateIds(combinedCropData: NMPFileCropData, crop: Crop, cropType: CropType) {
+  if (crop.id !== combinedCropData.cropId) {
+    throw new Error(
+      `Crop id mismatch: expected ${combinedCropData.cropId} but received ${crop.id}`,
+    );
   }
-}
-
-/**
- * Gets nitrogen credit for a previous crop
- *
- * @param {number} cropId - ID of the previous crop
- * @returns {Promise<number>} Nitrogen credit amount in imperial units (0 if no crop ID)
- */
-export async function getNCredit(cropId: number) {
-  try {
-    if (cropId == null || cropId === 0) {
-      return 0;
-    }
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/previouscroptypes/${cropId}/`);
-    return response.data[0].nitrogencreditimperial;
-  } catch (error) {
-    console.error(error);
-    return null;
+  if (cropType.id !== combinedCropData.cropTypeId) {
+    throw new Error(
+      `Crop type id mismatch: expected ${combinedCropData.cropTypeId} but received ${cropType.id}`,
+    );
   }
 }
 
@@ -176,14 +160,18 @@ export async function getNCredit(cropId: number) {
  * Calculates potassium (K2O) removal for a crop
  *
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
- * @param {boolean} isCoverCrop - If crop's crop type is cover crop
- * @returns {Promise<number>} Amount of K2O removed in lbs/acre, rounded to nearest integer
+ * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
+ * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @returns {number} Amount of K2O removed in lbs/acre, rounded to nearest integer
  */
-export async function getCropRemovalK20(combinedCropData: NMPFileCropData): Promise<number> {
-  const crop = await getCrop(combinedCropData.cropId);
-
+export function getCropRemovalK20(
+  combinedCropData: NMPFileCropData,
+  crop: Crop,
+  cropType: CropType,
+): number {
+  validateIds(combinedCropData, crop, cropType);
   // For cover crops not harvested, there's no removal
-  if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
+  if (cropType.covercrop && !combinedCropData.coverCropHarvested) {
     return 0;
   }
 
@@ -203,13 +191,18 @@ export async function getCropRemovalK20(combinedCropData: NMPFileCropData): Prom
  * Calculates phosphorus (P2O5) removal for a crop
  *
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
- * @returns {Promise<number>} Amount of P2O5 removed in lbs/acre, rounded to nearest integer
+ * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
+ * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @returns {number} Amount of P2O5 removed in lbs/acre, rounded to nearest integer
  */
-export async function getCropRemovalP205(combinedCropData: NMPFileCropData): Promise<number> {
-  const crop = await getCrop(combinedCropData.cropId);
-
+export function getCropRemovalP205(
+  combinedCropData: NMPFileCropData,
+  crop: Crop,
+  cropType: CropType,
+): number {
+  validateIds(combinedCropData, crop, cropType);
   // For cover crops not harvested, there's no removal
-  if (crop.croptypeid === 4 && !combinedCropData.coverCropHarvested) {
+  if (cropType.covercrop && !combinedCropData.coverCropHarvested) {
     return 0;
   }
 
@@ -230,16 +223,20 @@ export async function getCropRemovalP205(combinedCropData: NMPFileCropData): Pro
  * Calculates nitrogen removal for a crop
  *
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
- * @returns {Promise<number>} Amount of N removed in lbs/acre, rounded to nearest integer
+ * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
+ * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @returns {number} Amount of N removed in lbs/acre, rounded to nearest integer
  */
-export async function getCropRemovalN(combinedCropData: NMPFileCropData): Promise<number> {
+export function getCropRemovalN(
+  combinedCropData: NMPFileCropData,
+  crop: Crop,
+  cropType: CropType,
+): number {
+  validateIds(combinedCropData, crop, cropType);
   let nRemoval: number = 0;
-  const crop = await getCrop(combinedCropData.cropId);
-  const cropType = await getCropType(crop.croptypeid);
-  const isForageCrop = cropType.crudeproteinrequired === true;
 
   // Special calculation for forage crops with crude protein data
-  if (isForageCrop) {
+  if (cropType.crudeproteinrequired) {
     if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein == 0) {
       nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield!;
     } else {
@@ -264,31 +261,31 @@ export async function getCropRemovalN(combinedCropData: NMPFileCropData): Promis
  * Calculates nitrogen requirement for a crop, accounting for previous crop credit
  *
  * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
- * @returns {Promise<number>} Required N application in lbs/acre, rounded to nearest integer
+ * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
+ * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @returns {number} Required N application in lbs/acre, rounded to nearest integer
  */
-export async function getCropRequirementN(combinedCropData: NMPFileCropData): Promise<number> {
-  const crop = await getCrop(combinedCropData.cropId);
-  const ncredit = await getNCredit(Number(combinedCropData.prevCropId));
-
-  let nRequirement;
+export function getCropRequirementN(
+  combinedCropData: NMPFileCropData,
+  crop: Crop,
+  cropType: CropType,
+): number {
+  validateIds(combinedCropData, crop, cropType);
+  let nRequirement = 0;
   // Different calculation methods based on nitrogen recommendation ID
   switch (crop.nitrogenrecommendationid) {
     case 1:
-      if (crop.nitrogenrecommendationpoundperacre == null) {
-        nRequirement = 0;
-        break;
+      if (crop.nitrogenrecommendationpoundperacre !== null) {
+        nRequirement = crop.nitrogenrecommendationpoundperacre;
       }
-      nRequirement = crop.nitrogenrecommendationpoundperacre;
       break;
     case 2:
-      if (crop.nitrogenrecommendationpoundperacre == null) {
-        nRequirement = 0;
-        break;
+      if (crop.nitrogenrecommendationpoundperacre !== null) {
+        nRequirement = crop.nitrogenrecommendationpoundperacre;
       }
-      nRequirement = crop.nitrogenrecommendationpoundperacre;
       break;
     case 3:
-      nRequirement = await getCropRemovalN(combinedCropData);
+      nRequirement = getCropRemovalN(combinedCropData, crop, cropType);
       break;
     case 4: {
       if (combinedCropData.yield! !== 0) {
@@ -297,8 +294,6 @@ export async function getCropRequirementN(combinedCropData: NMPFileCropData): Pr
           (combinedCropData.yield! / combinedCropData.yield!) *
             crop.nitrogenrecommendationpoundperacre,
         );
-      } else {
-        nRequirement = 0;
       }
       break;
     }
@@ -306,7 +301,7 @@ export async function getCropRequirementN(combinedCropData: NMPFileCropData): Pr
       break;
   }
   // Subtract N credit from previous crop and ensure value isn't negative
-  nRequirement -= ncredit;
+  nRequirement -= combinedCropData.nCredit;
   nRequirement = nRequirement < 0 ? 0 : nRequirement;
 
   return Math.round(nRequirement);

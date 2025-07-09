@@ -123,16 +123,14 @@ function CropsModal({
   const { nmpFile } = useAppState().state;
   const apiCache = useContext(APICacheContext);
 
-  const [{ formData, selectedCropType, isFormYieldEqualToDefault }, dispatch] = useReducer(
-    cropsModalReducer,
-    {
+  const [{ formData, selectedCropType, selectedCrop, isFormYieldEqualToDefault }, dispatch] =
+    useReducer(cropsModalReducer, {
       formData: initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
       selectedCropType: undefined,
       selectedCrop: undefined,
       defaultYieldInTons: undefined,
       isFormYieldEqualToDefault: true,
-    },
-  );
+    });
   const [crops, setCrops] = useState<Crop[]>([]);
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
@@ -312,10 +310,10 @@ function CropsModal({
       return;
     }
 
-    if (fieldIndex !== null) {
+    if (fieldIndex !== null && selectedCrop !== undefined && selectedCropType !== undefined) {
       try {
         // Calculate crop requirements (P2O5, K2O, N)
-        const cropRequirementN = await getCropRequirementN(formData);
+        const cropRequirementN = getCropRequirementN(formData, selectedCrop, selectedCropType);
         const cropRequirementP205 = await getCropRequirementP205(
           formData,
           field.SoilTest,
@@ -328,9 +326,9 @@ function CropsModal({
         );
 
         // Calculate crop removals (N, P2O5, K2O)
-        const cropRemovalN = await getCropRemovalN(formData);
-        const cropRemovalP205 = await getCropRemovalP205(formData);
-        const cropRemovalK20 = await getCropRemovalK20(formData);
+        const cropRemovalN = getCropRemovalN(formData, selectedCrop, selectedCropType);
+        const cropRemovalP205 = getCropRemovalP205(formData, selectedCrop, selectedCropType);
+        const cropRemovalK20 = getCropRemovalK20(formData, selectedCrop, selectedCropType);
 
         // Update the crops data with calculated values
         dispatch({
@@ -736,6 +734,7 @@ function CropsModal({
           <Button
             variant="primary"
             onPress={handleCalculate}
+            isDisabled={selectedCrop === undefined || selectedCropType === undefined}
           >
             Calculate
           </Button>
