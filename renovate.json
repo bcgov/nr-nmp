@@ -4,6 +4,7 @@
   "extends": [
     "github>bcgov/renovate-config"
   ],
+  "prConcurrentLimit": 1,
   "ignorePresets": [
     ":ignoreModulesAndTests"
   ]
