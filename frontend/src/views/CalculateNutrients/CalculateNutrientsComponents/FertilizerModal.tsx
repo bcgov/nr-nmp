@@ -333,8 +333,8 @@ export default function FertilizerModal({
     setBalanceCacRow({
       name: 'calcOnly',
       reqN: Math.min(0, (balanceRow?.reqN ?? 0) + cropNutrients.N),
-      reqP2o5: Math.min((balanceRow?.reqP2o5 ?? 0) + cropNutrients.P2O5),
-      reqK2o: Math.min((balanceRow?.reqK2o ?? 0) + cropNutrients.K2O),
+      reqP2o5: Math.min(0, (balanceRow?.reqP2o5 ?? 0) + cropNutrients.P2O5),
+      reqK2o: Math.min(0, (balanceRow?.reqK2o ?? 0) + cropNutrients.K2O),
       remN: 0,
       remP2o5: 0,
       remK2o: 0,
