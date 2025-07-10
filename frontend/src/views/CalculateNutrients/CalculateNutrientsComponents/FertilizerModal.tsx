@@ -138,9 +138,12 @@ export default function FertilizerModal({
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
   const [densityUnits, setDensityUnits] = useState<any[]>([]);
   const [liqDensityFactors, setLiqDensityFactors] = useState<any[]>([]);
-  const [balanceCalcRow, setBalanceCacRow] = useState<CalculateNutrientsColumn | undefined>(
-    balanceRow,
-  );
+  const [balanceCalcRow, setBalanceCacRow] = useState<CalculateNutrientsColumn | undefined>({
+    ...balanceRow,
+    reqN: Math.min(balanceRow?.reqN ?? 0, 0),
+    reqP2o5: Math.min(balanceRow?.reqP2o5 ?? 0, 0),
+    reqK2o: Math.min(balanceRow?.reqK2o ?? 0, 0),
+  } as CalculateNutrientsColumn);
 
   const [formState, setFormState] = useState<NMPFileFertilizer>(
     initialModalData ?? EMPTY_FERTILIZER_FORM_DATA,
@@ -254,13 +257,11 @@ export default function FertilizerModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isCustomFertilizerValid = () => {
-    if (!formCustomFertilizer.nitrogen || formCustomFertilizer.nitrogen === 0) return false;
-    if (!formCustomFertilizer.phosphorous || formCustomFertilizer.phosphorous === 0) return false;
-    if (!formCustomFertilizer.potassium || formCustomFertilizer.potassium === 0) return false;
-
-    return true;
-  };
+  const isCustomFertilizerValid = () =>
+    // isFinite checks if value is truthy or zero, and a number.
+    Number.isFinite(formCustomFertilizer.nitrogen) &&
+    Number.isFinite(formCustomFertilizer.phosphorous) &&
+    Number.isFinite(formCustomFertilizer.potassium);
 
   // custom fertilizers should have a zero or falsy fertilizerId
   const isRegularFertilizerValid = () => !!formState.fertilizerId;
@@ -300,6 +301,7 @@ export default function FertilizerModal({
       // Logic for custom fertilizer
 
       // Check validity
+      console.log(formCustomFertilizer);
       if (!isCustomFertilizerValid()) {
         throw new Error('Invalid custom fertilizer input');
       }
@@ -453,7 +455,7 @@ export default function FertilizerModal({
                       name="nitrogen"
                       value={formCustomFertilizer?.nitrogen.toString()}
                       onChange={(e: string) => {
-                        handleInputChanges({ nitrogen: e });
+                        handleInputChanges({ nitrogen: parseInt(e, 10) });
                       }}
                       maxLength={5}
                     />
@@ -466,7 +468,7 @@ export default function FertilizerModal({
                       name="phosphorous"
                       value={formCustomFertilizer?.phosphorous.toString()}
                       onChange={(e: string) => {
-                        handleInputChanges({ phosphorous: e });
+                        handleInputChanges({ phosphorous: parseInt(e, 10) });
                       }}
                       maxLength={5}
                     />
@@ -479,7 +481,7 @@ export default function FertilizerModal({
                       name="potassium"
                       value={formCustomFertilizer?.potassium.toString()}
                       onChange={(e: string) => {
-                        handleInputChanges({ potassium: e });
+                        handleInputChanges({ potassium: parseInt(e, 10) });
                       }}
                       maxLength={5}
                     />
