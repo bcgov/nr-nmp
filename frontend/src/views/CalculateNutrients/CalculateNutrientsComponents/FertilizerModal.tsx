@@ -301,7 +301,6 @@ export default function FertilizerModal({
       // Logic for custom fertilizer
 
       // Check validity
-      console.log(formCustomFertilizer);
       if (!isCustomFertilizerValid()) {
         throw new Error('Invalid custom fertilizer input');
       }
@@ -333,9 +332,9 @@ export default function FertilizerModal({
     setCalculateData(cropNutrients);
     setBalanceCacRow({
       name: 'calcOnly',
-      reqN: (balanceRow?.reqN ?? 0) + cropNutrients.N,
-      reqP2o5: (balanceRow?.reqP2o5 ?? 0) + cropNutrients.P2O5,
-      reqK2o: (balanceRow?.reqK2o ?? 0) + cropNutrients.K2O,
+      reqN: Math.min(0, (balanceRow?.reqN ?? 0) + cropNutrients.N),
+      reqP2o5: Math.min((balanceRow?.reqP2o5 ?? 0) + cropNutrients.P2O5),
+      reqK2o: Math.min((balanceRow?.reqK2o ?? 0) + cropNutrients.K2O),
       remN: 0,
       remP2o5: 0,
       remK2o: 0,
