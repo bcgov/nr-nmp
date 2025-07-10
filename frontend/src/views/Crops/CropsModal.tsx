@@ -138,6 +138,7 @@ function CropsModal({
   }, [crops, formData.cropTypeId]);
   const [cropTypes, setCropTypes] = useState<CropType[]>([]);
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
+  // NOTE: Right now, this isn't set to false when the form changes
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -734,7 +735,11 @@ function CropsModal({
           <Button
             variant="primary"
             onPress={handleCalculate}
-            isDisabled={selectedCrop === undefined || selectedCropType === undefined}
+            isDisabled={
+              // TODO: Hide button and enable Submit if this is a custom crop
+              selectedCropType === undefined ||
+              (selectedCrop === undefined && !selectedCropType.customcrop)
+            }
           >
             Calculate
           </Button>

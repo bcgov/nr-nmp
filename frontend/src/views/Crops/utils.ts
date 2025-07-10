@@ -91,19 +91,45 @@ export type CropsModalReducerAction =
   | SetDefaultYieldAction
   | RestoreDefaultYieldAction;
 
+function isCropSet(cropId: number, selectedCrop: Crop | undefined) {
+  if (cropId === 0) return false;
+  // If cropId is non-zero, selectedCrop should match it
+  if (cropId !== CROP_OTHER_ID && (selectedCrop === undefined || cropId !== selectedCrop.id)) {
+    throw new Error('Crops modal entered bad state');
+  }
+  return true;
+}
+
+function validateBushelConversion(selectedCrop: Crop | undefined) {
+  if (
+    selectedCrop === undefined ||
+    selectedCrop.harvestbushelsperton === null ||
+    selectedCrop.harvestbushelsperton === 0
+  ) {
+    throw new Error('Crops modal entered bad state');
+  }
+}
+
 function compareYieldToDefaultYield(
   Yield: number, // using caps to dodge restricted term
   defaultYieldInTons: number | undefined,
   yieldHarvestUnit: string | undefined,
+  cropId: number,
   selectedCrop: Crop | undefined,
 ) {
-  if (defaultYieldInTons === undefined) return true;
+  // Default to true to hide reset button
+  if (
+    defaultYieldInTons === undefined ||
+    cropId === CROP_OTHER_ID ||
+    !isCropSet(cropId, selectedCrop)
+  ) {
+    return true;
+  }
+
   if (yieldHarvestUnit !== undefined) {
-    if (selectedCrop === undefined || selectedCrop.harvestbushelsperton === null) {
-      throw new Error('Crops modal entered bad state');
-    }
+    validateBushelConversion(selectedCrop);
     return yieldHarvestUnit === HarvestUnit.BushelsPerAcre
-      ? Yield === defaultYieldInTons * selectedCrop.harvestbushelsperton
+      ? Yield === defaultYieldInTons * selectedCrop!.harvestbushelsperton
       : Yield === defaultYieldInTons;
   }
   return Yield === defaultYieldInTons;
@@ -114,6 +140,7 @@ export function cropsModalReducer(
   action: CropsModalReducerAction,
 ): CropsModalState {
   const { formData, selectedCrop, defaultYieldInTons } = state;
+  const cropSet = isCropSet(formData.cropId, selectedCrop);
   switch (action.type) {
     case 'SET_CROP_TYPE_ID':
       return {
@@ -135,6 +162,8 @@ export function cropsModalReducer(
             ? HarvestUnit.BushelsPerAcre
             : undefined,
         },
+        selectedCrop: undefined,
+        defaultYieldInTons: undefined,
       };
 
     case 'SET_CROP_ID':
@@ -166,22 +195,21 @@ export function cropsModalReducer(
           action.yield,
           defaultYieldInTons,
           formData.yieldHarvestUnit,
+          formData.cropId,
           selectedCrop,
         ),
       };
 
     case 'SET_YIELD_IN_TONS':
-      if (formData.yieldHarvestUnit !== undefined) {
-        if (selectedCrop === undefined || selectedCrop.harvestbushelsperton === null) {
-          throw new Error('Crops modal entered bad state');
-        }
+      if (cropSet && formData.yieldHarvestUnit !== undefined) {
+        validateBushelConversion(selectedCrop);
         return {
           ...state,
           formData: {
             ...formData,
             yield:
               formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
-                ? action.yield * selectedCrop.harvestbushelsperton
+                ? action.yield * selectedCrop!.harvestbushelsperton
                 : action.yield,
           },
           isFormYieldEqualToDefault: action.yield === defaultYieldInTons,
@@ -190,7 +218,9 @@ export function cropsModalReducer(
       return {
         ...state,
         formData: { ...formData, yield: action.yield },
-        isFormYieldEqualToDefault: action.yield === defaultYieldInTons,
+        // Default to true to hide button
+        isFormYieldEqualToDefault:
+          defaultYieldInTons !== undefined ? action.yield === defaultYieldInTons : true,
       };
 
     case 'SET_YIELD_HARVEST_UNIT':
@@ -198,9 +228,18 @@ export function cropsModalReducer(
         // Shouldn't occur, but return without making changes
         return state;
       }
-      if (selectedCrop === undefined || selectedCrop.harvestbushelsperton === null) {
-        throw new Error('Crops modal entered bad state');
+      // Don't change yield if the crop isn't set
+      if (!cropSet) {
+        return {
+          ...state,
+          formData: {
+            ...formData,
+            yieldHarvestUnit: action.unit,
+          },
+        };
       }
+
+      validateBushelConversion(selectedCrop);
       return {
         ...state,
         formData: {
@@ -210,9 +249,9 @@ export function cropsModalReducer(
             formData.yield !== undefined
               ? action.unit === HarvestUnit.TonsPerAcre
                 ? // Going from bu/ac to tons/ac
-                  formData.yield / selectedCrop.harvestbushelsperton
+                  formData.yield / selectedCrop!.harvestbushelsperton
                 : // Going from tons/ac to bu/ac
-                  formData.yield * selectedCrop.harvestbushelsperton
+                  formData.yield * selectedCrop!.harvestbushelsperton
               : undefined,
         },
       };
@@ -257,16 +296,17 @@ export function cropsModalReducer(
                 formData.yield,
                 action.amount,
                 formData.yieldHarvestUnit,
+                formData.cropId,
                 selectedCrop,
               ),
       };
 
     case 'RESTORE_DEFAULT_YIELD':
-      if (defaultYieldInTons === undefined) throw new Error('Crops modal entered bad state');
+      if (defaultYieldInTons === undefined || !cropSet) {
+        throw new Error('Crops modal entered bad state');
+      }
       if (formData.yieldHarvestUnit !== undefined) {
-        if (selectedCrop === undefined || selectedCrop.harvestbushelsperton === null) {
-          throw new Error('Crops modal entered bad state');
-        }
+        validateBushelConversion(selectedCrop);
         return {
           ...state,
           isFormYieldEqualToDefault: true,
@@ -274,7 +314,7 @@ export function cropsModalReducer(
             ...formData,
             yield:
               formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
-                ? defaultYieldInTons * selectedCrop.harvestbushelsperton
+                ? defaultYieldInTons * selectedCrop!.harvestbushelsperton
                 : defaultYieldInTons,
           },
         };
