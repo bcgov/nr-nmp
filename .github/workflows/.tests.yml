@@ -20,30 +20,6 @@ env:
   PREFIX: ${{ github.event.repository.name }}-${{ inputs.target }}
 
 jobs:
-  # integration-tests:
-  #   name: Integration
-  #   runs-on: ubuntu-24.04
-  #   timeout-minutes: 1
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - id: cache-npm
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: ~/.npm
-  #         key: ${{ runner.os }}-build-cache-node-modules-${{ hashFiles('**/package-lock.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-build-cache-node-modules-
-  #           ${{ runner.os }}-build-
-  #           ${{ runner.os }}-
-
-  #     - env:
-  #         API_NAME: nest
-  #         BASE_URL: https://${{ github.event.repository.name }}-${{ inputs.target }}-frontend.${{ env.DOMAIN }}
-  #       run: |
-  #         cd tests/integration
-  #         npm ci
-  #         node src/main.js
-    
   frontend-tests:
     name: Frontend Tests
     defaults:
