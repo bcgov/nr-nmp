@@ -30,11 +30,17 @@ export default function AddAnimals() {
     state.nmpFile.years[0].FarmAnimals || [],
   );
 
+  useEffect(() => {
+    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const hasDairyCattle = useMemo(
     () =>
       state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
     [state.nmpFile.years],
   );
+
   const tabs = useMemo(
     () =>
       hasDairyCattle

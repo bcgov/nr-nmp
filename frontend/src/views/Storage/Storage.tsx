@@ -10,66 +10,86 @@ import {
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { NMPFileFarmManureData } from '../../types';
-import { DEFAULT_NMPFILE_YEAR, DefaultManureFormData } from '../../constants';
 import { StyledContent } from './storage.styles';
-import useAppState from '../../hooks/useAppState';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
+import useAppState from '@/hooks/useAppState';
+import { NMPFileManureStorageSystemsData } from '@/types';
+import DefaultNMPFileManureStorageSystemsData from '@/constants/DefaultNMPFileManureStorage';
 
 export default function Storage() {
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
   const navigate = useNavigate();
-
-  // TODO: make correct file type
-  const [storageList, setStorageList] = useState<NMPFileFarmManureData[]>(
-    state.nmpFile.years[0]?.FarmManures || [],
+  const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [storageList, setStorageList] = useState<NMPFileManureStorageSystemsData[]>(
+    state.nmpFile.years[0]?.ManureStorageSystems || [],
   );
-  // Not sure if NMPFileFarmManureData is the right file type
-  const [storageFormData, setstorageFormData] = useState<NMPFileFarmManureData>({
-    ManureSource: '',
-    MaterialType: '',
-    BookLab: '',
-    UniqueMaterialName: '',
-    Nutrients: { N: 0, P2O5: 0, K2O: 0, Moisture: '', NH4N: 0 },
-  });
-
-  const handleSubmit = () => {};
+  const [storageFormData, setStorageFormData] = useState<NMPFileManureStorageSystemsData>(
+    DefaultNMPFileManureStorageSystemsData,
+  );
 
   const handlePrevious = () => {
     navigate(MANURE_IMPORTS);
   };
 
+  // save to NMPFileManureStorageSystemsData
+  // either imported or generated manure do we save IsMaterialStored and AssignedToStoredSystem booleans
   const handleNext = () => {
+    dispatch({
+      type: 'SAVE_MANURE_STORAGE_SYSTEMS',
+      year: state.nmpFile.farmDetails.Year!,
+      newManureStorageSystems: storageList,
+    });
     navigate(NUTRIENT_ANALYSIS);
   };
 
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-
   const handleDialogClose = () => {
+    setRowEditIndex(undefined);
+    setStorageFormData(DefaultNMPFileManureStorageSystemsData);
     setIsDialogOpen(false);
   };
 
+  // on edit text fields dont show up
   const handleEditRow = (e: GridRenderCellParams) => {
+    setRowEditIndex(e.row);
+    setStorageFormData(e.row);
     setIsDialogOpen(true);
   };
 
-  const handleDeleteRow = (e: GridRenderCellParams) => {};
+  const handleDeleteRow = (e: GridRenderCellParams) => {
+    setStorageList((prev) => prev.filter((ele) => ele.Name !== e.row.Name));
+  };
+
+  const handleSubmit = (formData: NMPFileManureStorageSystemsData) => {
+    setStorageList([...storageList, storageFormData]);
+    if (rowEditIndex !== undefined) {
+      // If editing, find and replace field instead of adding new field
+      setStorageList((prev) => {
+        const newList = [...prev];
+        newList[rowEditIndex] = { ...formData };
+        return newList;
+      });
+    } else {
+      setStorageList((prev) => [...prev, { ...formData }]);
+    }
+    handleDialogClose();
+  };
 
   const columnsAnimalManure: GridColDef[] = useMemo(
     () => [
       {
-        field: 'storageType',
-        headerName: 'Storage Type',
+        field: 'Name',
+        headerName: 'System Name',
         width: 200,
         minWidth: 150,
         maxWidth: 300,
       },
       {
-        field: 'storageName',
+        field: 'ManureStorageStructures[0].Name',
         headerName: 'Storage Name',
         width: 325,
         minWidth: 150,
@@ -143,7 +163,7 @@ export default function Storage() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={storageList}
         columns={columnsAnimalManure}
-        getRowId={(row: any) => row.index}
+        getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination

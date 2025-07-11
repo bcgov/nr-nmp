@@ -1,7 +1,7 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { ComponentProps, FormEvent, Key, useState } from 'react';
+import { ComponentProps, FormEvent, Key, useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -13,39 +13,58 @@ import {
   Select,
   TextField,
 } from '@bcgov/design-system-react-components';
-import {
-  formCss,
-  modalHeaderStyle,
-  modalPaddingStyle,
-  formGridBreakpoints,
-} from '../../common.styles';
+import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.styles';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
-import { NMPFileImportedManureData } from '@/types';
+import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
+import useAppState from '@/hooks/useAppState';
+import { booleanChecker } from '@/utils/utils';
+import { NMPFileManureStorageSystemsData } from '@/types';
 
-// NMPFileImportedManureData is not the final type
-// TODO: determine type of data for initialModalData
 type ModalComponentProps = {
-  initialModalData: NMPFileImportedManureData;
-  handleDialogClose: () => void;
-  handleSubmit: (formData: NMPFileImportedManureData) => void;
+  initialModalData: NMPFileManureStorageSystemsData;
+  handleSubmit: (formData: NMPFileManureStorageSystemsData) => void;
   storageList: any;
+  handleDialogClose: () => void;
 };
 
 export default function StorageModal({
   initialModalData,
-  handleDialogClose,
   handleSubmit,
   storageList,
+  handleDialogClose,
   ...props
 }: ModalComponentProps & ComponentProps<typeof Modal>) {
-  const [formData, setFormData] = useState<NMPFileImportedManureData>(initialModalData);
-  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
+  const { state } = useAppState();
+  const [formData, setFormData] = useState<NMPFileManureStorageSystemsData>(initialModalData);
+  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.Name);
+
+  const [manureList, setManureList] = useState<
+    { id: string; label: string; manure: any; selected: boolean }[]
+  >([]);
+
+  // gets imported and generated manures then filters manures based on manure type
+  useEffect(() => {
+    const imported = state.nmpFile.years[0]?.ImportedManures ?? [];
+    const generated = state.nmpFile.years[0]?.GeneratedManures ?? [];
+    const manures = [...imported, ...generated];
+
+    const filteredManures = manures.filter(
+      (manure) => manure.ManureTypeName === formData?.ManureMaterialType,
+    );
+
+    const items = filteredManures.map((manure, index) => ({
+      id: `${manure.UniqueMaterialName}-${index}`,
+      label: manure.ManagedManureName ?? '',
+      manure,
+      selected: false,
+    }));
+
+    setManureList(items);
+  }, [formData?.ManureMaterialType, state.nmpFile.years]);
 
   const notUniqueNameCheck = () => {
     if (isEditingExistingEntry) return false;
-    return storageList.some(
-      (ele: NMPFileImportedManureData) => ele.UniqueMaterialName === formData.UniqueMaterialName,
-    );
+    return storageList.some((ele: NMPFileManureStorageSystemsData) => ele.Name === formData.Name);
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -60,11 +79,43 @@ export default function StorageModal({
     }
   };
 
-  const handleInputChange = (name: string, value: string | number | undefined) => {
-    setFormData((prev: NMPFileImportedManureData) => {
-      const updatedData = { ...prev, [name]: value };
-      return updatedData;
-    });
+  const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
+    if (name === 'ManuresIncludedInSystem') {
+      const cleanValue = value?.toString().split('-');
+      const selectedManure = manureList.find(
+        (item) => item.manure.UniqueMaterialName === cleanValue?.[0],
+      );
+      const isGenerated = state.nmpFile.years[0]?.GeneratedManures?.some(
+        (m: any) => m.UniqueMaterialName === selectedManure?.label,
+      );
+      const updatedManureEntry = {
+        Type: isGenerated ? 'Generated' : 'Imported',
+        Data: selectedManure?.manure,
+      };
+      setFormData((prev: any) => ({
+        ...prev,
+        ManuresIncludedInSystem: [updatedManureEntry],
+      }));
+      return;
+    }
+
+    if (name.includes('ManureStorageStructures')) {
+      const key = name.split('.');
+      setFormData((prev: any) => {
+        const updated = { ...prev };
+        updated.ManureStorageStructures = {
+          ...prev.ManureStorageStructures,
+          [key[1]]: value,
+        };
+        return updated;
+      });
+      return;
+    }
+
+    setFormData((prev: NMPFileManureStorageSystemsData) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -75,7 +126,7 @@ export default function StorageModal({
         aria-labelledby="add-storage-dialog"
       >
         <div css={modalPaddingStyle}>
-          <span css={modalHeaderStyle}>Add Storage System</span>
+          <span css={modalHeaderStyle}>Storage System Details</span>
           <Divider
             aria-hidden="true"
             component="div"
@@ -88,37 +139,114 @@ export default function StorageModal({
             <Grid
               container
               spacing={2}
+              size={12}
             >
-              <Grid size={formGridBreakpoints}>
-                <Grid size={formGridBreakpoints}>
+              <Grid
+                container
+                size={12}
+                direction="row"
+              >
+                <Grid
+                  container
+                  size={5}
+                >
                   <Select
                     isRequired
                     label="Manure Type"
-                    placeholder="Select manure type"
-                    selectedKey={formData?.ManureType}
+                    selectedKey={formData?.ManureMaterialType === 1 ? 'Liquid' : 'Solid'}
                     items={manureTypeOptions}
                     onSelectionChange={(e: Key) => {
-                      handleInputChange('ManureType', String(e));
-                      handleInputChange(
-                        'ManureTypeName',
-                        manureTypeOptions.find((ele) => ele.id === e)?.label,
-                      );
+                      handleInputChange('ManureMaterialType', e === 'Liquid' ? 1 : 2);
+                    }}
+                  />
+                  <TextField
+                    isRequired
+                    label="System Name"
+                    type="string"
+                    name="Name"
+                    value={formData.Name}
+                    onChange={(e) => {
+                      handleInputChange('Name', e);
                     }}
                   />
                 </Grid>
-                <span
-                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
-                />
-                <Grid>
-                  <TextField
+                <Grid size={6}>
+                  <Select
                     isRequired
-                    label="Storage Name"
-                    type="string"
-                    name="storageName"
-                    onChange={(e: Key) => {
-                      handleInputChange('StorageName', String(e) ?? '');
+                    label="Included Materials"
+                    placeholder="Select a manure type first"
+                    selectedKey={formData.ManuresIncludedInSystem?.Data?.UniqueMaterialName}
+                    items={manureList}
+                    onSelectionChange={(e) => {
+                      handleInputChange('ManuresIncludedInSystem', e);
                     }}
                   />
+                  {/* Todo old nmp set manure as selected in manureList */}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                size={12}
+                direction="column"
+              >
+                <Divider
+                  aria-hidden="true"
+                  component="div"
+                  css={{ marginTop: '1rem', marginBottom: '1rem' }}
+                />
+                <Grid
+                  container
+                  size={12}
+                  direction="row"
+                >
+                  <Grid
+                    container
+                    size={5}
+                    direction="row"
+                  >
+                    <TextField
+                      isRequired
+                      label="Storage Name"
+                      type="string"
+                      name="ManureStorageStructures.Name"
+                      value={formData.ManureStorageStructures.Name}
+                      onChange={(e: any) => {
+                        handleInputChange('ManureStorageStructures.Name', e);
+                      }}
+                    />
+                  </Grid>
+                  <Grid
+                    container
+                    size={5}
+                    direction="row"
+                  >
+                    <div
+                      style={{ marginBottom: '0.15rem' }}
+                      className="bcds-react-aria-Select--Label"
+                    >
+                      Is the storage covered?
+                      <YesNoRadioButtons
+                        value={booleanChecker(formData.ManureStorageStructures.IsStructureCovered)}
+                        text=""
+                        onChange={(e: boolean) => {
+                          handleInputChange('ManureStorageStructures.IsStructureCovered', e);
+                        }}
+                        orientation="horizontal"
+                      />
+                    </div>
+                    {!formData.ManureStorageStructures.IsStructureCovered && (
+                      <TextField
+                        isRequired
+                        label="Uncovered Area of Storage (ft2)"
+                        type="number"
+                        name="ManureStorageStructures.UncoveredAreaSquareFeet"
+                        value={formData.ManureStorageStructures.UncoveredAreaSquareFeet?.toString()}
+                        onChange={(e: any) => {
+                          handleInputChange('ManureStorageStructures.UncoveredAreaSquareFeet', e);
+                        }}
+                      />
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
