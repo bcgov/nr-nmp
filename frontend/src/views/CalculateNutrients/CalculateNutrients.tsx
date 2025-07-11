@@ -289,6 +289,7 @@ export default function CalculateNutrients() {
           <ManureModal
             initialModalData={undefined}
             farmManures={state.nmpFile.years[0].FarmManures || []}
+            field={fieldList[activeField]}
             rowEditIndex={openDialog[1]}
             isOpen={openDialog[0] === 'manure'}
             onCancel={handleDialogClose}

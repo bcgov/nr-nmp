@@ -14,7 +14,7 @@ import SEASON_APPLICATION from '../unseededData';
 import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-import { CropNutrients, Region } from '@/types';
+import { CropNutrients, NMPFileFieldData, Region } from '@/types';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 
@@ -31,6 +31,7 @@ type AddManureModalProps = {
   initialModalData: ManureFormFields | undefined;
   farmManures: NMPFileFarmManureData[];
   rowEditIndex: number | undefined;
+  field: NMPFileFieldData | undefined;
   onCancel: () => void;
 };
 
@@ -76,6 +77,7 @@ export default function ManureModal({
   initialModalData,
   farmManures,
   onCancel,
+  field,
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [manureForm, setManureForm] = useState<ManureFormFields>(
@@ -124,22 +126,39 @@ export default function ManureModal({
   };
 
   const handleCalculate = async () => {
-    // TBD: Calculate logic here - update the nutrient tables based on form inputs
-    console.log(
-      'Calculating nutrient values...',
-      await getNutrientInputs(
-        state.nmpFile?.years?.[0]?.FarmManures?.[0],
-        state.nmpFile.farmDetails.FarmRegion as unknown as Region,
-        manureForm.applicationRate,
-        manureForm.applUnit?.toString(),
-        manureForm.retentionAmmoniumN,
-        manureForm.organicNAvailable,
-      ),
+    const nutrientInputs = await getNutrientInputs(
+      state.nmpFile?.years?.[0]?.FarmManures?.[0],
+      state.nmpFile.farmDetails.FarmRegion as unknown as Region,
+      manureForm.applicationRate,
+      manureForm.applUnit?.toString(),
+      manureForm.retentionAmmoniumN,
+      manureForm.organicNAvailable,
     );
-    // This would typically call an API or perform calculations to update:
-    // - availableThisYearTable
-    // - availableLongTermTable
-    // - stillReqTable
+    setAvailableLongTermTable([
+      {
+        N: nutrientInputs.N_LongTerm,
+        P2O5: nutrientInputs.P2O5_LongTerm,
+        K2O: nutrientInputs.K2O_LongTerm,
+      },
+    ]);
+    setAvailableThisYearTable([
+      {
+        N: nutrientInputs.N_FirstYear,
+        P2O5: nutrientInputs.P2O5_FirstYear,
+        K2O: nutrientInputs.K2O_FirstYear,
+      },
+    ]);
+    setStillReqTable([
+      {
+        N:
+          field && Array.isArray(field.Crops)
+            ? (field.Crops[0]?.reqN ?? 0) + (field.Crops[1]?.reqN ?? 0)
+            : 0,
+        P2O5: (field?.Crops?.[0]?.reqP2o5 ?? 0) + (field?.Crops?.[1]?.reqP2o5 ?? 0),
+        K2O: (field?.Crops?.[0]?.reqK2o ?? 0) + (field?.Crops?.[1]?.reqK2o ?? 0),
+      },
+    ]);
+    console.log('HERE: ', field);
   };
 
   const handleChange = (changes: { [name: string]: string | number | undefined }) => {

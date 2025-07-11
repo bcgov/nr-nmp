@@ -142,7 +142,7 @@ export async function getNutrientInputs(
     );
   }
 
-  // Need to add nitrogen Mineralizations to database
+  // Need to add nitrogen Mineralizations to database for N calcs
 
   return nutrientInputs;
 }
