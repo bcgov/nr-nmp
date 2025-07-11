@@ -245,7 +245,7 @@ export default function NutrientAnalysis() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         <Button
           size="medium"

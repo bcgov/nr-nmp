@@ -2,8 +2,12 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import FertilizerTypes, FertilizerUnits, Fertilizers
-from .serializers import FertilizerTypesSerializer, FertilizerUnitsSerializer, FertilizersSerializer
+from .models import FertilizerTypes, FertilizerUnits, Fertilizers, LiquidFertilizerDensities, DensityUnits
+from .serializers import (
+    FertilizerTypesSerializer, FertilizerUnitsSerializer,
+    FertilizersSerializer, LiquidFertilizerDensitiesSerializer,
+    DensityUnitsSerializer
+)
 
 
 class FertilizersViewset(viewsets.ViewSet):
@@ -24,4 +28,16 @@ class FertilizersViewset(viewsets.ViewSet):
     def fertilizers(self, request, pk=None):
         fertilizers = Fertilizers.objects.all()
         serializer = FertilizersSerializer(fertilizers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def liquidFertilizerDensities(self, request, pk=None):
+        liquid_fertilizer_densities = LiquidFertilizerDensities.objects.all()
+        serializer = LiquidFertilizerDensitiesSerializer(liquid_fertilizer_densities, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def densityUnits(self, request, pk=None):
+        density_units = DensityUnits.objects.all()
+        serializer = DensityUnitsSerializer(density_units, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -4,8 +4,8 @@
     "pk": 2155,
     "fields": {
       "cropid": 1,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -13,8 +13,8 @@
     "pk": 2156,
     "fields": {
       "cropid": 1,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -22,8 +22,8 @@
     "pk": 2157,
     "fields": {
       "cropid": 1,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -31,8 +31,8 @@
     "pk": 2158,
     "fields": {
       "cropid": 2,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -40,8 +40,8 @@
     "pk": 2159,
     "fields": {
       "cropid": 2,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -49,8 +49,8 @@
     "pk": 2160,
     "fields": {
       "cropid": 2,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -58,8 +58,8 @@
     "pk": 2161,
     "fields": {
       "cropid": 3,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -67,8 +67,8 @@
     "pk": 2162,
     "fields": {
       "cropid": 3,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -76,8 +76,8 @@
     "pk": 2163,
     "fields": {
       "cropid": 3,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -85,8 +85,8 @@
     "pk": 2164,
     "fields": {
       "cropid": 4,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -94,8 +94,8 @@
     "pk": 2165,
     "fields": {
       "cropid": 4,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -103,8 +103,8 @@
     "pk": 2166,
     "fields": {
       "cropid": 4,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -112,8 +112,8 @@
     "pk": 2167,
     "fields": {
       "cropid": 5,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -121,8 +121,8 @@
     "pk": 2168,
     "fields": {
       "cropid": 5,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -130,8 +130,8 @@
     "pk": 2169,
     "fields": {
       "cropid": 5,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -139,8 +139,8 @@
     "pk": 2170,
     "fields": {
       "cropid": 6,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -148,8 +148,8 @@
     "pk": 2171,
     "fields": {
       "cropid": 6,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -157,8 +157,8 @@
     "pk": 2172,
     "fields": {
       "cropid": 6,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -166,8 +166,8 @@
     "pk": 2173,
     "fields": {
       "cropid": 7,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -175,8 +175,8 @@
     "pk": 2174,
     "fields": {
       "cropid": 7,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -184,8 +184,8 @@
     "pk": 2175,
     "fields": {
       "cropid": 7,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -193,8 +193,8 @@
     "pk": 2176,
     "fields": {
       "cropid": 8,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -202,8 +202,8 @@
     "pk": 2177,
     "fields": {
       "cropid": 8,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -211,8 +211,8 @@
     "pk": 2178,
     "fields": {
       "cropid": 8,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -220,8 +220,8 @@
     "pk": 2179,
     "fields": {
       "cropid": 9,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -229,8 +229,8 @@
     "pk": 2180,
     "fields": {
       "cropid": 9,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -238,8 +238,8 @@
     "pk": 2181,
     "fields": {
       "cropid": 9,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -247,8 +247,8 @@
     "pk": 2182,
     "fields": {
       "cropid": 10,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -256,8 +256,8 @@
     "pk": 2183,
     "fields": {
       "cropid": 10,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -265,8 +265,8 @@
     "pk": 2184,
     "fields": {
       "cropid": 10,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -274,8 +274,8 @@
     "pk": 2185,
     "fields": {
       "cropid": 11,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -283,8 +283,8 @@
     "pk": 2186,
     "fields": {
       "cropid": 11,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -292,8 +292,8 @@
     "pk": 2187,
     "fields": {
       "cropid": 11,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -301,8 +301,8 @@
     "pk": 2188,
     "fields": {
       "cropid": 12,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -310,8 +310,8 @@
     "pk": 2189,
     "fields": {
       "cropid": 12,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -319,8 +319,8 @@
     "pk": 2190,
     "fields": {
       "cropid": 12,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -328,8 +328,8 @@
     "pk": 2191,
     "fields": {
       "cropid": 13,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -337,8 +337,8 @@
     "pk": 2192,
     "fields": {
       "cropid": 13,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -346,8 +346,8 @@
     "pk": 2193,
     "fields": {
       "cropid": 13,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -355,8 +355,8 @@
     "pk": 2194,
     "fields": {
       "cropid": 14,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -364,8 +364,8 @@
     "pk": 2195,
     "fields": {
       "cropid": 14,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -373,8 +373,8 @@
     "pk": 2196,
     "fields": {
       "cropid": 14,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -382,8 +382,8 @@
     "pk": 2197,
     "fields": {
       "cropid": 15,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -391,8 +391,8 @@
     "pk": 2198,
     "fields": {
       "cropid": 15,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -400,8 +400,8 @@
     "pk": 2199,
     "fields": {
       "cropid": 15,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -409,8 +409,8 @@
     "pk": 2200,
     "fields": {
       "cropid": 16,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -418,8 +418,8 @@
     "pk": 2201,
     "fields": {
       "cropid": 16,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -427,8 +427,8 @@
     "pk": 2202,
     "fields": {
       "cropid": 16,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 6
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 6.0
     }
   },
   {
@@ -436,8 +436,8 @@
     "pk": 2203,
     "fields": {
       "cropid": 22,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -445,8 +445,8 @@
     "pk": 2204,
     "fields": {
       "cropid": 22,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -454,8 +454,8 @@
     "pk": 2205,
     "fields": {
       "cropid": 22,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -463,8 +463,8 @@
     "pk": 2206,
     "fields": {
       "cropid": 23,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -472,8 +472,8 @@
     "pk": 2207,
     "fields": {
       "cropid": 23,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -481,8 +481,8 @@
     "pk": 2208,
     "fields": {
       "cropid": 23,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -490,8 +490,8 @@
     "pk": 2209,
     "fields": {
       "cropid": 24,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -499,8 +499,8 @@
     "pk": 2210,
     "fields": {
       "cropid": 24,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -508,8 +508,8 @@
     "pk": 2211,
     "fields": {
       "cropid": 24,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -517,8 +517,8 @@
     "pk": 2212,
     "fields": {
       "cropid": 25,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -526,8 +526,8 @@
     "pk": 2213,
     "fields": {
       "cropid": 25,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -535,8 +535,8 @@
     "pk": 2214,
     "fields": {
       "cropid": 25,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -544,8 +544,8 @@
     "pk": 2215,
     "fields": {
       "cropid": 26,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -553,8 +553,8 @@
     "pk": 2216,
     "fields": {
       "cropid": 26,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -562,8 +562,8 @@
     "pk": 2217,
     "fields": {
       "cropid": 26,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -571,8 +571,8 @@
     "pk": 2218,
     "fields": {
       "cropid": 27,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -580,8 +580,8 @@
     "pk": 2219,
     "fields": {
       "cropid": 27,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -589,8 +589,8 @@
     "pk": 2220,
     "fields": {
       "cropid": 27,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -598,8 +598,8 @@
     "pk": 2221,
     "fields": {
       "cropid": 28,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -607,8 +607,8 @@
     "pk": 2222,
     "fields": {
       "cropid": 28,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -616,8 +616,8 @@
     "pk": 2223,
     "fields": {
       "cropid": 28,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -625,8 +625,8 @@
     "pk": 2224,
     "fields": {
       "cropid": 30,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -634,8 +634,8 @@
     "pk": 2225,
     "fields": {
       "cropid": 30,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -643,8 +643,8 @@
     "pk": 2226,
     "fields": {
       "cropid": 30,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -652,8 +652,8 @@
     "pk": 2227,
     "fields": {
       "cropid": 31,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -661,8 +661,8 @@
     "pk": 2228,
     "fields": {
       "cropid": 31,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -670,8 +670,8 @@
     "pk": 2229,
     "fields": {
       "cropid": 31,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -679,8 +679,8 @@
     "pk": 2230,
     "fields": {
       "cropid": 32,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -688,8 +688,8 @@
     "pk": 2231,
     "fields": {
       "cropid": 32,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -697,8 +697,8 @@
     "pk": 2232,
     "fields": {
       "cropid": 32,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -706,8 +706,8 @@
     "pk": 2233,
     "fields": {
       "cropid": 33,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -715,8 +715,8 @@
     "pk": 2234,
     "fields": {
       "cropid": 33,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -724,8 +724,8 @@
     "pk": 2235,
     "fields": {
       "cropid": 33,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -733,8 +733,8 @@
     "pk": 2236,
     "fields": {
       "cropid": 34,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -742,8 +742,8 @@
     "pk": 2237,
     "fields": {
       "cropid": 34,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -751,8 +751,8 @@
     "pk": 2238,
     "fields": {
       "cropid": 34,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -760,8 +760,8 @@
     "pk": 2239,
     "fields": {
       "cropid": 35,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -769,8 +769,8 @@
     "pk": 2240,
     "fields": {
       "cropid": 35,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -778,8 +778,8 @@
     "pk": 2241,
     "fields": {
       "cropid": 35,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -787,8 +787,8 @@
     "pk": 2242,
     "fields": {
       "cropid": 36,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -796,8 +796,8 @@
     "pk": 2243,
     "fields": {
       "cropid": 36,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -805,8 +805,8 @@
     "pk": 2244,
     "fields": {
       "cropid": 36,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -814,8 +814,8 @@
     "pk": 2245,
     "fields": {
       "cropid": 37,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -823,8 +823,8 @@
     "pk": 2246,
     "fields": {
       "cropid": 37,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -832,8 +832,8 @@
     "pk": 2247,
     "fields": {
       "cropid": 37,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -841,8 +841,8 @@
     "pk": 2248,
     "fields": {
       "cropid": 39,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -850,8 +850,8 @@
     "pk": 2249,
     "fields": {
       "cropid": 39,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -859,8 +859,8 @@
     "pk": 2250,
     "fields": {
       "cropid": 39,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -868,8 +868,8 @@
     "pk": 2251,
     "fields": {
       "cropid": 40,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -877,8 +877,8 @@
     "pk": 2252,
     "fields": {
       "cropid": 40,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -886,8 +886,8 @@
     "pk": 2253,
     "fields": {
       "cropid": 40,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -895,8 +895,8 @@
     "pk": 2254,
     "fields": {
       "cropid": 43,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -904,8 +904,8 @@
     "pk": 2255,
     "fields": {
       "cropid": 43,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -913,8 +913,8 @@
     "pk": 2256,
     "fields": {
       "cropid": 43,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -922,8 +922,8 @@
     "pk": 2257,
     "fields": {
       "cropid": 45,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -931,8 +931,8 @@
     "pk": 2258,
     "fields": {
       "cropid": 45,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -940,8 +940,8 @@
     "pk": 2259,
     "fields": {
       "cropid": 45,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -949,8 +949,8 @@
     "pk": 2260,
     "fields": {
       "cropid": 46,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -958,8 +958,8 @@
     "pk": 2261,
     "fields": {
       "cropid": 46,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -967,8 +967,8 @@
     "pk": 2262,
     "fields": {
       "cropid": 46,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -976,8 +976,8 @@
     "pk": 2263,
     "fields": {
       "cropid": 48,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -985,8 +985,8 @@
     "pk": 2264,
     "fields": {
       "cropid": 48,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -994,8 +994,8 @@
     "pk": 2265,
     "fields": {
       "cropid": 48,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1003,8 +1003,8 @@
     "pk": 2266,
     "fields": {
       "cropid": 49,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1012,8 +1012,8 @@
     "pk": 2267,
     "fields": {
       "cropid": 49,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1021,8 +1021,8 @@
     "pk": 2268,
     "fields": {
       "cropid": 49,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1030,8 +1030,8 @@
     "pk": 2269,
     "fields": {
       "cropid": 52,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1039,8 +1039,8 @@
     "pk": 2270,
     "fields": {
       "cropid": 52,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1048,8 +1048,8 @@
     "pk": 2271,
     "fields": {
       "cropid": 52,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1057,8 +1057,8 @@
     "pk": 2272,
     "fields": {
       "cropid": 53,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1066,8 +1066,8 @@
     "pk": 2273,
     "fields": {
       "cropid": 53,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1075,8 +1075,8 @@
     "pk": 2274,
     "fields": {
       "cropid": 53,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1084,8 +1084,8 @@
     "pk": 2275,
     "fields": {
       "cropid": 54,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1093,8 +1093,8 @@
     "pk": 2276,
     "fields": {
       "cropid": 54,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1102,8 +1102,8 @@
     "pk": 2277,
     "fields": {
       "cropid": 54,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1111,8 +1111,8 @@
     "pk": 2278,
     "fields": {
       "cropid": 55,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1120,8 +1120,8 @@
     "pk": 2279,
     "fields": {
       "cropid": 55,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1129,8 +1129,8 @@
     "pk": 2280,
     "fields": {
       "cropid": 55,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1138,8 +1138,8 @@
     "pk": 2281,
     "fields": {
       "cropid": 56,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1147,8 +1147,8 @@
     "pk": 2282,
     "fields": {
       "cropid": 56,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1156,8 +1156,8 @@
     "pk": 2283,
     "fields": {
       "cropid": 56,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1165,8 +1165,8 @@
     "pk": 2284,
     "fields": {
       "cropid": 57,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1174,8 +1174,8 @@
     "pk": 2285,
     "fields": {
       "cropid": 57,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1183,8 +1183,8 @@
     "pk": 2286,
     "fields": {
       "cropid": 57,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1192,8 +1192,8 @@
     "pk": 2287,
     "fields": {
       "cropid": 58,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1201,8 +1201,8 @@
     "pk": 2288,
     "fields": {
       "cropid": 58,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1210,8 +1210,8 @@
     "pk": 2289,
     "fields": {
       "cropid": 58,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1219,8 +1219,8 @@
     "pk": 2290,
     "fields": {
       "cropid": 59,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1228,8 +1228,8 @@
     "pk": 2291,
     "fields": {
       "cropid": 59,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1237,8 +1237,8 @@
     "pk": 2292,
     "fields": {
       "cropid": 59,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1246,8 +1246,8 @@
     "pk": 2293,
     "fields": {
       "cropid": 60,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1255,8 +1255,8 @@
     "pk": 2294,
     "fields": {
       "cropid": 60,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1264,8 +1264,8 @@
     "pk": 2295,
     "fields": {
       "cropid": 60,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1273,8 +1273,8 @@
     "pk": 2296,
     "fields": {
       "cropid": 61,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1282,8 +1282,8 @@
     "pk": 2297,
     "fields": {
       "cropid": 61,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1291,8 +1291,8 @@
     "pk": 2298,
     "fields": {
       "cropid": 61,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1300,8 +1300,8 @@
     "pk": 2299,
     "fields": {
       "cropid": 62,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1309,8 +1309,8 @@
     "pk": 2300,
     "fields": {
       "cropid": 62,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1318,8 +1318,8 @@
     "pk": 2301,
     "fields": {
       "cropid": 62,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1327,8 +1327,8 @@
     "pk": 2302,
     "fields": {
       "cropid": 63,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1336,8 +1336,8 @@
     "pk": 2303,
     "fields": {
       "cropid": 63,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1345,8 +1345,8 @@
     "pk": 2304,
     "fields": {
       "cropid": 63,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1354,8 +1354,8 @@
     "pk": 2305,
     "fields": {
       "cropid": 64,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1363,8 +1363,8 @@
     "pk": 2306,
     "fields": {
       "cropid": 64,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1372,8 +1372,8 @@
     "pk": 2307,
     "fields": {
       "cropid": 64,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1381,8 +1381,8 @@
     "pk": 2308,
     "fields": {
       "cropid": 65,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1390,8 +1390,8 @@
     "pk": 2309,
     "fields": {
       "cropid": 65,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1399,8 +1399,8 @@
     "pk": 2310,
     "fields": {
       "cropid": 65,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1408,8 +1408,8 @@
     "pk": 2311,
     "fields": {
       "cropid": 67,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1417,8 +1417,8 @@
     "pk": 2312,
     "fields": {
       "cropid": 67,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1426,8 +1426,8 @@
     "pk": 2313,
     "fields": {
       "cropid": 67,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1435,8 +1435,8 @@
     "pk": 2314,
     "fields": {
       "cropid": 68,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1444,8 +1444,8 @@
     "pk": 2315,
     "fields": {
       "cropid": 68,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1453,8 +1453,8 @@
     "pk": 2316,
     "fields": {
       "cropid": 68,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1462,8 +1462,8 @@
     "pk": 2317,
     "fields": {
       "cropid": 69,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1471,8 +1471,8 @@
     "pk": 2318,
     "fields": {
       "cropid": 69,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1480,8 +1480,8 @@
     "pk": 2319,
     "fields": {
       "cropid": 69,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1489,8 +1489,8 @@
     "pk": 2320,
     "fields": {
       "cropid": 70,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1498,8 +1498,8 @@
     "pk": 2321,
     "fields": {
       "cropid": 70,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1507,8 +1507,8 @@
     "pk": 2322,
     "fields": {
       "cropid": 70,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1516,8 +1516,8 @@
     "pk": 2323,
     "fields": {
       "cropid": 71,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -1525,8 +1525,8 @@
     "pk": 2324,
     "fields": {
       "cropid": 71,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -1534,8 +1534,8 @@
     "pk": 2325,
     "fields": {
       "cropid": 71,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 2
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 2.0
     }
   },
   {
@@ -1543,8 +1543,8 @@
     "pk": 2326,
     "fields": {
       "cropid": 72,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1552,8 +1552,8 @@
     "pk": 2327,
     "fields": {
       "cropid": 72,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1561,8 +1561,8 @@
     "pk": 2328,
     "fields": {
       "cropid": 72,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 3
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 3.0
     }
   },
   {
@@ -1570,8 +1570,8 @@
     "pk": 2329,
     "fields": {
       "cropid": 73,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1579,8 +1579,8 @@
     "pk": 2330,
     "fields": {
       "cropid": 73,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1588,8 +1588,8 @@
     "pk": 2331,
     "fields": {
       "cropid": 73,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1597,8 +1597,8 @@
     "pk": 2332,
     "fields": {
       "cropid": 74,
-      "soiltestpotassiumregioncode": 1,
-      "potassiumcropgroupregioncode": 4
+      "soiltestpotassiumregioncode": 1.0,
+      "potassiumcropgroupregioncode": 4.0
     }
   },
   {
@@ -1606,8 +1606,8 @@
     "pk": 2333,
     "fields": {
       "cropid": 74,
-      "soiltestpotassiumregioncode": 2,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 2.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   },
   {
@@ -1615,8 +1615,8 @@
     "pk": 2334,
     "fields": {
       "cropid": 74,
-      "soiltestpotassiumregioncode": 3,
-      "potassiumcropgroupregioncode": 5
+      "soiltestpotassiumregioncode": 3.0,
+      "potassiumcropgroupregioncode": 5.0
     }
   }
 ]

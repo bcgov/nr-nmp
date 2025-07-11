@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const booleanChecker = (value: any): boolean => {
   if (!value) {
     // value was empty string, false, 0, null, undefined

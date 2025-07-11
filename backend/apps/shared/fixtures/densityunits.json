@@ -1,0 +1,34 @@
+[
+  {
+    "model": "fertilizers.densityunits",
+    "pk": 1,
+    "fields": {
+      "name": "kg/US Gallon",
+      "convfactor": 2.65
+    }
+  },
+  {
+    "model": "fertilizers.densityunits",
+    "pk": 2,
+    "fields": {
+      "name": "kg/L",
+      "convfactor": 10.02
+    }
+  },
+  {
+    "model": "fertilizers.densityunits",
+    "pk": 3,
+    "fields": {
+      "name": "lb/imp. gallon",
+      "convfactor": 1.0
+    }
+  },
+  {
+    "model": "fertilizers.densityunits",
+    "pk": 4,
+    "fields": {
+      "name": "lb/US gallon",
+      "convfactor": 1.2
+    }
+  }
+]
