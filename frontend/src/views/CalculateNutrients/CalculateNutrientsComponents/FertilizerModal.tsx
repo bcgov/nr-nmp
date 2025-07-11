@@ -25,16 +25,22 @@ import type {
   NMPFileFieldData,
   CalculateNutrientsColumn,
 } from '@/types';
-import { calcFertBalance } from '../utils';
+import { calcFertBalance, renderBalanceCell } from '../utils';
 import { NMPFileFertilizer } from '@/types/calculateNutrients';
 
 type FertilizerModalProps = {
   fieldIndex: number;
   initialModalData: NMPFileFertilizer | undefined;
   rowEditIndex: number | undefined;
-  balanceRow: CalculateNutrientsColumn | undefined;
+  balanceRow: CalculateNutrientsColumn;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
+};
+
+type BalanceCalcRow = {
+  reqN: number;
+  reqP2o5: number;
+  reqK2o: number;
 };
 
 const NUTRIENT_COLUMNS: GridColDef[] = [
@@ -65,25 +71,28 @@ const BALANCE_COLUMNS: GridColDef[] = [
   {
     field: 'reqN',
     headerName: 'N',
-
+    renderCell: renderBalanceCell('reqN', true),
     sortable: false,
     resizable: false,
   },
   {
     field: 'reqP2o5',
     headerName: 'P2O5',
-
+    renderCell: renderBalanceCell('reqP2o5', true),
     sortable: false,
     resizable: false,
   },
   {
     field: 'reqK2o',
     headerName: 'K2O',
-
+    renderCell: renderBalanceCell('reqK2o', true),
     sortable: false,
     resizable: false,
   },
 ];
+
+const DRY_CUSTOM_ID = 2;
+const LIQUID_CUSTOM_ID = 4;
 
 const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
   name: '',
@@ -138,15 +147,14 @@ export default function FertilizerModal({
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
   const [densityUnits, setDensityUnits] = useState<any[]>([]);
   const [liqDensityFactors, setLiqDensityFactors] = useState<any[]>([]);
-  const [balanceCalcRow, setBalanceCacRow] = useState<CalculateNutrientsColumn | undefined>({
-    ...balanceRow,
-    reqN: Math.min(balanceRow?.reqN ?? 0, 0),
-    reqP2o5: Math.min(balanceRow?.reqP2o5 ?? 0, 0),
-    reqK2o: Math.min(balanceRow?.reqK2o ?? 0, 0),
-  } as CalculateNutrientsColumn);
+  const [balanceCalcRow, setBalanceCacRow] = useState<BalanceCalcRow>({
+    reqN: Math.min(balanceRow.reqN, 0),
+    reqP2o5: Math.min(balanceRow.reqP2o5, 0),
+    reqK2o: Math.min(balanceRow.reqK2o, 0),
+  });
 
   const [formState, setFormState] = useState<NMPFileFertilizer>(
-    initialModalData ?? EMPTY_FERTILIZER_FORM_DATA,
+    initialModalData || EMPTY_FERTILIZER_FORM_DATA,
   );
   const [formCustomFertilizer, setFormCustomFertilizer] =
     useState<Fertilizer>(EMPTY_CUSTOM_FERTILIZER);
@@ -331,13 +339,9 @@ export default function FertilizerModal({
     );
     setCalculateData(cropNutrients);
     setBalanceCacRow({
-      name: 'calcOnly',
-      reqN: Math.min(0, (balanceRow?.reqN ?? 0) + cropNutrients.N),
-      reqP2o5: Math.min(0, (balanceRow?.reqP2o5 ?? 0) + cropNutrients.P2O5),
-      reqK2o: Math.min(0, (balanceRow?.reqK2o ?? 0) + cropNutrients.K2O),
-      remN: 0,
-      remP2o5: 0,
-      remK2o: 0,
+      reqN: Math.min(0, balanceRow.reqN + cropNutrients.N),
+      reqP2o5: Math.min(0, balanceRow.reqP2o5 + cropNutrients.P2O5),
+      reqK2o: Math.min(0, balanceRow.reqK2o + cropNutrients.K2O),
     });
     setFormState((prev) => ({
       ...prev,
@@ -368,12 +372,20 @@ export default function FertilizerModal({
           ),
         );
 
-        if (value === 2) {
-          // For custom dry fertilizers
-          setFormCustomFertilizer((prev) => ({ ...prev, dryliquid: 'dry' }));
-        } else if (value === 4) {
-          // For custom liquid fertilizers
-          setFormCustomFertilizer((prev) => ({ ...prev, dryliquid: 'liquid' }));
+        if (value === DRY_CUSTOM_ID || value === LIQUID_CUSTOM_ID) {
+          setFormCustomFertilizer((prev) => {
+            // Reset if we're switching type
+            if (formState.fertilizerTypeId !== value) {
+              return {
+                ...EMPTY_CUSTOM_FERTILIZER,
+                dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
+              };
+            }
+            return {
+              ...prev,
+              dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
+            };
+          });
         } else {
           // Reset for other values
           setFormCustomFertilizer(EMPTY_CUSTOM_FERTILIZER);
@@ -475,7 +487,7 @@ export default function FertilizerModal({
                   <Grid size={{ xs: 4 }}>
                     <TextField
                       isRequired
-                      label="K2O"
+                      label="K2O (%)"
                       type="number"
                       name="potassium"
                       value={formCustomFertilizer?.potassium.toString()}
@@ -576,7 +588,7 @@ export default function FertilizerModal({
               label=""
               type="date"
               name="applDate"
-              value={formState.applDate ?? 0}
+              value={formState.applDate || 0}
               onChange={(e: any) => {
                 // Current NMP stores this, but not for calculations
                 // Right now not passed to parent componet for storing.
@@ -604,7 +616,7 @@ export default function FertilizerModal({
                   <DataGrid
                     sx={{ ...customTableStyle }}
                     columns={NUTRIENT_COLUMNS}
-                    rows={calculatedData !== null ? [calculatedData] : []}
+                    rows={calculatedData !== null ? [calculatedData] : [{ N: 0, P2O5: 0, K2O: 0 }]}
                     getRowId={() => crypto.randomUUID()}
                     disableRowSelectionOnClick
                     disableColumnMenu
@@ -622,7 +634,7 @@ export default function FertilizerModal({
                   <DataGrid
                     sx={{ ...customTableStyle }}
                     columns={BALANCE_COLUMNS}
-                    rows={balanceCalcRow !== undefined ? [balanceCalcRow] : [balanceRow]}
+                    rows={[balanceCalcRow]}
                     getRowId={() => crypto.randomUUID()}
                     disableRowSelectionOnClick
                     disableColumnMenu

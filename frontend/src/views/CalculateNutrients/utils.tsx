@@ -170,7 +170,7 @@ export const findBalanceMessage = (balanceType: string, balanceValue: number) =>
     return balanceValue >= low && balanceValue <= high;
   });
 
-const renderBalanceCell = (balanceType: string) =>
+export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
   function renderBalanceCellInner({ value }: any) {
     const message = findBalanceMessage(balanceType, value);
 
@@ -185,7 +185,11 @@ const renderBalanceCell = (balanceType: string) =>
               alt: 'Balance icon',
               style: { width: '1em', height: '1em', marginRight: '0.5em' },
             }),
-            React.createElement('span', { key: 'value' }, value),
+            React.createElement(
+              'span',
+              { key: 'value' },
+              showAsAbs ? Math.abs(value as number) : value,
+            ),
           ]
         : React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
     );
