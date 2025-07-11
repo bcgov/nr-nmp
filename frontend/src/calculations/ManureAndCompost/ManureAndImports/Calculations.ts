@@ -1,4 +1,23 @@
 import { evaluate } from 'mathjs';
+import axios from 'axios';
+import { env } from 'process';
+import { NMPFileFarmManureData, Region } from '@/types';
+import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
+
+// export async function getConversionFactors() {
+//   try {
+//     const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropsconversionfactors/`);
+//     console.log('Conversion Factors Response: ', response);
+//     return response.data[0];
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
+
+export function getManure(id: number): Promise<any> {
+  return axios.get(`${env.VITE_BACKEND_URL}/api/manures/${id}`).then((response) => response.data);
+}
 
 export function getDensity(moistureWholePercent: number): number {
   const moisturePercentDecimal = moistureWholePercent / 100;
@@ -28,4 +47,102 @@ export function getDensityFactoredConversionUsingMoisture(
 ): number {
   const density = getDensity(moistureWholePercent);
   return getDensityFactoredConversion(density, conversionFactor);
+}
+
+export async function getNutrientInputs(
+  farmManure: NMPFileFarmManureData | undefined,
+  region: Region | undefined,
+  applicationRate: number,
+  applicationRateUnit: string | undefined,
+  ammoniaNRetentionPct: number | undefined,
+  organicNAvailable: number | undefined,
+) {
+  const nutrientInputs = {
+    N_FirstYear: 0,
+    P2O5_FirstYear: 0,
+    K2O_FirstYear: 0,
+    N_LongTerm: 0,
+    P2O5_LongTerm: 0,
+    K2O_LongTerm: 0,
+  };
+
+  const conversionFactors = await getConversionFactors();
+
+  const potassiumAvailabilityFirstYear = conversionFactors.potassiumavailabilityfirstyear;
+  const potassiumAvailabilityLongTerm = conversionFactors.potassiumavailabilitylongterm;
+  const potassiumKtoK2Oconversion = conversionFactors.potassiumktok2oconversion;
+  const phosphorousAvailabilityFirstYear = conversionFactors.phosphorousavailabilityfirstyear;
+  const phosphorousAvailabilityLongTerm = conversionFactors.phosphorousavailabilitylongterm;
+  const phosphorousPtoP2O5Kconversion = conversionFactors.phosphorousptop2o5conversion;
+  const lbPerTonConversion = conversionFactors.poundpertonconversion;
+  // const tenThousand = 10000;
+  // const unit = getUnit(applicationRateUnit); - Need to add Units table to database
+  // const conversion = unit.ConversionlbTon;
+
+  const unit = { Id: 1 }; // Placeholder for unit, replace with actual logic
+  const conversion = 1; // Placeholder for conversion factor, replace with actual logic
+
+  let adjustedApplicationRate = applicationRate;
+
+  if (
+    unit.Id === 6 &&
+    farmManure &&
+    farmManure.Nutrients.SolidLiquid &&
+    farmManure.Nutrients.SolidLiquid.toUpperCase() === 'SOLID'
+  ) {
+    const manure = await getManure(farmManure.Nutrients.ManureId);
+    adjustedApplicationRate = applicationRate * manure.CubicYardConversion;
+  }
+
+  // get potassium first year
+  if (farmManure && farmManure.Nutrients.K2O !== undefined) {
+    nutrientInputs.K2O_FirstYear = Math.floor(
+      adjustedApplicationRate *
+        farmManure.Nutrients.K2O *
+        lbPerTonConversion *
+        potassiumKtoK2Oconversion *
+        potassiumAvailabilityFirstYear *
+        conversion,
+    );
+  }
+
+  // get potassium long term
+  if (farmManure && farmManure.Nutrients.K2O !== undefined) {
+    nutrientInputs.K2O_LongTerm = Math.floor(
+      adjustedApplicationRate *
+        farmManure.Nutrients.K2O *
+        lbPerTonConversion *
+        potassiumKtoK2Oconversion *
+        potassiumAvailabilityLongTerm *
+        conversion,
+    );
+  }
+
+  // get phosphorous first year
+  if (farmManure && farmManure.Nutrients.P2O5 !== undefined) {
+    nutrientInputs.P2O5_FirstYear = Math.floor(
+      adjustedApplicationRate *
+        farmManure.Nutrients.P2O5 *
+        lbPerTonConversion *
+        phosphorousPtoP2O5Kconversion *
+        phosphorousAvailabilityFirstYear *
+        conversion,
+    );
+  }
+
+  // get phosphorous long term
+  if (farmManure && farmManure.Nutrients.P2O5 !== undefined) {
+    nutrientInputs.P2O5_LongTerm = Math.floor(
+      adjustedApplicationRate *
+        farmManure.Nutrients.P2O5 *
+        lbPerTonConversion *
+        phosphorousPtoP2O5Kconversion *
+        phosphorousAvailabilityLongTerm *
+        conversion,
+    );
+  }
+
+  // Need to add nitrogen Mineralizations to database
+
+  return nutrientInputs;
 }

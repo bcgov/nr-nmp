@@ -14,7 +14,9 @@ import SEASON_APPLICATION from '../unseededData';
 import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-import { CropNutrients } from '@/types';
+import { CropNutrients, Region } from '@/types';
+import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
+import useAppState from '@/hooks/useAppState';
 
 type ManureFormFields = {
   MaterialType: string;
@@ -80,6 +82,7 @@ export default function ManureModal({
     initialModalData ?? DEFAULT_MANURE_FORM_FIELDS,
   );
   const apiCache = useContext(APICacheContext);
+  const { state } = useAppState();
 
   const [fertilizerUnits, setFertilizerUnits] = useState<
     {
@@ -118,6 +121,25 @@ export default function ManureModal({
   const handleSubmit = () => {
     // TBD: Submit logic here
     handleModalClose();
+  };
+
+  const handleCalculate = async () => {
+    // TBD: Calculate logic here - update the nutrient tables based on form inputs
+    console.log(
+      'Calculating nutrient values...',
+      await getNutrientInputs(
+        state.nmpFile?.years?.[0]?.FarmManures?.[0],
+        state.nmpFile.farmDetails.FarmRegion as unknown as Region,
+        manureForm.applicationRate,
+        manureForm.applUnit?.toString(),
+        manureForm.retentionAmmoniumN,
+        manureForm.organicNAvailable,
+      ),
+    );
+    // This would typically call an API or perform calculations to update:
+    // - availableThisYearTable
+    // - availableLongTermTable
+    // - stillReqTable
   };
 
   const handleChange = (changes: { [name: string]: string | number | undefined }) => {
@@ -263,6 +285,27 @@ export default function ManureModal({
               hideFooterPagination
               hideFooter
             />
+          </Grid>
+          <Grid
+            size={12}
+            sx={{ textAlign: 'center', mt: 2 }}
+          >
+            <button
+              type="button"
+              onClick={handleCalculate}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#003366',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              Calculate
+            </button>
           </Grid>
         </Grid>
       </Form>

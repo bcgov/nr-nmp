@@ -56,6 +56,8 @@ export type NutrientColumns = {
 };
 
 export interface ManureNutrients extends CropNutrients {
+  ManureId: number;
+  SolidLiquid: string;
   Moisture: string;
   NH4N: number; // Ammonium
 }
