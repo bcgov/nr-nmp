@@ -192,7 +192,7 @@ export default function AddAnimals() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         <Button
           size="medium"

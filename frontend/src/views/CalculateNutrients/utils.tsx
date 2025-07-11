@@ -13,6 +13,8 @@ export const calcFertBalance = (
   fert: Fertilizer,
   applRate: number,
   applUnit: FertilizerUnit,
+  density: number | undefined,
+  densityConvFactor: number | undefined,
 ): CropNutrients => {
   let newFertBalance: CropNutrients = initialAgronomicBalance;
   let convertedApplRate = applRate;
@@ -22,7 +24,9 @@ export const calcFertBalance = (
   // Default unit for calc is lb/ac for dry ferts, imp. gall/ac for liquid
   // this will check for units and adjust accordingly
   if (fert.dryliquid.includes('liquid')) {
-    convertedApplRate *= applUnit.conversiontoimperialgallonsperacre;
+    if (!density || !densityConvFactor)
+      throw new Error('Liquid fertilizer missing density or density units');
+    convertedApplRate *= applUnit.conversiontoimperialgallonsperacre * density * densityConvFactor;
   }
 
   if (fert.dryliquid.includes('dry')) {
@@ -166,7 +170,7 @@ export const findBalanceMessage = (balanceType: string, balanceValue: number) =>
     return balanceValue >= low && balanceValue <= high;
   });
 
-const renderBalanceCell = (balanceType: string) =>
+export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
   function renderBalanceCellInner({ value }: any) {
     const message = findBalanceMessage(balanceType, value);
 
@@ -181,7 +185,11 @@ const renderBalanceCell = (balanceType: string) =>
               alt: 'Balance icon',
               style: { width: '1em', height: '1em', marginRight: '0.5em' },
             }),
-            React.createElement('span', { key: 'value' }, value),
+            React.createElement(
+              'span',
+              { key: 'value' },
+              showAsAbs ? Math.abs(value as number) : value,
+            ),
           ]
         : React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
     );

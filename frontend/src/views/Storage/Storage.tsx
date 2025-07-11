@@ -160,7 +160,7 @@ export default function Storage() {
           variant="secondary"
           onPress={handlePrevious}
         >
-          BACK
+          Back
         </Button>
         <Button
           size="medium"

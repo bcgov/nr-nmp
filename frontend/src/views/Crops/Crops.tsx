@@ -235,7 +235,7 @@ function Crops() {
           variant="secondary"
           onClick={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         <Button
           size="medium"
