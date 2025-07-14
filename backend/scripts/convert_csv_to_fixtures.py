@@ -42,8 +42,8 @@ MODEL_MAPPINGS = {
     "_SoilTestPotassiumRecommendation": "crops.soiltestpotassiumrecommendation",
     "_Previous_Crop_Types": "crops.previouscroptypes",
     "_Units": "manures.units",
+    "_NMineralizations": "manures.nmineralization",
 }
-
 
 def clean_value(value, column_name):
     """Converts string values to appropriate Python types"""

@@ -4,23 +4,17 @@ import { env } from '@/env';
 import { NMPFileFarmManureData, Region } from '@/types';
 import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
 
-// export async function getConversionFactors() {
-//   try {
-//     const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropsconversionfactors/`);
-//     console.log('Conversion Factors Response: ', response);
-//     return response.data[0];
-//   } catch (error) {
-//     console.error(error);
-//     return null;
-//   }
-// }
-
 export function getManure(id: number): Promise<any> {
   return axios.get(`${env.VITE_BACKEND_URL}/api/manures/${id}`).then((response) => response.data);
 }
 
 export function getUnits(): Promise<any> {
   return axios.get(`${env.VITE_BACKEND_URL}/api/units/`).then((response) => response.data);
+}
+
+export async function getUnitByName(unitName: string | undefined): Promise<any> {
+  const units = await getUnits();
+  return units.find((unit: any) => unit.name === unitName);
 }
 
 export function getDensity(moistureWholePercent: number): number {
@@ -79,12 +73,9 @@ export async function getNutrientInputs(
   const phosphorousAvailabilityLongTerm = conversionFactors.phosphorousavailabilitylongterm;
   const phosphorousPtoP2O5Kconversion = conversionFactors.phosphorousptop2o5conversion;
   const lbPerTonConversion = conversionFactors.poundpertonconversion;
-  // const tenThousand = 10000;
-  // const unit = getUnit(applicationRateUnit); - Need to add Units table to database
-  // const conversion = unit.ConversionlbTon;
-
-  const unit = { Id: 1 }; // Placeholder for unit, replace with actual logic
-  const conversion = 1; // Placeholder for conversion factor, replace with actual logic
+  const tenThousand = 10000;
+  const unit = await getUnitByName(applicationRateUnit);
+  const conversion = unit && unit.ConversionlbTon ? unit.ConversionlbTon : 1; // Default to 1 if conversion is not defined
 
   let adjustedApplicationRate = applicationRate;
 
@@ -146,9 +137,9 @@ export async function getNutrientInputs(
     );
   }
 
-  // Need to add nitrogen Mineralizations to database for N calcs
-
-  console.log('get units', await getUnits());
+  // get nitrogen first year
+  const organicN =
+    Number(farmManure?.Nutrients.N || 0) - Number(farmManure?.Nutrients.NH4N || 0) / tenThousand;
 
   return nutrientInputs;
 }

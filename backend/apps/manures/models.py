@@ -65,3 +65,14 @@ class Units(models.Model):
     class Meta:
         managed = True
         db_table = 'units'
+
+class NitrogenMineralization(models.Model):
+    Id = models.IntegerField(primary_key=True)
+    LocationId = models.IntegerField()
+    Name = models.CharField(max_length=100)
+    FirstYearValue = models.FloatField()
+    LongTermValue = models.FloatField()
+    
+    class Meta:
+        managed = True
+        db_table = 'nitrogen_mineralization'

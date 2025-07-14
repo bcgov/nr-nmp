@@ -1,0 +1,25 @@
+Id,LocationId,Name,FirstYearValue,LongTermValue
+1,1,Liquid - Poultry,0.3,0.77
+1,2,Liquid - Poultry,0.5,0.77
+2,1,Liquid - Other,0.2,0.77
+2,2,Liquid - Other,0.35,0.77
+3,1,Liquid - Biosolids,0.25,0.77
+3,2,Liquid - Biosolids,0.3,0.77
+4,1,Solid - Biosolids,0.25,0.77
+4,2,Solid - Biosolids,0.3,0.77
+5,1,Solid - Poultry,0.3,0.77
+5,2,Solid - Poultry,0.5,0.77
+6,1,Solid - Mink,0.3,0.77
+6,2,Solid - Mink,0.35,0.77
+7,1,Solid - Hog,0.25,0.77
+7,2,Solid - Hog,0.3,0.77
+8,1,Solid - Mechanically Separated Dairy Solids,0.1,0.25
+8,2,Solid - Mechanically Separated Dairy Solids,0.1,0.25
+9,1,Solid - Horse,0.1,0.25
+9,2,Solid - Horse,0.1,0.25
+10,1,Solid - Compost,0.1,0.25
+10,2,Solid - Compost,0.1,0.25
+11,1,Solid - Other (<50%),0.15,0.25
+11,2,Solid - Other (<50%),0.2,0.25
+12,1,Solid - Other (>50%),0.05,0.2
+12,2,Solid - Other (>50%),0.1,0.15

@@ -3,11 +3,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
-from .models import Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors, Units
+from .models import Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors, Units, NitrogenMineralization
 from .serializers import (
     ManuresSerializer, SolidMaterialsConversionFactorsSerializer,
     LiquidMaterialsConversionFactorsSerializer,
-    UnitsSerializer
+    UnitsSerializer, NMineralizationSerializer
 )
 
 class ManuresViewset(viewsets.ViewSet):
@@ -37,7 +37,17 @@ class ManuresViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
-    def units(self, request):
-        units = Units.objects.all()
+    def units(self, request, unit=None):
+        units = None
+        if unit is None:
+            units = Units.objects.all()
+        else:
+            units = Units.objects.filter(name=unit)
         serializer = UnitsSerializer(units, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def nMineralization(self, request):
+        n_mineralization = NitrogenMineralization.objects.all()
+        serializer = NMineralizationSerializer(n_mineralization, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -8,4 +8,6 @@ urlpatterns = [
     path('solidmaterialsconversionfactors/', ManuresViewset.as_view({'get': 'solidMaterialsConversionFactors'})),
     path('liquidmaterialsconversionfactors/', ManuresViewset.as_view({'get': 'liquidMaterialsConversionFactors'})),
     path('units/', ManuresViewset.as_view({'get': 'units'}), name='units'),
+    path('units/<str:unit>/', ManuresViewset.as_view({'get': 'units'}), name='unit_detail'),
+    path('nmineralization/', ManuresViewset.as_view({'get': 'nMineralization'}), name='n_mineralization'),
 ]

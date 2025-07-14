@@ -86,7 +86,7 @@ export default function ManureModal({
   const apiCache = useContext(APICacheContext);
   const { state } = useAppState();
 
-  const [fertilizerUnits, setFertilizerUnits] = useState<
+  const [manureUnits, setManureUnits] = useState<
     {
       id: number;
       name: string;
@@ -105,10 +105,10 @@ export default function ManureModal({
 
   // get fertilizer types, names, and conversion units
   useEffect(() => {
-    apiCache.callEndpoint('api/fertilizerunits/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/units/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setFertilizerUnits(data);
+        setManureUnits(data);
       }
     });
   }, [apiCache, manureForm.MaterialType]);
@@ -232,7 +232,7 @@ export default function ManureModal({
               label="Units"
               placeholder="Select a unit"
               selectedKey={manureForm?.applUnit}
-              items={fertilizerUnits
+              items={manureUnits
                 // .filter((unit) => [3, 4, 5, 6].includes(unit.id))
                 .map((unit) => ({
                   value: { id: unit.id },
