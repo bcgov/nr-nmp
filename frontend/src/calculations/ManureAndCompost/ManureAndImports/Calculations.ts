@@ -100,11 +100,6 @@ export async function getNutrientInputs(
     K2O_LongTerm: 0,
   };
 
-  const NOrganicMineralizations = {
-    OrganicN_FirstYear: 0,
-    OrganicN_LongTerm: 0,
-  };
-
   const conversionFactors = await getConversionFactors();
 
   const potassiumAvailabilityFirstYear = conversionFactors.potassiumavailabilityfirstyear;
@@ -178,17 +173,35 @@ export async function getNutrientInputs(
     );
   }
 
-  // get nitrogen first year
+  // get nitrogen first year and long term
   const organicN =
     Number(farmManure?.Nutrients.N || 0) - Number(farmManure?.Nutrients.NH4N || 0) / tenThousand;
 
   const manure = await getManuresByName(farmManure?.MaterialType);
   const nMineralizationID = manure?.nmineralizationid;
-  const nMineralizations = await GetNMineralizations(nMineralizationID, region);
-  // NOrganicMineralizations = GetNMineralizations(nMineralizationID, region);
-  console.log('nMineralizations: ', nMineralizations);
+  const nOrganicMineralizations = await GetNMineralizations(nMineralizationID, region);
 
-  // NOrganicMineralizations =
+  nOrganicMineralizations.OrganicN_FirstYear = (organicNAvailable ?? 0) / 100;
+
+  const ammoniaRetention = (ammoniaNRetentionPct ?? 0) / 100;
+
+  const a = ((farmManure?.Nutrients.NH4N ?? 0) / tenThousand) * ammoniaRetention;
+
+  const b1 = organicN * nOrganicMineralizations.OrganicN_FirstYear;
+
+  const c1 = a + b1 + Number(farmManure?.Nutrients.N || 0) / tenThousand;
+
+  const nFirstYear = c1 * lbPerTonConversion;
+
+  nutrientInputs.N_FirstYear = Math.floor(applicationRate * nFirstYear * conversion);
+
+  const b2 = organicN * nOrganicMineralizations.OrganicN_LongTerm;
+
+  const c2 = a + b2 + Number(farmManure?.Nutrients.N || 0) / tenThousand;
+
+  const nLongTerm = c2 * lbPerTonConversion;
+
+  nutrientInputs.N_LongTerm = Math.floor(applicationRate * nLongTerm * conversion);
 
   return nutrientInputs;
 }
