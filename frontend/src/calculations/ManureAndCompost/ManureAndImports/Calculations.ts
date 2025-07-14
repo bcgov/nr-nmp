@@ -1,6 +1,6 @@
 import { evaluate } from 'mathjs';
 import axios from 'axios';
-import { env } from 'process';
+import { env } from '@/env';
 import { NMPFileFarmManureData, Region } from '@/types';
 import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
 
@@ -17,6 +17,10 @@ import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculat
 
 export function getManure(id: number): Promise<any> {
   return axios.get(`${env.VITE_BACKEND_URL}/api/manures/${id}`).then((response) => response.data);
+}
+
+export function getUnits(): Promise<any> {
+  return axios.get(`${env.VITE_BACKEND_URL}/api/units/`).then((response) => response.data);
 }
 
 export function getDensity(moistureWholePercent: number): number {
@@ -143,6 +147,8 @@ export async function getNutrientInputs(
   }
 
   // Need to add nitrogen Mineralizations to database for N calcs
+
+  console.log('get units', await getUnits());
 
   return nutrientInputs;
 }

@@ -3,12 +3,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
-from .models import Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors
+from .models import Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors, Units
 from .serializers import (
     ManuresSerializer, SolidMaterialsConversionFactorsSerializer,
-    LiquidMaterialsConversionFactorsSerializer
+    LiquidMaterialsConversionFactorsSerializer,
+    UnitsSerializer
 )
-
 
 class ManuresViewset(viewsets.ViewSet):
 
@@ -34,4 +34,10 @@ class ManuresViewset(viewsets.ViewSet):
     def liquidMaterialsConversionFactors(self, request):
         liquid_materials_conversion_factors = LiquidMaterialsConversionFactors.objects.all()
         serializer = LiquidMaterialsConversionFactorsSerializer(liquid_materials_conversion_factors, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def units(self, request):
+        units = Units.objects.all()
+        serializer = UnitsSerializer(units, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

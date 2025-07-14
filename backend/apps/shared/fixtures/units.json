@@ -1,0 +1,122 @@
+[
+  {
+    "model": "manures.units",
+    "pk": 1,
+    "fields": {
+      "name": "imp. gallons/ac",
+      "nutrientcontentunits": "lb/1000 imp. gal",
+      "conversionlbton": 0.005,
+      "nutrientrateunits": "lb/ac",
+      "costunits": "$/imp. gallon",
+      "costapplications": 0.015,
+      "dollarunitarea": "/ac",
+      "valuematerialunits": "$/lb",
+      "valuen": 0.7,
+      "valuep2o5": 0.75,
+      "valuek2o": 0.6,
+      "farmreqdnutrientsstdunitsconversion": 1.200949926,
+      "farmreqdnutrientsstdunitsareaconversion": 1.0,
+      "solidliquid": "Liquid"
+    }
+  },
+  {
+    "model": "manures.units",
+    "pk": 2,
+    "fields": {
+      "name": "m3/ha",
+      "nutrientcontentunits": "kg/m3",
+      "conversionlbton": 0.445091798,
+      "nutrientrateunits": "kg/ha",
+      "costunits": "$/m3",
+      "costapplications": 0.003,
+      "dollarunitarea": "/ha",
+      "valuematerialunits": "$/kg",
+      "valuen": 1.54,
+      "valuep2o5": 1.65,
+      "valuek2o": 1.32,
+      "farmreqdnutrientsstdunitsconversion": 264.1720524,
+      "farmreqdnutrientsstdunitsareaconversion": 0.404685642,
+      "solidliquid": "Liquid"
+    }
+  },
+  {
+    "model": "manures.units",
+    "pk": 3,
+    "fields": {
+      "name": "US gallons/ac",
+      "nutrientcontentunits": "lb/1000 US gal",
+      "conversionlbton": 0.004163369,
+      "nutrientrateunits": "lb/ac",
+      "costunits": "$/US gallon",
+      "costapplications": 0.012,
+      "dollarunitarea": "/ac",
+      "valuematerialunits": "$/lb",
+      "valuen": 0.7,
+      "valuep2o5": 0.75,
+      "valuek2o": 0.6,
+      "farmreqdnutrientsstdunitsconversion": 1.0,
+      "farmreqdnutrientsstdunitsareaconversion": 1.0,
+      "solidliquid": "Liquid"
+    }
+  },
+  {
+    "model": "manures.units",
+    "pk": 4,
+    "fields": {
+      "name": "tons/ac",
+      "nutrientcontentunits": "lb/ton",
+      "conversionlbton": 1.0,
+      "nutrientrateunits": "lb/ac",
+      "costunits": "$/ton",
+      "costapplications": 4.0,
+      "dollarunitarea": "/ac",
+      "valuematerialunits": "$/lb",
+      "valuen": 0.7,
+      "valuep2o5": 0.75,
+      "valuek2o": 0.6,
+      "farmreqdnutrientsstdunitsconversion": 1.0,
+      "farmreqdnutrientsstdunitsareaconversion": 1.0,
+      "solidliquid": "Solid"
+    }
+  },
+  {
+    "model": "manures.units",
+    "pk": 5,
+    "fields": {
+      "name": "tonnes/ha",
+      "nutrientcontentunits": "kg/tonne",
+      "conversionlbton": 0.5,
+      "nutrientrateunits": "kg/ha",
+      "costunits": "$/tonne",
+      "costapplications": 4.4,
+      "dollarunitarea": "/ha",
+      "valuematerialunits": "$/kg",
+      "valuen": 1.54,
+      "valuep2o5": 1.65,
+      "valuek2o": 1.32,
+      "farmreqdnutrientsstdunitsconversion": 1.102311311,
+      "farmreqdnutrientsstdunitsareaconversion": 0.404685642,
+      "solidliquid": "Solid"
+    }
+  },
+  {
+    "model": "manures.units",
+    "pk": 6,
+    "fields": {
+      "name": "yards\u00b2/ac",
+      "nutrientcontentunits": "nutrient_content_units",
+      "conversionlbton": 1.0,
+      "nutrientrateunits": "nutrient_rate_units",
+      "costunits": "cost_units",
+      "costapplications": 0.0,
+      "dollarunitarea": "dollar_unit_area",
+      "valuematerialunits": "value_material_units",
+      "valuen": 0.0,
+      "valuep2o5": 0.0,
+      "valuek2o": 0.0,
+      "farmreqdnutrientsstdunitsconversion": "-1",
+      "farmreqdnutrientsstdunitsareaconversion": 1.0,
+      "solidliquid": "Solid"
+    }
+  }
+]

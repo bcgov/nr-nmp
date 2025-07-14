@@ -7,4 +7,5 @@ urlpatterns = [
     path('manures/<int:pk>/', ManuresViewset.as_view({'get': 'manure'}), name='manure'),
     path('solidmaterialsconversionfactors/', ManuresViewset.as_view({'get': 'solidMaterialsConversionFactors'})),
     path('liquidmaterialsconversionfactors/', ManuresViewset.as_view({'get': 'liquidMaterialsConversionFactors'})),
+    path('units/', ManuresViewset.as_view({'get': 'units'}), name='units'),
 ]
