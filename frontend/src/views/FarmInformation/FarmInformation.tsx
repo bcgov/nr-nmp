@@ -325,7 +325,7 @@ export default function FarmInformation() {
             onPress={handlePeviousPage}
             variant="secondary"
           >
-            BACK
+            Back
           </Button>
           <Button
             size="medium"

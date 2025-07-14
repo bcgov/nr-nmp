@@ -458,7 +458,7 @@ export default function SoilTests() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         <Button
           size="medium"
