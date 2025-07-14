@@ -47,7 +47,13 @@ class ManuresViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
-    def nMineralization(self, request):
-        n_mineralization = NitrogenMineralization.objects.all()
-        serializer = NMineralizationSerializer(n_mineralization, many=True)
+    def nMineralization(self, request, nMineralizationID=None, region=None):
+        n_mineralizations = None
+        if nMineralizationID is None or region is None:
+            n_mineralizations = NitrogenMineralization.objects.all()
+        else:
+            n_mineralizations = NitrogenMineralization.objects.filter(
+                Id=nMineralizationID, LocationId=region
+            )
+        serializer = NMineralizationSerializer(n_mineralizations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -158,7 +158,6 @@ export default function ManureModal({
         K2O: (field?.Crops?.[0]?.reqK2o ?? 0) + (field?.Crops?.[1]?.reqK2o ?? 0),
       },
     ]);
-    console.log('HERE: ', field);
   };
 
   const handleChange = (changes: { [name: string]: string | number | undefined }) => {

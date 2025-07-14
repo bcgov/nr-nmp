@@ -10,4 +10,5 @@ urlpatterns = [
     path('units/', ManuresViewset.as_view({'get': 'units'}), name='units'),
     path('units/<str:unit>/', ManuresViewset.as_view({'get': 'units'}), name='unit_detail'),
     path('nmineralization/', ManuresViewset.as_view({'get': 'nMineralization'}), name='n_mineralization'),
+    path('nmineralization/<int:nMineralizationID>/<int:region>/', ManuresViewset.as_view({'get': 'nMineralization'}), name='n_mineralization_detail'),
 ]

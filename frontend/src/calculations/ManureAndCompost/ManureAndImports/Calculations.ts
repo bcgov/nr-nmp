@@ -8,6 +8,15 @@ export function getManure(id: number): Promise<any> {
   return axios.get(`${env.VITE_BACKEND_URL}/api/manures/${id}`).then((response) => response.data);
 }
 
+export function getManures(): Promise<any> {
+  return axios.get(`${env.VITE_BACKEND_URL}/api/manures/`).then((response) => response.data);
+}
+
+export async function getManuresByName(manureName: string | undefined): Promise<any> {
+  const manures = await getManures();
+  return manures.find((manure: any) => manure.name === manureName);
+}
+
 export function getUnits(): Promise<any> {
   return axios.get(`${env.VITE_BACKEND_URL}/api/units/`).then((response) => response.data);
 }
@@ -47,6 +56,33 @@ export function getDensityFactoredConversionUsingMoisture(
   return getDensityFactoredConversion(density, conversionFactor);
 }
 
+export async function GetNMineralizations(
+  nMineralizationID: number | undefined,
+  region: Region | undefined,
+) {
+  if (!nMineralizationID || !region) {
+    return {
+      OrganicN_FirstYear: 0,
+      OrganicN_LongTerm: 0,
+    };
+  }
+  const response = await axios.get(
+    `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${Number(region)}/`,
+  );
+
+  if (!response.data || response.data.length === 0) {
+    return {
+      OrganicN_FirstYear: 0,
+      OrganicN_LongTerm: 0,
+    };
+  }
+  const nMineralization = response.data[0];
+  return {
+    OrganicN_FirstYear: nMineralization.FirstYearValue,
+    OrganicN_LongTerm: nMineralization.LongTermValue,
+  };
+}
+
 export async function getNutrientInputs(
   farmManure: NMPFileFarmManureData | undefined,
   region: Region | undefined,
@@ -62,6 +98,11 @@ export async function getNutrientInputs(
     N_LongTerm: 0,
     P2O5_LongTerm: 0,
     K2O_LongTerm: 0,
+  };
+
+  const NOrganicMineralizations = {
+    OrganicN_FirstYear: 0,
+    OrganicN_LongTerm: 0,
   };
 
   const conversionFactors = await getConversionFactors();
@@ -140,6 +181,14 @@ export async function getNutrientInputs(
   // get nitrogen first year
   const organicN =
     Number(farmManure?.Nutrients.N || 0) - Number(farmManure?.Nutrients.NH4N || 0) / tenThousand;
+
+  const manure = await getManuresByName(farmManure?.MaterialType);
+  const nMineralizationID = manure?.nmineralizationid;
+  const nMineralizations = await GetNMineralizations(nMineralizationID, region);
+  // NOrganicMineralizations = GetNMineralizations(nMineralizationID, region);
+  console.log('nMineralizations: ', nMineralizations);
+
+  // NOrganicMineralizations =
 
   return nutrientInputs;
 }
