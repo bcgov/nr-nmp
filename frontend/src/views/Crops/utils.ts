@@ -101,11 +101,7 @@ function isCropSet(cropId: number, selectedCrop: Crop | undefined) {
 }
 
 function validateBushelConversion(selectedCrop: Crop | undefined) {
-  if (
-    selectedCrop === undefined ||
-    selectedCrop.harvestbushelsperton === null ||
-    selectedCrop.harvestbushelsperton === 0
-  ) {
+  if (!selectedCrop?.harvestbushelsperton) {
     throw new Error('Crops modal entered bad state');
   }
 }
