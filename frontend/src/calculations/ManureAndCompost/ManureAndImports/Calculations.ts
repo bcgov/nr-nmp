@@ -102,13 +102,13 @@ export async function getNutrientInputs(
 
   const conversionFactors = await getConversionFactors();
 
-  const potassiumAvailabilityFirstYear = conversionFactors.potassiumavailabilityfirstyear;
-  const potassiumAvailabilityLongTerm = conversionFactors.potassiumavailabilitylongterm;
-  const potassiumKtoK2Oconversion = conversionFactors.potassiumktok2oconversion;
-  const phosphorousAvailabilityFirstYear = conversionFactors.phosphorousavailabilityfirstyear;
-  const phosphorousAvailabilityLongTerm = conversionFactors.phosphorousavailabilitylongterm;
-  const phosphorousPtoP2O5Kconversion = conversionFactors.phosphorousptop2o5conversion;
-  const lbPerTonConversion = conversionFactors.poundpertonconversion;
+  const potassiumAvailabilityFirstYear = conversionFactors?.potassiumavailabilityfirstyear ?? 0;
+  const potassiumAvailabilityLongTerm = conversionFactors?.potassiumavailabilitylongterm ?? 0;
+  const potassiumKtoK2Oconversion = conversionFactors?.potassiumktok2oconversion ?? 0;
+  const phosphorousAvailabilityFirstYear = conversionFactors?.phosphorousavailabilityfirstyear ?? 0;
+  const phosphorousAvailabilityLongTerm = conversionFactors?.phosphorousavailabilitylongterm ?? 0;
+  const phosphorousPtoP2O5Kconversion = conversionFactors?.phosphorousptop2o5conversion ?? 0;
+  const lbPerTonConversion = conversionFactors?.poundpertonconversion ?? 1;
   const tenThousand = 10000;
   const unit = await getUnitByName(applicationRateUnit);
   const conversion = unit && unit.ConversionlbTon ? unit.ConversionlbTon : 1; // Default to 1 if conversion is not defined
@@ -125,7 +125,7 @@ export async function getNutrientInputs(
     adjustedApplicationRate = applicationRate * manure.CubicYardConversion;
   }
 
-  // get potassium first year
+  // get potassium first year and long term
   if (farmManure && farmManure.Nutrients.K2O !== undefined) {
     nutrientInputs.K2O_FirstYear = Math.floor(
       adjustedApplicationRate *
@@ -135,10 +135,6 @@ export async function getNutrientInputs(
         potassiumAvailabilityFirstYear *
         conversion,
     );
-  }
-
-  // get potassium long term
-  if (farmManure && farmManure.Nutrients.K2O !== undefined) {
     nutrientInputs.K2O_LongTerm = Math.floor(
       adjustedApplicationRate *
         farmManure.Nutrients.K2O *
@@ -149,7 +145,7 @@ export async function getNutrientInputs(
     );
   }
 
-  // get phosphorous first year
+  // get phosphorous first year and long term
   if (farmManure && farmManure.Nutrients.P2O5 !== undefined) {
     nutrientInputs.P2O5_FirstYear = Math.floor(
       adjustedApplicationRate *
@@ -159,10 +155,6 @@ export async function getNutrientInputs(
         phosphorousAvailabilityFirstYear *
         conversion,
     );
-  }
-
-  // get phosphorous long term
-  if (farmManure && farmManure.Nutrients.P2O5 !== undefined) {
     nutrientInputs.P2O5_LongTerm = Math.floor(
       adjustedApplicationRate *
         farmManure.Nutrients.P2O5 *
