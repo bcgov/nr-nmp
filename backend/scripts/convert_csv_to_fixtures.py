@@ -47,6 +47,7 @@ MODEL_MAPPINGS = {
     "_NMineralizations": "manures.nmineralization",
 }
 
+
 def clean_value(value, column_name):
     """Converts string values to appropriate Python types"""
     if value is None or value.strip() == '':

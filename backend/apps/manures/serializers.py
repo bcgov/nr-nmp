@@ -20,10 +20,12 @@ class LiquidMaterialsConversionFactorsSerializer(serializers.ModelSerializer):
         model = LiquidMaterialsConversionFactors
         fields = '__all__'
 
+
 class UnitsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Units
         fields = '__all__'
+
 
 class NMineralizationSerializer(serializers.ModelSerializer):
     class Meta:

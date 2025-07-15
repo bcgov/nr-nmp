@@ -46,6 +46,7 @@ class LiquidMaterialsConversionFactors(models.Model):
         managed = True
         db_table = 'liquid_materials_conversion_factors'
 
+
 class Units(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -62,9 +63,11 @@ class Units(models.Model):
     farmreqdnutrientsstdunitsconversion = models.FloatField()
     farmreqdnutrientsstdunitsareaconversion = models.FloatField()
     solidliquid = models.CharField(max_length=100)
+
     class Meta:
         managed = True
         db_table = 'units'
+
 
 class NitrogenMineralization(models.Model):
     Id = models.IntegerField(primary_key=True)
@@ -72,7 +75,7 @@ class NitrogenMineralization(models.Model):
     Name = models.CharField(max_length=100)
     FirstYearValue = models.FloatField()
     LongTermValue = models.FloatField()
-    
+
     class Meta:
         managed = True
         db_table = 'nitrogen_mineralization'

@@ -10,6 +10,7 @@ from .serializers import (
     UnitsSerializer, NMineralizationSerializer
 )
 
+
 class ManuresViewset(viewsets.ViewSet):
 
     @action(detail=True, methods=['get'])
@@ -35,7 +36,7 @@ class ManuresViewset(viewsets.ViewSet):
         liquid_materials_conversion_factors = LiquidMaterialsConversionFactors.objects.all()
         serializer = LiquidMaterialsConversionFactorsSerializer(liquid_materials_conversion_factors, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def units(self, request, unit=None):
         units = None
@@ -45,7 +46,7 @@ class ManuresViewset(viewsets.ViewSet):
             units = Units.objects.filter(name=unit)
         serializer = UnitsSerializer(units, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def nMineralization(self, request, nMineralizationID=None, region=None):
         n_mineralizations = None
