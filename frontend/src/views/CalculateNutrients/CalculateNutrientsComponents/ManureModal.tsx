@@ -140,7 +140,7 @@ export default function ManureModal({
 
     // Create new nutrient manure entry
     const newNutrientManure: NutrientManures = {
-      id: Date.now(), // Generate a unique ID
+      id: Date.now(),
       custom: false,
       manureId: selectedFarmManure.Nutrients.ManureId || 0,
       applicationId: Number(manureForm.applicationMethod) || 0,
@@ -159,8 +159,6 @@ export default function ManureModal({
     // Update the fields array
     const updatedFields = fields.map((f) => {
       if (f.FieldName === field.FieldName) {
-        // Since Nutrients is now a single object, not an array
-        // Add the new nutrient manure to the existing nutrientManures array
         return {
           ...f,
           Nutrients: {
