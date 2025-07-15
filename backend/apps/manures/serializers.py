@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from .models import Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors, Units, NitrogenMineralization
+from .models import (
+    Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors,
+    Units, NitrogenMineralization
+)
 
 
 class ManuresSerializer(serializers.ModelSerializer):
