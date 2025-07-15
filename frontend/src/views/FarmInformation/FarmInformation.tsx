@@ -37,9 +37,9 @@ export default function FarmInformation() {
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<NMPFileFarmDetails>({
-    Year: state.nmpFile.farmDetails.Year || '',
-    FarmName: state.nmpFile.farmDetails.FarmName || '',
-    FarmRegion: state.nmpFile.farmDetails.FarmRegion || 0,
+    Year: state.nmpFile.farmDetails.Year,
+    FarmName: state.nmpFile.farmDetails.FarmName,
+    FarmRegion: state.nmpFile.farmDetails.FarmRegion,
     FarmSubRegion: state.nmpFile.farmDetails.FarmSubRegion || null,
     FarmAnimals: state.nmpFile.farmDetails.FarmAnimals || [],
     HasVegetables: state.nmpFile.farmDetails.HasVegetables || false,
@@ -198,21 +198,21 @@ export default function FarmInformation() {
         >
           <Grid size={formGridBreakpoints}>
             <span
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.FarmName ? '--error' : ''}`}
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmName ? '--error' : ''}`}
             >
               Farm Name
             </span>
             <TextField
               isRequired
               name="FarmName"
-              value={formData?.FarmName}
+              value={formData.FarmName}
               onInput={handleInputChange}
               id="farmName"
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <span
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.Year ? '--error' : ''}`}
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.Year ? '--error' : ''}`}
             >
               Year
             </span>
@@ -221,13 +221,13 @@ export default function FarmInformation() {
               isRequired
               name="Year"
               items={yearOptions}
-              selectedKey={formData?.Year}
+              selectedKey={formData.Year}
               onSelectionChange={(e) => handleChange('Year', e)}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <span
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.FarmRegion ? '--error' : ''}`}
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmRegion ? '--error' : ''}`}
             >
               Region
             </span>
@@ -235,13 +235,13 @@ export default function FarmInformation() {
             <Select
               isRequired
               items={regionOptions}
-              selectedKey={formData?.FarmRegion}
+              selectedKey={formData.FarmRegion}
               onSelectionChange={(e) => handleChange('FarmRegion', e)}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <span
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData?.FarmSubRegion ? '--error' : ''}`}
+              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmSubRegion ? '--error' : ''}`}
             >
               Subregion
             </span>
@@ -249,7 +249,7 @@ export default function FarmInformation() {
             <Select
               isRequired
               items={subregionOptions}
-              selectedKey={formData?.FarmSubRegion}
+              selectedKey={formData.FarmSubRegion}
               onSelectionChange={(e) => handleChange('FarmSubRegion', e)}
               isDisabled={!(subregionOptions && subregionOptions.length)}
             />
@@ -325,7 +325,7 @@ export default function FarmInformation() {
             onPress={handlePeviousPage}
             variant="secondary"
           >
-            BACK
+            Back
           </Button>
           <Button
             size="medium"

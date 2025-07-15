@@ -399,7 +399,7 @@ export default function ManureAndImports() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         <Button
           size="medium"

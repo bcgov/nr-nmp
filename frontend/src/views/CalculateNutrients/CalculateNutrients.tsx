@@ -324,6 +324,7 @@ export default function CalculateNutrients() {
             }
             rowEditIndex={openDialog[1]}
             setFields={setFieldList}
+            balanceRow={balanceRow}
             isOpen={openDialog[0] === 'fertilizer'}
             onClose={handleDialogClose}
             modalStyle={{ width: '800px' }}
@@ -512,7 +513,7 @@ export default function CalculateNutrients() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         {/* go to next tab or if none navigate to next page */}
         <Button

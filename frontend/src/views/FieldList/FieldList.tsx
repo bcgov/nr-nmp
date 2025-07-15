@@ -174,7 +174,7 @@ export default function FieldList() {
           variant="secondary"
           onPress={handlePreviousPage}
         >
-          BACK
+          Back
         </Button>
         <Button
           size="medium"
