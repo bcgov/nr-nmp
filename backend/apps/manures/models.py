@@ -70,11 +70,11 @@ class Units(models.Model):
 
 
 class NitrogenMineralization(models.Model):
-    Id = models.IntegerField(primary_key=True)
-    LocationId = models.IntegerField()
-    Name = models.CharField(max_length=100)
-    FirstYearValue = models.FloatField()
-    LongTermValue = models.FloatField()
+    id = models.IntegerField(primary_key=True)
+    locationid = models.IntegerField()
+    name = models.CharField(max_length=100)
+    firstyearvalue = models.FloatField()
+    longtermvalue = models.FloatField()
 
     class Meta:
         managed = True

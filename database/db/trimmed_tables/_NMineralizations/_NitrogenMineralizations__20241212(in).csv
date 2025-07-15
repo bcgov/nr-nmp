@@ -1,4 +1,4 @@
-Id,LocationId,Name,FirstYearValue,LongTermValue
+id,locationid,name,firstyearvalue,longtermvalue
 1,1,Liquid - Poultry,0.3,0.77
 1,2,Liquid - Poultry,0.5,0.77
 2,1,Liquid - Other,0.2,0.77

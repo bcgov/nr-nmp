@@ -1,6 +1,6 @@
 [
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 1,
     "fields": {
       "locationid": 1,
@@ -10,7 +10,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 1,
     "fields": {
       "locationid": 2,
@@ -20,7 +20,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 2,
     "fields": {
       "locationid": 1,
@@ -30,7 +30,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 2,
     "fields": {
       "locationid": 2,
@@ -40,7 +40,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 3,
     "fields": {
       "locationid": 1,
@@ -50,7 +50,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 3,
     "fields": {
       "locationid": 2,
@@ -60,7 +60,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 4,
     "fields": {
       "locationid": 1,
@@ -70,7 +70,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 4,
     "fields": {
       "locationid": 2,
@@ -80,7 +80,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 5,
     "fields": {
       "locationid": 1,
@@ -90,7 +90,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 5,
     "fields": {
       "locationid": 2,
@@ -100,7 +100,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 6,
     "fields": {
       "locationid": 1,
@@ -110,7 +110,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 6,
     "fields": {
       "locationid": 2,
@@ -120,7 +120,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 7,
     "fields": {
       "locationid": 1,
@@ -130,7 +130,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 7,
     "fields": {
       "locationid": 2,
@@ -140,7 +140,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 8,
     "fields": {
       "locationid": 1,
@@ -150,7 +150,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 8,
     "fields": {
       "locationid": 2,
@@ -160,7 +160,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 9,
     "fields": {
       "locationid": 1,
@@ -170,7 +170,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 9,
     "fields": {
       "locationid": 2,
@@ -180,7 +180,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 10,
     "fields": {
       "locationid": 1,
@@ -190,7 +190,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 10,
     "fields": {
       "locationid": 2,
@@ -200,7 +200,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 11,
     "fields": {
       "locationid": 1,
@@ -210,7 +210,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 11,
     "fields": {
       "locationid": 2,
@@ -220,7 +220,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 12,
     "fields": {
       "locationid": 1,
@@ -230,7 +230,7 @@
     }
   },
   {
-    "model": "manures.nmineralization",
+    "model": "manures.nitrogenmineralization",
     "pk": 12,
     "fields": {
       "locationid": 2,

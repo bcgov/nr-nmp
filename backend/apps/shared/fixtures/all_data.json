@@ -14315,240 +14315,240 @@
     "model": "manures.nitrogenmineralization",
     "pk": 1,
     "fields": {
-      "LocationId": 1,
-      "Name": "Liquid - Poultry",
-      "FirstYearValue": 0.3,
-      "LongTermValue": 0.77
+      "locationid": 1,
+      "name": "Liquid - Poultry",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 1,
     "fields": {
-      "LocationId": 2,
-      "Name": "Liquid - Poultry",
-      "FirstYearValue": 0.5,
-      "LongTermValue": 0.77
+      "locationid": 2,
+      "name": "Liquid - Poultry",
+      "firstyearvalue": 0.5,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 2,
     "fields": {
-      "LocationId": 1,
-      "Name": "Liquid - Other",
-      "FirstYearValue": 0.2,
-      "LongTermValue": 0.77
+      "locationid": 1,
+      "name": "Liquid - Other",
+      "firstyearvalue": 0.2,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 2,
     "fields": {
-      "LocationId": 2,
-      "Name": "Liquid - Other",
-      "FirstYearValue": 0.35,
-      "LongTermValue": 0.77
+      "locationid": 2,
+      "name": "Liquid - Other",
+      "firstyearvalue": 0.35,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 3,
     "fields": {
-      "LocationId": 1,
-      "Name": "Liquid - Biosolids",
-      "FirstYearValue": 0.25,
-      "LongTermValue": 0.77
+      "locationid": 1,
+      "name": "Liquid - Biosolids",
+      "firstyearvalue": 0.25,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 3,
     "fields": {
-      "LocationId": 2,
-      "Name": "Liquid - Biosolids",
-      "FirstYearValue": 0.3,
-      "LongTermValue": 0.77
+      "locationid": 2,
+      "name": "Liquid - Biosolids",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 4,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Biosolids",
-      "FirstYearValue": 0.25,
-      "LongTermValue": 0.77
+      "locationid": 1,
+      "name": "Solid - Biosolids",
+      "firstyearvalue": 0.25,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 4,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Biosolids",
-      "FirstYearValue": 0.3,
-      "LongTermValue": 0.77
+      "locationid": 2,
+      "name": "Solid - Biosolids",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 5,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Poultry",
-      "FirstYearValue": 0.3,
-      "LongTermValue": 0.77
+      "locationid": 1,
+      "name": "Solid - Poultry",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 5,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Poultry",
-      "FirstYearValue": 0.5,
-      "LongTermValue": 0.77
+      "locationid": 2,
+      "name": "Solid - Poultry",
+      "firstyearvalue": 0.5,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 6,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Mink",
-      "FirstYearValue": 0.3,
-      "LongTermValue": 0.77
+      "locationid": 1,
+      "name": "Solid - Mink",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 6,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Mink",
-      "FirstYearValue": 0.35,
-      "LongTermValue": 0.77
+      "locationid": 2,
+      "name": "Solid - Mink",
+      "firstyearvalue": 0.35,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 7,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Hog",
-      "FirstYearValue": 0.25,
-      "LongTermValue": 0.77
+      "locationid": 1,
+      "name": "Solid - Hog",
+      "firstyearvalue": 0.25,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 7,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Hog",
-      "FirstYearValue": 0.3,
-      "LongTermValue": 0.77
+      "locationid": 2,
+      "name": "Solid - Hog",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 8,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Mechanically Separated Dairy Solids",
-      "FirstYearValue": 0.1,
-      "LongTermValue": 0.25
+      "locationid": 1,
+      "name": "Solid - Mechanically Separated Dairy Solids",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 8,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Mechanically Separated Dairy Solids",
-      "FirstYearValue": 0.1,
-      "LongTermValue": 0.25
+      "locationid": 2,
+      "name": "Solid - Mechanically Separated Dairy Solids",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 9,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Horse",
-      "FirstYearValue": 0.1,
-      "LongTermValue": 0.25
+      "locationid": 1,
+      "name": "Solid - Horse",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 9,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Horse",
-      "FirstYearValue": 0.1,
-      "LongTermValue": 0.25
+      "locationid": 2,
+      "name": "Solid - Horse",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 10,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Compost",
-      "FirstYearValue": 0.1,
-      "LongTermValue": 0.25
+      "locationid": 1,
+      "name": "Solid - Compost",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 10,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Compost",
-      "FirstYearValue": 0.1,
-      "LongTermValue": 0.25
+      "locationid": 2,
+      "name": "Solid - Compost",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 11,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Other (<50%)",
-      "FirstYearValue": 0.15,
-      "LongTermValue": 0.25
+      "locationid": 1,
+      "name": "Solid - Other (<50%)",
+      "firstyearvalue": 0.15,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 11,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Other (<50%)",
-      "FirstYearValue": 0.2,
-      "LongTermValue": 0.25
+      "locationid": 2,
+      "name": "Solid - Other (<50%)",
+      "firstyearvalue": 0.2,
+      "longtermvalue": 0.25
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 12,
     "fields": {
-      "LocationId": 1,
-      "Name": "Solid - Other (>50%)",
-      "FirstYearValue": 0.05,
-      "LongTermValue": 0.2
+      "locationid": 1,
+      "name": "Solid - Other (>50%)",
+      "firstyearvalue": 0.05,
+      "longtermvalue": 0.2
     }
   },
   {
     "model": "manures.nitrogenmineralization",
     "pk": 12,
     "fields": {
-      "LocationId": 2,
-      "Name": "Solid - Other (>50%)",
-      "FirstYearValue": 0.1,
-      "LongTermValue": 0.15
+      "locationid": 2,
+      "name": "Solid - Other (>50%)",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.15
     }
   }
 ]

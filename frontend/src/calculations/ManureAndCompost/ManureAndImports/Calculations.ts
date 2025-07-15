@@ -78,8 +78,8 @@ export async function GetNMineralizations(
   }
   const nMineralization = response.data[0];
   return {
-    OrganicN_FirstYear: nMineralization.FirstYearValue,
-    OrganicN_LongTerm: nMineralization.LongTermValue,
+    OrganicN_FirstYear: nMineralization.firstyearvalue,
+    OrganicN_LongTerm: nMineralization.longtermvalue,
   };
 }
 

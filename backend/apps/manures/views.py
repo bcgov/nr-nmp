@@ -57,7 +57,7 @@ class ManuresViewset(viewsets.ViewSet):
             n_mineralizations = NitrogenMineralization.objects.all()
         else:
             n_mineralizations = NitrogenMineralization.objects.filter(
-                Id=nMineralizationID, LocationId=region
+                id=nMineralizationID, locationid=region
             )
         serializer = NMineralizationSerializer(n_mineralizations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
