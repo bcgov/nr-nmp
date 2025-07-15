@@ -1,4 +1,4 @@
-import { CalculateNutrientsColumn, NMPFileFertilizer } from './calculateNutrients';
+import { CalculateNutrientsColumn, NMPFileFertilizer, NMPNutrients } from './calculateNutrients';
 import { NMPFileCropData, NMPFileSoilTestData } from './Crops';
 
 export type NMPFileOtherNutrient = CalculateNutrientsColumn;
@@ -11,6 +11,7 @@ export type NMPFileFieldData = {
   SoilTest?: NMPFileSoilTestData;
   Crops: NMPFileCropData[];
   Fertilizers: NMPFileFertilizer[];
+  Nutrients: NMPNutrients;
   OtherNutrients: NMPFileOtherNutrient[];
   /*
   Fields from old NMP, currently unused, feel free to re-add

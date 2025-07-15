@@ -15,6 +15,7 @@ import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import { CropNutrients, NMPFileFieldData, Region } from '@/types';
+import { NutrientManures } from '@/types/calculateNutrients';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 
@@ -84,7 +85,8 @@ export default function ManureModal({
     initialModalData ?? DEFAULT_MANURE_FORM_FIELDS,
   );
   const apiCache = useContext(APICacheContext);
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
+  const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
 
   const [manureUnits, setManureUnits] = useState<
     {
@@ -121,7 +123,63 @@ export default function ManureModal({
   };
 
   const handleSubmit = () => {
-    // TBD: Submit logic here
+    if (!field) {
+      console.error('No field selected for manure application');
+      return;
+    }
+
+    // Find the selected farm manure
+    const selectedFarmManure = farmManures.find(
+      (manure) => manure.MaterialType === manureForm.MaterialType,
+    );
+
+    if (!selectedFarmManure) {
+      console.error('Selected farm manure not found');
+      return;
+    }
+
+    // Create new nutrient manure entry
+    const newNutrientManure: NutrientManures = {
+      id: Date.now(), // Generate a unique ID
+      custom: false,
+      manureId: selectedFarmManure.Nutrients.ManureId || 0,
+      applicationId: Number(manureForm.applicationMethod) || 0,
+      unitId: Number(manureForm.applUnit) || 0,
+      rate: manureForm.applicationRate,
+      nh4Retention: manureForm.retentionAmmoniumN,
+      nAvail: manureForm.organicNAvailable,
+      yrN: availableThisYearTable[0]?.N || 0,
+      yrP2O5: availableThisYearTable[0]?.P2O5 || 0,
+      yrK2O: availableThisYearTable[0]?.K2O || 0,
+      ltN: availableLongTermTable[0]?.N || 0,
+      ltP2O5: availableLongTermTable[0]?.P2O5 || 0,
+      ltK2O: availableLongTermTable[0]?.K2O || 0,
+    };
+
+    // Update the fields array
+    const updatedFields = fields.map((f) => {
+      if (f.FieldName === field.FieldName) {
+        // Since Nutrients is now a single object, not an array
+        // Add the new nutrient manure to the existing nutrientManures array
+        return {
+          ...f,
+          Nutrients: {
+            nutrientManures: [...(f.Nutrients?.nutrientManures || []), newNutrientManure],
+          },
+        };
+      }
+      return f;
+    });
+
+    // Update fields state and dispatch to global state
+    setFields(updatedFields);
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.Year!,
+      newFields: updatedFields,
+    });
+    console.log('Updated fields:', updatedFields);
+    console.log('State: ', state);
     handleModalClose();
   };
 

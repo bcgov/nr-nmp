@@ -59,5 +59,26 @@ export interface ManureNutrients extends CropNutrients {
   ManureId: number;
   SolidLiquid: string;
   Moisture: string;
-  NH4N: number; // Ammonium
+  NH4N: number;
 }
+
+export type NutrientManures = {
+  id: number;
+  custom: boolean;
+  manureId: number;
+  applicationId: number;
+  unitId: number;
+  rate: number;
+  nh4Retention: number;
+  nAvail: number;
+  yrN: number;
+  yrP2O5: number;
+  yrK2O: number;
+  ltN: number;
+  ltP2O5: number;
+  ltK2O: number;
+};
+
+export type NMPNutrients = {
+  nutrientManures: NutrientManures[];
+};
