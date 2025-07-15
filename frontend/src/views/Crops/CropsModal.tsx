@@ -24,7 +24,7 @@ import {
 } from '../../common.styles';
 import { ModalProps } from '@/components/common/Modal/Modal';
 import { DEFAULT_NMPFILE_CROPS, HarvestUnit } from '@/constants';
-import { CROP_OTHER_ID } from '@/types/Crops';
+import { CROP_OTHER_ID, CROP_TYPE_OTHER_ID } from '@/types/Crops';
 import { HARVEST_UNIT_OPTIONS } from '../../constants/harvestUnits';
 import useAppState from '@/hooks/useAppState';
 import { cropsModalReducer, showUnitDropdown } from './utils';
@@ -164,6 +164,16 @@ function CropsModal({
 
     onClose();
   };
+
+  // When crop is Other calculate button is disabled
+  // To enable submit button setCalculationsPerformed to true for Other
+  useEffect(() => {
+    if (selectedCropType?.id === CROP_TYPE_OTHER_ID) {
+      setCalculationsPerformed(true);
+    } else {
+      setCalculationsPerformed(false);
+    }
+  }, [selectedCropType]);
 
   // On load, make API calls to initialize reducer state values
   useEffect(() => {
@@ -737,6 +747,8 @@ function CropsModal({
             onPress={handleCalculate}
             isDisabled={
               // TODO: Hide button and enable Submit if this is a custom crop
+              // If other crop hide button
+              selectedCropType?.id === CROP_TYPE_OTHER_ID ||
               selectedCropType === undefined ||
               (selectedCrop === undefined && !selectedCropType.customcrop)
             }
