@@ -11,12 +11,13 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
-import { AnimalData } from '@/types';
+import { AnimalData, DAIRY_COW_ID } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
-import { ErrorText, StyledContent } from './addAnimals.styles';
+import { DoubleRowStyle, ErrorText, StyledContent } from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
 import { liquidSolidManureDisplay } from '@/utils/utils';
+import { calculateAnnualWashWater } from './utils';
 
 export default function AddAnimals() {
   const { state, dispatch } = useAppState();
@@ -94,10 +95,21 @@ export default function AddAnimals() {
       {
         field: 'animalId',
         headerName: 'Animal Type',
-        width: 200,
-        minWidth: 150,
-        maxWidth: 300,
+        width: 175,
         valueGetter: (params: any) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        renderCell: (params: any) => {
+          if (params.row.animalId === DAIRY_COW_ID) {
+            return (
+              <span style={{ lineHeight: '40px' }}>
+                <DoubleRowStyle>{params.value}</DoubleRowStyle>
+                {params.row.animalId === DAIRY_COW_ID && (
+                  <DoubleRowStyle>Milking center wash water</DoubleRowStyle>
+                )}
+              </span>
+            );
+          }
+          return <div>{params.value}</div>;
+        },
       },
       {
         field: 'manureData',
@@ -106,6 +118,22 @@ export default function AddAnimals() {
         minWidth: 155,
         maxWidth: 300,
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
+        renderCell: (params: any) => {
+          const { animalId, washWater, washWaterUnit, animalsPerFarm } = params.row;
+          if (animalId === DAIRY_COW_ID) {
+            return (
+              <span style={{ lineHeight: '40px' }}>
+                <DoubleRowStyle>{params.value}</DoubleRowStyle>
+                {animalId === DAIRY_COW_ID && (
+                  <DoubleRowStyle>
+                    {calculateAnnualWashWater(washWater, washWaterUnit, animalsPerFarm)} tons
+                  </DoubleRowStyle>
+                )}
+              </span>
+            );
+          }
+          return <div>{params.value}</div>;
+        },
       },
       {
         field: 'actions',
@@ -175,11 +203,14 @@ export default function AddAnimals() {
         rows={animalList}
         columns={columns}
         getRowId={() => crypto.randomUUID()}
+        // getRowHeight={(params: any) => (params.model.animalId === DAIRY_COW_ID ? 88 : 54)}
+        // rowHeight={70}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
         hideFooter
       />
+      <pre>{JSON.stringify(animalList, null, 2)}</pre>
       <ErrorText>{showViewError}</ErrorText>
       <ButtonGroup
         alignment="start"

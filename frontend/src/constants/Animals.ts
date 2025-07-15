@@ -6,6 +6,8 @@ export const INITIAL_BEEF_FORM_DATA: BeefCattleData = {
   animalsPerFarm: undefined,
   daysCollected: 0,
   manureData: undefined,
+  // unique UUID to link animal to to the manure it generates
+  entryId: null,
 };
 
 export const INITIAL_DAIRY_FORM_DATA: DairyCattleData = {
@@ -21,4 +23,5 @@ export const INITIAL_DAIRY_FORM_DATA: DairyCattleData = {
   washWater: undefined,
   washWaterUnit: undefined,
   manureData: undefined,
+  entryId: null,
 };

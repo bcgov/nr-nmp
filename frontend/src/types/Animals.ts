@@ -12,6 +12,7 @@ export type BeefCattleData = {
   daysCollected?: number | undefined;
   manureData?: { name: string; annualSolidManure: number } | undefined;
   date?: string;
+  entryId: string | null;
 };
 
 export type DairyCattleData = {
@@ -28,6 +29,7 @@ export type DairyCattleData = {
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
     | { name: string; annualSolidManure: undefined; annualLiquidManure: number }
     | undefined;
+  entryId: string | null;
 };
 
 export type AnimalData = BeefCattleData | DairyCattleData;

@@ -42,3 +42,8 @@ export const StyledContent = styled.div`
 
   ${buttonGroup}
 `;
+
+export const DoubleRowStyle = styled.span`
+  display: block;
+  height: 34px;
+`;

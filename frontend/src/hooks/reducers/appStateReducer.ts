@@ -96,6 +96,8 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           AnnualAmount: animal.manureData.annualSolidManure,
           AnnualAmountTonsWeight: animal.manureData.annualSolidManure,
           AnnualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
+          // Link the generated manure to the animal that created it
+          entryId: animal.entryId,
         });
       } else {
         generatedManures.push({
@@ -105,6 +107,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           AnnualAmount: animal.manureData.annualLiquidManure,
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
+          entryId: animal.entryId,
         });
       }
     }
@@ -172,7 +175,7 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     year.FarmAnimals = undefined;
     year.GeneratedManures = undefined;
   }
-
+  console.log('year', year);
   // Save the file to local storage
   saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
   return newAppState;
