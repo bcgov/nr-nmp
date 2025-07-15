@@ -142,8 +142,76 @@ function CropsModal({
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  // add validation for other crop
+
+  /**
+   * Validates the crop form data
+   *
+   * @returns {boolean} True if the form is valid, false otherwise
+   */
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    // Required field validation
+    if (!formData.cropTypeId) {
+      newErrors.cropTypeId = 'Crop Type is required';
+    }
+
+    if (!formData.cropId) {
+      newErrors.cropId = 'Crop is required';
+    }
+
+    // Yield validation - required and must be positive number
+    if (!formData.yield) {
+      newErrors.yield = 'Yield is required';
+    } else if (Number.isNaN(Number(formData.yield)) || Number(formData.yield) <= 0) {
+      newErrors.yield = 'Yield must be a valid number greater than zero';
+    }
+
+    // Crude protein validation for forage crops (type 1)
+    if (selectedCropType?.crudeproteinrequired && !formData.crudeProtein) {
+      newErrors.crudeProtein = 'Crude Protein is required';
+    } else if (
+      formData.cropTypeId === 1 &&
+      (Number.isNaN(Number(formData.crudeProtein)) || Number(formData.crudeProtein) <= 0)
+    ) {
+      newErrors.crudeProtein = 'Crude Protein must be a valid number greater than zero';
+    }
+
+    // Only validate previous crop if options are available
+    if (formData.cropId && !formData.prevCropId) {
+      // Check if there are previous crop options for this crop
+      const hasPreviousCropOptions = previousCrops.some(
+        (crop) => crop.cropid === Number(formData.cropId),
+      );
+
+      if (hasPreviousCropOptions) {
+        newErrors.prevCropId = 'Previous crop selection is required';
+      }
+    }
+
+    // Special validation for cover crops (type 2)
+    if (selectedCropType?.covercrop && formData.coverCropHarvested === undefined) {
+      newErrors.coverCropHarvested = 'Please specify if cover crop was harvested';
+    }
+
+    // Validation for other crop type
+    if (formData.cropTypeId === CROP_TYPE_OTHER_ID && formData.name === '') {
+      newErrors.name = 'Please specify a name';
+    }
+
+    console.log('formData.name', formData);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // Only called after calculations have been performed
   const handleSubmit = () => {
+    if (formData.cropTypeId === CROP_TYPE_OTHER_ID) {
+      if (!validateForm()) {
+        return; // Stop if validation fails
+      }
+    }
     setFields((prevFields) => {
       const newFields = prevFields.map((prevField, index) => {
         if (index === fieldIndex) {
@@ -249,61 +317,6 @@ function CropsModal({
       default:
         dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
     }
-  };
-
-  /**
-   * Validates the crop form data
-   *
-   * @returns {boolean} True if the form is valid, false otherwise
-   */
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    // Required field validation
-    if (!formData.cropTypeId) {
-      newErrors.cropTypeId = 'Crop Type is required';
-    }
-
-    if (!formData.cropId) {
-      newErrors.cropId = 'Crop is required';
-    }
-
-    // Yield validation - required and must be positive number
-    if (!formData.yield) {
-      newErrors.yield = 'Yield is required';
-    } else if (Number.isNaN(Number(formData.yield)) || Number(formData.yield) <= 0) {
-      newErrors.yield = 'Yield must be a valid number greater than zero';
-    }
-
-    // Crude protein validation for forage crops (type 1)
-    if (selectedCropType?.crudeproteinrequired && !formData.crudeProtein) {
-      newErrors.crudeProtein = 'Crude Protein is required';
-    } else if (
-      formData.cropTypeId === 1 &&
-      (Number.isNaN(Number(formData.crudeProtein)) || Number(formData.crudeProtein) <= 0)
-    ) {
-      newErrors.crudeProtein = 'Crude Protein must be a valid number greater than zero';
-    }
-
-    // Only validate previous crop if options are available
-    if (formData.cropId && !formData.prevCropId) {
-      // Check if there are previous crop options for this crop
-      const hasPreviousCropOptions = previousCrops.some(
-        (crop) => crop.cropid === Number(formData.cropId),
-      );
-
-      if (hasPreviousCropOptions) {
-        newErrors.prevCropId = 'Previous crop selection is required';
-      }
-    }
-
-    // Special validation for cover crops (type 2)
-    if (selectedCropType?.covercrop && formData.coverCropHarvested === undefined) {
-      newErrors.coverCropHarvested = 'Please specify if cover crop was harvested';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   /**
@@ -436,6 +449,7 @@ function CropsModal({
               Crop Type
             </span>
             <Select
+              isRequired
               name="cropTypeId"
               items={cropTypes.map((ele) => ({ id: ele.id, label: ele.name }))}
               selectedKey={formData.cropTypeId}
@@ -450,9 +464,10 @@ function CropsModal({
                 <Grid size={formGridBreakpoints}>
                   <span className="bcds-react-aria-Select--Label">Crop Description</span>
                   <TextField
+                    isRequired
                     type="text"
                     name="name"
-                    value={formData.name}
+                    value={formData.name || ''}
                     onChange={(e) => handleFormFieldChange('name', e)}
                   />
                 </Grid>
@@ -464,6 +479,7 @@ function CropsModal({
                     Crop
                   </span>
                   <Select
+                    isRequired
                     name="cropId"
                     items={filteredCrops.map((ele) => ({ id: ele.id, label: ele.cropname }))}
                     isDisabled={!filteredCrops?.length}
@@ -479,6 +495,7 @@ function CropsModal({
                   Yield{showUnitDropdown(formData.cropTypeId) ? '' : ' (tons/ac)'}
                 </span>
                 <TextField
+                  isRequired
                   type="number"
                   name="yield"
                   value={formData.yield?.toString() || ''}
@@ -500,6 +517,7 @@ function CropsModal({
                 <Grid size={formGridBreakpoints}>
                   <span className="bcds-react-aria-Select--Label">Units</span>
                   <Select
+                    isRequired
                     name="yieldHarvestUnit"
                     items={HARVEST_UNIT_OPTIONS}
                     selectedKey={formData.yieldHarvestUnit}
@@ -517,6 +535,7 @@ function CropsModal({
                     Crude Protein (%)
                   </span>
                   <TextField
+                    isRequired
                     type="number"
                     name="crudeProtein"
                     value={formData.crudeProtein?.toString() || ''}
@@ -540,6 +559,7 @@ function CropsModal({
                             Previous crop ploughed down (N credit)
                           </span>
                           <Select
+                            isRequired
                             name="prevCropId"
                             items={availablePreviousCrops.map((ele) => ({
                               id: ele.id,
