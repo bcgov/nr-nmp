@@ -56,7 +56,22 @@ export default function CalculateNutrients() {
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell);
   }, [activeField]);
 
-  // TODO: Add manure columns
+  const manureColumns: GridColDef[] = useMemo(() => {
+    const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setOpenDialog(['manure', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
+    };
+    const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setFieldList((prev) => {
+        const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+        const nextFieldArray = [...prev];
+        const nutrientManures = [...nextFieldArray[activeField].Nutrients.nutrientManures];
+        nutrientManures.splice(index, 1);
+        nextFieldArray[activeField].Nutrients.nutrientManures = nutrientManures;
+        return nextFieldArray;
+      });
+    };
+    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell);
+  }, [activeField]);
 
   const fertilizerColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -75,19 +90,33 @@ export default function CalculateNutrients() {
   }, [activeField]);
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
-    const allRows = [
+    const cropAndOtherRows = [
       ...fieldList[activeField].Crops,
       ...fieldList[activeField].Fertilizers,
       ...fieldList[activeField].OtherNutrients,
     ];
+    const manureRows = fieldList[activeField].Nutrients.nutrientManures;
+
     return {
       name: 'Balance',
-      reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
-      reqP2o5: allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
-      reqK2o: allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
-      remN: allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0),
-      remP2o5: allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
-      remK2o: allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
+      reqN:
+        cropAndOtherRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0) +
+        manureRows.reduce((sum, manure) => sum + (manure.yrN ?? 0), 0),
+      reqP2o5:
+        cropAndOtherRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0) +
+        manureRows.reduce((sum, manure) => sum + (manure.yrP2O5 ?? 0), 0),
+      reqK2o:
+        cropAndOtherRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0) +
+        manureRows.reduce((sum, manure) => sum + (manure.yrK2O ?? 0), 0),
+      remN:
+        cropAndOtherRows.reduce((sum, row) => sum + (row.remN ?? 0), 0) +
+        manureRows.reduce((sum, manure) => sum + (manure.ltN ?? 0), 0),
+      remP2o5:
+        cropAndOtherRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0) +
+        manureRows.reduce((sum, manure) => sum + (manure.ltP2O5 ?? 0), 0),
+      remK2o:
+        cropAndOtherRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0) +
+        manureRows.reduce((sum, manure) => sum + (manure.ltK2O ?? 0), 0),
     };
   }, [fieldList, activeField]);
 
@@ -173,6 +202,21 @@ export default function CalculateNutrients() {
       marginLeft: '1.5em',
     },
   };
+
+  // Transform manure data to match CalculateNutrientsColumn structure
+  const transformedManureData: CalculateNutrientsColumn[] = useMemo(
+    () =>
+      fieldList[activeField].Nutrients.nutrientManures.map((manure, index) => ({
+        name: `Manure ${index + 1}`,
+        reqN: manure.yrN ?? 0,
+        reqP2o5: manure.yrP2O5 ?? 0,
+        reqK2o: manure.yrK2O ?? 0,
+        remN: manure.ltN ?? 0,
+        remP2o5: manure.ltP2O5 ?? 0,
+        remK2o: manure.ltK2O ?? 0,
+      })),
+    [fieldList, activeField],
+  );
 
   return (
     <StyledContent>
@@ -291,6 +335,7 @@ export default function CalculateNutrients() {
             farmManures={state.nmpFile.years[0].FarmManures || []}
             field={fieldList[activeField]}
             rowEditIndex={openDialog[1]}
+            setFields={setFieldList}
             isOpen={openDialog[0] === 'manure'}
             onCancel={handleDialogClose}
             modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
@@ -392,6 +437,22 @@ export default function CalculateNutrients() {
             sx={{ ...customTableStyle, ...customCalcTableStyle }}
             rows={fieldList[activeField].Fertilizers}
             columns={fertilizerColumns}
+            getRowId={() => crypto.randomUUID()}
+            disableRowSelectionOnClick
+            disableColumnMenu
+            columnHeaderHeight={0}
+            hideFooterPagination
+            hideFooter
+          />
+        </>
+      )}
+      {transformedManureData.length > 0 && (
+        <>
+          <span>Manure</span>
+          <DataGrid
+            sx={{ ...customTableStyle, ...customCalcTableStyle }}
+            rows={transformedManureData}
+            columns={manureColumns}
             getRowId={() => crypto.randomUUID()}
             disableRowSelectionOnClick
             disableColumnMenu

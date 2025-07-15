@@ -1,7 +1,7 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import { Key, useContext, useEffect, useState } from 'react';
+import { Key, useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { Select, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -33,6 +33,7 @@ type AddManureModalProps = {
   farmManures: NMPFileFarmManureData[];
   rowEditIndex: number | undefined;
   field: NMPFileFieldData | undefined;
+  setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
 };
 
@@ -79,6 +80,7 @@ export default function ManureModal({
   farmManures,
   onCancel,
   field,
+  setFields,
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [manureForm, setManureForm] = useState<ManureFormFields>(
@@ -86,7 +88,6 @@ export default function ManureModal({
   );
   const apiCache = useContext(APICacheContext);
   const { state, dispatch } = useAppState();
-  const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
 
   const [manureUnits, setManureUnits] = useState<
     {
@@ -157,7 +158,8 @@ export default function ManureModal({
     };
 
     // Update the fields array
-    const updatedFields = fields.map((f) => {
+    const currentFields = state.nmpFile.years[0].Fields || [];
+    const updatedFields = currentFields.map((f: NMPFileFieldData) => {
       if (f.FieldName === field.FieldName) {
         return {
           ...f,
