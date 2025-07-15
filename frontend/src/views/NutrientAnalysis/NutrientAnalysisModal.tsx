@@ -55,7 +55,6 @@ export default function NutrientAnalysisModal({
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        console.log('Manure Types Data: ', data);
         setManureTypesData(data);
       }
     });

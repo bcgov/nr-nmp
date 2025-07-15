@@ -178,8 +178,6 @@ export default function ManureModal({
       year: state.nmpFile.farmDetails.Year!,
       newFields: updatedFields,
     });
-    console.log('Updated fields:', updatedFields);
-    console.log('State: ', state);
     handleModalClose();
   };
 
