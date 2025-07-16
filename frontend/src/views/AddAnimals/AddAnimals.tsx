@@ -22,6 +22,7 @@ import {
 } from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
 import { isDairyAndMilkingCattle, liquidSolidManureDisplay } from '@/utils/utils';
+import { calculateAnnualWashWater } from './utils';
 
 export default function AddAnimals() {
   const { state, dispatch } = useAppState();
@@ -121,14 +122,17 @@ export default function AddAnimals() {
         maxWidth: 300,
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
         renderCell: (params: any) => {
-          const { animalId, subtype, washWaterGallons } = params.row;
+          const { animalId, animalsPerFarm, subtype, washWater, washWaterUnit } = params.row;
           if (isDairyAndMilkingCattle(animalId, subtype)) {
+            const washWaterGallons = calculateAnnualWashWater(
+              washWater,
+              washWaterUnit,
+              animalsPerFarm,
+            );
             return (
               <span css={specialTableRowStyle}>
                 <DoubleRowStyle>{params.value}</DoubleRowStyle>
-                {Number.isFinite(washWaterGallons) && (
-                  <DoubleRowStyle>{washWaterGallons} U.S. gallons</DoubleRowStyle>
-                )}
+                <DoubleRowStyle>{washWaterGallons} U.S. gallons</DoubleRowStyle>
               </span>
             );
           }

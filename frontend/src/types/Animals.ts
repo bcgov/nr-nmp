@@ -11,7 +11,7 @@ export type BeefCattleData = {
   animalId: '1';
   subtype?: string;
   animalsPerFarm?: number;
-  manureType?: 'liquid' | 'solid';
+  manureType?: 'solid';
   daysCollected?: number | undefined;
   manureData?: { name: string; annualSolidManure: number } | undefined;
   date?: string;
@@ -33,8 +33,6 @@ export type DairyCattleData = {
     | { name: string; annualSolidManure: undefined; annualLiquidManure: number }
     | undefined;
   manureId: string | null;
-  washWaterGallons?: number;
-  solidPerGalPerAnimalPerDay?: number;
 };
 
 export type AnimalData = BeefCattleData | DairyCattleData;

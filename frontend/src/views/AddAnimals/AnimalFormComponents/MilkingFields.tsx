@@ -73,7 +73,7 @@ export default function MilkingFields({
           value={milkProduction}
           onChange={(e) => {
             setMilkProduction(e);
-            handleInputChanges({ milkProduction: parseFloat(e) });
+            handleInputChanges({ milkProduction: Number(e) });
           }}
           isRequired
         />

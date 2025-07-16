@@ -7,6 +7,7 @@ import {
   AnimalData,
   DairyCattleData,
 } from '@/types';
+import { calculateAnnualWashWater } from '@/views/AddAnimals/utils';
 
 function NO_ROWS() {
   return <div style={{ width: '100%', textAlign: 'center' }}>No data</div>;
@@ -60,16 +61,19 @@ export default function ManureCompostInventory({
     manureArray.forEach((ele) => {
       resultArray.push({
         UniqueMaterialName: ele.UniqueMaterialName,
-        AnnualAmountDisplayWeight: ele?.AnnualAmountDisplayWeight,
+        AnnualAmountDisplayWeight: ele.AnnualAmountDisplayWeight,
         AnnualAmountDisplayVolume:
-          'AnnualAmountDisplayVolume' in ele ? ele!.AnnualAmountDisplayVolume : undefined,
+          'AnnualAmountDisplayVolume' in ele ? ele.AnnualAmountDisplayVolume : undefined,
       });
-      if (ele.UniqueMaterialName === 'Milking Cow') {
-        const washWaterGallons = (
-          FarmAnimals.find(
-            (animalEle) => animalEle.manureId === (ele as any).manureId,
-          ) as DairyCattleData
-        )?.washWaterGallons;
+      if ('manureId' in ele && ele.UniqueMaterialName === 'Milking Cow') {
+        const milkCowEntry = FarmAnimals.find(
+          (animalEle) => animalEle.manureId === ele.manureId,
+        ) as DairyCattleData;
+        const washWaterGallons = calculateAnnualWashWater(
+          milkCowEntry.washWater!,
+          milkCowEntry.washWaterUnit!,
+          milkCowEntry.animalsPerFarm!,
+        );
         resultArray.push({
           UniqueMaterialName: 'Milking Center Wash Water',
           AnnualAmountDisplayWeight: `${washWaterGallons} U.S. gallons`,
