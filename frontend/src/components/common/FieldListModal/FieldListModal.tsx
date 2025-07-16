@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import type { FormEvent } from 'react';
-import { TextField, Select } from '@bcgov/design-system-react-components';
+import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
+import Select from '@/components/common/Select/Select';
 import { formCss, formGridBreakpoints } from '../../../common.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NMPFileFieldData } from '@/types';
@@ -125,6 +126,7 @@ export default function FieldListModal({
               onSelectionChange={(e) => {
                 handleFormFieldChange('PreviousYearManureApplicationFrequency', e.toString());
               }}
+              noSort
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

@@ -10,9 +10,10 @@ import {
   Dialog,
   Modal,
   Form,
-  Select,
   TextField,
 } from '@bcgov/design-system-react-components';
+import { Select } from '@/components/common';
+
 import { APICacheContext } from '@/context/APICacheContext';
 import {
   DefaultSolidManureConversionFactors,
@@ -163,6 +164,7 @@ export default function ManureImportModal({
                       Moisture: '50.0',
                     });
                   }}
+                  noSort
                 />
               </Grid>
               <Grid size={formGridBreakpoints}>

@@ -2,12 +2,12 @@
  * @summary The field table on the calculate nutrients page
  */
 import { Key, useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { Select, TextField } from '@bcgov/design-system-react-components';
+import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
-import Form from '@/components/common/Form/Form';
+import { Form, Select } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 // Data not seeded in DB.
 import SEASON_APPLICATION from '../unseededData';

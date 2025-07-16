@@ -3,11 +3,11 @@
  */
 import { FormEvent, Key, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
+import { Checkbox, TextField } from '@bcgov/design-system-react-components';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { ManureNutrients, NMPFileFarmManureData, Manure } from '@/types';
 import { formCss, formGridBreakpoints } from '@/common.styles';
-import Form from '@/components/common/Form/Form';
+import { Form, Select } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
@@ -176,6 +176,7 @@ export default function NutrientAnalysisModal({
               onSelectionChange={(e: Key) => {
                 handleInputChanges({ materialType: e as string, bookLab: 'book' });
               }}
+              noSort
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

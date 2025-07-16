@@ -9,15 +9,13 @@ import {
   Checkbox,
   CheckboxGroup,
   Form,
-  Select,
   TextField,
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import type { Key } from 'react-aria-components';
-
 import useAppState from '@/hooks/useAppState';
 import { NMPFileFarmDetails } from '@/types/NMPFile';
-import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Select } from '../../components/common';
 import {
   formCss,
   formGridBreakpoints,
@@ -65,7 +63,7 @@ export default function FarmInformation() {
     const currentYear = new Date().getFullYear() + 1;
     const yearArray = [];
 
-    for (let i = currentYear; i > currentYear - 20; i -= 1) {
+    for (let i = currentYear; i > currentYear - 10; i -= 1) {
       yearArray.push({ id: i.toString(), label: i.toString() });
     }
 
@@ -223,6 +221,7 @@ export default function FarmInformation() {
               items={yearOptions}
               selectedKey={formData.Year}
               onSelectionChange={(e) => handleChange('Year', e)}
+              noSort
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

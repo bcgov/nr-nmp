@@ -3,19 +3,13 @@
  */
 import React, { FormEvent, Key, useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import {
-  Button,
-  ButtonGroup,
-  Form,
-  Select,
-  TextField,
-} from '@bcgov/design-system-react-components';
+import { Button, ButtonGroup, Form, TextField } from '@bcgov/design-system-react-components';
 import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { customTableStyle, formCss, formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { InputField } from '@/components/common';
+import { InputField, Select } from '@/components/common';
 
 import type {
   Fertilizer,
