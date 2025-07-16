@@ -98,13 +98,11 @@ export default function ManureModal({
     }[]
   >([]);
 
-  const [availableThisYearTable, setAvailableThisYearTable] = useState<Array<CropNutrients>>([
-    EMPTY_CROP_NUTRIENTS,
-  ]);
-  const [availableLongTermTable, setAvailableLongTermTable] = useState<Array<CropNutrients>>([
-    EMPTY_CROP_NUTRIENTS,
-  ]);
-  const [stillReqTable, setStillReqTable] = useState<Array<CropNutrients>>([EMPTY_CROP_NUTRIENTS]);
+  const [availableThisYearTable, setAvailableThisYearTable] =
+    useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
+  const [availableLongTermTable, setAvailableLongTermTable] =
+    useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
+  const [stillReqTable, setStillReqTable] = useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
 
   // get fertilizer types, names, and conversion units
   useEffect(() => {
@@ -117,9 +115,9 @@ export default function ManureModal({
   }, [apiCache, manureForm.MaterialType]);
 
   const handleModalClose = () => {
-    setAvailableThisYearTable([EMPTY_CROP_NUTRIENTS]);
-    setAvailableLongTermTable([EMPTY_CROP_NUTRIENTS]);
-    setStillReqTable([EMPTY_CROP_NUTRIENTS]);
+    setAvailableThisYearTable(EMPTY_CROP_NUTRIENTS);
+    setAvailableLongTermTable(EMPTY_CROP_NUTRIENTS);
+    setStillReqTable(EMPTY_CROP_NUTRIENTS);
     onCancel();
   };
 
@@ -147,12 +145,12 @@ export default function ManureModal({
       rate: manureForm.applicationRate,
       nh4Retention: manureForm.retentionAmmoniumN,
       nAvail: manureForm.organicNAvailable,
-      yrN: availableThisYearTable[0]?.N || 0,
-      yrP2O5: availableThisYearTable[0]?.P2O5 || 0,
-      yrK2O: availableThisYearTable[0]?.K2O || 0,
-      ltN: availableLongTermTable[0]?.N || 0,
-      ltP2O5: availableLongTermTable[0]?.P2O5 || 0,
-      ltK2O: availableLongTermTable[0]?.K2O || 0,
+      yrN: availableThisYearTable?.N || 0,
+      yrP2O5: availableThisYearTable?.P2O5 || 0,
+      yrK2O: availableThisYearTable?.K2O || 0,
+      ltN: availableLongTermTable?.N || 0,
+      ltP2O5: availableLongTermTable?.P2O5 || 0,
+      ltK2O: availableLongTermTable?.K2O || 0,
     };
 
     // Update the fields array
@@ -193,30 +191,24 @@ export default function ManureModal({
       manureForm.retentionAmmoniumN,
       manureForm.organicNAvailable,
     );
-    setAvailableLongTermTable([
-      {
-        N: nutrientInputs.N_LongTerm,
-        P2O5: nutrientInputs.P2O5_LongTerm,
-        K2O: nutrientInputs.K2O_LongTerm,
-      },
-    ]);
-    setAvailableThisYearTable([
-      {
-        N: nutrientInputs.N_FirstYear,
-        P2O5: nutrientInputs.P2O5_FirstYear,
-        K2O: nutrientInputs.K2O_FirstYear,
-      },
-    ]);
-    setStillReqTable([
-      {
-        N:
-          field && Array.isArray(field.Crops)
-            ? (field.Crops[0]?.reqN ?? 0) + (field.Crops[1]?.reqN ?? 0)
-            : 0,
-        P2O5: (field?.Crops?.[0]?.reqP2o5 ?? 0) + (field?.Crops?.[1]?.reqP2o5 ?? 0),
-        K2O: (field?.Crops?.[0]?.reqK2o ?? 0) + (field?.Crops?.[1]?.reqK2o ?? 0),
-      },
-    ]);
+    setAvailableLongTermTable({
+      N: nutrientInputs.N_LongTerm,
+      P2O5: nutrientInputs.P2O5_LongTerm,
+      K2O: nutrientInputs.K2O_LongTerm,
+    });
+    setAvailableThisYearTable({
+      N: nutrientInputs.N_FirstYear,
+      P2O5: nutrientInputs.P2O5_FirstYear,
+      K2O: nutrientInputs.K2O_FirstYear,
+    });
+    setStillReqTable({
+      N:
+        field && Array.isArray(field.Crops)
+          ? (field.Crops[0]?.reqN ?? 0) + (field.Crops[1]?.reqN ?? 0)
+          : 0,
+      P2O5: (field?.Crops?.[0]?.reqP2o5 ?? 0) + (field?.Crops?.[1]?.reqP2o5 ?? 0),
+      K2O: (field?.Crops?.[0]?.reqK2o ?? 0) + (field?.Crops?.[1]?.reqK2o ?? 0),
+    });
   };
 
   const handleChange = (changes: { [name: string]: string | number | undefined }) => {
@@ -329,7 +321,7 @@ export default function ManureModal({
             <DataGrid
               sx={{ ...customTableStyle }}
               columns={NUTRIENT_COLUMNS}
-              rows={availableThisYearTable}
+              rows={[availableThisYearTable]}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
@@ -342,7 +334,7 @@ export default function ManureModal({
             <DataGrid
               sx={{ ...customTableStyle }}
               columns={NUTRIENT_COLUMNS}
-              rows={availableLongTermTable}
+              rows={[availableLongTermTable]}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
@@ -355,7 +347,7 @@ export default function ManureModal({
             <DataGrid
               sx={{ ...customTableStyle }}
               columns={NUTRIENT_COLUMNS}
-              rows={stillReqTable}
+              rows={[stillReqTable]}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
