@@ -88,7 +88,7 @@ export default function DairyCattle({
     }
 
     let withManureCalc: DairyCattleData;
-    if (formData.manureType === ManureType.LIQUID) {
+    if (formData.manureType === ManureType.Liquid) {
       withManureCalc = {
         ...formData,
         manureData: {

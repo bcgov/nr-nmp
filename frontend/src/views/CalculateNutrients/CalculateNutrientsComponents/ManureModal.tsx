@@ -17,7 +17,7 @@ import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import { CropNutrients } from '@/types';
 
 type ManureFormFields = {
-  MaterialType: string;
+  materialType: string;
   applicationMethod: string;
   applicationRate: number;
   applUnit: number;
@@ -63,7 +63,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
 ];
 
 const DEFAULT_MANURE_FORM_FIELDS: ManureFormFields = {
-  MaterialType: '',
+  materialType: '',
   applicationMethod: '',
   applicationRate: 0,
   applUnit: 0,
@@ -77,7 +77,7 @@ export default function ManureModal({
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [manureForm, setManureForm] = useState<ManureFormFields>(
-    initialModalData ?? DEFAULT_MANURE_FORM_FIELDS,
+    initialModalData || DEFAULT_MANURE_FORM_FIELDS,
   );
   const apiCache = useContext(APICacheContext);
 
@@ -106,7 +106,7 @@ export default function ManureModal({
         setFertilizerUnits(data);
       }
     });
-  }, [apiCache, manureForm.MaterialType]);
+  }, [apiCache, manureForm.materialType]);
 
   const handleModalClose = () => {
     setAvailableThisYearTable([EMPTY_CROP_NUTRIENTS]);
@@ -150,12 +150,12 @@ export default function ManureModal({
               isRequired
               label="Material Type"
               placeholder="Select a material type"
-              selectedKey={manureForm?.MaterialType}
-              items={farmManures?.map((ele: NMPFileFarmManureData) => ({
-                id: ele.MaterialType,
-                label: ele.MaterialType,
+              selectedKey={manureForm.materialType}
+              items={farmManures.map((ele: NMPFileFarmManureData) => ({
+                id: ele.materialType,
+                label: ele.materialType,
               }))}
-              onSelectionChange={(e: Key) => handleChange({ MaterialType: e.toString() })}
+              onSelectionChange={(e: Key) => handleChange({ materialType: e as string })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -164,12 +164,10 @@ export default function ManureModal({
               label="Application Season/Method"
               name="applicationMethod"
               placeholder="Select an application method"
-              selectedKey={manureForm?.applicationMethod}
+              selectedKey={manureForm.applicationMethod}
               // TODO: filter by material type
               items={SEASON_APPLICATION.map((ele) => ({ id: ele.Id, label: ele.Name }))}
-              onSelectionChange={(e: Key) =>
-                handleChange({ applicationMethod: parseInt(e.toString(), 10) })
-              }
+              onSelectionChange={(e: Key) => handleChange({ applicationMethod: Number(e) })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -178,7 +176,7 @@ export default function ManureModal({
               label="Application Rate"
               type="number"
               name="applicationRate"
-              value={manureForm?.applicationRate?.toString()}
+              value={String(manureForm.applicationRate)}
               onChange={(e: string) => {
                 handleChange({ applicationRate: e });
               }}
@@ -190,14 +188,11 @@ export default function ManureModal({
               isRequired
               label="Units"
               placeholder="Select a unit"
-              selectedKey={manureForm?.applUnit}
-              items={fertilizerUnits
-                // .filter((unit) => [3, 4, 5, 6].includes(unit.id))
-                .map((unit) => ({
-                  value: { id: unit.id },
-                  label: unit.name,
-                }))}
-              // onSelectionChange={(e: any) => handleChange(e)}
+              selectedKey={manureForm.applUnit}
+              items={fertilizerUnits.map((unit) => ({
+                value: { id: unit.id },
+                label: unit.name,
+              }))}
               onSelectionChange={(e: Key) => handleChange({ applUnit: e.toString() })}
             />
           </Grid>
@@ -206,7 +201,7 @@ export default function ManureModal({
               label="Ammonium-N Retention (%)"
               type="number"
               name="retentionAmmoniumN"
-              value={manureForm?.retentionAmmoniumN?.toString()}
+              value={manureForm.retentionAmmoniumN.toString()}
               onChange={(e: string) => {
                 handleChange({ retentionAmmoniumN: Number.isNaN(Number(e)) ? e : Number(e) });
               }}
@@ -218,7 +213,7 @@ export default function ManureModal({
               label="Organic N Available"
               type="number"
               name="organicNAvailable"
-              value={manureForm?.organicNAvailable?.toString()}
+              value={manureForm.organicNAvailable.toString()}
               onChange={(e: string) => {
                 handleChange({ organicNAvailable: Number.isNaN(Number(e)) ? e : Number(e) });
               }}

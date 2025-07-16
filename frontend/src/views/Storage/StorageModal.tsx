@@ -134,7 +134,10 @@ export default function StorageModal({
                 selectedKey={formData.manureType}
                 items={MANURE_TYPE_OPTIONS}
                 onSelectionChange={(e: Key) => {
-                  handleInputChange({ manureType: e as number });
+                  handleInputChange({ manureType: e as number, manuresInSystem: [] });
+                  setFullManureList((prev) =>
+                    prev.map((m) => ({ ...m, data: { ...m.data, AssignedToStoredSystem: false } })),
+                  );
                 }}
               />
               <TextField

@@ -10,7 +10,7 @@ const DefaultManureFormData: NMPFileImportedManureData = {
   AnnualAmountDisplayVolume: '',
   AnnualAmountDisplayWeight: '',
   Units: 0,
-  Moisture: '50',
+  Moisture: '50.0',
   IsMaterialStored: false,
   ManagedManureName: '',
   AssignedToStoredSystem: false,

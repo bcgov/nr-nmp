@@ -7,8 +7,8 @@ export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
 
 // eslint-disable-next-line no-shadow
 export enum ManureType {
-  LIQUID = 1,
-  SOLID = 2,
+  Liquid = 1,
+  Solid = 2,
 }
 
 export type BeefCattleData = {

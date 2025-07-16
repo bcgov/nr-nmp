@@ -49,11 +49,6 @@ export default function AddAnimals() {
     [hasDairyCattle],
   );
 
-  useEffect(() => {
-    dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleEditRow = React.useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
     setIsDialogOpen(true);

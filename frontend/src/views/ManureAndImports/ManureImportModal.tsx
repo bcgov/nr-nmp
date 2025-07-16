@@ -160,7 +160,7 @@ export default function ManureImportModal({
                       ManagedManureName: `${formData.UniqueMaterialName}, ${ManureType[e as number]}`,
                       // Reset dependent inputs on changes
                       Units: undefined,
-                      Moisture: undefined,
+                      Moisture: '50.0',
                     });
                   }}
                 />

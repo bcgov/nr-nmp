@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { DEFAULT_NMPFILE, DEFAULT_NMPFILE_YEAR, NMP_FILE_KEY } from '@/constants';
+import { DEFAULT_NMPFILE, DEFAULT_NMPFILE_YEAR, APP_STATE_KEY } from '@/constants';
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import {
   NMPFileFieldData,
@@ -139,7 +139,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
           UniqueMaterialName: animal.manureData.name,
-          ManureType: ManureType.SOLID,
+          ManureType: ManureType.Solid,
           AnnualAmount: animal.manureData.annualSolidManure,
           AnnualAmountTonsWeight: animal.manureData.annualSolidManure,
           AnnualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
@@ -151,7 +151,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
           UniqueMaterialName: animal.manureData.name,
-          ManureType: ManureType.LIQUID,
+          ManureType: ManureType.Liquid,
           AnnualAmount: animal.manureData.annualLiquidManure,
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
@@ -184,13 +184,13 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
 
   if (action.type === 'OVERWRITE_NMPFILE') {
     newAppState.nmpFile = structuredClone(action.newFile);
-    saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
+    saveDataToLocalStorage(APP_STATE_KEY, newAppState);
     return newAppState;
   }
 
   if (action.type === 'RESET_NMPFILE') {
     newAppState.nmpFile = structuredClone(DEFAULT_NMPFILE);
-    saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
+    saveDataToLocalStorage(APP_STATE_KEY, newAppState);
     return newAppState;
   }
 
@@ -211,7 +211,7 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       saveAnimals(newAppState.nmpFile.years[0], []);
     }
     newAppState.nmpFile.farmDetails = structuredClone(action.newFarmDetails);
-    saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
+    saveDataToLocalStorage(APP_STATE_KEY, newAppState);
     return newAppState;
   }
 
@@ -233,7 +233,6 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       );
     }
   } else if (action.type === 'SAVE_MANURE_STORAGE_SYSTEMS') {
-    debugger;
     year.ManureStorageSystems = structuredClone(action.newManureStorageSystems);
 
     // Update the generated and imported manure lists
@@ -285,6 +284,6 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   }
 
   // Save the file to local storage
-  saveDataToLocalStorage(NMP_FILE_KEY, newAppState.nmpFile);
+  saveDataToLocalStorage(APP_STATE_KEY, newAppState);
   return newAppState;
 }

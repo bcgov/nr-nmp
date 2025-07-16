@@ -28,9 +28,9 @@ const EMPTY_MANURE_NUTRIENTS: ManureNutrients = {
 };
 
 const EMPTY_MANURE_DATA: NMPFileFarmManureData = {
-  ManureSource: '',
-  MaterialType: '',
-  BookLab: '',
+  materialSource: '',
+  materialType: '',
+  bookLab: '',
   UniqueMaterialName: '',
   Nutrients: EMPTY_MANURE_NUTRIENTS,
 };
@@ -43,7 +43,7 @@ export default function NutrientAnalysisModal({
   ...props
 }: NutrientAnalysisModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState<NMPFileFarmManureData>(
-    initialModalData ?? EMPTY_MANURE_DATA,
+    initialModalData || EMPTY_MANURE_DATA,
   );
   const apiCache = useContext(APICacheContext);
 
@@ -69,17 +69,17 @@ export default function NutrientAnalysisModal({
     setFormData((prev: NMPFileFarmManureData): NMPFileFarmManureData => {
       let next = { ...prev };
       Object.entries(changes).forEach(([name, value]) => {
-        if (name === 'ManureSource') {
+        if (name === 'materialSource') {
           next = {
             ...EMPTY_MANURE_DATA,
-            BookLab: '',
+            bookLab: '',
             ...changes,
           };
         }
-        if (name === 'MaterialType') {
+        if (name === 'materialType') {
           const updatedUniqueMaterialName =
             next.UniqueMaterialName === '' ||
-            next.UniqueMaterialName !== `Custom - ${next.MaterialType}`
+            next.UniqueMaterialName !== `Custom - ${next.materialType}`
               ? `Custom - ${value}`
               : next.UniqueMaterialName;
           const selectedManure = manureData.find((manure) => manure.name === value);
@@ -94,18 +94,18 @@ export default function NutrientAnalysisModal({
             P2O5: selectedManure.phosphorous,
             K2O: selectedManure.potassium,
           };
-          next.MaterialType = value ? value.toString() : '';
+          next.materialType = value ? value.toString() : '';
           next.UniqueMaterialName = updatedUniqueMaterialName;
           next.Nutrients = Nutrients;
         }
 
         // reset nutrient values when book value is selected
-        if (name === 'BookLab' && next.BookLab !== value) {
-          const selectedManure = manureData.find((manure) => manure.name === next.MaterialType);
+        if (name === 'bookLab' && next.bookLab !== value) {
+          const selectedManure = manureData.find((manure) => manure.name === next.materialType);
           if (!selectedManure) {
             throw new Error(`Manure type "${value}" not found.`);
           }
-          next.BookLab = value ? value.toString() : '';
+          next.bookLab = value ? value.toString() : '';
           next.Nutrients = {
             Moisture: String(selectedManure.moisture),
             N: selectedManure.nitrogen,
@@ -146,16 +146,16 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              name="ManureSource"
+              name="materialSource"
               items={manures.map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
                 id: ele.UniqueMaterialName,
                 label: ele.UniqueMaterialName,
               }))}
-              label="Manure Source"
-              placeholder="Select Manure Source"
-              selectedKey={formData.ManureSource}
+              label="Source of Material"
+              placeholder="Select Source of Material"
+              selectedKey={formData.materialSource}
               onSelectionChange={(e: Key) => {
-                handleInputChanges({ ManureSource: e.toString() });
+                handleInputChanges({ materialSource: e as string });
               }}
             />
           </Grid>
@@ -164,22 +164,22 @@ export default function NutrientAnalysisModal({
               isRequired
               name="name"
               items={manureData.map((ele) => ({ id: ele.name, label: ele.name }))}
-              label="Manure Type"
-              placeholder="Select Manure Type"
-              selectedKey={formData.MaterialType}
+              label="Material Type"
+              placeholder="Select Material Type"
+              selectedKey={formData.materialType}
               onSelectionChange={(e: Key) => {
-                handleInputChanges({ MaterialType: e.toString(), BookLab: 'book' });
+                handleInputChanges({ materialType: e as string, bookLab: 'book' });
               }}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <Checkbox
-              isRequired={!formData?.BookLab}
-              isDisabled={!(formData.ManureSource && formData.MaterialType)}
+              isRequired={!formData.bookLab}
+              isDisabled={!(formData.materialSource && formData.materialType)}
               value="book"
-              isSelected={formData?.BookLab === 'book'}
+              isSelected={formData.bookLab === 'book'}
               onChange={(s: boolean) => {
-                handleInputChanges({ BookLab: s ? 'book' : '' });
+                handleInputChanges({ bookLab: s ? 'book' : '' });
               }}
             >
               Book Value
@@ -187,12 +187,12 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={formGridBreakpoints}>
             <Checkbox
-              isRequired={!formData?.BookLab}
-              isDisabled={!(formData.ManureSource && formData.MaterialType)}
+              isRequired={!formData.bookLab}
+              isDisabled={!(formData.materialSource && formData.materialType)}
               value="lab"
-              isSelected={formData?.BookLab === 'lab'}
+              isSelected={formData.bookLab === 'lab'}
               onChange={(s: boolean) => {
-                handleInputChanges({ BookLab: s ? 'lab' : '' });
+                handleInputChanges({ bookLab: s ? 'lab' : '' });
               }}
             >
               Lab Value
@@ -200,11 +200,11 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={{ xs: 12 }}>
             <TextField
-              isDisabled={formData?.BookLab !== 'lab'}
-              isRequired={formData?.BookLab === 'lab'}
+              isDisabled={formData.bookLab !== 'lab'}
+              isRequired={formData.bookLab === 'lab'}
               label="Material name"
               name="UniqueMaterialName"
-              value={formData?.UniqueMaterialName}
+              value={formData.UniqueMaterialName}
               onChange={(e: string) => {
                 handleInputChanges({ UniqueMaterialName: e });
               }}
@@ -213,11 +213,11 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={{ xs: 4 }}>
             <TextField
-              isDisabled={formData?.BookLab !== 'lab'}
-              isRequired={formData?.BookLab === 'lab'}
+              isDisabled={formData.bookLab !== 'lab'}
+              isRequired={formData.bookLab === 'lab'}
               label="Moisture (%)"
               name="Moisture"
-              value={formData?.Nutrients.Moisture}
+              value={formData.Nutrients.Moisture}
               onChange={(e: string) => {
                 handleInputChanges({ Moisture: e });
               }}
@@ -226,12 +226,12 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={{ xs: 4 }}>
             <TextField
-              isDisabled={formData?.BookLab !== 'lab'}
-              isRequired={formData?.BookLab === 'lab'}
+              isDisabled={formData.bookLab !== 'lab'}
+              isRequired={formData.bookLab === 'lab'}
               label="N"
               name="Moisture"
               type="number"
-              value={formData?.Nutrients?.N?.toString()}
+              value={formData.Nutrients?.N?.toString()}
               onChange={(e: string) => {
                 handleInputChanges({ N: Number(e) });
               }}
@@ -240,12 +240,12 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={{ xs: 4 }}>
             <TextField
-              isDisabled={formData?.BookLab !== 'lab'}
-              isRequired={formData?.BookLab === 'lab'}
+              isDisabled={formData.bookLab !== 'lab'}
+              isRequired={formData.bookLab === 'lab'}
               label="NH4-N (%)"
               name="NH4N"
               type="number"
-              value={formData?.Nutrients?.NH4N?.toString()}
+              value={formData.Nutrients?.NH4N?.toString()}
               onChange={(e: string) => {
                 handleInputChanges({ NH4N: Number(e) });
               }}
@@ -254,12 +254,12 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={{ xs: 4 }}>
             <TextField
-              isDisabled={formData?.BookLab !== 'lab'}
-              isRequired={formData?.BookLab === 'lab'}
+              isDisabled={formData.bookLab !== 'lab'}
+              isRequired={formData.bookLab === 'lab'}
               label="P (%)"
               name="P2O5"
               type="number"
-              value={formData?.Nutrients?.P2O5?.toString()}
+              value={formData.Nutrients?.P2O5?.toString()}
               onChange={(e: string) => {
                 handleInputChanges({ P2O5: Number(e) });
               }}
@@ -268,12 +268,12 @@ export default function NutrientAnalysisModal({
           </Grid>
           <Grid size={{ xs: 4 }}>
             <TextField
-              isDisabled={formData?.BookLab !== 'lab'}
-              isRequired={formData?.BookLab === 'lab'}
+              isDisabled={formData.bookLab !== 'lab'}
+              isRequired={formData.bookLab === 'lab'}
               label="K (%)"
               name="K2O"
               type="number"
-              value={formData?.Nutrients?.K2O?.toString()}
+              value={formData.Nutrients?.K2O?.toString()}
               onChange={(e: string) => {
                 handleInputChanges({ K2O: Number(e) });
               }}

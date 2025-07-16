@@ -9,7 +9,7 @@ const DEFAULT_NMPFILE_MANURE_STORAGE: NMPFileManureStorageSystem = {
     id: 0,
     name: '',
     isStructureCovered: false,
-    uncoveredAreaSquareFeet: 0,
+    uncoveredAreaSqFt: 0,
   },
 };
 

@@ -70,7 +70,7 @@ export default function ManureAndImports() {
   const handleSubmit = (data: NMPFileImportedManureData) => {
     let updatedManureFormData: NMPFileImportedManureData;
 
-    if (data.ManureType === ManureType.LIQUID) {
+    if (data.ManureType === ManureType.Liquid) {
       const liquidManureConversionFactor = liquidManureDropdownOptions.find(
         (item) => item.inputunit == data.Units,
       );
@@ -86,7 +86,7 @@ export default function ManureAndImports() {
         AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
         AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10).toString()} U.S. gallons`,
       };
-    } else if (data.ManureType === ManureType.SOLID) {
+    } else if (data.ManureType === ManureType.Solid) {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
         (item) => item.inputunit == data.Units,
       );
@@ -145,7 +145,7 @@ export default function ManureAndImports() {
       year: state.nmpFile.farmDetails.Year!,
       newManures: manures,
     });
-    if (animalList.some((animal) => animal.animalId === '2')) {
+    if (hasDairyCattle) {
       navigate(STORAGE);
     } else {
       navigate(NUTRIENT_ANALYSIS);
