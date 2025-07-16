@@ -5,7 +5,11 @@ import { formGridBreakpoints } from '@/common.styles';
 import manureTypeOptions from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID } from '@/types';
-import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
+import {
+  calculateAnnualLiquidManure,
+  calculateAnnualSolidManure,
+  calculateAnnualWashWater,
+} from '../utils';
 import MilkingFields from './MilkingFields';
 import AnimalFormWrapper from './AnimalFormWrapper';
 
@@ -45,11 +49,12 @@ export default function DairyCattle({
 
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
+    if (Number.isFinite(formData.washWater)) return formData.washWater;
     if (subtypes.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     return milkingCow.washwater;
-  }, [subtypes]);
+  }, [formData.washWater, subtypes]);
   const milkProductionInit = useMemo(() => {
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
@@ -85,7 +90,7 @@ export default function DairyCattle({
     } else {
       extraCoefficient = breed.breedmanurefactor;
     }
-
+    console.log('dairyCattle', formData);
     let withManureCalc: DairyCattleData;
     if (formData.manureType === 'liquid') {
       withManureCalc = {
@@ -117,6 +122,17 @@ export default function DairyCattle({
       };
     }
 
+    if (
+      Number.isFinite(formData.washWater) &&
+      formData.washWaterUnit &&
+      Number.isFinite(formData.animalsPerFarm)
+    ) {
+      withManureCalc.washWaterGallons = calculateAnnualWashWater(
+        formData.washWater!,
+        formData.washWaterUnit!,
+        formData.animalsPerFarm!,
+      );
+    }
     handleSubmit(withManureCalc);
   };
 
@@ -200,7 +216,7 @@ export default function DairyCattle({
           name="animalsPerFarm"
           value={formData?.animalsPerFarm?.toString()}
           onChange={(e: string) => {
-            handleInputChanges({ animalsPerFarm: e });
+            handleInputChanges({ animalsPerFarm: parseFloat(e) });
           }}
           maxLength={7}
           isRequired
@@ -225,7 +241,7 @@ export default function DairyCattle({
           name="grazingDaysPerYear"
           value={formData?.grazingDaysPerYear?.toString()}
           onChange={(e: string) => {
-            handleInputChanges({ grazingDaysPerYear: e });
+            handleInputChanges({ grazingDaysPerYear: parseFloat(e) });
           }}
           maxLength={3}
           isRequired

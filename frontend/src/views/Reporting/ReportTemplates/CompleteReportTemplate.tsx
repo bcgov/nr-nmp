@@ -71,6 +71,7 @@ export default function CompleteReportTemplate() {
       <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure/Compost Inventory</div>
       {years[0] && (
         <ManureCompostInventory
+          FarmAnimals={years[0].FarmAnimals}
           GeneratedManures={years[0].GeneratedManures}
           ImportedManures={years[0].ImportedManures}
         />

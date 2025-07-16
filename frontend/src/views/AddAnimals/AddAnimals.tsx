@@ -11,13 +11,17 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
-import { AnimalData, DAIRY_COW_ID } from '@/types';
+import { AnimalData } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
-import { DoubleRowStyle, ErrorText, StyledContent } from './addAnimals.styles';
+import {
+  DoubleRowStyle,
+  ErrorText,
+  specialTableRowStyle,
+  StyledContent,
+} from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
-import { liquidSolidManureDisplay } from '@/utils/utils';
-import { calculateAnnualWashWater } from './utils';
+import { isDairyAndMilkingCattle, liquidSolidManureDisplay } from '@/utils/utils';
 
 export default function AddAnimals() {
   const { state, dispatch } = useAppState();
@@ -98,13 +102,11 @@ export default function AddAnimals() {
         width: 175,
         valueGetter: (params: any) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
         renderCell: (params: any) => {
-          if (params.row.animalId === DAIRY_COW_ID) {
+          if (isDairyAndMilkingCattle(params.row.animalId, params.row.subtype)) {
             return (
-              <span style={{ lineHeight: '40px' }}>
+              <span css={specialTableRowStyle}>
                 <DoubleRowStyle>{params.value}</DoubleRowStyle>
-                {params.row.animalId === DAIRY_COW_ID && (
-                  <DoubleRowStyle>Milking center wash water</DoubleRowStyle>
-                )}
+                <DoubleRowStyle>Milking center wash water</DoubleRowStyle>
               </span>
             );
           }
@@ -119,15 +121,13 @@ export default function AddAnimals() {
         maxWidth: 300,
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
         renderCell: (params: any) => {
-          const { animalId, washWater, washWaterUnit, animalsPerFarm } = params.row;
-          if (animalId === DAIRY_COW_ID) {
+          const { animalId, subtype, washWaterGallons } = params.row;
+          if (isDairyAndMilkingCattle(animalId, subtype)) {
             return (
-              <span style={{ lineHeight: '40px' }}>
+              <span css={specialTableRowStyle}>
                 <DoubleRowStyle>{params.value}</DoubleRowStyle>
-                {animalId === DAIRY_COW_ID && (
-                  <DoubleRowStyle>
-                    {calculateAnnualWashWater(washWater, washWaterUnit, animalsPerFarm)} tons
-                  </DoubleRowStyle>
+                {Number.isFinite(washWaterGallons) && (
+                  <DoubleRowStyle>{washWaterGallons} U.S. gallons</DoubleRowStyle>
                 )}
               </span>
             );
@@ -203,14 +203,11 @@ export default function AddAnimals() {
         rows={animalList}
         columns={columns}
         getRowId={() => crypto.randomUUID()}
-        // getRowHeight={(params: any) => (params.model.animalId === DAIRY_COW_ID ? 88 : 54)}
-        // rowHeight={70}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
         hideFooter
       />
-      <pre>{JSON.stringify(animalList, null, 2)}</pre>
       <ErrorText>{showViewError}</ErrorText>
       <ButtonGroup
         alignment="start"

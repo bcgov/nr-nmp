@@ -27,7 +27,7 @@ export default function MilkingFields({
   // I'm starting to think keeping stateful props is dumb and I should just keep the useEffects
   // to get the same on-mount-and-unmount behavior, but I just wanna get this PR in atm
   const [milkProduction, setMilkProduction] = useState<string>(String(milkProductionInit));
-  const [washWater, setWashWater] = useState<string>(`${washWaterInit}.0`);
+  const [washWater, setWashWater] = useState<string>(washWaterInit.toFixed(1));
 
   // When the breed changes, change the milk production value
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function MilkingFields({
           value={milkProduction}
           onChange={(e) => {
             setMilkProduction(e);
-            handleInputChanges({ milkProduction: e });
+            handleInputChanges({ milkProduction: parseFloat(e) });
           }}
           isRequired
         />
@@ -86,7 +86,7 @@ export default function MilkingFields({
           value={washWater}
           onChange={(e) => {
             setWashWater(e);
-            handleInputChanges({ washWater: e });
+            handleInputChanges({ washWater: parseFloat(e) });
           }}
           isRequired
         />

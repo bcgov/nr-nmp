@@ -6,6 +6,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, BEEF_COW_ID, BeefCattleData } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
+import { MANURE_SOLID } from '@/types/Animals';
 
 interface BeefCattleSubtype {
   id: number;
@@ -41,6 +42,7 @@ export default function BeefCattle({
       ...formData,
       manureData: {
         name: subtype.name,
+        manureType: MANURE_SOLID,
         annualSolidManure: calculateAnnualSolidManure(
           subtype.solidperpoundperanimalperday,
           formData.animalsPerFarm!,

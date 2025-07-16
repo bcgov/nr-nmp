@@ -2,6 +2,7 @@
  * @summary Styling for AddAnimals view
  */
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
 
 export const Container = styled.div`
@@ -45,5 +46,9 @@ export const StyledContent = styled.div`
 
 export const DoubleRowStyle = styled.span`
   display: block;
-  height: 34px;
+  height: 24px;
 `;
+
+export const specialTableRowStyle = css({
+  lineHeight: '24px',
+});
