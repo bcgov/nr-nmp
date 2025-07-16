@@ -164,7 +164,7 @@ function CropsModal({
     // Yield validation - required and must be positive number
     if (!formData.yield) {
       newErrors.yield = 'Yield is required';
-    } else if (Number.isNaN(Number(formData.yield)) || Number(formData.yield) <= 0) {
+    } else if (Number.isFinite(formData.yield) || Number(formData.yield) <= 0) {
       newErrors.yield = 'Yield must be a valid number greater than zero';
     }
 
@@ -200,7 +200,6 @@ function CropsModal({
       newErrors.name = 'Please specify a name';
     }
 
-    console.log('formData.name', formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
