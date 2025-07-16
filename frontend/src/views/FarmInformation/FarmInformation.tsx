@@ -60,9 +60,9 @@ export default function FarmInformation() {
 
   const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
 
-  // Initialize year list
+  // Initialize year list up to current year + 1
   const yearOptions = useMemo(() => {
-    const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear() + 1;
     const yearArray = [];
 
     for (let i = currentYear; i > currentYear - 20; i -= 1) {

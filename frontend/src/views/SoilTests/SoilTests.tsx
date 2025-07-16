@@ -6,6 +6,8 @@ import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
@@ -27,18 +29,13 @@ import {
   modalPaddingStyle,
   tableActionButtonCss,
 } from '../../common.styles';
-import {
-  InputField,
-  AppTitle,
-  PageTitle,
-  ProgressStepper,
-  TabsMaterial,
-} from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
 import { InfoBox, StyledContent } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
+import monthOptions from '@/constants/MonthOptions';
 
 const EMPTY_SOIL_TEST_FORM: Omit<NMPFileSoilTestData, 'soilTestId'> = {
   sampleDate: '',
@@ -307,14 +304,13 @@ export default function SoilTests() {
                     Sample Month
                   </span>
                   <div css={{ label: { margin: '0' } }}>
-                    <InputField
-                      label=""
-                      type="month"
-                      name="sampleDate"
-                      value={formData?.sampleDate ?? 0}
+                    <ReactDatePicker
+                      selected={formData.sampleDate}
                       onChange={(e: any) => {
-                        handleFormFieldChange('sampleDate', e?.target?.value);
+                        handleFormFieldChange('sampleDate', e);
                       }}
+                      dateFormat="MM/yyyy"
+                      showMonthYearPicker
                     />
                   </div>
                 </Grid>
