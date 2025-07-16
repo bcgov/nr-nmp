@@ -14,7 +14,7 @@ import SEASON_APPLICATION from '../unseededData';
 import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-import { CropNutrients, NMPFileFieldData, Region } from '@/types';
+import { CropNutrients, NMPFileFieldData } from '@/types';
 import { NutrientManures } from '@/types/calculateNutrients';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
@@ -185,7 +185,7 @@ export default function ManureModal({
     }
     const nutrientInputs = await getNutrientInputs(
       farmManure,
-      state.nmpFile.farmDetails.FarmRegion as unknown as Region,
+      state.nmpFile.farmDetails.FarmRegion,
       manureForm.applicationRate,
       manureForm.applUnit?.toString(),
       manureForm.retentionAmmoniumN,
@@ -202,10 +202,7 @@ export default function ManureModal({
       K2O: nutrientInputs.K2O_FirstYear,
     });
     setStillReqTable({
-      N:
-        field && Array.isArray(field.Crops)
-          ? (field.Crops[0]?.reqN ?? 0) + (field.Crops[1]?.reqN ?? 0)
-          : 0,
+      N: field ? (field.Crops[0]?.reqN ?? 0) + (field.Crops[1]?.reqN ?? 0) : 0,
       P2O5: (field?.Crops?.[0]?.reqP2o5 ?? 0) + (field?.Crops?.[1]?.reqP2o5 ?? 0),
       K2O: (field?.Crops?.[0]?.reqK2o ?? 0) + (field?.Crops?.[1]?.reqK2o ?? 0),
     });

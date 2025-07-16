@@ -1,7 +1,7 @@
 import { evaluate } from 'mathjs';
 import axios from 'axios';
 import { env } from '@/env';
-import { NMPFileFarmManureData, Region } from '@/types';
+import { NMPFileFarmManureData } from '@/types';
 import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { ManureData, UnitsData } from '@/types/ManureAPI';
 
@@ -85,7 +85,7 @@ export function getDensityFactoredConversionUsingMoisture(
   return getDensityFactoredConversion(density, conversionFactor);
 }
 
-export async function GetNMineralizations(nMineralizationID: number, region: Region) {
+export async function GetNMineralizations(nMineralizationID: number, region: number) {
   if (!nMineralizationID || !region) {
     return {
       OrganicN_FirstYear: 0,
@@ -95,7 +95,7 @@ export async function GetNMineralizations(nMineralizationID: number, region: Reg
 
   try {
     const response = await axios.get(
-      `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${Number(region)}/`,
+      `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${region}/`,
     );
 
     if (!response.data || response.data.length === 0) {
@@ -123,7 +123,7 @@ export async function GetNMineralizations(nMineralizationID: number, region: Reg
 
 export async function getNutrientInputs(
   farmManure: NMPFileFarmManureData,
-  region: Region | undefined,
+  region: number | undefined,
   applicationRate: number,
   applicationRateUnit: string | undefined,
   ammoniaNRetentionPct: number | undefined,
