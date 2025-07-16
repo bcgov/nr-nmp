@@ -71,12 +71,12 @@ export type NutrientManures = {
   rate: number;
   nh4Retention: number;
   nAvail: number;
-  yrN: number;
-  yrP2O5: number;
-  yrK2O: number;
-  ltN: number;
-  ltP2O5: number;
-  ltK2O: number;
+  reqN: number;
+  reqP2o5: number;
+  reqK2o: number;
+  remN: number;
+  remP2o5: number;
+  remK2o: number;
 };
 
 export type NMPNutrients = {

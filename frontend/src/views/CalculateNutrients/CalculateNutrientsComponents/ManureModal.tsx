@@ -145,12 +145,12 @@ export default function ManureModal({
       rate: manureForm.applicationRate,
       nh4Retention: manureForm.retentionAmmoniumN,
       nAvail: manureForm.organicNAvailable,
-      yrN: availableThisYearTable?.N || 0,
-      yrP2O5: availableThisYearTable?.P2O5 || 0,
-      yrK2O: availableThisYearTable?.K2O || 0,
-      ltN: availableLongTermTable?.N || 0,
-      ltP2O5: availableLongTermTable?.P2O5 || 0,
-      ltK2O: availableLongTermTable?.K2O || 0,
+      reqN: availableThisYearTable?.N || 0,
+      reqP2o5: availableThisYearTable?.P2O5 || 0,
+      reqK2o: availableThisYearTable?.K2O || 0,
+      remN: availableLongTermTable?.N || 0,
+      remP2o5: availableLongTermTable?.P2O5 || 0,
+      remK2o: availableLongTermTable?.K2O || 0,
     };
 
     // Update the fields array
