@@ -1,283 +1,260 @@
 /**
- * @summary This is the Add Animal list Tab
+ * @summary This is the modal for the Storage page
  */
-import { ComponentProps, FormEvent, Key, useEffect, useState } from 'react';
+import { Key, useState, useMemo, FormEvent } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
   Button,
   ButtonGroup,
-  Dialog,
-  Modal,
+  Checkbox,
+  CheckboxGroup,
   Form,
   Select,
   TextField,
 } from '@bcgov/design-system-react-components';
-import { formCss, modalHeaderStyle, modalPaddingStyle } from '../../common.styles';
-import manureTypeOptions from '@/constants/ManureTypeOptions';
+import { formCss } from '../../common.styles';
+import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { booleanChecker } from '@/utils/utils';
-import { NMPFileManureStorageSystemsData } from '@/types';
+import { ManureInSystem, ManureStorage, NMPFileManureStorageSystem } from '@/types';
+import DEFAULT_NMPFILE_MANURE_STORAGE from '@/constants/DefaultNMPFileManureStorage';
+import { Modal } from '@/components/common';
+import { ModalProps } from '@/components/common/Modal/Modal';
 
 type ModalComponentProps = {
-  initialModalData: NMPFileManureStorageSystemsData;
-  handleSubmit: (formData: NMPFileManureStorageSystemsData) => void;
-  storageList: any;
+  initialModalData: NMPFileManureStorageSystem | undefined;
+  rowEditIndex: number | undefined;
+  unassignedManures: ManureInSystem[];
   handleDialogClose: () => void;
 };
 
 export default function StorageModal({
   initialModalData,
-  handleSubmit,
-  storageList,
+  rowEditIndex,
+  unassignedManures,
   handleDialogClose,
   ...props
-}: ModalComponentProps & ComponentProps<typeof Modal>) {
-  const { state } = useAppState();
-  const [formData, setFormData] = useState<NMPFileManureStorageSystemsData>(initialModalData);
-  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.Name);
+}: ModalComponentProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+  const { state, dispatch } = useAppState();
+  const [formData, setFormData] = useState<NMPFileManureStorageSystem>(
+    initialModalData || DEFAULT_NMPFILE_MANURE_STORAGE,
+  );
+  // Need to maintain a string[] for the CheckboxGroup
+  const selectedManureNames = useMemo(
+    () => formData.manuresInSystem.map((m) => m.data.ManagedManureName),
+    [formData],
+  );
+  const [fullManureList, setFullManureList] = useState<ManureInSystem[]>(
+    [...unassignedManures, ...formData.manuresInSystem].sort((a, b) =>
+      a.data.ManagedManureName.localeCompare(b.data.ManagedManureName),
+    ),
+  );
 
-  const [manureList, setManureList] = useState<
-    { id: string; label: string; manure: any; selected: boolean }[]
-  >([]);
+  const availableManures: ManureInSystem[] = useMemo(
+    () => fullManureList.filter((m) => m.data.ManureType === formData.manureType),
+    [formData, fullManureList],
+  );
 
-  // gets imported and generated manures then filters manures based on manure type
-  useEffect(() => {
-    const imported = state.nmpFile.years[0]?.ImportedManures ?? [];
-    const generated = state.nmpFile.years[0]?.GeneratedManures ?? [];
-    const manures = [...imported, ...generated];
-
-    const filteredManures = manures.filter(
-      (manure) => manure.ManureTypeName === formData?.ManureMaterialType,
-    );
-
-    const items = filteredManures.map((manure, index) => ({
-      id: `${manure.UniqueMaterialName}-${index}`,
-      label: manure.ManagedManureName ?? '',
-      manure,
-      selected: false,
-    }));
-
-    setManureList(items);
-  }, [formData?.ManureMaterialType, state.nmpFile.years]);
-
-  const notUniqueNameCheck = () => {
-    if (isEditingExistingEntry) return false;
-    return storageList.some((ele: NMPFileManureStorageSystemsData) => ele.Name === formData.Name);
-  };
-
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    // Prevent default browser page refresh.
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (notUniqueNameCheck()) {
-      console.error('not unique name');
+    const newList = [...(state.nmpFile.years[0].ManureStorageSystems || [])];
+    if (rowEditIndex !== undefined) {
+      newList[rowEditIndex] = formData;
     } else {
-      handleSubmit(formData);
-      handleDialogClose();
+      newList.push(formData);
     }
+    dispatch({
+      type: 'SAVE_MANURE_STORAGE_SYSTEMS',
+      year: state.nmpFile.farmDetails.Year!,
+      newManureStorageSystems: newList,
+    });
+    handleDialogClose();
   };
 
-  const handleInputChange = (name: string, value: string | number | boolean | undefined) => {
-    if (name === 'ManuresIncludedInSystem') {
-      const cleanValue = value?.toString().split('-');
-      const selectedManure = manureList.find(
-        (item) => item.manure.UniqueMaterialName === cleanValue?.[0],
-      );
-      const isGenerated = state.nmpFile.years[0]?.GeneratedManures?.some(
-        (m: any) => m.UniqueMaterialName === selectedManure?.label,
-      );
-      const updatedManureEntry = {
-        Type: isGenerated ? 'Generated' : 'Imported',
-        Data: selectedManure?.manure,
-      };
-      setFormData((prev: any) => ({
-        ...prev,
-        ManuresIncludedInSystem: [updatedManureEntry],
-      }));
-      return;
-    }
+  const handleInputChange = (
+    changes: Partial<Omit<NMPFileManureStorageSystem, 'manureStorageStructures'>>,
+  ) => {
+    setFormData((prev) => ({ ...prev, ...changes }));
+  };
 
-    if (name.includes('ManureStorageStructures')) {
-      const key = name.split('.');
-      setFormData((prev: any) => {
-        const updated = { ...prev };
-        updated.ManureStorageStructures = {
-          ...prev.ManureStorageStructures,
-          [key[1]]: value,
-        };
-        return updated;
-      });
-      return;
-    }
+  const handleSelectedChange = (selected: string[]) => {
+    const selectedManures: ManureInSystem[] = [];
+    setFullManureList((prev) =>
+      prev.map((manure) => {
+        let newManure: ManureInSystem;
+        if (selected.includes(manure.data.ManagedManureName)) {
+          newManure = { ...manure, data: { ...manure.data, AssignedToStoredSystem: true } };
+          selectedManures.push(newManure);
+        } else {
+          newManure = { ...manure, data: { ...manure.data, AssignedToStoredSystem: false } };
+        }
+        return newManure;
+      }),
+    );
+    setFormData((prev) => ({ ...prev, manuresInSystem: selectedManures }));
+  };
 
-    setFormData((prev: NMPFileManureStorageSystemsData) => ({
+  const handleStorageChange = (changes: Partial<ManureStorage>) => {
+    // TODO: Adapt this to work with multiple storages. I think this version of the modal always edits the 1st storage?
+    setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      manureStorageStructures: { ...prev.manureStorageStructures, ...changes },
     }));
   };
 
   return (
-    <Modal {...props}>
-      <Dialog
-        isCloseable
-        role="dialog"
-        aria-labelledby="add-storage-dialog"
+    <Modal
+      onOpenChange={handleDialogClose}
+      title="Storage System Details"
+      {...props}
+    >
+      <Form
+        css={formCss}
+        onSubmit={handleSubmit}
       >
-        <div css={modalPaddingStyle}>
-          <span css={modalHeaderStyle}>Storage System Details</span>
-          <Divider
-            aria-hidden="true"
-            component="div"
-            css={{ marginTop: '0.5rem', marginBottom: '0.5rem' }}
-          />
-          <Form
-            css={formCss}
-            onSubmit={onSubmit}
+        <Grid
+          container
+          spacing={2}
+          size={12}
+        >
+          <Grid
+            container
+            size={12}
+            direction="row"
           >
             <Grid
               container
-              spacing={2}
-              size={12}
+              size={5}
             >
-              <Grid
-                container
-                size={12}
-                direction="row"
-              >
-                <Grid
-                  container
-                  size={5}
-                >
-                  <Select
-                    isRequired
-                    label="Manure Type"
-                    selectedKey={formData?.ManureMaterialType === 1 ? 'Liquid' : 'Solid'}
-                    items={manureTypeOptions}
-                    onSelectionChange={(e: Key) => {
-                      handleInputChange('ManureMaterialType', e === 'Liquid' ? 1 : 2);
-                    }}
-                  />
-                  <TextField
-                    isRequired
-                    label="System Name"
-                    type="string"
-                    name="Name"
-                    value={formData.Name}
-                    onChange={(e) => {
-                      handleInputChange('Name', e);
-                    }}
-                  />
-                </Grid>
-                <Grid size={6}>
-                  <Select
-                    isRequired
-                    label="Included Materials"
-                    placeholder="Select a manure type first"
-                    selectedKey={formData.ManuresIncludedInSystem?.Data?.UniqueMaterialName}
-                    items={manureList}
-                    onSelectionChange={(e) => {
-                      handleInputChange('ManuresIncludedInSystem', e);
-                    }}
-                  />
-                  {/* Todo old nmp set manure as selected in manureList */}
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                size={12}
-                direction="column"
-              >
-                <Divider
-                  aria-hidden="true"
-                  component="div"
-                  css={{ marginTop: '1rem', marginBottom: '1rem' }}
-                />
-                <Grid
-                  container
-                  size={12}
-                  direction="row"
-                >
-                  <Grid
-                    container
-                    size={5}
-                    direction="row"
-                  >
-                    <TextField
-                      isRequired
-                      label="Storage Name"
-                      type="string"
-                      name="ManureStorageStructures.Name"
-                      value={formData.ManureStorageStructures.Name}
-                      onChange={(e: any) => {
-                        handleInputChange('ManureStorageStructures.Name', e);
-                      }}
-                    />
-                  </Grid>
-                  <Grid
-                    container
-                    size={5}
-                    direction="row"
-                  >
-                    <div
-                      style={{ marginBottom: '0.15rem' }}
-                      className="bcds-react-aria-Select--Label"
-                    >
-                      Is the storage covered?
-                      <YesNoRadioButtons
-                        value={booleanChecker(formData.ManureStorageStructures.IsStructureCovered)}
-                        text=""
-                        onChange={(e: boolean) => {
-                          handleInputChange('ManureStorageStructures.IsStructureCovered', e);
-                        }}
-                        orientation="horizontal"
-                      />
-                    </div>
-                    {!formData.ManureStorageStructures.IsStructureCovered && (
-                      <TextField
-                        isRequired
-                        label="Uncovered Area of Storage (ft2)"
-                        type="number"
-                        name="ManureStorageStructures.UncoveredAreaSquareFeet"
-                        value={formData.ManureStorageStructures.UncoveredAreaSquareFeet?.toString()}
-                        onChange={(e: any) => {
-                          handleInputChange('ManureStorageStructures.UncoveredAreaSquareFeet', e);
-                        }}
-                      />
-                    )}
-                  </Grid>
-                </Grid>
-              </Grid>
+              <Select
+                isRequired
+                label="Manure Type"
+                selectedKey={formData.manureType}
+                items={MANURE_TYPE_OPTIONS}
+                onSelectionChange={(e: Key) => {
+                  handleInputChange({ manureType: e as number });
+                }}
+              />
+              <TextField
+                isRequired
+                label="System Name"
+                type="string"
+                value={formData.name}
+                onChange={(e) => {
+                  handleInputChange({ name: e });
+                }}
+              />
             </Grid>
+            <Grid size={6}>
+              <CheckboxGroup
+                isRequired
+                value={selectedManureNames}
+                onChange={handleSelectedChange}
+              >
+                {availableManures.map((manure) => (
+                  <Checkbox
+                    key={manure.data.ManagedManureName}
+                    value={manure.data.ManagedManureName}
+                  >
+                    {manure.data.ManagedManureName}
+                  </Checkbox>
+                ))}
+              </CheckboxGroup>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            size={12}
+            direction="column"
+          >
             <Divider
               aria-hidden="true"
               component="div"
               css={{ marginTop: '1rem', marginBottom: '1rem' }}
             />
-            <ButtonGroup
-              alignment="end"
-              orientation="horizontal"
+            <Grid
+              container
+              size={12}
+              direction="row"
             >
-              <Button
-                type="reset"
-                variant="secondary"
-                onPress={handleDialogClose}
-                aria-label="reset"
+              <Grid
+                container
+                size={5}
+                direction="row"
               >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                aria-label="submit"
+                <TextField
+                  isRequired
+                  label="Storage Name"
+                  type="string"
+                  name="manureStorageStructures.Name"
+                  value={formData.manureStorageStructures.name}
+                  onChange={(e: any) => {
+                    handleStorageChange({ name: e });
+                  }}
+                />
+              </Grid>
+              <Grid
+                container
+                size={5}
+                direction="row"
               >
-                Confirm
-              </Button>
-            </ButtonGroup>
-          </Form>
-        </div>
-      </Dialog>
+                <div
+                  style={{ marginBottom: '0.15rem' }}
+                  className="bcds-react-aria-Select--Label"
+                >
+                  Is the storage covered?
+                  <YesNoRadioButtons
+                    value={formData.manureStorageStructures.isStructureCovered}
+                    text=""
+                    onChange={(e: boolean) => {
+                      handleStorageChange({ isStructureCovered: e });
+                    }}
+                    orientation="horizontal"
+                  />
+                </div>
+                {!formData.manureStorageStructures.isStructureCovered && (
+                  <TextField
+                    isRequired
+                    label="Uncovered Area of Storage (ft2)"
+                    type="number"
+                    value={String(formData.manureStorageStructures.uncoveredAreaSqFt)}
+                    onChange={(e: string) => {
+                      handleStorageChange({ uncoveredAreaSqFt: Number(e) });
+                    }}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Divider
+          aria-hidden="true"
+          component="div"
+          css={{ marginTop: '1rem', marginBottom: '1rem' }}
+        />
+        <ButtonGroup
+          alignment="end"
+          orientation="horizontal"
+        >
+          <Button
+            type="reset"
+            variant="secondary"
+            onPress={handleDialogClose}
+            aria-label="reset"
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            aria-label="submit"
+          >
+            Confirm
+          </Button>
+        </ButtonGroup>
+      </Form>
     </Modal>
   );
 }

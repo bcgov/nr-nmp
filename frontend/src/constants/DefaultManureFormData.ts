@@ -2,7 +2,6 @@ import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 
 const DefaultManureFormData: NMPFileImportedManureData = {
   UniqueMaterialName: '',
-  ManureTypeName: '',
   AnnualAmount: 0,
   AnnualAmountUSGallonsVolume: 0,
   AnnualAmountCubicYardsVolume: 0,
@@ -14,7 +13,6 @@ const DefaultManureFormData: NMPFileImportedManureData = {
   Moisture: '50',
   IsMaterialStored: false,
   ManagedManureName: '',
-  ManureType: 0,
   AssignedToStoredSystem: false,
   AssignedWithNutrientAnalysis: false,
 };

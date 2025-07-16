@@ -3,7 +3,7 @@ import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import { NMPFileFieldData } from './NMPFileFieldData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
-import NMPFileManureStorageSystemsData from './NMPFileManureStorageSystemsData.ts';
+import { NMPFileManureStorageSystem } from './NMPFileManureStorageSystem';
 
 type NMPFileYear = {
   Year: string;
@@ -12,9 +12,9 @@ type NMPFileYear = {
   FarmManures?: NMPFileFarmManureData[];
   GeneratedManures?: NMPFileGeneratedManureData[];
   ImportedManures?: NMPFileImportedManureData[];
+  ManureStorageSystems?: NMPFileManureStorageSystem[];
   // Fields from old NMP, currently unused, feel free to re-add
   // SeparatedSolidManures?: any[];
-  ManureStorageSystems?: NMPFileManureStorageSystemsData[];
 };
 
 export default NMPFileYear;

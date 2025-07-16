@@ -5,7 +5,7 @@ import { FormEvent, Key, useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { ManureNutrients, NMPFileFarmManureData, ManureType } from '@/types';
+import { ManureNutrients, NMPFileFarmManureData, Manure } from '@/types';
 import { formCss, formGridBreakpoints } from '@/common.styles';
 import Form from '@/components/common/Form/Form';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -47,13 +47,13 @@ export default function NutrientAnalysisModal({
   );
   const apiCache = useContext(APICacheContext);
 
-  const [manureTypesData, setManureTypesData] = useState<ManureType[]>([]);
+  const [manureData, setManureData] = useState<Manure[]>([]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setManureTypesData(data);
+        setManureData(data);
       }
     });
   }, [apiCache]);
@@ -82,7 +82,7 @@ export default function NutrientAnalysisModal({
             next.UniqueMaterialName !== `Custom - ${next.MaterialType}`
               ? `Custom - ${value}`
               : next.UniqueMaterialName;
-          const selectedManure = manureTypesData.find((manure) => manure.name === value);
+          const selectedManure = manureData.find((manure) => manure.name === value);
           if (!selectedManure) {
             throw new Error(`Manure type "${value}" not found.`);
           }
@@ -101,9 +101,7 @@ export default function NutrientAnalysisModal({
 
         // reset nutrient values when book value is selected
         if (name === 'BookLab' && next.BookLab !== value) {
-          const selectedManure = manureTypesData.find(
-            (manure) => manure.name === next.MaterialType,
-          );
+          const selectedManure = manureData.find((manure) => manure.name === next.MaterialType);
           if (!selectedManure) {
             throw new Error(`Manure type "${value}" not found.`);
           }
@@ -165,7 +163,7 @@ export default function NutrientAnalysisModal({
             <Select
               isRequired
               name="name"
-              items={manureTypesData.map((ele) => ({ id: ele.name, label: ele.name }))}
+              items={manureData.map((ele) => ({ id: ele.name, label: ele.name }))}
               label="Manure Type"
               placeholder="Select Manure Type"
               selectedKey={formData.MaterialType}

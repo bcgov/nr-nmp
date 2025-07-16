@@ -5,12 +5,18 @@ export const PER_DAY_PER_ANIMAL_UNIT = 'PER_DAY_PER_ANIMAL';
 export const PER_DAY_UNIT = 'PER_DAY';
 export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
 
+// eslint-disable-next-line no-shadow
+export enum ManureType {
+  LIQUID = 1,
+  SOLID = 2,
+}
+
 export type BeefCattleData = {
   animalId: '1';
   subtype?: string;
   animalsPerFarm?: number;
-  daysCollected?: number | undefined;
-  manureData?: { name: string; annualSolidManure: number } | undefined;
+  daysCollected?: number;
+  manureData?: { name: string; annualSolidManure: number };
   date?: string;
 };
 
@@ -18,16 +24,15 @@ export type DairyCattleData = {
   animalId: '2';
   subtype?: string;
   breed?: string;
-  manureType?: 'liquid' | 'solid';
+  manureType?: ManureType;
   grazingDaysPerYear?: number;
   animalsPerFarm?: number;
-  milkProduction?: number | undefined;
-  washWater?: number | undefined;
-  washWaterUnit?: WashWaterUnit | undefined;
+  milkProduction?: number;
+  washWater?: number;
+  washWaterUnit?: WashWaterUnit;
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
-    | { name: string; annualSolidManure: undefined; annualLiquidManure: number }
-    | undefined;
+    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
 };
 
 export type AnimalData = BeefCattleData | DairyCattleData;

@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,8 @@ import {
   ButtonGroup as ButtonGovGroup,
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { StyledContent } from './storage.styles';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
@@ -17,83 +18,76 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
 import useAppState from '@/hooks/useAppState';
-import { NMPFileManureStorageSystemsData } from '@/types';
-import DefaultNMPFileManureStorageSystemsData from '@/constants/DefaultNMPFileManureStorage';
+import { ManureInSystem } from '@/types';
 
 export default function Storage() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [storageList, setStorageList] = useState<NMPFileManureStorageSystemsData[]>(
-    state.nmpFile.years[0]?.ManureStorageSystems || [],
-  );
-  const [storageFormData, setStorageFormData] = useState<NMPFileManureStorageSystemsData>(
-    DefaultNMPFileManureStorageSystemsData,
-  );
+
+  const generatedManures = state.nmpFile.years[0].GeneratedManures;
+  const importedManures = state.nmpFile.years[0].ImportedManures;
+  const unassignedManures = useMemo(() => {
+    const unassignedM: ManureInSystem[] = [];
+    const assignedM: ManureInSystem[] = [];
+    (generatedManures || []).forEach((manure) => {
+      if (manure.AssignedToStoredSystem) {
+        assignedM.push({ type: 'Generated', data: manure });
+      } else {
+        unassignedM.push({ type: 'Generated', data: manure });
+      }
+    });
+    (importedManures || []).forEach((manure) => {
+      if (manure.AssignedToStoredSystem) {
+        assignedM.push({ type: 'Imported', data: manure });
+      } else {
+        unassignedM.push({ type: 'Imported', data: manure });
+      }
+    });
+    return unassignedM;
+  }, [generatedManures, importedManures]);
 
   const handlePrevious = () => {
     navigate(MANURE_IMPORTS);
   };
 
-  // save to NMPFileManureStorageSystemsData
-  // either imported or generated manure do we save IsMaterialStored and AssignedToStoredSystem booleans
   const handleNext = () => {
-    dispatch({
-      type: 'SAVE_MANURE_STORAGE_SYSTEMS',
-      year: state.nmpFile.farmDetails.Year!,
-      newManureStorageSystems: storageList,
-    });
     navigate(NUTRIENT_ANALYSIS);
   };
 
   const handleDialogClose = () => {
     setRowEditIndex(undefined);
-    setStorageFormData(DefaultNMPFileManureStorageSystemsData);
     setIsDialogOpen(false);
   };
 
-  // on edit text fields dont show up
-  const handleEditRow = (e: GridRenderCellParams) => {
-    setRowEditIndex(e.row);
-    setStorageFormData(e.row);
+  const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+    setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
     setIsDialogOpen(true);
   };
 
-  const handleDeleteRow = (e: GridRenderCellParams) => {
-    setStorageList((prev) => prev.filter((ele) => ele.Name !== e.row.Name));
-  };
-
-  const handleSubmit = (formData: NMPFileManureStorageSystemsData) => {
-    setStorageList([...storageList, storageFormData]);
-    if (rowEditIndex !== undefined) {
-      // If editing, find and replace field instead of adding new field
-      setStorageList((prev) => {
-        const newList = [...prev];
-        newList[rowEditIndex] = { ...formData };
-        return newList;
+  const handleDeleteRow = useCallback(
+    (e: { id: GridRowId; api: GridApiCommunity }) => {
+      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+      const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
+      newList.splice(index, 1);
+      dispatch({
+        type: 'SAVE_MANURE_STORAGE_SYSTEMS',
+        year: state.nmpFile.farmDetails.Year!,
+        newManureStorageSystems: newList,
       });
-    } else {
-      setStorageList((prev) => [...prev, { ...formData }]);
-    }
-    handleDialogClose();
-  };
+    },
+    [state.nmpFile, dispatch],
+  );
 
   const columnsAnimalManure: GridColDef[] = useMemo(
     () => [
       {
-        field: 'Name',
+        field: 'name',
         headerName: 'System Name',
         width: 200,
         minWidth: 150,
         maxWidth: 300,
-      },
-      {
-        field: 'ManureStorageStructures[0].Name',
-        headerName: 'Storage Name',
-        width: 325,
-        minWidth: 150,
-        maxWidth: 500,
       },
       {
         field: 'actions',
@@ -119,7 +113,7 @@ export default function Storage() {
         resizable: false,
       },
     ],
-    [],
+    [handleDeleteRow],
   );
 
   return (
@@ -144,16 +138,19 @@ export default function Storage() {
             </ButtonGov>
           </ButtonGovGroup>
         </div>
-        <StorageModal
-          key={isDialogOpen.toString()}
-          initialModalData={storageFormData}
-          storageList={storageList}
-          handleDialogClose={handleDialogClose}
-          handleSubmit={handleSubmit}
-          isOpen={isDialogOpen}
-          onOpenChange={handleDialogClose}
-          isDismissable
-        />
+        {isDialogOpen && (
+          <StorageModal
+            initialModalData={
+              rowEditIndex !== undefined
+                ? state.nmpFile.years[0].ManureStorageSystems![rowEditIndex]
+                : undefined
+            }
+            rowEditIndex={rowEditIndex}
+            unassignedManures={unassignedManures}
+            handleDialogClose={handleDialogClose}
+            isOpen={isDialogOpen}
+          />
+        )}
         <TabsMaterial
           activeTab={2}
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
@@ -161,7 +158,7 @@ export default function Storage() {
       </>
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={storageList}
+        rows={state.nmpFile.years[0].ManureStorageSystems || []}
         columns={columnsAnimalManure}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
@@ -169,6 +166,16 @@ export default function Storage() {
         hideFooterPagination
         hideFooter
       />
+      <div>
+        <span>Materials Needing Storage</span>
+        <br />
+        {unassignedManures.map((m) => (
+          <>
+            <span key={m.data.ManagedManureName}>{m.data.ManagedManureName}</span>
+            <br />
+          </>
+        ))}
+      </div>
       <ButtonGroup
         alignment="start"
         ariaLabel="A group of buttons"
