@@ -90,7 +90,7 @@ export default function DairyCattle({
     } else {
       extraCoefficient = breed.breedmanurefactor;
     }
-    console.log('dairyCattle', formData);
+
     let withManureCalc: DairyCattleData;
     if (formData.manureType === 'liquid') {
       withManureCalc = {

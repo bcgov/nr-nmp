@@ -58,3 +58,5 @@ export const customTableStyle = {
     whiteSpace: 'break-spaces',
   },
 };
+
+export const ROW_HEIGHT = 32;

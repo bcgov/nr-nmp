@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useMemo } from 'react';
-import { customTableStyle } from '../reporting.styles';
+import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
 import {
   NMPFileImportedManureData,
   NMPFileGeneratedManureData,
@@ -65,7 +65,6 @@ export default function ManureCompostInventory({
           'AnnualAmountDisplayVolume' in ele ? ele!.AnnualAmountDisplayVolume : undefined,
       });
       if (ele.UniqueMaterialName === 'Milking Cow') {
-        console.log(ele, FarmAnimals);
         const washWaterGallons = (
           FarmAnimals.find(
             (animalEle) => animalEle.manureId === (ele as any).manureId,
@@ -110,6 +109,7 @@ export default function ManureCompostInventory({
         rows={totalTable}
         columns={TABLE_COLUMNS}
         getRowId={() => crypto.randomUUID()}
+        rowHeight={ROW_HEIGHT}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
