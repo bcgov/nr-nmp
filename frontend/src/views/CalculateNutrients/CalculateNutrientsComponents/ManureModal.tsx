@@ -202,7 +202,7 @@ export default function ManureModal({
       K2O: nutrientInputs.K2O_FirstYear,
     });
     setStillReqTable({
-      N: field ? (field.Crops[0]?.reqN ?? 0) + (field.Crops[1]?.reqN ?? 0) : 0,
+      N: (field.Crops[0]?.reqN ?? 0) + (field.Crops[1]?.reqN ?? 0),
       P2O5: (field?.Crops?.[0]?.reqP2o5 ?? 0) + (field?.Crops?.[1]?.reqP2o5 ?? 0),
       K2O: (field?.Crops?.[0]?.reqK2o ?? 0) + (field?.Crops?.[1]?.reqK2o ?? 0),
     });
