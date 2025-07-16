@@ -765,8 +765,6 @@ function CropsModal({
             variant="primary"
             onPress={handleCalculate}
             isDisabled={
-              // TODO: Hide button and enable Submit if this is a custom crop
-              // If other crop hide button
               selectedCropType?.id === CROP_TYPE_OTHER_ID ||
               selectedCropType === undefined ||
               (selectedCrop === undefined && !selectedCropType.customcrop)
