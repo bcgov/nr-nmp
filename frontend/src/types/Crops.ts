@@ -71,6 +71,16 @@ export type NMPFileSoilTestData = {
   sampleDate?: Date;
 };
 
+export type FormErrors = {
+  sampleDate?: string;
+  valNO3H?: string;
+  valP?: string;
+  valK?: string;
+  valPH?: string;
+  convertedKelownaK?: string;
+  convertedKelownaP?: string;
+};
+
 export interface NMPFileCropData extends CalculateNutrientsColumn {
   cropId: number;
   cropTypeId: number;

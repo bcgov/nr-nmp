@@ -35,10 +35,10 @@ import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/ty
 import { InfoBox, StyledContent } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
-import monthOptions from '@/constants/MonthOptions';
+import { FormErrors } from '@/types/Crops';
 
 const EMPTY_SOIL_TEST_FORM: Omit<NMPFileSoilTestData, 'soilTestId'> = {
-  sampleDate: '',
+  sampleDate: undefined,
   valNO3H: '',
   valP: '',
   valK: '',
@@ -60,8 +60,7 @@ export default function SoilTests() {
 
   const [formData, setFormData] =
     useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
-  const [formErrors, setFormErrors] =
-    useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
+  const [formErrors, setFormErrors] = useState<Omit<FormErrors, 'soilTestId'>>({});
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleEditRow = useCallback(
@@ -87,7 +86,7 @@ export default function SoilTests() {
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setFormErrors(EMPTY_SOIL_TEST_FORM);
+    setFormErrors({});
     setFormData(EMPTY_SOIL_TEST_FORM);
   };
 
@@ -192,7 +191,11 @@ export default function SoilTests() {
       {
         field: 'SoilTest',
         headerName: 'Sampling Month',
-        valueGetter: (_value, row) => row?.SoilTest?.sampleDate,
+        valueGetter: (_value, row) =>
+          row?.SoilTest?.sampleDate.toLocaleDateString('en-CA', {
+            year: 'numeric',
+            month: 'long',
+          }),
         width: 150,
         minWidth: 150,
         maxWidth: 300,
