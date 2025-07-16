@@ -3,27 +3,56 @@ import axios from 'axios';
 import { env } from '@/env';
 import { NMPFileFarmManureData, Region } from '@/types';
 import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
+import { ManureData, UnitsData } from '@/types/ManureAPI';
 
-export function getManure(id: number): Promise<any> {
-  return axios.get(`${env.VITE_BACKEND_URL}/api/manures/${id}`).then((response) => response.data);
+export async function getManure(id: number): Promise<ManureData> {
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/manures/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to fetch manure with id ${id}:`, error);
+    throw error;
+  }
 }
 
-export function getManures(): Promise<any> {
-  return axios.get(`${env.VITE_BACKEND_URL}/api/manures/`).then((response) => response.data);
+export async function getManures(): Promise<ManureData[]> {
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/manures/`);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch manures:', error);
+    throw error;
+  }
 }
 
-export async function getManuresByName(manureName: string | undefined): Promise<any> {
-  const manures = await getManures();
-  return manures.find((manure: any) => manure.name === manureName);
+export async function getManuresByName(manureName: string): Promise<ManureData | undefined> {
+  try {
+    const manures = await getManures();
+    return manures.find((manure: ManureData) => manure.name === manureName);
+  } catch (error) {
+    console.error(`Failed to fetch manure by name ${manureName}:`, error);
+    throw error;
+  }
 }
 
-export function getUnits(): Promise<any> {
-  return axios.get(`${env.VITE_BACKEND_URL}/api/units/`).then((response) => response.data);
+export async function getUnits(): Promise<UnitsData[]> {
+  try {
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/units/`);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch units:', error);
+    throw error;
+  }
 }
 
-export async function getUnitByName(unitName: string | undefined): Promise<any> {
-  const units = await getUnits();
-  return units.find((unit: any) => unit.name === unitName);
+export async function getUnitByName(unitName: string | undefined): Promise<UnitsData | undefined> {
+  try {
+    const units = await getUnits();
+    return units.find((unit: any) => unit.name === unitName);
+  } catch (error) {
+    console.error(`Failed to fetch unit by name ${unitName}:`, error);
+    throw error;
+  }
 }
 
 export function getDensity(moistureWholePercent: number): number {
@@ -56,31 +85,40 @@ export function getDensityFactoredConversionUsingMoisture(
   return getDensityFactoredConversion(density, conversionFactor);
 }
 
-export async function GetNMineralizations(
-  nMineralizationID: number | undefined,
-  region: Region | undefined,
-) {
+export async function GetNMineralizations(nMineralizationID: number, region: Region) {
   if (!nMineralizationID || !region) {
     return {
       OrganicN_FirstYear: 0,
       OrganicN_LongTerm: 0,
     };
   }
-  const response = await axios.get(
-    `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${Number(region)}/`,
-  );
 
-  if (!response.data || response.data.length === 0) {
+  try {
+    const response = await axios.get(
+      `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${Number(region)}/`,
+    );
+
+    if (!response.data || response.data.length === 0) {
+      return {
+        OrganicN_FirstYear: 0,
+        OrganicN_LongTerm: 0,
+      };
+    }
+    const nMineralization = response.data[0];
+    return {
+      OrganicN_FirstYear: nMineralization.firstyearvalue,
+      OrganicN_LongTerm: nMineralization.longtermvalue,
+    };
+  } catch (error) {
+    console.error(
+      `Failed to fetch N mineralizations for ID ${nMineralizationID} and region ${region}:`,
+      error,
+    );
     return {
       OrganicN_FirstYear: 0,
       OrganicN_LongTerm: 0,
     };
   }
-  const nMineralization = response.data[0];
-  return {
-    OrganicN_FirstYear: nMineralization.firstyearvalue,
-    OrganicN_LongTerm: nMineralization.longtermvalue,
-  };
 }
 
 export async function getNutrientInputs(
@@ -100,100 +138,103 @@ export async function getNutrientInputs(
     K2O_LongTerm: 0,
   };
 
-  const conversionFactors = await getConversionFactors();
+  try {
+    const conversionFactors = await getConversionFactors();
 
-  const potassiumAvailabilityFirstYear = conversionFactors?.potassiumavailabilityfirstyear ?? 0;
-  const potassiumAvailabilityLongTerm = conversionFactors?.potassiumavailabilitylongterm ?? 0;
-  const potassiumKtoK2Oconversion = conversionFactors?.potassiumktok2oconversion ?? 0;
-  const phosphorousAvailabilityFirstYear = conversionFactors?.phosphorousavailabilityfirstyear ?? 0;
-  const phosphorousAvailabilityLongTerm = conversionFactors?.phosphorousavailabilitylongterm ?? 0;
-  const phosphorousPtoP2O5Kconversion = conversionFactors?.phosphorousptop2o5conversion ?? 0;
-  const lbPerTonConversion = conversionFactors?.poundpertonconversion ?? 1;
-  const tenThousand = 10000;
-  const unit = await getUnitByName(applicationRateUnit);
-  const conversion = unit && unit.ConversionlbTon ? unit.ConversionlbTon : 1; // Default to 1 if conversion is not defined
+    const potassiumAvailabilityFirstYear = conversionFactors?.potassiumavailabilityfirstyear ?? 0;
+    const potassiumAvailabilityLongTerm = conversionFactors?.potassiumavailabilitylongterm ?? 0;
+    const potassiumKtoK2Oconversion = conversionFactors?.potassiumktok2oconversion ?? 0;
+    const phosphorousAvailabilityFirstYear =
+      conversionFactors?.phosphorousavailabilityfirstyear ?? 0;
+    const phosphorousAvailabilityLongTerm = conversionFactors?.phosphorousavailabilitylongterm ?? 0;
+    const phosphorousPtoP2O5Kconversion = conversionFactors?.phosphorousptop2o5conversion ?? 0;
+    const lbPerTonConversion = conversionFactors?.poundpertonconversion ?? 1;
+    const tenThousand = 10000;
+    const unit = await getUnitByName(applicationRateUnit);
+    const conversion = unit && unit.conversionlbton ? unit.conversionlbton : 1;
 
-  let adjustedApplicationRate = applicationRate;
+    let adjustedApplicationRate = applicationRate;
 
-  if (
-    unit.Id === 6 &&
-    farmManure &&
-    farmManure.Nutrients.SolidLiquid &&
-    farmManure.Nutrients.SolidLiquid.toUpperCase() === 'SOLID'
-  ) {
-    const manure = await getManure(farmManure.Nutrients.ManureId);
-    adjustedApplicationRate = applicationRate * manure.CubicYardConversion;
+    if (
+      unit &&
+      unit.id === 6 &&
+      farmManure &&
+      farmManure.Nutrients.SolidLiquid &&
+      farmManure.Nutrients.SolidLiquid.toUpperCase() === 'SOLID'
+    ) {
+      const manure = await getManure(farmManure.Nutrients.ManureId);
+      adjustedApplicationRate = applicationRate * manure.cubicyardconversion;
+    }
+
+    // get potassium first year and long term
+    if (farmManure && farmManure.Nutrients.K2O !== undefined) {
+      nutrientInputs.K2O_FirstYear = Math.round(
+        adjustedApplicationRate *
+          farmManure.Nutrients.K2O *
+          lbPerTonConversion *
+          potassiumKtoK2Oconversion *
+          potassiumAvailabilityFirstYear *
+          conversion,
+      );
+      nutrientInputs.K2O_LongTerm = Math.round(
+        adjustedApplicationRate *
+          farmManure.Nutrients.K2O *
+          lbPerTonConversion *
+          potassiumKtoK2Oconversion *
+          potassiumAvailabilityLongTerm *
+          conversion,
+      );
+    }
+
+    // get phosphorous first year and long term
+    if (farmManure && farmManure.Nutrients.P2O5 !== undefined) {
+      nutrientInputs.P2O5_FirstYear = Math.round(
+        adjustedApplicationRate *
+          farmManure.Nutrients.P2O5 *
+          lbPerTonConversion *
+          phosphorousPtoP2O5Kconversion *
+          phosphorousAvailabilityFirstYear *
+          conversion,
+      );
+      nutrientInputs.P2O5_LongTerm = Math.round(
+        adjustedApplicationRate *
+          farmManure.Nutrients.P2O5 *
+          lbPerTonConversion *
+          phosphorousPtoP2O5Kconversion *
+          phosphorousAvailabilityLongTerm *
+          conversion,
+      );
+    }
+
+    // get nitrogen first year and long term
+    const organicN =
+      Number(farmManure?.Nutrients.N || 0) - Number(farmManure?.Nutrients.NH4N || 0) / tenThousand;
+
+    const manure = await getManuresByName(farmManure?.MaterialType ?? '');
+    const nMineralizationID = manure?.nmineralizationid;
+    let nOrganicMineralizations = { OrganicN_FirstYear: 0, OrganicN_LongTerm: 0 };
+    if (region !== undefined) {
+      nOrganicMineralizations = await GetNMineralizations(nMineralizationID ?? 0, region);
+    }
+    nOrganicMineralizations.OrganicN_FirstYear = (organicNAvailable ?? 0) / 100;
+
+    const ammoniaRetention = (ammoniaNRetentionPct ?? 0) / 100;
+
+    const a = ((farmManure?.Nutrients.NH4N ?? 0) / tenThousand) * ammoniaRetention;
+
+    const b1 = organicN * nOrganicMineralizations.OrganicN_FirstYear;
+    const c1 = a + b1 + Number(farmManure?.Nutrients.N || 0) / tenThousand;
+    const nFirstYear = c1 * lbPerTonConversion;
+    nutrientInputs.N_FirstYear = Math.round(applicationRate * nFirstYear * conversion);
+
+    const b2 = organicN * nOrganicMineralizations.OrganicN_LongTerm;
+    const c2 = a + b2 + Number(farmManure?.Nutrients.N || 0) / tenThousand;
+    const nLongTerm = c2 * lbPerTonConversion;
+    nutrientInputs.N_LongTerm = Math.round(applicationRate * nLongTerm * conversion);
+
+    return nutrientInputs;
+  } catch (error) {
+    console.error('Failed to calculate nutrient inputs:', error);
+    return nutrientInputs;
   }
-
-  // get potassium first year and long term
-  if (farmManure && farmManure.Nutrients.K2O !== undefined) {
-    nutrientInputs.K2O_FirstYear = Math.floor(
-      adjustedApplicationRate *
-        farmManure.Nutrients.K2O *
-        lbPerTonConversion *
-        potassiumKtoK2Oconversion *
-        potassiumAvailabilityFirstYear *
-        conversion,
-    );
-    nutrientInputs.K2O_LongTerm = Math.floor(
-      adjustedApplicationRate *
-        farmManure.Nutrients.K2O *
-        lbPerTonConversion *
-        potassiumKtoK2Oconversion *
-        potassiumAvailabilityLongTerm *
-        conversion,
-    );
-  }
-
-  // get phosphorous first year and long term
-  if (farmManure && farmManure.Nutrients.P2O5 !== undefined) {
-    nutrientInputs.P2O5_FirstYear = Math.floor(
-      adjustedApplicationRate *
-        farmManure.Nutrients.P2O5 *
-        lbPerTonConversion *
-        phosphorousPtoP2O5Kconversion *
-        phosphorousAvailabilityFirstYear *
-        conversion,
-    );
-    nutrientInputs.P2O5_LongTerm = Math.floor(
-      adjustedApplicationRate *
-        farmManure.Nutrients.P2O5 *
-        lbPerTonConversion *
-        phosphorousPtoP2O5Kconversion *
-        phosphorousAvailabilityLongTerm *
-        conversion,
-    );
-  }
-
-  // get nitrogen first year and long term
-  const organicN =
-    Number(farmManure?.Nutrients.N || 0) - Number(farmManure?.Nutrients.NH4N || 0) / tenThousand;
-
-  const manure = await getManuresByName(farmManure?.MaterialType);
-  const nMineralizationID = manure?.nmineralizationid;
-  const nOrganicMineralizations = await GetNMineralizations(nMineralizationID, region);
-
-  nOrganicMineralizations.OrganicN_FirstYear = (organicNAvailable ?? 0) / 100;
-
-  const ammoniaRetention = (ammoniaNRetentionPct ?? 0) / 100;
-
-  const a = ((farmManure?.Nutrients.NH4N ?? 0) / tenThousand) * ammoniaRetention;
-
-  const b1 = organicN * nOrganicMineralizations.OrganicN_FirstYear;
-
-  const c1 = a + b1 + Number(farmManure?.Nutrients.N || 0) / tenThousand;
-
-  const nFirstYear = c1 * lbPerTonConversion;
-
-  nutrientInputs.N_FirstYear = Math.floor(applicationRate * nFirstYear * conversion);
-
-  const b2 = organicN * nOrganicMineralizations.OrganicN_LongTerm;
-
-  const c2 = a + b2 + Number(farmManure?.Nutrients.N || 0) / tenThousand;
-
-  const nLongTerm = c2 * lbPerTonConversion;
-
-  nutrientInputs.N_LongTerm = Math.floor(applicationRate * nLongTerm * conversion);
-
-  return nutrientInputs;
 }
