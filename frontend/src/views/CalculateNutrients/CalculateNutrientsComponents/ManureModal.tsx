@@ -32,7 +32,7 @@ type AddManureModalProps = {
   initialModalData: ManureFormFields | undefined;
   farmManures: NMPFileFarmManureData[];
   rowEditIndex: number | undefined;
-  field: NMPFileFieldData | undefined;
+  field: NMPFileFieldData;
   setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
 };
@@ -141,8 +141,6 @@ export default function ManureModal({
 
     // Create new nutrient manure entry
     const newNutrientManure: NutrientManures = {
-      id: Date.now(),
-      custom: false,
       manureId: selectedFarmManure.Nutrients.ManureId || 0,
       applicationId: Number(manureForm.applicationMethod) || 0,
       unitId: Number(manureForm.applUnit) || 0,
@@ -182,8 +180,13 @@ export default function ManureModal({
   };
 
   const handleCalculate = async () => {
+    const farmManure = state.nmpFile?.years?.[0]?.FarmManures?.[0];
+    if (!farmManure) {
+      console.error('No farm manure data available for calculation.');
+      return;
+    }
     const nutrientInputs = await getNutrientInputs(
-      state.nmpFile?.years?.[0]?.FarmManures?.[0],
+      farmManure,
       state.nmpFile.farmDetails.FarmRegion as unknown as Region,
       manureForm.applicationRate,
       manureForm.applUnit?.toString(),

@@ -65,8 +65,6 @@ export interface ManureNutrients extends CropNutrients {
 }
 
 export type NutrientManures = {
-  id: number;
-  custom: boolean;
   manureId: number;
   applicationId: number;
   unitId: number;

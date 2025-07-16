@@ -122,7 +122,7 @@ export async function GetNMineralizations(nMineralizationID: number, region: Reg
 }
 
 export async function getNutrientInputs(
-  farmManure: NMPFileFarmManureData | undefined,
+  farmManure: NMPFileFarmManureData,
   region: Region | undefined,
   applicationRate: number,
   applicationRateUnit: string | undefined,
