@@ -14,7 +14,7 @@ const DEFAULT_NMPFILE_CROPS: NMPFileCropData = {
   remK2o: 0,
   crudeProtein: 0,
   prevCropId: 0,
-  coverCropHarvested: null,
+  nCredit: 0,
 };
 
 export default DEFAULT_NMPFILE_CROPS;
