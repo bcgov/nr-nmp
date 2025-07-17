@@ -90,33 +90,21 @@ export default function CalculateNutrients() {
   }, [activeField]);
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
-    const cropAndOtherRows = [
+    const allRows = [
       ...fieldList[activeField].Crops,
       ...fieldList[activeField].Fertilizers,
       ...fieldList[activeField].OtherNutrients,
+      ...fieldList[activeField].Nutrients.nutrientManures,
     ];
-    const manureRows = fieldList[activeField].Nutrients.nutrientManures;
 
     return {
       name: 'Balance',
-      reqN:
-        cropAndOtherRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0) +
-        manureRows.reduce((sum, manure) => sum + (manure.reqN ?? 0), 0),
-      reqP2o5:
-        cropAndOtherRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0) +
-        manureRows.reduce((sum, manure) => sum + (manure.reqP2o5 ?? 0), 0),
-      reqK2o:
-        cropAndOtherRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0) +
-        manureRows.reduce((sum, manure) => sum + (manure.reqK2o ?? 0), 0),
-      remN:
-        cropAndOtherRows.reduce((sum, row) => sum + (row.remN ?? 0), 0) +
-        manureRows.reduce((sum, manure) => sum + (manure.remN ?? 0), 0),
-      remP2o5:
-        cropAndOtherRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0) +
-        manureRows.reduce((sum, manure) => sum + (manure.remP2o5 ?? 0), 0),
-      remK2o:
-        cropAndOtherRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0) +
-        manureRows.reduce((sum, manure) => sum + (manure.remK2o ?? 0), 0),
+      reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
+      reqP2o5: allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
+      reqK2o: allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
+      remN: allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0),
+      remP2o5: allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
+      remK2o: allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
     };
   }, [fieldList, activeField]);
 

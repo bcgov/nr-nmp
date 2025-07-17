@@ -45,7 +45,7 @@ export async function getUnits(): Promise<UnitsData[]> {
   }
 }
 
-export async function getUnitByName(unitName: string | undefined): Promise<UnitsData | undefined> {
+export async function getUnitByName(unitName: string): Promise<UnitsData | undefined> {
   try {
     const units = await getUnits();
     return units.find((unit: any) => unit.name === unitName);
@@ -154,7 +154,7 @@ export async function getNutrientInputs(
     const tenThousand = 10000;
 
     // Get application rate unit conversion factor
-    const applicationUnit = await getUnitByName(applicationRateUnit);
+    const applicationUnit = await getUnitByName(applicationRateUnit ?? '');
     const unitConversionFactor =
       applicationUnit && applicationUnit.conversionlbton ? applicationUnit.conversionlbton : 1;
 
