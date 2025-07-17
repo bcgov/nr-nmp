@@ -43,6 +43,8 @@ MODEL_MAPPINGS = {
     "_SoilTestPotassiumKelownaRanges": "crops.soiltestpotassiumkelownaranges",
     "_SoilTestPotassiumRecommendation": "crops.soiltestpotassiumrecommendation",
     "_Previous_Crop_Types": "crops.previouscroptypes",
+    "_Units": "manures.units",
+    "_NMineralizations": "manures.nmineralization",
 }
 
 
