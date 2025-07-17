@@ -1,0 +1,7 @@
+id,name,nutrientContentUnits,conversionlbTon,nutrientRateUnits,costUnits,costApplications,dollarUnitArea,valueMaterialUnits,valueN,valueP2O5,valueK2O,farmReqdNutrientsStdUnitsConversion,farmReqdNutrientsStdUnitsAreaConversion,solidLiquid
+1,imp. gallons/ac,lb/1000 imp. gal,0.005,lb/ac,$/imp. gallon,0.015,/ac,$/lb,0.7,0.75,0.6,1.200949926,1,Liquid
+2,m3/ha,kg/m3,0.445091798,kg/ha,$/m3,0.003,/ha,$/kg,1.54,1.65,1.32,264.1720524,0.404685642,Liquid
+3,US gallons/ac,lb/1000 US gal,0.004163369,lb/ac,$/US gallon,0.012,/ac,$/lb,0.7,0.75,0.6,1,1,Liquid
+4,tons/ac,lb/ton,1,lb/ac,$/ton,4,/ac,$/lb,0.7,0.75,0.6,1,1,Solid
+5,tonnes/ha,kg/tonne,0.5,kg/ha,$/tonne,4.4,/ha,$/kg,1.54,1.65,1.32,1.102311311,0.404685642,Solid
+6,yards²/ac,nutrient_content_units,1,nutrient_rate_units,cost_units,0,dollar_unit_area,value_material_units,0,0,0,-1,1,Solid

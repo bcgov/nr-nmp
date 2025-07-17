@@ -25,6 +25,8 @@ const EMPTY_MANURE_NUTRIENTS: ManureNutrients = {
   NH4N: 0,
   P2O5: 0,
   K2O: 0,
+  ManureId: 0,
+  SolidLiquid: '',
 };
 
 const EMPTY_MANURE_DATA: NMPFileFarmManureData = {
@@ -93,6 +95,8 @@ export default function NutrientAnalysisModal({
             NH4N: selectedManure.ammonia,
             P2O5: selectedManure.phosphorous,
             K2O: selectedManure.potassium,
+            ManureId: selectedManure.id,
+            SolidLiquid: selectedManure.solidLiquid || '',
           };
           next.MaterialType = value ? value.toString() : '';
           next.UniqueMaterialName = updatedUniqueMaterialName;
@@ -109,11 +113,13 @@ export default function NutrientAnalysisModal({
           }
           next.BookLab = value ? value.toString() : '';
           next.Nutrients = {
+            ManureId: selectedManure.id,
             Moisture: String(selectedManure.moisture),
             N: selectedManure.nitrogen,
             NH4N: selectedManure.ammonia,
             P2O5: selectedManure.phosphorous,
             K2O: selectedManure.potassium,
+            SolidLiquid: selectedManure.solidLiquid,
           };
         }
 
