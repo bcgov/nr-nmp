@@ -1,11 +1,14 @@
-import { BEEF_COW_ID, BeefCattleData, DAIRY_COW_ID, DairyCattleData } from '@/types';
+import { BEEF_COW_ID, BeefCattleData, DAIRY_COW_ID, DairyCattleData, MANURE_SOLID } from '@/types';
 
 export const INITIAL_BEEF_FORM_DATA: BeefCattleData = {
   animalId: BEEF_COW_ID,
   subtype: '',
   animalsPerFarm: undefined,
   daysCollected: 0,
+  manureType: MANURE_SOLID,
   manureData: undefined,
+  // unique UUID to link animal to to the manure it generates
+  manureId: null,
 };
 
 export const INITIAL_DAIRY_FORM_DATA: DairyCattleData = {
@@ -21,4 +24,5 @@ export const INITIAL_DAIRY_FORM_DATA: DairyCattleData = {
   washWater: undefined,
   washWaterUnit: undefined,
   manureData: undefined,
+  manureId: null,
 };

@@ -5,7 +5,7 @@ import { booleanChecker } from '@/utils/utils';
 import { APICacheContext } from '@/context/APICacheContext';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
 import { findBalanceMessage } from '@/views/CalculateNutrients/utils';
-import { customTableStyle, Message } from '../reporting.styles';
+import { customTableStyle, Message, ROW_HEIGHT } from '../reporting.styles';
 import { NutrientMessage } from '@/views/CalculateNutrients/nutrientMessages';
 
 const HIDE_COLUMN_CSS = {
@@ -190,6 +190,7 @@ export default function CompleteReportTemplate({
         disableColumnMenu
         hideFooterPagination
         hideFooter
+        rowHeight={ROW_HEIGHT}
       />
       {booleanChecker(SoilTest) ? (
         <>
@@ -206,6 +207,7 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
+            rowHeight={ROW_HEIGHT}
           />
         </>
       ) : (
@@ -235,6 +237,7 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
+            rowHeight={ROW_HEIGHT}
           />
         )}
         {Fertilizers.length > 0 && (
@@ -250,6 +253,7 @@ export default function CompleteReportTemplate({
               columnHeaderHeight={0}
               hideFooterPagination
               hideFooter
+              rowHeight={ROW_HEIGHT}
             />
           </>
         )}
@@ -266,6 +270,7 @@ export default function CompleteReportTemplate({
               columnHeaderHeight={0}
               hideFooterPagination
               hideFooter
+              rowHeight={ROW_HEIGHT}
             />
           </>
         )}
@@ -279,6 +284,7 @@ export default function CompleteReportTemplate({
           disableColumnMenu
           hideFooterPagination
           hideFooter
+          rowHeight={ROW_HEIGHT}
         />
         {balanceMessages.map((msg) => (
           <Message key={msg.Id}>{msg.Text}</Message>

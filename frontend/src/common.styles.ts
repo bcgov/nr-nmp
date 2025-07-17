@@ -91,7 +91,7 @@ export const customTableStyle = {
   '& .MuiDataGrid-columnHeaders': {
     borderBottom: 'none',
   },
-  '& div div div div >.MuiDataGrid-cell': {
+  '& div div div div > .MuiDataGrid-cell': {
     borderBottom: 'none',
     borderTop: '1px solid rgba(224, 224, 224, 1)',
   },
