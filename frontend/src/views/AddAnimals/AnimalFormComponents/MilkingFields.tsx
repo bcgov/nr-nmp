@@ -8,7 +8,7 @@ interface MilkingFieldsProps {
   milkProductionInit: number;
   washWaterInit: number;
   animalsPerFarm: number;
-  washWaterUnit: WashWaterUnit | undefined;
+  washWaterUnit?: WashWaterUnit;
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
 }
 

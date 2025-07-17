@@ -12,8 +12,8 @@ import { textFieldStyle } from '@/common.styles';
 
 type OtherModalProps = {
   fieldIndex: number;
-  initialModalData: NMPFileOtherNutrient | undefined;
-  rowEditIndex: number | undefined;
+  initialModalData?: NMPFileOtherNutrient;
+  rowEditIndex?: number;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
 };

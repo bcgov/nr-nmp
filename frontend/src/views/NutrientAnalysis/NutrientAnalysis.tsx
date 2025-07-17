@@ -47,12 +47,12 @@ export default function NutrientAnalysis() {
 
   const handleEdit = (name: string) => {
     setEditName(name);
-    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.ManureSource === name));
+    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.materialSource === name));
     setIsDialogOpen(true);
   };
 
   const handleDelete = (name: string) => {
-    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.ManureSource !== name));
+    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.materialSource !== name));
   };
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -65,7 +65,7 @@ export default function NutrientAnalysis() {
       // if editing an entry then updates that entry
       if (editName !== null) {
         return prevState.map((item: NMPFileFarmManureData) =>
-          item.ManureSource === editName ? { ...data } : item,
+          item.materialSource === editName ? { ...data } : item,
         );
       }
       // else add this new entry
@@ -100,7 +100,7 @@ export default function NutrientAnalysis() {
     () => [
       {
         headerName: 'Source',
-        field: 'ManureSource',
+        field: 'materialSource',
         width: 200,
         minWidth: 100,
         maxWidth: 300,
@@ -149,13 +149,13 @@ export default function NutrientAnalysis() {
           <>
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleEdit(row.row.ManureSource)}
+              onClick={() => handleEdit(row.row.materialSource)}
               icon={faEdit}
               aria-label="Edit"
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDelete(row.row.ManureSource)}
+              onClick={() => handleDelete(row.row.materialSource)}
               icon={faTrash}
               aria-label="Delete"
             />
@@ -195,7 +195,7 @@ export default function NutrientAnalysis() {
           initialModalData={analysisForm}
           manures={manures.filter((manureEle) => {
             const existingList = nutrientAnalysisData.map(
-              (nutrientEle) => nutrientEle.ManureSource,
+              (nutrientEle) => nutrientEle.materialSource,
             );
             // Disallow manurer sources already entered, unless it is being edited
             return !existingList.some(

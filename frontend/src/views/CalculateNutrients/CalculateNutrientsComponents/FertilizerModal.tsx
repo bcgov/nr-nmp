@@ -30,8 +30,8 @@ import { NMPFileFertilizer } from '@/types/calculateNutrients';
 
 type FertilizerModalProps = {
   fieldIndex: number;
-  initialModalData: NMPFileFertilizer | undefined;
-  rowEditIndex: number | undefined;
+  initialModalData?: NMPFileFertilizer;
+  rowEditIndex?: number;
   balanceRow: CalculateNutrientsColumn;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;

@@ -1,5 +1,5 @@
 /**
- * @summary This is the Add Animal list Tab
+ * @summary This is the modal for imported (i.e. manually input) manures
  */
 import { ComponentProps, FormEvent, Key, useContext, useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
@@ -17,6 +17,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import {
   DefaultSolidManureConversionFactors,
   DefaultLiquidManureConversionFactors,
+  MANURE_TYPE_OPTIONS,
 } from '@/constants';
 import {
   formCss,
@@ -28,14 +29,12 @@ import {
   NMPFileImportedManureData,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
+  ManureType,
 } from '@/types';
 
-const manureTypeOptions = [
-  { label: 'Liquid', id: 1 },
-  { label: 'Solid', id: 2 },
-];
-
 type ModalComponentProps = {
+  // TODO: Change this. initialModalData should be undefined if there isn't existing data
+  // The parent shouldn't handle its form state
   initialModalData: NMPFileImportedManureData;
   handleDialogClose: () => void;
   handleSubmit: (formData: NMPFileImportedManureData) => void;
@@ -52,7 +51,7 @@ export default function ManureImportModal({
   const apiCache = useContext(APICacheContext);
 
   const [formData, setFormData] = useState<NMPFileImportedManureData>(initialModalData);
-  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName);
+  const [isEditingExistingEntry] = useState<boolean>(!!initialModalData?.UniqueMaterialName); // this hurts
   // const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
 
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
@@ -101,9 +100,9 @@ export default function ManureImportModal({
     }
   };
 
-  const handleInputChange = (name: string, value: string | number | undefined) => {
+  const handleInputChange = (changes: Partial<NMPFileImportedManureData>) => {
     setFormData((prev: NMPFileImportedManureData) => {
-      const updatedData = { ...prev, [name]: value };
+      const updatedData = { ...prev, ...changes };
       return updatedData;
     });
   };
@@ -138,9 +137,9 @@ export default function ManureImportModal({
                   isRequired
                   label="Material name"
                   name="UniqueMaterialName"
-                  value={formData?.UniqueMaterialName}
+                  value={formData.UniqueMaterialName}
                   onChange={(e: string) => {
-                    handleInputChange('UniqueMaterialName', e);
+                    handleInputChange({ UniqueMaterialName: e });
                   }}
                   maxLength={100}
                 />
@@ -153,17 +152,16 @@ export default function ManureImportModal({
                   isRequired
                   label="Manure Type"
                   placeholder="Select manure type"
-                  selectedKey={formData?.ManureType}
-                  items={manureTypeOptions}
+                  selectedKey={formData.ManureType}
+                  items={MANURE_TYPE_OPTIONS}
                   onSelectionChange={(e: Key) => {
-                    handleInputChange('ManureType', Number(e) ?? '');
-                    handleInputChange(
-                      'ManureTypeName',
-                      manureTypeOptions.find((ele) => ele.id === e)?.label,
-                    );
-                    // Reset dependent inputs on changes
-                    handleInputChange('Units', '');
-                    handleInputChange('Moisture', '');
+                    handleInputChange({
+                      ManureType: e as number,
+                      ManagedManureName: `${formData.UniqueMaterialName}, ${ManureType[e as number]}`,
+                      // Reset dependent inputs on changes
+                      Units: undefined,
+                      Moisture: '50.0',
+                    });
                   }}
                 />
               </Grid>
@@ -173,9 +171,9 @@ export default function ManureImportModal({
                   label="Amount per year"
                   type="number"
                   name="AnnualAmount"
-                  value={formData?.AnnualAmount?.toString()}
+                  value={String(formData.AnnualAmount)}
                   onChange={(e: string) => {
-                    handleInputChange('AnnualAmount', e);
+                    handleInputChange({ AnnualAmount: Number(e) });
                   }}
                   maxLength={7}
                 />
@@ -188,13 +186,13 @@ export default function ManureImportModal({
                       isRequired
                       label="Units"
                       placeholder="Select a unit"
-                      selectedKey={formData?.Units}
+                      selectedKey={formData.Units}
                       items={solidManureDropdownOptions.map((ele) => ({
                         id: ele.inputunit,
                         label: ele.inputunitname ?? '',
                       }))}
                       onSelectionChange={(e: Key) => {
-                        handleInputChange('Units', e as number);
+                        handleInputChange({ Units: e as number });
                       }}
                     />
                   </Grid>
@@ -204,9 +202,9 @@ export default function ManureImportModal({
                       label="Moisture (%)"
                       type="number"
                       name="Moisture"
-                      value={formData?.Moisture}
+                      value={formData.Moisture}
                       onChange={(e: string) => {
-                        handleInputChange('Moisture', e);
+                        handleInputChange({ Moisture: e });
                       }}
                       maxLength={7}
                     />
@@ -220,13 +218,13 @@ export default function ManureImportModal({
                     isRequired
                     label="Units"
                     placeholder="Select a unit"
-                    selectedKey={formData?.Units}
+                    selectedKey={formData.Units}
                     items={liquidManureDropdownOptions.map((ele) => ({
                       id: ele.inputunit,
                       label: ele.inputunitname ?? '',
                     }))}
                     onSelectionChange={(e: Key) => {
-                      handleInputChange('Units', e as number);
+                      handleInputChange({ Units: e as number });
                     }}
                   />
                 </Grid>

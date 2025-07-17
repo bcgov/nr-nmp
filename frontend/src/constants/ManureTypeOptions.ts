@@ -1,8 +1,8 @@
-import { MANURE_LIQUID, MANURE_SOLID } from '@/types/Animals';
+import { ManureType } from '@/types';
 
-const manureTypeOptions: { id: string; label: string }[] = [
-  { id: MANURE_LIQUID, label: 'Liquid' },
-  { id: MANURE_SOLID, label: 'Solid' },
+const MANURE_TYPE_OPTIONS: { id: ManureType; label: string }[] = [
+  { id: ManureType.Liquid, label: 'Liquid' },
+  { id: ManureType.Solid, label: 'Solid' },
 ];
 
-export default manureTypeOptions;
+export default MANURE_TYPE_OPTIONS;

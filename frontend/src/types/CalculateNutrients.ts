@@ -41,8 +41,8 @@ export interface NMPFileFertilizer extends CalculateNutrientsColumn {
   applUnitId: number;
   applDate?: string;
   applicationMethod: string;
-  density: number | undefined;
-  densityUnitId: number | undefined;
+  density?: number;
+  densityUnitId?: number;
 }
 
 export interface CropNutrients {

@@ -15,7 +15,7 @@ import { NMPFileFieldData, NMPFileOtherNutrient } from './NMPFileFieldData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 import SolidManureConversionFactors from './SolidManureConversionFactors';
 import Region from './Region';
-import ManureType from './ManureType';
+import Manure from './Manure';
 import {
   CalculateNutrientsColumn,
   CropNutrients,
@@ -36,11 +36,15 @@ import {
   BeefCattleData,
   DairyCattleData,
   AnimalData,
-  MANURE_LIQUID,
-  MANURE_SOLID,
+  ManureType,
 } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
+import {
+  ManureInSystem,
+  NMPFileManureStorageSystem,
+  ManureStorage,
+} from './NMPFileManureStorageSystem';
 
 export {
   BEEF_COW_ID,
@@ -48,8 +52,7 @@ export {
   MILKING_COW_ID,
   PER_DAY_PER_ANIMAL_UNIT,
   PER_DAY_UNIT,
-  MANURE_LIQUID,
-  MANURE_SOLID,
+  ManureType,
 };
 
 export type {
@@ -62,6 +65,8 @@ export type {
   NMPFileFieldData,
   NMPFileImportedManureData,
   NMPFileGeneratedManureData,
+  ManureInSystem,
+  NMPFileManureStorageSystem,
   SolidManureConversionFactors,
   Region,
   CropsConversionFactors,
@@ -71,7 +76,7 @@ export type {
   SoilTestMethodsData,
   NMPFileSoilTestData,
   NMPFileCropData,
-  ManureType,
+  Manure,
   NMPFileFarmManureData,
   CalculateNutrientsColumn,
   CropNutrients,
@@ -85,4 +90,5 @@ export type {
   FertilizerType,
   FertilizerUnit,
   NMPFileOtherNutrient,
+  ManureStorage,
 };

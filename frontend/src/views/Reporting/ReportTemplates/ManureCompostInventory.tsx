@@ -18,9 +18,9 @@ export default function ManureCompostInventory({
   GeneratedManures = [],
   ImportedManures = [],
 }: {
-  FarmAnimals: AnimalData[] | undefined;
-  GeneratedManures: NMPFileGeneratedManureData[] | undefined;
-  ImportedManures: NMPFileImportedManureData[] | undefined;
+  FarmAnimals?: AnimalData[];
+  GeneratedManures?: NMPFileGeneratedManureData[];
+  ImportedManures?: NMPFileImportedManureData[];
 }) {
   // TODO categorize manures by table by if they have storage systems,
   // and by liquid/solid storage systems when implemented

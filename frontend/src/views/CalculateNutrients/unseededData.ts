@@ -1,5 +1,6 @@
 // Data not seeded into DB.
 // From bcgov/agri-nmp, agri-nmp/app/Agri.Data/SeedData/StaticDataVersion_13.json
+// Manually changed ManureType to be 1 for Liquid, 2 for Solid, and 3 for either
 const SEASON_APPLICATION = [
   {
     Id: 1,
@@ -13,7 +14,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: '0.95',
     Compost: 'Spring',
     SortNum: 110,
-    ManureType: 'Solid/Liquid',
+    ManureType: 3,
     StaticDataVersionId: 13,
   },
   {
@@ -28,7 +29,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: '0.7',
     Compost: 'Spring',
     SortNum: 120,
-    ManureType: 'Solid/Liquid',
+    ManureType: 3,
     StaticDataVersionId: 13,
   },
   {
@@ -43,7 +44,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: '0.5',
     Compost: 'Spring',
     SortNum: 130,
-    ManureType: 'Solid/Liquid',
+    ManureType: 3,
     StaticDataVersionId: 13,
   },
   {
@@ -58,7 +59,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: '0.4',
     Compost: 'Spring',
     SortNum: 140,
-    ManureType: 'Solid/Liquid',
+    ManureType: 3,
     StaticDataVersionId: 13,
   },
   {
@@ -73,7 +74,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: '0.40',
     Compost: 'Spring',
     SortNum: 100,
-    ManureType: 'Solid/Liquid',
+    ManureType: 3,
     StaticDataVersionId: 13,
   },
   {
@@ -88,7 +89,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Spring',
     SortNum: 150,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -103,7 +104,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Spring',
     SortNum: 160,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -118,7 +119,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Spring',
     SortNum: 170,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -133,7 +134,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: '0.34',
     Compost: 'Summer',
     SortNum: 200,
-    ManureType: 'Solid/Liquid',
+    ManureType: 3,
     StaticDataVersionId: 13,
   },
   {
@@ -148,7 +149,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Summer',
     SortNum: 210,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -163,7 +164,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Summer',
     SortNum: 220,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -178,7 +179,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Summer',
     SortNum: 230,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -193,7 +194,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: '0.40',
     Compost: 'Fall',
     SortNum: 300,
-    ManureType: 'Solid/Liquid',
+    ManureType: 3,
     StaticDataVersionId: 13,
   },
   {
@@ -208,7 +209,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Fall',
     SortNum: 310,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -223,7 +224,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Fall',
     SortNum: 320,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
   {
@@ -238,7 +239,7 @@ const SEASON_APPLICATION = [
     PoultrySolid: 'reselect',
     Compost: 'Fall',
     SortNum: 330,
-    ManureType: 'Liquid',
+    ManureType: 1,
     StaticDataVersionId: 13,
   },
 ];

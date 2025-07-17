@@ -1,19 +1,16 @@
 import React, { useReducer } from 'react';
 import { AppState } from '@/types';
 import { getDataFromLocalStorage } from '@/utils/localStorage';
-import { DEFAULT_NMPFILE, NMP_FILE_KEY } from '@/constants';
+import { DEFAULT_NMPFILE, APP_STATE_KEY } from '@/constants';
 import { AppStateAction, appStateReducer } from '@/hooks/reducers/appStateReducer';
 
 function initAppContext(): AppState {
-  let nmpFile = getDataFromLocalStorage(NMP_FILE_KEY);
-  if (nmpFile === null) {
+  let appState: AppState = getDataFromLocalStorage(APP_STATE_KEY);
+  if (appState === null) {
     // No cached file, need to start from scratch
-    nmpFile = DEFAULT_NMPFILE;
+    appState = { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: false };
   }
-  return {
-    nmpFile,
-    showAnimalsStep: false, // TODO: Change
-  };
+  return appState;
 }
 
 const initValue = initAppContext();
