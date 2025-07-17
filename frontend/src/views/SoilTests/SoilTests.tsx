@@ -32,7 +32,7 @@ import {
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
-import { InfoBox, StyledContent } from './soilTests.styles';
+import { InfoBox, StyledContent, StyledDatePicker } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import { FormErrors } from '@/types/Crops';
@@ -307,14 +307,17 @@ export default function SoilTests() {
                     Sample Month
                   </span>
                   <div css={{ label: { margin: '0' } }}>
-                    <ReactDatePicker
-                      selected={formData.sampleDate}
-                      onChange={(e: any) => {
-                        handleFormFieldChange('sampleDate', e);
-                      }}
-                      dateFormat="MM/yyyy"
-                      showMonthYearPicker
-                    />
+                    <StyledDatePicker>
+                      <ReactDatePicker
+                        selected={formData.sampleDate}
+                        onChange={(e: any) => {
+                          handleFormFieldChange('sampleDate', e);
+                        }}
+                        dateFormat="MM/yyyy"
+                        showMonthYearPicker
+                        wrapperClassName="monthPicker"
+                      />
+                    </StyledDatePicker>
                   </div>
                 </Grid>
                 <Grid size={formGridBreakpoints}>
