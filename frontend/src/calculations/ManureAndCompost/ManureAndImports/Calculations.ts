@@ -125,9 +125,9 @@ export async function getNutrientInputs(
   farmManure: NMPFileFarmManureData,
   region: number | undefined,
   applicationRate: number,
-  applicationRateUnit: string | undefined,
-  ammoniaNRetentionPct: number | undefined,
-  organicNAvailable: number | undefined,
+  applicationRateUnit: string = '',
+  ammoniaNRetentionPct: number = 0,
+  organicNAvailable: number = 0,
 ) {
   // Initialize nutrient input results structure
   const nutrientInputs = {
@@ -154,7 +154,7 @@ export async function getNutrientInputs(
     const tenThousand = 10000;
 
     // Get application rate unit conversion factor
-    const applicationUnit = await getUnitByName(applicationRateUnit ?? '');
+    const applicationUnit = await getUnitByName(applicationRateUnit);
     const unitConversionFactor =
       applicationUnit && applicationUnit.conversionlbton ? applicationUnit.conversionlbton : 1;
 
@@ -164,7 +164,6 @@ export async function getNutrientInputs(
     if (
       applicationUnit &&
       applicationUnit.id === 6 &&
-      farmManure &&
       farmManure.Nutrients.SolidLiquid &&
       farmManure.Nutrients.SolidLiquid.toUpperCase() === 'SOLID'
     ) {
@@ -173,7 +172,7 @@ export async function getNutrientInputs(
     }
 
     // Calculate potassium first year and long term
-    if (farmManure && farmManure.Nutrients.K2O !== undefined) {
+    if (farmManure.Nutrients.K2O !== undefined) {
       nutrientInputs.K2O_FirstYear = Math.round(
         adjustedApplicationRate *
           farmManure.Nutrients.K2O *
@@ -193,7 +192,7 @@ export async function getNutrientInputs(
     }
 
     // Calculate phosphorous first year and long term
-    if (farmManure && farmManure.Nutrients.P2O5 !== undefined) {
+    if (farmManure.Nutrients.P2O5 !== undefined) {
       nutrientInputs.P2O5_FirstYear = Math.round(
         adjustedApplicationRate *
           farmManure.Nutrients.P2O5 *
@@ -214,24 +213,23 @@ export async function getNutrientInputs(
 
     // Calculate nitrogen first year and long term availability
     // Calculate organic nitrogen content (total nitrogen minus ammonium nitrogen)
-    const organicNitrogenContent =
-      Number(farmManure?.Nutrients.N || 0) - Number(farmManure?.Nutrients.NH4N || 0) / tenThousand;
+    const organicNitrogenContent = farmManure.Nutrients.N - farmManure.Nutrients.NH4N / tenThousand;
 
-    const manureTypeData = await getManuresByName(farmManure?.MaterialType ?? '');
+    const manureTypeData = await getManuresByName(farmManure.materialType);
     const nMineralizationID = manureTypeData?.nmineralizationid;
     let organicNMineralizationRates = { OrganicN_FirstYear: 0, OrganicN_LongTerm: 0 };
     if (region !== undefined) {
       organicNMineralizationRates = await GetNMineralizations(nMineralizationID ?? 0, region);
     }
     // Override first year organic N availability with user-provided value
-    organicNMineralizationRates.OrganicN_FirstYear = (organicNAvailable ?? 0) / 100;
+    organicNMineralizationRates.OrganicN_FirstYear = organicNAvailable / 100;
 
     // Convert ammonia retention percentage to decimal
-    const ammoniaRetentionFactor = (ammoniaNRetentionPct ?? 0) / 100;
+    const ammoniaRetentionFactor = ammoniaNRetentionPct / 100;
 
     // Calculate available ammonium nitrogen after accounting for retention losses
     const availableAmmoniumNitrogen =
-      ((farmManure?.Nutrients.NH4N ?? 0) / tenThousand) * ammoniaRetentionFactor;
+      (farmManure.Nutrients.NH4N / tenThousand) * ammoniaRetentionFactor;
 
     // First year nitrogen calculations
     // Calculate mineralized organic nitrogen for first year
@@ -241,7 +239,7 @@ export async function getNutrientInputs(
     const totalAvailableNFirstYear =
       availableAmmoniumNitrogen +
       mineralizedOrganicNFirstYear +
-      Number(farmManure?.Nutrients.N || 0) / tenThousand;
+      farmManure.Nutrients.N / tenThousand;
     const nitrogenPerTonFirstYear = totalAvailableNFirstYear * lbPerTonConversion;
     nutrientInputs.N_FirstYear = Math.round(
       applicationRate * nitrogenPerTonFirstYear * unitConversionFactor,
@@ -255,7 +253,7 @@ export async function getNutrientInputs(
     const totalAvailableNLongTerm =
       availableAmmoniumNitrogen +
       mineralizedOrganicNLongTerm +
-      Number(farmManure?.Nutrients.N || 0) / tenThousand;
+      farmManure.Nutrients.N / tenThousand;
     const nitrogenPerTonLongTerm = totalAvailableNLongTerm * lbPerTonConversion;
     nutrientInputs.N_LongTerm = Math.round(
       applicationRate * nitrogenPerTonLongTerm * unitConversionFactor,

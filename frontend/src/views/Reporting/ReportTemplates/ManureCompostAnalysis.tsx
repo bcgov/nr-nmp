@@ -3,8 +3,8 @@ import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
 import type { NMPFileFarmManureData } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
-  { field: 'ManureSource', headerName: 'Source of Material', width: 200 },
-  { field: 'MaterialType', headerName: 'Material Type', width: 200 },
+  { field: 'materialSource', headerName: 'Source of Material', width: 200 },
+  { field: 'materialType', headerName: 'Material Type', width: 200 },
   {
     field: 'Moisture',
     headerName: 'Moisture (%)',

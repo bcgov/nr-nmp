@@ -2,12 +2,13 @@ import { FormEvent, Key, useContext, useEffect, useMemo, useState } from 'react'
 import { Select, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
-import manureTypeOptions from '@/constants/ManureTypeOptions';
+import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID } from '@/types';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import MilkingFields from './MilkingFields';
 import AnimalFormWrapper from './AnimalFormWrapper';
+import { ManureType } from '@/types/Animals';
 
 type DairyCattleProps = {
   formData: DairyCattleData;
@@ -88,7 +89,7 @@ export default function DairyCattle({
     }
 
     let withManureCalc: DairyCattleData;
-    if (formData.manureType === 'liquid') {
+    if (formData.manureType === ManureType.Liquid) {
       withManureCalc = {
         ...formData,
         manureData: {
@@ -173,7 +174,7 @@ export default function DairyCattle({
         <Select
           label="Sub Type"
           name="subtype"
-          selectedKey={formData?.subtype}
+          selectedKey={formData.subtype}
           items={subtypeOptions}
           onSelectionChange={(e: Key) => {
             handleInputChanges({ subtype: e.toString() });
@@ -185,7 +186,7 @@ export default function DairyCattle({
         <Select
           label="Breed"
           name="breed"
-          selectedKey={formData?.breed}
+          selectedKey={formData.breed}
           items={breedOptions}
           onSelectionChange={(e: Key) => {
             handleInputChanges({ breed: e.toString() });
@@ -198,7 +199,7 @@ export default function DairyCattle({
           label="Average Animal Number on Farm"
           type="number"
           name="animalsPerFarm"
-          value={formData?.animalsPerFarm?.toString()}
+          value={formData.animalsPerFarm?.toString()}
           onChange={(e: string) => {
             handleInputChanges({ animalsPerFarm: Number(e) });
           }}
@@ -210,10 +211,10 @@ export default function DairyCattle({
         <Select
           label="Manure Type"
           name="manureType"
-          selectedKey={formData?.manureType}
-          items={manureTypeOptions}
+          selectedKey={formData.manureType}
+          items={MANURE_TYPE_OPTIONS}
           onSelectionChange={(e: Key) => {
-            handleInputChanges({ manureType: e.toString() });
+            handleInputChanges({ manureType: e as number });
           }}
           isRequired
         />
@@ -223,7 +224,7 @@ export default function DairyCattle({
           label="Grazing Days per Year"
           type="number"
           name="grazingDaysPerYear"
-          value={formData?.grazingDaysPerYear?.toString()}
+          value={formData.grazingDaysPerYear?.toString()}
           onChange={(e: string) => {
             handleInputChanges({ grazingDaysPerYear: Number(e) });
           }}

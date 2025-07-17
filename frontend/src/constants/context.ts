@@ -1,2 +1,2 @@
-const NMP_FILE_KEY = 'nmpFile';
-export default NMP_FILE_KEY; // Default export for now
+const APP_STATE_KEY = 'AppState';
+export default APP_STATE_KEY; // Default export for now

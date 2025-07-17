@@ -13,8 +13,8 @@ export const calcFertBalance = (
   fert: Fertilizer,
   applRate: number,
   applUnit: FertilizerUnit,
-  density: number | undefined,
-  densityConvFactor: number | undefined,
+  density?: number,
+  densityConvFactor?: number,
 ): CropNutrients => {
   let newFertBalance: CropNutrients = initialAgronomicBalance;
   let convertedApplRate = applRate;

@@ -1,5 +1,5 @@
 // Type for api/manure data table
-type ManureType = {
+type Manure = {
   id: number;
   name: string;
   manureClass: string;
@@ -16,4 +16,4 @@ type ManureType = {
   nitrate: number;
   defaultSolidMoisture: number;
 };
-export default ManureType;
+export default Manure;

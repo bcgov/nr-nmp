@@ -3,8 +3,8 @@ import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
 import { NMPFileImportedManureData, NMPFileGeneratedManureData } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
-  // Should correspond with ManureType
-  { field: 'MaterialType', headerName: 'Material', width: 100 },
+  // Name from the Manure database table
+  { field: 'materialType', headerName: 'Material', width: 100 },
   {
     field: 'UniqueMaterialName',
     headerName: 'Material Source',
@@ -39,8 +39,8 @@ export default function ManureCompostUse({
   GeneratedManures = [],
   ImportedManures = [],
 }: {
-  GeneratedManures: NMPFileGeneratedManureData[] | undefined;
-  ImportedManures: NMPFileImportedManureData[] | undefined;
+  GeneratedManures?: NMPFileGeneratedManureData[];
+  ImportedManures?: NMPFileImportedManureData[];
 }) {
   return (
     <div>

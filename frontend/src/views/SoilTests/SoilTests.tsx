@@ -55,7 +55,7 @@ export default function SoilTests() {
 
   const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
   const [soilTestId, setSoilTestId] = useState<number>(
-    fields?.find((field) => field.SoilTest !== undefined)?.SoilTest?.soilTestId || 0,
+    fields.find((field) => field.SoilTest !== undefined)?.SoilTest?.soilTestId || 0,
   );
 
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
@@ -311,7 +311,7 @@ export default function SoilTests() {
                       label=""
                       type="month"
                       name="sampleDate"
-                      value={formData?.sampleDate ?? 0}
+                      value={formData.sampleDate || 0}
                       onChange={(e: any) => {
                         handleFormFieldChange('sampleDate', e?.target?.value);
                       }}

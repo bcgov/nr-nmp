@@ -1,6 +1,8 @@
+import { ManureType } from './Animals';
+
 interface NMPFileImportedManureData {
   UniqueMaterialName: string;
-  ManureTypeName: string;
+  ManureType?: ManureType;
   AnnualAmount: number;
   AnnualAmountUSGallonsVolume?: number;
   AnnualAmountCubicYardsVolume?: number;
@@ -11,8 +13,7 @@ interface NMPFileImportedManureData {
   Units?: number;
   Moisture?: string;
   IsMaterialStored?: boolean;
-  ManagedManureName?: string;
-  ManureType?: number;
+  ManagedManureName: string;
   AssignedToStoredSystem?: boolean;
   AssignedWithNutrientAnalysis?: boolean;
 }
