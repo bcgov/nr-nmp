@@ -27,3 +27,11 @@ export const StyledContent = styled.div`
 
   ${buttonGroup}
 `;
+
+export const StyledDatePicker = styled.div`
+  input {
+    padding: 8px;
+    flex-grow: 1;
+    width: 100%;
+  }
+`;

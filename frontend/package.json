@@ -33,6 +33,7 @@
     "react": "^19.0.0",
     "react-aria-components": "^1.8.0",
     "react-collapsed": "^4.2.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.0.0",
     "typography": "^0.16.24"

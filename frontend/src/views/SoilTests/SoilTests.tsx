@@ -6,6 +6,8 @@ import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
@@ -27,21 +29,16 @@ import {
   modalPaddingStyle,
   tableActionButtonCss,
 } from '../../common.styles';
-import {
-  InputField,
-  AppTitle,
-  PageTitle,
-  ProgressStepper,
-  TabsMaterial,
-} from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
-import { InfoBox, StyledContent } from './soilTests.styles';
+import { InfoBox, StyledContent, StyledDatePicker } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
+import { FormErrors } from '@/types/Crops';
 
 const EMPTY_SOIL_TEST_FORM: Omit<NMPFileSoilTestData, 'soilTestId'> = {
-  sampleDate: '',
+  sampleDate: undefined,
   valNO3H: '',
   valP: '',
   valK: '',
@@ -63,8 +60,7 @@ export default function SoilTests() {
 
   const [formData, setFormData] =
     useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
-  const [formErrors, setFormErrors] =
-    useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
+  const [formErrors, setFormErrors] = useState<Omit<FormErrors, 'soilTestId'>>({});
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const handleEditRow = useCallback(
@@ -90,7 +86,7 @@ export default function SoilTests() {
 
   const handleDialogClose = () => {
     setIsDialogOpen(false);
-    setFormErrors(EMPTY_SOIL_TEST_FORM);
+    setFormErrors({});
     setFormData(EMPTY_SOIL_TEST_FORM);
   };
 
@@ -195,7 +191,11 @@ export default function SoilTests() {
       {
         field: 'SoilTest',
         headerName: 'Sampling Month',
-        valueGetter: (_value, row) => row?.SoilTest?.sampleDate,
+        valueGetter: (_value, row) =>
+          row?.SoilTest?.sampleDate.toLocaleDateString('en-CA', {
+            year: 'numeric',
+            month: 'long',
+          }),
         width: 150,
         minWidth: 150,
         maxWidth: 300,
@@ -307,15 +307,17 @@ export default function SoilTests() {
                     Sample Month
                   </span>
                   <div css={{ label: { margin: '0' } }}>
-                    <InputField
-                      label=""
-                      type="month"
-                      name="sampleDate"
-                      value={formData.sampleDate || 0}
-                      onChange={(e: any) => {
-                        handleFormFieldChange('sampleDate', e?.target?.value);
-                      }}
-                    />
+                    <StyledDatePicker>
+                      <ReactDatePicker
+                        selected={formData.sampleDate}
+                        onChange={(e: any) => {
+                          handleFormFieldChange('sampleDate', e);
+                        }}
+                        dateFormat="MM/yyyy"
+                        showMonthYearPicker
+                        wrapperClassName="monthPicker"
+                      />
+                    </StyledDatePicker>
                   </div>
                 </Grid>
                 <Grid size={formGridBreakpoints}>
