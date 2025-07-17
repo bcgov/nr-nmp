@@ -3,7 +3,7 @@ import { Checkbox, Select, TextField } from '@bcgov/design-system-react-componen
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, BEEF_COW_ID, BeefCattleData } from '@/types';
+import { AnimalData, BEEF_COW_ID, BeefCattleData, ManureType } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 
@@ -27,7 +27,7 @@ export default function BeefCattle({
   onCancel,
 }: BeefCattleProps) {
   const apiCache = useContext(APICacheContext);
-  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData?.daysCollected);
+  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
 
@@ -41,6 +41,7 @@ export default function BeefCattle({
       ...formData,
       manureData: {
         name: subtype.name,
+        manureType: ManureType.Solid,
         annualSolidManure: calculateAnnualSolidManure(
           subtype.solidperpoundperanimalperday,
           formData.animalsPerFarm!,

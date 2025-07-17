@@ -103,8 +103,8 @@ function postprocessModalData(data: NMPFileCropData): NMPFileCropData {
 type CropsModalProps = {
   field: NMPFileFieldData;
   fieldIndex: number;
-  cropIndex: number | undefined;
-  initialModalData: NMPFileCropData | undefined;
+  cropIndex?: number;
+  initialModalData?: NMPFileCropData;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
   farmRegion: number;

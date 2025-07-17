@@ -1,7 +1,7 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import { Key, useContext, useEffect, useState } from 'react';
+import { Key, useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { Select, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -14,7 +14,10 @@ import SEASON_APPLICATION from '../unseededData';
 import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-import { CropNutrients } from '@/types';
+import { CropNutrients, NMPFileFieldData } from '@/types';
+import { NutrientManures } from '@/types/calculateNutrients';
+import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
+import useAppState from '@/hooks/useAppState';
 
 type ManureFormFields = {
   materialType: string;
@@ -26,9 +29,11 @@ type ManureFormFields = {
 };
 
 type AddManureModalProps = {
-  initialModalData: ManureFormFields | undefined;
+  initialModalData?: ManureFormFields;
   farmManures: NMPFileFarmManureData[];
-  rowEditIndex: number | undefined;
+  rowEditIndex?: number;
+  field: NMPFileFieldData;
+  setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
 };
 
@@ -74,14 +79,17 @@ export default function ManureModal({
   initialModalData,
   farmManures,
   onCancel,
+  field,
+  setFields,
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [manureForm, setManureForm] = useState<ManureFormFields>(
     initialModalData || DEFAULT_MANURE_FORM_FIELDS,
   );
   const apiCache = useContext(APICacheContext);
+  const { state, dispatch } = useAppState();
 
-  const [fertilizerUnits, setFertilizerUnits] = useState<
+  const [manureUnits, setManureUnits] = useState<
     {
       id: number;
       name: string;
@@ -90,34 +98,114 @@ export default function ManureModal({
     }[]
   >([]);
 
-  const [availableThisYearTable, setAvailableThisYearTable] = useState<Array<CropNutrients>>([
-    EMPTY_CROP_NUTRIENTS,
-  ]);
-  const [availableLongTermTable, setAvailableLongTermTable] = useState<Array<CropNutrients>>([
-    EMPTY_CROP_NUTRIENTS,
-  ]);
-  const [stillReqTable, setStillReqTable] = useState<Array<CropNutrients>>([EMPTY_CROP_NUTRIENTS]);
+  const [availableThisYearTable, setAvailableThisYearTable] =
+    useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
+  const [availableLongTermTable, setAvailableLongTermTable] =
+    useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
+  const [stillReqTable, setStillReqTable] = useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
 
   // get fertilizer types, names, and conversion units
   useEffect(() => {
-    apiCache.callEndpoint('api/fertilizerunits/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/units/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setFertilizerUnits(data);
+        setManureUnits(data);
       }
     });
   }, [apiCache, manureForm.materialType]);
 
   const handleModalClose = () => {
-    setAvailableThisYearTable([EMPTY_CROP_NUTRIENTS]);
-    setAvailableLongTermTable([EMPTY_CROP_NUTRIENTS]);
-    setStillReqTable([EMPTY_CROP_NUTRIENTS]);
+    setAvailableThisYearTable(EMPTY_CROP_NUTRIENTS);
+    setAvailableLongTermTable(EMPTY_CROP_NUTRIENTS);
+    setStillReqTable(EMPTY_CROP_NUTRIENTS);
     onCancel();
   };
 
   const handleSubmit = () => {
-    // TBD: Submit logic here
+    if (!field) {
+      console.error('No field selected for manure application');
+      return;
+    }
+
+    // Find the selected farm manure
+    const selectedFarmManure = farmManures.find(
+      (manure) => manure.materialType === manureForm.materialType,
+    );
+
+    if (!selectedFarmManure) {
+      console.error('Selected farm manure not found');
+      return;
+    }
+
+    // Create new nutrient manure entry
+    const newNutrientManure: NutrientManures = {
+      manureId: selectedFarmManure.Nutrients.ManureId || 0,
+      applicationId: Number(manureForm.applicationMethod) || 0,
+      unitId: Number(manureForm.applUnit) || 0,
+      rate: manureForm.applicationRate,
+      nh4Retention: manureForm.retentionAmmoniumN,
+      nAvail: manureForm.organicNAvailable,
+      reqN: availableThisYearTable?.N || 0,
+      reqP2o5: availableThisYearTable?.P2O5 || 0,
+      reqK2o: availableThisYearTable?.K2O || 0,
+      remN: availableLongTermTable?.N || 0,
+      remP2o5: availableLongTermTable?.P2O5 || 0,
+      remK2o: availableLongTermTable?.K2O || 0,
+    };
+
+    // Update the fields array
+    const currentFields = state.nmpFile.years[0].Fields || [];
+    const updatedFields = currentFields.map((f: NMPFileFieldData) => {
+      if (f.FieldName === field.FieldName) {
+        return {
+          ...f,
+          Nutrients: {
+            nutrientManures: [...(f.Nutrients?.nutrientManures || []), newNutrientManure],
+          },
+        };
+      }
+      return f;
+    });
+
+    // Update fields state and dispatch to global state
+    setFields(updatedFields);
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.Year!,
+      newFields: updatedFields,
+    });
     handleModalClose();
+  };
+
+  const handleCalculate = async () => {
+    const farmManure = state.nmpFile?.years?.[0]?.FarmManures?.[0];
+    if (!farmManure) {
+      console.error('No farm manure data available for calculation.');
+      return;
+    }
+    const nutrientInputs = await getNutrientInputs(
+      farmManure,
+      state.nmpFile.farmDetails.FarmRegion,
+      manureForm.applicationRate,
+      manureForm.applUnit?.toString(),
+      manureForm.retentionAmmoniumN,
+      manureForm.organicNAvailable,
+    );
+    setAvailableLongTermTable({
+      N: nutrientInputs.N_LongTerm,
+      P2O5: nutrientInputs.P2O5_LongTerm,
+      K2O: nutrientInputs.K2O_LongTerm,
+    });
+    setAvailableThisYearTable({
+      N: nutrientInputs.N_FirstYear,
+      P2O5: nutrientInputs.P2O5_FirstYear,
+      K2O: nutrientInputs.K2O_FirstYear,
+    });
+    setStillReqTable({
+      N: field.Crops[0].reqN + (field.Crops[1]?.reqN ?? 0),
+      P2O5: field.Crops[0].reqP2o5 + (field.Crops[1]?.reqP2o5 ?? 0),
+      K2O: field.Crops[0].reqK2o + (field.Crops[1]?.reqK2o ?? 0),
+    });
   };
 
   const handleChange = (changes: { [name: string]: string | number | undefined }) => {
@@ -188,8 +276,8 @@ export default function ManureModal({
               isRequired
               label="Units"
               placeholder="Select a unit"
-              selectedKey={manureForm.applUnit}
-              items={fertilizerUnits.map((unit) => ({
+              selectedKey={manureForm?.applUnit}
+              items={manureUnits.map((unit) => ({
                 value: { id: unit.id },
                 label: unit.name,
               }))}
@@ -225,7 +313,7 @@ export default function ManureModal({
             <DataGrid
               sx={{ ...customTableStyle }}
               columns={NUTRIENT_COLUMNS}
-              rows={availableThisYearTable}
+              rows={[availableThisYearTable]}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
@@ -238,7 +326,7 @@ export default function ManureModal({
             <DataGrid
               sx={{ ...customTableStyle }}
               columns={NUTRIENT_COLUMNS}
-              rows={availableLongTermTable}
+              rows={[availableLongTermTable]}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
@@ -251,13 +339,34 @@ export default function ManureModal({
             <DataGrid
               sx={{ ...customTableStyle }}
               columns={NUTRIENT_COLUMNS}
-              rows={stillReqTable}
+              rows={[stillReqTable]}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
               hideFooterPagination
               hideFooter
             />
+          </Grid>
+          <Grid
+            size={12}
+            sx={{ textAlign: 'center', mt: 2 }}
+          >
+            <button
+              type="button"
+              onClick={handleCalculate}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#003366',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              Calculate
+            </button>
           </Grid>
         </Grid>
       </Form>

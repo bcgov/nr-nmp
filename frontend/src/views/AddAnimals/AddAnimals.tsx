@@ -14,9 +14,15 @@ import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
 import { AnimalData } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
-import { ErrorText, StyledContent } from './addAnimals.styles';
+import {
+  DoubleRowStyle,
+  ErrorText,
+  specialTableRowStyle,
+  StyledContent,
+} from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
-import { liquidSolidManureDisplay } from '@/utils/utils';
+import { isDairyAndMilkingCattle, liquidSolidManureDisplay } from '@/utils/utils';
+import { calculateAnnualWashWater } from './utils';
 
 export default function AddAnimals() {
   const { state, dispatch } = useAppState();
@@ -36,8 +42,7 @@ export default function AddAnimals() {
   }, []);
 
   const hasDairyCattle = useMemo(
-    () =>
-      state.nmpFile.years[0]?.FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+    () => state.nmpFile.years[0].FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
     [state.nmpFile.years],
   );
 
@@ -95,10 +100,19 @@ export default function AddAnimals() {
       {
         field: 'animalId',
         headerName: 'Animal Type',
-        width: 200,
-        minWidth: 150,
-        maxWidth: 300,
+        width: 175,
         valueGetter: (params: any) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        renderCell: (params: any) => {
+          if (isDairyAndMilkingCattle(params.row.animalId, params.row.subtype)) {
+            return (
+              <span css={specialTableRowStyle}>
+                <DoubleRowStyle>{params.value}</DoubleRowStyle>
+                <DoubleRowStyle>Milking center wash water</DoubleRowStyle>
+              </span>
+            );
+          }
+          return <div>{params.value}</div>;
+        },
       },
       {
         field: 'manureData',
@@ -107,6 +121,23 @@ export default function AddAnimals() {
         minWidth: 155,
         maxWidth: 300,
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
+        renderCell: (params: any) => {
+          const { animalId, animalsPerFarm, subtype, washWater, washWaterUnit } = params.row;
+          if (isDairyAndMilkingCattle(animalId, subtype)) {
+            const washWaterGallons = calculateAnnualWashWater(
+              washWater,
+              washWaterUnit,
+              animalsPerFarm,
+            );
+            return (
+              <span css={specialTableRowStyle}>
+                <DoubleRowStyle>{params.value}</DoubleRowStyle>
+                <DoubleRowStyle>{washWaterGallons} U.S. gallons</DoubleRowStyle>
+              </span>
+            );
+          }
+          return <div>{params.value}</div>;
+        },
       },
       {
         field: 'actions',

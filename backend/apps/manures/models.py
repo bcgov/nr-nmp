@@ -16,7 +16,7 @@ class Manures(models.Model):
     sortnum = models.IntegerField()
     cubicyardconversion = models.FloatField()
     nitrate = models.FloatField()
-    defaultsolidmoisture = models.IntegerField()
+    defaultsolidmoisture = models.IntegerField(null=True, blank=True)
 
     class Meta:
         managed = True
@@ -45,3 +45,37 @@ class LiquidMaterialsConversionFactors(models.Model):
     class Meta:
         managed = True
         db_table = 'liquid_materials_conversion_factors'
+
+
+class Units(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    nutrientcontentunits = models.CharField()
+    conversionlbton = models.FloatField()
+    nutrientrateunits = models.CharField(max_length=100)
+    costunits = models.CharField(max_length=100)
+    costapplications = models.CharField(max_length=100)
+    dollarunitarea = models.CharField(max_length=100)
+    valuematerialunits = models.CharField(max_length=100)
+    valuen = models.CharField(max_length=100)
+    valuep2o5 = models.CharField(max_length=100)
+    valuek2o = models.CharField(max_length=100)
+    farmreqdnutrientsstdunitsconversion = models.FloatField()
+    farmreqdnutrientsstdunitsareaconversion = models.FloatField()
+    solidliquid = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'units'
+
+
+class NitrogenMineralization(models.Model):
+    id = models.IntegerField(primary_key=True)
+    locationid = models.IntegerField()
+    name = models.CharField(max_length=100)
+    firstyearvalue = models.FloatField()
+    longtermvalue = models.FloatField()
+
+    class Meta:
+        managed = True
+        db_table = 'nitrogen_mineralization'

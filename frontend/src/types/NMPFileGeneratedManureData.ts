@@ -11,5 +11,6 @@ interface NMPFileGeneratedManureData {
   IsMaterialStored?: boolean;
   AssignedToStoredSystem?: boolean;
   AssignedWithNutrientAnalysis?: boolean;
+  manureId: string;
 }
 export default NMPFileGeneratedManureData;

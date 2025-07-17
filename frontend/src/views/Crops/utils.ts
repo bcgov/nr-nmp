@@ -9,9 +9,9 @@ export function showUnitDropdown(cropTypeId: number) {
 
 export type CropsModalState = {
   formData: NMPFileCropData;
-  selectedCropType: CropType | undefined;
-  selectedCrop: Crop | undefined;
-  defaultYieldInTons: number | undefined;
+  selectedCropType?: CropType;
+  selectedCrop?: Crop;
+  defaultYieldInTons?: number;
   // isFormYieldEqualToDefault inits to true to hide a button
   isFormYieldEqualToDefault: boolean;
 };
@@ -91,7 +91,7 @@ export type CropsModalReducerAction =
   | SetDefaultYieldAction
   | RestoreDefaultYieldAction;
 
-function isCropSet(cropId: number, selectedCrop: Crop | undefined) {
+function isCropSet(cropId: number, selectedCrop?: Crop) {
   if (cropId === 0) return false;
   // If cropId is non-zero, selectedCrop should match it
   if (cropId !== CROP_OTHER_ID && (selectedCrop === undefined || cropId !== selectedCrop.id)) {
@@ -100,7 +100,7 @@ function isCropSet(cropId: number, selectedCrop: Crop | undefined) {
   return true;
 }
 
-function validateBushelConversion(selectedCrop: Crop | undefined) {
+function validateBushelConversion(selectedCrop?: Crop) {
   if (!selectedCrop?.harvestbushelsperton) {
     throw new Error('Crops modal entered bad state');
   }

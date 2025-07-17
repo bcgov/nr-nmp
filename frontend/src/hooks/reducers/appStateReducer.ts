@@ -146,6 +146,8 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           // ManagedManureName is the name of the manure, number of animals and manure type
           // Calves (0 to 3 months old), 2 animals, Solid
           ManagedManureName: `${animal.manureData.name}, ${animal.animalsPerFarm} animal${animal.animalsPerFarm === 1 ? '' : 's'}, Solid`,
+          // Link the generated manure to the animal that created it
+          manureId: animal.manureId,
         });
       } else {
         generatedManures.push({
@@ -156,6 +158,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
           ManagedManureName: `${animal.manureData.name}, ${animal.animalsPerFarm} animal${animal.animalsPerFarm === 1 ? '' : 's'}, Liquid`,
+          manureId: animal.manureId,
         });
       }
     }
@@ -282,7 +285,6 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       );
     }
   }
-
   // Save the file to local storage
   saveDataToLocalStorage(APP_STATE_KEY, newAppState);
   return newAppState;

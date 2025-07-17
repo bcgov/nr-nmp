@@ -11,7 +11,7 @@ const animalOptions = [
 ];
 
 type AnimalFormWrapperProps = {
-  selectedAnimalId: string | undefined;
+  selectedAnimalId?: string;
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   onCancel: (e: PressEvent) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;

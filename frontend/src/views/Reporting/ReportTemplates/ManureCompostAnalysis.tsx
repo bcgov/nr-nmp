@@ -1,5 +1,5 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { customTableStyle } from '../reporting.styles';
+import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
 import type { NMPFileFarmManureData } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
@@ -54,6 +54,7 @@ export default function ManureCompostAnalysis({
       disableColumnMenu
       hideFooterPagination
       hideFooter
+      rowHeight={ROW_HEIGHT}
       slots={{
         noRowsOverlay: NO_ROWS,
       }}

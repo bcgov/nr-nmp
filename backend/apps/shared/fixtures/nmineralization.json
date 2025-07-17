@@ -1,0 +1,242 @@
+[
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 1,
+    "fields": {
+      "locationid": 1,
+      "name": "Liquid - Poultry",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 1,
+    "fields": {
+      "locationid": 2,
+      "name": "Liquid - Poultry",
+      "firstyearvalue": 0.5,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 2,
+    "fields": {
+      "locationid": 1,
+      "name": "Liquid - Other",
+      "firstyearvalue": 0.2,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 2,
+    "fields": {
+      "locationid": 2,
+      "name": "Liquid - Other",
+      "firstyearvalue": 0.35,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 3,
+    "fields": {
+      "locationid": 1,
+      "name": "Liquid - Biosolids",
+      "firstyearvalue": 0.25,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 3,
+    "fields": {
+      "locationid": 2,
+      "name": "Liquid - Biosolids",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 4,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Biosolids",
+      "firstyearvalue": 0.25,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 4,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Biosolids",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 5,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Poultry",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 5,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Poultry",
+      "firstyearvalue": 0.5,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 6,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Mink",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 6,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Mink",
+      "firstyearvalue": 0.35,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 7,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Hog",
+      "firstyearvalue": 0.25,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 7,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Hog",
+      "firstyearvalue": 0.3,
+      "longtermvalue": 0.77
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 8,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Mechanically Separated Dairy Solids",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 8,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Mechanically Separated Dairy Solids",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 9,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Horse",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 9,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Horse",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 10,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Compost",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 10,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Compost",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 11,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Other (<50%)",
+      "firstyearvalue": 0.15,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 11,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Other (<50%)",
+      "firstyearvalue": 0.2,
+      "longtermvalue": 0.25
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 12,
+    "fields": {
+      "locationid": 1,
+      "name": "Solid - Other (>50%)",
+      "firstyearvalue": 0.05,
+      "longtermvalue": 0.2
+    }
+  },
+  {
+    "model": "manures.nitrogenmineralization",
+    "pk": 12,
+    "fields": {
+      "locationid": 2,
+      "name": "Solid - Other (>50%)",
+      "firstyearvalue": 0.1,
+      "longtermvalue": 0.15
+    }
+  }
+]

@@ -54,6 +54,7 @@ export default function FieldList() {
         margin: [24, 24, 24, 24],
         width: 1024,
         windowWidth: 1024,
+        autoPaging: 'text',
       });
     }
   };
@@ -78,6 +79,7 @@ export default function FieldList() {
         margin: [24, 24, 24, 24],
         width: 1024,
         windowWidth: 1024,
+        autoPaging: 'text',
       });
     }
   };

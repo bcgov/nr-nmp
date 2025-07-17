@@ -13,8 +13,8 @@ type Mode = 'Add Field' | 'Edit Field' | 'Duplicate Field';
 
 interface FieldListModalProps {
   mode: Mode;
-  initialModalData: NMPFileFieldData | undefined;
-  rowEditIndex: number | undefined;
+  initialModalData?: NMPFileFieldData;
+  rowEditIndex?: number;
   setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   isFieldNameUnique: (field: Partial<NMPFileFieldData>, index: number) => boolean;
   onClose: () => void;

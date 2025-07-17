@@ -1,5 +1,5 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { customTableStyle } from '../reporting.styles';
+import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
 import { NMPFileImportedManureData, NMPFileGeneratedManureData } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
@@ -39,8 +39,8 @@ export default function ManureCompostUse({
   GeneratedManures = [],
   ImportedManures = [],
 }: {
-  GeneratedManures: NMPFileGeneratedManureData[] | undefined;
-  ImportedManures: NMPFileImportedManureData[] | undefined;
+  GeneratedManures?: NMPFileGeneratedManureData[];
+  ImportedManures?: NMPFileImportedManureData[];
 }) {
   return (
     <div>
@@ -53,6 +53,7 @@ export default function ManureCompostUse({
         disableColumnMenu
         hideFooterPagination
         hideFooter
+        rowHeight={ROW_HEIGHT}
         slots={{
           noRowsOverlay: NO_ROWS,
         }}

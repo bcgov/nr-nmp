@@ -44,10 +44,10 @@ export default function AddAnimalsModal({
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {
         if (changes.animalId === '1') {
-          return { ...INITIAL_BEEF_FORM_DATA, ...changes };
+          return { ...INITIAL_BEEF_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
         if (changes.animalId === '2') {
-          return { ...INITIAL_DAIRY_FORM_DATA, ...changes };
+          return { ...INITIAL_DAIRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
       }
 

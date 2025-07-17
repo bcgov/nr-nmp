@@ -8,9 +8,9 @@ export interface FormProps extends BaseFormProps {
   children: React.ReactNode;
   // TODO: If these buttons aren't featured in every modal, make these optional and
   // only display buttons when they are defined
-  onCancel: ((e: PressEvent) => void) | undefined;
+  onCancel?: (e: PressEvent) => void;
   // Should be defined if onSubmit is undefined
-  onConfirm?: ((e: PressEvent) => void) | undefined;
+  onConfirm?: (e: PressEvent) => void;
   isConfirmDisabled?: boolean;
   submitButtonText?: string;
 }

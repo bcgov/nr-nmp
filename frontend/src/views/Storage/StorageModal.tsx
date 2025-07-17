@@ -23,8 +23,8 @@ import { Modal } from '@/components/common';
 import { ModalProps } from '@/components/common/Modal/Modal';
 
 type ModalComponentProps = {
-  initialModalData: NMPFileManureStorageSystem | undefined;
-  rowEditIndex: number | undefined;
+  initialModalData?: NMPFileManureStorageSystem;
+  rowEditIndex?: number;
   unassignedManures: ManureInSystem[];
   handleDialogClose: () => void;
 };

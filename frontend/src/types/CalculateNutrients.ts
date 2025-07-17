@@ -41,8 +41,8 @@ export interface NMPFileFertilizer extends CalculateNutrientsColumn {
   applUnitId: number;
   applDate?: string;
   applicationMethod: string;
-  density: number | undefined;
-  densityUnitId: number | undefined;
+  density?: number;
+  densityUnitId?: number;
 }
 
 export interface CropNutrients {
@@ -58,6 +58,27 @@ export type NutrientColumns = {
 };
 
 export interface ManureNutrients extends CropNutrients {
+  ManureId: number;
+  SolidLiquid: string;
   Moisture: string;
-  NH4N: number; // Ammonium
+  NH4N: number;
 }
+
+export type NutrientManures = {
+  manureId: number;
+  applicationId: number;
+  unitId: number;
+  rate: number;
+  nh4Retention: number;
+  nAvail: number;
+  reqN: number;
+  reqP2o5: number;
+  reqK2o: number;
+  remN: number;
+  remP2o5: number;
+  remK2o: number;
+};
+
+export type NMPNutrients = {
+  nutrientManures: NutrientManures[];
+};

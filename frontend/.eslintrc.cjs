@@ -57,6 +57,7 @@ module.exports = {
         'no-nested-ternary': 'off',
         'arrow-parens': ['error', 'always'], // Ensure parentheses around arrow function arguments
         'no-unused-vars': 'off',
+        'no-unused-expressions': ['error', { 'allowTernary': true }],
         'jsx-a11y/label-has-associated-control': [
           2,
           {
