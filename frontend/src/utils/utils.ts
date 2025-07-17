@@ -1,3 +1,5 @@
+import { DAIRY_COW_ID, MILKING_COW_ID } from '@/types';
+
 export const booleanChecker = (value: any): boolean => {
   if (!value) {
     // value was empty string, false, 0, null, undefined
@@ -36,3 +38,6 @@ export function getLiquidManureDisplay(amount: number) {
   const roundedAmount = Math.round(amount);
   return `${roundedAmount} U.S. gallon${roundedAmount === 1 ? '' : 's'}`;
 }
+
+export const isDairyAndMilkingCattle = (animalId: string, subType: string) =>
+  animalId === DAIRY_COW_ID && subType === MILKING_COW_ID;

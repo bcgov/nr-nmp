@@ -43,7 +43,6 @@ export default function ApplicationReportSection({
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
         disableColumnMenu
-        rowHeight={40}
         hideFooterPagination
         hideFooter
         slots={{

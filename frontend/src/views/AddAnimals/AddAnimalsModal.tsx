@@ -34,7 +34,8 @@ export default function AddAnimalsModal({
         return newList;
       });
     } else {
-      setAnimalList((prev) => [...prev, { ...newFormData }]);
+      // On creating new animal entry, give it unique manureId
+      setAnimalList((prev) => [...prev, { ...newFormData, manureId: crypto.randomUUID() }]);
     }
     onClose();
   };

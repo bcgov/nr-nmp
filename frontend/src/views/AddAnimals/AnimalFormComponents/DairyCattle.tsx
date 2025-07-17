@@ -45,11 +45,12 @@ export default function DairyCattle({
 
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterInit = useMemo(() => {
+    if (formData.washWater || formData.washWater === 0) return formData.washWater;
     if (subtypes.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     return milkingCow.washwater;
-  }, [subtypes]);
+  }, [formData.washWater, subtypes]);
   const milkProductionInit = useMemo(() => {
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
@@ -116,7 +117,6 @@ export default function DairyCattle({
         },
       };
     }
-
     handleSubmit(withManureCalc);
   };
 
@@ -200,7 +200,7 @@ export default function DairyCattle({
           name="animalsPerFarm"
           value={formData?.animalsPerFarm?.toString()}
           onChange={(e: string) => {
-            handleInputChanges({ animalsPerFarm: e });
+            handleInputChanges({ animalsPerFarm: Number(e) });
           }}
           maxLength={7}
           isRequired
@@ -225,7 +225,7 @@ export default function DairyCattle({
           name="grazingDaysPerYear"
           value={formData?.grazingDaysPerYear?.toString()}
           onChange={(e: string) => {
-            handleInputChanges({ grazingDaysPerYear: e });
+            handleInputChanges({ grazingDaysPerYear: Number(e) });
           }}
           maxLength={3}
           isRequired
