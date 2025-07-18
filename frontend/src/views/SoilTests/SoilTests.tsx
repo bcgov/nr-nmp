@@ -18,7 +18,6 @@ import {
   Dialog,
   Modal,
   TextField,
-  Select,
 } from '@bcgov/design-system-react-components';
 import {
   customTableStyle,
@@ -29,7 +28,13 @@ import {
   modalPaddingStyle,
   tableActionButtonCss,
 } from '../../common.styles';
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import {
+  AppTitle,
+  PageTitle,
+  ProgressStepper,
+  Select,
+  TabsMaterial,
+} from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
 import { InfoBox, StyledContent, StyledDatePicker } from './soilTests.styles';

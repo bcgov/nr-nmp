@@ -1,11 +1,11 @@
 /* eslint-disable no-case-declarations */
 import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react';
-import { Button, ButtonGroup, TextField, Select } from '@bcgov/design-system-react-components';
+import { Button, ButtonGroup, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import LoopIcon from '@mui/icons-material/Loop';
-import { Modal, YesNoRadioButtons } from '@/components/common';
+import { Modal, Select, YesNoRadioButtons } from '@/components/common';
 import { CropType, Crop, PreviousCrop, NMPFileCropData, NMPFileFieldData } from '@/types';
 import {
   getCropRequirementP205,

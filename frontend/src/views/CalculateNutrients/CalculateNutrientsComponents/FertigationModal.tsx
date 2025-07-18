@@ -2,8 +2,8 @@
  * @summary The field table on the calculate nutrients page
  */
 import React, { useState } from 'react';
-import { Select } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
+import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import Form from '@/components/common/Form/Form';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';

@@ -1,8 +1,7 @@
 import React, { Key } from 'react';
-import { Select } from '@bcgov/design-system-react-components';
 import { PressEvent } from 'react-aria-components';
 import Grid from '@mui/material/Grid';
-import Form from '@/components/common/Form/Form';
+import { Form, Select } from '@/components/common';
 
 // TEMPORARY! TODO: Use the database once we add all the animals
 const animalOptions = [

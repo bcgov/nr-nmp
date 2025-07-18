@@ -10,7 +10,6 @@ import {
   Checkbox,
   CheckboxGroup,
   Form,
-  Select,
   TextField,
 } from '@bcgov/design-system-react-components';
 import { formCss } from '../../common.styles';
@@ -19,7 +18,7 @@ import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioB
 import useAppState from '@/hooks/useAppState';
 import { ManureInSystem, ManureStorage, NMPFileManureStorageSystem } from '@/types';
 import DEFAULT_NMPFILE_MANURE_STORAGE from '@/constants/DefaultNMPFileManureStorage';
-import { Modal } from '@/components/common';
+import { Modal, Select } from '@/components/common';
 import { ModalProps } from '@/components/common/Modal/Modal';
 
 type ModalComponentProps = {

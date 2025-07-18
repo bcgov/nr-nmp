@@ -1,6 +1,7 @@
 import { FormEvent, Key, useContext, useEffect, useState } from 'react';
-import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
+import { Checkbox, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
+import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, BEEF_COW_ID, BeefCattleData, ManureType } from '@/types';

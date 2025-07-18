@@ -1,6 +1,7 @@
 import { FormEvent, Key, useContext, useEffect, useMemo, useState } from 'react';
-import { Select, TextField } from '@bcgov/design-system-react-components';
+import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
+import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
