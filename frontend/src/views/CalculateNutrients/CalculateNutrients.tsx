@@ -256,7 +256,7 @@ export default function CalculateNutrients() {
             <FontAwesomeIcon icon={faPlus} />
             Add Fertilizer
           </Button>
-          <Button
+          {/* <Button
             size="medium"
             aria-label="Add Fertigation"
             onPress={() => {
@@ -266,7 +266,7 @@ export default function CalculateNutrients() {
           >
             <FontAwesomeIcon icon={faPlus} />
             Add Fertigation
-          </Button>
+          </Button> */}
           <Button
             size="medium"
             aria-label="Add Other"

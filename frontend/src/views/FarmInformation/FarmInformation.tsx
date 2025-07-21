@@ -79,7 +79,9 @@ export default function FarmInformation() {
         const { data } = response;
         const animalDict: { [id: string]: string } = (data as { id: number; name: string }[])
           // Temp, remove non-cattle as an option
-          .filter((opt) => opt.id === 1 || opt.id === 2)
+          // Uncomment this line and delete the other filter when Dairy cattle is ready
+          // .filter((opt) => opt.id === 1 || opt.id === 2)
+          .filter((opt) => opt.id === 1)
           .reduce(
             (dict, row) => {
               // eslint-disable-next-line no-param-reassign
