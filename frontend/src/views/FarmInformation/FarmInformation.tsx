@@ -273,13 +273,13 @@ export default function FarmInformation() {
               >
                 I have vegetables
               </Checkbox>
-              <Checkbox
+              {/* <Checkbox
                 value="HasBerries"
                 isSelected={formData.HasBerries}
                 onChange={(s) => handleChange('HasBerries', s)}
               >
                 I have berries
-              </Checkbox>
+              </Checkbox> */}
             </div>
           </Grid>
           <Grid size={12}>
