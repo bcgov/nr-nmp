@@ -153,6 +153,11 @@ export default function ManureAndImports() {
   };
 
   const handlePreviousPage = () => {
+    dispatch({
+      type: 'SAVE_IMPORTED_MANURE',
+      year: state.nmpFile.farmDetails.Year!,
+      newManures: manures,
+    });
     if (state.showAnimalsStep) {
       navigate(ADD_ANIMALS);
     } else {
