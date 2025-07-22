@@ -89,6 +89,11 @@ export default function NutrientAnalysis() {
   };
 
   const handlePreviousPage = () => {
+    dispatch({
+      type: 'SAVE_FARM_MANURE',
+      year: state.nmpFile.farmDetails.Year!,
+      newManures: nutrientAnalysisData,
+    });
     if (hasDairyCattle) {
       navigate(STORAGE);
     } else {

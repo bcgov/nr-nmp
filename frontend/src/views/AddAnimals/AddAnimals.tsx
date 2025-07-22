@@ -91,6 +91,13 @@ export default function AddAnimals() {
   };
 
   const handlePreviousPage = () => {
+    if (animalList.length) {
+      dispatch({
+        type: 'SAVE_ANIMALS',
+        year: state.nmpFile.farmDetails.Year!,
+        newAnimals: animalList,
+      });
+    }
     navigate(FARM_INFORMATION);
   };
 
