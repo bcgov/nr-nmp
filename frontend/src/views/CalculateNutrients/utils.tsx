@@ -225,7 +225,7 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
 
     return React.createElement(
       'div',
-      { style: { display: 'flex', alignItems: 'center', justifyContent: 'right' } },
+      { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'right' } },
       message?.Icon
         ? [
             React.createElement('img', {
