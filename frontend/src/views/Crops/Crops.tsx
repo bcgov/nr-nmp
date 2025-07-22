@@ -68,6 +68,7 @@ function Crops() {
   };
 
   const handlePreviousPage = () => {
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
     navigate(SOIL_TESTS);
   };
 
