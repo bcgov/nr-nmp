@@ -6,7 +6,7 @@ import { Form, Select } from '@/components/common';
 // TEMPORARY! TODO: Use the database once we add all the animals
 const animalOptions = [
   { id: '1', label: 'Beef Cattle' },
-  { id: '2', label: 'Dairy Cattle' },
+  // { id: '2', label: 'Dairy Cattle' },
 ];
 
 type AnimalFormWrapperProps = {
