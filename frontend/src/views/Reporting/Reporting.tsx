@@ -3,7 +3,7 @@ import { jsPDF } from 'jspdf';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
-import { SectionHeader, StyledContent, Error } from './reporting.styles';
+import { SectionHeader, StyledContent } from './reporting.styles';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
 import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
@@ -11,7 +11,6 @@ import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 
 import useAppState from '@/hooks/useAppState';
 import { ManureInSystem } from '@/types';
-import { formGridBreakpoints } from '@/common.styles';
 
 export default function FieldList() {
   const reportRef = useRef(null);
@@ -25,14 +24,14 @@ export default function FieldList() {
     const importedManures = state.nmpFile?.years[0].ImportedManures || [];
     const unassignedM: ManureInSystem[] = [];
     const assignedM: ManureInSystem[] = [];
-    (generatedManures || []).forEach((manure) => {
+    generatedManures.forEach((manure) => {
       if (manure.AssignedToStoredSystem) {
         assignedM.push({ type: 'Generated', data: manure });
       } else {
         unassignedM.push({ type: 'Generated', data: manure });
       }
     });
-    (importedManures || []).forEach((manure) => {
+    importedManures.forEach((manure) => {
       if (manure.AssignedToStoredSystem) {
         assignedM.push({ type: 'Imported', data: manure });
       } else {
@@ -127,7 +126,7 @@ export default function FieldList() {
             The following materials are not stored:
             <ul>
               {unassignedManures.map((manure) => (
-                <span key={`${manure.type}-${manure.data?.ManagedManureName}`}>
+                <span key={`${manure.data?.ManagedManureName}`}>
                   {manure.type} - {manure.data?.ManagedManureName}
                 </span>
               ))}

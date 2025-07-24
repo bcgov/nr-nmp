@@ -16,7 +16,7 @@ import { formCss, formGridBreakpoints } from '../../common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem, ManureStorage, NMPFileManureStorageSystem } from '@/types';
+import { ManureInSystem, ManureStorage, ManureType, NMPFileManureStorageSystem } from '@/types';
 import DEFAULT_NMPFILE_MANURE_STORAGE from '@/constants/DefaultNMPFileManureStorage';
 import { Modal, Select } from '@/components/common';
 import { ModalProps } from '@/components/common/Modal/Modal';
@@ -184,7 +184,7 @@ export default function StorageModal({
             container
             size={12}
           >
-            {formData.manureType === 1 && (
+            {formData.manureType === ManureType.Liquid && (
               <>
                 <Grid
                   container
@@ -226,7 +226,7 @@ export default function StorageModal({
           css={{ marginTop: '1rem', marginBottom: '1rem' }}
         />
 
-        {formData.manureType === 1 && (
+        {formData.manureType === ManureType.Liquid && (
           <Grid
             container
             size={formGridBreakpoints}
@@ -261,11 +261,11 @@ export default function StorageModal({
                       type="number"
                       value={String(formData.PercentageOfLiquidVolumeSeparated)}
                       onChange={(e: string) => {
-                        handleInputChange({ PercentageOfLiquidVolumeSeparated: Number(e) });
                         const solidsSeparatedGallons = totalManureGallons * (Number(e) / 100);
                         const separatedLiquidsGallons = totalManureGallons - solidsSeparatedGallons;
                         const separatedSolidsTons = (solidsSeparatedGallons / 264.172) * 0.5;
                         handleInputChange({
+                          PercentageOfLiquidVolumeSeparated: Number(e),
                           SeparatedLiquidsUSGallons: Math.round(separatedLiquidsGallons),
                           SeparatedSolidsTons: Math.round(separatedSolidsTons),
                         });
@@ -328,18 +328,19 @@ export default function StorageModal({
               }}
               orientation="horizontal"
             />
-            {!formData.manureStorageStructures.isStructureCovered && formData.manureType === 2 && (
-              <TextField
-                isRequired
-                label="Uncovered Area of Storage (ft2)"
-                type="number"
-                value={String(formData.manureStorageStructures.uncoveredAreaSqFt)}
-                onChange={(e: string) => {
-                  handleStorageChange({ uncoveredAreaSqFt: Number(e) });
-                }}
-              />
-            )}
-            {formData.manureType === 1 && (
+            {!formData.manureStorageStructures.isStructureCovered &&
+              formData.manureType === ManureType.Solid && (
+                <TextField
+                  isRequired
+                  label="Uncovered Area of Storage (ft2)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.uncoveredAreaSqFt)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ uncoveredAreaSqFt: Number(e) });
+                  }}
+                />
+              )}
+            {formData.manureType === ManureType.Liquid && (
               <Select
                 isRequired
                 label="Storage shape"
