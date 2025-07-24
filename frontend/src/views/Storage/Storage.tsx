@@ -195,7 +195,6 @@ export default function Storage() {
           variant="primary"
           onPress={handleNext}
           type="submit"
-          isDisabled={unassignedManures.length > 0}
         >
           Next
         </Button>

@@ -12,11 +12,11 @@ import {
   Form,
   TextField,
 } from '@bcgov/design-system-react-components';
-import { formCss } from '../../common.styles';
+import { formCss, formGridBreakpoints } from '../../common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem, ManureStorage, NMPFileManureStorageSystem } from '@/types';
+import { ManureInSystem, ManureStorage, ManureType, NMPFileManureStorageSystem } from '@/types';
 import DEFAULT_NMPFILE_MANURE_STORAGE from '@/constants/DefaultNMPFileManureStorage';
 import { Modal, Select } from '@/components/common';
 import { ModalProps } from '@/components/common/Modal/Modal';
@@ -27,6 +27,12 @@ type ModalComponentProps = {
   unassignedManures: ManureInSystem[];
   handleDialogClose: () => void;
 };
+
+const storageShapeOptions = [
+  { id: '1', label: 'Rectangular' },
+  { id: '2', label: 'Circular' },
+  { id: '3', label: 'SlopedWallRectangular' },
+];
 
 export default function StorageModal({
   initialModalData,
@@ -48,6 +54,15 @@ export default function StorageModal({
     [...unassignedManures, ...formData.manuresInSystem].sort((a, b) =>
       a.data.ManagedManureName.localeCompare(b.data.ManagedManureName),
     ),
+  );
+  // get sum of all entered manures, used for solid and liquid seperation
+  const totalManureGallons = useMemo(
+    () =>
+      fullManureList.reduce(
+        (sum, manure) => sum + (manure.data.AnnualAmountUSGallonsVolume || 0),
+        0,
+      ),
+    [fullManureList],
   );
 
   const availableManures: ManureInSystem[] = useMemo(
@@ -108,6 +123,7 @@ export default function StorageModal({
       onOpenChange={handleDialogClose}
       title="Storage System Details"
       {...props}
+      modalStyle={{ width: '700px' }}
     >
       <Form
         css={formCss}
@@ -115,122 +131,341 @@ export default function StorageModal({
       >
         <Grid
           container
+          size={formGridBreakpoints}
+          direction="row"
           spacing={2}
-          size={12}
         >
           <Grid
             container
-            size={12}
-            direction="row"
+            size={6}
           >
-            <Grid
-              container
-              size={5}
+            <Select
+              isRequired
+              label="Manure Type"
+              selectedKey={formData.manureType}
+              items={MANURE_TYPE_OPTIONS}
+              onSelectionChange={(e: Key) => {
+                handleInputChange({ manureType: e as number, manuresInSystem: [] });
+                setFullManureList((prev) =>
+                  prev.map((m) => ({ ...m, data: { ...m.data, AssignedToStoredSystem: false } })),
+                );
+              }}
+            />
+            <TextField
+              isRequired
+              label="System Name"
+              type="string"
+              value={formData.name}
+              onChange={(e) => {
+                handleInputChange({ name: e });
+              }}
+            />
+          </Grid>
+          <Grid
+            container
+            size={6}
+          >
+            <CheckboxGroup
+              isRequired
+              value={selectedManureNames}
+              onChange={handleSelectedChange}
             >
-              <Select
-                isRequired
-                label="Manure Type"
-                selectedKey={formData.manureType}
-                items={MANURE_TYPE_OPTIONS}
-                onSelectionChange={(e: Key) => {
-                  handleInputChange({ manureType: e as number, manuresInSystem: [] });
-                  setFullManureList((prev) =>
-                    prev.map((m) => ({ ...m, data: { ...m.data, AssignedToStoredSystem: false } })),
-                  );
-                }}
-              />
-              <TextField
-                isRequired
-                label="System Name"
-                type="string"
-                value={formData.name}
-                onChange={(e) => {
-                  handleInputChange({ name: e });
-                }}
-              />
-            </Grid>
-            <Grid size={6}>
-              <CheckboxGroup
-                isRequired
-                value={selectedManureNames}
-                onChange={handleSelectedChange}
-              >
-                {availableManures.map((manure) => (
-                  <Checkbox
-                    key={manure.data.ManagedManureName}
-                    value={manure.data.ManagedManureName}
-                  >
-                    {manure.data.ManagedManureName}
-                  </Checkbox>
-                ))}
-              </CheckboxGroup>
-            </Grid>
+              {availableManures.map((manure) => (
+                <Checkbox
+                  key={manure.data.ManagedManureName}
+                  value={manure.data.ManagedManureName}
+                >
+                  {manure.data.ManagedManureName}
+                </Checkbox>
+              ))}
+            </CheckboxGroup>
           </Grid>
           <Grid
             container
             size={12}
-            direction="column"
           >
-            <Divider
-              aria-hidden="true"
-              component="div"
-              css={{ marginTop: '1rem', marginBottom: '1rem' }}
-            />
-            <Grid
-              container
-              size={12}
-              direction="row"
-            >
-              <Grid
-                container
-                size={5}
-                direction="row"
-              >
-                <TextField
-                  isRequired
-                  label="Storage Name"
-                  type="string"
-                  name="manureStorageStructures.Name"
-                  value={formData.manureStorageStructures.name}
-                  onChange={(e: any) => {
-                    handleStorageChange({ name: e });
-                  }}
-                />
-              </Grid>
-              <Grid
-                container
-                size={5}
-                direction="row"
-              >
-                <div
-                  style={{ marginBottom: '0.15rem' }}
-                  className="bcds-react-aria-Select--Label"
+            {formData.manureType === ManureType.Liquid && (
+              <>
+                <Grid
+                  container
+                  size={6}
                 >
-                  Is the storage covered?
                   <YesNoRadioButtons
-                    value={formData.manureStorageStructures.isStructureCovered}
-                    text=""
+                    value={formData.getsRunoffFromRoofsOrYards}
+                    text="Does yard or roof runoff enter the storage?"
                     onChange={(e: boolean) => {
-                      handleStorageChange({ isStructureCovered: e });
+                      handleInputChange({ getsRunoffFromRoofsOrYards: e });
                     }}
                     orientation="horizontal"
                   />
-                </div>
-                {!formData.manureStorageStructures.isStructureCovered && (
-                  <TextField
-                    isRequired
-                    label="Uncovered Area of Storage (ft2)"
-                    type="number"
-                    value={String(formData.manureStorageStructures.uncoveredAreaSqFt)}
-                    onChange={(e: string) => {
-                      handleStorageChange({ uncoveredAreaSqFt: Number(e) });
-                    }}
-                  />
+                </Grid>
+                {formData.getsRunoffFromRoofsOrYards === true && (
+                  <Grid
+                    container
+                    size={6}
+                  >
+                    <TextField
+                      isRequired
+                      label="Yard and Roof Area (ft2)"
+                      type="number"
+                      name="runoffAreaSqFt"
+                      value={String(formData.runoffAreaSqFt)}
+                      onChange={(e: string) => {
+                        handleInputChange({ runoffAreaSqFt: Number(e) });
+                      }}
+                    />
+                  </Grid>
                 )}
-              </Grid>
-            </Grid>
+              </>
+            )}
           </Grid>
         </Grid>
+        <Divider
+          aria-hidden="true"
+          component="div"
+          css={{ marginTop: '1rem', marginBottom: '1rem' }}
+        />
+
+        {formData.manureType === ManureType.Liquid && (
+          <Grid
+            container
+            size={formGridBreakpoints}
+            direction="row"
+            spacing={2}
+          >
+            <Grid
+              container
+              size={6}
+              direction="row"
+            >
+              <div
+                style={{ marginBottom: '0.15rem' }}
+                className="bcds-react-aria-Select--Label"
+              >
+                Is there solid/liquid separation?
+                <YesNoRadioButtons
+                  value={formData.IsThereSolidLiquidSeparation}
+                  text=""
+                  onChange={(e: boolean) => {
+                    handleInputChange({ IsThereSolidLiquidSeparation: e });
+                  }}
+                  orientation="horizontal"
+                />
+              </div>
+              {formData.IsThereSolidLiquidSeparation === true && (
+                <div style={{ display: 'flex', width: '100%' }}>
+                  <div style={{ paddingRight: '2em' }}>
+                    <TextField
+                      isRequired
+                      label="% of liquid volume separated"
+                      type="number"
+                      value={String(formData.PercentageOfLiquidVolumeSeparated)}
+                      onChange={(e: string) => {
+                        const solidsSeparatedGallons = totalManureGallons * (Number(e) / 100);
+                        const separatedLiquidsGallons = totalManureGallons - solidsSeparatedGallons;
+                        const separatedSolidsTons = (solidsSeparatedGallons / 264.172) * 0.5;
+                        handleInputChange({
+                          PercentageOfLiquidVolumeSeparated: Number(e),
+                          SeparatedLiquidsUSGallons: Math.round(separatedLiquidsGallons),
+                          SeparatedSolidsTons: Math.round(separatedSolidsTons),
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </Grid>
+            <Grid
+              container
+              size={6}
+              direction="row"
+            >
+              <div style={{ width: 'max-content', fontSize: '12px' }}>
+                <p>
+                  Separated liquids
+                  <p>{formData.SeparatedLiquidsUSGallons} U.S. Gallons</p>
+                </p>
+                <p>
+                  Separated solids
+                  <p>{formData.SeparatedSolidsTons} tons</p>
+                </p>
+              </div>
+            </Grid>
+          </Grid>
+        )}
+        <Divider
+          aria-hidden="true"
+          component="div"
+          css={{ marginTop: '1rem', marginBottom: '1rem' }}
+        />
+
+        <Grid
+          container
+          size={formGridBreakpoints}
+          direction="row"
+          spacing={2}
+        >
+          <Grid
+            container
+            size={6}
+            direction="row"
+          >
+            <TextField
+              isRequired
+              label="Storage Name"
+              type="string"
+              name="manureStorageStructures.Name"
+              value={formData.manureStorageStructures.name}
+              onChange={(e: any) => {
+                handleStorageChange({ name: e });
+              }}
+            />
+            <YesNoRadioButtons
+              value={formData.manureStorageStructures.isStructureCovered}
+              text="Is the storage covered?"
+              onChange={(e: boolean) => {
+                handleStorageChange({ isStructureCovered: e });
+              }}
+              orientation="horizontal"
+            />
+            {!formData.manureStorageStructures.isStructureCovered &&
+              formData.manureType === ManureType.Solid && (
+                <TextField
+                  isRequired
+                  label="Uncovered Area of Storage (ft2)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.uncoveredAreaSqFt)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ uncoveredAreaSqFt: Number(e) });
+                  }}
+                />
+              )}
+            {formData.manureType === ManureType.Liquid && (
+              <Select
+                isRequired
+                label="Storage shape"
+                selectedKey={
+                  storageShapeOptions.find(
+                    (option) =>
+                      option.id === formData.manureStorageStructures.SelectedStorageStructureShape,
+                  )?.label
+                }
+                items={storageShapeOptions}
+                onSelectionChange={(e: any) => {
+                  // find storage shape by id
+                  const selectedShape = storageShapeOptions.find(
+                    (option) => option.id === e,
+                  )?.label;
+                  handleStorageChange({
+                    SelectedStorageStructureShape:
+                      selectedShape as ManureStorage['SelectedStorageStructureShape'],
+                  });
+                }}
+              />
+            )}
+          </Grid>
+          <Grid
+            container
+            size={6}
+            direction="row"
+          >
+            {formData.manureStorageStructures.SelectedStorageStructureShape === 'Circular' && (
+              <div>
+                <TextField
+                  isRequired
+                  label="Diameter(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.CircularDiameter)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ CircularDiameter: Number(e) });
+                  }}
+                />
+                <TextField
+                  isRequired
+                  label="Height(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.CircularHeight)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ CircularHeight: Number(e) });
+                  }}
+                />
+              </div>
+            )}
+            {formData.manureStorageStructures.SelectedStorageStructureShape === 'Rectangular' && (
+              <div>
+                <TextField
+                  isRequired
+                  label="Length(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.RectangularLength)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ RectangularLength: Number(e) });
+                  }}
+                />
+                <TextField
+                  isRequired
+                  label="Width(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.RectangularWidth)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ RectangularWidth: Number(e) });
+                  }}
+                />
+                <TextField
+                  isRequired
+                  label="Height(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.RectangularHeight)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ RectangularHeight: Number(e) });
+                  }}
+                />
+              </div>
+            )}
+            {formData.manureStorageStructures.SelectedStorageStructureShape ===
+              'SlopedWallRectangular' && (
+              <div>
+                <TextField
+                  isRequired
+                  label="Diameter(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.CircularDiameter)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ CircularDiameter: Number(e) });
+                  }}
+                />
+                <TextField
+                  isRequired
+                  label="Height(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.CircularHeight)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ CircularHeight: Number(e) });
+                  }}
+                />
+                <TextField
+                  isRequired
+                  label="Diameter(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.CircularDiameter)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ CircularDiameter: Number(e) });
+                  }}
+                />
+                <TextField
+                  isRequired
+                  label="Height(ft)"
+                  type="number"
+                  value={String(formData.manureStorageStructures.CircularHeight)}
+                  onChange={(e: string) => {
+                    handleStorageChange({ CircularHeight: Number(e) });
+                  }}
+                />
+              </div>
+            )}
+          </Grid>
+        </Grid>
+
         <Divider
           aria-hidden="true"
           component="div"

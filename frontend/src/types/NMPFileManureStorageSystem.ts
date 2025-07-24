@@ -11,11 +11,26 @@ export type ManureInSystem =
       data: NMPFileImportedManureData;
     };
 
+export type StorageShapes = 'Rectangular' | 'Circular' | 'SlopedWallRectangular';
+
 export type ManureStorage = {
   id: number;
   name: string;
   isStructureCovered: boolean;
   uncoveredAreaSqFt?: number;
+  SelectedStorageStructureShape: StorageShapes;
+  RectangularLength?: number;
+  RectangularWidth?: number;
+  RectangularHeight?: number;
+  CircularDiameter?: number;
+  CircularHeight?: number;
+  SlopedWallTopLength?: number;
+  SlopedWallTopWidth?: number;
+  SlopedWallHeight?: number;
+  SlopedWallSlopeOfWall?: number;
+  surfaceArea?: number;
+  volumeUSGallons?: number;
+  volumeOfStorageStructure?: string;
 };
 
 export type NMPFileManureStorageSystem = {
@@ -23,7 +38,14 @@ export type NMPFileManureStorageSystem = {
   manureType?: ManureType;
   manuresInSystem: ManureInSystem[];
   // TODO: Change these as they become relevant
-  getsRunoffFromRoofsOrYards: false;
-  runoffAreaSqFt: null;
+  getsRunoffFromRoofsOrYards: boolean;
+  runoffAreaSqFt: number;
+  IsThereSolidLiquidSeparation: boolean;
+  PercentageOfLiquidVolumeSeparated: number;
+  SeparatedLiquidsUSGallons: number;
+  SeparatedSolidsTons: number;
   manureStorageStructures: ManureStorage;
+  // AnnualPrecipitation: number;
+  // AssignedWithNutrientAnalysis: boolean;
+  // ManureStorageVolume: string;
 };
