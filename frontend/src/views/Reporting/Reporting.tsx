@@ -123,16 +123,16 @@ export default function FieldList() {
           container
           sx={{ marginTop: '1rem' }}
         >
-          <Error>
-            The following manures have not been assigned:
+          <div style={{ border: '1px solid #c81212', width: '100%' }}>
+            The following materials are not stored:
             <ul>
-              {unassignedManures.map((manure, idx) => (
-                <span key={`${manure.type}-${manure.data?.ManureName || idx}`}>
-                  {manure.type} - {manure.data?.ManureName || 'Unnamed'}
+              {unassignedManures.map((manure) => (
+                <span key={`${manure.type}-${manure.data?.ManagedManureName}`}>
+                  {manure.type} - {manure.data?.ManagedManureName}
                 </span>
               ))}
             </ul>
-          </Error>
+          </div>
         </Grid>
       )}
 
