@@ -178,6 +178,7 @@ export default function SoilTests() {
   };
 
   const handlePreviousPage = () => {
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
     navigate(FIELD_LIST);
   };
 

@@ -66,6 +66,13 @@ export default function FieldList() {
 
   const handlePreviousPage = () => {
     try {
+      if (fieldList.length) {
+        dispatch({
+          type: 'SAVE_FIELDS',
+          year: state.nmpFile.farmDetails.Year!,
+          newFields: fieldList,
+        });
+      }
       if (!state.showAnimalsStep) {
         navigate(FARM_INFORMATION);
       } else {

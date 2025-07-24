@@ -3,11 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
+import { css } from '@emotion/react';
 import type { CropNutrients, Fertilizer, NMPFileFieldData, FertilizerUnit } from '@/types';
 import { tableActionButtonCss } from '../../common.styles';
 import { NUTRIENT_MESSAGES } from './nutrientMessages';
 
 const initialAgronomicBalance: CropNutrients = { N: 0, P2O5: 0, K2O: 0 };
+const COLUMN_WIDTH: number = 90;
+const COLUMN_STYLE = css({
+  textAlign: 'right',
+  width: `${COLUMN_WIDTH}px`,
+});
 
 export const calcFertBalance = (
   fert: Fertilizer,
@@ -47,61 +53,104 @@ export const generateColumns = (
   handleEditRow: (e: any) => void,
   handleDeleteRow: (e: any) => void,
   renderCell: (params: GridRenderCellParams<any, any, any>) => React.ReactNode,
+  renderTableHeader?: React.ReactNode,
+  hideColumnHeaders?: boolean,
 ): GridColDef[] => [
-  { field: 'name', width: 230, minWidth: 200, maxWidth: 300, renderHeader: () => null },
+  {
+    field: 'name',
+    width: 230,
+    minWidth: 200,
+    maxWidth: 300,
+    renderHeader: () => renderTableHeader ?? <div />,
+    sortable: false,
+  },
   {
     field: 'reqN',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Nitrogen',
-    renderHeader: () => null,
+    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>N</span>),
     renderCell,
+    sortable: false,
   },
   {
     field: 'reqP2o5',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
-    renderHeader: () => null,
+    renderHeader: () =>
+      hideColumnHeaders ? (
+        <div />
+      ) : (
+        <span css={COLUMN_STYLE}>
+          P<sub>2</sub>O<sub>5</sub>
+        </span>
+      ),
     renderCell,
+    sortable: false,
   },
   {
     field: 'reqK2o',
-    width: 120,
-    minWidth: 120,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Potassium',
-    renderHeader: () => null,
+    renderHeader: () =>
+      hideColumnHeaders ? (
+        <div />
+      ) : (
+        <span css={COLUMN_STYLE}>
+          K<sub>2</sub>O
+        </span>
+      ),
     renderCell,
+    sortable: false,
   },
   {
     field: 'remN',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Nitrogen',
-    renderHeader: () => null,
+    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>N</span>),
     renderCell,
+    sortable: false,
   },
   {
     field: 'remP2o5',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
-    renderHeader: () => null,
+    renderHeader: () =>
+      hideColumnHeaders ? (
+        <div />
+      ) : (
+        <span css={COLUMN_STYLE}>
+          P<sub>2</sub>O<sub>5</sub>
+        </span>
+      ),
     renderCell,
+    sortable: false,
   },
   {
     field: 'remK2o',
-    width: 130,
-    minWidth: 60,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 130,
     description: 'Potassium',
-    renderHeader: () => null,
+    renderHeader: () =>
+      hideColumnHeaders ? (
+        <div />
+      ) : (
+        <span css={COLUMN_STYLE}>
+          K<sub>2</sub>O
+        </span>
+      ),
     renderCell,
+    sortable: false,
   },
   {
     field: '',
@@ -153,7 +202,7 @@ export function genHandleDeleteRow(
 export function renderNutrientCell({ value }: any) {
   return React.createElement(
     'div',
-    { style: { display: 'flex', alignItems: 'center' } },
+    { style: { display: 'flex', alignItems: 'center', justifyContent: 'right' } },
     React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
   );
 }
@@ -176,7 +225,7 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
 
     return React.createElement(
       'div',
-      { style: { display: 'flex', alignItems: 'center' } },
+      { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'right' } },
       message?.Icon
         ? [
             React.createElement('img', {
@@ -196,54 +245,74 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
   };
 
 export const BALANCE_COLUMNS = [
-  { field: 'name', width: 230, minWidth: 200, maxWidth: 300 },
+  {
+    field: 'name',
+    width: 230,
+    minWidth: 200,
+    maxWidth: 300,
+    renderHeader: () => null,
+    renderCell: () => <div style={{ fontWeight: 'bold' }}>Balance</div>,
+    sortable: false,
+  },
   {
     field: 'reqN',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Nitrogen',
     renderCell: renderBalanceCell('reqN'),
+    renderHeader: () => <span css={COLUMN_STYLE}>N</span>,
+    sortable: false,
   },
   {
     field: 'reqP2o5',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
     renderCell: renderBalanceCell('reqP2o5'),
+    renderHeader: () => (
+      <span css={COLUMN_STYLE}>
+        P<sub>2</sub>O<sub>5</sub>
+      </span>
+    ),
+    sortable: false,
   },
   {
     field: 'reqK2o',
-    width: 120,
-    minWidth: 120,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Potassium',
     renderCell: renderBalanceCell('reqK2o'),
+    sortable: false,
   },
   {
     field: 'remN',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Nitrogen',
     renderCell: renderBalanceCell('remN'),
+    sortable: false,
   },
   {
     field: 'remP2o5',
-    width: 80,
-    minWidth: 80,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
     renderCell: renderBalanceCell('remP2o5'),
+    sortable: false,
   },
   {
     field: 'remK2o',
-    width: 130,
-    minWidth: 60,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 130,
     description: 'Potassium',
     renderCell: renderBalanceCell('remK2o'),
+    sortable: false,
   },
   {
     field: '',

@@ -78,7 +78,6 @@ export default function FarmInformation() {
       if (response.status === 200) {
         const { data } = response;
         const animalDict: { [id: string]: string } = (data as { id: number; name: string }[])
-          // Temp, remove non-cattle as an option
           .filter((opt) => opt.id === 1 || opt.id === 2)
           .reduce(
             (dict, row) => {
@@ -273,13 +272,13 @@ export default function FarmInformation() {
               >
                 I have vegetables
               </Checkbox>
-              <Checkbox
+              {/* <Checkbox
                 value="HasBerries"
                 isSelected={formData.HasBerries}
                 onChange={(s) => handleChange('HasBerries', s)}
               >
                 I have berries
-              </Checkbox>
+              </Checkbox> */}
             </div>
           </Grid>
           <Grid size={12}>

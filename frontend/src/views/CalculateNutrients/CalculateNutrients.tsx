@@ -9,7 +9,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
@@ -35,6 +34,10 @@ import {
 import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 import CropsModal from '../Crops/CropsModal.tsx';
 
+function NoRows() {
+  return <div />;
+}
+
 export default function CalculateNutrients() {
   const { state, dispatch } = useAppState();
   const [openDialog, setOpenDialog] = useState<[string, number | undefined]>(['', undefined]);
@@ -53,8 +56,14 @@ export default function CalculateNutrients() {
       setOpenDialog(['crop', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = genHandleDeleteRow(activeField, 'Crops', setFieldList);
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell);
-  }, [activeField]);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      fieldList[activeField].Crops?.length ? <div>Crops</div> : <div />,
+      false,
+    );
+  }, [activeField, fieldList]);
 
   const manureColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -70,7 +79,13 @@ export default function CalculateNutrients() {
         return nextFieldArray;
       });
     };
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      <div>Manures</div>,
+      true,
+    );
   }, [activeField]);
 
   const fertilizerColumns: GridColDef[] = useMemo(() => {
@@ -78,7 +93,13 @@ export default function CalculateNutrients() {
       setOpenDialog(['fertilizer', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = genHandleDeleteRow(activeField, 'Fertilizers', setFieldList);
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      <div>Fertilizers</div>,
+      true,
+    );
   }, [activeField]);
 
   const otherColumns: GridColDef[] = useMemo(() => {
@@ -86,7 +107,13 @@ export default function CalculateNutrients() {
       setOpenDialog(['other', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = genHandleDeleteRow(activeField, 'OtherNutrients', setFieldList);
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      <div>Other</div>,
+      true,
+    );
   }, [activeField]);
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
@@ -171,23 +198,15 @@ export default function CalculateNutrients() {
   };
 
   const customCalcTableStyle = {
-    '& .MuiDataGrid-columnHeader[data-field="reqN"] .MuiDataGrid-columnHeaderTitle': {
-      marginLeft: '2em',
+    '& .MuiDataGrid-columnHeaderTitleContainerContent': {
+      fontWeight: 'bold',
     },
-    '& .MuiDataGrid-columnHeader[data-field="reqP2o5"] .MuiDataGrid-columnHeaderTitle': {
-      marginLeft: '.5em',
+    '& .MuiDataGrid-overlayWrapperInner': {
+      fontWeight: 'bold',
     },
-    '& .MuiDataGrid-columnHeader[data-field="reqK2o"] .MuiDataGrid-columnHeaderTitle': {
-      marginLeft: '.5em',
-    },
-    '& .MuiDataGrid-columnHeader[data-field="remN"] .MuiDataGrid-columnHeaderTitle': {
-      marginLeft: '2em',
-    },
-    '& .MuiDataGrid-columnHeader[data-field="remP2o5"] .MuiDataGrid-columnHeaderTitle': {
-      marginLeft: '1em',
-    },
-    '& .MuiDataGrid-columnHeader[data-field="remK2o"] .MuiDataGrid-columnHeaderTitle': {
-      marginLeft: '1.5em',
+    '& .MuiDataGrid-columnHeader': {
+      backgroundColor: 'white !important',
+      borderColor: 'none !important',
     },
   };
 
@@ -256,7 +275,7 @@ export default function CalculateNutrients() {
             <FontAwesomeIcon icon={faPlus} />
             Add Fertilizer
           </Button>
-          <Button
+          {/* <Button
             size="medium"
             aria-label="Add Fertigation"
             onPress={() => {
@@ -266,7 +285,7 @@ export default function CalculateNutrients() {
           >
             <FontAwesomeIcon icon={faPlus} />
             Add Fertigation
-          </Button>
+          </Button> */}
           <Button
             size="medium"
             aria-label="Add Other"
@@ -363,109 +382,67 @@ export default function CalculateNutrients() {
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >
         <div style={{ width: 220 }} />
-        <div style={{ width: 290 }}>
-          Agronomic (lb/ac)
-          <br />
-          <Grid container>
-            <Grid size="grow">
-              <span>N</span>
-            </Grid>
-            <Grid size="grow">
-              <span>
-                P<sub>2</sub>O<sub>5</sub>
-              </span>
-            </Grid>
-            <Grid size="grow">
-              <span>
-                K<sub>2</sub>O
-              </span>
-            </Grid>
-          </Grid>
-        </div>
-        <div style={{ width: 250 }}>
-          Crop Removal (lb/ac)
-          <br />
-          <Grid container>
-            <Grid size="grow">
-              <span>N</span>
-            </Grid>
-            <Grid size="grow">
-              <span>
-                P<sub>2</sub>O<sub>5</sub>
-              </span>
-            </Grid>
-            <Grid size="grow">
-              <span>
-                K<sub>2</sub>O
-              </span>
-            </Grid>
-          </Grid>
-        </div>
+        <div style={{ width: 350 }}>Agronomic (lb/ac)</div>
+        <div style={{ width: 220 }}>Crop Removal (lb/ac)</div>
       </div>
 
-      {fieldList[activeField].Crops.length > 0 && (
-        <>
-          <span>Crop</span>
-          <DataGrid
-            sx={{ ...customTableStyle, ...customCalcTableStyle }}
-            rows={fieldList[activeField].Crops}
-            columns={cropColumns}
-            getRowId={() => crypto.randomUUID()}
-            disableRowSelectionOnClick
-            disableColumnMenu
-            columnHeaderHeight={0}
-            hideFooterPagination
-            hideFooter
-          />
-        </>
-      )}
+      <DataGrid
+        sx={{
+          ...customTableStyle,
+          ...customCalcTableStyle,
+          '--DataGrid-overlayHeight': '0px',
+          '--DataGrid-rowBorderColor':
+            fieldList[activeField]?.Crops.length > 0 ? 'inherit' : 'none',
+        }}
+        rows={fieldList[activeField].Crops}
+        columns={cropColumns}
+        getRowId={() => crypto.randomUUID()}
+        disableRowSelectionOnClick
+        disableColumnMenu
+        columnHeaderHeight={24}
+        hideFooterPagination
+        hideFooter
+        slots={{ noRowsOverlay: NoRows }}
+      />
+
       {fieldList[activeField].Fertilizers.length > 0 && (
-        <>
-          <span>Fertilizer</span>
-          <DataGrid
-            sx={{ ...customTableStyle, ...customCalcTableStyle }}
-            rows={fieldList[activeField].Fertilizers}
-            columns={fertilizerColumns}
-            getRowId={() => crypto.randomUUID()}
-            disableRowSelectionOnClick
-            disableColumnMenu
-            columnHeaderHeight={0}
-            hideFooterPagination
-            hideFooter
-          />
-        </>
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={fieldList[activeField].Fertilizers}
+          columns={fertilizerColumns}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          columnHeaderHeight={16}
+          hideFooterPagination
+          hideFooter
+        />
       )}
       {transformedManureData.length > 0 && (
-        <>
-          <span>Manure</span>
-          <DataGrid
-            sx={{ ...customTableStyle, ...customCalcTableStyle }}
-            rows={transformedManureData}
-            columns={manureColumns}
-            getRowId={() => crypto.randomUUID()}
-            disableRowSelectionOnClick
-            disableColumnMenu
-            columnHeaderHeight={0}
-            hideFooterPagination
-            hideFooter
-          />
-        </>
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={transformedManureData}
+          columns={manureColumns}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          columnHeaderHeight={16}
+          hideFooterPagination
+          hideFooter
+        />
       )}
       {fieldList[activeField].OtherNutrients.length > 0 && (
-        <>
-          <span>Nutrient Source</span>
-          <DataGrid
-            sx={{ ...customTableStyle, ...customCalcTableStyle }}
-            rows={fieldList[activeField].OtherNutrients}
-            columns={otherColumns}
-            getRowId={() => crypto.randomUUID()}
-            disableRowSelectionOnClick
-            disableColumnMenu
-            columnHeaderHeight={0}
-            hideFooterPagination
-            hideFooter
-          />
-        </>
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={fieldList[activeField].OtherNutrients}
+          columns={otherColumns}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          columnHeaderHeight={16}
+          hideFooterPagination
+          hideFooter
+        />
       )}
       <DataGrid
         sx={{ ...customTableStyle, ...customCalcTableStyle }}
