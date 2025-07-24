@@ -1,15 +1,17 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { jsPDF } from 'jspdf';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
-import { SectionHeader, StyledContent } from './reporting.styles';
+import { SectionHeader, StyledContent, Error } from './reporting.styles';
 import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
 import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
 import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 
 import useAppState from '@/hooks/useAppState';
+import { ManureInSystem } from '@/types';
+import { formGridBreakpoints } from '@/common.styles';
 
 export default function FieldList() {
   const reportRef = useRef(null);
@@ -17,6 +19,28 @@ export default function FieldList() {
 
   const { state } = useAppState();
   const navigate = useNavigate();
+
+  const unassignedManures = useMemo(() => {
+    const generatedManures = state.nmpFile?.years[0].GeneratedManures || [];
+    const importedManures = state.nmpFile?.years[0].ImportedManures || [];
+    const unassignedM: ManureInSystem[] = [];
+    const assignedM: ManureInSystem[] = [];
+    (generatedManures || []).forEach((manure) => {
+      if (manure.AssignedToStoredSystem) {
+        assignedM.push({ type: 'Generated', data: manure });
+      } else {
+        unassignedM.push({ type: 'Generated', data: manure });
+      }
+    });
+    (importedManures || []).forEach((manure) => {
+      if (manure.AssignedToStoredSystem) {
+        assignedM.push({ type: 'Imported', data: manure });
+      } else {
+        unassignedM.push({ type: 'Imported', data: manure });
+      }
+    });
+    return unassignedM;
+  }, [state.nmpFile?.years]);
 
   async function downloadBlob() {
     const url = URL.createObjectURL(
@@ -93,6 +117,24 @@ export default function FieldList() {
       <ProgressStepper />
       <AppTitle />
       <PageTitle title="Reporting" />
+
+      {unassignedManures.length > 0 && (
+        <Grid
+          container
+          sx={{ marginTop: '1rem' }}
+        >
+          <Error>
+            The following manures have not been assigned:
+            <ul>
+              {unassignedManures.map((manure, idx) => (
+                <span key={`${manure.type}-${manure.data?.ManureName || idx}`}>
+                  {manure.type} - {manure.data?.ManureName || 'Unnamed'}
+                </span>
+              ))}
+            </ul>
+          </Error>
+        </Grid>
+      )}
 
       <Grid
         container
