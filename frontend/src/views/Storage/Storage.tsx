@@ -9,16 +9,15 @@ import {
   ButtonGroup as ButtonGovGroup,
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
-import { GridApiCommunity } from '@mui/x-data-grid/internals';
+import Grid from '@mui/material/Grid';
 import { StyledContent } from './storage.styles';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
+import { addRecordGroupStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem } from '@/types';
+import { ManureInSystem, ManureType } from '@/types';
 
 export default function Storage() {
   const { state, dispatch } = useAppState();
@@ -61,14 +60,13 @@ export default function Storage() {
     setIsDialogOpen(false);
   };
 
-  const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
-    setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
+  const handleEditRow = (index: number) => {
+    setRowEditIndex(index);
     setIsDialogOpen(true);
   };
 
   const handleDeleteRow = useCallback(
-    (e: { id: GridRowId; api: GridApiCommunity }) => {
-      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+    (index: number) => {
       const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
       newList.splice(index, 1);
       dispatch({
@@ -78,42 +76,6 @@ export default function Storage() {
       });
     },
     [state.nmpFile, dispatch],
-  );
-
-  const columnsAnimalManure: GridColDef[] = useMemo(
-    () => [
-      {
-        field: 'name',
-        headerName: 'System Name',
-        width: 200,
-        minWidth: 150,
-        maxWidth: 300,
-      },
-      {
-        field: 'actions',
-        headerName: 'Actions',
-        width: 120,
-        renderCell: (row: GridRenderCellParams) => (
-          <>
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleEditRow(row)}
-              icon={faEdit}
-              aria-label="Edit"
-            />
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleDeleteRow(row)}
-              icon={faTrash}
-              aria-label="Delete"
-            />
-          </>
-        ),
-        sortable: false,
-        resizable: false,
-      },
-    ],
-    [handleDeleteRow],
   );
 
   return (
@@ -156,16 +118,73 @@ export default function Storage() {
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
       </>
-      <DataGrid
-        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={state.nmpFile.years[0].ManureStorageSystems || []}
-        columns={columnsAnimalManure}
-        getRowId={() => crypto.randomUUID()}
-        disableRowSelectionOnClick
-        disableColumnMenu
-        hideFooterPagination
-        hideFooter
-      />
+      {(state.nmpFile.years[0].ManureStorageSystems || []).map((system, index) => (
+        <Grid container>
+          <Grid size={10}>
+            <span>{system.name}</span>
+          </Grid>
+          <Grid size={2}>
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => handleEditRow(index)}
+              icon={faEdit}
+              aria-label="Edit"
+            />
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => handleDeleteRow(index)}
+              icon={faTrash}
+              aria-label="Delete"
+            />
+          </Grid>
+          {system.manureType === ManureType.Liquid ? (
+            <>
+              {system.manureStorages.map((storage) => {
+                <>
+                  <Grid size={10}>
+                    <span>{storage.name}</span>
+                  </Grid>
+                  <Grid size={2}>
+                    <FontAwesomeIcon
+                      css={tableActionButtonCss}
+                      icon={faEdit}
+                      aria-label="Edit"
+                      
+                    />
+                    <FontAwesomeIcon
+                      css={tableActionButtonCss}
+                      icon={faTrash}
+                      aria-label="Delete"
+                    />
+                  </Grid> 
+                </>
+              })}
+              <Button
+                size="medium"
+                aria-label="Add a Storage to this System"
+                variant="secondary"
+                onPress={() => {}}
+              >
+                Add a Storage to this System
+              </Button>
+            </>
+          ) : (
+            <>
+            <Grid size={10}>
+              <span>{system.manureStorage.name}</span>
+            </Grid>
+            <Grid size={2}>
+              <FontAwesomeIcon
+                css={tableActionButtonCss}
+                icon={faEdit}
+                aria-label="Edit"
+                
+              />
+            </Grid>
+            </>
+          )}
+        </Grid>)
+      )}
       <div>
         <span>Materials Needing Storage</span>
         <br />
@@ -195,7 +214,6 @@ export default function Storage() {
           variant="primary"
           onPress={handleNext}
           type="submit"
-          isDisabled={unassignedManures.length > 0}
         >
           Next
         </Button>

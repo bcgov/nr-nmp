@@ -16,7 +16,7 @@ import { formCss } from '../../common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem, ManureStorage, NMPFileManureStorageSystem } from '@/types';
+import { ManureInSystem, SolidManureStorage, NMPFileManureStorageSystem } from '@/types';
 import DEFAULT_NMPFILE_MANURE_STORAGE from '@/constants/DefaultNMPFileManureStorage';
 import { Modal, Select } from '@/components/common';
 import { ModalProps } from '@/components/common/Modal/Modal';
@@ -84,10 +84,16 @@ export default function StorageModal({
       prev.map((manure) => {
         let newManure: ManureInSystem;
         if (selected.includes(manure.data.ManagedManureName)) {
-          newManure = { ...manure, data: { ...manure.data, AssignedToStoredSystem: true } };
+          newManure = {
+            ...manure,
+            data: { ...manure.data, AssignedToStoredSystem: true },
+          } as ManureInSystem;
           selectedManures.push(newManure);
         } else {
-          newManure = { ...manure, data: { ...manure.data, AssignedToStoredSystem: false } };
+          newManure = {
+            ...manure,
+            data: { ...manure.data, AssignedToStoredSystem: false },
+          } as ManureInSystem;
         }
         return newManure;
       }),
@@ -135,7 +141,13 @@ export default function StorageModal({
                 onSelectionChange={(e: Key) => {
                   handleInputChange({ manureType: e as number, manuresInSystem: [] });
                   setFullManureList((prev) =>
-                    prev.map((m) => ({ ...m, data: { ...m.data, AssignedToStoredSystem: false } })),
+                    prev.map(
+                      (m) =>
+                        ({
+                          ...m,
+                          data: { ...m.data, AssignedToStoredSystem: false },
+                        }) as ManureInSystem,
+                    ),
                   );
                 }}
               />
