@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { jsPDF } from 'jspdf';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
@@ -10,6 +10,7 @@ import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
 import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 
 import useAppState from '@/hooks/useAppState';
+import { ManureInSystem } from '@/types';
 
 export default function FieldList() {
   const reportRef = useRef(null);
@@ -17,6 +18,28 @@ export default function FieldList() {
 
   const { state } = useAppState();
   const navigate = useNavigate();
+
+  const unassignedManures = useMemo(() => {
+    const generatedManures = state.nmpFile?.years[0].GeneratedManures || [];
+    const importedManures = state.nmpFile?.years[0].ImportedManures || [];
+    const unassignedM: ManureInSystem[] = [];
+    const assignedM: ManureInSystem[] = [];
+    generatedManures.forEach((manure) => {
+      if (manure.AssignedToStoredSystem) {
+        assignedM.push({ type: 'Generated', data: manure });
+      } else {
+        unassignedM.push({ type: 'Generated', data: manure });
+      }
+    });
+    importedManures.forEach((manure) => {
+      if (manure.AssignedToStoredSystem) {
+        assignedM.push({ type: 'Imported', data: manure });
+      } else {
+        unassignedM.push({ type: 'Imported', data: manure });
+      }
+    });
+    return unassignedM;
+  }, [state.nmpFile?.years]);
 
   async function downloadBlob() {
     const url = URL.createObjectURL(
@@ -93,6 +116,24 @@ export default function FieldList() {
       <ProgressStepper />
       <AppTitle />
       <PageTitle title="Reporting" />
+
+      {unassignedManures.length > 0 && (
+        <Grid
+          container
+          sx={{ marginTop: '1rem' }}
+        >
+          <div style={{ border: '1px solid #c81212', width: '100%' }}>
+            The following materials are not stored:
+            <ul>
+              {unassignedManures.map((manure) => (
+                <span key={`${manure.data?.ManagedManureName}`}>
+                  {manure.type} - {manure.data?.ManagedManureName}
+                </span>
+              ))}
+            </ul>
+          </div>
+        </Grid>
+      )}
 
       <Grid
         container

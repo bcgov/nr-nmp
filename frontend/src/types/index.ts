@@ -40,6 +40,7 @@ import {
 } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
+import { LiquidManureStorageSystem, SolidManureStorageSystem } from './NMPFileManureStorageSystem';
 import {
   ManureInSystem,
   NMPFileManureStorageSystem,
@@ -67,6 +68,8 @@ export type {
   NMPFileGeneratedManureData,
   ManureInSystem,
   NMPFileManureStorageSystem,
+  LiquidManureStorageSystem,
+  SolidManureStorageSystem,
   SolidManureConversionFactors,
   Region,
   CropsConversionFactors,
