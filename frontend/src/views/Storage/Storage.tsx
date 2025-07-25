@@ -49,11 +49,13 @@ export default function Storage() {
   useEffect(() => {
     const region = state.nmpFile.farmDetails.FarmRegion;
     const subregion = state.nmpFile.farmDetails.FarmSubRegion;
+    debugger;
     if (region && subregion) {
       apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
         const { data } = response;
+        debugger;
         const currentSubregion = data.find(
-          (ele: Subregion) => ele.id === subregion,
+          (ele: Subregion) => ele.id === Number(subregion),
         );
         setSubregionData(currentSubregion);
       });
