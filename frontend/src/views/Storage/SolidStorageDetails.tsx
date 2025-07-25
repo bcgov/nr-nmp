@@ -1,18 +1,20 @@
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import { TextField } from '@bcgov/design-system-react-components';
 import { formGridBreakpoints } from '../../common.styles';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { SolidManureStorageSystem, ManureStorage } from '@/types';
+import { SolidManureStorageSystem, SolidManureStorage } from '@/types';
 
 type SolidStorageDetailsProps = {
   formData: SolidManureStorageSystem;
+  setFormData: React.Dispatch<React.SetStateAction<SolidManureStorageSystem>>;
 };
 
-export default function SolidStorageDetails({ formData }: SolidStorageDetailsProps) {
-  const handleStorageChange = (changes: Partial<ManureStorage>) => {
+export default function SolidStorageDetails({ formData, setFormData }: SolidStorageDetailsProps) {
+  const handleStorageChange = (changes: Partial<SolidManureStorage>) => {
     setFormData((prev) => ({
       ...prev,
-      manureStorageStructures: { ...prev.manureStorageStructures, ...changes },
+      manureStorage: { ...prev.manureStorage, ...changes },
     }));
   };
 

@@ -1,48 +1,16 @@
-import React, { useState, useMemo } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import { TextField } from '@bcgov/design-system-react-components';
 import { formGridBreakpoints } from '../../common.styles';
-import { ManureInSystem, ManureType } from '@/types';
-import {
-  NMPFileManureStorageSystem,
-  LiquidManureStorageSystem,
-  SolidManureStorageSystem,
-} from '@/types/NMPFileManureStorageSystem';
+import { ManureType } from '@/types';
+import { NMPFileManureStorageSystem } from '@/types/NMPFileManureStorageSystem';
 
-type StorageSystemDetailsEditProps = {
+type StorageSystemDetailsDisplayProps = {
   formData: NMPFileManureStorageSystem;
-  setFormData: React.Dispatch<React.SetStateAction<NMPFileManureStorageSystem>>;
-  unassignedManures: ManureInSystem[];
 };
 
-export default function StorageSystemDetailsEdit({
+export default function StorageSystemDetailsDisplay({
   formData,
-  setFormData,
-  unassignedManures,
-}: StorageSystemDetailsEditProps) {
-  const [fullManureList, setFullManureList] = useState<ManureInSystem[]>(
-    [...unassignedManures, ...formData.manuresInSystem].sort((a, b) =>
-      a.data.ManagedManureName.localeCompare(b.data.ManagedManureName),
-    ),
-  );
-
-  // get sum of all entered manures, used for solid and liquid seperation
-  const totalManureGallons = useMemo(
-    () =>
-      fullManureList.reduce(
-        (sum, manure) => sum + (manure.data.AnnualAmountUSGallonsVolume || 0),
-        0,
-      ),
-    [fullManureList],
-  );
-
-  const handleInputChange = (
-    changes: Partial<SolidManureStorageSystem> | Partial<LiquidManureStorageSystem>,
-  ) => {
-    setFormData((prev) => ({ ...prev, ...changes }) as NMPFileManureStorageSystem);
-  };
-
+}: StorageSystemDetailsDisplayProps) {
   return (
     <>
       <Grid
@@ -111,16 +79,13 @@ export default function StorageSystemDetailsEdit({
                   container
                   size={6}
                 >
-                  <TextField
-                    isRequired
-                    label="Yard and Roof Area (ft2)"
-                    type="number"
-                    name="runoffAreaSqFt"
-                    value={String(formData.runoffAreaSqFt)}
-                    onChange={(e: string) => {
-                      handleInputChange({ runoffAreaSqFt: Number(e) });
-                    }}
-                  />
+                  <div
+                    style={{ marginBottom: '0.15rem' }}
+                    className="bcds-react-aria-Select--Label"
+                  >
+                    Yard and Roof Area (ft2)
+                  </div>
+                  <span>{formData.runoffAreaSqFt}</span>
                 </Grid>
               )}
             </>
@@ -154,22 +119,13 @@ export default function StorageSystemDetailsEdit({
             {formData.hasSeperation === true && (
               <div style={{ display: 'flex', width: '100%' }}>
                 <div style={{ paddingRight: '2em' }}>
-                  <TextField
-                    isRequired
-                    label="% of liquid volume separated"
-                    type="number"
-                    value={String(formData.percentLiquidSeperation)}
-                    onChange={(e: string) => {
-                      const solidsSeparatedGallons = totalManureGallons * (Number(e) / 100);
-                      const separatedLiquidsGallons = totalManureGallons - solidsSeparatedGallons;
-                      const separatedSolidsTons = (solidsSeparatedGallons / 264.172) * 0.5;
-                      handleInputChange({
-                        percentLiquidSeperation: Number(e),
-                        separatedLiquidsUSGallons: Math.round(separatedLiquidsGallons),
-                        separatedSolidsTons: Math.round(separatedSolidsTons),
-                      });
-                    }}
-                  />
+                  <div
+                    style={{ marginBottom: '0.15rem' }}
+                    className="bcds-react-aria-Select--Label"
+                  >
+                    % of liquid volume separated
+                  </div>
+                  <span>{formData.percentLiquidSeperation}</span>
                 </div>
               </div>
             )}

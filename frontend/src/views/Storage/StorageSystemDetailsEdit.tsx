@@ -12,14 +12,23 @@ import {
   LiquidManureStorageSystem,
   SolidManureStorageSystem,
 } from '@/types/NMPFileManureStorageSystem';
+import { StorageModalFormData } from './types';
+import {
+  DEFAULT_LIQUID_MANURE_STORAGE,
+  DEFAULT_LIQUID_MANURE_SYSTEM,
+  DEFAULT_SOLID_MANURE_STORAGE,
+  DEFAULT_SOLID_MANURE_SYSTEM,
+} from '@/constants';
 
 type StorageSystemDetailsEditProps = {
-  formData: NMPFileManureStorageSystem;
-  setFormData: React.Dispatch<React.SetStateAction<NMPFileManureStorageSystem>>;
+  mode: 'create' | 'system_edit';
+  formData: StorageModalFormData;
+  setFormData: React.Dispatch<React.SetStateAction<StorageModalFormData>>;
   unassignedManures: ManureInSystem[];
 };
 
 export default function StorageSystemDetailsEdit({
+  mode,
   formData,
   setFormData,
   unassignedManures,
@@ -50,6 +59,43 @@ export default function StorageSystemDetailsEdit({
     () => fullManureList.filter((m) => m.data.ManureType === formData.manureType),
     [formData, fullManureList],
   );
+
+  // Reset the form when the manure type changes
+  const handleManureTypeChange = (newType: ManureType) => {
+    setFormData((prev) => {
+      if (prev.manureType === newType) return prev;
+
+      let next: NMPFileManureStorageSystem;
+      if (newType === ManureType.Liquid) {
+        next = {
+          ...DEFAULT_LIQUID_MANURE_SYSTEM,
+          name: prev.name,
+        };
+        if (prev.manureType === ManureType.Solid) {
+          next.manureStorages = [
+            {
+              ...DEFAULT_LIQUID_MANURE_STORAGE,
+              name: prev.manureStorage.name,
+              isStructureCovered: prev.manureStorage.isStructureCovered,
+            },
+          ];
+        }
+      } else {
+        next = {
+          ...DEFAULT_SOLID_MANURE_SYSTEM,
+          name: prev.name,
+        };
+        if (prev.manureType === ManureType.Liquid) {
+          next.manureStorage = {
+            ...DEFAULT_SOLID_MANURE_STORAGE,
+            name: prev.manureStorages[0].name,
+            isStructureCovered: prev.manureStorages[0].isStructureCovered,
+          };
+        }
+      }
+      return next;
+    });
+  };
 
   const handleInputChange = (
     changes: Partial<SolidManureStorageSystem> | Partial<LiquidManureStorageSystem>,
@@ -98,7 +144,7 @@ export default function StorageSystemDetailsEdit({
             selectedKey={formData.manureType}
             items={MANURE_TYPE_OPTIONS}
             onSelectionChange={(e) => {
-              handleInputChange({ manureType: e as number, manuresInSystem: [] });
+              handleManureTypeChange(e as number);
               setFullManureList((prev) =>
                 prev.map(
                   (m) =>
@@ -109,6 +155,7 @@ export default function StorageSystemDetailsEdit({
                 ),
               );
             }}
+            isDisabled={mode !== 'create'}
           />
           <TextField
             isRequired
@@ -179,77 +226,83 @@ export default function StorageSystemDetailsEdit({
           )}
         </Grid>
       </Grid>
-      <Divider
-        aria-hidden="true"
-        component="div"
-        css={{ marginTop: '1rem', marginBottom: '1rem' }}
-      />
       {formData.manureType === ManureType.Liquid && (
-        <Grid
-          container
-          size={formGridBreakpoints}
-          direction="row"
-          spacing={2}
-        >
+        <>
+          <Divider
+            aria-hidden="true"
+            component="div"
+            css={{ marginTop: '1rem', marginBottom: '1rem' }}
+          />
           <Grid
             container
-            size={6}
+            size={formGridBreakpoints}
             direction="row"
+            spacing={2}
           >
-            <div
-              style={{ marginBottom: '0.15rem' }}
-              className="bcds-react-aria-Select--Label"
+            <Grid
+              container
+              size={6}
+              direction="row"
             >
-              Is there solid/liquid separation?
-              <YesNoRadioButtons
-                value={formData.hasSeperation}
-                text=""
-                onChange={(e: boolean) => {
-                  handleInputChange({ hasSeperation: e });
-                }}
-                orientation="horizontal"
-              />
-            </div>
-            {formData.hasSeperation === true && (
-              <div style={{ display: 'flex', width: '100%' }}>
-                <div style={{ paddingRight: '2em' }}>
-                  <TextField
-                    isRequired
-                    label="% of liquid volume separated"
-                    type="number"
-                    value={String(formData.percentLiquidSeperation)}
-                    onChange={(e: string) => {
-                      const solidsSeparatedGallons = totalManureGallons * (Number(e) / 100);
-                      const separatedLiquidsGallons = totalManureGallons - solidsSeparatedGallons;
-                      const separatedSolidsTons = (solidsSeparatedGallons / 264.172) * 0.5;
-                      handleInputChange({
-                        percentLiquidSeperation: Number(e),
-                        separatedLiquidsUSGallons: Math.round(separatedLiquidsGallons),
-                        separatedSolidsTons: Math.round(separatedSolidsTons),
-                      });
-                    }}
-                  />
-                </div>
+              <div
+                style={{ marginBottom: '0.15rem' }}
+                className="bcds-react-aria-Select--Label"
+              >
+                Is there solid/liquid separation?
+                <YesNoRadioButtons
+                  value={formData.hasSeperation}
+                  text=""
+                  onChange={(e: boolean) => {
+                    handleInputChange({ hasSeperation: e });
+                  }}
+                  orientation="horizontal"
+                />
               </div>
-            )}
+              {formData.hasSeperation && (
+                <div style={{ display: 'flex', width: '100%' }}>
+                  <div style={{ paddingRight: '2em' }}>
+                    <TextField
+                      isRequired
+                      label="% of liquid volume separated"
+                      type="number"
+                      value={String(formData.percentLiquidSeperation)}
+                      onChange={(e: string) => {
+                        const solidsSeparatedGallons = totalManureGallons * (Number(e) / 100);
+                        const separatedLiquidsGallons = totalManureGallons - solidsSeparatedGallons;
+                        const separatedSolidsTons = (solidsSeparatedGallons / 264.172) * 0.5;
+                        handleInputChange({
+                          percentLiquidSeperation: Number(e),
+                          separatedLiquidsUSGallons: Math.round(separatedLiquidsGallons),
+                          separatedSolidsTons: Math.round(separatedSolidsTons),
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </Grid>
+            <Grid
+              container
+              size={6}
+              direction="row"
+            >
+              <div style={{ width: 'max-content', fontSize: '12px' }}>
+                {formData.hasSeperation && (
+                  <>
+                    <p>
+                      Separated liquids
+                      <p>{formData.separatedLiquidsUSGallons} U.S. Gallons</p>
+                    </p>
+                    <p>
+                      Separated solids
+                      <p>{formData.separatedSolidsTons} tons</p>
+                    </p>
+                  </>
+                )}
+              </div>
+            </Grid>
           </Grid>
-          <Grid
-            container
-            size={6}
-            direction="row"
-          >
-            <div style={{ width: 'max-content', fontSize: '12px' }}>
-              <p>
-                Separated liquids
-                <p>{formData.separatedLiquidsUSGallons} U.S. Gallons</p>
-              </p>
-              <p>
-                Separated solids
-                <p>{formData.separatedSolidsTons} tons</p>
-              </p>
-            </div>
-          </Grid>
-        </Grid>
+        </>
       )}
     </>
   );

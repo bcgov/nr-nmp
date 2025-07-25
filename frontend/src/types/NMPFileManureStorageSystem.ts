@@ -19,32 +19,41 @@ export type SolidManureStorage = {
   // TODO: Add attribute for annual precipitation
 };
 
-type RectangularStorage = {
-  shape: 'Rectangular';
-  length: number;
-  width: number;
-  height: number;
+// eslint-disable-next-line no-shadow
+export enum Shape {
+  Rectangular = 1,
+  Circular = 2,
+  SlopedWallRectangular = 3,
 }
 
-type CircularStorage = {
-  shape: 'Circular';
-  diameter: number;
-  height: number;
-}
+export type RectangularStorage = {
+  shape: Shape.Rectangular;
+  lengthFt: number;
+  widthFt: number;
+  heightFt: number;
+};
 
-type SlopedWallStorage = {
-  shape: 'SlopedWallRectangular';
-  topLength: number;
-  topWidth: number;
-  height: number;
+export type CircularStorage = {
+  shape: Shape.Circular;
+  diameterFt: number;
+  heightFt: number;
+};
+
+export type SlopedWallStorage = {
+  shape: Shape.SlopedWallRectangular;
+  topLengthFt: number;
+  topWidthFt: number;
+  heightFt: number;
   slopeOfWall: number;
 };
+
+export type StorageStructure = RectangularStorage | CircularStorage | SlopedWallStorage;
 
 export type LiquidManureStorage = {
   name: string;
   manureType: ManureType.Liquid;
   isStructureCovered: boolean;
-  structure?: RectangularStorage | CircularStorage | SlopedWallStorage;
+  structure?: StorageStructure;
   volumeUSGallons: number;
   // TODO: Add attribute for annual precipitation
 };
