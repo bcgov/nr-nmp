@@ -15,6 +15,7 @@ import { NMPFileFieldData, NMPFileOtherNutrient } from './NMPFileFieldData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 import SolidManureConversionFactors from './SolidManureConversionFactors';
 import Region from './Region';
+import SubRegion from './SubRegion';
 import Manure from './Manure';
 import {
   CalculateNutrientsColumn,
@@ -91,4 +92,5 @@ export type {
   FertilizerUnit,
   NMPFileOtherNutrient,
   ManureStorage,
+  SubRegion,
 };

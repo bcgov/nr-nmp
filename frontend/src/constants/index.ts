@@ -10,6 +10,7 @@ import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from './Animals';
 import APP_STATE_KEY from './context';
 import { HarvestUnit, HARVEST_UNIT_OPTIONS } from './harvestUnits';
 import MANURE_TYPE_OPTIONS from './ManureTypeOptions';
+import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 
 // TODO: Standardize these variable names. Global constants should be in all caps
 export {
@@ -28,4 +29,5 @@ export {
   HARVEST_UNIT_OPTIONS,
   MANURE_APPLICATION_FREQ,
   MANURE_TYPE_OPTIONS,
+  PrecipitationConversionFactor,
 };

@@ -8,9 +8,10 @@ interface NMPFileGeneratedManureData {
   AnnualAmountTonsWeight?: number;
   AnnualAmountDisplayWeight?: string;
   ManagedManureName: string;
+  AnnualAmountOfManurePerStorage?: number;
   IsMaterialStored?: boolean;
   AssignedToStoredSystem?: boolean;
   AssignedWithNutrientAnalysis?: boolean;
-  manureId: string;
+  manureId?: string;
 }
 export default NMPFileGeneratedManureData;

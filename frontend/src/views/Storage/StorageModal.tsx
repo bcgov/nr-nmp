@@ -1,7 +1,7 @@
 /**
  * @summary This is the modal for the Storage page
  */
-import { Key, useState, useMemo, FormEvent } from 'react';
+import { Key, useContext, useState, useMemo, FormEvent, useEffect } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -16,10 +16,20 @@ import { formCss, formGridBreakpoints } from '../../common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem, ManureStorage, ManureType, NMPFileManureStorageSystem } from '@/types';
+import { APICacheContext } from '@/context/APICacheContext';
+import {
+  ManureInSystem,
+  ManureStorage,
+  ManureType,
+  NMPFileGeneratedManureData,
+  NMPFileImportedManureData,
+  NMPFileManureStorageSystem,
+  SubRegion,
+} from '@/types';
 import DEFAULT_NMPFILE_MANURE_STORAGE from '@/constants/DefaultNMPFileManureStorage';
 import { Modal, Select } from '@/components/common';
 import { ModalProps } from '@/components/common/Modal/Modal';
+import { PrecipitationConversionFactor } from '@/constants';
 
 type ModalComponentProps = {
   initialModalData?: NMPFileManureStorageSystem;
@@ -45,6 +55,9 @@ export default function StorageModal({
   const [formData, setFormData] = useState<NMPFileManureStorageSystem>(
     initialModalData || DEFAULT_NMPFILE_MANURE_STORAGE,
   );
+  const apiCache = useContext(APICacheContext);
+  const [subRegionData, setSubRegionData] = useState<SubRegion | undefined>(undefined);
+
   // Need to maintain a string[] for the CheckboxGroup
   const selectedManureNames = useMemo(
     () => formData.manuresInSystem.map((m) => m.data.ManagedManureName),
@@ -70,6 +83,22 @@ export default function StorageModal({
     [formData, fullManureList],
   );
 
+  const region = state.nmpFile.farmDetails.FarmRegion;
+
+  // Get subregion precipitation data
+  useEffect(() => {
+    if (state.nmpFile?.farmDetails?.FarmRegion && state.nmpFile?.farmDetails?.FarmSubRegion) {
+      apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
+        const { data } = response;
+        const currentSubRegion = data.find(
+          (ele: SubRegion) => ele.id === Number(state.nmpFile?.farmDetails?.FarmSubRegion),
+        );
+        setSubRegionData(currentSubRegion);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -87,6 +116,31 @@ export default function StorageModal({
     handleDialogClose();
   };
 
+  const calculatePrecipitation = (
+    manure: NMPFileGeneratedManureData | NMPFileImportedManureData,
+  ) => {
+    const updatedManure = { ...manure };
+    if (!subRegionData) throw new Error('No subregion data found');
+
+    const convFactor =
+      manure.ManureType === ManureType.Liquid
+        ? PrecipitationConversionFactor.liquid
+        : PrecipitationConversionFactor.solid;
+    const runoffArea = formData.getsRunoffFromRoofsOrYards ? formData.runoffAreaSqFt : 0;
+    const uncoveredAreaSqFt = !formData.manureStorageStructures.isStructureCovered
+      ? formData.manureStorageStructures.uncoveredAreaSqFt
+      : 0;
+
+    const totalAnnualAmount =
+      ((runoffArea ?? 0) + (uncoveredAreaSqFt ?? 0)) *
+        subRegionData.annualprecipitation *
+        convFactor +
+      manure.AnnualAmount;
+    updatedManure.AnnualAmountOfManurePerStorage = totalAnnualAmount;
+
+    return updatedManure;
+  };
+
   const handleInputChange = (
     changes: Partial<Omit<NMPFileManureStorageSystem, 'manureStorageStructures'>>,
   ) => {
@@ -99,7 +153,10 @@ export default function StorageModal({
       prev.map((manure) => {
         let newManure: ManureInSystem;
         if (selected.includes(manure.data.ManagedManureName)) {
-          newManure = { ...manure, data: { ...manure.data, AssignedToStoredSystem: true } };
+          newManure = {
+            ...manure,
+            data: { ...calculatePrecipitation(manure.data), AssignedToStoredSystem: true },
+          };
           selectedManures.push(newManure);
         } else {
           newManure = { ...manure, data: { ...manure.data, AssignedToStoredSystem: false } };
@@ -112,6 +169,9 @@ export default function StorageModal({
 
   const handleStorageChange = (changes: Partial<ManureStorage>) => {
     // TODO: Adapt this to work with multiple storages. I think this version of the modal always edits the 1st storage?
+
+    // Wilson note: TODO manures need to be updated (by calling calculatePrecipitation as handleSelectedChange above)
+    // when storage attributes getsRunoffFromRoofsOrYards and uncoveredAreaSqFt
     setFormData((prev) => ({
       ...prev,
       manureStorageStructures: { ...prev.manureStorageStructures, ...changes },
@@ -131,14 +191,9 @@ export default function StorageModal({
       >
         <Grid
           container
-          size={formGridBreakpoints}
-          direction="row"
-          spacing={2}
+          spacing={1}
         >
-          <Grid
-            container
-            size={6}
-          >
+          <Grid size={formGridBreakpoints}>
             <Select
               isRequired
               label="Manure Type"
@@ -161,62 +216,71 @@ export default function StorageModal({
               }}
             />
           </Grid>
-          <Grid
-            container
-            size={6}
-          >
-            <CheckboxGroup
-              isRequired
-              value={selectedManureNames}
-              onChange={handleSelectedChange}
-            >
-              {availableManures.map((manure) => (
-                <Checkbox
-                  key={manure.data.ManagedManureName}
-                  value={manure.data.ManagedManureName}
-                >
-                  {manure.data.ManagedManureName}
-                </Checkbox>
-              ))}
-            </CheckboxGroup>
-          </Grid>
-          <Grid
-            container
-            size={12}
-          >
-            {formData.manureType === ManureType.Liquid && (
-              <>
-                <Grid
-                  container
-                  size={6}
-                >
-                  <YesNoRadioButtons
-                    value={formData.getsRunoffFromRoofsOrYards}
-                    text="Does yard or roof runoff enter the storage?"
-                    onChange={(e: boolean) => {
-                      handleInputChange({ getsRunoffFromRoofsOrYards: e });
-                    }}
-                    orientation="horizontal"
-                  />
-                </Grid>
-                {formData.getsRunoffFromRoofsOrYards === true && (
-                  <Grid
-                    container
-                    size={6}
+          <Grid size={formGridBreakpoints}>
+            <div css={{ marginTop: '1.5em' }}>
+              <CheckboxGroup
+                isRequired
+                value={selectedManureNames}
+                onChange={handleSelectedChange}
+              >
+                {availableManures.map((manure) => (
+                  <Checkbox
+                    key={manure.data.ManagedManureName}
+                    value={manure.data.ManagedManureName}
                   >
-                    <TextField
-                      isRequired
-                      label="Yard and Roof Area (ft2)"
-                      type="number"
-                      name="runoffAreaSqFt"
-                      value={String(formData.runoffAreaSqFt)}
-                      onChange={(e: string) => {
-                        handleInputChange({ runoffAreaSqFt: Number(e) });
-                      }}
-                    />
-                  </Grid>
-                )}
-              </>
+                    {manure.data.ManagedManureName}
+                  </Checkbox>
+                ))}
+              </CheckboxGroup>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          spacing={1}
+        >
+          <Grid size={12}>
+            <Divider
+              aria-hidden="true"
+              component="div"
+              css={{ marginTop: '1rem', marginBottom: '1rem' }}
+            />
+          </Grid>
+          <Grid size={formGridBreakpoints}>
+            <TextField
+              isRequired
+              label="Storage Name"
+              type="string"
+              name="manureStorageStructures.Name"
+              value={formData.manureStorageStructures.name}
+              onChange={(e: any) => {
+                handleStorageChange({ name: e });
+              }}
+            />
+          </Grid>
+          <Grid size={formGridBreakpoints}>
+            <div style={{ marginTop: '1.5em', marginBottom: '0.5rem' }}>
+              <span className="bcds-react-aria-Select--Label">Is the storage covered?</span>
+              <YesNoRadioButtons
+                value={formData.manureStorageStructures.isStructureCovered}
+                text=""
+                onChange={(e: boolean) => {
+                  handleStorageChange({ isStructureCovered: e });
+                  if (e) handleStorageChange({ uncoveredAreaSqFt: 0 });
+                }}
+                orientation="horizontal"
+              />
+            </div>
+            {!formData.manureStorageStructures.isStructureCovered && (
+              <TextField
+                isRequired
+                label="Uncovered Area of Storage (ft2)"
+                type="number"
+                value={String(formData.manureStorageStructures.uncoveredAreaSqFt)}
+                onChange={(e: string) => {
+                  handleStorageChange({ uncoveredAreaSqFt: Number(e) });
+                }}
+              />
             )}
           </Grid>
         </Grid>
