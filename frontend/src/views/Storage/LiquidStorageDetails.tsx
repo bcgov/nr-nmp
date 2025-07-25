@@ -18,6 +18,7 @@ import {
   DEFAULT_RECTANGULAR_STORAGE,
   DEFAULT_SLOPED_WALL_STORAGE,
 } from '@/constants';
+import { calcStorageVolumeGallons } from '@/utils/manureStorageSystems';
 
 const storageShapeOptions = [
   { id: Shape.Rectangular, label: Shape[Shape.Rectangular] },
@@ -39,6 +40,11 @@ export default function LiquidStorageDetails({
   const selectedStorage = useMemo(
     () => formData.manureStorages[storageIndex],
     [formData, storageIndex],
+  );
+  // TODO: Figure out why this always returns 0
+  const totalVolume = useMemo(
+    () => formData.manureStorages.reduce((sum, s) => sum + s.volumeUSGallons, 0),
+    [formData],
   );
 
   const handleStorageChange = (changes: Partial<LiquidManureStorage>) => {
@@ -73,7 +79,10 @@ export default function LiquidStorageDetails({
   const handleStructureChange = (structure: StorageStructure) => {
     setFormData((prev) => {
       const newManureStorages = [...prev.manureStorages];
-      newManureStorages[storageIndex] = { ...selectedStorage, structure };
+      newManureStorages[storageIndex] = {
+        ...selectedStorage,
+        structure: { ...structure, volumeUSGallons: calcStorageVolumeGallons(structure) },
+      };
       return { ...prev, manureStorages: newManureStorages };
     });
   };
@@ -129,26 +138,24 @@ export default function LiquidStorageDetails({
               label="Diameter(ft)"
               type="number"
               value={String(selectedStorage.structure.diameterFt)}
-              onChange={(e: string) => {
-                const newStructure: CircularStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as CircularStorage),
                   diameterFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
             <TextField
               isRequired
               label="Height(ft)"
               type="number"
               value={String(selectedStorage.structure.heightFt)}
-              onChange={(e: string) => {
-                const newStructure: CircularStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as CircularStorage),
                   heightFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
           </div>
         )}
@@ -159,39 +166,36 @@ export default function LiquidStorageDetails({
               label="Length(ft)"
               type="number"
               value={String(selectedStorage.structure.lengthFt)}
-              onChange={(e: string) => {
-                const newStructure: RectangularStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
                   lengthFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
             <TextField
               isRequired
               label="Width(ft)"
               type="number"
               value={String(selectedStorage.structure.widthFt)}
-              onChange={(e: string) => {
-                const newStructure: RectangularStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
                   widthFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
             <TextField
               isRequired
               label="Height(ft)"
               type="number"
               value={String(selectedStorage.structure.heightFt)}
-              onChange={(e: string) => {
-                const newStructure: RectangularStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
                   heightFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
           </div>
         )}
@@ -202,55 +206,61 @@ export default function LiquidStorageDetails({
               label="Top-Length(ft)"
               type="number"
               value={String(selectedStorage.structure.topLengthFt)}
-              onChange={(e: string) => {
-                const newStructure: SlopedWallStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
                   topLengthFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
             <TextField
               isRequired
               label="Top-Width(ft)"
               type="number"
               value={String(selectedStorage.structure.topWidthFt)}
-              onChange={(e: string) => {
-                const newStructure: SlopedWallStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
                   topWidthFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
             <TextField
               isRequired
               label="Height(ft)"
               type="number"
               value={String(selectedStorage.structure.heightFt)}
-              onChange={(e: string) => {
-                const newStructure: SlopedWallStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
                   heightFt: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
             <TextField
               isRequired
               label="Slope of wall (X:1)"
               type="number"
               value={String(selectedStorage.structure.slopeOfWall)}
-              onChange={(e: string) => {
-                const newStructure: SlopedWallStorage = {
+              onChange={(e: string) =>
+                handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
                   slopeOfWall: Number(e),
-                };
-                handleStructureChange(newStructure);
-              }}
+                })
+              }
             />
           </div>
         )}
+        {selectedStorage.structure?.volumeUSGallons !== undefined &&
+          selectedStorage.structure?.volumeUSGallons !== 0 && (
+            <p>
+              Storage Volume
+              <p>
+                {`${selectedStorage.structure?.volumeUSGallons} U.S. Gallons (${selectedStorage.name})`}
+              </p>
+              <p>{`${totalVolume} U.S. Gallons (${formData.name})`}</p>
+            </p>
+          )}
       </Grid>
     </Grid>
   );

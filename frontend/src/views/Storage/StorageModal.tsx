@@ -20,12 +20,14 @@ import StorageSystemDetailsEdit from './StorageSystemDetailsEdit';
 import LiquidStorageDetails from './LiquidStorageDetails';
 import SolidStorageDetails from './SolidStorageDetails';
 import { DEFAULT_FORM_DATA, StorageModalFormData, StorageModalMode } from './types';
-import { DEFAULT_LIQUID_MANURE_STORAGE } from '@/constants';
+import { DEFAULT_LIQUID_MANURE_STORAGE, PrecipitationConversionFactor } from '@/constants';
+import { calcStorageSurfaceAreaSqFt } from '@/utils/manureStorageSystems';
 
 type ModalComponentProps = {
   mode: StorageModalMode;
   initialModalData?: NMPFileManureStorageSystem;
   unassignedManures: ManureInSystem[];
+  annualPrecipitation?: number;
   handleDialogClose: () => void;
 };
 
@@ -33,6 +35,7 @@ export default function StorageModal({
   mode,
   initialModalData,
   unassignedManures,
+  annualPrecipitation,
   handleDialogClose,
   ...props
 }: ModalComponentProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
@@ -52,12 +55,36 @@ export default function StorageModal({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formData.manureType === undefined) throw new Error('Form validation failed.');
+    if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
+
+    // Add precipitation data to the form
+    const withRainData = { ...formData };
+    if (withRainData.manureType === ManureType.Liquid) {
+      let totalUncoveredArea = withRainData.runoffAreaSqFt || 0;
+      withRainData.manureStorages.forEach((storage) => {
+        if (!storage.isStructureCovered) {
+          if (!storage.structure) throw new Error('Form validation failed.');
+          totalUncoveredArea += calcStorageSurfaceAreaSqFt(storage.structure);
+        }
+      });
+      withRainData.annualPrecipitation =
+        totalUncoveredArea > 0
+          ? totalUncoveredArea * annualPrecipitation * PrecipitationConversionFactor.Liquid
+          : undefined;
+    } else {
+      // For solid manure
+      withRainData.annualPrecipitation = withRainData.manureStorage.uncoveredAreaSqFt
+        ? withRainData.manureStorage.uncoveredAreaSqFt *
+          annualPrecipitation *
+          PrecipitationConversionFactor.Solid
+        : undefined;
+    }
 
     const newList = [...(state.nmpFile.years[0].ManureStorageSystems || [])];
     if (mode.mode !== 'create') {
-      newList[mode.systemIndex] = formData;
+      newList[mode.systemIndex] = withRainData;
     } else {
-      newList.push(formData);
+      newList.push(withRainData);
     }
     dispatch({
       type: 'SAVE_MANURE_STORAGE_SYSTEMS',

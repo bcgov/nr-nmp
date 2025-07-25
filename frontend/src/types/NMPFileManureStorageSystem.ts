@@ -16,7 +16,6 @@ export type SolidManureStorage = {
   manureType: ManureType.Solid;
   isStructureCovered: boolean;
   uncoveredAreaSqFt?: number;
-  // TODO: Add attribute for annual precipitation
 };
 
 // eslint-disable-next-line no-shadow
@@ -31,12 +30,14 @@ export type RectangularStorage = {
   lengthFt: number;
   widthFt: number;
   heightFt: number;
+  volumeUSGallons: number;
 };
 
 export type CircularStorage = {
   shape: Shape.Circular;
   diameterFt: number;
   heightFt: number;
+  volumeUSGallons: number;
 };
 
 export type SlopedWallStorage = {
@@ -45,6 +46,7 @@ export type SlopedWallStorage = {
   topWidthFt: number;
   heightFt: number;
   slopeOfWall: number;
+  volumeUSGallons: number;
 };
 
 export type StorageStructure = RectangularStorage | CircularStorage | SlopedWallStorage;
@@ -53,9 +55,9 @@ export type LiquidManureStorage = {
   name: string;
   manureType: ManureType.Liquid;
   isStructureCovered: boolean;
+  uncoveredAreaSqFt?: number;
   structure?: StorageStructure;
   volumeUSGallons: number;
-  // TODO: Add attribute for annual precipitation
 };
 
 export type ManureStorage = SolidManureStorage | LiquidManureStorage;
@@ -65,6 +67,7 @@ export type SolidManureStorageSystem = {
   manureType: ManureType.Solid;
   manuresInSystem: ManureInSystem[];
   manureStorage: SolidManureStorage;
+  annualPrecipitation?: number;
 };
 
 export type LiquidManureStorageSystem = {
@@ -78,6 +81,7 @@ export type LiquidManureStorageSystem = {
   separatedLiquidsUSGallons: number;
   separatedSolidsTons: number;
   manureStorages: LiquidManureStorage[];
+  annualPrecipitation?: number;
 };
 
 export type NMPFileManureStorageSystem = SolidManureStorageSystem | LiquidManureStorageSystem;

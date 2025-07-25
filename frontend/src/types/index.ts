@@ -40,6 +40,7 @@ import {
 } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
+import Subregion from './Subregion';
 import {
   LiquidManureStorageSystem,
   SolidManureStorageSystem,
@@ -103,6 +104,7 @@ export type {
   FertilizerUnit,
   NMPFileOtherNutrient,
   ManureStorage,
+  Subregion,
   SolidManureStorage,
   LiquidManureStorage,
   StorageStructure,

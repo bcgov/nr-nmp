@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -17,12 +17,15 @@ import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../compon
 import { addRecordGroupStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem, ManureType } from '@/types';
+import { APICacheContext } from '@/context/APICacheContext';
+import { ManureInSystem, ManureType, Subregion } from '@/types';
 import { StorageModalMode } from './types';
 
 export default function Storage() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
+  const apiCache = useContext(APICacheContext);
+  const [subregionData, setSubregionData] = useState<Subregion | undefined>(undefined);
   const [modalMode, setModalMode] = useState<StorageModalMode | undefined>(undefined);
 
   const generatedManures = state.nmpFile.years[0].GeneratedManures;
@@ -41,6 +44,22 @@ export default function Storage() {
     });
     return unassignedM;
   }, [generatedManures, importedManures]);
+
+  // Get subregion precipitation data
+  useEffect(() => {
+    const region = state.nmpFile.farmDetails.FarmRegion;
+    const subregion = state.nmpFile.farmDetails.FarmSubRegion;
+    if (region && subregion) {
+      apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
+        const { data } = response;
+        const currentSubregion = data.find(
+          (ele: Subregion) => ele.id === subregion,
+        );
+        setSubregionData(currentSubregion);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // These function don't save to the NMP file
   // Because changes are already saved to the NMP file
@@ -112,6 +131,7 @@ export default function Storage() {
                 ? state.nmpFile.years[0].ManureStorageSystems![modalMode.systemIndex]
                 : undefined
             }
+            annualPrecipitation={subregionData ? subregionData.annualprecipitation : undefined}
             unassignedManures={unassignedManures}
             handleDialogClose={handleDialogClose}
             isOpen={modalMode !== undefined}
