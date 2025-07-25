@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -9,66 +9,73 @@ import {
   ButtonGroup as ButtonGovGroup,
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
-import { GridApiCommunity } from '@mui/x-data-grid/internals';
+import Grid from '@mui/material/Grid';
 import { StyledContent } from './storage.styles';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
+import { addRecordGroupStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem } from '@/types';
+import { APICacheContext } from '@/context/APICacheContext';
+import { ManureInSystem, ManureType, Subregion } from '@/types';
+import { StorageModalMode } from './types';
 
 export default function Storage() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
-  const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const apiCache = useContext(APICacheContext);
+  const [subregionData, setSubregionData] = useState<Subregion | undefined>(undefined);
+  const [modalMode, setModalMode] = useState<StorageModalMode | undefined>(undefined);
 
   const generatedManures = state.nmpFile.years[0].GeneratedManures;
   const importedManures = state.nmpFile.years[0].ImportedManures;
   const unassignedManures = useMemo(() => {
     const unassignedM: ManureInSystem[] = [];
-    const assignedM: ManureInSystem[] = [];
     (generatedManures || []).forEach((manure) => {
-      if (manure.AssignedToStoredSystem) {
-        assignedM.push({ type: 'Generated', data: manure });
-      } else {
+      if (!manure.AssignedToStoredSystem) {
         unassignedM.push({ type: 'Generated', data: manure });
       }
     });
     (importedManures || []).forEach((manure) => {
-      if (manure.AssignedToStoredSystem) {
-        assignedM.push({ type: 'Imported', data: manure });
-      } else {
+      if (!manure.AssignedToStoredSystem) {
         unassignedM.push({ type: 'Imported', data: manure });
       }
     });
     return unassignedM;
   }, [generatedManures, importedManures]);
 
+  // Get subregion precipitation data
+  useEffect(() => {
+    const region = state.nmpFile.farmDetails.FarmRegion;
+    const subregion = state.nmpFile.farmDetails.FarmSubRegion;
+    if (region && subregion) {
+      apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
+        const { data } = response;
+        const currentSubregion = data.find(
+          (ele: Subregion) => ele.id === Number(subregion),
+        );
+        setSubregionData(currentSubregion);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // These function don't save to the NMP file
+  // Because changes are already saved to the NMP file
   const handlePrevious = () => {
     navigate(MANURE_IMPORTS);
   };
-
   const handleNext = () => {
     navigate(NUTRIENT_ANALYSIS);
   };
 
   const handleDialogClose = () => {
-    setRowEditIndex(undefined);
-    setIsDialogOpen(false);
+    setModalMode(undefined);
   };
 
-  const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
-    setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
-    setIsDialogOpen(true);
-  };
-
-  const handleDeleteRow = useCallback(
-    (e: { id: GridRowId; api: GridApiCommunity }) => {
-      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+  const handleDeleteSystem = useCallback(
+    (index: number) => {
       const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
       newList.splice(index, 1);
       dispatch({
@@ -80,41 +87,19 @@ export default function Storage() {
     [state.nmpFile, dispatch],
   );
 
-  const columnsAnimalManure: GridColDef[] = useMemo(
-    () => [
-      {
-        field: 'name',
-        headerName: 'System Name',
-        width: 200,
-        minWidth: 150,
-        maxWidth: 300,
-      },
-      {
-        field: 'actions',
-        headerName: 'Actions',
-        width: 120,
-        renderCell: (row: GridRenderCellParams) => (
-          <>
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleEditRow(row)}
-              icon={faEdit}
-              aria-label="Edit"
-            />
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleDeleteRow(row)}
-              icon={faTrash}
-              aria-label="Delete"
-            />
-          </>
-        ),
-        sortable: false,
-        resizable: false,
-      },
-    ],
-    [handleDeleteRow],
-  );
+  const handleDeleteStorage = useCallback((systemIndex: number, storageIndex: number) => {
+    const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
+    const system = newList[systemIndex];
+    if (system.manureType !== ManureType.Liquid) throw new Error('Storage entered bad state');
+    const newStorageList = [...system.manureStorages];
+    newStorageList.splice(storageIndex, 1);
+    newList[systemIndex] = { ...system, manureStorages: newStorageList };
+    dispatch({
+      type: 'SAVE_MANURE_STORAGE_SYSTEMS',
+      year: state.nmpFile.farmDetails.Year!,
+      newManureStorageSystems: newList,
+    });
+  }, [state.nmpFile, dispatch]);
 
   return (
     <StyledContent>
@@ -131,24 +116,25 @@ export default function Storage() {
             <ButtonGov
               size="medium"
               aria-label="Add Storage System"
-              onPress={() => setIsDialogOpen(true)}
+              onPress={() => setModalMode({ mode: 'create' })}
               variant="secondary"
             >
               Add Storage System
             </ButtonGov>
           </ButtonGovGroup>
         </div>
-        {isDialogOpen && (
+        {modalMode !== undefined && (
           <StorageModal
+            mode={modalMode}
             initialModalData={
-              rowEditIndex !== undefined
-                ? state.nmpFile.years[0].ManureStorageSystems![rowEditIndex]
+              modalMode !== undefined && modalMode.mode !== 'create'
+                ? state.nmpFile.years[0].ManureStorageSystems![modalMode.systemIndex]
                 : undefined
             }
-            rowEditIndex={rowEditIndex}
+            annualPrecipitation={subregionData ? subregionData.annualprecipitation : undefined}
             unassignedManures={unassignedManures}
             handleDialogClose={handleDialogClose}
-            isOpen={isDialogOpen}
+            isOpen={modalMode !== undefined}
           />
         )}
         <TabsMaterial
@@ -156,16 +142,76 @@ export default function Storage() {
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
       </>
-      <DataGrid
-        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={state.nmpFile.years[0].ManureStorageSystems || []}
-        columns={columnsAnimalManure}
-        getRowId={() => crypto.randomUUID()}
-        disableRowSelectionOnClick
-        disableColumnMenu
-        hideFooterPagination
-        hideFooter
-      />
+      {(state.nmpFile.years[0].ManureStorageSystems || []).map((system, systemIndex) => (
+        <Grid container>
+          <Grid size={10}>
+            <span>{system.name}</span>
+          </Grid>
+          <Grid size={2}>
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => setModalMode({ mode: 'system_edit', systemIndex })}
+              icon={faEdit}
+              aria-label="Edit"
+            />
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={() => handleDeleteSystem(systemIndex)}
+              icon={faTrash}
+              aria-label="Delete"
+            />
+          </Grid>
+          {system.manureType === ManureType.Liquid ? (
+            <>
+              {system.manureStorages.map((storage, storageIndex) => {
+                <>
+                  <Grid size={10}>
+                    <span>{storage.name}</span>
+                  </Grid>
+                  <Grid size={2}>
+                    <FontAwesomeIcon
+                      css={tableActionButtonCss}
+                      onClick={() => setModalMode({ mode: 'storage_edit', systemIndex, storageIndex})}
+                      icon={faEdit}
+                      aria-label="Edit"
+                      
+                    />
+                    <FontAwesomeIcon
+                      css={tableActionButtonCss}
+                      onClick={() => handleDeleteStorage(systemIndex, storageIndex)}
+                      icon={faTrash}
+                      aria-label="Delete"
+                    />
+                  </Grid> 
+                </>
+              })}
+              <Button
+                size="medium"
+                aria-label="Add a Storage to this System"
+                variant="secondary"
+                onPress={() => { setModalMode({ mode: 'storage_create', systemIndex })}}
+              >
+                Add a Storage to this System
+              </Button>
+            </>
+          ) : (
+            <>
+            <Grid size={10}>
+              <span>{system.manureStorage.name}</span>
+            </Grid>
+            <Grid size={2}>
+              <FontAwesomeIcon
+                css={tableActionButtonCss}
+                onClick={() => setModalMode({ mode: 'storage_edit', systemIndex, storageIndex: 0})}
+                icon={faEdit}
+                aria-label="Edit"
+                
+              />
+            </Grid>
+            </>
+          )}
+        </Grid>)
+      )}
       <div>
         <span>Materials Needing Storage</span>
         <br />

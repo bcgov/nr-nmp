@@ -40,10 +40,20 @@ import {
 } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
+import Subregion from './Subregion';
 import {
+  LiquidManureStorageSystem,
+  SolidManureStorageSystem,
+  SolidManureStorage,
+  LiquidManureStorage,
   ManureInSystem,
   NMPFileManureStorageSystem,
   ManureStorage,
+  StorageStructure,
+  RectangularStorage,
+  CircularStorage,
+  SlopedWallStorage,
+  Shape,
 } from './NMPFileManureStorageSystem';
 
 export {
@@ -53,6 +63,7 @@ export {
   PER_DAY_PER_ANIMAL_UNIT,
   PER_DAY_UNIT,
   ManureType,
+  Shape,
 };
 
 export type {
@@ -67,6 +78,8 @@ export type {
   NMPFileGeneratedManureData,
   ManureInSystem,
   NMPFileManureStorageSystem,
+  LiquidManureStorageSystem,
+  SolidManureStorageSystem,
   SolidManureConversionFactors,
   Region,
   CropsConversionFactors,
@@ -91,4 +104,11 @@ export type {
   FertilizerUnit,
   NMPFileOtherNutrient,
   ManureStorage,
+  Subregion,
+  SolidManureStorage,
+  LiquidManureStorage,
+  StorageStructure,
+  RectangularStorage,
+  CircularStorage,
+  SlopedWallStorage,
 };
