@@ -1,6 +1,5 @@
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import { formGridBreakpoints } from '../../common.styles';
 import { ManureType } from '@/types';
 import { NMPFileManureStorageSystem } from '@/types/NMPFileManureStorageSystem';
 import { Text } from './StorageModal.styles';
@@ -117,16 +116,14 @@ export default function StorageSystemDetailsDisplay({
             size={6}
             direction="row"
           >
-            <div style={{ width: 'max-content', fontSize: '12px' }}>
-              <p>
-                Separated liquids
-                <p>{formData.separatedLiquidsUSGallons} U.S. Gallons</p>
-              </p>
-              <p>
-                Separated solids
-                <p>{formData.separatedSolidsTons} tons</p>
-              </p>
-            </div>
+            <Text className="bcds-react-aria-Text disabled small">Separated liquids</Text>
+            <Text className="bcds-react-aria-Text disabled small">
+              {formData.separatedLiquidsUSGallons} U.S. Gallons
+            </Text>
+            <Text className="bcds-react-aria-Text disabled small">Separated solids</Text>
+            <Text className="bcds-react-aria-Text disabled small">
+              {formData.separatedSolidsTons} tons
+            </Text>
           </Grid>
         </Grid>
       )}

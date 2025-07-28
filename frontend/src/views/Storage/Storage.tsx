@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import { StyledContent } from './storage.styles';
+import { StyledContent, SystemDisplay } from './storage.styles';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
 import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
@@ -137,88 +137,105 @@ export default function Storage() {
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
       </>
-      {(state.nmpFile.years[0].ManureStorageSystems || []).map((system, systemIndex) => (
+      <Grid
+        container
+        size={12}
+      >
         <Grid
           container
-          key={system.name}
+          size={8}
         >
-          <Grid size={10}>
-            <span>{system.name}</span>
-          </Grid>
-          <Grid size={2}>
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => setModalMode({ mode: 'system_edit', systemIndex })}
-              icon={faEdit}
-              aria-label="Edit"
-            />
-            <FontAwesomeIcon
-              css={tableActionButtonCss}
-              onClick={() => handleDeleteSystem(systemIndex)}
-              icon={faTrash}
-              aria-label="Delete"
-            />
-          </Grid>
-          {system.manureType === ManureType.Liquid ? (
-            <>
-              {system.manureStorages.map((storage, storageIndex) => (
-                <>
-                  <Grid size={10}>
-                    <span>{storage.name}</span>
-                  </Grid>
-                  <Grid size={2}>
-                    <FontAwesomeIcon
-                      css={tableActionButtonCss}
-                      onClick={() =>
-                        setModalMode({ mode: 'storage_edit', systemIndex, storageIndex })
-                      }
-                      icon={faEdit}
-                      aria-label="Edit"
-                    />
-                    <FontAwesomeIcon
-                      css={tableActionButtonCss}
-                      onClick={() => handleDeleteStorage(systemIndex, storageIndex)}
-                      icon={faTrash}
-                      aria-label="Delete"
-                    />
-                  </Grid>
-                </>
-              ))}
-              <Button
-                size="medium"
-                variant="secondary"
-                onPress={() => {
-                  setModalMode({ mode: 'storage_create', systemIndex });
-                }}
-              >
-                Add a Storage to this System
-              </Button>
-            </>
-          ) : (
-            <>
-              <Grid size={10}>
-                <span>{system.manureStorage.name}</span>
-              </Grid>
-              <Grid size={2}>
-                <FontAwesomeIcon
-                  css={tableActionButtonCss}
-                  onClick={() =>
-                    setModalMode({ mode: 'storage_edit', systemIndex, storageIndex: 0 })
-                  }
-                  icon={faEdit}
-                  aria-label="Edit"
-                />
-              </Grid>
-            </>
-          )}
+          {(state.nmpFile.years[0].ManureStorageSystems || []).map((system, systemIndex) => (
+            <SystemDisplay key={system.name}>
+              <div className="row">
+                <div>
+                  <span>{system.name}</span>
+                </div>
+                <div>
+                  <FontAwesomeIcon
+                    css={tableActionButtonCss}
+                    onClick={() => setModalMode({ mode: 'system_edit', systemIndex })}
+                    icon={faEdit}
+                    aria-label="Edit"
+                  />
+                  <FontAwesomeIcon
+                    css={tableActionButtonCss}
+                    onClick={() => handleDeleteSystem(systemIndex)}
+                    icon={faTrash}
+                    aria-label="Delete"
+                  />
+                </div>
+              </div>
+              {system.manureType === ManureType.Liquid ? (
+                <ul>
+                  {system.manureStorages.map((storage, storageIndex) => (
+                    <li
+                      className="row"
+                      key={storage.name}
+                    >
+                      <div>
+                        <span>{storage.name}</span>
+                      </div>
+                      <div>
+                        <FontAwesomeIcon
+                          css={tableActionButtonCss}
+                          onClick={() =>
+                            setModalMode({ mode: 'storage_edit', systemIndex, storageIndex })
+                          }
+                          icon={faEdit}
+                          aria-label="Edit"
+                        />
+                        <FontAwesomeIcon
+                          css={tableActionButtonCss}
+                          onClick={() => handleDeleteStorage(systemIndex, storageIndex)}
+                          icon={faTrash}
+                          aria-label="Delete"
+                        />
+                      </div>
+                    </li>
+                  ))}
+                  <Button
+                    size="small"
+                    variant="secondary"
+                    onPress={() => {
+                      setModalMode({ mode: 'storage_create', systemIndex });
+                    }}
+                  >
+                    Add a Storage to this System
+                  </Button>
+                </ul>
+              ) : (
+                <ul>
+                  <li className="row">
+                    <div>
+                      <span>{system.manureStorage.name}</span>
+                    </div>
+                    <div className="margin-right">
+                      <FontAwesomeIcon
+                        css={tableActionButtonCss}
+                        onClick={() =>
+                          setModalMode({ mode: 'storage_edit', systemIndex, storageIndex: 0 })
+                        }
+                        icon={faEdit}
+                        aria-label="Edit"
+                      />
+                    </div>
+                  </li>
+                </ul>
+              )}
+            </SystemDisplay>
+          ))}
         </Grid>
-      ))}
-      <div>
-        <div>Materials Needing Storage</div>
-        {unassignedManures.map((m) => (
-          <div key={m.data.ManagedManureName}>{m.data.ManagedManureName}</div>
-        ))}
-      </div>
+        <Grid
+          container
+          size={4}
+        >
+          <div>Materials Needing Storage</div>
+          {unassignedManures.map((m) => (
+            <div key={m.data.ManagedManureName}>{m.data.ManagedManureName}</div>
+          ))}
+        </Grid>
+      </Grid>
       <ButtonGroup
         alignment="start"
         ariaLabel="A group of buttons"
