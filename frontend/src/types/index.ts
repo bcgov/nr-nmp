@@ -37,6 +37,7 @@ import {
   DairyCattleData,
   AnimalData,
   ManureType,
+  PoultryData,
 } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
@@ -98,6 +99,7 @@ export type {
   WashWaterUnit,
   BeefCattleData,
   DairyCattleData,
+  PoultryData,
   AnimalData,
   Fertilizer,
   FertilizerType,
