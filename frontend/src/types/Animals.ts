@@ -37,4 +37,17 @@ export type DairyCattleData = {
   manureId: string;
 };
 
-export type AnimalData = BeefCattleData | DairyCattleData;
+export type PoultryData = {
+  animalId: '6';
+  subtype?: string;
+  manureType?: ManureType;
+  birdsPerFlock?: number;
+  flocksPerYear?: number;
+  daysPerFlock?: number;
+  manureData?:
+    | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
+    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
+  manureId: string;
+};
+
+export type AnimalData = BeefCattleData | DairyCattleData | PoultryData;

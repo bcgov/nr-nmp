@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import BeefCattle from './AnimalFormComponents/BeefCattle';
 import DairyCattle from './AnimalFormComponents/DairyCattle';
+import Poultry from './AnimalFormComponents/Poultry';
 import { AnimalData } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
@@ -80,6 +81,14 @@ export default function AddAnimalsModal({
       )}
       {formData?.animalId === '2' && (
         <DairyCattle
+          formData={formData}
+          handleInputChanges={handleInputChanges}
+          handleSubmit={handleSubmit}
+          onCancel={onClose}
+        />
+      )}
+      {formData?.animalId === '6' && (
+        <Poultry
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}

@@ -7,6 +7,7 @@ import { Form, Select } from '@/components/common';
 const animalOptions = [
   { id: '1', label: 'Beef Cattle' },
   { id: '2', label: 'Dairy Cattle' },
+  { id: '6', label: 'Poultry' },
 ];
 
 type AnimalFormWrapperProps = {
