@@ -28,13 +28,7 @@ import {
   modalPaddingStyle,
   tableActionButtonCss,
 } from '../../common.styles';
-import {
-  AppTitle,
-  PageTitle,
-  ProgressStepper,
-  Select,
-  Tabs,
-} from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Select, Tabs } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
 import { InfoBox, StyledContent, StyledDatePicker } from './soilTests.styles';

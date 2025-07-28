@@ -9,7 +9,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
 import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
-import { StyledContent } from './nutrientAnalsysis.styles';
+import { StyledContent } from './nutrientAnalysis.styles';
 import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
