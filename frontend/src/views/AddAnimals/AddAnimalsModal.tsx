@@ -9,6 +9,7 @@ import { AnimalData } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from '@/constants';
+import { INITIAL_POULTRY_FORM_DATA } from '@/constants/Animals';
 
 type AddAnimalsModalProps = {
   initialModalData: AnimalData | undefined;
@@ -49,6 +50,9 @@ export default function AddAnimalsModal({
         }
         if (changes.animalId === '2') {
           return { ...INITIAL_DAIRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
+        }
+        if (changes.animalId === '6') {
+          return { ...INITIAL_POULTRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
       }
 
