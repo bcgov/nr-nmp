@@ -33,7 +33,7 @@ import {
   PageTitle,
   ProgressStepper,
   Select,
-  TabsMaterial,
+  Tabs,
 } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
@@ -409,7 +409,7 @@ export default function SoilTests() {
           </div>
         </Dialog>
       </Modal>
-      <TabsMaterial
+      <Tabs
         activeTab={1}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />

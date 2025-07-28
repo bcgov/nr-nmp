@@ -10,7 +10,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
@@ -243,7 +243,7 @@ export default function CalculateNutrients() {
         </Button>
       </ButtonGroup>
       {/* tabs = the fields the user has entered */}
-      <TabsMaterial
+      <Tabs
         activeTab={activeField}
         tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.FieldName) : ['Field 1']}
       />

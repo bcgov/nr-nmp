@@ -27,6 +27,9 @@ const storageShapeOptions = [
   { id: Shape.SlopedWallRectangular, label: Shape[Shape.SlopedWallRectangular] },
 ];
 
+const measurementValidation = (value: string) =>
+  Number(value) <= 0 ? 'Please enter a valid measurement.' : null;
+
 type LiquidStorageDetailsProps = {
   formData: LiquidManureStorageSystem;
   setFormData: React.Dispatch<React.SetStateAction<LiquidManureStorageSystem>>;
@@ -119,7 +122,7 @@ export default function LiquidStorageDetails({
           orientation="horizontal"
         />
         <Select
-          isRequired
+          isRequired={!selectedStorage.isStructureCovered}
           label="Storage shape"
           selectedKey={selectedStorage.structure?.shape}
           items={storageShapeOptions}
@@ -140,6 +143,7 @@ export default function LiquidStorageDetails({
               label="Diameter(ft)"
               type="number"
               value={String(selectedStorage.structure.diameterFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as CircularStorage),
@@ -152,6 +156,7 @@ export default function LiquidStorageDetails({
               label="Height(ft)"
               type="number"
               value={String(selectedStorage.structure.heightFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as CircularStorage),
@@ -168,6 +173,7 @@ export default function LiquidStorageDetails({
               label="Length(ft)"
               type="number"
               value={String(selectedStorage.structure.lengthFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
@@ -180,6 +186,7 @@ export default function LiquidStorageDetails({
               label="Width(ft)"
               type="number"
               value={String(selectedStorage.structure.widthFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
@@ -192,6 +199,7 @@ export default function LiquidStorageDetails({
               label="Height(ft)"
               type="number"
               value={String(selectedStorage.structure.heightFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
@@ -208,6 +216,7 @@ export default function LiquidStorageDetails({
               label="Top-Length(ft)"
               type="number"
               value={String(selectedStorage.structure.topLengthFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
@@ -220,6 +229,7 @@ export default function LiquidStorageDetails({
               label="Top-Width(ft)"
               type="number"
               value={String(selectedStorage.structure.topWidthFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
@@ -232,6 +242,7 @@ export default function LiquidStorageDetails({
               label="Height(ft)"
               type="number"
               value={String(selectedStorage.structure.heightFt)}
+              validate={measurementValidation}
               onChange={(e: string) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),

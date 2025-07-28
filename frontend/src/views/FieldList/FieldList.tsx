@@ -8,7 +8,7 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
 import { ErrorText, StyledContent } from './fieldList.styles';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
@@ -155,7 +155,7 @@ export default function FieldList() {
           />
         )}
       </>
-      <TabsMaterial
+      <Tabs
         activeTab={0}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />

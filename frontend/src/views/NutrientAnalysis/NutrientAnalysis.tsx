@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
 import { StyledContent } from './nutrientAnalsysis.styles';
 import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
@@ -213,17 +213,17 @@ export default function NutrientAnalysis() {
         />
       )}
       {state.showAnimalsStep && hasDairyCattle ? (
-        <TabsMaterial
+        <Tabs
           activeTab={3}
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
       ) : state.showAnimalsStep ? (
-        <TabsMaterial
+        <Tabs
           activeTab={2}
           tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
         />
       ) : (
-        <TabsMaterial
+        <Tabs
           activeTab={1}
           tabLabel={['Manure & Imports', 'Nutrient Analysis']}
         />

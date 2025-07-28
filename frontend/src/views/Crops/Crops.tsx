@@ -13,7 +13,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
 import { StyledContent } from './crops.styles';
 import { NMPFileFieldData } from '@/types';
 import {
@@ -193,7 +193,7 @@ function Crops() {
       <ProgressStepper />
       <AppTitle />
       <PageTitle title="Field Information" />
-      <TabsMaterial
+      <Tabs
         activeTab={2}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />

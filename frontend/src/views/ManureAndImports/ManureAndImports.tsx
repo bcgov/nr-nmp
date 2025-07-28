@@ -35,7 +35,7 @@ import {
   STORAGE,
 } from '@/constants/routes';
 
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
@@ -356,17 +356,17 @@ export default function ManureAndImports() {
           isDismissable
         />
         {state.showAnimalsStep && hasDairyCattle ? (
-          <TabsMaterial
+          <Tabs
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
           />
         ) : state.showAnimalsStep ? (
-          <TabsMaterial
+          <Tabs
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
           />
         ) : (
-          <TabsMaterial
+          <Tabs
             activeTab={0}
             tabLabel={['Manure & Imports', 'Nutrient Analysis']}
           />

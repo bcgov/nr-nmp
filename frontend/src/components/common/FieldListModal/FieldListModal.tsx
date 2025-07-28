@@ -130,7 +130,7 @@ export default function FieldListModal({
               selectedKey={formData.PreviousYearManureApplicationFrequency}
               validate={() => (!isManureOptionValid() ? 'required' : '')}
               onSelectionChange={(e) => {
-                handleFormFieldChange('PreviousYearManureApplicationFrequency', e.toString());
+                handleFormFieldChange('PreviousYearManureApplicationFrequency', e?.toString());
               }}
               noSort
             />

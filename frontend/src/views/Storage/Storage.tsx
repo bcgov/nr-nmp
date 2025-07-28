@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import { StyledContent, SystemDisplay } from './storage.styles';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
 import { addRecordGroupStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
 import useAppState from '@/hooks/useAppState';
@@ -132,7 +132,7 @@ export default function Storage() {
             isOpen={modalMode !== undefined}
           />
         )}
-        <TabsMaterial
+        <Tabs
           activeTab={2}
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
