@@ -461,8 +461,8 @@ function CropsModal({
             <>
               {selectedCropType?.customcrop ? (
                 <Grid size={formGridBreakpoints}>
-                  <span className="bcds-react-aria-Select--Label">Crop Description</span>
                   <TextField
+                    label="Crop Description"
                     isRequired
                     type="text"
                     name="name"
@@ -473,27 +473,33 @@ function CropsModal({
               ) : (
                 <Grid size={formGridBreakpoints}>
                   <span
+                    id="cropId-label"
                     className={`bcds-react-aria-Select--Label ${errors?.cropId ? '--error' : ''}`}
                   >
                     Crop
                   </span>
                   <Select
+                    aria-labelledby="cropId-label"
                     isRequired
                     name="cropId"
                     items={filteredCrops.map((ele) => ({ id: ele.id, label: ele.cropname }))}
                     isDisabled={!filteredCrops?.length}
                     selectedKey={formData.cropId}
                     onSelectionChange={(e) => {
-                      handleFormFieldChange('cropId', e);
+                      handleFormFieldChange('cropId', e as number);
                     }}
                   />
                 </Grid>
               )}
               <Grid size={formGridBreakpoints}>
-                <span className={`bcds-react-aria-Select--Label ${errors.yield ? '--error' : ''}`}>
+                <span
+                  id="yield-label"
+                  className={`bcds-react-aria-Select--Label ${errors.yield ? '--error' : ''}`}
+                >
                   Yield{showUnitDropdown(formData.cropTypeId) ? '' : ' (tons/ac)'}
                 </span>
                 <TextField
+                  aria-labelledby="yield-label"
                   isRequired
                   type="number"
                   name="yield"
@@ -514,14 +520,14 @@ function CropsModal({
               </Grid>
               {showUnitDropdown(formData.cropTypeId) && (
                 <Grid size={formGridBreakpoints}>
-                  <span className="bcds-react-aria-Select--Label">Units</span>
                   <Select
+                    label="Units"
                     isRequired
                     name="yieldHarvestUnit"
                     items={HARVEST_UNIT_OPTIONS}
                     selectedKey={formData.yieldHarvestUnit}
                     onSelectionChange={(e) => {
-                      handleFormFieldChange('yieldHarvestUnit', e);
+                      handleFormFieldChange('yieldHarvestUnit', e as string);
                     }}
                   />
                 </Grid>
@@ -529,11 +535,13 @@ function CropsModal({
               {selectedCropType?.crudeproteinrequired && (
                 <Grid size={formGridBreakpoints}>
                   <span
+                    id="crudeProtein-label"
                     className={`bcds-react-aria-Select--Label ${errors.crudeProtein ? '--error' : ''}`}
                   >
                     Crude Protein (%)
                   </span>
                   <TextField
+                    aria-labelledby="crudeProtein-label"
                     isRequired
                     type="number"
                     name="crudeProtein"
@@ -553,11 +561,13 @@ function CropsModal({
                       <>
                         <Grid size={formGridBreakpoints}>
                           <span
+                            id="prevCropId-label"
                             className={`bcds-react-aria-Select--Label ${errors.prevCropId ? '--error' : ''}`}
                           >
                             Previous crop ploughed down (N credit)
                           </span>
                           <Select
+                            aria-labelledby="prevCropId-label"
                             isRequired
                             name="prevCropId"
                             items={availablePreviousCrops.map((ele) => ({
@@ -566,7 +576,7 @@ function CropsModal({
                             }))}
                             selectedKey={formData.prevCropId}
                             onSelectionChange={(e) => {
-                              handleFormFieldChange('prevCropId', e);
+                              handleFormFieldChange('prevCropId', e as number);
                             }}
                           />
                         </Grid>

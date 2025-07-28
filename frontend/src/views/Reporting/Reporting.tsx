@@ -182,7 +182,6 @@ export default function FieldList() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -191,7 +190,6 @@ export default function FieldList() {
         {/* Go to BC soil nutrient testing site */}
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={() => {
             navigate(

@@ -474,7 +474,6 @@ export default function CalculateNutrients() {
         {/* go to last tab or if none navigate to nuttrient analysis */}
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -483,7 +482,6 @@ export default function CalculateNutrients() {
         {/* go to next tab or if none navigate to next page */}
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={() => {
             if (activeField < fieldList.length - 1) {

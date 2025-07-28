@@ -338,7 +338,6 @@ export default function ManureAndImports() {
           >
             <ButtonGov
               size="medium"
-              aria-label="Add manure"
               onPress={() => setIsDialogOpen(true)}
               variant="secondary"
             >
@@ -402,7 +401,6 @@ export default function ManureAndImports() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -410,7 +408,6 @@ export default function ManureAndImports() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNextPage}
           type="submit"

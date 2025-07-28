@@ -232,7 +232,6 @@ function Crops() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onClick={handlePreviousPage}
         >
@@ -240,7 +239,6 @@ function Crops() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onClick={handleNextPage}
           type="submit"

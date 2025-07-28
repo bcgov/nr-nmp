@@ -59,7 +59,6 @@ export default function LandingPage() {
         <Button
           size="medium"
           onPress={newCalcHandler}
-          aria-label="Get Started"
           variant="primary"
           isDisabled={false}
         >
@@ -68,7 +67,6 @@ export default function LandingPage() {
         <Button
           size="medium"
           onPress={handleUpload}
-          aria-label="Upload an existing .nmp file"
           isDisabled={false}
           variant="secondary"
         >

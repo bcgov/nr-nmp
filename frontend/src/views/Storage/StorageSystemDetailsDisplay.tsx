@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '../../common.styles';
 import { ManureType } from '@/types';
 import { NMPFileManureStorageSystem } from '@/types/NMPFileManureStorageSystem';
+import { Text } from './StorageModal.styles';
 
 type StorageSystemDetailsDisplayProps = {
   formData: NMPFileManureStorageSystem;
@@ -15,82 +16,67 @@ export default function StorageSystemDetailsDisplay({
     <>
       <Grid
         container
-        size={formGridBreakpoints}
-        direction="row"
-        spacing={2}
+        size={12}
+        spacing={1}
       >
         <Grid
           container
           size={6}
         >
-          <div
-            style={{ marginBottom: '0.15rem' }}
-            className="bcds-react-aria-Select--Label"
-          >
-            Manure Type
-          </div>
-          <span>{ManureType[formData.manureType]}</span>
-          <div
-            style={{ marginBottom: '0.15rem' }}
-            className="bcds-react-aria-Select--Label"
-          >
-            System Name
-          </div>
-          <span>{formData.name}</span>
+          <Text className="bcds-react-aria-Text disabled small">Manure Type</Text>
+          <Text className="bcds-react-aria-Text disabled small">
+            {ManureType[formData.manureType]}
+          </Text>
+          <Text className="bcds-react-aria-Text disabled small">System Name</Text>
+          <Text className="bcds-react-aria-Text disabled small">{formData.name}</Text>
         </Grid>
         <Grid
           container
           size={6}
+          spacing={0}
         >
-          <div
-            style={{ marginBottom: '0.15rem' }}
-            className="bcds-react-aria-Select--Label"
-          >
-            Materials selected to include
-          </div>
+          <Text className="bcds-react-aria-Text disabled small">Materials selected to include</Text>
           <div>
-            <ul>
+            <ul css={{ marginBottom: '0.5rem' }}>
               {formData.manuresInSystem.map((m) => (
-                <li key={m.data.ManagedManureName}>{m.data.ManagedManureName}</li>
+                <li
+                  className="bcds-react-aria-Text disabled small"
+                  key={m.data.ManagedManureName}
+                >
+                  {m.data.ManagedManureName}
+                </li>
               ))}
             </ul>
           </div>
         </Grid>
-        <Grid
-          container
-          size={12}
-        >
-          {formData.manureType === ManureType.Liquid && (
-            <>
+        {formData.manureType === ManureType.Liquid && (
+          <>
+            <Grid
+              container
+              size={6}
+            >
+              <Text className="bcds-react-aria-Text disabled small">
+                Does yard or roof runoff enter the storage?
+              </Text>
+              <Text className="bcds-react-aria-Text disabled small">
+                {formData.getsRunoff ? 'Yes' : 'No'}
+              </Text>
+            </Grid>
+            {formData.getsRunoff && (
               <Grid
                 container
                 size={6}
               >
-                <div
-                  style={{ marginBottom: '0.15rem' }}
-                  className="bcds-react-aria-Select--Label"
-                >
-                  Does yard or roof runoff enter the storage?
-                </div>
-                <span>{formData.getsRunoff ? 'Yes' : 'No'}</span>
+                <Text className="bcds-react-aria-Text disabled small">
+                  Yard and Roof Area (ft2)
+                </Text>
+                <Text className="bcds-react-aria-Text disabled small">
+                  {formData.runoffAreaSqFt}
+                </Text>
               </Grid>
-              {formData.getsRunoff === true && (
-                <Grid
-                  container
-                  size={6}
-                >
-                  <div
-                    style={{ marginBottom: '0.15rem' }}
-                    className="bcds-react-aria-Select--Label"
-                  >
-                    Yard and Roof Area (ft2)
-                  </div>
-                  <span>{formData.runoffAreaSqFt}</span>
-                </Grid>
-              )}
-            </>
-          )}
-        </Grid>
+            )}
+          </>
+        )}
       </Grid>
       <Divider
         aria-hidden="true"
@@ -100,7 +86,7 @@ export default function StorageSystemDetailsDisplay({
       {formData.manureType === ManureType.Liquid && (
         <Grid
           container
-          size={formGridBreakpoints}
+          size={12}
           direction="row"
           spacing={2}
         >
@@ -109,25 +95,21 @@ export default function StorageSystemDetailsDisplay({
             size={6}
             direction="row"
           >
-            <div
-              style={{ marginBottom: '0.15rem' }}
-              className="bcds-react-aria-Select--Label"
-            >
+            <Text className="bcds-react-aria-Text disabled small">
               Is there solid/liquid separation?
-            </div>
-            <span>{formData.hasSeperation ? 'Yes' : 'No'}</span>
+            </Text>
+            <Text className="bcds-react-aria-Text disabled small">
+              {formData.hasSeperation ? 'Yes' : 'No'}
+            </Text>
             {formData.hasSeperation === true && (
-              <div style={{ display: 'flex', width: '100%' }}>
-                <div style={{ paddingRight: '2em' }}>
-                  <div
-                    style={{ marginBottom: '0.15rem' }}
-                    className="bcds-react-aria-Select--Label"
-                  >
-                    % of liquid volume separated
-                  </div>
-                  <span>{formData.percentLiquidSeperation}</span>
-                </div>
-              </div>
+              <>
+                <Text className="bcds-react-aria-Text disabled small">
+                  % of liquid volume separated
+                </Text>
+                <Text className="bcds-react-aria-Text disabled small">
+                  {formData.percentLiquidSeperation}
+                </Text>
+              </>
             )}
           </Grid>
           <Grid

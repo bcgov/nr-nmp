@@ -3,12 +3,7 @@ import { useState, useMemo, useCallback, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import {
-  Button,
-  Button as ButtonGov,
-  ButtonGroup as ButtonGovGroup,
-  ButtonGroup,
-} from '@bcgov/design-system-react-components';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { StyledContent } from './storage.styles';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
@@ -52,9 +47,7 @@ export default function Storage() {
     if (region && subregion) {
       apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
         const { data } = response;
-        const currentSubregion = data.find(
-          (ele: Subregion) => ele.id === Number(subregion),
-        );
+        const currentSubregion = data.find((ele: Subregion) => ele.id === Number(subregion));
         setSubregionData(currentSubregion);
       });
     }
@@ -87,19 +80,22 @@ export default function Storage() {
     [state.nmpFile, dispatch],
   );
 
-  const handleDeleteStorage = useCallback((systemIndex: number, storageIndex: number) => {
-    const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
-    const system = newList[systemIndex];
-    if (system.manureType !== ManureType.Liquid) throw new Error('Storage entered bad state');
-    const newStorageList = [...system.manureStorages];
-    newStorageList.splice(storageIndex, 1);
-    newList[systemIndex] = { ...system, manureStorages: newStorageList };
-    dispatch({
-      type: 'SAVE_MANURE_STORAGE_SYSTEMS',
-      year: state.nmpFile.farmDetails.Year!,
-      newManureStorageSystems: newList,
-    });
-  }, [state.nmpFile, dispatch]);
+  const handleDeleteStorage = useCallback(
+    (systemIndex: number, storageIndex: number) => {
+      const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
+      const system = newList[systemIndex];
+      if (system.manureType !== ManureType.Liquid) throw new Error('Storage entered bad state');
+      const newStorageList = [...system.manureStorages];
+      newStorageList.splice(storageIndex, 1);
+      newList[systemIndex] = { ...system, manureStorages: newStorageList };
+      dispatch({
+        type: 'SAVE_MANURE_STORAGE_SYSTEMS',
+        year: state.nmpFile.farmDetails.Year!,
+        newManureStorageSystems: newList,
+      });
+    },
+    [state.nmpFile, dispatch],
+  );
 
   return (
     <StyledContent>
@@ -108,20 +104,19 @@ export default function Storage() {
       <PageTitle title="Storage" />
       <>
         <div css={addRecordGroupStyle}>
-          <ButtonGovGroup
+          <ButtonGroup
             alignment="end"
             ariaLabel="A group of buttons"
             orientation="horizontal"
           >
-            <ButtonGov
+            <Button
               size="medium"
-              aria-label="Add Storage System"
               onPress={() => setModalMode({ mode: 'create' })}
               variant="secondary"
             >
               Add Storage System
-            </ButtonGov>
-          </ButtonGovGroup>
+            </Button>
+          </ButtonGroup>
         </div>
         {modalMode !== undefined && (
           <StorageModal
@@ -143,7 +138,10 @@ export default function Storage() {
         />
       </>
       {(state.nmpFile.years[0].ManureStorageSystems || []).map((system, systemIndex) => (
-        <Grid container>
+        <Grid
+          container
+          key={system.name}
+        >
           <Grid size={10}>
             <span>{system.name}</span>
           </Grid>
@@ -163,7 +161,7 @@ export default function Storage() {
           </Grid>
           {system.manureType === ManureType.Liquid ? (
             <>
-              {system.manureStorages.map((storage, storageIndex) => {
+              {system.manureStorages.map((storage, storageIndex) => (
                 <>
                   <Grid size={10}>
                     <span>{storage.name}</span>
@@ -171,10 +169,11 @@ export default function Storage() {
                   <Grid size={2}>
                     <FontAwesomeIcon
                       css={tableActionButtonCss}
-                      onClick={() => setModalMode({ mode: 'storage_edit', systemIndex, storageIndex})}
+                      onClick={() =>
+                        setModalMode({ mode: 'storage_edit', systemIndex, storageIndex })
+                      }
                       icon={faEdit}
                       aria-label="Edit"
-                      
                     />
                     <FontAwesomeIcon
                       css={tableActionButtonCss}
@@ -182,44 +181,42 @@ export default function Storage() {
                       icon={faTrash}
                       aria-label="Delete"
                     />
-                  </Grid> 
+                  </Grid>
                 </>
-              })}
+              ))}
               <Button
                 size="medium"
-                aria-label="Add a Storage to this System"
                 variant="secondary"
-                onPress={() => { setModalMode({ mode: 'storage_create', systemIndex })}}
+                onPress={() => {
+                  setModalMode({ mode: 'storage_create', systemIndex });
+                }}
               >
                 Add a Storage to this System
               </Button>
             </>
           ) : (
             <>
-            <Grid size={10}>
-              <span>{system.manureStorage.name}</span>
-            </Grid>
-            <Grid size={2}>
-              <FontAwesomeIcon
-                css={tableActionButtonCss}
-                onClick={() => setModalMode({ mode: 'storage_edit', systemIndex, storageIndex: 0})}
-                icon={faEdit}
-                aria-label="Edit"
-                
-              />
-            </Grid>
+              <Grid size={10}>
+                <span>{system.manureStorage.name}</span>
+              </Grid>
+              <Grid size={2}>
+                <FontAwesomeIcon
+                  css={tableActionButtonCss}
+                  onClick={() =>
+                    setModalMode({ mode: 'storage_edit', systemIndex, storageIndex: 0 })
+                  }
+                  icon={faEdit}
+                  aria-label="Edit"
+                />
+              </Grid>
             </>
           )}
-        </Grid>)
-      )}
+        </Grid>
+      ))}
       <div>
-        <span>Materials Needing Storage</span>
-        <br />
+        <div>Materials Needing Storage</div>
         {unassignedManures.map((m) => (
-          <>
-            <span key={m.data.ManagedManureName}>{m.data.ManagedManureName}</span>
-            <br />
-          </>
+          <div key={m.data.ManagedManureName}>{m.data.ManagedManureName}</div>
         ))}
       </div>
       <ButtonGroup
@@ -229,7 +226,6 @@ export default function Storage() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePrevious}
         >
@@ -237,7 +233,6 @@ export default function Storage() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNext}
           type="submit"

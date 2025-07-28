@@ -187,7 +187,6 @@ export default function NutrientAnalysis() {
         >
           <ButtonGov
             size="medium"
-            aria-label="Add Nutrient Anaylsis"
             onPress={() => setIsDialogOpen(true)}
             variant="secondary"
           >
@@ -246,7 +245,6 @@ export default function NutrientAnalysis() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -254,7 +252,6 @@ export default function NutrientAnalysis() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNextPage}
           type="submit"

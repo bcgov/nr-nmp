@@ -160,14 +160,12 @@ export default function StorageModal({
             type="reset"
             variant="secondary"
             onPress={handleDialogClose}
-            aria-label="reset"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             variant="primary"
-            aria-label="submit"
           >
             Confirm
           </Button>

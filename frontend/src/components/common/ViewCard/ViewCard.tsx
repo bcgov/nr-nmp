@@ -42,7 +42,6 @@ export default function ViewCard({
             text="Next"
             size="sm"
             handleClick={handleNext}
-            aria-label="Next"
             variant="primary"
             disabled={nextDisabled}
           />
@@ -54,7 +53,6 @@ export default function ViewCard({
             text="Back"
             size="sm"
             handleClick={handlePrevious}
-            aria-label="Back"
             variant="primary"
             disabled={prevDisabled}
           />

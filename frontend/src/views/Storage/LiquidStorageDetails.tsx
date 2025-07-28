@@ -19,6 +19,7 @@ import {
   DEFAULT_SLOPED_WALL_STORAGE,
 } from '@/constants';
 import { calcStorageVolumeGallons } from '@/utils/manureStorageSystems';
+import { Text } from './StorageModal.styles';
 
 const storageShapeOptions = [
   { id: Shape.Rectangular, label: Shape[Shape.Rectangular] },
@@ -81,7 +82,8 @@ export default function LiquidStorageDetails({
       const newManureStorages = [...prev.manureStorages];
       newManureStorages[storageIndex] = {
         ...selectedStorage,
-        structure: { ...structure, volumeUSGallons: calcStorageVolumeGallons(structure) },
+        structure,
+        volumeUSGallons: calcStorageVolumeGallons(structure),
       };
       return { ...prev, manureStorages: newManureStorages };
     });
@@ -251,16 +253,13 @@ export default function LiquidStorageDetails({
             />
           </div>
         )}
-        {selectedStorage.structure?.volumeUSGallons !== undefined &&
-          selectedStorage.structure?.volumeUSGallons !== 0 && (
-            <p>
-              Storage Volume
-              <p>
-                {`${selectedStorage.structure?.volumeUSGallons} U.S. Gallons (${selectedStorage.name})`}
-              </p>
-              <p>{`${totalVolume} U.S. Gallons (${formData.name})`}</p>
-            </p>
-          )}
+        {selectedStorage.volumeUSGallons > 0 && selectedStorage.name !== '' && (
+          <>
+            <Text className="bcds-react-aria-Text primary small">Storage Volume</Text>
+            <Text className="bcds-react-aria-Text primary small">{`${selectedStorage.volumeUSGallons} U.S. Gallons (${selectedStorage.name})`}</Text>
+            <Text className="bcds-react-aria-Text primary small">{`${totalVolume} U.S. Gallons (${formData.name})`}</Text>
+          </>
+        )}
       </Grid>
     </Grid>
   );

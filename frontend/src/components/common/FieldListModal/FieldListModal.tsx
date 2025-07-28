@@ -85,11 +85,13 @@ export default function FieldListModal({
         >
           <Grid size={formGridBreakpoints}>
             <span
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && (!formData.FieldName || validateUniqueName()) ? '--error' : ''}`}
+              id="FieldName-label"
+              className={`bcds-react-aria-TextField--Label ${isFormInvalid && (!formData.FieldName || validateUniqueName()) ? '--error' : ''}`}
             >
               Field Name {isFormInvalid && validateUniqueName()}
             </span>
             <TextField
+              aria-labelledby="FieldName-label"
               isRequired
               name="FieldName"
               value={formData.FieldName}
@@ -99,11 +101,13 @@ export default function FieldListModal({
           </Grid>
           <Grid size={formGridBreakpoints}>
             <span
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.Area ? '--error' : ''}`}
+              id="Area-label"
+              className={`bcds-react-aria-TextField--Label ${isFormInvalid && !formData.Area ? '--error' : ''}`}
             >
               Area (acres)
             </span>
             <TextField
+              aria-labelledby="Area-label"
               isRequired
               type="number"
               name="Area"
@@ -113,11 +117,13 @@ export default function FieldListModal({
           </Grid>
           <Grid size={6}>
             <span
+              id="manureApplication-label"
               className={`bcds-react-aria-Select--Label ${isFormInvalid && !isManureOptionValid() ? '--error' : ''}`}
             >
               Manure Application
             </span>
             <Select
+              aria-labelledby="manureApplication-label"
               isRequired
               name="manureApplication"
               items={MANURE_APPLICATION_FREQ}
@@ -130,8 +136,9 @@ export default function FieldListModal({
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <span>Comment (Optional)</span>
+            <span id="Comment-label">Comment (Optional)</span>
             <TextField
+              aria-labelledby="Comment-label"
               name="Comment"
               value={formData.Comment}
               onChange={(e) => handleFormFieldChange('Comment', e)}

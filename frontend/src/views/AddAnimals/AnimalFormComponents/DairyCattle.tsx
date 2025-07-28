@@ -1,4 +1,4 @@
-import { FormEvent, Key, useContext, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { Select } from '@/components/common';
@@ -177,8 +177,8 @@ export default function DairyCattle({
           name="subtype"
           selectedKey={formData.subtype}
           items={subtypeOptions}
-          onSelectionChange={(e: Key) => {
-            handleInputChanges({ subtype: e.toString() });
+          onSelectionChange={(e) => {
+            handleInputChanges({ subtype: e?.toString() });
           }}
           isRequired
         />
@@ -189,8 +189,8 @@ export default function DairyCattle({
           name="breed"
           selectedKey={formData.breed}
           items={breedOptions}
-          onSelectionChange={(e: Key) => {
-            handleInputChanges({ breed: e.toString() });
+          onSelectionChange={(e) => {
+            handleInputChanges({ breed: e?.toString() });
           }}
           isRequired
         />
@@ -214,7 +214,7 @@ export default function DairyCattle({
           name="manureType"
           selectedKey={formData.manureType}
           items={MANURE_TYPE_OPTIONS}
-          onSelectionChange={(e: Key) => {
+          onSelectionChange={(e) => {
             handleInputChanges({ manureType: e as number });
           }}
           isRequired

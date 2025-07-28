@@ -30,14 +30,12 @@ export type RectangularStorage = {
   lengthFt: number;
   widthFt: number;
   heightFt: number;
-  volumeUSGallons: number;
 };
 
 export type CircularStorage = {
   shape: Shape.Circular;
   diameterFt: number;
   heightFt: number;
-  volumeUSGallons: number;
 };
 
 export type SlopedWallStorage = {
@@ -46,7 +44,6 @@ export type SlopedWallStorage = {
   topWidthFt: number;
   heightFt: number;
   slopeOfWall: number;
-  volumeUSGallons: number;
 };
 
 export type StorageStructure = RectangularStorage | CircularStorage | SlopedWallStorage;

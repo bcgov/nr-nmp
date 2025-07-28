@@ -1,7 +1,7 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import { Key, useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -243,7 +243,7 @@ export default function ManureModal({
                 id: ele.materialType,
                 label: ele.materialType,
               }))}
-              onSelectionChange={(e: Key) => handleChange({ materialType: e as string })}
+              onSelectionChange={(e) => handleChange({ materialType: e as string })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -255,7 +255,7 @@ export default function ManureModal({
               selectedKey={manureForm.applicationMethod}
               // TODO: filter by material type
               items={SEASON_APPLICATION.map((ele) => ({ id: ele.Id, label: ele.Name }))}
-              onSelectionChange={(e: Key) => handleChange({ applicationMethod: Number(e) })}
+              onSelectionChange={(e) => handleChange({ applicationMethod: Number(e) })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -281,7 +281,7 @@ export default function ManureModal({
                 value: { id: unit.id },
                 label: unit.name,
               }))}
-              onSelectionChange={(e: Key) => handleChange({ applUnit: e.toString() })}
+              onSelectionChange={(e) => handleChange({ applUnit: e?.toString() })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

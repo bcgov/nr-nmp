@@ -440,7 +440,7 @@ export default function FertilizerModal({
               label="Fertilizer Type"
               placeholder="Select Fertilizer Type"
               selectedKey={formState.fertilizerTypeId}
-              onSelectionChange={(e: Key) => {
+              onSelectionChange={(e) => {
                 handleInputChanges({ fertilizerTypeId: e as number });
               }}
             />
@@ -503,7 +503,7 @@ export default function FertilizerModal({
                 label="Fertilizer"
                 placeholder="Select Fertilizer"
                 selectedKey={formState.fertilizerId}
-                onSelectionChange={(e: Key) => {
+                onSelectionChange={(e) => {
                   handleInputChanges({ fertilizerId: e as number });
                 }}
               />
@@ -530,7 +530,7 @@ export default function FertilizerModal({
               label="Application Units"
               placeholder="Select Units"
               selectedKey={formState.applUnitId}
-              onSelectionChange={(e: Key) => {
+              onSelectionChange={(e) => {
                 handleInputChanges({ applUnitId: e as number });
               }}
             />
@@ -558,7 +558,7 @@ export default function FertilizerModal({
                   label="Density Units"
                   placeholder="Select Units"
                   selectedKey={formState?.densityUnitId}
-                  onSelectionChange={(e: Key) => {
+                  onSelectionChange={(e) => {
                     handleInputChanges({ densityUnitId: e as number });
                   }}
                 />
@@ -571,7 +571,7 @@ export default function FertilizerModal({
               items={FERTILIZER_METHOD}
               label="Method (optional)"
               selectedKey={formState.applicationMethod}
-              onSelectionChange={(e: Key) => {
+              onSelectionChange={(e) => {
                 handleInputChanges({ applicationMethod: e as number });
               }}
             />
@@ -653,14 +653,12 @@ export default function FertilizerModal({
             type="reset"
             variant="secondary"
             onPress={onClose}
-            aria-label="reset"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             variant="primary"
-            aria-label="submit"
           >
             Calculate
           </Button>
@@ -668,7 +666,6 @@ export default function FertilizerModal({
             isDisabled={!calculatedData}
             variant="primary"
             onClick={handleSubmit}
-            aria-label="submit"
           >
             Submit
           </Button>

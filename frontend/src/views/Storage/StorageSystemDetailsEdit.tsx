@@ -172,6 +172,7 @@ export default function StorageSystemDetailsEdit({
           size={6}
         >
           <CheckboxGroup
+            aria-label="Manures in System"
             isRequired
             value={selectedManureNames}
             onChange={handleSelectedChange}
@@ -244,14 +245,10 @@ export default function StorageSystemDetailsEdit({
               size={6}
               direction="row"
             >
-              <div
-                style={{ marginBottom: '0.15rem' }}
-                className="bcds-react-aria-Select--Label"
-              >
-                Is there solid/liquid separation?
+              <div style={{ marginBottom: '0.15rem' }}>
                 <YesNoRadioButtons
                   value={formData.hasSeperation}
-                  text=""
+                  text="Is there solid/liquid separation?"
                   onChange={(e: boolean) => {
                     handleInputChange({ hasSeperation: e });
                   }}

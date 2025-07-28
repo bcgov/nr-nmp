@@ -186,7 +186,6 @@ export default function AddAnimals() {
           >
             <Button
               size="medium"
-              aria-label="Add Animal"
               onPress={() => setIsDialogOpen(true)}
               variant="secondary"
             >
@@ -227,7 +226,6 @@ export default function AddAnimals() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -235,7 +233,6 @@ export default function AddAnimals() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNextPage}
           type="submit"
