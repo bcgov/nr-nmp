@@ -78,7 +78,7 @@ export default function FarmInformation() {
       if (response.status === 200) {
         const { data } = response;
         const animalDict: { [id: string]: string } = (data as { id: number; name: string }[])
-          .filter((opt) => opt.id === 1 || opt.id === 2)
+          .filter((opt) => opt.id === 1 || opt.id === 2 || opt.id === 6)
           .reduce(
             (dict, row) => {
               // eslint-disable-next-line no-param-reassign
