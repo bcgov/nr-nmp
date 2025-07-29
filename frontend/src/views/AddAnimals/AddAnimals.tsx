@@ -110,9 +110,9 @@ export default function AddAnimals() {
         width: 175,
         valueGetter: (params: any) => {
           const animalTypeMap: { [key: string]: string } = {
-            BEEF_COW_ID: 'Beef Cattle',
-            DAIRY_COW_ID: 'Dairy Cattle',
-            POULTRY_ID: 'Poultry',
+            [BEEF_COW_ID]: 'Beef Cattle',
+            [DAIRY_COW_ID]: 'Dairy Cattle',
+            [POULTRY_ID]: 'Poultry',
           };
           return animalTypeMap[params] || params;
         },

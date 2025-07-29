@@ -16,7 +16,7 @@ export function calculateAnnualSolidManure(
 ) {
   if (daysCollected > 365 || daysCollected < 0) {
     throw new Error(
-      `Invalid number of collection days: can only be 0-365 but received ${daysCollected}`,
+      `Invalid number of collection days: must be between 0 and 365 but received ${daysCollected}`,
     );
   }
   return (poundsPerAnimal * animalsPerFarm * daysCollected * (coefficient || 1)) / 2000; // 1 US ton = 2000 pounds
@@ -35,9 +35,9 @@ export function calculatePoultryAnnualSolidManure(
   flocksPerYear: number,
   daysPerFlock: number,
 ) {
-  if (daysPerFlock < 0) {
+  if (daysPerFlock < 0 || daysPerFlock > 365) {
     throw new Error(
-      `Invalid number of days per flock: must be greater than 0 but received ${daysPerFlock}`,
+      `Invalid number of days per flock: must be between 0 and 365 but received ${daysPerFlock}`,
     );
   }
   return (poundsPerAnimal * birdsPerFlock * flocksPerYear * daysPerFlock) / 2000; // 1 US ton = 2000 pounds
@@ -58,7 +58,7 @@ export function calculateAnnualLiquidManure(
 ) {
   if (daysCollected > 365 || daysCollected < 0) {
     throw new Error(
-      `Invalid number of collection days: can only be 0-365 but received ${daysCollected}`,
+      `Invalid number of collection days: must be between 0 and 365 but received ${daysCollected}`,
     );
   }
   return galsPerAnimal * animalsPerFarm * daysCollected * (coefficient || 1);
@@ -77,9 +77,9 @@ export function calculatePoultryAnnualLiquidManure(
   flocksPerYear: number,
   daysPerFlock: number,
 ) {
-  if (daysPerFlock < 0) {
+  if (daysPerFlock < 0 || daysPerFlock > 365) {
     throw new Error(
-      `Invalid number of days per flock: must be greater than 0 but received ${daysPerFlock}`,
+      `Invalid number of days per flock: must be between 0 and 365 but received ${daysPerFlock}`,
     );
   }
   return galsPerAnimal * birdsPerFlock * flocksPerYear * daysPerFlock;
