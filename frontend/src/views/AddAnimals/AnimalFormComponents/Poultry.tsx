@@ -8,6 +8,7 @@ import { AnimalData, PoultryData } from '@/types';
 import { calculatePoultryAnnualLiquidManure, calculatePoultryAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 import { ManureType, POULTRY_ID } from '@/types/Animals';
+import { MANURE_TYPE_OPTIONS } from '@/constants';
 
 type PoultryProps = {
   formData: PoultryData;
@@ -110,10 +111,26 @@ export default function Poultry({
           items={subtypeOptions}
           onSelectionChange={(e: Key) => {
             handleInputChanges({ subtype: e.toString() });
+            console.log(e);
           }}
           isRequired
         />
       </Grid>
+      {/* Ducks don't have choice of manure type */}
+      {formData.subtype !== '10' && (
+        <Grid size={formGridBreakpoints}>
+          <Select
+            label="Manure Type"
+            name="manureType"
+            selectedKey={formData.manureType}
+            items={MANURE_TYPE_OPTIONS}
+            onSelectionChange={(e: Key) => {
+              handleInputChanges({ manureType: e as number });
+            }}
+            isRequired
+          />
+        </Grid>
+      )}
       <Grid size={formGridBreakpoints}>
         <TextField
           label="Number of birds per flock"

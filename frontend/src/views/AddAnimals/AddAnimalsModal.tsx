@@ -38,7 +38,6 @@ export default function AddAnimalsModal({
     } else {
       setAnimalList((prev) => [...prev, { ...newFormData }]);
     }
-    console.log(newFormData);
     onClose();
   };
 
