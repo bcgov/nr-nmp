@@ -110,8 +110,9 @@ export default function Poultry({
           selectedKey={formData.subtype}
           items={subtypeOptions}
           onSelectionChange={(e: Key) => {
-            handleInputChanges({ subtype: e.toString() });
-            console.log(e);
+            e === 10
+              ? handleInputChanges({ subtype: e.toString(), ManureType: 2 })
+              : handleInputChanges({ subtype: e.toString() });
           }}
           isRequired
         />
@@ -157,6 +158,7 @@ export default function Poultry({
           isRequired
         />
       </Grid>
+      {/*  nuymber of days before flock is removed or replaced */}
       <Grid size={formGridBreakpoints}>
         <TextField
           label="Number of days per flock"
@@ -166,7 +168,7 @@ export default function Poultry({
           onChange={(e: string) => {
             handleInputChanges({ daysPerFlock: Number(e) });
           }}
-          maxLength={7}
+          maxLength={3}
           isRequired
         />
       </Grid>
