@@ -231,7 +231,14 @@ export default function ManureAndImports() {
         width: 200,
         minWidth: 150,
         maxWidth: 300,
-        valueGetter: (param: string | number) => (param === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        valueGetter: (params: any) => {
+          const animalTypeMap: { [key: string]: string } = {
+            '1': 'Beef Cattle',
+            '2': 'Dairy Cattle',
+            '6': 'Poultry',
+          };
+          return animalTypeMap[params] || params;
+        },
       },
       {
         field: 'subtype',

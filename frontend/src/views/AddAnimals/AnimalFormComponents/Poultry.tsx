@@ -3,13 +3,11 @@ import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
-import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, DAIRY_COW_ID, PoultryData, MILKING_COW_ID } from '@/types';
+import { AnimalData, PoultryData } from '@/types';
 import { calculatePoultryAnnualLiquidManure, calculatePoultryAnnualSolidManure } from '../utils';
-import MilkingFields from './MilkingFields';
 import AnimalFormWrapper from './AnimalFormWrapper';
-import { ManureType } from '@/types/Animals';
+import { ManureType, POULTRY_ID } from '@/types/Animals';
 
 type PoultryProps = {
   formData: PoultryData;
@@ -75,9 +73,8 @@ export default function Poultry({
     handleSubmit(withManureCalc);
   };
 
-  // poultry animal id = 6 get animalid
   useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
+    apiCache.callEndpoint('api/animal_subtypes/6/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
         // The data in the response has more properties, but we want to trim it down
@@ -92,7 +89,6 @@ export default function Poultry({
           id: row.id.toString(),
           label: row.name,
         }));
-        console.log(setSubtypeOptions);
         setSubtypeOptions(subtypeOptionz);
       }
     });
@@ -101,7 +97,7 @@ export default function Poultry({
 
   return (
     <AnimalFormWrapper
-      selectedAnimalId={DAIRY_COW_ID}
+      selectedAnimalId={POULTRY_ID}
       handleInputChanges={handleInputChanges}
       onCancel={onCancel}
       onSubmit={onSubmit}
@@ -153,7 +149,7 @@ export default function Poultry({
           onChange={(e: string) => {
             handleInputChanges({ daysPerFlock: Number(e) });
           }}
-          maxLength={3}
+          maxLength={7}
           isRequired
         />
       </Grid>

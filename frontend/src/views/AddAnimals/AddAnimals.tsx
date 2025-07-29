@@ -108,7 +108,14 @@ export default function AddAnimals() {
         field: 'animalId',
         headerName: 'Animal Type',
         width: 175,
-        valueGetter: (params: any) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        valueGetter: (params: any) => {
+          const animalTypeMap: { [key: string]: string } = {
+            '1': 'Beef Cattle',
+            '2': 'Dairy Cattle',
+            '6': 'Poultry',
+          };
+          return animalTypeMap[params] || params;
+        },
         renderCell: (params: any) => {
           if (isDairyAndMilkingCattle(params.row.animalId, params.row.subtype)) {
             return (
