@@ -156,6 +156,7 @@ export default function StorageSystemDetailsEdit({
               );
             }}
             isDisabled={mode !== 'create'}
+            style={{ flexGrow: 1 }}
           />
           <TextField
             isRequired
