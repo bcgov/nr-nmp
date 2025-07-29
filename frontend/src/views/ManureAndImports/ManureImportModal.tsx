@@ -1,7 +1,7 @@
 /**
  * @summary This is the modal for imported (i.e. manually input) manures
  */
-import { ComponentProps, FormEvent, Key, useContext, useEffect, useState } from 'react';
+import { ComponentProps, FormEvent, useContext, useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import {
@@ -155,7 +155,7 @@ export default function ManureImportModal({
                   placeholder="Select manure type"
                   selectedKey={formData.ManureType}
                   items={MANURE_TYPE_OPTIONS}
-                  onSelectionChange={(e: Key) => {
+                  onSelectionChange={(e) => {
                     handleInputChange({
                       ManureType: e as number,
                       ManagedManureName: `${formData.UniqueMaterialName}, ${ManureType[e as number]}`,
@@ -193,7 +193,7 @@ export default function ManureImportModal({
                         id: ele.inputunit,
                         label: ele.inputunitname ?? '',
                       }))}
-                      onSelectionChange={(e: Key) => {
+                      onSelectionChange={(e) => {
                         handleInputChange({ Units: e as number });
                       }}
                     />
@@ -225,7 +225,7 @@ export default function ManureImportModal({
                       id: ele.inputunit,
                       label: ele.inputunitname ?? '',
                     }))}
-                    onSelectionChange={(e: Key) => {
+                    onSelectionChange={(e) => {
                       handleInputChange({ Units: e as number });
                     }}
                   />
@@ -245,14 +245,12 @@ export default function ManureImportModal({
                 type="reset"
                 variant="secondary"
                 onPress={handleDialogClose}
-                aria-label="reset"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 variant="primary"
-                aria-label="submit"
               >
                 Confirm
               </Button>

@@ -3,28 +3,6 @@
  */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import SCREEN_SIZES from '../../constants/screenSizes';
-
-export const CardHeader = styled.div`
-  background-color: rgba(200, 200, 200, 0.3);
-  padding: 0;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 65px;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  @media (min-width: ${SCREEN_SIZES.tablet}) {
-    justify-content: flex-start;
-    padding-left: 2em;
-  }
-  z-index: 2000;
-`;
 
 export const Banner = styled.div`
   display: flex;

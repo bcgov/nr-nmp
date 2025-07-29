@@ -10,6 +10,16 @@ import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from './Animals';
 import APP_STATE_KEY from './context';
 import { HarvestUnit, HARVEST_UNIT_OPTIONS } from './harvestUnits';
 import MANURE_TYPE_OPTIONS from './ManureTypeOptions';
+import PrecipitationConversionFactor from './PrecipitationConversionFactor';
+import {
+  DEFAULT_CIRCULAR_STORAGE,
+  DEFAULT_LIQUID_MANURE_STORAGE,
+  DEFAULT_LIQUID_MANURE_SYSTEM,
+  DEFAULT_RECTANGULAR_STORAGE,
+  DEFAULT_SLOPED_WALL_STORAGE,
+  DEFAULT_SOLID_MANURE_STORAGE,
+  DEFAULT_SOLID_MANURE_SYSTEM,
+} from './storage';
 
 // TODO: Standardize these variable names. Global constants should be in all caps
 export {
@@ -28,4 +38,12 @@ export {
   HARVEST_UNIT_OPTIONS,
   MANURE_APPLICATION_FREQ,
   MANURE_TYPE_OPTIONS,
+  PrecipitationConversionFactor,
+  DEFAULT_LIQUID_MANURE_STORAGE,
+  DEFAULT_SOLID_MANURE_STORAGE,
+  DEFAULT_RECTANGULAR_STORAGE,
+  DEFAULT_CIRCULAR_STORAGE,
+  DEFAULT_SLOPED_WALL_STORAGE,
+  DEFAULT_LIQUID_MANURE_SYSTEM,
+  DEFAULT_SOLID_MANURE_SYSTEM,
 };

@@ -19,7 +19,7 @@ export const HeaderWrapper = styled.header`
     justify-content: flex-start;
     padding-left: 2em;
   }
-  z-index: 2000;
+  z-index: 999;
 `;
 
 export const Heading = styled.h2`

@@ -16,11 +16,12 @@ function Modal({ isOpen, onOpenChange, title, children, modalStyle }: ModalProps
       isDismissable
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      style={modalStyle}
+      style={{ ...modalStyle, overflow: 'scroll' }}
     >
       <Dialog
         isCloseable
         role="dialog"
+        aria-label={title}
       >
         <div style={{ padding: '1rem' }}>
           <span style={{ fontWeight: '700', fontSize: '1.25rem' }}>{title}</span>

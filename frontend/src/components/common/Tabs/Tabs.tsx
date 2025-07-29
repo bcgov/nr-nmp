@@ -1,43 +1,35 @@
-import React from 'react';
-import { TabsWrapper, Tab, TabContent } from './tabs.styles';
+import { useState, useEffect } from 'react';
+import MUITabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 
-interface TabProps {
-  label: string;
-  content: React.ReactNode;
-  id: string;
-}
-
-interface TabsProps {
-  tabs: TabProps[];
+export default function Tabs({
+  activeTab,
+  tabLabel,
+}: {
   activeTab: number;
-  setActiveTab?: (index: number) => void;
-  clickable?: boolean;
-}
+  tabLabel: Array<string>;
+}) {
+  const [value, setValue] = useState(activeTab);
 
-export function TabOptions({ tabs, activeTab, setActiveTab, clickable = true }: TabsProps) {
+  useEffect(() => setValue(activeTab), [activeTab, setValue]);
+
   return (
-    <TabsWrapper>
-      <div>
-        {tabs.map((tab, index) => (
-          <Tab
-            key={tab.id}
-            active={index === activeTab}
-            clickable={clickable}
-            onClick={() => clickable && setActiveTab && setActiveTab(index)}
-          >
-            {tab.label}
-          </Tab>
-        ))}
-      </div>
-    </TabsWrapper>
+    <Box sx={{ width: '100%' }}>
+      <Box>
+        <MUITabs
+          value={value}
+          aria-label="tab"
+        >
+          {tabLabel.map((ele, i) => (
+            <Tab
+              label={ele}
+              // eslint-disable-next-line react/no-array-index-key
+              key={`${ele} + ${i}`}
+            />
+          ))}
+        </MUITabs>
+      </Box>
+    </Box>
   );
-}
-
-interface TabContentDisplayProps {
-  tabs: TabProps[];
-  activeTab: number;
-}
-
-export function TabContentDisplay({ tabs, activeTab }: TabContentDisplayProps) {
-  return <TabContent>{tabs[activeTab].content}</TabContent>;
 }

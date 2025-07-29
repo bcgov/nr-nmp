@@ -10,7 +10,7 @@ import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
-import { AppTitle, PageTitle, TabsMaterial } from '@/components/common';
+import { AppTitle, PageTitle, Tabs } from '@/components/common';
 import { AnimalData } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
@@ -186,7 +186,6 @@ export default function AddAnimals() {
           >
             <Button
               size="medium"
-              aria-label="Add Animal"
               onPress={() => setIsDialogOpen(true)}
               variant="secondary"
             >
@@ -205,7 +204,7 @@ export default function AddAnimals() {
           />
         )}
       </>
-      <TabsMaterial
+      <Tabs
         activeTab={0}
         tabLabel={tabs}
       />
@@ -227,7 +226,6 @@ export default function AddAnimals() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -235,7 +233,6 @@ export default function AddAnimals() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNextPage}
           type="submit"

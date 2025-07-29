@@ -97,7 +97,7 @@ export default function FarmInformation() {
         id: row?.id.toString(),
         label: row.name,
       }));
-      setRegionOptions(regions as Array<SelectOption>);
+      setRegionOptions(regions as SelectOption[]);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -115,7 +115,7 @@ export default function FarmInformation() {
         label: row.name,
       }));
 
-      setSubregionOptions(subregions as Array<SelectOption>);
+      setSubregionOptions(subregions as SelectOption[]);
     });
   }, [formData.FarmRegion, apiCache]);
 
@@ -195,11 +195,13 @@ export default function FarmInformation() {
         >
           <Grid size={formGridBreakpoints}>
             <span
+              id="FarmName-label"
               className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmName ? '--error' : ''}`}
             >
               Farm Name
             </span>
             <TextField
+              aria-labelledby="FarmName-label"
               isRequired
               name="FarmName"
               value={formData.FarmName}
@@ -209,46 +211,49 @@ export default function FarmInformation() {
           </Grid>
           <Grid size={formGridBreakpoints}>
             <span
+              id="Year-label"
               className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.Year ? '--error' : ''}`}
             >
               Year
             </span>
-
             <Select
+              aria-labelledby="Year-label"
               isRequired
               name="Year"
               items={yearOptions}
               selectedKey={formData.Year}
-              onSelectionChange={(e) => handleChange('Year', e)}
+              onSelectionChange={(e) => handleChange('Year', e as string)}
               noSort
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <span
+              id="FarmRegion-label"
               className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmRegion ? '--error' : ''}`}
             >
               Region
             </span>
-
             <Select
+              aria-labelledby="FarmRegion-label"
               isRequired
               items={regionOptions}
               selectedKey={formData.FarmRegion}
-              onSelectionChange={(e) => handleChange('FarmRegion', e)}
+              onSelectionChange={(e) => handleChange('FarmRegion', e as string)}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <span
+              id="FarmSubRegion-label"
               className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmSubRegion ? '--error' : ''}`}
             >
               Subregion
             </span>
-
             <Select
+              aria-labelledby="FarmSubRegion-label"
               isRequired
               items={subregionOptions}
               selectedKey={formData.FarmSubRegion}
-              onSelectionChange={(e) => handleChange('FarmSubRegion', e)}
+              onSelectionChange={(e) => handleChange('FarmSubRegion', e as string)}
               isDisabled={!(subregionOptions && subregionOptions.length)}
             />
           </Grid>
@@ -296,6 +301,7 @@ export default function FarmInformation() {
               orientation="horizontal"
             />
             <CheckboxGroup
+              aria-label="Farm Animals"
               css={
                 hasAnimals
                   ? {
@@ -319,7 +325,6 @@ export default function FarmInformation() {
         >
           <Button
             size="medium"
-            aria-label="Back"
             onPress={handlePeviousPage}
             variant="secondary"
           >
@@ -327,7 +332,6 @@ export default function FarmInformation() {
           </Button>
           <Button
             size="medium"
-            aria-label="Next"
             variant="primary"
             type="submit"
           >

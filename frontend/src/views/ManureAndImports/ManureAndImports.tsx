@@ -35,7 +35,7 @@ import {
   STORAGE,
 } from '@/constants/routes';
 
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
@@ -338,7 +338,6 @@ export default function ManureAndImports() {
           >
             <ButtonGov
               size="medium"
-              aria-label="Add manure"
               onPress={() => setIsDialogOpen(true)}
               variant="secondary"
             >
@@ -357,17 +356,17 @@ export default function ManureAndImports() {
           isDismissable
         />
         {state.showAnimalsStep && hasDairyCattle ? (
-          <TabsMaterial
+          <Tabs
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
           />
         ) : state.showAnimalsStep ? (
-          <TabsMaterial
+          <Tabs
             activeTab={1}
             tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
           />
         ) : (
-          <TabsMaterial
+          <Tabs
             activeTab={0}
             tabLabel={['Manure & Imports', 'Nutrient Analysis']}
           />
@@ -402,7 +401,6 @@ export default function ManureAndImports() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -410,7 +408,6 @@ export default function ManureAndImports() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNextPage}
           type="submit"

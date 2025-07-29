@@ -28,13 +28,7 @@ import {
   modalPaddingStyle,
   tableActionButtonCss,
 } from '../../common.styles';
-import {
-  AppTitle,
-  PageTitle,
-  ProgressStepper,
-  Select,
-  TabsMaterial,
-} from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Select, Tabs } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
 import { InfoBox, StyledContent, StyledDatePicker } from './soilTests.styles';
@@ -409,7 +403,7 @@ export default function SoilTests() {
           </div>
         </Dialog>
       </Modal>
-      <TabsMaterial
+      <Tabs
         activeTab={1}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />
@@ -462,7 +456,6 @@ export default function SoilTests() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -470,7 +463,6 @@ export default function SoilTests() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNextPage}
           type="submit"

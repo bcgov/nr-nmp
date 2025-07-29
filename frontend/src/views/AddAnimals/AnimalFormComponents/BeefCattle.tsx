@@ -1,4 +1,4 @@
-import { FormEvent, Key, useContext, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import { Checkbox, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { Select } from '@/components/common';
@@ -90,7 +90,7 @@ export default function BeefCattle({
           placeholder="Select a cattle type"
           selectedKey={formData?.subtype}
           items={subtypeOptions}
-          onSelectionChange={(e: Key) => {
+          onSelectionChange={(e) => {
             handleInputChanges({ subtype: e?.toString() });
           }}
         />

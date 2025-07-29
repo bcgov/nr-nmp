@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
-import { AppTitle, PageTitle, ProgressStepper, TabsMaterial } from '../../components/common';
-import { StyledContent } from './nutrientAnalsysis.styles';
+import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
+import { StyledContent } from './nutrientAnalysis.styles';
 import { AnimalData, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
@@ -187,7 +187,6 @@ export default function NutrientAnalysis() {
         >
           <ButtonGov
             size="medium"
-            aria-label="Add Nutrient Anaylsis"
             onPress={() => setIsDialogOpen(true)}
             variant="secondary"
           >
@@ -214,17 +213,17 @@ export default function NutrientAnalysis() {
         />
       )}
       {state.showAnimalsStep && hasDairyCattle ? (
-        <TabsMaterial
+        <Tabs
           activeTab={3}
           tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
       ) : state.showAnimalsStep ? (
-        <TabsMaterial
+        <Tabs
           activeTab={2}
           tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
         />
       ) : (
-        <TabsMaterial
+        <Tabs
           activeTab={1}
           tabLabel={['Manure & Imports', 'Nutrient Analysis']}
         />
@@ -246,7 +245,6 @@ export default function NutrientAnalysis() {
       >
         <Button
           size="medium"
-          aria-label="Back"
           variant="secondary"
           onPress={handlePreviousPage}
         >
@@ -254,7 +252,6 @@ export default function NutrientAnalysis() {
         </Button>
         <Button
           size="medium"
-          aria-label="Next"
           variant="primary"
           onPress={handleNextPage}
           type="submit"
