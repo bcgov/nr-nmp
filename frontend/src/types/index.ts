@@ -32,11 +32,15 @@ import {
   MILKING_COW_ID,
   PER_DAY_PER_ANIMAL_UNIT,
   PER_DAY_UNIT,
+  OTHER_ANIMAL_IDS,
   WashWaterUnit,
   BeefCattleData,
   DairyCattleData,
+  OtherAnimalData,
+  OtherAnimalId,
   AnimalData,
   ManureType,
+  Animal,
 } from './Animals';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
@@ -62,6 +66,7 @@ export {
   MILKING_COW_ID,
   PER_DAY_PER_ANIMAL_UNIT,
   PER_DAY_UNIT,
+  OTHER_ANIMAL_IDS,
   ManureType,
   Shape,
 };
@@ -98,7 +103,10 @@ export type {
   WashWaterUnit,
   BeefCattleData,
   DairyCattleData,
+  OtherAnimalData,
+  OtherAnimalId,
   AnimalData,
+  Animal,
   Fertilizer,
   FertilizerType,
   FertilizerUnit,

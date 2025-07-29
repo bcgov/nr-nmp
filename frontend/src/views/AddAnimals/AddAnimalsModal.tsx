@@ -4,10 +4,11 @@
 import React, { useState } from 'react';
 import BeefCattle from './AnimalFormComponents/BeefCattle';
 import DairyCattle from './AnimalFormComponents/DairyCattle';
-import { AnimalData } from '@/types';
+import { AnimalData, ManureType, OTHER_ANIMAL_IDS, OtherAnimalData, OtherAnimalId } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from '@/constants';
+import OtherAnimals from './AnimalFormComponents/OtherAnimals';
 
 type AddAnimalsModalProps = {
   initialModalData: AnimalData | undefined;
@@ -49,6 +50,17 @@ export default function AddAnimalsModal({
         if (changes.animalId === '2') {
           return { ...INITIAL_DAIRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
+
+        if (!OTHER_ANIMAL_IDS.some((id) => id === changes.animalId)) {
+          throw new Error(`Invalid animalId: ${changes.animalId}`);
+        }
+        return {
+          manureType: ManureType.Solid,
+          daysCollected: 0,
+          ...changes,
+          animalId: changes.animalId as OtherAnimalId,
+          manureId: crypto.randomUUID(),
+        };
       }
 
       if (prev === undefined) {
@@ -81,6 +93,14 @@ export default function AddAnimalsModal({
       {formData?.animalId === '2' && (
         <DairyCattle
           formData={formData}
+          handleInputChanges={handleInputChanges}
+          handleSubmit={handleSubmit}
+          onCancel={onClose}
+        />
+      )}
+      {formData !== undefined && OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
+        <OtherAnimals
+          formData={formData as OtherAnimalData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
           onCancel={onClose}

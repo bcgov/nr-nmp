@@ -1,4 +1,4 @@
-import React, { Key } from 'react';
+import React from 'react';
 import { PressEvent } from 'react-aria-components';
 import Grid from '@mui/material/Grid';
 import { Form, Select } from '@/components/common';
@@ -7,6 +7,10 @@ import { Form, Select } from '@/components/common';
 const animalOptions = [
   { id: '1', label: 'Beef Cattle' },
   { id: '2', label: 'Dairy Cattle' },
+  { id: '4', label: 'Goats' },
+  { id: '5', label: 'Horse' },
+  { id: '7', label: 'Rabbits' },
+  { id: '8', label: 'Sheep' },
 ];
 
 type AnimalFormWrapperProps = {
@@ -44,8 +48,8 @@ export default function AnimalFormWrapper({
             label="Animal Type"
             placeholder="Select Animal Type"
             selectedKey={selectedAnimalId}
-            onSelectionChange={(e: Key) => {
-              handleInputChanges({ animalId: e.toString() });
+            onSelectionChange={(e) => {
+              handleInputChanges({ animalId: e as string });
             }}
           />
         </Grid>
