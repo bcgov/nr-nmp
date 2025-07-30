@@ -93,7 +93,7 @@ export default function AddAnimalsModal({
     apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        const options = (data as Animal[]).map((row) => ({ id: row.id, label: row.name }));
+        const options = (data as Animal[]).map((row) => ({ id: String(row.id), label: row.name }));
         // TODO: REMOVE ONCE WE HAVE SWINE
         // This is a lazy way to take it out of the list
         options.splice(options.length - 1, 1);
