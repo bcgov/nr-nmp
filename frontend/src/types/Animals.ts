@@ -1,6 +1,8 @@
 export const BEEF_COW_ID = '1';
 export const DAIRY_COW_ID = '2';
-export const MILKING_COW_ID = '9';
+export const MILKING_COW_ID = '9'; // subtype
+export const POULTRY_ID = '6';
+export const DUCK_ID = '10'; // subtype
 export const PER_DAY_PER_ANIMAL_UNIT = 'PER_DAY_PER_ANIMAL';
 export const PER_DAY_UNIT = 'PER_DAY';
 export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
@@ -37,6 +39,19 @@ export type DairyCattleData = {
   manureId: string;
 };
 
+export type PoultryData = {
+  animalId: '6';
+  subtype?: string;
+  manureType?: ManureType;
+  birdsPerFlock?: number;
+  flocksPerYear?: number;
+  daysPerFlock?: number;
+  manureData?:
+    | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
+    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
+  manureId: string;
+};
+
 // I didn't want to define the type like this but Typescript
 // doesn't allow defining types as an exclusion of specific strings
 export type OtherAnimalId = '4' | '5' | '7' | '8';
@@ -51,7 +66,7 @@ export type OtherAnimalData = {
   manureId: string;
 };
 
-export type AnimalData = BeefCattleData | DairyCattleData | OtherAnimalData;
+export type AnimalData = BeefCattleData | DairyCattleData | PoultryData | OtherAnimalData;
 
 export type Animal = {
   id: number;

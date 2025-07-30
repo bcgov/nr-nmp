@@ -1,17 +1,9 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { PressEvent } from 'react-aria-components';
 import Grid from '@mui/material/Grid';
 import { Form, Select } from '@/components/common';
-
-// TEMPORARY! TODO: Use the database once we add all the animals
-const animalOptions = [
-  { id: '1', label: 'Beef Cattle' },
-  { id: '2', label: 'Dairy Cattle' },
-  { id: '4', label: 'Goats' },
-  { id: '5', label: 'Horse' },
-  { id: '7', label: 'Rabbits' },
-  { id: '8', label: 'Sheep' },
-];
+import { Animal, SelectOption } from '@/types';
+import { APICacheContext } from '@/context/APICacheContext';
 
 type AnimalFormWrapperProps = {
   selectedAnimalId?: string;
@@ -30,6 +22,20 @@ export default function AnimalFormWrapper({
   isConfirmDisabled,
   children,
 }: AnimalFormWrapperProps) {
+  const [animalOptions, setAnimalOptions] = useState<SelectOption[]>([]);
+  const apiCache = useContext(APICacheContext);
+
+  apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
+    if (response.status === 200) {
+      const { data } = response;
+      const options = (data as Animal[]).map((row) => ({ id: row.id, label: row.name }));
+      // TODO: REMOVE ONCE WE HAVE SWINE
+      // This is a lazy way to take it out of the list
+      options.splice(options.length - 1, 1);
+      setAnimalOptions(options);
+    }
+  });
+
   return (
     <Form
       onCancel={onCancel}

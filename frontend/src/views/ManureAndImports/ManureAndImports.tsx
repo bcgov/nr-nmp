@@ -18,6 +18,7 @@ import {
   AnimalData,
   ManureType,
   Animal,
+  SelectOption,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
@@ -49,6 +50,7 @@ export default function ManureAndImports() {
   const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
   const [animals, setAnimals] = useState<Animal[]>([]);
+  const [subtypeList, setSubtypeList] = useState<SelectOption[]>([]);
   const [editMaterialName, setEditMaterialName] = useState<string | null>(null);
   const [manures, setManures] = useState<NMPFileImportedManureData[]>(
     state.nmpFile.years[0]?.ImportedManures || [],
@@ -186,6 +188,16 @@ export default function ManureAndImports() {
       if (response.status === 200) {
         const { data } = response;
         setAnimals(data);
+      }
+    });
+
+    apiCache.callEndpoint('api/animal_subtypes/').then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const subType: { id: string; label: string }[] = (
+          data as { id: number; name: string }[]
+        ).map((row) => ({ id: row.id.toString(), label: row.name }));
+        setSubtypeList((prev) => [...prev, ...subType]);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
