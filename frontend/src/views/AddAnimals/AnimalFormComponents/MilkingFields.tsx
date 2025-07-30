@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { PER_DAY_UNIT, PER_DAY_PER_ANIMAL_UNIT, WashWaterUnit } from '@/types';
-import { Select } from '@/components/common';
+import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 
 interface MilkingFieldsProps {
@@ -27,12 +27,12 @@ export default function MilkingFields({
 }: MilkingFieldsProps) {
   // I'm starting to think keeping stateful props is dumb and I should just keep the useEffects
   // to get the same on-mount-and-unmount behavior, but I just wanna get this PR in atm
-  const [milkProduction, setMilkProduction] = useState<string>(String(milkProductionInit));
+  const [milkProduction, setMilkProduction] = useState<number>(milkProductionInit);
   const [washWater, setWashWater] = useState<string>(washWaterInit.toFixed(1));
 
   // When the breed changes, change the milk production value
   useEffect(() => {
-    setMilkProduction(String(milkProductionInit));
+    setMilkProduction(milkProductionInit);
     handleInputChanges({ milkProduction: milkProductionInit });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [milkProductionInit]);
@@ -67,6 +67,15 @@ export default function MilkingFields({
   return (
     <>
       <Grid size={formGridBreakpoints}>
+        <NumberField
+          isRequired
+          label="Average Animal Number on Farm"
+          value={milkProduction}
+          onChange={(e) => {
+            handleInputChanges({ animalsPerFarm: e });
+          }}
+          minValue={0}
+        />
         <TextField
           label="Milk Production"
           type="number"
