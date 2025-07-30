@@ -4,10 +4,12 @@
 import React, { useState } from 'react';
 import BeefCattle from './AnimalFormComponents/BeefCattle';
 import DairyCattle from './AnimalFormComponents/DairyCattle';
-import { AnimalData } from '@/types';
+import Poultry from './AnimalFormComponents/Poultry';
+import { AnimalData, BEEF_COW_ID, DAIRY_COW_ID, POULTRY_ID } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from '@/constants';
+import { INITIAL_POULTRY_FORM_DATA } from '@/constants/Animals';
 
 type AddAnimalsModalProps = {
   initialModalData: AnimalData | undefined;
@@ -43,11 +45,14 @@ export default function AddAnimalsModal({
     setFormData((prev: AnimalData | undefined) => {
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {
-        if (changes.animalId === '1') {
+        if (changes.animalId === BEEF_COW_ID) {
           return { ...INITIAL_BEEF_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
-        if (changes.animalId === '2') {
+        if (changes.animalId === DAIRY_COW_ID) {
           return { ...INITIAL_DAIRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
+        }
+        if (changes.animalId === POULTRY_ID) {
+          return { ...INITIAL_POULTRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
       }
 
@@ -70,7 +75,7 @@ export default function AddAnimalsModal({
           onCancel={onClose}
         />
       )}
-      {formData?.animalId === '1' && (
+      {formData?.animalId === BEEF_COW_ID && (
         <BeefCattle
           formData={formData}
           handleInputChanges={handleInputChanges}
@@ -78,8 +83,16 @@ export default function AddAnimalsModal({
           onCancel={onClose}
         />
       )}
-      {formData?.animalId === '2' && (
+      {formData?.animalId === DAIRY_COW_ID && (
         <DairyCattle
+          formData={formData}
+          handleInputChanges={handleInputChanges}
+          handleSubmit={handleSubmit}
+          onCancel={onClose}
+        />
+      )}
+      {formData?.animalId === POULTRY_ID && (
+        <Poultry
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}

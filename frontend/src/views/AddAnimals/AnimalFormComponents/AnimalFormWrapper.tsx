@@ -2,11 +2,13 @@ import React, { Key } from 'react';
 import { PressEvent } from 'react-aria-components';
 import Grid from '@mui/material/Grid';
 import { Form, Select } from '@/components/common';
+import { BEEF_COW_ID, DAIRY_COW_ID, POULTRY_ID } from '@/types';
 
 // TEMPORARY! TODO: Use the database once we add all the animals
 const animalOptions = [
-  { id: '1', label: 'Beef Cattle' },
-  { id: '2', label: 'Dairy Cattle' },
+  { id: BEEF_COW_ID, label: 'Beef Cattle' },
+  { id: DAIRY_COW_ID, label: 'Dairy Cattle' },
+  { id: POULTRY_ID, label: 'Poultry' },
 ];
 
 type AnimalFormWrapperProps = {

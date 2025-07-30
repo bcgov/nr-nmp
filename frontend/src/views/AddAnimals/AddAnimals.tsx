@@ -11,7 +11,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, Tabs } from '@/components/common';
-import { AnimalData } from '@/types';
+import { AnimalData, BEEF_COW_ID, DAIRY_COW_ID, POULTRY_ID } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import {
@@ -108,7 +108,14 @@ export default function AddAnimals() {
         field: 'animalId',
         headerName: 'Animal Type',
         width: 175,
-        valueGetter: (params: any) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        valueGetter: (params: any) => {
+          const animalTypeMap: { [key: string]: string } = {
+            [BEEF_COW_ID]: 'Beef Cattle',
+            [DAIRY_COW_ID]: 'Dairy Cattle',
+            [POULTRY_ID]: 'Poultry',
+          };
+          return animalTypeMap[params] || params;
+        },
         renderCell: (params: any) => {
           if (isDairyAndMilkingCattle(params.row.animalId, params.row.subtype)) {
             return (

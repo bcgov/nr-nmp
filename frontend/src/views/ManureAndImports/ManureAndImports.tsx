@@ -48,7 +48,7 @@ export default function ManureAndImports() {
 
   const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
-  const [cattleSubtypeList, setCattleSubtypeList] = useState<SelectOption[]>([]);
+  const [subtypeList, setSubtypeList] = useState<SelectOption[]>([]);
   const [editMaterialName, setEditMaterialName] = useState<string | null>(null);
   const [manures, setManures] = useState<NMPFileImportedManureData[]>(
     state.nmpFile.years[0]?.ImportedManures || [],
@@ -183,23 +183,13 @@ export default function ManureAndImports() {
         }
       });
 
-    apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
+    apiCache.callEndpoint('api/animal_subtypes/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
         const subType: { id: string; label: string }[] = (
           data as { id: number; name: string }[]
         ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setCattleSubtypeList((prev) => [...prev, ...subType]);
-      }
-    });
-
-    apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const subType: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setCattleSubtypeList((prev) => [...prev, ...subType]);
+        setSubtypeList((prev) => [...prev, ...subType]);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,7 +221,14 @@ export default function ManureAndImports() {
         width: 200,
         minWidth: 150,
         maxWidth: 300,
-        valueGetter: (param: string | number) => (param === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        valueGetter: (params: any) => {
+          const animalTypeMap: { [key: string]: string } = {
+            '1': 'Beef Cattle',
+            '2': 'Dairy Cattle',
+            '6': 'Poultry',
+          };
+          return animalTypeMap[params] || params;
+        },
       },
       {
         field: 'subtype',
@@ -240,7 +237,7 @@ export default function ManureAndImports() {
         minWidth: 150,
         maxWidth: 500,
         valueGetter: (param: string | number) =>
-          cattleSubtypeList?.find((ele) => ele.id === param)?.label || param,
+          subtypeList?.find((ele) => ele.id === param)?.label || param,
       },
       {
         field: 'manureData',
@@ -251,7 +248,7 @@ export default function ManureAndImports() {
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
       },
     ],
-    [cattleSubtypeList],
+    [subtypeList],
   );
 
   const columnsImportedManure: GridColDef[] = useMemo(
