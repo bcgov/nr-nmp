@@ -1,44 +1,42 @@
 import { FormEvent, useContext, useEffect, useState } from 'react';
 import { Checkbox, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, BEEF_COW_ID, BeefCattleData, ManureType, SelectOption } from '@/types';
+import { AnimalData, ManureType, SelectOption } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
+import { OtherAnimalData } from '@/types/Animals';
 
-interface BeefCattleSubtype {
-  id: number;
+type Subtype = {
+  animalid: number;
   name: string;
   solidperpoundperanimalperday: number;
-}
+};
 
-type BeefCattleProps = {
-  formData: BeefCattleData;
+type OtherAnimalsProps = {
+  formData: OtherAnimalData;
   animalOptions: SelectOption[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
 };
 
-export default function BeefCattle({
+export default function OtherAnimals({
   formData,
   handleInputChanges,
   handleSubmit,
   ...props
-}: BeefCattleProps) {
+}: OtherAnimalsProps) {
   const apiCache = useContext(APICacheContext);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
-  const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
+  const [subtype, setSubtype] = useState<Subtype | null>(null);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     // Calculate manure
-    const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    if (subtype === null) throw new Error('Submit occurred when it should be disabled.');
     const withManureCalc = {
       ...formData,
       manureData: {
@@ -54,48 +52,28 @@ export default function BeefCattle({
     handleSubmit(withManureCalc);
   };
 
-  // only run on initial mount
   useEffect(() => {
-    apiCache.callEndpoint(`api/animal_subtypes/${BEEF_COW_ID}/`).then((response) => {
+    apiCache.callEndpoint(`api/animal_subtypes/${formData.animalId}/`).then((response) => {
       if (response.status === 200) {
-        const { data } = response;
-        const subtypez: BeefCattleSubtype[] = (
-          data as { id: number; name: string; solidperpoundperanimalperday: number }[]
-        ).map((row) => ({
-          id: row.id,
-          name: row.name,
-          solidperpoundperanimalperday: row.solidperpoundperanimalperday,
-        }));
-        setSubtypes(subtypez);
-        const sOptions: { id: string; label: string }[] = subtypez.map((row) => ({
-          id: row.id.toString(),
-          label: row.name,
-        }));
-        setSubtypeOptions(sOptions);
+        const castedData = response.data as Subtype[];
+        setSubtype({
+          animalid: castedData[0].animalid,
+          name: castedData[0].name,
+          solidperpoundperanimalperday: castedData[0].solidperpoundperanimalperday,
+        });
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [formData.animalId]);
 
   return (
     <AnimalFormWrapper
-      selectedAnimalId={BEEF_COW_ID}
+      selectedAnimalId={formData.animalId}
       handleInputChanges={handleInputChanges}
       onSubmit={onSubmit}
+      isConfirmDisabled={subtype === null || String(subtype.animalid) !== formData.animalId}
       {...props}
     >
-      <Grid size={formGridBreakpoints}>
-        <Select
-          isRequired
-          label="Cattle Type"
-          placeholder="Select a cattle type"
-          selectedKey={formData.subtype}
-          items={subtypeOptions}
-          onSelectionChange={(e) => {
-            handleInputChanges({ subtype: e?.toString() });
-          }}
-        />
-      </Grid>
       <Grid size={formGridBreakpoints}>
         <TextField
           isRequired

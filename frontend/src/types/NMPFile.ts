@@ -4,7 +4,7 @@ export type NMPFileFarmDetails = {
   Year: string;
   FarmName: string;
   FarmRegion: number;
-  FarmSubRegion?: number | null;
+  FarmSubRegion?: number;
   FarmAnimals?: string[];
   HasHorticulturalCrops?: boolean;
   HasBerries?: boolean;

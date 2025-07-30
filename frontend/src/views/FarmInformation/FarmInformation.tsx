@@ -15,17 +15,17 @@ import Grid from '@mui/material/Grid';
 import type { Key } from 'react-aria-components';
 import useAppState from '@/hooks/useAppState';
 import { NMPFileFarmDetails } from '@/types/NMPFile';
-import { AppTitle, PageTitle, ProgressStepper, Select } from '../../components/common';
+import { AppTitle, PageTitle, ProgressStepper, Select } from '@/components/common';
 import {
   formCss,
   formGridBreakpoints,
   hideCheckboxGroup,
   showCheckboxGroup,
-} from '../../common.styles';
+} from '@/common.styles';
 import { StyledContent, subHeader } from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ADD_ANIMALS, FIELD_LIST, LANDING_PAGE } from '@/constants/routes';
-import { BEEF_COW_ID, DAIRY_COW_ID, POULTRY_ID, SelectOption } from '../../types';
+import { SelectOption } from '@/types';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 
 export default function FarmInformation() {
@@ -35,14 +35,13 @@ export default function FarmInformation() {
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<NMPFileFarmDetails>({
-    Year: state.nmpFile.farmDetails.Year,
-    FarmName: state.nmpFile.farmDetails.FarmName,
-    FarmRegion: state.nmpFile.farmDetails.FarmRegion,
-    FarmSubRegion: state.nmpFile.farmDetails.FarmSubRegion || null,
-    FarmAnimals: state.nmpFile.farmDetails.FarmAnimals || [],
-    HasVegetables: state.nmpFile.farmDetails.HasVegetables || false,
-    HasBerries: state.nmpFile.farmDetails.HasBerries || false,
-    HasHorticulturalCrops: state.nmpFile.farmDetails.HasHorticulturalCrops || false,
+    // These are default values if the NMPFile doesn't have values
+    FarmAnimals: [],
+    HasVegetables: false,
+    HasBerries: false,
+    HasHorticulturalCrops: false,
+    // Overwrite with existing file values
+    ...state.nmpFile.farmDetails,
   });
 
   // Props for animal selections
@@ -78,12 +77,7 @@ export default function FarmInformation() {
       if (response.status === 200) {
         const { data } = response;
         const animalDict: { [id: string]: string } = (data as { id: number; name: string }[])
-          .filter(
-            (opt) =>
-              opt.id === Number(BEEF_COW_ID) ||
-              opt.id === Number(DAIRY_COW_ID) ||
-              opt.id === Number(POULTRY_ID),
-          )
+          .filter((opt) => opt.id !== 9) // TODO: Remove once we add pigs
           .reduce(
             (dict, row) => {
               // eslint-disable-next-line no-param-reassign

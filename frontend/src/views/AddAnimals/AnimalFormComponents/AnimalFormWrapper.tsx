@@ -1,17 +1,11 @@
-import React, { Key } from 'react';
+import React from 'react';
 import { PressEvent } from 'react-aria-components';
 import Grid from '@mui/material/Grid';
 import { Form, Select } from '@/components/common';
-import { BEEF_COW_ID, DAIRY_COW_ID, POULTRY_ID } from '@/types';
-
-// TEMPORARY! TODO: Use the database once we add all the animals
-const animalOptions = [
-  { id: BEEF_COW_ID, label: 'Beef Cattle' },
-  { id: DAIRY_COW_ID, label: 'Dairy Cattle' },
-  { id: POULTRY_ID, label: 'Poultry' },
-];
+import { SelectOption } from '@/types';
 
 type AnimalFormWrapperProps = {
+  animalOptions: SelectOption[];
   selectedAnimalId?: string;
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   onCancel: (e: PressEvent) => void;
@@ -21,6 +15,7 @@ type AnimalFormWrapperProps = {
 };
 
 export default function AnimalFormWrapper({
+  animalOptions,
   selectedAnimalId,
   handleInputChanges,
   onCancel,
@@ -46,8 +41,8 @@ export default function AnimalFormWrapper({
             label="Animal Type"
             placeholder="Select Animal Type"
             selectedKey={selectedAnimalId}
-            onSelectionChange={(e: Key) => {
-              handleInputChanges({ animalId: e.toString() });
+            onSelectionChange={(e) => {
+              handleInputChanges({ animalId: e as string });
             }}
           />
         </Grid>

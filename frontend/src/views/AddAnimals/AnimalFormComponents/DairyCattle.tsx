@@ -5,7 +5,7 @@ import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID } from '@/types';
+import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID, SelectOption } from '@/types';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import MilkingFields from './MilkingFields';
 import AnimalFormWrapper from './AnimalFormWrapper';
@@ -13,6 +13,7 @@ import { ManureType } from '@/types/Animals';
 
 type DairyCattleProps = {
   formData: DairyCattleData;
+  animalOptions: SelectOption[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -37,7 +38,7 @@ export default function DairyCattle({
   formData,
   handleInputChanges,
   handleSubmit,
-  onCancel,
+  ...props
 }: DairyCattleProps) {
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
@@ -123,7 +124,7 @@ export default function DairyCattle({
   };
 
   useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
+    apiCache.callEndpoint(`api/animal_subtypes/${DAIRY_COW_ID}/`).then((response) => {
       if (response.status === 200) {
         const { data } = response;
         // The data in the response has more properties, but we want to trim it down
@@ -168,8 +169,8 @@ export default function DairyCattle({
     <AnimalFormWrapper
       selectedAnimalId={DAIRY_COW_ID}
       handleInputChanges={handleInputChanges}
-      onCancel={onCancel}
       onSubmit={onSubmit}
+      {...props}
     >
       <Grid size={formGridBreakpoints}>
         <Select
