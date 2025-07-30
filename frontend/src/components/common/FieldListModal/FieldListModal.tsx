@@ -9,6 +9,7 @@ import { NMPFileFieldData } from '@/types';
 import Form from '../Form/Form';
 import initialFieldFormData from '@/constants/DefaultNMPFileFieldData';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
+import NumberField from '../NumberField/NumberField';
 
 type Mode = 'Add Field' | 'Edit Field' | 'Duplicate Field';
 
@@ -52,7 +53,7 @@ export default function FieldListModal({
     onClose();
   };
 
-  const handleFormFieldChange = (field: string, value: string) => {
+  const handleFormFieldChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -106,13 +107,11 @@ export default function FieldListModal({
             >
               Area (acres)
             </span>
-            <TextField
+            <NumberField
               aria-labelledby="Area-label"
               isRequired
-              type="number"
-              name="Area"
-              value={formData.Area?.toString()}
-              onChange={(e) => handleFormFieldChange('Area', e?.trim())}
+              value={formData.Area}
+              onChange={(e) => handleFormFieldChange('Area', e)}
             />
           </Grid>
           <Grid size={6}>
@@ -130,7 +129,7 @@ export default function FieldListModal({
               selectedKey={formData.PreviousYearManureApplicationFrequency}
               validate={() => (!isManureOptionValid() ? 'required' : '')}
               onSelectionChange={(e) => {
-                handleFormFieldChange('PreviousYearManureApplicationFrequency', e?.toString());
+                handleFormFieldChange('PreviousYearManureApplicationFrequency', e!.toString());
               }}
               noSort
             />

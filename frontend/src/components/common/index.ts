@@ -10,6 +10,7 @@ import Modal from './Modal/Modal';
 import YesNoRadioButtons from './YesNoRadioButtons/YesNoRadioButtons';
 import Form from './Form/Form';
 import Select from './Select/Select';
+import NumberField from './NumberField/NumberField';
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   Tabs,
   YesNoRadioButtons,
   Select,
+  NumberField,
 };

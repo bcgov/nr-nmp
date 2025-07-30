@@ -1,7 +1,7 @@
 import { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import { Select } from '@/components/common';
+import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -197,16 +197,14 @@ export default function DairyCattle({
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
-        <TextField
-          label="Average Animal Number on Farm"
-          type="number"
-          name="animalsPerFarm"
-          value={formData.animalsPerFarm?.toString()}
-          onChange={(e: string) => {
-            handleInputChanges({ animalsPerFarm: Number(e) });
-          }}
-          maxLength={7}
+        <NumberField
           isRequired
+          label="Average Animal Number on Farm"
+          value={formData.animalsPerFarm}
+          onChange={(e) => {
+            handleInputChanges({ animalsPerFarm: e });
+          }}
+          minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
@@ -222,16 +220,15 @@ export default function DairyCattle({
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
-        <TextField
-          label="Grazing Days per Year"
-          type="number"
-          name="grazingDaysPerYear"
-          value={formData.grazingDaysPerYear?.toString()}
-          onChange={(e: string) => {
-            handleInputChanges({ grazingDaysPerYear: Number(e) });
-          }}
-          maxLength={3}
+        <NumberField
           isRequired
+          label="Grazing Days per Year"
+          value={formData.grazingDaysPerYear}
+          onChange={(e) => {
+            handleInputChanges({ grazingDaysPerYear: e });
+          }}
+          minValue={0}
+          maxValue={365}
         />
       </Grid>
       {formData.subtype === MILKING_COW_ID &&

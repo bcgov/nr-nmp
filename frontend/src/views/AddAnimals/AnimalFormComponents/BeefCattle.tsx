@@ -1,7 +1,7 @@
 import { FormEvent, useContext, useEffect, useState } from 'react';
-import { Checkbox, TextField } from '@bcgov/design-system-react-components';
+import { Checkbox } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import { Select } from '@/components/common';
+import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, BEEF_COW_ID, BeefCattleData, ManureType, SelectOption } from '@/types';
@@ -97,16 +97,14 @@ export default function BeefCattle({
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
-        <TextField
+        <NumberField
           isRequired
           label="Average Animal Number on Farm"
-          type="number"
-          name="animalsPerFarm"
-          value={formData.animalsPerFarm?.toString()}
-          onChange={(e: string) => {
+          value={formData.animalsPerFarm}
+          onChange={(e) => {
             handleInputChanges({ animalsPerFarm: e });
           }}
-          maxLength={7}
+          minValue={0}
         />
       </Grid>
       <Grid size={12}>
@@ -122,17 +120,15 @@ export default function BeefCattle({
       </Grid>
       {showCollectionDays && (
         <Grid size={formGridBreakpoints}>
-          <TextField
+          <NumberField
             label="How many days is the manure collected?"
-            type="number"
-            name="daysCollected"
             size="small"
-            value={formData.daysCollected?.toString()}
-            onChange={(e: string) => {
+            value={formData.daysCollected}
+            onChange={(e) => {
               handleInputChanges({ daysCollected: e });
             }}
-            maxLength={3}
-            isRequired={showCollectionDays}
+            minValue={0}
+            maxValue={365}
           />
         </Grid>
       )}
