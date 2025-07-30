@@ -4,13 +4,14 @@ import Grid from '@mui/material/Grid';
 import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, PoultryData, DUCK_ID, ManureType, POULTRY_ID } from '@/types';
+import { AnimalData, PoultryData, DUCK_ID, ManureType, POULTRY_ID, SelectOption } from '@/types';
 import { calculatePoultryAnnualLiquidManure, calculatePoultryAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 import { MANURE_TYPE_OPTIONS } from '@/constants';
 
 type PoultryProps = {
   formData: PoultryData;
+  animalOptions: SelectOption[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -27,7 +28,7 @@ export default function Poultry({
   formData,
   handleInputChanges,
   handleSubmit,
-  onCancel,
+  ...props
 }: PoultryProps) {
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<PoultrySubtype[]>([]);
@@ -74,7 +75,7 @@ export default function Poultry({
   };
 
   useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/6/').then((response) => {
+    apiCache.callEndpoint(`api/animal_subtypes/${POULTRY_ID}/`).then((response) => {
       if (response.status === 200) {
         const { data } = response;
         // The data in the response has more properties, but we want to trim it down
@@ -99,8 +100,8 @@ export default function Poultry({
     <AnimalFormWrapper
       selectedAnimalId={POULTRY_ID}
       handleInputChanges={handleInputChanges}
-      onCancel={onCancel}
       onSubmit={onSubmit}
+      {...props}
     >
       <Grid size={formGridBreakpoints}>
         <Select
@@ -117,7 +118,7 @@ export default function Poultry({
         />
       </Grid>
       {/* Ducks don't have choice of manure type */}
-      {formData.subtype !== '10' && (
+      {formData.subtype !== DUCK_ID && (
         <Grid size={formGridBreakpoints}>
           <Select
             label="Manure Type"

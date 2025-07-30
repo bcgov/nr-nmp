@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import { Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, BEEF_COW_ID, BeefCattleData, ManureType } from '@/types';
+import { AnimalData, BEEF_COW_ID, BeefCattleData, ManureType, SelectOption } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 
@@ -16,6 +16,7 @@ interface BeefCattleSubtype {
 
 type BeefCattleProps = {
   formData: BeefCattleData;
+  animalOptions: SelectOption[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -25,7 +26,7 @@ export default function BeefCattle({
   formData,
   handleInputChanges,
   handleSubmit,
-  onCancel,
+  ...props
 }: BeefCattleProps) {
   const apiCache = useContext(APICacheContext);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
@@ -55,7 +56,7 @@ export default function BeefCattle({
 
   // only run on initial mount
   useEffect(() => {
-    apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
+    apiCache.callEndpoint(`api/animal_subtypes/${BEEF_COW_ID}/`).then((response) => {
       if (response.status === 200) {
         const { data } = response;
         const subtypez: BeefCattleSubtype[] = (
@@ -80,15 +81,15 @@ export default function BeefCattle({
     <AnimalFormWrapper
       selectedAnimalId={BEEF_COW_ID}
       handleInputChanges={handleInputChanges}
-      onCancel={onCancel}
       onSubmit={onSubmit}
+      {...props}
     >
       <Grid size={formGridBreakpoints}>
         <Select
           isRequired
           label="Cattle Type"
           placeholder="Select a cattle type"
-          selectedKey={formData?.subtype}
+          selectedKey={formData.subtype}
           items={subtypeOptions}
           onSelectionChange={(e) => {
             handleInputChanges({ subtype: e?.toString() });
@@ -101,7 +102,7 @@ export default function BeefCattle({
           label="Average Animal Number on Farm"
           type="number"
           name="animalsPerFarm"
-          value={formData?.animalsPerFarm?.toString()}
+          value={formData.animalsPerFarm?.toString()}
           onChange={(e: string) => {
             handleInputChanges({ animalsPerFarm: e });
           }}
@@ -126,7 +127,7 @@ export default function BeefCattle({
             type="number"
             name="daysCollected"
             size="small"
-            value={formData?.daysCollected?.toString()}
+            value={formData.daysCollected?.toString()}
             onChange={(e: string) => {
               handleInputChanges({ daysCollected: e });
             }}

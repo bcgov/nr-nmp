@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { PressEvent } from 'react-aria-components';
 import Grid from '@mui/material/Grid';
 import { Form, Select } from '@/components/common';
-import { Animal, SelectOption } from '@/types';
-import { APICacheContext } from '@/context/APICacheContext';
+import { SelectOption } from '@/types';
 
 type AnimalFormWrapperProps = {
+  animalOptions: SelectOption[];
   selectedAnimalId?: string;
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   onCancel: (e: PressEvent) => void;
@@ -15,6 +15,7 @@ type AnimalFormWrapperProps = {
 };
 
 export default function AnimalFormWrapper({
+  animalOptions,
   selectedAnimalId,
   handleInputChanges,
   onCancel,
@@ -22,20 +23,6 @@ export default function AnimalFormWrapper({
   isConfirmDisabled,
   children,
 }: AnimalFormWrapperProps) {
-  const [animalOptions, setAnimalOptions] = useState<SelectOption[]>([]);
-  const apiCache = useContext(APICacheContext);
-
-  apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
-    if (response.status === 200) {
-      const { data } = response;
-      const options = (data as Animal[]).map((row) => ({ id: row.id, label: row.name }));
-      // TODO: REMOVE ONCE WE HAVE SWINE
-      // This is a lazy way to take it out of the list
-      options.splice(options.length - 1, 1);
-      setAnimalOptions(options);
-    }
-  });
-
   return (
     <Form
       onCancel={onCancel}
@@ -55,7 +42,7 @@ export default function AnimalFormWrapper({
             placeholder="Select Animal Type"
             selectedKey={selectedAnimalId}
             onSelectionChange={(e) => {
-              handleInputChanges({ animalId: e as string });
+              handleInputChanges({ animalId: String(e) });
             }}
           />
         </Grid>

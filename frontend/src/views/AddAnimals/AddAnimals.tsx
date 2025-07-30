@@ -11,7 +11,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, Tabs } from '@/components/common';
-import { Animal, AnimalData } from '@/types';
+import { Animal, AnimalData, DAIRY_COW_ID } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import {
@@ -35,7 +35,7 @@ export default function AddAnimals() {
 
   const navigate = useNavigate();
 
-  const [animalList, setAnimalList] = useState<Array<AnimalData>>(
+  const [animalList, setAnimalList] = useState<AnimalData[]>(
     state.nmpFile.years[0].FarmAnimals || [],
   );
 
@@ -52,7 +52,10 @@ export default function AddAnimals() {
   }, []);
 
   const hasDairyCattle = useMemo(
-    () => state.nmpFile.years[0].FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+    () =>
+      state.nmpFile.years[0].FarmAnimals?.some(
+        (animal: AnimalData) => animal.animalId === DAIRY_COW_ID,
+      ),
     [state.nmpFile.years],
   );
 

@@ -3,7 +3,7 @@ import { Checkbox, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, ManureType } from '@/types';
+import { AnimalData, ManureType, SelectOption } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 import { OtherAnimalData } from '@/types/Animals';
@@ -16,6 +16,7 @@ type Subtype = {
 
 type OtherAnimalsProps = {
   formData: OtherAnimalData;
+  animalOptions: SelectOption[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -25,7 +26,7 @@ export default function OtherAnimals({
   formData,
   handleInputChanges,
   handleSubmit,
-  onCancel,
+  ...props
 }: OtherAnimalsProps) {
   const apiCache = useContext(APICacheContext);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
@@ -69,9 +70,9 @@ export default function OtherAnimals({
     <AnimalFormWrapper
       selectedAnimalId={formData.animalId}
       handleInputChanges={handleInputChanges}
-      onCancel={onCancel}
       onSubmit={onSubmit}
       isConfirmDisabled={subtype === null || String(subtype.animalid) !== formData.animalId}
+      {...props}
     >
       <Grid size={formGridBreakpoints}>
         <TextField
