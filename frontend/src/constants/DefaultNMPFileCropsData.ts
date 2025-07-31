@@ -15,6 +15,12 @@ const DEFAULT_NMPFILE_CROPS: NMPFileCropData = {
   crudeProtein: 0,
   prevCropId: 0,
   nCredit: 0,
+  plantAgeYears: '',
+  numberOfPlantsPerAcre: 0,
+  distanceBtwnPlantsRows: '',
+  willPlantsBePruned: false,
+  whereWillPruningsGo: '',
+  willSawdustBeApplied: false,
 };
 
 export default DEFAULT_NMPFILE_CROPS;

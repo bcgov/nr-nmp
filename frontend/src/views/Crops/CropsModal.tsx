@@ -14,6 +14,8 @@ import {
   getCropRemovalN,
   getCropRemovalP205,
   getCropRemovalK20,
+  getRaspberryNutrients,
+  getBlueberryNutrients,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
@@ -24,7 +26,13 @@ import {
 } from '../../common.styles';
 import { ModalProps } from '@/components/common/Modal/Modal';
 import { DEFAULT_NMPFILE_CROPS, HarvestUnit } from '@/constants';
-import { CROP_OTHER_ID, CROP_TYPE_OTHER_ID } from '@/types/Crops';
+import {
+  CROP_OTHER_ID,
+  CROP_TYPE_OTHER_ID,
+  CROP_TYPE_BERRIES_ID,
+  CROP_BLUEBERRIES_ID,
+  CROP_RASPBERRIES_ID,
+} from '@/types/Crops';
 import { HARVEST_UNIT_OPTIONS } from '../../constants/harvestUnits';
 import useAppState from '@/hooks/useAppState';
 import { cropsModalReducer, showUnitDropdown } from './utils';
@@ -319,6 +327,18 @@ function CropsModal({
   };
 
   /**
+   * Helper function to extract nutrient values from calculation results
+   */
+  const extractNutrientValues = (nutrients: any) => ({
+    cropRequirementN: nutrients.reqN,
+    cropRequirementP205: nutrients.reqP2o5,
+    cropRequirementK2O: nutrients.reqK2o,
+    cropRemovalN: nutrients.remN,
+    cropRemovalP205: nutrients.remP2o5,
+    cropRemovalK20: nutrients.remK2o,
+  });
+
+  /**
    * Calculates nutrient requirements and removals for the selected crop
    * Updates the formData state with calculated values
    */
@@ -332,36 +352,90 @@ function CropsModal({
       setCalculationsPerformed(true);
       return;
     }
-
     if (fieldIndex !== null && selectedCrop !== undefined && selectedCropType !== undefined) {
       try {
-        // Calculate crop requirements (P2O5, K2O, N)
-        const cropRequirementN = getCropRequirementN(formData, selectedCrop, selectedCropType);
-        const cropRequirementP205 = await getCropRequirementP205(
-          formData,
-          field.SoilTest,
-          farmRegion,
-        );
-        const cropRequirementK2O = await getCropRequirementK2O(
-          formData,
-          field.SoilTest,
-          farmRegion,
-        );
+        let nutrientValues;
+        // Get soil test P and K values, use defaults if not available
+        const soilTestValP = field.SoilTest?.convertedKelownaP
+          ? Number(field.SoilTest.convertedKelownaP)
+          : 250; // Default from defaultSoilTestData
+        const soilTestValK = field.SoilTest?.convertedKelownaK
+          ? Number(field.SoilTest.convertedKelownaK)
+          : 500; // Default from defaultSoilTestData
+        console.log('Soil Test P:', soilTestValP);
+        console.log('Soil Test K:', soilTestValK);
+        // Leaf tissue will be completed after this ticket and updated here. Using temp values for now
+        const leafTissueP = 1.1;
+        const leafTissueK = 1.1;
+        if (
+          selectedCropType.id === CROP_TYPE_BERRIES_ID &&
+          selectedCrop.id === CROP_RASPBERRIES_ID
+        ) {
+          const nutrients = await getRaspberryNutrients(
+            formData.yield,
+            formData.willSawdustBeApplied,
+            formData.willPlantsBePruned,
+            formData.whereWillPruningsGo,
+            soilTestValP,
+            soilTestValK,
+            leafTissueP,
+            leafTissueK,
+          );
+          nutrientValues = extractNutrientValues(nutrients);
+        } else if (
+          selectedCropType.id === CROP_TYPE_BERRIES_ID &&
+          selectedCrop.id === CROP_BLUEBERRIES_ID
+        ) {
+          const nutrients = await getBlueberryNutrients(
+            formData.yield,
+            formData.willSawdustBeApplied,
+            formData.willPlantsBePruned,
+            formData.whereWillPruningsGo,
+            formData.plantAgeYears,
+            formData.numberOfPlantsPerAcre,
+            soilTestValP,
+            leafTissueP,
+            leafTissueK,
+          );
+          nutrientValues = extractNutrientValues(nutrients);
+        } else {
+          // Calculate crop requirements (P2O5, K2O, N)
+          const cropRequirementN = getCropRequirementN(formData, selectedCrop, selectedCropType);
+          const cropRequirementP205 = await getCropRequirementP205(
+            formData,
+            field.SoilTest,
+            farmRegion,
+          );
+          const cropRequirementK2O = await getCropRequirementK2O(
+            formData,
+            field.SoilTest,
+            farmRegion,
+          );
 
-        // Calculate crop removals (N, P2O5, K2O)
-        const cropRemovalN = getCropRemovalN(formData, selectedCrop, selectedCropType);
-        const cropRemovalP205 = getCropRemovalP205(formData, selectedCrop, selectedCropType);
-        const cropRemovalK20 = getCropRemovalK20(formData, selectedCrop, selectedCropType);
+          // Calculate crop removals (N, P2O5, K2O)
+          const cropRemovalN = getCropRemovalN(formData, selectedCrop, selectedCropType);
+          const cropRemovalP205 = getCropRemovalP205(formData, selectedCrop, selectedCropType);
+          const cropRemovalK20 = getCropRemovalK20(formData, selectedCrop, selectedCropType);
+
+          nutrientValues = {
+            cropRequirementN,
+            cropRequirementP205,
+            cropRequirementK2O,
+            cropRemovalN,
+            cropRemovalP205,
+            cropRemovalK20,
+          };
+        }
 
         // Update the crops data with calculated values
         dispatch({
           type: 'SET_CALCULATED_VALUES',
-          reqN: cropRequirementN,
-          reqP2o5: cropRequirementP205,
-          reqK2o: cropRequirementK2O,
-          remN: cropRemovalN,
-          remP2o5: cropRemovalP205,
-          remK2o: cropRemovalK20,
+          reqN: nutrientValues.cropRequirementN,
+          reqP2o5: nutrientValues.cropRequirementP205,
+          reqK2o: nutrientValues.cropRequirementK2O,
+          remN: nutrientValues.cropRemovalN,
+          remP2o5: nutrientValues.cropRemovalP205,
+          remK2o: nutrientValues.cropRemovalK20,
         });
 
         // Mark calculations as performed
@@ -549,6 +623,147 @@ function CropsModal({
                     onChange={(e) => handleFormFieldChange('crudeProtein', e)}
                   />
                 </Grid>
+              )}
+              {selectedCrop?.id === CROP_BLUEBERRIES_ID && (
+                <>
+                  <Grid size={formGridBreakpoints}>
+                    <Select
+                      label="Plant Age (Years)"
+                      name="plantAgeYears"
+                      items={[
+                        { id: '1', label: '1' },
+                        { id: '2', label: '2' },
+                        { id: '3', label: '3' },
+                        { id: '4', label: '4' },
+                        { id: '5', label: '5' },
+                        { id: '6', label: '6' },
+                        { id: '7', label: '7' },
+                        { id: '8', label: '8' },
+                        { id: '9 or more', label: '9 or more' },
+                      ]}
+                      selectedKey={formData.plantAgeYears?.toString() || ''}
+                      onSelectionChange={(e) => handleFormFieldChange('plantAgeYears', e as string)}
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <Select
+                      label="# of plants per acre"
+                      name="numberOfPlantsPerAcre"
+                      items={[
+                        { id: '1', label: '2498' },
+                        { id: '2', label: '2248' },
+                        { id: '3', label: '1999' },
+                        { id: '4', label: '1799' },
+                        { id: '5', label: '1665' },
+                        { id: '6', label: '1499' },
+                      ]}
+                      selectedKey={formData.numberOfPlantsPerAcre?.toString() || ''}
+                      onSelectionChange={(e) =>
+                        handleFormFieldChange('numberOfPlantsPerAcre', e as string)
+                      }
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <Select
+                      label="Distance between plants, distance between rows (inches)"
+                      name="distanceBtwnPlantsRows"
+                      items={[
+                        { id: '1', label: '2498' },
+                        { id: '2', label: '2248' },
+                        { id: '3', label: '1999' },
+                        { id: '4', label: '1799' },
+                        { id: '5', label: '1665' },
+                        { id: '6', label: '1499' },
+                      ]}
+                      selectedKey={formData.distanceBtwnPlantsRows?.toString() || ''}
+                      onSelectionChange={(e) =>
+                        handleFormFieldChange('distanceBtwnPlantsRows', e as string)
+                      }
+                    />
+                  </Grid>
+                </>
+              )}
+              {selectedCropType?.id === CROP_TYPE_BERRIES_ID && (
+                <>
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      id="willPlantsBePruned-label"
+                      className={`bcds-react-aria-Select--Label ${errors.willPlantsBePruned ? '--error' : ''}`}
+                    >
+                      Will plants be pruned?
+                    </span>
+                    <Select
+                      aria-labelledby="willPlantsBePruned-label"
+                      isRequired
+                      name="willPlantsBePruned"
+                      items={[
+                        { id: 'true', label: 'Yes' },
+                        { id: 'false', label: 'No' },
+                      ]}
+                      selectedKey={
+                        formData.willPlantsBePruned === undefined
+                          ? 'false'
+                          : formData.willPlantsBePruned
+                            ? 'true'
+                            : 'false'
+                      }
+                      onSelectionChange={(e) =>
+                        handleFormFieldChange('willPlantsBePruned', e === 'true')
+                      }
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      id="whereWillPrunningsGo-label"
+                      className={`bcds-react-aria-Select--Label ${errors.whereWillPrunningsGo ? '--error' : ''}`}
+                    >
+                      Where will prunings go?
+                    </span>
+                    <Select
+                      aria-labelledby="whereWillPrunningsGo-label"
+                      isRequired
+                      name="whereWillPrunningsGo"
+                      items={[
+                        { id: 0, label: 'N/A' },
+                        { id: 1, label: 'Remove from field' },
+                        { id: 2, label: 'Left in row' },
+                        { id: 3, label: 'Left between rows' },
+                      ]}
+                      selectedKey={formData.whereWillPruningsGo || 0}
+                      onSelectionChange={(e) =>
+                        handleFormFieldChange('whereWillPruningsGo', e as number)
+                      }
+                    />
+                  </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <span
+                      id="willSawdustBeApplied-label"
+                      className={`bcds-react-aria-Select--Label ${errors.willSawdustBeApplied ? '--error' : ''}`}
+                    >
+                      Is sawdust or wood mulch applied within the 6 months prior to the growing
+                      season?
+                    </span>
+                    <Select
+                      aria-labelledby="willSawdustBeApplied-label"
+                      isRequired
+                      name="willSawdustBeApplied"
+                      items={[
+                        { id: 'true', label: 'Yes' },
+                        { id: 'false', label: 'No' },
+                      ]}
+                      selectedKey={
+                        formData.willSawdustBeApplied === undefined
+                          ? 'false'
+                          : formData.willSawdustBeApplied
+                            ? 'true'
+                            : 'false'
+                      }
+                      onSelectionChange={(e) =>
+                        handleFormFieldChange('willSawdustBeApplied', e === 'true')
+                      }
+                    />
+                  </Grid>
+                </>
               )}
               {!selectedCropType?.customcrop && (
                 <>
