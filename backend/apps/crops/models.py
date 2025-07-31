@@ -169,3 +169,35 @@ class NitrogenRecommendation(models.Model):
     class Meta:
         managed = True
         db_table = 'nitrogen_recommendations'
+
+class PlantAge(models.Model):
+    id = models.IntegerField(primary_key=True)
+    label = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'plant_age'
+
+class PlantsPerAcre(models.Model):
+    id = models.IntegerField(primary_key=True)
+    label = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'plants_per_acre'
+
+class DistanceBetweenPlants(models.Model):
+    id = models.IntegerField(primary_key=True)
+    label = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'distance_between_plants'
+
+class WhereWillPrunningsGo(models.Model):
+    id = models.IntegerField(primary_key=True)
+    label = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'where_will_prunnings_go'

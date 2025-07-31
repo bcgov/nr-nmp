@@ -140,6 +140,14 @@ function CropsModal({
       isFormYieldEqualToDefault: true,
     });
   const [crops, setCrops] = useState<Crop[]>([]);
+  const [plantAges, setPlantAges] = useState<{ id: number; label: string }[]>([]);
+  const [plantsPerAcre, setPlantsPerAcre] = useState<{ id: number; label: string }[]>([]);
+  const [distanceBetweenPlants, setDistanceBetweenPlants] = useState<
+    { id: number; label: string }[]
+  >([]);
+  const [whereWillPrunningsGo, setWhereWillPrunningsGo] = useState<{ id: number; label: string }[]>(
+    [],
+  );
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
     return crops.filter((type) => type.croptypeid === Number(formData.cropTypeId));
@@ -260,8 +268,6 @@ function CropsModal({
             dispatch({ type: 'SET_SELECTED_CROP_TYPE', cropType: response.data[0] });
           }
         });
-    }
-    if (formData.cropId !== 0) {
       apiCache
         .callEndpoint(`api/crops/${formData.cropId}/`)
         .then((response: { status: any; data: Crop[] }) => {
@@ -290,6 +296,30 @@ function CropsModal({
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
           setPreviousCrops(response.data);
+        }
+      });
+    apiCache.callEndpoint('api/plantage/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        setPlantAges(response.data);
+      }
+    });
+    apiCache.callEndpoint('api/plantsperacre/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        setPlantsPerAcre(response.data);
+      }
+    });
+    apiCache
+      .callEndpoint('api/distancebetweenplants/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          setDistanceBetweenPlants(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/wherewillprunningsgo/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          setWhereWillPrunningsGo(response.data);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -630,36 +660,19 @@ function CropsModal({
                     <Select
                       label="Plant Age (Years)"
                       name="plantAgeYears"
-                      items={[
-                        { id: '1', label: '1' },
-                        { id: '2', label: '2' },
-                        { id: '3', label: '3' },
-                        { id: '4', label: '4' },
-                        { id: '5', label: '5' },
-                        { id: '6', label: '6' },
-                        { id: '7', label: '7' },
-                        { id: '8', label: '8' },
-                        { id: '9 or more', label: '9 or more' },
-                      ]}
-                      selectedKey={formData.plantAgeYears?.toString() || ''}
-                      onSelectionChange={(e) => handleFormFieldChange('plantAgeYears', e as string)}
+                      items={plantAges.map((ele) => ({ id: ele.id, label: ele.label }))}
+                      selectedKey={formData.plantAgeYears || 0}
+                      onSelectionChange={(e) => handleFormFieldChange('plantAgeYears', e as number)}
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
                     <Select
                       label="# of plants per acre"
                       name="numberOfPlantsPerAcre"
-                      items={[
-                        { id: '1', label: '2498' },
-                        { id: '2', label: '2248' },
-                        { id: '3', label: '1999' },
-                        { id: '4', label: '1799' },
-                        { id: '5', label: '1665' },
-                        { id: '6', label: '1499' },
-                      ]}
-                      selectedKey={formData.numberOfPlantsPerAcre?.toString() || ''}
+                      items={plantsPerAcre.map((ele) => ({ id: ele.id, label: ele.label }))}
+                      selectedKey={formData.numberOfPlantsPerAcre || 0}
                       onSelectionChange={(e) =>
-                        handleFormFieldChange('numberOfPlantsPerAcre', e as string)
+                        handleFormFieldChange('numberOfPlantsPerAcre', e as number)
                       }
                     />
                   </Grid>
@@ -667,17 +680,10 @@ function CropsModal({
                     <Select
                       label="Distance between plants, distance between rows (inches)"
                       name="distanceBtwnPlantsRows"
-                      items={[
-                        { id: '1', label: '2498' },
-                        { id: '2', label: '2248' },
-                        { id: '3', label: '1999' },
-                        { id: '4', label: '1799' },
-                        { id: '5', label: '1665' },
-                        { id: '6', label: '1499' },
-                      ]}
-                      selectedKey={formData.distanceBtwnPlantsRows?.toString() || ''}
+                      items={distanceBetweenPlants.map((ele) => ({ id: ele.id, label: ele.label }))}
+                      selectedKey={formData.distanceBtwnPlantsRows || 0}
                       onSelectionChange={(e) =>
-                        handleFormFieldChange('distanceBtwnPlantsRows', e as string)
+                        handleFormFieldChange('distanceBtwnPlantsRows', e as number)
                       }
                     />
                   </Grid>
@@ -723,12 +729,7 @@ function CropsModal({
                       aria-labelledby="whereWillPrunningsGo-label"
                       isRequired
                       name="whereWillPrunningsGo"
-                      items={[
-                        { id: 0, label: 'N/A' },
-                        { id: 1, label: 'Remove from field' },
-                        { id: 2, label: 'Left in row' },
-                        { id: 3, label: 'Left between rows' },
-                      ]}
+                      items={whereWillPrunningsGo.map((ele) => ({ id: ele.id, label: ele.label }))}
                       selectedKey={formData.whereWillPruningsGo || 0}
                       onSelectionChange={(e) =>
                         handleFormFieldChange('whereWillPruningsGo', e as number)

@@ -45,6 +45,10 @@ MODEL_MAPPINGS = {
     "_Previous_Crop_Types": "crops.previouscroptypes",
     "_Units": "manures.units",
     "_NMineralizations": "manures.nmineralization",
+    "_PlantAge": "crops.plantage",
+    "_PlantsPerActre": "crops.plantsperacre",
+    "_WhereWillPrunningsGo": "crops.wherewillprunningsgo",
+    "_DistanceBetweenPLants": "crops.distancebetweenplants",
 }
 
 

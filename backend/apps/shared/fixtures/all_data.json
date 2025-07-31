@@ -14550,5 +14550,205 @@
       "firstyearvalue": 0.1,
       "longtermvalue": 0.15
     }
+  },
+  {
+        "model": "crops.plantage",
+        "pk": 1,
+        "fields": {
+            "id": 1,
+            "label": "1"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 2,
+        "fields": {
+            "id": 2,
+            "label": "2"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 3,
+        "fields": {
+            "id": 3,
+            "label": "3"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 4,
+        "fields": {
+            "id": 4,
+            "label": "4"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 5,
+        "fields": {
+            "id": 5,
+            "label": "5"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 6,
+        "fields": {
+            "id": 6,
+            "label": "6"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 7,
+        "fields": {
+            "id": 7,
+            "label": "7"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 8,
+        "fields": {
+            "id": 8,
+            "label": "8"
+        }
+    },
+    {
+        "model": "crops.plantage",
+        "pk": 9,
+        "fields": {
+            "id": 9,
+            "label": "9 or more"
+        }
+    },
+        {
+        "model": "crops.plantsperacre",
+        "pk": 1,
+        "fields": {
+            "id": 1,
+            "label": "2498"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 2,
+        "fields": {
+            "id": 2,
+            "label": "2248"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 3,
+        "fields": {
+            "id": 3,
+            "label": "1999"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 4,
+        "fields": {
+            "id": 4,
+            "label": "1799"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 5,
+        "fields": {
+            "id": 5,
+            "label": "1665"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 6,
+        "fields": {
+            "id": 6,
+            "label": "1499"
+        }
+    },
+      {
+    "model": "crops.wherewillprunningsgo",
+    "pk": 1,
+    "fields": {
+      "id": 1,
+      "label": "N/A"
+    }
+  },
+  {
+    "model": "crops.wherewillprunningsgo",
+    "pk": 2,
+    "fields": {
+      "id": 2,
+      "label": "Removed from field"
+    }
+  },
+  {
+    "model": "crops.wherewillprunningsgo",
+    "pk": 3,
+    "fields": {
+      "id": 3,
+      "label": "Left in row"
+    }
+  },
+  {
+    "model": "crops.wherewillprunningsgo",
+    "pk": 4,
+    "fields": {
+      "id": 4,
+      "label": "Left between rows"
+    }
+  },
+    {
+    "model": "crops.distancebetweenplants",
+    "pk": 1,
+    "fields": {
+      "id": 1,
+      "label": "0.6 m x 2.7 m (2 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 2,
+    "fields": {
+      "id": 2,
+      "label": "0.6 m x 3.0 m (2 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 3,
+    "fields": {
+      "id": 3,
+      "label": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 4,
+    "fields": {
+      "id": 4,
+      "label": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 5,
+    "fields": {
+      "id": 5,
+      "label": "0.9 m x 2.7 m (3 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 6,
+    "fields": {
+      "id": 6,
+      "label": "0.9 m x 3.0 m (3 ft x 10 ft)"
+    }
   }
 ]
