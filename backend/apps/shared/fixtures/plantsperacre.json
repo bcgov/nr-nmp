@@ -1,0 +1,50 @@
+[
+    {
+        "model": "crops.plantsperacre",
+        "pk": 1,
+        "fields": {
+            "id": 1,
+            "label": "2498"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 2,
+        "fields": {
+            "id": 2,
+            "label": "2248"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 3,
+        "fields": {
+            "id": 3,
+            "label": "1999"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 4,
+        "fields": {
+            "id": 4,
+            "label": "1799"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 5,
+        "fields": {
+            "id": 5,
+            "label": "1665"
+        }
+    },
+    {
+        "model": "crops.plantsperacre",
+        "pk": 6,
+        "fields": {
+            "id": 6,
+            "label": "1499"
+        }
+    }
+]

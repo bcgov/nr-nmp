@@ -1,0 +1,50 @@
+[
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 1,
+    "fields": {
+      "id": 1,
+      "label": "0.6 m x 2.7 m (2 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 2,
+    "fields": {
+      "id": 2,
+      "label": "0.6 m x 3.0 m (2 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 3,
+    "fields": {
+      "id": 3,
+      "label": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 4,
+    "fields": {
+      "id": 4,
+      "label": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 5,
+    "fields": {
+      "id": 5,
+      "label": "0.9 m x 2.7 m (3 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 6,
+    "fields": {
+      "id": 6,
+      "label": "0.9 m x 3.0 m (3 ft x 10 ft)"
+    }
+  }
+]
