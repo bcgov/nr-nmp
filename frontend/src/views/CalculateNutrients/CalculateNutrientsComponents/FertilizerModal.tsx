@@ -1,7 +1,7 @@
 /**
  * @summary This is the NewFertilizerModal component
  */
-import React, { FormEvent, Key, useContext, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Button, ButtonGroup, Form, TextField } from '@bcgov/design-system-react-components';
 import Divider from '@mui/material/Divider';
@@ -460,7 +460,7 @@ export default function FertilizerModal({
                       name="nitrogen"
                       value={formCustomFertilizer?.nitrogen.toString()}
                       onChange={(e: string) => {
-                        handleInputChanges({ nitrogen: parseInt(e, 10) });
+                        handleInputChanges({ nitrogen: Number(e) });
                       }}
                       maxLength={5}
                     />
@@ -473,7 +473,7 @@ export default function FertilizerModal({
                       name="phosphorous"
                       value={formCustomFertilizer?.phosphorous.toString()}
                       onChange={(e: string) => {
-                        handleInputChanges({ phosphorous: parseInt(e, 10) });
+                        handleInputChanges({ phosphorous: Number(e) });
                       }}
                       maxLength={5}
                     />
@@ -486,7 +486,7 @@ export default function FertilizerModal({
                       name="potassium"
                       value={formCustomFertilizer?.potassium.toString()}
                       onChange={(e: string) => {
-                        handleInputChanges({ potassium: parseInt(e, 10) });
+                        handleInputChanges({ potassium: Number(e) });
                       }}
                       maxLength={5}
                     />

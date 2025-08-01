@@ -1,7 +1,7 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +11,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
 import { AppTitle, PageTitle, Tabs } from '@/components/common';
-import { AnimalData } from '@/types';
+import { Animal, AnimalData, DAIRY_COW_ID } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
 import {
@@ -23,26 +23,39 @@ import {
 import AddAnimalsModal from './AddAnimalsModal';
 import { isDairyAndMilkingCattle, liquidSolidManureDisplay } from '@/utils/utils';
 import { calculateAnnualWashWater } from './utils';
+import { APICacheContext } from '@/context/APICacheContext';
 
 export default function AddAnimals() {
   const { state, dispatch } = useAppState();
+  const apiCache = useContext(APICacheContext);
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
+  const [animals, setAnimals] = useState<Animal[]>([]);
 
   const navigate = useNavigate();
 
-  const [animalList, setAnimalList] = useState<Array<AnimalData>>(
+  const [animalList, setAnimalList] = useState<AnimalData[]>(
     state.nmpFile.years[0].FarmAnimals || [],
   );
 
   useEffect(() => {
     dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
+
+    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setAnimals(data);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const hasDairyCattle = useMemo(
-    () => state.nmpFile.years[0].FarmAnimals?.some((animal: AnimalData) => animal.animalId === '2'),
+    () =>
+      state.nmpFile.years[0].FarmAnimals?.some(
+        (animal: AnimalData) => animal.animalId === DAIRY_COW_ID,
+      ),
     [state.nmpFile.years],
   );
 
@@ -108,7 +121,7 @@ export default function AddAnimals() {
         field: 'animalId',
         headerName: 'Animal Type',
         width: 175,
-        valueGetter: (params: any) => (params === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        valueGetter: (val: any) => animals.find((ele) => String(ele.id) === val)?.name || val,
         renderCell: (params: any) => {
           if (isDairyAndMilkingCattle(params.row.animalId, params.row.subtype)) {
             return (
@@ -169,7 +182,7 @@ export default function AddAnimals() {
         sortable: false,
       },
     ],
-    [handleEditRow],
+    [handleEditRow, animals],
   );
 
   return (

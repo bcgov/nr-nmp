@@ -1,13 +1,28 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import BeefCattle from './AnimalFormComponents/BeefCattle';
 import DairyCattle from './AnimalFormComponents/DairyCattle';
-import { AnimalData } from '@/types';
+import OtherAnimals from './AnimalFormComponents/OtherAnimals';
+import Poultry from './AnimalFormComponents/Poultry';
+import {
+  AnimalData,
+  ManureType,
+  BEEF_COW_ID,
+  DAIRY_COW_ID,
+  POULTRY_ID,
+  OTHER_ANIMAL_IDS,
+  OtherAnimalData,
+  OtherAnimalId,
+  SelectOption,
+  Animal,
+} from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from '@/constants';
+import { INITIAL_POULTRY_FORM_DATA } from '@/constants/Animals';
+import { APICacheContext } from '@/context/APICacheContext';
 
 type AddAnimalsModalProps = {
   initialModalData: AnimalData | undefined;
@@ -24,6 +39,8 @@ export default function AddAnimalsModal({
   ...props
 }: AddAnimalsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState<AnimalData | undefined>(initialModalData);
+  const [animalOptions, setAnimalOptions] = useState<SelectOption[]>([]);
+  const apiCache = useContext(APICacheContext);
 
   const handleSubmit = (newFormData: AnimalData) => {
     if (rowEditIndex !== undefined) {
@@ -43,12 +60,26 @@ export default function AddAnimalsModal({
     setFormData((prev: AnimalData | undefined) => {
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {
-        if (changes.animalId === '1') {
+        if (changes.animalId === BEEF_COW_ID) {
           return { ...INITIAL_BEEF_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
-        if (changes.animalId === '2') {
+        if (changes.animalId === DAIRY_COW_ID) {
           return { ...INITIAL_DAIRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
         }
+        if (changes.animalId === POULTRY_ID) {
+          return { ...INITIAL_POULTRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
+        }
+
+        if (!OTHER_ANIMAL_IDS.some((id) => id === changes.animalId)) {
+          throw new Error(`Invalid animalId: ${changes.animalId}`);
+        }
+        return {
+          manureType: ManureType.Solid,
+          daysCollected: 0,
+          ...changes,
+          animalId: changes.animalId as OtherAnimalId,
+          manureId: crypto.randomUUID(),
+        };
       }
 
       if (prev === undefined) {
@@ -58,6 +89,20 @@ export default function AddAnimalsModal({
     });
   };
 
+  useEffect(() => {
+    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const options = (data as Animal[]).map((row) => ({ id: String(row.id), label: row.name }));
+        // TODO: REMOVE ONCE WE HAVE SWINE
+        // This is a lazy way to take it out of the list
+        options.splice(options.length - 1, 1);
+        setAnimalOptions(options);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Modal
       title="Add animals"
@@ -66,21 +111,42 @@ export default function AddAnimalsModal({
     >
       {formData === undefined && (
         <UnselectedAnimal
+          animalOptions={animalOptions}
           handleInputChanges={handleInputChanges}
           onCancel={onClose}
         />
       )}
-      {formData?.animalId === '1' && (
+      {formData?.animalId === BEEF_COW_ID && (
         <BeefCattle
+          animalOptions={animalOptions}
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
           onCancel={onClose}
         />
       )}
-      {formData?.animalId === '2' && (
+      {formData?.animalId === DAIRY_COW_ID && (
         <DairyCattle
+          animalOptions={animalOptions}
           formData={formData}
+          handleInputChanges={handleInputChanges}
+          handleSubmit={handleSubmit}
+          onCancel={onClose}
+        />
+      )}
+      {formData?.animalId === POULTRY_ID && (
+        <Poultry
+          animalOptions={animalOptions}
+          formData={formData}
+          handleInputChanges={handleInputChanges}
+          handleSubmit={handleSubmit}
+          onCancel={onClose}
+        />
+      )}
+      {formData !== undefined && OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
+        <OtherAnimals
+          animalOptions={animalOptions}
+          formData={formData as OtherAnimalData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
           onCancel={onClose}

@@ -15,9 +15,10 @@ import {
   NMPFileImportedManureData,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
-  SelectOption,
   AnimalData,
   ManureType,
+  Animal,
+  DAIRY_COW_ID,
 } from '@/types';
 import {
   DefaultSolidManureConversionFactors,
@@ -48,7 +49,7 @@ export default function ManureAndImports() {
 
   const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
 
-  const [cattleSubtypeList, setCattleSubtypeList] = useState<SelectOption[]>([]);
+  const [animals, setAnimals] = useState<Animal[]>([]);
   const [editMaterialName, setEditMaterialName] = useState<string | null>(null);
   const [manures, setManures] = useState<NMPFileImportedManureData[]>(
     state.nmpFile.years[0]?.ImportedManures || [],
@@ -63,7 +64,7 @@ export default function ManureAndImports() {
     useState<NMPFileImportedManureData>(DefaultManureFormData);
 
   const hasDairyCattle = useMemo(
-    () => animalList.some((animal) => animal.animalId === '2'),
+    () => animalList.some((animal) => animal.animalId === DAIRY_COW_ID),
     [animalList],
   );
 
@@ -182,24 +183,10 @@ export default function ManureAndImports() {
           setSolidManureDropdownOptions(data);
         }
       });
-
-    apiCache.callEndpoint('api/animal_subtypes/2/').then((response) => {
+    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        const subType: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setCattleSubtypeList((prev) => [...prev, ...subType]);
-      }
-    });
-
-    apiCache.callEndpoint('api/animal_subtypes/1/').then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const subType: { id: string; label: string }[] = (
-          data as { id: number; name: string }[]
-        ).map((row) => ({ id: row.id.toString(), label: row.name }));
-        setCattleSubtypeList((prev) => [...prev, ...subType]);
+        setAnimals(data);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,16 +218,15 @@ export default function ManureAndImports() {
         width: 200,
         minWidth: 150,
         maxWidth: 300,
-        valueGetter: (param: string | number) => (param === '1' ? 'Beef Cattle' : 'Dairy Cattle'),
+        valueGetter: (val: any) => animals.find((ele) => String(ele.id) === val)?.name || val,
       },
       {
-        field: 'subtype',
+        field: 'manureId',
         headerName: 'Animal Sub Type',
         width: 325,
         minWidth: 150,
         maxWidth: 500,
-        valueGetter: (param: string | number) =>
-          cattleSubtypeList?.find((ele) => ele.id === param)?.label || param,
+        valueGetter: (val: string) => animalList.find((a) => a.manureId === val)!.manureData?.name,
       },
       {
         field: 'manureData',
@@ -251,7 +237,7 @@ export default function ManureAndImports() {
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
       },
     ],
-    [cattleSubtypeList],
+    [animalList, animals],
   );
 
   const columnsImportedManure: GridColDef[] = useMemo(
