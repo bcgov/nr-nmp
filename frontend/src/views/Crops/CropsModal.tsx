@@ -216,16 +216,58 @@ function CropsModal({
       newErrors.name = 'Please specify a name';
     }
 
+    // Validation for berries crops
+    if (selectedCropType?.id === CROP_TYPE_BERRIES_ID) {
+      // Required field validation for all berries
+      if (formData.willPlantsBePruned === undefined) {
+        newErrors.willPlantsBePruned = 'Please specify if plants will be pruned';
+      }
+
+      if (
+        !formData.whereWillPruningsGo ||
+        formData.whereWillPruningsGo === '' ||
+        formData.whereWillPruningsGo === '0'
+      ) {
+        console.log('whereWillPruningsGo is invalid');
+        newErrors.whereWillPruningsGo = 'Please specify where prunings will go';
+      }
+
+      if (formData.willSawdustBeApplied === undefined) {
+        newErrors.willSawdustBeApplied = 'Please specify if sawdust or wood mulch will be applied';
+      }
+
+      // Additional validation for blueberries
+      if (selectedCrop?.id === CROP_BLUEBERRIES_ID) {
+        if (
+          !formData.plantAgeYears ||
+          formData.plantAgeYears === '' ||
+          formData.plantAgeYears === '0'
+        ) {
+          newErrors.plantAgeYears = 'Plant age is required';
+        }
+
+        if (!formData.numberOfPlantsPerAcre || formData.numberOfPlantsPerAcre === 0) {
+          newErrors.numberOfPlantsPerAcre = 'Number of plants per acre is required';
+        }
+
+        if (
+          !formData.distanceBtwnPlantsRows ||
+          formData.distanceBtwnPlantsRows === '' ||
+          formData.distanceBtwnPlantsRows === '0'
+        ) {
+          newErrors.distanceBtwnPlantsRows = 'Distance between plants and rows is required';
+        }
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   // Only called after calculations have been performed
   const handleSubmit = () => {
-    if (formData.cropTypeId === CROP_TYPE_OTHER_ID) {
-      if (!validateForm()) {
-        return; // Stop if validation fails
-      }
+    if (!validateForm()) {
+      return; // Stop if validation fails
     }
     setFields((prevFields) => {
       const newFields = prevFields.map((prevField, index) => {
@@ -657,8 +699,15 @@ function CropsModal({
               {selectedCrop?.id === CROP_BLUEBERRIES_ID && (
                 <>
                   <Grid size={formGridBreakpoints}>
+                    <span
+                      id="plantAgeYears-label"
+                      className={`bcds-react-aria-Select--Label ${errors.plantAgeYears ? '--error' : ''}`}
+                    >
+                      Plant Age (Years)
+                    </span>
                     <Select
-                      label="Plant Age (Years)"
+                      aria-labelledby="plantAgeYears-label"
+                      isRequired
                       name="plantAgeYears"
                       items={plantAges.map((ele) => ({ id: ele.id, label: ele.label }))}
                       selectedKey={formData.plantAgeYears || 0}
@@ -666,8 +715,15 @@ function CropsModal({
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
+                    <span
+                      id="numberOfPlantsPerAcre-label"
+                      className={`bcds-react-aria-Select--Label ${errors.numberOfPlantsPerAcre ? '--error' : ''}`}
+                    >
+                      # of plants per acre
+                    </span>
                     <Select
-                      label="# of plants per acre"
+                      aria-labelledby="numberOfPlantsPerAcre-label"
+                      isRequired
                       name="numberOfPlantsPerAcre"
                       items={plantsPerAcre.map((ele) => ({ id: ele.id, label: ele.label }))}
                       selectedKey={formData.numberOfPlantsPerAcre || 0}
@@ -677,8 +733,15 @@ function CropsModal({
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
+                    <span
+                      id="distanceBtwnPlantsRows-label"
+                      className={`bcds-react-aria-Select--Label ${errors.distanceBtwnPlantsRows ? '--error' : ''}`}
+                    >
+                      Distance between plants, distance between rows (inches)
+                    </span>
                     <Select
-                      label="Distance between plants, distance between rows (inches)"
+                      aria-labelledby="distanceBtwnPlantsRows-label"
+                      isRequired
                       name="distanceBtwnPlantsRows"
                       items={distanceBetweenPlants.map((ele) => ({ id: ele.id, label: ele.label }))}
                       selectedKey={formData.distanceBtwnPlantsRows || 0}
@@ -698,30 +761,19 @@ function CropsModal({
                     >
                       Will plants be pruned?
                     </span>
-                    <Select
-                      aria-labelledby="willPlantsBePruned-label"
-                      isRequired
-                      name="willPlantsBePruned"
-                      items={[
-                        { id: 'true', label: 'Yes' },
-                        { id: 'false', label: 'No' },
-                      ]}
-                      selectedKey={
-                        formData.willPlantsBePruned === undefined
-                          ? 'false'
-                          : formData.willPlantsBePruned
-                            ? 'true'
-                            : 'false'
-                      }
-                      onSelectionChange={(e) =>
-                        handleFormFieldChange('willPlantsBePruned', e === 'true')
-                      }
+                    <YesNoRadioButtons
+                      value={formData.willPlantsBePruned || false}
+                      text=""
+                      onChange={(b: boolean) => {
+                        handleFormFieldChange('willPlantsBePruned', b);
+                      }}
+                      orientation="horizontal"
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
                     <span
                       id="whereWillPrunningsGo-label"
-                      className={`bcds-react-aria-Select--Label ${errors.whereWillPrunningsGo ? '--error' : ''}`}
+                      className={`bcds-react-aria-Select--Label ${errors.whereWillPruningsGo ? '--error' : ''}`}
                     >
                       Where will prunings go?
                     </span>
@@ -744,24 +796,13 @@ function CropsModal({
                       Is sawdust or wood mulch applied within the 6 months prior to the growing
                       season?
                     </span>
-                    <Select
-                      aria-labelledby="willSawdustBeApplied-label"
-                      isRequired
-                      name="willSawdustBeApplied"
-                      items={[
-                        { id: 'true', label: 'Yes' },
-                        { id: 'false', label: 'No' },
-                      ]}
-                      selectedKey={
-                        formData.willSawdustBeApplied === undefined
-                          ? 'false'
-                          : formData.willSawdustBeApplied
-                            ? 'true'
-                            : 'false'
-                      }
-                      onSelectionChange={(e) =>
-                        handleFormFieldChange('willSawdustBeApplied', e === 'true')
-                      }
+                    <YesNoRadioButtons
+                      value={formData.willSawdustBeApplied || false}
+                      text=""
+                      onChange={(b: boolean) => {
+                        handleFormFieldChange('willSawdustBeApplied', b);
+                      }}
+                      orientation="horizontal"
                     />
                   </Grid>
                 </>
