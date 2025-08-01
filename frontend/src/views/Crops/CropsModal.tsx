@@ -228,7 +228,6 @@ function CropsModal({
         formData.whereWillPruningsGo === '' ||
         formData.whereWillPruningsGo === '0'
       ) {
-        console.log('whereWillPruningsGo is invalid');
         newErrors.whereWillPruningsGo = 'Please specify where prunings will go';
       }
 
@@ -434,8 +433,6 @@ function CropsModal({
         const soilTestValK = field.SoilTest?.convertedKelownaK
           ? Number(field.SoilTest.convertedKelownaK)
           : 500; // Default from defaultSoilTestData
-        console.log('Soil Test P:', soilTestValP);
-        console.log('Soil Test K:', soilTestValK);
         // Leaf tissue will be completed after this ticket and updated here. Using temp values for now
         const leafTissueP = 1.1;
         const leafTissueK = 1.1;
