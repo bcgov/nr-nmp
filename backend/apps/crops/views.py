@@ -8,7 +8,7 @@ from .models import (
     SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
     CropYields, NitrogenRecommendation, PlantAge, PlantsPerAcre,
-    DistanceBetweenPlants, WhereWillPrunningsGo
+    DistanceBetweenPlants, WhereWillPruningsGo
 )
 from .serializers import (
     CropTypesSerializer, CropsSerializer, PreviousCropTypesSerializer,
@@ -17,7 +17,7 @@ from .serializers import (
     ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer,
     SoilTestPotassiumRecommendationSerializer, CropSoilPotassiumRegionsSerializer,
     CropYieldsSerializer, NitrogenRecommendationSerializer, PlantAgeSerializer, PlantsPerAcreSerializer,
-    DistanceBetweenPlantsSerializer, WhereWillPrunningsGoSerializer
+    DistanceBetweenPlantsSerializer, WhereWillPruningsGoSerializer
 )
 
 
@@ -150,7 +150,7 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['get'])
-    def whereWillPrunningsGo(self, request):
-        where_will_prunnings_go = WhereWillPrunningsGo.objects.all()
-        serializer = WhereWillPrunningsGoSerializer(where_will_prunnings_go, many=True)
+    def whereWillPruningsGo(self, request):
+        where_will_prunings_go = WhereWillPruningsGo.objects.all()
+        serializer = WhereWillPruningsGoSerializer(where_will_prunings_go, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

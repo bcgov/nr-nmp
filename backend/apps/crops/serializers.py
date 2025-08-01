@@ -6,7 +6,7 @@ from .models import (
     SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
     CropYields, NitrogenRecommendation, PlantAge, PlantsPerAcre,
-    DistanceBetweenPlants, WhereWillPrunningsGo
+    DistanceBetweenPlants, WhereWillPruningsGo
 )
 
 
@@ -104,7 +104,7 @@ class DistanceBetweenPlantsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class WhereWillPrunningsGoSerializer(serializers.ModelSerializer):
+class WhereWillPruningsGoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = WhereWillPrunningsGo
+        model = WhereWillPruningsGo
         fields = '__all__'

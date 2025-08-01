@@ -14672,7 +14672,7 @@
         }
     },
       {
-    "model": "crops.wherewillprunningsgo",
+    "model": "crops.wherewillpruningsgo",
     "pk": 1,
     "fields": {
       "id": 1,
@@ -14680,7 +14680,7 @@
     }
   },
   {
-    "model": "crops.wherewillprunningsgo",
+    "model": "crops.wherewillpruningsgo",
     "pk": 2,
     "fields": {
       "id": 2,
@@ -14688,7 +14688,7 @@
     }
   },
   {
-    "model": "crops.wherewillprunningsgo",
+    "model": "crops.wherewillpruningsgo",
     "pk": 3,
     "fields": {
       "id": 3,
@@ -14696,7 +14696,7 @@
     }
   },
   {
-    "model": "crops.wherewillprunningsgo",
+    "model": "crops.wherewillpruningsgo",
     "pk": 4,
     "fields": {
       "id": 4,

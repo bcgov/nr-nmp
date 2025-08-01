@@ -22,13 +22,13 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='WhereWillPrunningsGo',
+            name='WhereWillPruningsGo',
             fields=[
                 ('id', models.IntegerField(primary_key=True, serialize=False)),
                 ('label', models.CharField(max_length=100)),
             ],
             options={
-                'db_table': 'where_will_prunnings_go',
+                'db_table': 'where_will_prunings_go',
                 'managed': True,
             },
         ),

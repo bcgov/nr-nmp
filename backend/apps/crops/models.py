@@ -194,10 +194,10 @@ class DistanceBetweenPlants(models.Model):
         managed = True
         db_table = 'distance_between_plants'
 
-class WhereWillPrunningsGo(models.Model):
+class WhereWillPruningsGo(models.Model):
     id = models.IntegerField(primary_key=True)
     label = models.CharField(max_length=100)
 
     class Meta:
         managed = True
-        db_table = 'where_will_prunnings_go'
+        db_table = 'where_will_prunings_go'

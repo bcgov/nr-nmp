@@ -28,5 +28,5 @@ urlpatterns = [
     path('plantage/', CropsViewset.as_view({'get': 'plantAge'})),
     path('plantsperacre/', CropsViewset.as_view({'get': 'plantsPerAcre'})),
     path('distancebetweenplants/', CropsViewset.as_view({'get': 'distanceBetweenPlants'})),
-    path('wherewillprunningsgo/', CropsViewset.as_view({'get': 'whereWillPrunningsGo'})),
+    path('wherewillpruningsgo/', CropsViewset.as_view({'get': 'whereWillPruningsGo'})),
 ]

@@ -145,7 +145,7 @@ function CropsModal({
   const [distanceBetweenPlants, setDistanceBetweenPlants] = useState<
     { id: number; label: string }[]
   >([]);
-  const [whereWillPrunningsGo, setWhereWillPrunningsGo] = useState<{ id: number; label: string }[]>(
+  const [whereWillPruningsGo, setWhereWillPruningsGo] = useState<{ id: number; label: string }[]>(
     [],
   );
   const filteredCrops = useMemo<Crop[]>(() => {
@@ -357,10 +357,10 @@ function CropsModal({
         }
       });
     apiCache
-      .callEndpoint('api/wherewillprunningsgo/')
+      .callEndpoint('api/wherewillpruningsgo/')
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
-          setWhereWillPrunningsGo(response.data);
+          setWhereWillPruningsGo(response.data);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -769,16 +769,16 @@ function CropsModal({
                   </Grid>
                   <Grid size={formGridBreakpoints}>
                     <span
-                      id="whereWillPrunningsGo-label"
+                      id="whereWillPruningsGo-label"
                       className={`bcds-react-aria-Select--Label ${errors.whereWillPruningsGo ? '--error' : ''}`}
                     >
                       Where will prunings go?
                     </span>
                     <Select
-                      aria-labelledby="whereWillPrunningsGo-label"
+                      aria-labelledby="whereWillPruningsGo-label"
                       isRequired
-                      name="whereWillPrunningsGo"
-                      items={whereWillPrunningsGo.map((ele) => ({ id: ele.id, label: ele.label }))}
+                      name="whereWillPruningsGo"
+                      items={whereWillPruningsGo.map((ele) => ({ id: ele.id, label: ele.label }))}
                       selectedKey={formData.whereWillPruningsGo || 0}
                       onSelectionChange={(e) =>
                         handleFormFieldChange('whereWillPruningsGo', e as number)
