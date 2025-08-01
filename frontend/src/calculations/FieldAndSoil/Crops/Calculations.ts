@@ -438,9 +438,7 @@ export async function getRaspberryNutrients(
       tempN = 89;
     }
 
-    // Add sawdust adjustment if applicable
-    const sawdust = willSawdustBeApplied;
-    nutrientInputs.reqN = Math.round(tempN + (sawdust ? 25 : 0));
+    nutrientInputs.reqN = Math.round(tempN + (willSawdustBeApplied ? 25 : 0));
 
     // Calculate P2O5 requirement based on leaf tissue P and soil test P
     let tempReqP2O5 = 0;
@@ -555,8 +553,10 @@ export async function getBlueberryNutrients(
     const plantAge = plantAgeYears;
     const plantsPerAcre = numberOfPlantsPerAcre || 0;
     const tempN = NGmPlantArr.find((item) => item.key === plantAge)?.value || 0;
-    const sawdust = willSawdustBeApplied;
-    nutrientInputs.reqN = Math.round((plantsPerAcre * tempN) / 1000 / 1.12 + (sawdust ? 25 : 0));
+
+    nutrientInputs.reqN = Math.round(
+      (plantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
+    );
 
     // P2O5 requirement calculation
     let tempReqP2O5 = 0;
