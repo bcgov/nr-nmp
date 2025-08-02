@@ -115,7 +115,7 @@ export default function FieldListModal({
               placeholder="Select"
               placeholder="Select"
               onSelectionChange={(e) => {
-                handleFormFieldChange({ PreviousYearManureApplicationFrequency: String(e) });
+                handleFormFieldChange({ PreviousYearManureApplicationFrequency: e as string });
               }}
               noSort
             />
