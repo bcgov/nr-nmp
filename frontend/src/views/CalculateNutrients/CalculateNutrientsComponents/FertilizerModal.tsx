@@ -431,7 +431,11 @@ export default function FertilizerModal({
                 <Grid size={{ xs: 4 }}>
                   <NumberField
                     isRequired
-                    label="P2O5 (%)"
+                    label={
+                      <span>
+                        P<sub>2</sub>O<sub>5</sub> (%)
+                      </span>
+                    }
                     value={formCustomFertilizer.phosphorous}
                     onChange={(e) => handleInputChanges({ phosphorous: e })}
                     minValue={0}
@@ -441,7 +445,11 @@ export default function FertilizerModal({
                 <Grid size={{ xs: 4 }}>
                   <NumberField
                     isRequired
-                    label="K2O (%)"
+                    label={
+                      <span>
+                        K<sub>2</sub>O (%)
+                      </span>
+                    }
                     value={formCustomFertilizer.potassium}
                     onChange={(e) => handleInputChanges({ potassium: e })}
                     minValue={0}

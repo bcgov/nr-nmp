@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import axios from 'axios';
 import { env } from '@/env';
 import {
@@ -237,7 +236,7 @@ export function getCropRemovalN(
 
   // Special calculation for forage crops with crude protein data
   if (cropType.crudeproteinrequired) {
-    if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein == 0) {
+    if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein === 0) {
       nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield!;
     } else {
       const nToProteinConversionFactor = 0.625;
