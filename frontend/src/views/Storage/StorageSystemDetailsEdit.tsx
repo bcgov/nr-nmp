@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import { Checkbox, CheckboxGroup, TextField } from '@bcgov/design-system-react-components';
-import { Select } from '@/components/common';
+import { Checkbox, CheckboxGroup } from '@bcgov/design-system-react-components';
+import { NumberField, Select, TextField } from '@/components/common';
 import { formGridBreakpoints } from '../../common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
@@ -163,9 +163,7 @@ export default function StorageSystemDetailsEdit({
             label="System Name"
             type="string"
             value={formData.name}
-            onChange={(e) => {
-              handleInputChange({ name: e });
-            }}
+            onChange={(e) => handleInputChange({ name: e })}
           />
         </Grid>
         <Grid
@@ -212,14 +210,12 @@ export default function StorageSystemDetailsEdit({
                   container
                   size={6}
                 >
-                  <TextField
+                  <NumberField
                     isRequired
                     label="Yard and Roof Area (ft2)"
-                    type="number"
-                    name="runoffAreaSqFt"
-                    value={String(formData.runoffAreaSqFt)}
-                    onChange={(e: string) => {
-                      handleInputChange({ runoffAreaSqFt: Number(e) });
+                    value={formData.runoffAreaSqFt}
+                    onChange={(e: number) => {
+                      handleInputChange({ runoffAreaSqFt: e });
                     }}
                   />
                 </Grid>
@@ -259,17 +255,16 @@ export default function StorageSystemDetailsEdit({
               {formData.hasSeperation && (
                 <div style={{ display: 'flex', width: '100%' }}>
                   <div style={{ paddingRight: '2em' }}>
-                    <TextField
+                    <NumberField
                       isRequired
                       label="% of liquid volume separated"
-                      type="number"
-                      value={String(formData.percentLiquidSeperation)}
-                      onChange={(e: string) => {
-                        const solidsSeparatedGallons = totalManureGallons * (Number(e) / 100);
+                      value={formData.percentLiquidSeperation}
+                      onChange={(e) => {
+                        const solidsSeparatedGallons = totalManureGallons * (e / 100);
                         const separatedLiquidsGallons = totalManureGallons - solidsSeparatedGallons;
                         const separatedSolidsTons = (solidsSeparatedGallons / 264.172) * 0.5;
                         handleInputChange({
-                          percentLiquidSeperation: Number(e),
+                          percentLiquidSeperation: e,
                           separatedLiquidsUSGallons: Math.round(separatedLiquidsGallons),
                           separatedSolidsTons: Math.round(separatedSolidsTons),
                         });

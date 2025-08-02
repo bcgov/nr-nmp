@@ -2,7 +2,6 @@
  * @summary Styling for FieldList view
  */
 import styled from '@emotion/styled';
-import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
 
 export const InfoBox = styled.div`
   background-color: rgba(200, 200, 200, 0.3);
@@ -17,15 +16,6 @@ export const InfoBox = styled.div`
   li {
     margin-bottom: 2px;
   }
-`;
-
-export const StyledContent = styled.div`
-  margin-bottom: 1rem;
-  ${componentContainer}
-
-  ${paragraphCss}
-
-  ${buttonGroup}
 `;
 
 export const StyledDatePicker = styled.div`

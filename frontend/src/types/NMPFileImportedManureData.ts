@@ -11,7 +11,7 @@ interface NMPFileImportedManureData {
   AnnualAmountDisplayVolume?: string;
   AnnualAmountDisplayWeight?: string;
   Units?: number;
-  Moisture?: string;
+  Moisture?: number;
   IsMaterialStored?: boolean;
   ManagedManureName: string;
   AssignedToStoredSystem?: boolean;

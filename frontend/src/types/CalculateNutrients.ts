@@ -34,6 +34,12 @@ export type FertilizerUnit = {
   farmrequirednutrientsstdunitsareaconversion: number;
 };
 
+export type DensityUnit = {
+  id: number;
+  name: string;
+  convfactor: number;
+};
+
 export interface NMPFileFertilizer extends CalculateNutrientsColumn {
   fertilizerTypeId: number;
   fertilizerId: number;
@@ -60,7 +66,7 @@ export type NutrientColumns = {
 export interface ManureNutrients extends CropNutrients {
   ManureId: number;
   SolidLiquid: string;
-  Moisture: string;
+  Moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number?
   NH4N: number;
 }
 

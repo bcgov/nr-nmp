@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import type { FormEvent } from 'react';
-import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import Select from '@/components/common/Select/Select';
-import { formCss, formGridBreakpoints } from '../../../common.styles';
+import { formGridBreakpoints } from '../../../common.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NMPFileFieldData } from '@/types';
 import Form from '../Form/Form';
 import initialFieldFormData from '@/constants/DefaultNMPFileFieldData';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
 import NumberField from '../NumberField/NumberField';
+import TextField from '../TextField/TextField';
 
 type Mode = 'Add Field' | 'Edit Field' | 'Duplicate Field';
 
@@ -34,12 +33,8 @@ export default function FieldListModal({
   const [formData, setFormData] = useState<NMPFileFieldData>(
     initialModalData !== undefined ? initialModalData : initialFieldFormData,
   );
-  const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    // Prevent default browser page refresh.
-    e.preventDefault();
-
+  const onSubmit = () => {
     if (rowEditIndex !== undefined) {
       // If editing, find and replace field instead of adding new field
       setFieldList((prev) => {
@@ -53,19 +48,14 @@ export default function FieldListModal({
     onClose();
   };
 
-  const handleFormFieldChange = (field: string, value: string | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleFormFieldChange = (changes: Partial<NMPFileFieldData>) => {
+    setFormData((prev) => ({ ...prev, ...changes }));
   };
 
-  const validateUniqueName = (): string => {
-    if (!formData.FieldName) return '';
-    return !isFieldNameUnique(formData, rowEditIndex === undefined ? -1 : rowEditIndex)
-      ? ' must be unique'
-      : '';
+  const validateUniqueName = (): boolean => {
+    if (!formData.FieldName) return true;
+    return isFieldNameUnique(formData, rowEditIndex === undefined ? -1 : rowEditIndex);
   };
-
-  const isManureOptionValid = () =>
-    formData.PreviousYearManureApplicationFrequency !== MANURE_APPLICATION_FREQ[0].id;
 
   return (
     <Modal
@@ -74,73 +64,52 @@ export default function FieldListModal({
       {...props}
     >
       <Form
-        css={formCss}
-        onSubmit={onSubmit}
-        validationBehavior="native"
-        onInvalid={() => setIsFormInvalid(true)}
         onCancel={onClose}
+        onConfirm={onSubmit}
       >
         <Grid
           container
           spacing={1}
         >
           <Grid size={formGridBreakpoints}>
-            <span
-              id="FieldName-label"
-              className={`bcds-react-aria-TextField--Label ${isFormInvalid && (!formData.FieldName || validateUniqueName()) ? '--error' : ''}`}
-            >
-              Field Name {isFormInvalid && validateUniqueName()}
-            </span>
             <TextField
-              aria-labelledby="FieldName-label"
               isRequired
-              name="FieldName"
+              label="Field Name"
               value={formData.FieldName}
-              isInvalid={!!validateUniqueName()} // Note: this turns the textbox border red, looks odd but will only change if we get complaints
-              onChange={(e) => handleFormFieldChange('FieldName', e)}
+              onChange={(e) => handleFormFieldChange({ FieldName: e })}
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              validate={(_: string) =>
+                validateUniqueName() ? undefined : 'Field name must be unique'
+              }
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <span
-              id="Area-label"
-              className={`bcds-react-aria-TextField--Label ${isFormInvalid && !formData.Area ? '--error' : ''}`}
-            >
-              Area (acres)
-            </span>
             <NumberField
-              aria-labelledby="Area-label"
               isRequired
+              label="Area in acres"
               value={formData.Area}
-              onChange={(e) => handleFormFieldChange('Area', e)}
+              onChange={(e) => handleFormFieldChange({ Area: e })}
+              minValue={0}
             />
           </Grid>
           <Grid size={6}>
-            <span
-              id="manureApplication-label"
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !isManureOptionValid() ? '--error' : ''}`}
-            >
-              Manure Application
-            </span>
             <Select
-              aria-labelledby="manureApplication-label"
+              label="Manure application"
               isRequired
-              name="manureApplication"
               items={MANURE_APPLICATION_FREQ}
               selectedKey={formData.PreviousYearManureApplicationFrequency}
-              validate={() => (!isManureOptionValid() ? 'required' : '')}
+              placeholder="Select"
               onSelectionChange={(e) => {
-                handleFormFieldChange('PreviousYearManureApplicationFrequency', e!.toString());
+                handleFormFieldChange({ PreviousYearManureApplicationFrequency: String(e) });
               }}
               noSort
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <span id="Comment-label">Comment (Optional)</span>
             <TextField
-              aria-labelledby="Comment-label"
-              name="Comment"
+              label="Comments (optional)"
               value={formData.Comment}
-              onChange={(e) => handleFormFieldChange('Comment', e)}
+              onChange={(e) => handleFormFieldChange({ Comment: e })}
             />
           </Grid>
         </Grid>

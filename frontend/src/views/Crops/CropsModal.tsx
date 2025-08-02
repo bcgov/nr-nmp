@@ -1,11 +1,16 @@
 /* eslint-disable no-case-declarations */
 import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react';
-import { Button, ButtonGroup, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import LoopIcon from '@mui/icons-material/Loop';
-import { Modal, Select, YesNoRadioButtons } from '@/components/common';
+import {
+  Modal,
+  Select,
+  YesNoRadioButtons,
+  TextField,
+  NumberField,
+  Form,
+} from '@/components/common';
 import { CropType, Crop, PreviousCrop, NMPFileCropData, NMPFileFieldData } from '@/types';
 import {
   getCropRequirementP205,
@@ -16,12 +21,7 @@ import {
   getCropRemovalK20,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
-import {
-  customTableStyle,
-  formCss,
-  formGridBreakpoints,
-  textFieldStyle,
-} from '../../common.styles';
+import { customTableStyle, formGridBreakpoints } from '../../common.styles';
 import { ModalProps } from '@/components/common/Modal/Modal';
 import { DEFAULT_NMPFILE_CROPS, HarvestUnit } from '@/constants';
 import { CROP_OTHER_ID, CROP_TYPE_OTHER_ID } from '@/types/Crops';
@@ -138,79 +138,10 @@ function CropsModal({
   }, [crops, formData.cropTypeId]);
   const [cropTypes, setCropTypes] = useState<CropType[]>([]);
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
-  // NOTE: Right now, this isn't set to false when the form changes
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  // add validation for other crop
-
-  /**
-   * Validates the crop form data
-   *
-   * @returns {boolean} True if the form is valid, false otherwise
-   */
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    // Required field validation
-    if (!formData.cropTypeId) {
-      newErrors.cropTypeId = 'Crop Type is required';
-    }
-
-    if (!formData.cropId) {
-      newErrors.cropId = 'Crop is required';
-    }
-
-    // Yield validation - required and must be positive number
-    if (!formData.yield) {
-      newErrors.yield = 'Yield is required';
-    } else if (Number.isFinite(formData.yield) || Number(formData.yield) <= 0) {
-      newErrors.yield = 'Yield must be a valid number greater than zero';
-    }
-
-    // Crude protein validation for forage crops (type 1)
-    if (selectedCropType?.crudeproteinrequired && !formData.crudeProtein) {
-      newErrors.crudeProtein = 'Crude Protein is required';
-    } else if (
-      formData.cropTypeId === 1 &&
-      (Number.isNaN(Number(formData.crudeProtein)) || Number(formData.crudeProtein) <= 0)
-    ) {
-      newErrors.crudeProtein = 'Crude Protein must be a valid number greater than zero';
-    }
-
-    // Only validate previous crop if options are available
-    if (formData.cropId && !formData.prevCropId) {
-      // Check if there are previous crop options for this crop
-      const hasPreviousCropOptions = previousCrops.some(
-        (crop) => crop.cropid === Number(formData.cropId),
-      );
-
-      if (hasPreviousCropOptions) {
-        newErrors.prevCropId = 'Previous crop selection is required';
-      }
-    }
-
-    // Special validation for cover crops (type 2)
-    if (selectedCropType?.covercrop && formData.coverCropHarvested === undefined) {
-      newErrors.coverCropHarvested = 'Please specify if cover crop was harvested';
-    }
-
-    // Validation for other crop type
-    if (formData.cropTypeId === CROP_TYPE_OTHER_ID && formData.name === '') {
-      newErrors.name = 'Please specify a name';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   // Only called after calculations have been performed
   const handleSubmit = () => {
-    if (formData.cropTypeId === CROP_TYPE_OTHER_ID) {
-      if (!validateForm()) {
-        return; // Stop if validation fails
-      }
-    }
     setFields((prevFields) => {
       const newFields = prevFields.map((prevField, index) => {
         if (index === fieldIndex) {
@@ -288,9 +219,9 @@ function CropsModal({
   }, []);
 
   const handleFormFieldChange = (attr: keyof NMPFileCropData, value: string | number | boolean) => {
-    // Clear the error for the field being changed
-    if (errors[attr]) {
-      setErrors((prev) => ({ ...prev, [attr]: '' }));
+    // Reset calculation button
+    if (formData.cropId !== CROP_OTHER_ID) {
+      setCalculationsPerformed(false);
     }
 
     switch (attr) {
@@ -323,16 +254,6 @@ function CropsModal({
    * Updates the formData state with calculated values
    */
   const handleCalculate = async () => {
-    if (!validateForm()) {
-      return; // Stop if validation fails
-    }
-
-    // TODO: Handle this some better way?
-    if (formData.cropId === CROP_OTHER_ID) {
-      setCalculationsPerformed(true);
-      return;
-    }
-
     if (fieldIndex !== null && selectedCrop !== undefined && selectedCropType !== undefined) {
       try {
         // Calculate crop requirements (P2O5, K2O, N)
@@ -404,13 +325,22 @@ function CropsModal({
   useEffect(() => {
     if (formData.cropId !== 0 && formData.cropId !== CROP_OTHER_ID) {
       apiCache
-        .callEndpoint(`api/cropyields/${formData.cropId}/${nmpFile.farmDetails.FarmRegion}/`)
+        .callEndpoint(`api/cropyields/${formData.cropId}/${nmpFile.farmDetails.RegionLocationId}/`)
         .then((response) => {
           if (response.status === 200) {
             const { data } = response;
-            dispatch({ type: 'SET_DEFAULT_YIELD', amount: data[0].amount });
+            let amount;
+            if ((data as any[]).length === 0) {
+              console.error(
+                `No yield data for ${formData.cropId} and location id ${nmpFile.farmDetails.RegionLocationId}`,
+              );
+              amount = 0;
+            } else {
+              amount = data[0].amount;
+            }
+            dispatch({ type: 'SET_DEFAULT_YIELD', amount });
             if (initialModalData?.cropId !== formData.cropId) {
-              dispatch({ type: 'SET_YIELD_IN_TONS', yield: data[0].amount });
+              dispatch({ type: 'SET_YIELD_IN_TONS', yield: amount });
             }
           }
         });
@@ -436,25 +366,29 @@ function CropsModal({
       title={`${cropIndex !== undefined ? 'Edit' : 'Add'} Crop`}
       {...props}
     >
-      <div css={formCss}>
+      <Form
+        onCancel={onClose}
+        onCalculate={handleCalculate}
+        isCalculateDisabled={
+          selectedCropType === undefined ||
+          selectedCropType.id === CROP_TYPE_OTHER_ID ||
+          (selectedCrop === undefined && !selectedCropType.customcrop)
+        }
+        onConfirm={handleSubmit}
+        isConfirmDisabled={!calculationsPerformed}
+        confirmButtonText="Submit"
+      >
         <Grid
           container
           spacing={1}
         >
           <Grid size={formGridBreakpoints}>
-            <span
-              className={`bcds-react-aria-Select--Label ${errors?.cropTypeId ? '--error' : ''}`}
-            >
-              Crop Type
-            </span>
             <Select
               isRequired
-              name="cropTypeId"
+              label="Crop Type"
               items={cropTypes.map((ele) => ({ id: ele.id, label: ele.name }))}
               selectedKey={formData.cropTypeId}
-              onSelectionChange={(e) => {
-                handleFormFieldChange('cropTypeId', e as number);
-              }}
+              onSelectionChange={(e) => handleFormFieldChange('cropTypeId', e as number)}
             />
           </Grid>
           {cropTypes.length === 0 ? null : (
@@ -464,46 +398,27 @@ function CropsModal({
                   <TextField
                     label="Crop Description"
                     isRequired
-                    type="text"
-                    name="name"
-                    value={formData.name || ''}
+                    value={formData.name}
                     onChange={(e) => handleFormFieldChange('name', e)}
                   />
                 </Grid>
               ) : (
                 <Grid size={formGridBreakpoints}>
-                  <span
-                    id="cropId-label"
-                    className={`bcds-react-aria-Select--Label ${errors?.cropId ? '--error' : ''}`}
-                  >
-                    Crop
-                  </span>
                   <Select
-                    aria-labelledby="cropId-label"
                     isRequired
-                    name="cropId"
+                    label="Crop"
                     items={filteredCrops.map((ele) => ({ id: ele.id, label: ele.cropname }))}
-                    isDisabled={!filteredCrops?.length}
+                    isDisabled={filteredCrops.length === 0}
                     selectedKey={formData.cropId}
-                    onSelectionChange={(e) => {
-                      handleFormFieldChange('cropId', e as number);
-                    }}
+                    onSelectionChange={(e) => handleFormFieldChange('cropId', e as number)}
                   />
                 </Grid>
               )}
               <Grid size={formGridBreakpoints}>
-                <span
-                  id="yield-label"
-                  className={`bcds-react-aria-Select--Label ${errors.yield ? '--error' : ''}`}
-                >
-                  Yield{showUnitDropdown(formData.cropTypeId) ? '' : ' (tons/ac)'}
-                </span>
-                <TextField
-                  aria-labelledby="yield-label"
+                <NumberField
                   isRequired
-                  type="number"
-                  name="yield"
-                  value={formData.yield?.toString() || ''}
+                  label={`Yield${showUnitDropdown(formData.cropTypeId) ? '' : ' (tons/ac)'}`}
+                  value={formData.yield}
                   onChange={(e) => handleFormFieldChange('yield', e)}
                   iconRight={
                     !isFormYieldEqualToDefault ? (
@@ -516,6 +431,7 @@ function CropsModal({
                       </button>
                     ) : undefined
                   }
+                  minValue={0}
                 />
               </Grid>
               {showUnitDropdown(formData.cropTypeId) && (
@@ -523,7 +439,6 @@ function CropsModal({
                   <Select
                     label="Units"
                     isRequired
-                    name="yieldHarvestUnit"
                     items={HARVEST_UNIT_OPTIONS}
                     selectedKey={formData.yieldHarvestUnit}
                     onSelectionChange={(e) => {
@@ -534,19 +449,13 @@ function CropsModal({
               )}
               {selectedCropType?.crudeproteinrequired && (
                 <Grid size={formGridBreakpoints}>
-                  <span
-                    id="crudeProtein-label"
-                    className={`bcds-react-aria-Select--Label ${errors.crudeProtein ? '--error' : ''}`}
-                  >
-                    Crude Protein (%)
-                  </span>
-                  <TextField
-                    aria-labelledby="crudeProtein-label"
+                  <NumberField
                     isRequired
-                    type="number"
-                    name="crudeProtein"
-                    value={formData.crudeProtein?.toString() || ''}
+                    label="Crude Protein (%)"
+                    value={formData.crudeProtein}
                     onChange={(e) => handleFormFieldChange('crudeProtein', e)}
+                    minValue={0}
+                    maxValue={100}
                   />
                 </Grid>
               )}
@@ -560,16 +469,9 @@ function CropsModal({
                     return availablePreviousCrops.length > 0 ? (
                       <>
                         <Grid size={formGridBreakpoints}>
-                          <span
-                            id="prevCropId-label"
-                            className={`bcds-react-aria-Select--Label ${errors.prevCropId ? '--error' : ''}`}
-                          >
-                            Previous crop ploughed down (N credit)
-                          </span>
                           <Select
-                            aria-labelledby="prevCropId-label"
                             isRequired
-                            name="prevCropId"
+                            label="Previous crop ploughed down (N credit)"
                             items={availablePreviousCrops.map((ele) => ({
                               id: ele.id,
                               label: ele.name,
@@ -581,7 +483,9 @@ function CropsModal({
                           />
                         </Grid>
                         <Grid size={formGridBreakpoints}>
-                          <span className="bcds-react-aria-Select--Label">N credit (lb/ac):</span>
+                          <span className="bcds-react-aria-Text primary small">
+                            N credit (lb/ac):
+                          </span>
                           <div>
                             <span css={{ display: 'block', marginTop: '8px' }}>
                               {formData.nCredit}
@@ -595,15 +499,9 @@ function CropsModal({
               )}
               {selectedCropType?.covercrop && (
                 <Grid size={formGridBreakpoints}>
-                  <div
-                    style={{ marginBottom: '0.15rem' }}
-                    className={`bcds-react-aria-Select--Label ${errors.coverCropHarvested ? '--error' : ''}`}
-                  >
-                    Cover Crop Harvested
-                  </div>
                   <YesNoRadioButtons
                     value={formData.coverCropHarvested || false}
-                    text=""
+                    text="Cover Crop Harvested"
                     onChange={(b: boolean) => {
                       handleFormFieldChange('coverCropHarvested', b);
                     }}
@@ -635,40 +533,38 @@ function CropsModal({
                       size={6}
                     >
                       <Grid size="grow">
-                        <span className="MuiDataGrid-columnHeaderTitle">N</span>
-                        <TextField
+                        <NumberField
                           isRequired
-                          type="number"
-                          aria-label="N"
-                          value={formData.reqN.toString()}
+                          shortenRequired
+                          label="N"
+                          value={formData.reqN}
                           onChange={(v) => handleFormFieldChange('reqN', v)}
-                          css={textFieldStyle}
                         />
                       </Grid>
                       <Grid size="grow">
-                        <span className="MuiDataGrid-columnHeaderTitle">
-                          P<sub>2</sub>O<sub>5</sub>
-                        </span>
-                        <TextField
+                        <NumberField
                           isRequired
-                          type="number"
-                          aria-label="P2O5"
-                          value={formData.reqP2o5.toString()}
+                          shortenRequired
+                          label={
+                            <span>
+                              P<sub>2</sub>O<sub>5</sub>
+                            </span>
+                          }
+                          value={formData.reqP2o5}
                           onChange={(v) => handleFormFieldChange('reqP2o5', v)}
-                          css={textFieldStyle}
                         />
                       </Grid>
                       <Grid size="grow">
-                        <span className="MuiDataGrid-columnHeaderTitle">
-                          K<sub>2</sub>O
-                        </span>
-                        <TextField
+                        <NumberField
                           isRequired
-                          type="number"
-                          aria-label="K2O"
-                          value={formData.reqK2o.toString()}
+                          shortenRequired
+                          label={
+                            <span>
+                              K<sub>2</sub>O
+                            </span>
+                          }
+                          value={formData.reqK2o}
                           onChange={(v) => handleFormFieldChange('reqK2o', v)}
-                          css={textFieldStyle}
                         />
                       </Grid>
                     </Grid>
@@ -678,40 +574,38 @@ function CropsModal({
                       size={6}
                     >
                       <Grid size="grow">
-                        <span className="MuiDataGrid-columnHeaderTitle">N</span>
-                        <TextField
+                        <NumberField
                           isRequired
-                          type="number"
-                          aria-label="N"
-                          value={formData.remN.toString()}
+                          shortenRequired
+                          label="N"
+                          value={formData.remN}
                           onChange={(v) => handleFormFieldChange('remN', v)}
-                          css={textFieldStyle}
                         />
                       </Grid>
                       <Grid size="grow">
-                        <span className="MuiDataGrid-columnHeaderTitle">
-                          P<sub>2</sub>O<sub>5</sub>
-                        </span>
-                        <TextField
+                        <NumberField
                           isRequired
-                          type="number"
-                          aria-label="P2O5"
-                          value={formData.remP2o5.toString()}
+                          shortenRequired
+                          label={
+                            <span>
+                              P<sub>2</sub>O<sub>5</sub>
+                            </span>
+                          }
+                          value={formData.remP2o5}
                           onChange={(v) => handleFormFieldChange('remP2o5', v)}
-                          css={textFieldStyle}
                         />
                       </Grid>
                       <Grid size="grow">
-                        <span className="MuiDataGrid-columnHeaderTitle">
-                          K<sub>2</sub>O
-                        </span>
-                        <TextField
+                        <NumberField
                           isRequired
-                          type="number"
-                          aria-label="K2O"
-                          value={formData.remK2o.toString()}
+                          shortenRequired
+                          label={
+                            <span>
+                              K<sub>2</sub>O
+                            </span>
+                          }
+                          value={formData.remK2o}
                           onChange={(v) => handleFormFieldChange('remK2o', v)}
-                          css={textFieldStyle}
                         />
                       </Grid>
                     </Grid>
@@ -719,78 +613,42 @@ function CropsModal({
                 </div>
               ) : (
                 <Grid size={{ xs: 12 }}>
-                  <div>
-                    <Grid
-                      container
-                      spacing={1}
-                      sx={{ marginTop: '1rem' }}
-                    >
-                      <Grid size={{ xs: 6 }}>
-                        <span css={{ fontWeight: 'bold' }}>Crop Requirement (lb/ac)</span>
-                        <DataGrid
-                          sx={{ ...customTableStyle }}
-                          columns={requireAndRemoveColumns}
-                          rows={requirementRows}
-                          disableRowSelectionOnClick
-                          disableColumnMenu
-                          hideFooterPagination
-                          hideFooter
-                        />
-                      </Grid>
-                      <Grid size={{ xs: 6 }}>
-                        <span css={{ fontWeight: 'bold' }}>Nutrient Removal (lb/ac)</span>
-                        <DataGrid
-                          sx={{ ...customTableStyle }}
-                          columns={requireAndRemoveColumns}
-                          rows={removeRows}
-                          disableRowSelectionOnClick
-                          disableColumnMenu
-                          hideFooterPagination
-                          hideFooter
-                        />
-                      </Grid>
+                  <Grid
+                    container
+                    spacing={1}
+                    sx={{ marginTop: '1rem' }}
+                  >
+                    <Grid size={{ xs: 6 }}>
+                      <span css={{ fontWeight: 'bold' }}>Crop Requirement (lb/ac)</span>
+                      <DataGrid
+                        sx={{ ...customTableStyle }}
+                        columns={requireAndRemoveColumns}
+                        rows={requirementRows}
+                        disableRowSelectionOnClick
+                        disableColumnMenu
+                        hideFooterPagination
+                        hideFooter
+                      />
                     </Grid>
-                  </div>
+                    <Grid size={{ xs: 6 }}>
+                      <span css={{ fontWeight: 'bold' }}>Nutrient Removal (lb/ac)</span>
+                      <DataGrid
+                        sx={{ ...customTableStyle }}
+                        columns={requireAndRemoveColumns}
+                        rows={removeRows}
+                        disableRowSelectionOnClick
+                        disableColumnMenu
+                        hideFooterPagination
+                        hideFooter
+                      />
+                    </Grid>
+                  </Grid>
                 </Grid>
               )}
             </>
           )}
         </Grid>
-        <Divider
-          aria-hidden="true"
-          component="div"
-          css={{ marginTop: '1rem', marginBottom: '1rem' }}
-        />
-        <ButtonGroup
-          alignment="end"
-          orientation="horizontal"
-        >
-          <Button
-            variant="secondary"
-            onPress={onClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            onPress={handleCalculate}
-            isDisabled={
-              selectedCropType?.id === CROP_TYPE_OTHER_ID ||
-              selectedCropType === undefined ||
-              (selectedCrop === undefined && !selectedCropType.customcrop)
-            }
-          >
-            Calculate
-          </Button>
-          <Button
-            variant="primary"
-            onPress={handleSubmit}
-            isDisabled={!calculationsPerformed}
-          >
-            Submit
-          </Button>
-        </ButtonGroup>
-      </div>
+      </Form>
     </Modal>
   );
 }

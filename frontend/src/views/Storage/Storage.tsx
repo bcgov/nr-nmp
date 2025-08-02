@@ -1,14 +1,13 @@
-/* eslint-disable eqeqeq */
 import { useState, useMemo, useCallback, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import { StyledContent, SystemDisplay } from './storage.styles';
+import SystemDisplay from './storage.styles';
 import { NUTRIENT_ANALYSIS, MANURE_IMPORTS } from '../../constants/routes';
 
-import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
+import { Tabs, View } from '../../components/common';
 import { addRecordGroupStyle, tableActionButtonCss } from '../../common.styles';
 import StorageModal from './StorageModal';
 import useAppState from '@/hooks/useAppState';
@@ -47,7 +46,7 @@ export default function Storage() {
     if (region && subregion) {
       apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
         const { data } = response;
-        const currentSubregion = data.find((ele: Subregion) => ele.id === Number(subregion));
+        const currentSubregion = data.find((ele: Subregion) => ele.id === subregion);
         setSubregionData(currentSubregion);
       });
     }
@@ -98,45 +97,44 @@ export default function Storage() {
   );
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Storage" />
-      <>
-        <div css={addRecordGroupStyle}>
-          <ButtonGroup
-            alignment="end"
-            ariaLabel="A group of buttons"
-            orientation="horizontal"
+    <View
+      title="Storage"
+      handleBack={handlePrevious}
+      handleNext={handleNext}
+    >
+      <div css={addRecordGroupStyle}>
+        <ButtonGroup
+          alignment="end"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            onPress={() => setModalMode({ mode: 'create' })}
+            variant="secondary"
           >
-            <Button
-              size="medium"
-              onPress={() => setModalMode({ mode: 'create' })}
-              variant="secondary"
-            >
-              Add Storage System
-            </Button>
-          </ButtonGroup>
-        </div>
-        {modalMode !== undefined && (
-          <StorageModal
-            mode={modalMode}
-            initialModalData={
-              modalMode !== undefined && modalMode.mode !== 'create'
-                ? state.nmpFile.years[0].ManureStorageSystems![modalMode.systemIndex]
-                : undefined
-            }
-            annualPrecipitation={subregionData ? subregionData.annualprecipitation : undefined}
-            unassignedManures={unassignedManures}
-            handleDialogClose={handleDialogClose}
-            isOpen={modalMode !== undefined}
-          />
-        )}
-        <Tabs
-          activeTab={2}
-          tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+            Add Storage System
+          </Button>
+        </ButtonGroup>
+      </div>
+      {modalMode !== undefined && (
+        <StorageModal
+          mode={modalMode}
+          initialModalData={
+            modalMode !== undefined && modalMode.mode !== 'create'
+              ? state.nmpFile.years[0].ManureStorageSystems![modalMode.systemIndex]
+              : undefined
+          }
+          annualPrecipitation={subregionData ? subregionData.annualprecipitation : undefined}
+          unassignedManures={unassignedManures}
+          handleDialogClose={handleDialogClose}
+          isOpen={modalMode !== undefined}
         />
-      </>
+      )}
+      <Tabs
+        activeTab={2}
+        tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+      />
       <Grid
         container
         size={12}
@@ -236,27 +234,6 @@ export default function Storage() {
           ))}
         </Grid>
       </Grid>
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePrevious}
-        >
-          Back
-        </Button>
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={handleNext}
-          type="submit"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

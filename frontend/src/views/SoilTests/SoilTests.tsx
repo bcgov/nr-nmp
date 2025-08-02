@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /**
  * @summary This is the Soil Tests Tab
  */
@@ -6,43 +5,24 @@ import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import {
-  Button,
-  ButtonGroup,
-  Dialog,
-  Modal,
-  TextField,
-} from '@bcgov/design-system-react-components';
+import { Button } from '@bcgov/design-system-react-components';
 import {
   customTableStyle,
   formCss,
   formGridBreakpoints,
-  modalDividerStyle,
-  modalHeaderStyle,
-  modalPaddingStyle,
   tableActionButtonCss,
 } from '../../common.styles';
-import { AppTitle, PageTitle, ProgressStepper, Select, Tabs } from '../../components/common';
+import { Select, Tabs, View } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { NMPFileFieldData, NMPFileSoilTestData, SoilTestMethodsData } from '@/types';
-import { InfoBox, StyledContent, StyledDatePicker } from './soilTests.styles';
+import { NMPFileFieldData, SelectOption, SoilTestMethodsData } from '@/types';
+import { InfoBox } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
-import { FormErrors } from '@/types/Crops';
-
-const EMPTY_SOIL_TEST_FORM: Omit<NMPFileSoilTestData, 'soilTestId'> = {
-  sampleDate: undefined,
-  valNO3H: '',
-  valP: '',
-  valK: '',
-  valPH: '',
-};
+import SoilTestsModal from './SoilTestsModal';
 
 export default function SoilTests() {
   const { state, dispatch } = useAppState();
@@ -54,116 +34,32 @@ export default function SoilTests() {
     fields.find((field) => field.SoilTest !== undefined)?.SoilTest?.soilTestId || 0,
   );
 
-  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethodsData>[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
-  const [formData, setFormData] =
-    useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(EMPTY_SOIL_TEST_FORM);
-  const [formErrors, setFormErrors] = useState<Omit<FormErrors, 'soilTestId'>>({});
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
+    const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+    setCurrentFieldIndex(index);
+  }, []);
 
-  const handleEditRow = useCallback(
-    (e: { id: GridRowId; api: GridApiCommunity }) => {
-      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-      setCurrentFieldIndex(index);
-      setFormData(fields[index].SoilTest || EMPTY_SOIL_TEST_FORM);
-      setIsDialogOpen(true);
-    },
-    [fields],
-  );
-
-  const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+  const handleDeleteRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     setFields((prev) => {
       const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-      if (fields[index].SoilTest === undefined) return prev;
+      if (prev[index].SoilTest === undefined) return prev;
 
       const newList = [...prev];
       newList[index].SoilTest = undefined;
       return newList;
     });
-  };
+  }, []);
 
   const handleDialogClose = () => {
-    setIsDialogOpen(false);
-    setFormErrors({});
-    setFormData(EMPTY_SOIL_TEST_FORM);
+    setCurrentFieldIndex(null);
   };
 
   // IMPORTANT QUESTION: when the user changes the soil test method do we update the existing field.SoilTest values?
   const soilTestMethodSelect = (value: number) => {
     setSoilTestId(value);
-  };
-
-  const handleFormFieldChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const isFormDataValid = () => {
-    let phCheck = '';
-    if (!formData.valPH || Number.isNaN(Number(formData.valPH))) {
-      phCheck = 'pH is required and must be a number';
-    }
-    if (Number(formData.valPH) < 0 || Number(formData.valPH) > 14) {
-      phCheck = 'pH must be between 0 and 14';
-    }
-
-    const newFormErrors = {
-      ...EMPTY_SOIL_TEST_FORM,
-      sampleDate: !formData.sampleDate ? 'Sample Month is required' : '',
-      valNO3H: !formData.valNO3H ? 'NO3-N (ppm) is required and must be a number' : '',
-      valP: !formData.valP ? 'P (ppm) is required and must be a number' : '',
-      valK: !formData.valK ? 'K (ppm) is required and must be a number' : '',
-      valPH: phCheck,
-    };
-
-    setFormErrors(newFormErrors);
-
-    // Return false if errors exist
-    return !Object.values(newFormErrors).some((ele) => ele);
-  };
-
-  const handleFormFieldSubmit = () => {
-    if (!isFormDataValid()) return;
-
-    // Calculate convertedKelownaP directly
-    const lessThan72 = soilTestMethods.find(
-      (method) => method.id === Number(soilTestId),
-    )?.converttokelownaphlessthan72;
-    const greaterThan72 = soilTestMethods.find(
-      (method) => method.id === Number(soilTestId),
-    )?.converttokelownaphgreaterthan72;
-
-    let convertedKelownaP = formData.valP;
-
-    if (Number(formData.valPH) < 7.2 && lessThan72 !== undefined) {
-      convertedKelownaP = (Number(formData.valP) * lessThan72).toString();
-    } else if (Number(formData.valPH) >= 7.2 && greaterThan72 !== undefined) {
-      convertedKelownaP = (Number(formData.valP) * greaterThan72).toString();
-    }
-
-    // Calculate converted Kelowna K value (if you need it)
-    const convertedKelownaK =
-      soilTestMethods.find((method) => method.id === Number(soilTestId))?.converttokelownak !==
-      undefined
-        ? (
-            Number(formData.valK) *
-            soilTestMethods.find((method) => method.id === Number(soilTestId))!.converttokelownak
-          ).toString()
-        : formData.valK;
-
-    setFormData((prev) => ({
-      ...prev,
-      convertedKelownaP,
-      convertedKelownaK,
-    }));
-
-    setFields((prev) => {
-      const newList = [...prev];
-      if (currentFieldIndex !== null)
-        newList[currentFieldIndex].SoilTest = { ...formData, soilTestId };
-      return newList;
-    });
-    handleDialogClose();
   };
 
   const handleNextPage = () => {
@@ -180,9 +76,16 @@ export default function SoilTests() {
     apiCache.callEndpoint('api/soiltestmethods/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setSoilTestMethods(data);
+        setSoilTestMethods(
+          (data as SoilTestMethodsData[]).map((method) => ({
+            id: method.id,
+            label: method.name,
+            value: method,
+          })),
+        );
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns: GridColDef[] = useMemo(
@@ -259,7 +162,7 @@ export default function SoilTests() {
                 <Button
                   variant="primary"
                   size="small"
-                  onClick={() => handleEditRow(e)}
+                  onPress={() => handleEditRow(e)}
                 >
                   Add soil test
                 </Button>
@@ -271,138 +174,25 @@ export default function SoilTests() {
         resizable: false,
       },
     ],
-    [],
+    [fields, handleDeleteRow, handleEditRow],
   );
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Field Information" />
-      <Modal
-        isDismissable
-        isOpen={isDialogOpen}
-        onOpenChange={handleDialogClose}
-      >
-        <Dialog
-          isCloseable
-          role="dialog"
-        >
-          <div css={modalPaddingStyle}>
-            <span css={modalHeaderStyle}>Add Field</span>
-            <Divider
-              aria-hidden="true"
-              component="div"
-              css={modalDividerStyle}
-            />
-            <div css={formCss}>
-              <Grid
-                container
-                spacing={1}
-              >
-                <Grid size={formGridBreakpoints}>
-                  <span
-                    className={`bcds-react-aria-Select--Label ${formErrors.sampleDate ? '--error' : ''}`}
-                  >
-                    Sample Month
-                  </span>
-                  <div css={{ label: { margin: '0' } }}>
-                    <StyledDatePicker>
-                      <ReactDatePicker
-                        selected={formData.sampleDate}
-                        onChange={(e: any) => {
-                          handleFormFieldChange('sampleDate', e);
-                        }}
-                        dateFormat="MM/yyyy"
-                        showMonthYearPicker
-                        wrapperClassName="monthPicker"
-                      />
-                    </StyledDatePicker>
-                  </div>
-                </Grid>
-                <Grid size={formGridBreakpoints}>
-                  <span
-                    className={`bcds-react-aria-Select--Label ${formErrors.valNO3H ? '--error' : ''}`}
-                  >
-                    NO3-N (ppm), nitrate-nitrogen
-                  </span>
-                  <TextField
-                    isRequired
-                    type="number"
-                    name="valNO3H"
-                    value={formData.valNO3H}
-                    onChange={(e) => handleFormFieldChange('valNO3H', e)}
-                  />
-                </Grid>
-                <Grid size={formGridBreakpoints}>
-                  <span
-                    className={`bcds-react-aria-Select--Label ${formErrors.valP ? '--error' : ''}`}
-                  >
-                    P (ppm), phosphorus
-                  </span>
-                  <TextField
-                    isRequired
-                    type="number"
-                    name="valP"
-                    value={formData.valP}
-                    onChange={(e) => handleFormFieldChange('valP', e)}
-                  />
-                </Grid>
-                <Grid size={formGridBreakpoints}>
-                  <span
-                    className={`bcds-react-aria-Select--Label ${formErrors.valK ? '--error' : ''}`}
-                  >
-                    K (ppm), potassium
-                  </span>
-                  <TextField
-                    isRequired
-                    type="number"
-                    name="valK"
-                    value={formData.valK}
-                    onChange={(e) => handleFormFieldChange('valK', e)}
-                  />
-                </Grid>
-                <Grid size={formGridBreakpoints}>
-                  <span
-                    className={`bcds-react-aria-Select--Label ${formErrors.valPH ? '--error' : ''}`}
-                  >
-                    pH
-                  </span>
-                  <TextField
-                    isRequired
-                    type="number"
-                    name="valPH"
-                    value={formData.valPH}
-                    onChange={(e) => handleFormFieldChange('valPH', e)}
-                  />
-                </Grid>
-              </Grid>
-              <Divider
-                aria-hidden="true"
-                component="div"
-                css={{ marginTop: '1rem', marginBottom: '1rem' }}
-              />
-              <ButtonGroup
-                alignment="end"
-                orientation="horizontal"
-              >
-                <Button
-                  variant="secondary"
-                  onPress={handleDialogClose}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="primary"
-                  onPress={handleFormFieldSubmit}
-                >
-                  Confirm
-                </Button>
-              </ButtonGroup>
-            </div>
-          </div>
-        </Dialog>
-      </Modal>
+    <View
+      title="Field Information"
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+    >
+      {currentFieldIndex !== null && (
+        <SoilTestsModal
+          currentFieldIndex={currentFieldIndex}
+          initialFormData={fields[currentFieldIndex].SoilTest}
+          soilTestId={soilTestId}
+          soilTestMethods={soilTestMethods}
+          setFields={setFields}
+          handleDialogClose={handleDialogClose}
+        />
+      )}
       <Tabs
         activeTab={1}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
@@ -425,15 +215,10 @@ export default function SoilTests() {
           size={formGridBreakpoints}
         >
           <Select
-            name="soilTest"
-            items={soilTestMethods.map((method) => ({
-              id: method.id,
-              label: method.name,
-            }))}
+            aria-label="Select the lab used (soil test methods)"
+            items={soilTestMethods}
             selectedKey={soilTestId}
-            onSelectionChange={(id) => {
-              soilTestMethodSelect(id as number);
-            }}
+            onSelectionChange={(id) => soilTestMethodSelect(id as number)}
           />
         </Grid>
       </Grid>
@@ -450,26 +235,6 @@ export default function SoilTests() {
           hideFooter
         />
       )}
-      <ButtonGroup
-        alignment="start"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={handleNextPage}
-          type="submit"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

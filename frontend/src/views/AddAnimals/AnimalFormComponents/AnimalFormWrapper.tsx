@@ -2,20 +2,20 @@ import React from 'react';
 import { PressEvent } from 'react-aria-components';
 import Grid from '@mui/material/Grid';
 import { Form, Select } from '@/components/common';
-import { SelectOption } from '@/types';
+import { Animal, SelectOption } from '@/types';
 
 type AnimalFormWrapperProps = {
-  animalOptions: SelectOption[];
+  animals: SelectOption<Animal>[];
   selectedAnimalId?: string;
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   onCancel: (e: PressEvent) => void;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: () => void;
   isConfirmDisabled?: boolean;
   children: React.ReactNode | null;
 };
 
 export default function AnimalFormWrapper({
-  animalOptions,
+  animals,
   selectedAnimalId,
   handleInputChanges,
   onCancel,
@@ -26,7 +26,7 @@ export default function AnimalFormWrapper({
   return (
     <Form
       onCancel={onCancel}
-      onSubmit={onSubmit}
+      onConfirm={onSubmit}
       isConfirmDisabled={isConfirmDisabled}
     >
       <Grid
@@ -36,14 +36,11 @@ export default function AnimalFormWrapper({
         <Grid size={12}>
           <Select
             isRequired
-            name="animalId"
-            items={animalOptions}
+            items={animals}
             label="Animal Type"
             placeholder="Select Animal Type"
             selectedKey={selectedAnimalId}
-            onSelectionChange={(e) => {
-              handleInputChanges({ animalId: e as string });
-            }}
+            onSelectionChange={(e) => handleInputChanges({ animalId: e as string })}
           />
         </Grid>
         {children}

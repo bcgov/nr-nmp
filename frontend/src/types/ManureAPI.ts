@@ -1,4 +1,4 @@
-export interface ManureData {
+export interface Manure {
   id: number;
   name: string;
   manureclass: string;
@@ -16,7 +16,7 @@ export interface ManureData {
   defaultsolidmoisture: number | null;
 }
 
-export interface UnitsData {
+export interface Units {
   id: number;
   name: string;
   nutrientcontentunits: string;
@@ -34,7 +34,10 @@ export interface UnitsData {
   solidliquid: string;
 }
 
-export interface NitrogenMineralizationData {
+/*
+TODO: Reinclude if these are used somewhere, delete otherwise
+
+export interface NitrogenMineralization {
   id: number;
   locationid: number;
   name: string;
@@ -55,3 +58,4 @@ export interface NMineralizationResult {
   OrganicN_FirstYear: number;
   OrganicN_LongTerm: number;
 }
+*/

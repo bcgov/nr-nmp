@@ -136,7 +136,6 @@ export function cropsModalReducer(
   action: CropsModalReducerAction,
 ): CropsModalState {
   const { formData, selectedCrop, defaultYieldInTons } = state;
-  const cropSet = isCropSet(formData.cropId, selectedCrop);
   switch (action.type) {
     case 'SET_CROP_TYPE_ID':
       return {
@@ -197,7 +196,7 @@ export function cropsModalReducer(
       };
 
     case 'SET_YIELD_IN_TONS':
-      if (cropSet && formData.yieldHarvestUnit !== undefined) {
+      if (isCropSet(formData.cropId, selectedCrop) && formData.yieldHarvestUnit !== undefined) {
         validateBushelConversion(selectedCrop);
         return {
           ...state,
@@ -225,7 +224,7 @@ export function cropsModalReducer(
         return state;
       }
       // Don't change yield if the crop isn't set
-      if (!cropSet) {
+      if (!isCropSet(formData.cropId, selectedCrop)) {
         return {
           ...state,
           formData: {
@@ -298,7 +297,7 @@ export function cropsModalReducer(
       };
 
     case 'RESTORE_DEFAULT_YIELD':
-      if (defaultYieldInTons === undefined || !cropSet) {
+      if (defaultYieldInTons === undefined || !isCropSet(formData.cropId, selectedCrop)) {
         throw new Error('Crops modal entered bad state');
       }
       if (formData.yieldHarvestUnit !== undefined) {
