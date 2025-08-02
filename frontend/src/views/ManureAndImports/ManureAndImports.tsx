@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import { useState, useEffect, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -67,7 +66,7 @@ export default function ManureAndImports() {
 
     if (data.ManureType === ManureType.Liquid) {
       const liquidManureConversionFactor = liquidManureDropdownOptions.find(
-        (item) => item.inputunit == data.Units,
+        (item) => item.inputunit === data.Units,
       );
 
       const annualAmountUSGallonsVolume =
@@ -83,7 +82,7 @@ export default function ManureAndImports() {
       };
     } else if (data.ManureType === ManureType.Solid) {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
-        (item) => item.inputunit == data.Units,
+        (item) => item.inputunit === data.Units,
       );
 
       const annualAmountCubicMetersVolume =
