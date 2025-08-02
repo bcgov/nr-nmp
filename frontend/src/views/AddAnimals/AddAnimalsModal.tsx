@@ -94,7 +94,7 @@ export default function AddAnimalsModal({
       if (response.status === 200) {
         const { data } = response;
         const options: SelectOption<Animal>[] = (data as Animal[]).map((row) => ({
-          id: String(row.id),
+          id: row.id,
           label: row.name,
           value: row,
         }));

@@ -39,8 +39,8 @@ export default function AnimalFormWrapper({
             items={animals}
             label="Animal Type"
             placeholder="Select Animal Type"
-            selectedKey={selectedAnimalId}
-            onSelectionChange={(e) => handleInputChanges({ animalId: e as string })}
+            selectedKey={Number(selectedAnimalId || '0')}
+            onSelectionChange={(e) => handleInputChanges({ animalId: String(e) })}
           />
         </Grid>
         {children}
