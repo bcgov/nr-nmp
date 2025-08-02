@@ -545,7 +545,7 @@ function CropsModal({
           if (response.status === 200) {
             const { data } = response;
             let amount;
-            if ((data as { amount: number }[]).length === 0) {
+            if ((data as any[]).length === 0) {
               console.error(
                 `No yield data for ${formData.cropId} and location id ${nmpFile.farmDetails.RegionLocationId}`,
               );

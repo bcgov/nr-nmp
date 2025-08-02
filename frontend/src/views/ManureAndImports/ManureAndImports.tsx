@@ -321,6 +321,7 @@ export default function ManureAndImports() {
         </ButtonGroup>
       </div>
       <ManureImportModal
+        key={isDialogOpen.toString()}
         initialModalData={manureFormData}
         handleDialogClose={handleDialogClose}
         handleSubmit={handleSubmit}

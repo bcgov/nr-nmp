@@ -260,7 +260,7 @@ export default function ManureModal({
               selectedKey={manureForm.applicationMethod}
               // TODO: filter by material type
               items={MANURE_APPLICATION_METHODS}
-              onSelectionChange={(e) => handleChange({ applicationMethod: e as number })}
+              onSelectionChange={(e) => handleChange({ applicationMethod: Number(e) })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

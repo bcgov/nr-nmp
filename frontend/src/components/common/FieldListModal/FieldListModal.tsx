@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Select from '@/components/common/Select/Select';
 import { formGridBreakpoints } from '../../../common.styles';
+import { formGridBreakpoints } from '../../../common.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NMPFileFieldData } from '@/types';
 import Form from '../Form/Form';
 import initialFieldFormData from '@/constants/DefaultNMPFileFieldData';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
 import NumberField from '../NumberField/NumberField';
+import TextField from '../TextField/TextField';
 import TextField from '../TextField/TextField';
 
 type Mode = 'Add Field' | 'Edit Field' | 'Duplicate Field';
@@ -35,6 +37,7 @@ export default function FieldListModal({
   );
 
   const onSubmit = () => {
+  const onSubmit = () => {
     if (rowEditIndex !== undefined) {
       // If editing, find and replace field instead of adding new field
       setFieldList((prev) => {
@@ -50,8 +53,13 @@ export default function FieldListModal({
 
   const handleFormFieldChange = (changes: Partial<NMPFileFieldData>) => {
     setFormData((prev) => ({ ...prev, ...changes }));
+  const handleFormFieldChange = (changes: Partial<NMPFileFieldData>) => {
+    setFormData((prev) => ({ ...prev, ...changes }));
   };
 
+  const validateUniqueName = (): boolean => {
+    if (!formData.FieldName) return true;
+    return isFieldNameUnique(formData, rowEditIndex === undefined ? -1 : rowEditIndex);
   const validateUniqueName = (): boolean => {
     if (!formData.FieldName) return true;
     return isFieldNameUnique(formData, rowEditIndex === undefined ? -1 : rowEditIndex);
@@ -66,6 +74,7 @@ export default function FieldListModal({
       <Form
         onCancel={onClose}
         onConfirm={onSubmit}
+        onConfirm={onSubmit}
       >
         <Grid
           container
@@ -75,16 +84,23 @@ export default function FieldListModal({
             <TextField
               isRequired
               label="Field Name"
+              label="Field Name"
               value={formData.FieldName}
               onChange={(e) => handleFormFieldChange({ FieldName: e })}
-              validate={() => (validateUniqueName() ? undefined : 'Field name must be unique')}
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              validate={(_: string) =>
+                validateUniqueName() ? undefined : 'Field name must be unique'
+              }
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <NumberField
               isRequired
               label="Area in acres"
+              label="Area in acres"
               value={formData.Area}
+              onChange={(e) => handleFormFieldChange({ Area: e })}
+              minValue={0}
               onChange={(e) => handleFormFieldChange({ Area: e })}
               minValue={0}
             />
@@ -92,12 +108,14 @@ export default function FieldListModal({
           <Grid size={6}>
             <Select
               label="Manure application"
+              label="Manure application"
               isRequired
               items={MANURE_APPLICATION_FREQ}
               selectedKey={formData.PreviousYearManureApplicationFrequency}
               placeholder="Select"
+              placeholder="Select"
               onSelectionChange={(e) => {
-                handleFormFieldChange({ PreviousYearManureApplicationFrequency: e as string });
+                handleFormFieldChange({ PreviousYearManureApplicationFrequency: String(e) });
               }}
               noSort
             />
@@ -105,7 +123,9 @@ export default function FieldListModal({
           <Grid size={formGridBreakpoints}>
             <TextField
               label="Comments (optional)"
+              label="Comments (optional)"
               value={formData.Comment}
+              onChange={(e) => handleFormFieldChange({ Comment: e })}
               onChange={(e) => handleFormFieldChange({ Comment: e })}
             />
           </Grid>

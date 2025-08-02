@@ -108,6 +108,7 @@ export default function OtherModal({
                   label="N"
                   value={formData.reqN}
                   onChange={(v) => handleNutrientChange('reqN', v)}
+                  // css={{ width: '100%' }}
                 />
               </Grid>
               <Grid size="grow">
@@ -120,6 +121,7 @@ export default function OtherModal({
                   }
                   value={formData.reqP2o5}
                   onChange={(v) => handleNutrientChange('reqP2o5', v)}
+                  // css={{ width: '100%' }}
                 />
               </Grid>
               <Grid size="grow">
@@ -132,6 +134,7 @@ export default function OtherModal({
                   }
                   value={formData.reqK2o}
                   onChange={(v) => handleNutrientChange('reqK2o', v)}
+                  // css={{ width: '100%' }}
                 />
               </Grid>
             </Grid>
@@ -143,6 +146,7 @@ export default function OtherModal({
                   label="N"
                   value={formData.remN}
                   onChange={(v) => handleNutrientChange('remN', v)}
+                  // css={{ width: '100%' }}
                 />
               </Grid>
               <Grid size="grow">
@@ -155,6 +159,7 @@ export default function OtherModal({
                   }
                   value={formData.remP2o5}
                   onChange={(v) => handleNutrientChange('remP2o5', v)}
+                  // css={{ width: '100%' }}
                 />
               </Grid>
               <Grid size="grow">
@@ -167,6 +172,7 @@ export default function OtherModal({
                   }
                   value={formData.remK2o}
                   onChange={(v) => handleNutrientChange('remK2o', v)}
+                  // css={{ width: '100%' }}
                 />
               </Grid>
             </Grid>
