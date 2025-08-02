@@ -8,9 +8,13 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
-import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '../../common.styles';
-import { ErrorText, StyledContent } from './fieldList.styles';
+import { Tabs, View } from '../../components/common';
+import {
+  addRecordGroupStyle,
+  customTableStyle,
+  ErrorText,
+  tableActionButtonCss,
+} from '../../common.styles';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { FARM_INFORMATION, NUTRIENT_ANALYSIS, SOIL_TESTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
@@ -121,40 +125,39 @@ export default function FieldList() {
   );
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Field Information" />
-      <>
-        <div css={addRecordGroupStyle}>
-          <ButtonGroup
-            alignment="end"
-            ariaLabel="A group of buttons"
-            orientation="horizontal"
+    <View
+      title="Field Information"
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+    >
+      <div css={addRecordGroupStyle}>
+        <ButtonGroup
+          alignment="end"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            aria-label="Add Field"
+            onPress={() => setIsDialogOpen(true)}
+            variant="secondary"
           >
-            <Button
-              size="medium"
-              aria-label="Add Field"
-              onPress={() => setIsDialogOpen(true)}
-              variant="secondary"
-            >
-              <FontAwesomeIcon icon={faPlus} />
-              Add Field
-            </Button>
-          </ButtonGroup>
-        </div>
-        {isDialogOpen && (
-          <FieldListModal
-            mode={rowEditIndex !== undefined ? 'Edit Field' : 'Add Field'}
-            initialModalData={rowEditIndex !== undefined ? fieldList[rowEditIndex] : undefined}
-            rowEditIndex={rowEditIndex}
-            setFieldList={setFieldList}
-            isFieldNameUnique={isFieldNameUnique}
-            isOpen={isDialogOpen}
-            onClose={handleDialogClose}
-          />
-        )}
-      </>
+            <FontAwesomeIcon icon={faPlus} />
+            Add Field
+          </Button>
+        </ButtonGroup>
+      </div>
+      {isDialogOpen && (
+        <FieldListModal
+          mode={rowEditIndex !== undefined ? 'Edit Field' : 'Add Field'}
+          initialModalData={rowEditIndex !== undefined ? fieldList[rowEditIndex] : undefined}
+          rowEditIndex={rowEditIndex}
+          setFieldList={setFieldList}
+          isFieldNameUnique={isFieldNameUnique}
+          isOpen={isDialogOpen}
+          onClose={handleDialogClose}
+        />
+      )}
       <Tabs
         activeTab={0}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
@@ -170,27 +173,6 @@ export default function FieldList() {
         hideFooter
       />
       <ErrorText>{showViewError}</ErrorText>
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={handleNextPage}
-          type="submit"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

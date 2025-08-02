@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppState from '@/hooks/useAppState';
 import { customTableStyle } from '../reporting.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { SelectOption } from '@/types';
+import { Region, SelectOption, Subregion } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
   { field: 'name', headerName: 'Nutrient Source', width: 200 },
@@ -20,31 +20,32 @@ export default function RecordKeepingSheets() {
   const { farmDetails, years } = nmpFile;
   const { FarmName, FarmRegion, FarmSubRegion } = farmDetails;
 
-  const [regionOptions, setRegionOptions] = useState<Array<SelectOption>>([]);
-  const [subregionOptions, setSubregionOptions] = useState<Array<SelectOption>>([]);
+  const [regionOptions, setRegionOptions] = useState<SelectOption<Region>[]>([]);
+  const [subregionOptions, setSubregionOptions] = useState<SelectOption<Subregion>[]>([]);
 
   const apiCache = useContext(APICacheContext);
 
   useEffect(() => {
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
-      const regions = (data as { id: number; name: string }[]).map((row) => ({
-        id: row?.id.toString(),
+      const regions: SelectOption<Region>[] = (data as Region[]).map((row) => ({
+        id: row.id.toString(),
         label: row.name,
+        value: row,
       }));
-      setRegionOptions(regions as Array<SelectOption>);
+      setRegionOptions(regions);
     });
     apiCache.callEndpoint(`api/subregions/${FarmRegion}/`).then((response) => {
       const { data } = response;
-      const subregions = (data as { id: number; name: string }[]).map((row) => ({
-        id: row?.id.toString(),
+      const subregions: SelectOption<Subregion>[] = (data as Subregion[]).map((row) => ({
+        id: row.id.toString(),
         label: row.name,
+        value: row,
       }));
 
-      setSubregionOptions(subregions as Array<SelectOption>);
+      setSubregionOptions(subregions);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [FarmRegion, FarmSubRegion]);
+  }, [apiCache, FarmRegion]);
 
   return (
     <div style={{ width: '744px' }}>
@@ -56,13 +57,13 @@ export default function RecordKeepingSheets() {
       </div>
       <div>
         <span>
-          Farm Region: {regionOptions?.find((ele) => ele.id === FarmRegion)?.label ?? FarmRegion}
+          Farm Region: {regionOptions.find((ele) => ele.id === FarmRegion)?.label ?? FarmRegion}
         </span>
       </div>
       <div>
         <span>
           Farm Sub Region:{' '}
-          {subregionOptions?.find((ele) => ele.id === FarmSubRegion)?.label ?? FarmSubRegion}
+          {subregionOptions.find((ele) => ele.id === FarmSubRegion)?.label ?? FarmSubRegion}
         </span>
       </div>
       <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Application Schedule</div>

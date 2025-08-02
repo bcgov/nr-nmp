@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   NumberField as ReactAriaNumberField,
   NumberFieldProps as ReactAriaNumberFieldProps,
@@ -6,40 +6,63 @@ import {
   Label,
   FieldError,
   Text,
-  ValidationResult,
 } from 'react-aria-components';
-import '@bcgov/design-tokens/css/variables.css';
 import { SvgExclamationIcon } from '@bcgov/design-system-react-components';
 
+import '@bcgov/design-tokens/css/variables.css';
 import './NumberField.css';
 
-export interface NumberFieldProps extends ReactAriaNumberFieldProps {
+export interface NumberFieldProps
+  extends Omit<ReactAriaNumberFieldProps, 'validate, minValue, maxValue'> {
   /* Sets size of text input field */
   size?: 'medium' | 'small';
   /* Sets text label above text input field */
-  label?: string;
+  label?: string | React.ReactNode;
   /* Sets optional description text below text input field */
   description?: string;
-  /* Used for data validation and error handling */
-  errorMessage?: string | ((validation: ValidationResult) => string);
   /* Icon slot to left of text input field */
   iconLeft?: React.ReactElement;
   /* Icon slot to right of text input field */
   iconRight?: React.ReactElement;
+  /* Minimum valid value */
+  minValue?: number;
+  /* Maximum valid value */
+  maxValue?: number;
+  /* For small fields, display (req) instead of (required) */
+  shortenRequired?: boolean;
 }
 
 export default function NumberField({
   size,
   label,
   description,
-  errorMessage,
   iconLeft,
   iconRight,
+  minValue,
+  maxValue,
+  shortenRequired,
   ...props
 }: NumberFieldProps) {
+  const validate = useMemo(() => {
+    if (minValue !== undefined && maxValue !== undefined) {
+      return (value: number) =>
+        value < minValue! || value > maxValue!
+          ? [`Must be between ${minValue} and ${maxValue}.`]
+          : undefined;
+    }
+    if (minValue !== undefined) {
+      return (value: number) => (value < minValue! ? [`Minimum is ${minValue}.`] : undefined);
+    }
+    if (maxValue !== undefined) {
+      return (value: number) => (value < maxValue! ? [`Maximum is ${maxValue}.`] : undefined);
+    }
+    return undefined;
+  }, [minValue, maxValue]);
+
   return (
     <ReactAriaNumberField
       className="bcds-react-aria-NumberField"
+      validate={validate}
       {...props}
     >
       {({ isRequired, isInvalid }) => (
@@ -48,7 +71,9 @@ export default function NumberField({
             <Label className="bcds-react-aria-NumberField--Label">
               {label}
               {isRequired && (
-                <span className="bcds-react-aria-NumberField--Label required">(required)</span>
+                <span className="bcds-react-aria-NumberField--Label">
+                  {shortenRequired ? '(req)' : ' (required)'}
+                </span>
               )}
             </Label>
           )}
@@ -56,7 +81,11 @@ export default function NumberField({
             className={`bcds-react-aria-NumberField--container ${size === 'small' ? 'small' : 'medium'}`}
           >
             {iconLeft}
-            <Input className="bcds-react-aria-NumberField--Input" />
+            <Input
+              className="bcds-react-aria-NumberField--Input"
+              // Force input to inherit width from parent div
+              css={{ width: '100%' }}
+            />
             {isInvalid && <SvgExclamationIcon />}
             {iconRight}
           </div>
@@ -68,7 +97,7 @@ export default function NumberField({
               {description}
             </Text>
           )}
-          <FieldError className="bcds-react-aria-NumberField--Error">{errorMessage}</FieldError>
+          <FieldError className="bcds-react-aria-NumberField--Error" />
         </>
       )}
     </ReactAriaNumberField>

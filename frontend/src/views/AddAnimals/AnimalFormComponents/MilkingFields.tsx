@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { PER_DAY_UNIT, PER_DAY_PER_ANIMAL_UNIT, WashWaterUnit } from '@/types';
 import { NumberField, Select } from '@/components/common';
@@ -28,7 +27,7 @@ export default function MilkingFields({
   // I'm starting to think keeping stateful props is dumb and I should just keep the useEffects
   // to get the same on-mount-and-unmount behavior, but I just wanna get this PR in atm
   const [milkProduction, setMilkProduction] = useState<number>(milkProductionInit);
-  const [washWater, setWashWater] = useState<string>(washWaterInit.toFixed(1));
+  const [washWater, setWashWater] = useState<number>(washWaterInit);
 
   // When the breed changes, change the milk production value
   useEffect(() => {
@@ -54,10 +53,10 @@ export default function MilkingFields({
 
   const handleUnitChange = (newUnit: WashWaterUnit) => {
     if (newUnit === PER_DAY_PER_ANIMAL_UNIT && washWaterUnit === PER_DAY_UNIT) {
-      setWashWater(`${washWaterInit}.0`);
+      setWashWater(washWaterInit);
       handleInputChanges({ washWater: washWaterInit, washWaterUnit: newUnit });
     } else if (newUnit === PER_DAY_UNIT && washWaterUnit === PER_DAY_PER_ANIMAL_UNIT) {
-      setWashWater(String(washWaterInit * animalsPerFarm));
+      setWashWater(washWaterInit * animalsPerFarm);
       handleInputChanges({ washWater: washWaterInit * animalsPerFarm, washWaterUnit: newUnit });
     } else {
       handleInputChanges({ washWaterUnit: newUnit });
@@ -69,47 +68,33 @@ export default function MilkingFields({
       <Grid size={formGridBreakpoints}>
         <NumberField
           isRequired
-          label="Average Animal Number on Farm"
-          value={milkProduction}
-          onChange={(e) => {
-            handleInputChanges({ animalsPerFarm: e });
-          }}
-          minValue={0}
-        />
-        <TextField
           label="Milk Production"
-          type="number"
-          name="milkProduction"
           value={milkProduction}
           onChange={(e) => {
             setMilkProduction(e);
-            handleInputChanges({ milkProduction: Number(e) });
+            handleInputChanges({ milkProduction: e });
           }}
-          isRequired
+          minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
-        <TextField
+        <NumberField
+          isRequired
           label="Milking Centre Wash Water"
-          type="number"
-          name="washWater"
           value={washWater}
           onChange={(e) => {
             setWashWater(e);
-            handleInputChanges({ washWater: parseFloat(e) });
+            handleInputChanges({ washWater: e });
           }}
-          isRequired
+          minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
         <Select
           label="(Units)"
-          name="washWaterUnit"
           selectedKey={washWaterUnit || PER_DAY_PER_ANIMAL_UNIT}
           items={washWaterOptions}
-          onSelectionChange={(e) => {
-            handleUnitChange(e as WashWaterUnit);
-          }}
+          onSelectionChange={(e) => handleUnitChange(e as WashWaterUnit)}
           isRequired
           noSort
         />

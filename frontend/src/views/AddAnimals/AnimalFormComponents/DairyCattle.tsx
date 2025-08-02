@@ -1,5 +1,4 @@
-import { FormEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { TextField } from '@bcgov/design-system-react-components';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
@@ -9,11 +8,11 @@ import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID, SelectOption
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import MilkingFields from './MilkingFields';
 import AnimalFormWrapper from './AnimalFormWrapper';
-import { ManureType } from '@/types/Animals';
+import { Animal, ManureType } from '@/types/Animals';
 
 type DairyCattleProps = {
   formData: DairyCattleData;
-  animalOptions: SelectOption[];
+  animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -63,9 +62,7 @@ export default function DairyCattle({
     return milkingCow.milkproduction * breed.breedmanurefactor;
   }, [subtypes, breeds, formData.breed]);
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = () => {
     // Calculate manure
     const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
     if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
@@ -175,24 +172,18 @@ export default function DairyCattle({
       <Grid size={formGridBreakpoints}>
         <Select
           label="Sub Type"
-          name="subtype"
           selectedKey={formData.subtype}
           items={subtypeOptions}
-          onSelectionChange={(e) => {
-            handleInputChanges({ subtype: e?.toString() });
-          }}
+          onSelectionChange={(e) => handleInputChanges({ subtype: e as string })}
           isRequired
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
         <Select
           label="Breed"
-          name="breed"
           selectedKey={formData.breed}
           items={breedOptions}
-          onSelectionChange={(e) => {
-            handleInputChanges({ breed: e?.toString() });
-          }}
+          onSelectionChange={(e) => handleInputChanges({ breed: e as string })}
           isRequired
         />
       </Grid>
@@ -201,21 +192,16 @@ export default function DairyCattle({
           isRequired
           label="Average Animal Number on Farm"
           value={formData.animalsPerFarm}
-          onChange={(e) => {
-            handleInputChanges({ animalsPerFarm: e });
-          }}
+          onChange={(e) => handleInputChanges({ animalsPerFarm: e })}
           minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
         <Select
           label="Manure Type"
-          name="manureType"
           selectedKey={formData.manureType}
           items={MANURE_TYPE_OPTIONS}
-          onSelectionChange={(e) => {
-            handleInputChanges({ manureType: e as number });
-          }}
+          onSelectionChange={(e) => handleInputChanges({ manureType: e as number })}
           isRequired
         />
       </Grid>
@@ -224,9 +210,7 @@ export default function DairyCattle({
           isRequired
           label="Grazing Days per Year"
           value={formData.grazingDaysPerYear}
-          onChange={(e) => {
-            handleInputChanges({ grazingDaysPerYear: e });
-          }}
+          onChange={(e) => handleInputChanges({ grazingDaysPerYear: e })}
           minValue={0}
           maxValue={365}
         />

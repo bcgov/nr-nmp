@@ -6,26 +6,38 @@ import { formCss } from '@/common.styles';
 
 export interface FormProps extends BaseFormProps {
   children: React.ReactNode;
-  // TODO: If these buttons aren't featured in every modal, make these optional and
-  // only display buttons when they are defined
-  onCancel?: (e: PressEvent) => void;
-  // Should be defined if onSubmit is undefined
-  onConfirm?: (e: PressEvent) => void;
+  onCancel: (e: PressEvent) => void;
+  onCalculate?: () => void;
+  isCalculateDisabled?: boolean;
+  onConfirm: () => void;
   isConfirmDisabled?: boolean;
-  submitButtonText?: string;
+  confirmButtonText?: string;
 }
 
 export default function Form({
   children,
   onCancel,
+  onCalculate,
+  isCalculateDisabled,
   onConfirm,
   isConfirmDisabled,
-  submitButtonText,
+  confirmButtonText,
   ...props
 }: FormProps) {
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if ((e.nativeEvent as SubmitEvent).submitter!.innerHTML === 'Calculate') {
+      if (!onCalculate) throw new Error('Calculate was pressed when undefined.');
+      onCalculate();
+    } else {
+      onConfirm();
+    }
+  };
+
   return (
     <BcGovForm
       css={formCss}
+      onSubmit={onSubmit}
       {...props}
     >
       {children}
@@ -44,13 +56,21 @@ export default function Form({
         >
           Cancel
         </Button>
+        {onCalculate && (
+          <Button
+            variant="primary"
+            isDisabled={isCalculateDisabled}
+            type="submit"
+          >
+            Calculate
+          </Button>
+        )}
         <Button
           variant="primary"
-          onPress={onConfirm}
           isDisabled={isConfirmDisabled}
           type="submit"
         >
-          {submitButtonText || 'Confirm'}
+          {confirmButtonText || 'Confirm'}
         </Button>
       </ButtonGroup>
     </BcGovForm>
