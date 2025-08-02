@@ -134,7 +134,7 @@ function CropsModal({
   const [crops, setCrops] = useState<Crop[]>([]);
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
-    return crops.filter((type) => type.croptypeid === Number(formData.cropTypeId));
+    return crops.filter((type) => type.croptypeid === formData.cropTypeId);
   }, [crops, formData.cropTypeId]);
   const [cropTypes, setCropTypes] = useState<CropType[]>([]);
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
@@ -323,7 +323,7 @@ function CropsModal({
    * Fetches default yield based on selected crop and region
    */
   useEffect(() => {
-    if (formData.cropId !== 0 && formData.cropId !== CROP_OTHER_ID) {
+    if (formData.cropId !== 0 && formData.cropId !== CROP_OTHER_ID && selectedCrop !== undefined) {
       apiCache
         .callEndpoint(`api/cropyields/${formData.cropId}/${nmpFile.farmDetails.RegionLocationId}/`)
         .then((response) => {
@@ -346,7 +346,7 @@ function CropsModal({
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.cropId]);
+  }, [formData.cropId, selectedCrop]);
 
   // Set data for nutrients added table
   const requirementRows = useMemo(() => {
@@ -463,7 +463,7 @@ function CropsModal({
                 <>
                   {(() => {
                     const availablePreviousCrops = previousCrops.filter(
-                      (crop) => crop.cropid === Number(formData.cropId),
+                      (crop) => crop.cropid === formData.cropId,
                     );
 
                     return availablePreviousCrops.length > 0 ? (

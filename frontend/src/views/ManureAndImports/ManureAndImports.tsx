@@ -79,7 +79,7 @@ export default function ManureAndImports() {
       updatedManureFormData = {
         ...data,
         AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
-        AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10).toString()} U.S. gallons`,
+        AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10)} U.S. gallons`,
       };
     } else if (data.ManureType === ManureType.Solid) {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
@@ -111,8 +111,8 @@ export default function ManureAndImports() {
         ...data,
         AnnualAmountCubicYardsVolume: annualAmountCubicYardsVolume,
         AnnualAmountCubicMetersVolume: annualAmountCubicMetersVolume,
-        AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10).toString()} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10).toString()} m³)`,
-        AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10).toString()} tons`,
+        AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10)} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10)} m³)`,
+        AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10)} tons`,
       };
     } else {
       throw new Error("Manure type isn't set.");
@@ -322,7 +322,6 @@ export default function ManureAndImports() {
         </ButtonGroup>
       </div>
       <ManureImportModal
-        key={isDialogOpen.toString()}
         initialModalData={manureFormData}
         handleDialogClose={handleDialogClose}
         handleSubmit={handleSubmit}
