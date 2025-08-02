@@ -1,7 +1,7 @@
 /**
  * @summary This is the modal for the Storage page
  */
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import Divider from '@mui/material/Divider';
 import { Button, ButtonGroup, Form } from '@bcgov/design-system-react-components';
 import { formCss } from '../../common.styles';
@@ -52,8 +52,7 @@ export default function StorageModal({
       : initialModalData || DEFAULT_FORM_DATA,
   );
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (formData.manureType === undefined) throw new Error('Form validation failed.');
     if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
 

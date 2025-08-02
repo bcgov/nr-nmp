@@ -5,6 +5,7 @@ const DEFAULT_NMPFILE: NMPFile = {
     Year: '',
     FarmName: '',
     FarmRegion: 0,
+    RegionLocationId: 0,
     FarmAnimals: [],
     HasHorticulturalCrops: false,
     HasBerries: false,

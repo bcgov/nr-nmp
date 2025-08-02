@@ -1,9 +1,9 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import { TextField } from '@bcgov/design-system-react-components';
 import { formGridBreakpoints } from '../../common.styles';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { SolidManureStorageSystem, SolidManureStorage } from '@/types';
+import { TextField, NumberField } from '@/components/common';
 
 type SolidStorageDetailsProps = {
   formData: SolidManureStorageSystem;
@@ -48,14 +48,14 @@ export default function SolidStorageDetails({ formData, setFormData }: SolidStor
           orientation="horizontal"
         />
         {!formData.manureStorage.isStructureCovered && (
-          <TextField
+          <NumberField
             isRequired
             label="Uncovered Area of Storage (ft2)"
-            type="number"
-            value={String(formData.manureStorage.uncoveredAreaSqFt)}
-            onChange={(e: string) => {
-              handleStorageChange({ uncoveredAreaSqFt: Number(e) });
+            value={formData.manureStorage.uncoveredAreaSqFt}
+            onChange={(e: number) => {
+              handleStorageChange({ uncoveredAreaSqFt: e });
             }}
+            minValue={0}
           />
         )}
       </Grid>

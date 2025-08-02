@@ -1,18 +1,11 @@
 /**
  * @summary This is the modal for imported (i.e. manually input) manures
  */
-import { ComponentProps, FormEvent, useContext, useEffect, useState } from 'react';
+import { ComponentProps, useContext, useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import {
-  Button,
-  ButtonGroup,
-  Dialog,
-  Modal,
-  Form,
-  TextField,
-} from '@bcgov/design-system-react-components';
-import { Select } from '@/components/common';
+import { Button, ButtonGroup, Dialog, Modal, Form } from '@bcgov/design-system-react-components';
+import { NumberField, Select, TextField } from '@/components/common';
 
 import { APICacheContext } from '@/context/APICacheContext';
 import {
@@ -89,10 +82,7 @@ export default function ManureImportModal({
     );
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    // Prevent default browser page refresh.
-    e.preventDefault();
-
+  const onSubmit = () => {
     if (notUniqueNameCheck()) {
       console.error('not unique name');
     } else {
@@ -131,22 +121,18 @@ export default function ManureImportModal({
               spacing={2}
             >
               <Grid size={formGridBreakpoints}>
-                <span
-                  className={`bcds-react-aria-Select--Label ${notUniqueNameCheck() ? '--error' : ''}`}
-                />
                 <TextField
                   isRequired
                   label="Material name"
-                  name="UniqueMaterialName"
                   value={formData.UniqueMaterialName}
                   onChange={(e: string) => {
                     handleInputChange({ UniqueMaterialName: e });
                   }}
                   maxLength={100}
+                  validate={() =>
+                    notUniqueNameCheck() ? 'Unique material name required.' : undefined
+                  }
                 />
-                {notUniqueNameCheck() && (
-                  <span className="--error">Unique material name required</span>
-                )}
               </Grid>
               <Grid size={formGridBreakpoints}>
                 <Select
@@ -161,23 +147,21 @@ export default function ManureImportModal({
                       ManagedManureName: `${formData.UniqueMaterialName}, ${ManureType[e as number]}`,
                       // Reset dependent inputs on changes
                       Units: undefined,
-                      Moisture: '50.0',
+                      Moisture: 50,
                     });
                   }}
                   noSort
                 />
               </Grid>
               <Grid size={formGridBreakpoints}>
-                <TextField
+                <NumberField
                   isRequired
                   label="Amount per year"
-                  type="number"
-                  name="AnnualAmount"
-                  value={String(formData.AnnualAmount)}
-                  onChange={(e: string) => {
-                    handleInputChange({ AnnualAmount: Number(e) });
+                  value={formData.AnnualAmount}
+                  onChange={(e: number) => {
+                    handleInputChange({ AnnualAmount: e });
                   }}
-                  maxLength={7}
+                  minValue={0}
                 />
               </Grid>
 
@@ -199,16 +183,13 @@ export default function ManureImportModal({
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
-                    <TextField
+                    <NumberField
                       isRequired
                       label="Moisture (%)"
-                      type="number"
-                      name="Moisture"
                       value={formData.Moisture}
-                      onChange={(e: string) => {
-                        handleInputChange({ Moisture: e });
-                      }}
-                      maxLength={7}
+                      onChange={(e) => handleInputChange({ Moisture: e })}
+                      minValue={0}
+                      maxValue={100}
                     />
                   </Grid>
                 </>

@@ -1,14 +1,8 @@
-/* eslint-disable eqeqeq */
 import { useState, useEffect, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import {
-  Button,
-  Button as ButtonGov,
-  ButtonGroup as ButtonGovGroup,
-  ButtonGroup,
-} from '@bcgov/design-system-react-components';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
@@ -26,7 +20,6 @@ import {
   DefaultManureFormData,
 } from '@/constants';
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
-import { StyledContent } from './manureAndImports.styles';
 import useAppState from '@/hooks/useAppState';
 import {
   ADD_ANIMALS,
@@ -36,7 +29,7 @@ import {
   STORAGE,
 } from '@/constants/routes';
 
-import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
+import { Tabs, View } from '../../components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
@@ -73,11 +66,11 @@ export default function ManureAndImports() {
 
     if (data.ManureType === ManureType.Liquid) {
       const liquidManureConversionFactor = liquidManureDropdownOptions.find(
-        (item) => item.inputunit == data.Units,
+        (item) => item.inputunit === data.Units,
       );
 
       const annualAmountUSGallonsVolume =
-        (data.AnnualAmount ?? 0) *
+        (data.AnnualAmount || 0) *
         (liquidManureConversionFactor?.usgallonsoutput
           ? parseFloat(liquidManureConversionFactor.usgallonsoutput)
           : 0);
@@ -85,31 +78,31 @@ export default function ManureAndImports() {
       updatedManureFormData = {
         ...data,
         AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
-        AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10).toString()} U.S. gallons`,
+        AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10)} U.S. gallons`,
       };
     } else if (data.ManureType === ManureType.Solid) {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
-        (item) => item.inputunit == data.Units,
+        (item) => item.inputunit === data.Units,
       );
 
       const annualAmountCubicMetersVolume =
-        (data.AnnualAmount ?? 0) *
+        (data.AnnualAmount || 0) *
         getDensityFactoredConversionUsingMoisture(
-          Number(data.Moisture),
+          data.Moisture || 0,
           solidManureConversionFactor?.cubicmetersoutput || '',
         );
 
       const annualAmountCubicYardsVolume =
-        (data.AnnualAmount ?? 0) *
+        (data.AnnualAmount || 0) *
         getDensityFactoredConversionUsingMoisture(
-          Number(data.Moisture),
+          data.Moisture || 0,
           solidManureConversionFactor?.cubicyardsoutput || '',
         );
 
       const annualAmountTonsWeight =
-        (data.AnnualAmount ?? 0) *
+        (data.AnnualAmount || 0) *
         getDensityFactoredConversionUsingMoisture(
-          Number(data.Moisture),
+          data.Moisture || 0,
           solidManureConversionFactor?.metrictonsoutput || '',
         );
 
@@ -117,8 +110,8 @@ export default function ManureAndImports() {
         ...data,
         AnnualAmountCubicYardsVolume: annualAmountCubicYardsVolume,
         AnnualAmountCubicMetersVolume: annualAmountCubicMetersVolume,
-        AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10).toString()} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10).toString()} m³)`,
-        AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10).toString()} tons`,
+        AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10)} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10)} m³)`,
+        AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10)} tons`,
       };
     } else {
       throw new Error("Manure type isn't set.");
@@ -307,57 +300,51 @@ export default function ManureAndImports() {
   );
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      {state.showAnimalsStep ? (
-        <PageTitle title="Animals and Manure" />
-      ) : (
-        <PageTitle title="Manure and Compost" />
-      )}
-      <>
-        <div css={addRecordGroupStyle}>
-          <ButtonGovGroup
-            alignment="end"
-            ariaLabel="A group of buttons"
-            orientation="horizontal"
+    <View
+      title={state.showAnimalsStep ? 'Animals and Manure' : 'Manure and Compost'}
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+    >
+      <div css={addRecordGroupStyle}>
+        <ButtonGroup
+          alignment="end"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            onPress={() => setIsDialogOpen(true)}
+            variant="secondary"
           >
-            <ButtonGov
-              size="medium"
-              onPress={() => setIsDialogOpen(true)}
-              variant="secondary"
-            >
-              Add Manure
-            </ButtonGov>
-          </ButtonGovGroup>
-        </div>
-        <ManureImportModal
-          key={isDialogOpen.toString()}
-          initialModalData={manureFormData}
-          handleDialogClose={handleDialogClose}
-          handleSubmit={handleSubmit}
-          manuresList={manures}
-          isOpen={isDialogOpen}
-          onOpenChange={handleDialogClose}
-          isDismissable
+            Add Manure
+          </Button>
+        </ButtonGroup>
+      </div>
+      <ManureImportModal
+        initialModalData={manureFormData}
+        handleDialogClose={handleDialogClose}
+        handleSubmit={handleSubmit}
+        manuresList={manures}
+        isOpen={isDialogOpen}
+        onOpenChange={handleDialogClose}
+        isDismissable
+      />
+      {state.showAnimalsStep && hasDairyCattle ? (
+        <Tabs
+          activeTab={1}
+          tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
         />
-        {state.showAnimalsStep && hasDairyCattle ? (
-          <Tabs
-            activeTab={1}
-            tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
-          />
-        ) : state.showAnimalsStep ? (
-          <Tabs
-            activeTab={1}
-            tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
-          />
-        ) : (
-          <Tabs
-            activeTab={0}
-            tabLabel={['Manure & Imports', 'Nutrient Analysis']}
-          />
-        )}
-      </>
+      ) : state.showAnimalsStep ? (
+        <Tabs
+          activeTab={1}
+          tabLabel={['Add Animals', 'Manure & Imports', 'Nutrient Analysis']}
+        />
+      ) : (
+        <Tabs
+          activeTab={0}
+          tabLabel={['Manure & Imports', 'Nutrient Analysis']}
+        />
+      )}
       {state.showAnimalsStep ? (
         <DataGrid
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
@@ -380,27 +367,6 @@ export default function ManureAndImports() {
         hideFooterPagination
         hideFooter
       />
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={handleNextPage}
-          type="submit"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

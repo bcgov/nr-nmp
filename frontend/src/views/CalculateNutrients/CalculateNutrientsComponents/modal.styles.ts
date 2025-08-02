@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 
-// eslint-disable-next-line import/prefer-default-export
 export const ModalContent = styled.div`
   background: #fff;
   padding: 20px;
@@ -11,4 +10,7 @@ export const ModalContent = styled.div`
 
 export const SectionTitle = styled.span`
   margin: auto;
+  font: var(--typography-regular-small-body);
+  color: var(--typography-color-primary);
+  padding: var(--layout-padding-xsmall) var(--layout-padding-none);
 `;

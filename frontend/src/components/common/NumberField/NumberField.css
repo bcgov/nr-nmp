@@ -1,0 +1,133 @@
+
+.bcds-react-aria-NumberField {
+  display: inline-flex;
+  flex-direction: column;
+  /* Hacks for `stretch`: https://caniuse.com/mdn-css_properties_max-width_stretch */
+  align-self: stretch;
+  max-width: -moz-available;
+  max-width: -webkit-fill-available;
+}
+
+/* Styles for the text label above the input field */
+.bcds-react-aria-NumberField--Label {
+  font: var(--typography-regular-small-body);
+  color: var(--typography-color-primary);
+  padding: var(--layout-padding-xsmall) var(--layout-padding-none);
+}
+
+.bcds-react-aria-NumberField--Label .required {
+  color: var(--typography-color-secondary);
+  padding: var(--layout-padding-none) var(--layout-padding-xsmall);
+}
+
+/* Styles for the text description below the input field */
+.bcds-react-aria-NumberField--Description {
+  font: var(--typography-regular-small-body);
+  color: var(--typography-color-secondary);
+  padding: var(--layout-padding-xsmall) var(--layout-padding-none);
+}
+
+/* Styles for the input field container */
+.bcds-react-aria-NumberField--container {
+  color: var(--typography-color-primary);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--layout-margin-small);
+  background: var(--surface-color-forms-default);
+  box-sizing: border-box;
+  border: var(--layout-border-width-small) solid
+    var(--surface-color-border-default);
+  border-radius: var(--layout-border-radius-medium);
+  padding: var(--layout-padding-small) 12px;
+}
+
+/* Sizes */
+.bcds-react-aria-NumberField--container.small {
+  height: var(--layout-margin-xlarge);
+  min-height: var(--layout-margin-xlarge);
+}
+
+.bcds-react-aria-NumberField--container.medium {
+  height: var(--layout-margin-xxlarge);
+  min-height: var(--layout-margin-xxlarge);
+}
+
+/* Text input field */
+.bcds-react-aria-NumberField--Input {
+  font: var(--typography-regular-body);
+  padding: var(--layout-padding-none);
+  color: var(--typography-color-primary);
+  border: none;
+  flex-grow: 1;
+}
+
+.bcds-react-aria-NumberField--Input::placeholder {
+  color: var(--typography-color-placeholder);
+}
+
+/* Hover and focus states */
+
+.bcds-react-aria-NumberField--container
+  > .bcds-react-aria-NumberField--Input[data-focused] {
+  outline: none;
+}
+
+.bcds-react-aria-NumberField--container:focus-within {
+  border-radius: var(--layout-border-radius-large);
+  border: var(--layout-border-width-small) solid
+    var(--surface-color-border-active);
+  outline: solid var(--layout-border-width-medium)
+    var(--surface-color-border-active);
+  outline-offset: var(--layout-margin-hair);
+}
+
+.bcds-react-aria-NumberField--container:hover {
+  border-color: var(--surface-color-border-dark);
+}
+
+/* Disabled and invalid states */
+
+.bcds-react-aria-NumberField[data-disabled]
+  > .bcds-react-aria-NumberField--container {
+  background: var(--surface-color-forms-disabled);
+  cursor: not-allowed;
+}
+
+.bcds-react-aria-NumberField--Input[data-disabled] {
+  color: var(--typography-color-placeholder);
+  cursor: not-allowed;
+}
+
+.bcds-react-aria-NumberField[data-invalid]
+  > .bcds-react-aria-NumberField--container {
+  border-radius: var(--layout-border-radius-medium);
+  border: var(--layout-border-width-small) solid
+    var(--support-border-color-danger);
+  background: var(--surface-color-forms-default);
+}
+
+.bcds-react-aria-NumberField[data-readonly]
+  > .bcds-react-aria-NumberField--container {
+  background: var(--surface-color-forms-disabled);
+}
+
+.bcds-react-aria-NumberField[data-readonly]
+  > .bcds-react-aria-NumberField--container
+  > .bcds-react-aria-NumberField--Input {
+  background: var(--surface-color-forms-disabled);
+}
+
+/* Styles for the error message slot */
+.bcds-react-aria-NumberField--Error {
+  font: var(--typography-regular-small-body);
+  color: var(--typography-color-danger);
+}
+
+.bcds-react-aria-NumberField[data-invalid]
+  > .bcds-react-aria-NumberField--container
+  > svg#exclamation-icon {
+  color: var(--icons-color-danger);
+  min-width: var(--icons-size-medium);
+  height: var(--icons-size-medium);
+}

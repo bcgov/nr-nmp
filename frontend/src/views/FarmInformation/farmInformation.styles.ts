@@ -1,26 +1,13 @@
 /**
  * @summary Styling for FarmInformation view
  */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { buttonGroup, componentContainer, paragraphCss } from '../../common.styles';
 
-export const StyledContent = styled.div`
-  ${componentContainer}
-
-  ${paragraphCss}
-
-  ${buttonGroup}
+const Subheader = styled.div`
+  font-weight: 700;
+  size: 1.25rem;
+  line-height: 100%;
+  letter-spacing: 0px;
 `;
 
-export const subHeader = css({
-  fontWeight: '700',
-  size: '1.25rem',
-  lineHeight: '100%',
-  letterSpacing: '0px',
-});
-
-export default {
-  StyledContent,
-  subHeader,
-};
+export default Subheader;

@@ -1,8 +1,8 @@
-import { SelectOption } from '@/types';
+import { Animal, SelectOption } from '@/types';
 import AnimalFormWrapper from './AnimalFormWrapper';
 
 type UnselectedAnimalProps = {
-  animalOptions: SelectOption[];
+  animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   onCancel: () => void;
 };

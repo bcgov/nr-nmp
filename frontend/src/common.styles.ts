@@ -1,5 +1,6 @@
 import * as tokens from '@bcgov/design-tokens/js';
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 
 export const componentContainer = css({
   display: 'flex',
@@ -16,19 +17,15 @@ export const formCss = css({
 
   '.bcds-react-aria-TextField': {
     width: '100%',
+  },
 
-    '> .bcds-react-aria-TextField--Error': {
-      display: 'none;',
-    },
+  '.bcds-react-aria-NumberField': {
+    width: '100%',
   },
 
   '.bcds-react-aria-Select': {
     Button: {
       width: '100%',
-    },
-
-    '> .bcds-react-aria-Select--Error': {
-      display: 'none;',
     },
   },
 
@@ -36,20 +33,16 @@ export const formCss = css({
     display: 'none;',
   },
 
-  '.--error': {
-    color: 'var(--support-border-color-danger);',
+  '.bcds-react-aria-TextField[data-invalid] .bcds-react-aria-TextField--Label': {
+    color: 'var(--support-border-color-danger); !important',
+  },
 
-    '+ div > .bcds-react-aria-TextField--container': {
-      borderColor: 'var(--support-border-color-danger) !important;',
-    },
+  '.bcds-react-aria-NumberField[data-invalid] .bcds-react-aria-NumberField--Label': {
+    color: 'var(--support-border-color-danger); !important',
+  },
 
-    '+ div > div > input': {
-      borderColor: 'var(--support-border-color-danger) !important;',
-    },
-
-    '+ div > .bcds-react-aria-Select--Button': {
-      borderColor: 'var(--support-border-color-danger) !important;',
-    },
+  '.bcds-react-aria-Select--Label:has(+ .bcds-react-aria-Select--Button.invalid)': {
+    color: 'var(--support-border-color-danger); !important',
   },
 });
 
@@ -137,3 +130,7 @@ export const textFieldStyle = css({
     width: '100%',
   },
 });
+
+export const ErrorText = styled.div`
+  color: red;
+`;

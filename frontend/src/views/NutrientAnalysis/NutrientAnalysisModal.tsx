@@ -1,13 +1,13 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { FormEvent, Key, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Checkbox, TextField } from '@bcgov/design-system-react-components';
-import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { ManureNutrients, NMPFileFarmManureData, Manure } from '@/types';
-import { formCss, formGridBreakpoints } from '@/common.styles';
-import { Form, Select } from '@/components/common';
+import { Checkbox } from '@bcgov/design-system-react-components';
+import { ModalProps } from '@/components/common/Modal/Modal';
+import { ManureNutrients, NMPFileFarmManureData, Manure, SelectOption } from '@/types';
+import { formGridBreakpoints } from '@/common.styles';
+import { Form, Select, Modal, TextField, NumberField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
@@ -49,21 +49,18 @@ export default function NutrientAnalysisModal({
   );
   const apiCache = useContext(APICacheContext);
 
-  const [manureData, setManureData] = useState<Manure[]>([]);
+  const [manureOptions, setManureOptions] = useState<SelectOption<Manure>[]>([]);
 
   useEffect(() => {
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setManureData(data);
+        setManureOptions(
+          (data as Manure[]).map((ele) => ({ id: ele.name, label: ele.name, value: ele })),
+        );
       }
     });
   }, [apiCache]);
-
-  const handleModalSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    handleSubmit(formData);
-  };
 
   const handleInputChanges = (
     changes: Partial<NMPFileFarmManureData> | Partial<ManureNutrients>,
@@ -84,19 +81,19 @@ export default function NutrientAnalysisModal({
             next.UniqueMaterialName !== `Custom - ${next.materialType}`
               ? `Custom - ${value}`
               : next.UniqueMaterialName;
-          const selectedManure = manureData.find((manure) => manure.name === value);
+          const selectedManure = manureOptions.find((manure) => manure.value.name === value)?.value;
           if (!selectedManure) {
             throw new Error(`Manure type "${value}" not found.`);
           }
 
           const Nutrients: ManureNutrients = {
-            Moisture: String(selectedManure.moisture),
+            Moisture: selectedManure.moisture,
             N: selectedManure.nitrogen,
             NH4N: selectedManure.ammonia,
             P2O5: selectedManure.phosphorous,
             K2O: selectedManure.potassium,
             ManureId: selectedManure.id,
-            SolidLiquid: selectedManure.solidLiquid || '',
+            SolidLiquid: selectedManure.solidliquid || '',
           };
           next.materialType = value ? value.toString() : '';
           next.UniqueMaterialName = updatedUniqueMaterialName;
@@ -105,19 +102,21 @@ export default function NutrientAnalysisModal({
 
         // reset nutrient values when book value is selected
         if (name === 'bookLab' && next.bookLab !== value) {
-          const selectedManure = manureData.find((manure) => manure.name === next.materialType);
+          const selectedManure = manureOptions.find(
+            (manure) => manure.value.name === next.materialType,
+          )?.value;
           if (!selectedManure) {
             throw new Error(`Manure type "${value}" not found.`);
           }
           next.bookLab = value ? value.toString() : '';
           next.Nutrients = {
             ManureId: selectedManure.id,
-            Moisture: String(selectedManure.moisture),
+            Moisture: selectedManure.moisture,
             N: selectedManure.nitrogen,
             NH4N: selectedManure.ammonia,
             P2O5: selectedManure.phosphorous,
             K2O: selectedManure.potassium,
-            SolidLiquid: selectedManure.solidLiquid,
+            SolidLiquid: selectedManure.solidliquid,
           };
         }
 
@@ -141,8 +140,7 @@ export default function NutrientAnalysisModal({
       {...props}
     >
       <Form
-        css={formCss}
-        onSubmit={handleModalSubmit}
+        onConfirm={() => handleSubmit(formData)}
         onCancel={onCancel}
       >
         <Grid
@@ -152,7 +150,6 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              name="materialSource"
               items={manures.map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
                 id: ele.UniqueMaterialName,
                 label: ele.UniqueMaterialName,
@@ -160,21 +157,23 @@ export default function NutrientAnalysisModal({
               label="Source of Material"
               placeholder="Select Source of Material"
               selectedKey={formData.materialSource}
-              onSelectionChange={(e: Key) => {
-                handleInputChanges({ materialSource: e as string });
-              }}
+              onSelectionChange={(e) => handleInputChanges({ materialSource: e as string })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              name="name"
-              items={manureData.map((ele) => ({ id: ele.name, label: ele.name }))}
+              items={manureOptions}
               label="Material Type"
               placeholder="Select Material Type"
               selectedKey={formData.materialType}
-              onSelectionChange={(e: Key) => {
-                handleInputChanges({ materialType: e as string, bookLab: 'book' });
+              onSelectionChange={(e) => {
+                const opt = manureOptions.find((r) => r.id === e)!;
+                handleInputChanges({
+                  materialType: e as string,
+                  bookLab: 'book',
+                  nMineralizationId: opt.value.nmineralizationid,
+                });
               }}
               noSort
             />
@@ -185,9 +184,7 @@ export default function NutrientAnalysisModal({
               isDisabled={!(formData.materialSource && formData.materialType)}
               value="book"
               isSelected={formData.bookLab === 'book'}
-              onChange={(s: boolean) => {
-                handleInputChanges({ bookLab: s ? 'book' : '' });
-              }}
+              onChange={(s: boolean) => handleInputChanges({ bookLab: s ? 'book' : '' })}
             >
               Book Value
             </Checkbox>
@@ -198,9 +195,7 @@ export default function NutrientAnalysisModal({
               isDisabled={!(formData.materialSource && formData.materialType)}
               value="lab"
               isSelected={formData.bookLab === 'lab'}
-              onChange={(s: boolean) => {
-                handleInputChanges({ bookLab: s ? 'lab' : '' });
-              }}
+              onChange={(s: boolean) => handleInputChanges({ bookLab: s ? 'lab' : '' })}
             >
               Lab Value
             </Checkbox>
@@ -210,81 +205,74 @@ export default function NutrientAnalysisModal({
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="Material name"
-              name="UniqueMaterialName"
               value={formData.UniqueMaterialName}
-              onChange={(e: string) => {
-                handleInputChanges({ UniqueMaterialName: e });
-              }}
+              onChange={(e: string) => handleInputChanges({ UniqueMaterialName: e })}
               maxLength={100}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <TextField
-              isDisabled={formData.bookLab !== 'lab'}
-              isRequired={formData.bookLab === 'lab'}
-              label="Moisture (%)"
-              name="Moisture"
-              value={formData.Nutrients.Moisture}
-              onChange={(e: string) => {
-                handleInputChanges({ Moisture: e });
-              }}
-              maxLength={5}
-            />
+            {formData.bookLab === 'lab' ? (
+              <NumberField
+                isRequired
+                label="Moisture (%)"
+                value={
+                  Number.isNaN(formData.Nutrients.Moisture)
+                    ? undefined
+                    : Number(formData.Nutrients.Moisture)
+                }
+                onChange={(e) => handleInputChanges({ Moisture: String(e) })}
+                minValue={0}
+                maxValue={100}
+              />
+            ) : (
+              <TextField
+                isDisabled
+                label="Moisture (%)"
+                value={formData.Nutrients.Moisture}
+              />
+            )}
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <TextField
+            <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="N"
-              name="Moisture"
-              type="number"
-              value={formData.Nutrients?.N?.toString()}
-              onChange={(e: string) => {
-                handleInputChanges({ N: Number(e) });
-              }}
-              maxLength={3}
+              value={formData.Nutrients.N}
+              onChange={(e) => handleInputChanges({ N: e })}
+              minValue={0}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <TextField
+            <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="NH4-N (%)"
-              name="NH4N"
-              type="number"
-              value={formData.Nutrients?.NH4N?.toString()}
-              onChange={(e: string) => {
-                handleInputChanges({ NH4N: Number(e) });
-              }}
-              maxLength={3}
+              value={formData.Nutrients.NH4N}
+              onChange={(e) => handleInputChanges({ NH4N: e })}
+              minValue={0}
+              maxValue={100}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <TextField
+            <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="P (%)"
-              name="P2O5"
-              type="number"
-              value={formData.Nutrients?.P2O5?.toString()}
-              onChange={(e: string) => {
-                handleInputChanges({ P2O5: Number(e) });
-              }}
-              maxLength={3}
+              value={formData.Nutrients.P2O5}
+              onChange={(e) => handleInputChanges({ P2O5: e })}
+              minValue={0}
+              maxValue={100}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <TextField
+            <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="K (%)"
-              name="K2O"
-              type="number"
-              value={formData.Nutrients?.K2O?.toString()}
-              onChange={(e: string) => {
-                handleInputChanges({ K2O: Number(e) });
-              }}
-              maxLength={3}
+              value={formData.Nutrients.K2O}
+              onChange={(e) => handleInputChanges({ K2O: e })}
+              minValue={0}
+              maxValue={100}
             />
           </Grid>
         </Grid>

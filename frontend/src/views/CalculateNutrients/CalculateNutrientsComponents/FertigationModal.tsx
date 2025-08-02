@@ -49,9 +49,8 @@ export default function FertigationModal({
     >
       <ModalContent>
         <Form
-          onCancel={() => onCancel()}
-          onSubmit={() => handleSubmit()}
-          isConfirmDisabled={false}
+          onCancel={onCancel}
+          onConfirm={handleSubmit}
         >
           <Grid
             container

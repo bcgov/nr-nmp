@@ -62,23 +62,13 @@ export type PreviousCrop = {
 
 export type NMPFileSoilTestData = {
   soilTestId: number;
-  valNO3H?: string;
-  valP?: string;
-  valK?: string;
-  valPH?: string;
-  convertedKelownaK?: string;
-  convertedKelownaP?: string;
+  valNO3H?: number;
+  valP?: number;
+  valK?: number;
+  valPH?: number;
+  convertedKelownaK?: number;
+  convertedKelownaP?: number;
   sampleDate?: Date;
-};
-
-export type FormErrors = {
-  sampleDate?: string;
-  valNO3H?: string;
-  valP?: string;
-  valK?: string;
-  valPH?: string;
-  convertedKelownaK?: string;
-  convertedKelownaP?: string;
 };
 
 export interface NMPFileCropData extends CalculateNutrientsColumn {

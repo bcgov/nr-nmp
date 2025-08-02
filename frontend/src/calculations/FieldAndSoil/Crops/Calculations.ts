@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import axios from 'axios';
 import { env } from '@/env';
 import {
@@ -237,7 +236,7 @@ export function getCropRemovalN(
 
   // Special calculation for forage crops with crude protein data
   if (cropType.crudeproteinrequired) {
-    if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein == 0) {
+    if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein === 0) {
       nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield!;
     } else {
       const nToProteinConversionFactor = 0.625;
@@ -326,7 +325,7 @@ export async function getCropRequirementK2O(
 
   // Use default if soil test data is missing
   let STK = soilTest?.convertedKelownaK || defaultSoilTestData.convertedKelownaK;
-  if (STK == '0' || STK == null) STK = String(conversionFactors.defaultsoiltestkelownapotassium);
+  if (!STK) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
   const cropSTKRegionCd = await getCropSoilTestRegions(
     combinedCropData.cropId,
@@ -336,7 +335,7 @@ export async function getCropRequirementK2O(
 
   const potassiumCropGroupRegionCd = cropSTKRegionCd[0].potassiumcropgroupregioncode;
 
-  const sTKKelownaRange = await getKelownaRangeByPpm(Number(STK), 'soiltestpotassiumkelonwaranges');
+  const sTKKelownaRange = await getKelownaRangeByPpm(STK, 'soiltestpotassiumkelonwaranges');
 
   const stkKelownaRangeId = sTKKelownaRange.id;
   if (potassiumCropGroupRegionCd == null) {
@@ -375,7 +374,7 @@ export async function getCropRequirementP205(
 
   // Use default if soil test data is missing
   let STP = soilTest?.convertedKelownaP || defaultSoilTestData.convertedKelownaP;
-  if (STP == '0' || STP == null) STP = String(conversionFactors.defaultsoiltestkelownaphosphorous);
+  if (!STP) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 
   const cropSTPRegionCd = await getCropSoilTestRegions(
     combinedCropData.cropId,
@@ -385,10 +384,7 @@ export async function getCropRequirementP205(
 
   const phosphorousCropGroupRegionCd = cropSTPRegionCd[0].phosphorouscropgroupregioncode;
 
-  const sTPKelownaRange = await getKelownaRangeByPpm(
-    Number(STP),
-    'soiltestphosphorouskelonwaranges',
-  );
+  const sTPKelownaRange = await getKelownaRangeByPpm(STP, 'soiltestphosphorouskelonwaranges');
 
   const stpKelownaRangeId = sTPKelownaRange.id;
   if (phosphorousCropGroupRegionCd == null) {
