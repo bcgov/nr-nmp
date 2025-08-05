@@ -77,10 +77,7 @@ export default function FieldListModal({
               label="Field Name"
               value={formData.FieldName}
               onChange={(e) => handleFormFieldChange({ FieldName: e })}
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              validate={(_: string) =>
-                validateUniqueName() ? undefined : 'Field name must be unique'
-              }
+              validate={() => (validateUniqueName() ? undefined : 'Field name must be unique')}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
