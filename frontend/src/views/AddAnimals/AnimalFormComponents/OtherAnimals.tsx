@@ -62,8 +62,7 @@ export default function OtherAnimals({
     apiCache.callEndpoint(`api/animal_subtypes/${formData.animalId}/`).then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        // get subtypes with animalId = 9 swine
-        const subtypez: Subtype[] = (data as Subtype[]).map((row: any) => ({
+        const subtypez: Subtype[] = (data as Subtype[]).map((row: Subtype) => ({
           id: row.id,
           name: row.name,
           solidperpoundperanimalperday: row.solidperpoundperanimalperday,
