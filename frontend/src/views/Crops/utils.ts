@@ -291,16 +291,13 @@ export function cropsModalReducer(
       return {
         ...state,
         defaultYieldInTons: action.amount,
-        isFormYieldEqualToDefault:
-          formData.yield === undefined
-            ? true
-            : compareYieldToDefaultYield(
-                formData.yield,
-                action.amount,
-                formData.yieldHarvestUnit,
-                formData.cropId,
-                selectedCrop,
-              ),
+        isFormYieldEqualToDefault: compareYieldToDefaultYield(
+          formData.yield,
+          action.amount,
+          formData.yieldHarvestUnit,
+          formData.cropId,
+          selectedCrop,
+        ),
       };
 
     case 'RESTORE_DEFAULT_YIELD':
