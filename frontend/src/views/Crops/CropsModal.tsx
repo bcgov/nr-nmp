@@ -388,11 +388,6 @@ function CropsModal({
       case 'yieldHarvestUnit':
         dispatch({ type: 'SET_YIELD_HARVEST_UNIT', unit: value as HarvestUnit });
         return;
-      case 'numberOfPlantsPerAcre':
-        const selectedPlantOption = plantsPerAcre.find((option) => option.id === Number(value));
-        const numberOfPlants = selectedPlantOption ? Number(selectedPlantOption.label) : 0;
-        dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: numberOfPlants });
-        return;
       case 'whereWillPruningsGo':
         const selectedPruningOption = whereWillPruningsGo.find(
           (option) => option.id === Number(value),
@@ -725,11 +720,7 @@ function CropsModal({
                       isRequired
                       name="numberOfPlantsPerAcre"
                       items={plantsPerAcre.map((ele) => ({ id: ele.id, label: ele.label }))}
-                      selectedKey={
-                        plantsPerAcre.find(
-                          (option) => Number(option.label) === formData.numberOfPlantsPerAcre,
-                        )?.id || 0
-                      }
+                      selectedKey={formData.numberOfPlantsPerAcre || 0}
                       onSelectionChange={(e) =>
                         handleFormFieldChange('numberOfPlantsPerAcre', e as number)
                       }
