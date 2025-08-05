@@ -9,6 +9,7 @@ import {
   NMPFileSoilTestData,
 } from '@/types';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
+import { PLANT_AGES } from '@/constants';
 
 /**
  * Fetches crop conversion factors from the API
@@ -531,22 +532,9 @@ export async function getBlueberryNutrients(
     remK2o: 0,
   };
 
-  // Nitrogen calculation based on plant age
-  const NGmPlantArr = [
-    { key: '1', value: 6 },
-    { key: '2', value: 8.5 },
-    { key: '3', value: 14 },
-    { key: '4', value: 23 },
-    { key: '5', value: 28 },
-    { key: '6', value: 31 },
-    { key: '7', value: 40 },
-    { key: '8', value: 45 },
-    { key: '9 or more', value: 63 },
-  ];
-
   const plantAge = plantAgeYears;
   const plantsPerAcre = numberOfPlantsPerAcre || 0;
-  const tempN = NGmPlantArr.find((item) => item.key === plantAge)?.value || 0;
+  const tempN = PLANT_AGES.find((item) => item.key === plantAge)?.value || 0;
 
   nutrientInputs.reqN = Math.round(
     (plantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
