@@ -436,10 +436,7 @@ function CropsModal({
         // Leaf tissue will be completed after this ticket and updated here. Using temp values for now
         const leafTissueP = 1.1;
         const leafTissueK = 1.1;
-        if (
-          selectedCropType.id === CROP_TYPE_BERRIES_ID &&
-          selectedCrop.id === CROP_RASPBERRIES_ID
-        ) {
+        if (selectedCrop.id === CROP_RASPBERRIES_ID) {
           const nutrients = await getRaspberryNutrients(
             formData.yield,
             formData.willSawdustBeApplied,
@@ -451,10 +448,7 @@ function CropsModal({
             leafTissueK,
           );
           nutrientValues = extractNutrientValues(nutrients);
-        } else if (
-          selectedCropType.id === CROP_TYPE_BERRIES_ID &&
-          selectedCrop.id === CROP_BLUEBERRIES_ID
-        ) {
+        } else if (selectedCrop.id === CROP_BLUEBERRIES_ID) {
           const nutrients = await getBlueberryNutrients(
             formData.yield,
             formData.willSawdustBeApplied,
