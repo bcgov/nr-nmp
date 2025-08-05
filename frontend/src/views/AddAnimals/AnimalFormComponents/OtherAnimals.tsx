@@ -33,8 +33,7 @@ export default function OtherAnimals({
 }: OtherAnimalsProps) {
   const apiCache = useContext(APICacheContext);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
-  const [subtypes, setSubtypes] = useState<Subtype[]>([]);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
+  const [subtypes, setSubtypes] = useState<SelectOption<Subtype>[]>([]);
 
   const onSubmit = () => {
     // Calculate manure
@@ -45,9 +44,9 @@ export default function OtherAnimals({
         withManureCalc = {
           ...formData,
           manureData: {
-            name: selectedSubtype.name,
+            name: selectedSubtype.value.name,
             annualLiquidManure: calculateAnnualLiquidManure(
-              selectedSubtype.liquidpergalperanimalperday,
+              selectedSubtype.value.liquidpergalperanimalperday,
               formData.animalsPerFarm!,
               formData.daysCollected || 0,
             ),
@@ -58,10 +57,10 @@ export default function OtherAnimals({
         withManureCalc = {
           ...formData,
           manureData: {
-            name: selectedSubtype.name,
+            name: selectedSubtype.value.name,
             annualLiquidManure: undefined,
             annualSolidManure: calculateAnnualSolidManure(
-              selectedSubtype.solidperpoundperanimalperday,
+              selectedSubtype.value.solidperpoundperanimalperday,
               formData.animalsPerFarm!,
               formData.daysCollected || 0,
             ),
@@ -78,22 +77,20 @@ export default function OtherAnimals({
   useEffect(() => {
     apiCache.callEndpoint(`api/animal_subtypes/${formData.animalId}/`).then((response) => {
       if (response.status === 200) {
-        const { data } = response;
-        const subtypez: Subtype[] = (data as Subtype[]).map((row: Subtype) => ({
-          id: row.id,
-          name: row.name,
-          solidperpoundperanimalperday: row.solidperpoundperanimalperday,
-          liquidpergalperanimalperday: row.liquidpergalperanimalperday,
-        }));
-        setSubtypes(data);
-        const subtypeOptionz: { id: string; label: string }[] = subtypez.map((row) => ({
-          id: row.id.toString(),
-          label: row.name,
-        }));
-        setSubtypeOptions(subtypeOptionz);
+        setSubtypes(
+          response.map((row: Subtype) => ({
+            id: row.id,
+            label: row.name,
+            value: {
+              name: row.name,
+              solidperpoundperanimalperday: row.solidperpoundperanimalperday,
+              liquidpergalperanimalperday: row.liquidpergalperanimalperday,
+            },
+          })),
+        );
         // if animal not swine and only has one subtype option set subtype automatically
-        if (subtypeOptionz.length < 2) {
-          handleInputChanges({ subtype: String(subtypeOptionz[0].id) });
+        if (subtypes.length < 2) {
+          handleInputChanges({ subtype: String(subtypes[0].id) });
         }
       }
     });
@@ -114,7 +111,7 @@ export default function OtherAnimals({
             label="Sub Type"
             name="subtype"
             selectedKey={formData.subtype}
-            items={subtypeOptions}
+            items={subtypes}
             onSelectionChange={(e) => {
               handleInputChanges({ subtype: String(e) });
             }}
