@@ -87,10 +87,12 @@ class NitrogenRecommendationSerializer(serializers.ModelSerializer):
         model = NitrogenRecommendation
         fields = '__all__'
 
+
 class PlantAgeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlantAge
         fields = '__all__'
+
 
 class PlantsPerAcreSerializer(serializers.ModelSerializer):
     class Meta:

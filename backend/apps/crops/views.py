@@ -148,7 +148,7 @@ class CropsViewset(viewsets.ViewSet):
         distance_between_plants = DistanceBetweenPlants.objects.all()
         serializer = DistanceBetweenPlantsSerializer(distance_between_plants, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def whereWillPruningsGo(self, request):
         where_will_prunings_go = WhereWillPruningsGo.objects.all()
