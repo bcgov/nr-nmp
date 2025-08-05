@@ -4,7 +4,10 @@ export const FORAGE_ID = 1;
 export const COVER_CROP_ID = 2;
 export const GRAIN_OILSEED_ID = 4;
 export const CROP_TYPE_OTHER_ID = 6;
+export const CROP_TYPE_BERRIES_ID = 7;
 export const CROP_OTHER_ID = 66;
+export const CROP_BLUEBERRIES_ID = 75;
+export const CROP_RASPBERRIES_ID = 76;
 
 export type CropsConversionFactors = {
   nitrogenproteinconversion: number;
@@ -74,22 +77,23 @@ export type NMPFileSoilTestData = {
 export interface NMPFileCropData extends CalculateNutrientsColumn {
   cropId: number;
   cropTypeId: number;
-  yield?: number;
-  stdN?: number;
+  yield: number;
   crudeProtein?: number;
   prevCropId?: number;
   coverCropHarvested?: boolean;
   yieldHarvestUnit?: string;
   nCredit: number;
+  plantAgeYears?: string;
+  numberOfPlantsPerAcre?: number;
+  distanceBtwnPlantsRows?: string;
+  willPlantsBePruned?: boolean;
+  whereWillPruningsGo?: string;
+  willSawdustBeApplied?: boolean;
+
   /*
   Fields from old NMP, currently unused, feel free to re-add
+  stdN?: number;
   prevYearManureAppl_volCatCd?: number;
-  plantAgeYears?: number | null;
-  numberOfPlantsPerAcre?: number;
-  distanceBtwnPlantsRows?: number | null;
-  willPlantsBePruned?: boolean;
-  whereWillPruningsGo?: string | null;
-  willSawdustBeApplied?: boolean;
   */
 }
 

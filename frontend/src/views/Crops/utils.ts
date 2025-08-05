@@ -2,6 +2,7 @@
 import { HarvestUnit } from '@/constants';
 import { CropType, NMPFileCropData } from '@/types';
 import { Crop, CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/types/Crops';
+import { CROP_TYPE_BERRIES_ID } from '../../types/Crops';
 
 export function showUnitDropdown(cropTypeId: number) {
   return cropTypeId === GRAIN_OILSEED_ID;
@@ -156,6 +157,14 @@ export function cropsModalReducer(
           yieldHarvestUnit: showUnitDropdown(action.cropTypeId)
             ? HarvestUnit.BushelsPerAcre
             : undefined,
+          // Special case #4: if this is Berry, set berry fields to default, otherwise set to undefined
+          willSawdustBeApplied: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          willPlantsBePruned: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          // These berry fields have a default value of undefined
+          plantAgeYears: undefined,
+          numberOfPlantsPerAcre: undefined,
+          distanceBtwnPlantsRows: undefined,
+          whereWillPruningsGo: undefined,
         },
         selectedCrop: undefined,
         defaultYieldInTons: undefined,
@@ -241,13 +250,11 @@ export function cropsModalReducer(
           ...formData,
           yieldHarvestUnit: action.unit,
           yield:
-            formData.yield !== undefined
-              ? action.unit === HarvestUnit.TonsPerAcre
-                ? // Going from bu/ac to tons/ac
-                  formData.yield / selectedCrop!.harvestbushelsperton
-                : // Going from tons/ac to bu/ac
-                  formData.yield * selectedCrop!.harvestbushelsperton
-              : undefined,
+            action.unit === HarvestUnit.TonsPerAcre
+              ? // Going from bu/ac to tons/ac
+                formData.yield / selectedCrop!.harvestbushelsperton
+              : // Going from tons/ac to bu/ac
+                formData.yield * selectedCrop!.harvestbushelsperton,
         },
       };
 

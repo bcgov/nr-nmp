@@ -8,6 +8,7 @@ import {
   NMPFileSoilTestData,
 } from '@/types';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
+import { PLANT_AGES } from '@/constants';
 
 /**
  * Fetches crop conversion factors from the API
@@ -178,9 +179,9 @@ export function getCropRemovalK20(
 
   // Calculate removal differently based on crop harvesting method
   if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
-    k2oRemoval = (combinedCropData.yield! / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
+    k2oRemoval = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
   } else {
-    k2oRemoval = combinedCropData.yield! * crop.cropremovalfactork2o;
+    k2oRemoval = combinedCropData.yield * crop.cropremovalfactork2o;
   }
 
   return Math.round(k2oRemoval) || 0;
@@ -209,10 +210,9 @@ export function getCropRemovalP205(
 
   // Calculate removal differently based on crop harvesting method
   if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
-    p2o5Removal =
-      (combinedCropData.yield! / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
+    p2o5Removal = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
   } else {
-    p2o5Removal = combinedCropData.yield! * crop.cropremovalfactorp2o5;
+    p2o5Removal = combinedCropData.yield * crop.cropremovalfactorp2o5;
   }
 
   return Math.round(p2o5Removal) || 0;
@@ -237,20 +237,20 @@ export function getCropRemovalN(
   // Special calculation for forage crops with crude protein data
   if (cropType.crudeproteinrequired) {
     if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein === 0) {
-      nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield!;
+      nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield;
     } else {
       const nToProteinConversionFactor = 0.625;
       const unitConversionFactor = 0.5;
 
       const newCropRemovalFactorNitrogen =
         combinedCropData.crudeProtein / (nToProteinConversionFactor * unitConversionFactor);
-      nRemoval = newCropRemovalFactorNitrogen * combinedCropData.yield!;
+      nRemoval = newCropRemovalFactorNitrogen * combinedCropData.yield;
     }
   } else if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
     nRemoval =
-      (combinedCropData.yield! / crop.harvestbushelsperton) * crop.cropremovalfactornitrogen;
+      (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactornitrogen;
   } else {
-    nRemoval = combinedCropData.yield! * crop.cropremovalfactornitrogen;
+    nRemoval = combinedCropData.yield * crop.cropremovalfactornitrogen;
   }
 
   return Math.round(nRemoval) || 0;
@@ -287,10 +287,10 @@ export function getCropRequirementN(
       nRequirement = getCropRemovalN(combinedCropData, crop, cropType);
       break;
     case 4: {
-      if (combinedCropData.yield! !== 0) {
+      if (combinedCropData.yield !== 0) {
         // Wait wtf, why do we calculate 1????
         nRequirement = Math.round(
-          (combinedCropData.yield! / combinedCropData.yield!) *
+          (combinedCropData.yield / combinedCropData.yield) *
             crop.nitrogenrecommendationpoundperacre,
         );
       }
@@ -402,4 +402,172 @@ export async function getCropRequirementP205(
     Number(sTPRecommended.p2o5recommendationkilogramperhectare) *
       conversionFactors.kilogramperhectaretopoundperacreconversion,
   );
+}
+
+export async function getRaspberryNutrients(
+  cropYield: number,
+  willSawdustBeApplied: boolean,
+  willPlantsBePruned: boolean,
+  whereWillPruningsGo: string,
+  soilTestValP: number,
+  soilTestValK: number,
+  leafTissueP: number,
+  leafTissueK: number,
+) {
+  const nutrientInputs = {
+    reqN: 0,
+    reqP2o5: 0,
+    reqK2o: 0,
+    remN: 0,
+    remP2o5: 0,
+    remK2o: 0,
+  };
+
+  // Calculate nitrogen requirement based on yield
+  let tempN = 0;
+  if (cropYield < 3.35) {
+    tempN = 54;
+  } else if (cropYield >= 3.35 && cropYield <= 5.35) {
+    tempN = 71;
+  } else if (cropYield > 5.35) {
+    tempN = 89;
+  }
+
+  nutrientInputs.reqN = Math.round(tempN + (willSawdustBeApplied ? 25 : 0));
+
+  // Calculate P2O5 requirement based on leaf tissue P and soil test P
+  let tempReqP2O5 = 0;
+  if (leafTissueP < 0.16) {
+    if (soilTestValP < 15) {
+      tempReqP2O5 = 80;
+    } else if (soilTestValP >= 15 && soilTestValP <= 30) {
+      tempReqP2O5 = 70;
+    } else if (soilTestValP > 30) {
+      tempReqP2O5 = 40;
+    }
+  } else if (leafTissueP >= 0.16 && leafTissueP <= 0.18) {
+    if (soilTestValP < 15) {
+      tempReqP2O5 = 70;
+    } else if (soilTestValP >= 15 && soilTestValP <= 30) {
+      tempReqP2O5 = 60;
+    } else if (soilTestValP > 30) {
+      tempReqP2O5 = 30;
+    }
+  } else if (leafTissueP > 0.19) {
+    if (soilTestValP < 15) {
+      tempReqP2O5 = 40;
+    } else if (soilTestValP >= 15 && soilTestValP <= 30) {
+      tempReqP2O5 = 30;
+    } else if (soilTestValP > 30) {
+      tempReqP2O5 = 0;
+    }
+  }
+  nutrientInputs.reqP2o5 = Math.round(tempReqP2O5);
+
+  // Calculate K2O requirement based on leaf tissue K and soil test K
+  let tempReqK2O = 0;
+  if (leafTissueK < 1.0) {
+    if (soilTestValK < 120) {
+      tempReqK2O = 100;
+    } else if (soilTestValK >= 120 && soilTestValK <= 280) {
+      tempReqK2O = 80;
+    } else if (soilTestValK > 280) {
+      tempReqK2O = 50;
+    }
+  } else if (leafTissueK >= 1.0 && leafTissueK <= 1.25) {
+    if (soilTestValK < 120) {
+      tempReqK2O = 80;
+    } else if (soilTestValK >= 120 && soilTestValK <= 280) {
+      tempReqK2O = 60;
+    } else if (soilTestValK > 280) {
+      tempReqK2O = 30;
+    }
+  } else if (leafTissueK > 1.25) {
+    if (soilTestValK < 120) {
+      tempReqK2O = 50;
+    } else if (soilTestValK >= 120 && soilTestValK <= 280) {
+      tempReqK2O = 30;
+    } else if (soilTestValK > 280) {
+      tempReqK2O = 0;
+    }
+  }
+  nutrientInputs.reqK2o = Math.round(tempReqK2O);
+
+  // Calculate P2O5 removal
+  let tempRemP2O5 = cropYield;
+  const isPrunedAndRemoved = willPlantsBePruned && whereWillPruningsGo === 'Removed from field';
+  tempRemP2O5 = tempRemP2O5 * 1.145 + (isPrunedAndRemoved ? 2.748 : 0);
+  nutrientInputs.remP2o5 = Math.round(tempRemP2O5);
+
+  // Calculate K2O removal
+  let tempRemK2O = cropYield;
+  tempRemK2O = tempRemK2O * 3.63 + (isPrunedAndRemoved ? 11.374 : 0);
+  nutrientInputs.remK2o = Math.round(tempRemK2O);
+
+  return nutrientInputs;
+}
+
+export async function getBlueberryNutrients(
+  cropYield: number,
+  willSawdustBeApplied: boolean,
+  willPlantsBePruned: boolean,
+  whereWillPruningsGo: string,
+  plantAgeYears: string,
+  numberOfPlantsPerAcre: number,
+  soilTestValP: number,
+  leafTissueP: number,
+  leafTissueK: number,
+) {
+  const nutrientInputs = {
+    reqN: 0,
+    reqP2o5: 0,
+    reqK2o: 0,
+    remN: 0,
+    remP2o5: 0,
+    remK2o: 0,
+  };
+
+  const plantAge = plantAgeYears;
+  const plantsPerAcre = numberOfPlantsPerAcre || 0;
+  const tempN = PLANT_AGES.find((item) => item.key === plantAge)?.value || 0;
+
+  nutrientInputs.reqN = Math.round(
+    (plantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
+  );
+
+  // P2O5 requirement calculation
+  let tempReqP2O5 = 0;
+  const soilTestP = soilTestValP;
+  if (leafTissueP < 0.08) {
+    tempReqP2O5 = soilTestP < 100 ? 63 : 40;
+  } else if (leafTissueP >= 0.08 && leafTissueP <= 0.1) {
+    tempReqP2O5 = soilTestP < 100 ? 40 : 0;
+  } else if (leafTissueP > 0.1) {
+    tempReqP2O5 = 0;
+  }
+  nutrientInputs.reqP2o5 = Math.round(tempReqP2O5);
+
+  // K2O requirement calculation
+  let tempReqK2O = 0;
+  if (leafTissueK < 0.2) {
+    tempReqK2O = 103;
+  } else if (leafTissueK >= 0.2 && leafTissueK <= 0.4) {
+    tempReqK2O = 76;
+  } else if (leafTissueK > 0.4) {
+    tempReqK2O = 0;
+  }
+  nutrientInputs.reqK2o = Math.round(tempReqK2O);
+
+  // P2O5 removal calculation
+  let tempRemP2O5 = cropYield;
+  const isPrunedAndRemoved = willPlantsBePruned && whereWillPruningsGo === 'Removed from field';
+  tempRemP2O5 = tempRemP2O5 * 0.687 + (isPrunedAndRemoved ? 3.435 : 0);
+  nutrientInputs.remP2o5 = Math.round(tempRemP2O5);
+
+  // K2O removal calculation
+  let tempRemK2O = cropYield;
+  tempRemK2O = tempRemK2O * 3.509 + (isPrunedAndRemoved ? 7.865 : 0);
+  nutrientInputs.remK2o = Math.round(tempRemK2O);
+
+  return nutrientInputs;
 }
