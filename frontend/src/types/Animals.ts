@@ -64,7 +64,9 @@ export type OtherAnimalData = {
   manureType: ManureType;
   animalsPerFarm?: number;
   daysCollected?: number;
-  manureData?: { name: string; annualSolidManure: number };
+  manureData?:
+    | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
+    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
   manureId: string;
 };
 

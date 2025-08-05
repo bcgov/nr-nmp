@@ -1,13 +1,14 @@
-import { FormEvent, useContext, useEffect, useState } from 'react';
-import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
+import { useContext, useEffect, useState } from 'react';
+import { Checkbox, Select } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, ManureType, SelectOption } from '@/types';
-import { calculateAnnualSolidManure } from '../utils';
+import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
-import { OtherAnimalData } from '@/types/Animals';
+import { Animal, OtherAnimalData } from '@/types/Animals';
 import { MANURE_TYPE_OPTIONS } from '@/constants';
+import { NumberField } from '@/components/common';
 
 type Subtype = {
   id: number;
@@ -39,18 +40,34 @@ export default function OtherAnimals({
     // Calculate manure
     const selectedSubtype = subtypes.find((s) => s.id.toString() === formData.subtype);
     if (selectedSubtype !== null && selectedSubtype !== undefined) {
-      const withManureCalc = {
-        ...formData,
-        manureData: {
-          name: selectedSubtype.name,
-          manureType: ManureType.Solid,
-          annualSolidManure: calculateAnnualSolidManure(
-            selectedSubtype ? selectedSubtype.solidperpoundperanimalperday : 0,
-            formData.animalsPerFarm!,
-            formData.daysCollected || 0,
-          ),
-        },
-      };
+      let withManureCalc: OtherAnimalData;
+      if (formData.manureType === ManureType.Liquid) {
+        withManureCalc = {
+          ...formData,
+          manureData: {
+            name: selectedSubtype.name,
+            annualLiquidManure: calculateAnnualLiquidManure(
+              selectedSubtype.liquidpergalperanimalperday,
+              formData.animalsPerFarm!,
+              formData.daysCollected || 0,
+            ),
+            annualSolidManure: undefined,
+          },
+        };
+      } else {
+        withManureCalc = {
+          ...formData,
+          manureData: {
+            name: selectedSubtype.name,
+            annualLiquidManure: undefined,
+            annualSolidManure: calculateAnnualSolidManure(
+              selectedSubtype.solidperpoundperanimalperday,
+              formData.animalsPerFarm!,
+              formData.daysCollected || 0,
+            ),
+          },
+        };
+      }
       handleSubmit(withManureCalc);
     } else {
       throw new Error('Submit occurred when it should be disabled.');
