@@ -93,8 +93,12 @@ export default function AddAnimalsModal({
     apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        const options = (data as Animal[]).map((row) => ({ id: String(row.id), label: row.name }));
-        setAnimalOptions(options);
+        const options = (data as Animal[]).map((row) => ({
+          id: String(row.id),
+          label: row.name,
+          value: row,
+        }));
+        setAnimals(options);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
