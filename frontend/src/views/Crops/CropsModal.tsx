@@ -237,11 +237,7 @@ function CropsModal({
 
       // Additional validation for blueberries
       if (selectedCrop?.id === CROP_BLUEBERRIES_ID) {
-        if (
-          !formData.plantAgeYears ||
-          formData.plantAgeYears === '' ||
-          formData.plantAgeYears === '0'
-        ) {
+        if (!formData.plantAgeYears || formData.plantAgeYears === 0) {
           newErrors.plantAgeYears = 'Plant age is required';
         }
 
@@ -391,6 +387,18 @@ function CropsModal({
         return;
       case 'yieldHarvestUnit':
         dispatch({ type: 'SET_YIELD_HARVEST_UNIT', unit: value as HarvestUnit });
+        return;
+      case 'numberOfPlantsPerAcre':
+        const selectedPlantOption = plantsPerAcre.find((option) => option.id === Number(value));
+        const numberOfPlants = selectedPlantOption ? Number(selectedPlantOption.label) : 0;
+        dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: numberOfPlants });
+        return;
+      case 'whereWillPruningsGo':
+        const selectedPruningOption = whereWillPruningsGo.find(
+          (option) => option.id === Number(value),
+        );
+        const pruningLocation = selectedPruningOption ? selectedPruningOption.label : '';
+        dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: pruningLocation });
         return;
       default:
         dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
@@ -717,7 +725,11 @@ function CropsModal({
                       isRequired
                       name="numberOfPlantsPerAcre"
                       items={plantsPerAcre.map((ele) => ({ id: ele.id, label: ele.label }))}
-                      selectedKey={formData.numberOfPlantsPerAcre || 0}
+                      selectedKey={
+                        plantsPerAcre.find(
+                          (option) => Number(option.label) === formData.numberOfPlantsPerAcre,
+                        )?.id || 0
+                      }
                       onSelectionChange={(e) =>
                         handleFormFieldChange('numberOfPlantsPerAcre', e as number)
                       }
@@ -773,7 +785,11 @@ function CropsModal({
                       isRequired
                       name="whereWillPruningsGo"
                       items={whereWillPruningsGo.map((ele) => ({ id: ele.id, label: ele.label }))}
-                      selectedKey={formData.whereWillPruningsGo || 0}
+                      selectedKey={
+                        whereWillPruningsGo.find(
+                          (option) => option.label === formData.whereWillPruningsGo,
+                        )?.id || 0
+                      }
                       onSelectionChange={(e) =>
                         handleFormFieldChange('whereWillPruningsGo', e as number)
                       }

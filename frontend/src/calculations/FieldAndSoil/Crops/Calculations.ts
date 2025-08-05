@@ -517,7 +517,7 @@ export async function getBlueberryNutrients(
   willSawdustBeApplied: boolean,
   willPlantsBePruned: boolean,
   whereWillPruningsGo: string,
-  plantAgeYears: string,
+  plantAgeYears: number,
   numberOfPlantsPerAcre: number,
   soilTestValP: number,
   leafTissueP: number,
@@ -532,12 +532,10 @@ export async function getBlueberryNutrients(
     remK2o: 0,
   };
 
-  const plantAge = plantAgeYears;
-  const plantsPerAcre = numberOfPlantsPerAcre || 0;
-  const tempN = PLANT_AGES.find((item) => item.key === plantAge)?.value || 0;
+  const tempN = PLANT_AGES.find((item) => item.key === plantAgeYears)?.value || 0;
 
   nutrientInputs.reqN = Math.round(
-    (plantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
+    (numberOfPlantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
   );
 
   // P2O5 requirement calculation
@@ -565,7 +563,11 @@ export async function getBlueberryNutrients(
 
   // P2O5 removal calculation
   let tempRemP2O5 = cropYield;
+  console.log('tempRemP2O5 before:', tempRemP2O5);
+  console.log('willPlantsBePruned:', willPlantsBePruned);
+  console.log('whereWillPruningsGo:', whereWillPruningsGo);
   const isPrunedAndRemoved = willPlantsBePruned && whereWillPruningsGo === 'Removed from field';
+  console.log('isPrunedAndRemoved:', isPrunedAndRemoved);
   tempRemP2O5 = tempRemP2O5 * 0.687 + (isPrunedAndRemoved ? 3.435 : 0);
   nutrientInputs.remP2o5 = Math.round(tempRemP2O5);
 
