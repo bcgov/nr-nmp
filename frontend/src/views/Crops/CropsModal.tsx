@@ -237,11 +237,7 @@ function CropsModal({
 
       // Additional validation for blueberries
       if (selectedCrop?.id === CROP_BLUEBERRIES_ID) {
-        if (
-          !formData.plantAgeYears ||
-          formData.plantAgeYears === '' ||
-          formData.plantAgeYears === '0'
-        ) {
+        if (!formData.plantAgeYears || formData.plantAgeYears === 0) {
           newErrors.plantAgeYears = 'Plant age is required';
         }
 
@@ -392,6 +388,13 @@ function CropsModal({
       case 'yieldHarvestUnit':
         dispatch({ type: 'SET_YIELD_HARVEST_UNIT', unit: value as HarvestUnit });
         return;
+      case 'whereWillPruningsGo':
+        const selectedPruningOption = whereWillPruningsGo.find(
+          (option) => option.id === Number(value),
+        );
+        const pruningLocation = selectedPruningOption ? selectedPruningOption.label : '';
+        dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: pruningLocation });
+        return;
       default:
         dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
     }
@@ -434,8 +437,8 @@ function CropsModal({
           ? Number(field.SoilTest.convertedKelownaK)
           : 500; // Default from defaultSoilTestData
         // Leaf tissue will be completed after this ticket and updated here. Using temp values for now
-        const leafTissueP = 1.1;
-        const leafTissueK = 1.1;
+        const leafTissueP = 0;
+        const leafTissueK = 0;
         if (selectedCrop.id === CROP_RASPBERRIES_ID) {
           const nutrients = await getRaspberryNutrients(
             formData.yield,
@@ -773,7 +776,11 @@ function CropsModal({
                       isRequired
                       name="whereWillPruningsGo"
                       items={whereWillPruningsGo.map((ele) => ({ id: ele.id, label: ele.label }))}
-                      selectedKey={formData.whereWillPruningsGo || 0}
+                      selectedKey={
+                        whereWillPruningsGo.find(
+                          (option) => option.label === formData.whereWillPruningsGo,
+                        )?.id || 0
+                      }
                       onSelectionChange={(e) =>
                         handleFormFieldChange('whereWillPruningsGo', e as number)
                       }

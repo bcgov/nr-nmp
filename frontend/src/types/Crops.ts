@@ -94,7 +94,7 @@ export interface NMPFileCropData extends CalculateNutrientsColumn {
   coverCropHarvested?: boolean;
   yieldHarvestUnit?: string;
   nCredit: number;
-  plantAgeYears: string;
+  plantAgeYears: number;
   numberOfPlantsPerAcre: number;
   distanceBtwnPlantsRows: string;
   willPlantsBePruned: boolean;
