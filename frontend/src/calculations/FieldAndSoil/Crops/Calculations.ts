@@ -563,11 +563,7 @@ export async function getBlueberryNutrients(
 
   // P2O5 removal calculation
   let tempRemP2O5 = cropYield;
-  console.log('tempRemP2O5 before:', tempRemP2O5);
-  console.log('willPlantsBePruned:', willPlantsBePruned);
-  console.log('whereWillPruningsGo:', whereWillPruningsGo);
   const isPrunedAndRemoved = willPlantsBePruned && whereWillPruningsGo === 'Removed from field';
-  console.log('isPrunedAndRemoved:', isPrunedAndRemoved);
   tempRemP2O5 = tempRemP2O5 * 0.687 + (isPrunedAndRemoved ? 3.435 : 0);
   nutrientInputs.remP2o5 = Math.round(tempRemP2O5);
 

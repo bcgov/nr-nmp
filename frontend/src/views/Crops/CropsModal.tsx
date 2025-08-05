@@ -442,8 +442,8 @@ function CropsModal({
           ? Number(field.SoilTest.convertedKelownaK)
           : 500; // Default from defaultSoilTestData
         // Leaf tissue will be completed after this ticket and updated here. Using temp values for now
-        const leafTissueP = 1.1;
-        const leafTissueK = 1.1;
+        const leafTissueP = 0;
+        const leafTissueK = 0;
         if (selectedCrop.id === CROP_RASPBERRIES_ID) {
           const nutrients = await getRaspberryNutrients(
             formData.yield,
