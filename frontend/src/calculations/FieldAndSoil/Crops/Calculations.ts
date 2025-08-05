@@ -512,7 +512,7 @@ export async function getBlueberryNutrients(
   willSawdustBeApplied: boolean,
   willPlantsBePruned: boolean,
   whereWillPruningsGo: string,
-  plantAgeYears: string,
+  plantAgeYears: number,
   numberOfPlantsPerAcre: number,
   soilTestValP: number,
   leafTissueP: number,
@@ -527,12 +527,10 @@ export async function getBlueberryNutrients(
     remK2o: 0,
   };
 
-  const plantAge = plantAgeYears;
-  const plantsPerAcre = numberOfPlantsPerAcre || 0;
-  const tempN = PLANT_AGES.find((item) => item.key === plantAge)?.value || 0;
+  const tempN = PLANT_AGES.find((item) => item.key === plantAgeYears)?.value || 0;
 
   nutrientInputs.reqN = Math.round(
-    (plantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
+    (numberOfPlantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
   );
 
   // P2O5 requirement calculation
