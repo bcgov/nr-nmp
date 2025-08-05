@@ -25,4 +25,8 @@ urlpatterns = [
     path('cropyields/<int:cropid>/<int:locationid>/', CropsViewset.as_view({'get': 'cropYields'})),
     path('nitrogenrecommendation/', CropsViewset.as_view({'get': 'nitrogenRecommendation'})),
     path('nitrogenrecommendation/<int:id>/', CropsViewset.as_view({'get': 'nitrogenRecommendation'})),
+    path('plantage/', CropsViewset.as_view({'get': 'plantAge'})),
+    path('plantsperacre/', CropsViewset.as_view({'get': 'plantsPerAcre'})),
+    path('distancebetweenplants/', CropsViewset.as_view({'get': 'distanceBetweenPlants'})),
+    path('wherewillpruningsgo/', CropsViewset.as_view({'get': 'whereWillPruningsGo'})),
 ]

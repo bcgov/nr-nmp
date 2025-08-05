@@ -5,7 +5,8 @@ from .models import (
     SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
     SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
-    CropYields, NitrogenRecommendation
+    CropYields, NitrogenRecommendation, PlantAge, PlantsPerAcre,
+    DistanceBetweenPlants, WhereWillPruningsGo
 )
 
 
@@ -84,4 +85,28 @@ class CropYieldsSerializer(serializers.ModelSerializer):
 class NitrogenRecommendationSerializer(serializers.ModelSerializer):
     class Meta:
         model = NitrogenRecommendation
+        fields = '__all__'
+
+
+class PlantAgeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlantAge
+        fields = '__all__'
+
+
+class PlantsPerAcreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlantsPerAcre
+        fields = '__all__'
+
+
+class DistanceBetweenPlantsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DistanceBetweenPlants
+        fields = '__all__'
+
+
+class WhereWillPruningsGoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WhereWillPruningsGo
         fields = '__all__'
