@@ -37,23 +37,26 @@ export default function OtherAnimals({
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(formData);
 
     // Calculate manure
-    if (formData.subtype === null) throw new Error('Submit occurred when it should be disabled.');
-    const withManureCalc = {
-      ...formData,
-      manureData: {
-        name: formData.subtype?.name,
-        manureType: ManureType.Solid,
-        annualSolidManure: calculateAnnualSolidManure(
-          formData.subtype.solidperpoundperanimalperday,
-          formData.animalsPerFarm!,
-          formData.daysCollected || 0,
-        ),
-      },
-    };
-    handleSubmit(withManureCalc);
+    const selectedSubtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    if (selectedSubtype !== null && selectedSubtype !== undefined) {
+      const withManureCalc = {
+        ...formData,
+        manureData: {
+          name: selectedSubtype.name,
+          manureType: ManureType.Solid,
+          annualSolidManure: calculateAnnualSolidManure(
+            selectedSubtype ? selectedSubtype.solidperpoundperanimalperday : 0,
+            formData.animalsPerFarm!,
+            formData.daysCollected || 0,
+          ),
+        },
+      };
+      handleSubmit(withManureCalc);
+    } else {
+      throw new Error('Submit occurred when it should be disabled.');
+    }
   };
 
   // autoset subtype for animals that only have one subtype
