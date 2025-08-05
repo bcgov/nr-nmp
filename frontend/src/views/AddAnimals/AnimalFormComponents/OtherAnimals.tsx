@@ -82,7 +82,7 @@ export default function OtherAnimals({
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [formData.animalId]);
 
   return (
     <AnimalFormWrapper
