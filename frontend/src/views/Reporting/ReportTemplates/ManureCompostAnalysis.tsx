@@ -36,7 +36,7 @@ const TABLE_COLUMNS: GridColDef[] = [
 ];
 
 function NO_ROWS() {
-  return <div style={{ width: '100%', textAlign: 'center' }}>No data</div>;
+  return <div style={{ width: '100%', textAlign: 'center', paddingTop: '2rem' }}>No data</div>;
 }
 
 export default function ManureCompostAnalysis({

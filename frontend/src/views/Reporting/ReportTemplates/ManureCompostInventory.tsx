@@ -1,29 +1,30 @@
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useMemo } from 'react';
-import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
+import { inventoryTableCss, inventoryTableHeader } from '../reporting.styles';
 import {
   NMPFileImportedManureData,
   NMPFileGeneratedManureData,
   AnimalData,
   DairyCattleData,
+  NMPFileManureStorageSystem,
+  ManureType,
 } from '@/types';
 import { calculateAnnualWashWater } from '@/views/AddAnimals/utils';
-
-function NO_ROWS() {
-  return <div style={{ width: '100%', textAlign: 'center' }}>No data</div>;
-}
 
 export default function ManureCompostInventory({
   FarmAnimals = [],
   GeneratedManures = [],
   ImportedManures = [],
+  ManureStorageSystems = [],
 }: {
   FarmAnimals?: AnimalData[];
   GeneratedManures?: NMPFileGeneratedManureData[];
   ImportedManures?: NMPFileImportedManureData[];
+  ManureStorageSystems?: NMPFileManureStorageSystem[];
 }) {
-  // TODO categorize manures by table by if they have storage systems,
-  // and by liquid/solid storage systems when implemented
+  const getMilkWashAmount = (manureId: string) => {
+    const milkManure = FarmAnimals.find(
+      (animalEle) => animalEle.manureId === manureId,
+    ) as DairyCattleData;
+    if (!milkManure) return 0;
 
   const TABLE_COLUMNS: GridColDef[] = useMemo(
     () => [
@@ -84,44 +85,102 @@ export default function ManureCompostInventory({
 
     return resultArray;
   };
-  const assignedToStorage = insertWashWater(
-    [...GeneratedManures, ...ImportedManures].filter((ele) => ele.AssignedToStoredSystem),
-  );
 
-  const notAssignedToStorage = insertWashWater(
-    [...GeneratedManures, ...ImportedManures].filter((ele) => !ele.AssignedToStoredSystem),
-  );
-
-  const totalTable = [
-    {
-      UniqueMaterialName: 'Material in liquid or solid storage system',
-      AnnualAmountDisplayWeight: '',
-      bold: true,
-    },
-    ...assignedToStorage,
-    {
-      UniqueMaterialName: 'Material not assigned to storage system',
-      AnnualAmountDisplayWeight: '',
-      bold: true,
-    },
-    ...notAssignedToStorage,
+  const unAssignedManures = [
+    ...GeneratedManures.filter((ele) => !ele.AssignedToStoredSystem),
+    ...ImportedManures.filter((ele) => !ele.AssignedToStoredSystem),
   ];
+
   return (
-    <div>
-      <DataGrid
-        sx={{ ...customTableStyle, marginTop: '8px' }}
-        rows={totalTable}
-        columns={TABLE_COLUMNS}
-        getRowId={() => crypto.randomUUID()}
-        rowHeight={ROW_HEIGHT}
-        disableRowSelectionOnClick
-        disableColumnMenu
-        hideFooterPagination
-        hideFooter
-        slots={{
-          noRowsOverlay: NO_ROWS,
-        }}
-      />
-    </div>
+    <table css={inventoryTableCss}>
+      <thead css={inventoryTableHeader}>
+        <tr>
+          <th>Material</th>
+          <th colSpan={2}>Annual Amount</th>
+        </tr>
+      </thead>
+      {ManureStorageSystems.map((systemEle, index) => (
+        <tbody key={systemEle.name}>
+          {index !== 0 ? (
+            <tr>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <td colSpan={3} />
+            </tr>
+          ) : (
+            ''
+          )}
+          <tr style={{ fontWeight: 'bold' }}>
+            <td>
+              Material in {systemEle.manureType === ManureType.Liquid ? 'Liquid' : 'Solid'}
+              Storage System
+            </td>
+            <td style={{ textAlign: 'right' }}>
+              {systemEle.manuresInSystem.reduce(
+                (accumulator, currentValue) => currentValue.data.AnnualAmount + accumulator,
+                0,
+              )}
+            </td>
+            <td>{systemEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
+          </tr>
+          <tr>
+            <td
+              colSpan={3}
+              style={{ paddingLeft: '2rem' }}
+            >
+              Animal manure
+            </td>
+          </tr>
+          {systemEle.manuresInSystem.map((manureEle) => (
+            <tr key={manureEle.data.UniqueMaterialName}>
+              <td style={{ paddingLeft: '3rem' }}>{manureEle.data.UniqueMaterialName}</td>
+              <td style={{ textAlign: 'right' }}>{manureEle.data.AnnualAmount}</td>
+              <td>{systemEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
+            </tr>
+          ))}
+          {systemEle.manuresInSystem
+            .filter(
+              (manureEle) =>
+                'manureId' in manureEle.data && manureEle.data.UniqueMaterialName === 'Milking Cow',
+            )
+            .map((manureEle) => (
+              <tr key={manureEle.data.UniqueMaterialName}>
+                <td>Milking Center Wash Water</td>
+                <td style={{ textAlign: 'right' }}>
+                  {getMilkWashAmount((manureEle.data as NMPFileGeneratedManureData).manureId)}
+                </td>
+                <td>{systemEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
+              </tr>
+            ))}
+          <tr>
+            <td>Precipitation</td>
+            <td style={{ textAlign: 'right' }}>{systemEle.annualPrecipitation}</td>
+            <td>{systemEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
+          </tr>
+        </tbody>
+      ))}
+      {unAssignedManures.length > 0 && (
+        <tbody>
+          <tr>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <td colSpan={3} />
+          </tr>
+          <tr>
+            <td
+              colSpan={3}
+              style={{ fontWeight: 'bold' }}
+            >
+              Material not stored
+            </td>
+          </tr>
+          {unAssignedManures.map((manureEle) => (
+            <tr key={manureEle.UniqueMaterialName}>
+              <td style={{ paddingLeft: '3rem' }}>{manureEle.UniqueMaterialName}</td>
+              <td style={{ textAlign: 'right' }}>{manureEle.AnnualAmount}</td>
+              <td>{manureEle.ManureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
+            </tr>
+          ))}
+        </tbody>
+      )}
+    </table>
   );
 }

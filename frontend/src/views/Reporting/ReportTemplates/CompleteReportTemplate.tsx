@@ -7,6 +7,7 @@ import ManureCompostUse from './ManureCompostUse';
 import ManureCompostAnalysis from './ManureCompostAnalysis';
 import { APICacheContext } from '@/context/APICacheContext';
 import { Region, SelectOption, Subregion } from '@/types';
+import LiquidStorageCapacitySection from './LiquidStorageCapacitySection';
 
 export default function CompleteReportTemplate() {
   const { nmpFile } = useAppState().state;
@@ -75,15 +76,19 @@ export default function CompleteReportTemplate() {
           FarmAnimals={years[0].FarmAnimals}
           GeneratedManures={years[0].GeneratedManures}
           ImportedManures={years[0].ImportedManures}
+          ManureStorageSystems={years[0].ManureStorageSystems}
         />
       )}
       <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure and Compost Use</div>
+      {years[0] && <ManureCompostUse ManureStorageSystems={years[0].ManureStorageSystems} />}
+
+      <div style={{ fontWeight: 'bold', marginTop: '64px' }}>
+        Liquid Storage Capacity: October to March
+      </div>
       {years[0] && (
-        <ManureCompostUse
-          GeneratedManures={years[0].GeneratedManures}
-          ImportedManures={years[0].ImportedManures}
-        />
+        <LiquidStorageCapacitySection ManureStorageSystems={years[0].ManureStorageSystems} />
       )}
+
       <div style={{ marginTop: '64px' }}>
         {years.map((yearEle) =>
           yearEle.Fields?.map((fieldEle) => (

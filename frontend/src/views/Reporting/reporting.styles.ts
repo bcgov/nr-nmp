@@ -1,5 +1,8 @@
 import styled from '@emotion/styled';
 
+import { css } from '@emotion/react';
+// import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
+
 export const SectionHeader = styled.div({
   width: '100%',
   lineHeight: '3rem',
@@ -136,3 +139,26 @@ export const SubsectionLabel = styled.div`
   border-radius: 4px;
   border-left: 3px solid #6c757d;
 `;
+
+export const inventoryTableHeader = css({
+  fontWeight: 'bold',
+  backgroundColor: 'lightblue',
+});
+
+export const inventoryTableCss = css({
+  fontSize: '14px',
+  th: {
+    paddingLeft: '1rem',
+    borderStyle: 'none',
+  },
+  tr: {
+    td: {
+      borderColor: 'rgba(224, 224, 224, 1)',
+      borderWidth: '1px',
+      borderTopStyle: 'solid',
+      paddingLeft: '1rem',
+      paddingTop: '0.25rem',
+      paddingBottom: '0.25rem',
+    },
+  },
+});

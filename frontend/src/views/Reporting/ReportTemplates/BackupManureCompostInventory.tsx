@@ -13,7 +13,7 @@ function NO_ROWS() {
   return <div style={{ width: '100%', textAlign: 'center' }}>No data</div>;
 }
 
-export default function ManureCompostInventory({
+export default function BackupManureCompostInventory({
   FarmAnimals = [],
   GeneratedManures = [],
   ImportedManures = [],
