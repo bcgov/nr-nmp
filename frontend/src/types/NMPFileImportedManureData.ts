@@ -16,6 +16,7 @@ interface NMPFileImportedManureData {
   ManagedManureName: string;
   AssignedToStoredSystem?: boolean;
   AssignedWithNutrientAnalysis?: boolean;
+  manureId: string;
 }
 
 export default NMPFileImportedManureData;

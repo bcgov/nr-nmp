@@ -1,52 +1,72 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
-import { NMPFileImportedManureData, NMPFileGeneratedManureData } from '@/types';
+import { NMPFileManureStorageSystem, ManureType } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
-  // Name from the Manure database table
-  { field: 'materialType', headerName: 'Material', width: 100 },
   {
-    field: 'UniqueMaterialName',
-    headerName: 'Material Source',
+    field: 'title',
+    headerName: 'Material',
     width: 200,
   },
   {
-    field: 'AnnualAmountDisplayWeight',
+    field: 'AnnualAmount',
     headerName: 'Annual amount',
-    width: 150,
-    valueGetter: (_value, row) =>
-      row?.AnnualAmountDisplayWeight || row?.AnnualAmountDisplayVolume || '',
+    width: 200,
   },
   {
-    // Not currently collected
+    // Not currently collected, awaiting Fertigation function
     field: 'landApplied',
     headerName: 'Land applied',
     width: 150,
+    valueGetter: (value, row) =>
+      `${value ?? 0} ${row.liqOrSol === ManureType.Liquid ? 'US Gallons' : 'ton'}`,
   },
   {
-    // Not enough info collected to calculate
+    // Not enough info collected to calculate, awaiting Fertigation function
     field: 'amountRemaining',
     headerName: 'Amount remaining',
     width: 150,
+    valueGetter: (value) => `${value ?? 0}%`,
   },
 ];
 
 function NO_ROWS() {
-  return <div style={{ width: '100%', textAlign: 'center' }}>No data</div>;
+  return <div style={{ width: '100%', textAlign: 'center', paddingTop: '2rem' }}>No data</div>;
 }
 
 export default function ManureCompostUse({
-  GeneratedManures = [],
-  ImportedManures = [],
+  ManureStorageSystems = [],
 }: {
-  GeneratedManures?: NMPFileGeneratedManureData[];
-  ImportedManures?: NMPFileImportedManureData[];
+  ManureStorageSystems?: NMPFileManureStorageSystem[];
 }) {
+  const storedLiquidManuresAmount = ManureStorageSystems.filter(
+    (manureEle) => manureEle.manureType === ManureType.Liquid,
+  )
+    .flatMap((manureEle) => manureEle.manuresInSystem)
+    .reduce((accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount, 0);
+
+  const storedSolidManuresAmount = ManureStorageSystems.filter(
+    (manureEle) => manureEle.manureType === ManureType.Solid,
+  )
+    .flatMap((manureEle) => manureEle.manuresInSystem)
+    .reduce((accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount, 0);
+
   return (
     <div>
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '8px' }}
-        rows={[...GeneratedManures, ...ImportedManures]}
+        rows={[
+          {
+            liqOrSol: ManureType.Liquid,
+            title: 'Material in Liquid Storage System',
+            AnnualAmount: `${storedLiquidManuresAmount} US Gallons`,
+          },
+          {
+            liqOrSol: ManureType.Solid,
+            title: 'Material in Solid Storage System',
+            AnnualAmount: `${storedSolidManuresAmount} tons`,
+          },
+        ]}
         columns={TABLE_COLUMNS}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
