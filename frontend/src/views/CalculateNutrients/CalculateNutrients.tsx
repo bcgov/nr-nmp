@@ -34,6 +34,7 @@ import {
 import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 import CropsModal from '../Crops/CropsModal.tsx';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal.tsx';
+import FertigationModal from './CalculateNutrientsComponents/FertigationModal.tsx';
 
 function NoRows() {
   return <div />;
@@ -277,6 +278,35 @@ export default function CalculateNutrients() {
             Add Fertilizer
           </Button>
           <Button
+      <>
+        <ButtonGroup
+          alignment="end"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            aria-label="Add Manure"
+            onPress={() => {
+              setOpenDialog(['manure', undefined]);
+            }}
+            variant="secondary"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Add Manure
+          </Button>
+          <Button
+            size="medium"
+            aria-label="Add Fertilizer"
+            onPress={() => {
+              setOpenDialog(['fertilizer', undefined]);
+            }}
+            variant="secondary"
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Add Fertilizer
+          </Button>
+          <Button
             size="medium"
             aria-label="Add Fertigation"
             onPress={() => {
@@ -350,8 +380,8 @@ export default function CalculateNutrients() {
             modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
           />
         )}
-        {openDialog[0] === 'fertigation' && (
-          <FertigationModal
+          {openDialog[0] === 'fertigation' && (
+            <FertigationModal
             fieldIndex={activeField}
             initialModalData={undefined}
             rowEditIndex={openDialog[1]}
@@ -361,7 +391,7 @@ export default function CalculateNutrients() {
             onClose={handleDialogClose}
             modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
           />
-        )}
+          )}
         {openDialog[0] === 'other' && (
           <OtherModal
             fieldIndex={activeField}
