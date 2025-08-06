@@ -77,8 +77,8 @@ export default function OtherAnimals({
     apiCache.callEndpoint(`api/animal_subtypes/${formData.animalId}/`).then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        const mappedSubtypes = data.map((row: Subtype) => ({
-          id: row.name,
+        const mappedSubtypes = data.map((row: any) => ({
+          id: row.id,
           label: row.name,
           value: {
             name: row.name,
@@ -86,7 +86,6 @@ export default function OtherAnimals({
             liquidpergalperanimalperday: row.liquidpergalperanimalperday,
           },
         }));
-        console.log(mappedSubtypes);
         setSubtypes(mappedSubtypes);
         // if animal not swine and only has one subtype option set subtype automatically
         if (mappedSubtypes.length === 1) {
