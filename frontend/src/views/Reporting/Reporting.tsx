@@ -3,8 +3,8 @@ import { jsPDF } from 'jspdf';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
-import { SectionHeader, StyledContent } from './reporting.styles';
-import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
+import { SectionHeader } from './reporting.styles';
+import { View } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
 import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
 import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
@@ -112,11 +112,7 @@ export default function FieldList() {
   };
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Reporting" />
-
+    <View title="Reporting">
       {unassignedManures.length > 0 && (
         <Grid
           container
@@ -209,6 +205,6 @@ export default function FieldList() {
           <RecordKeepingSheets />
         </div>
       </div>
-    </StyledContent>
+    </View>
   );
 }

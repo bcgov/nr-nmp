@@ -7,9 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { Button, Button as ButtonGov, ButtonGroup } from '@bcgov/design-system-react-components';
-import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
-import { StyledContent } from './nutrientAnalysis.styles';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
+import { Tabs, View } from '../../components/common';
 import { AnimalData, DAIRY_COW_ID, NMPFileImportedManureData } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
@@ -111,6 +110,7 @@ export default function NutrientAnalysis() {
         width: 200,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'Moisture',
@@ -118,6 +118,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'N (%)',
@@ -126,6 +127,7 @@ export default function NutrientAnalysis() {
         minWidth: 100,
         maxWidth: 300,
         valueGetter: (param: string | number) => param,
+        sortable: false,
       },
       {
         headerName: 'NH4-N (%)',
@@ -133,6 +135,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'P (%)',
@@ -140,6 +143,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'K (%)',
@@ -147,6 +151,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         field: 'actions',
@@ -177,23 +182,24 @@ export default function NutrientAnalysis() {
   );
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Nutrient Analysis" />
+    <View
+      title="Nutrient Analysis"
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+    >
       <div css={addRecordGroupStyle}>
         <ButtonGroup
           alignment="end"
           ariaLabel="A group of buttons"
           orientation="horizontal"
         >
-          <ButtonGov
+          <Button
             size="medium"
             onPress={() => setIsDialogOpen(true)}
             variant="secondary"
           >
             Add Nutrient Anaylsis
-          </ButtonGov>
+          </Button>
         </ButtonGroup>
       </div>
       {isDialogOpen && (
@@ -240,27 +246,6 @@ export default function NutrientAnalysis() {
         hideFooterPagination
         hideFooter
       />
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={handleNextPage}
-          type="submit"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

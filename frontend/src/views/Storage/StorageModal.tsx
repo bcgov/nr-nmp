@@ -1,9 +1,8 @@
 /**
  * @summary This is the modal for the Storage page
  */
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import Divider from '@mui/material/Divider';
-import { Button, ButtonGroup, Form } from '@bcgov/design-system-react-components';
 import { formCss } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
 import {
@@ -13,7 +12,7 @@ import {
   NMPFileManureStorageSystem,
   SolidManureStorageSystem,
 } from '@/types';
-import { Modal } from '@/components/common';
+import { Form, Modal } from '@/components/common';
 import { ModalProps } from '@/components/common/Modal/Modal';
 import StorageSystemDetailsDisplay from './StorageSystemDetailsDisplay';
 import StorageSystemDetailsEdit from './StorageSystemDetailsEdit';
@@ -52,8 +51,7 @@ export default function StorageModal({
       : initialModalData || DEFAULT_FORM_DATA,
   );
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (formData.manureType === undefined) throw new Error('Form validation failed.');
     if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
 
@@ -103,7 +101,8 @@ export default function StorageModal({
     >
       <Form
         css={formCss}
-        onSubmit={handleSubmit}
+        onCancel={handleDialogClose}
+        onConfirm={handleSubmit}
       >
         {mode.mode === 'create' || mode.mode === 'system_edit' ? (
           <StorageSystemDetailsEdit
@@ -147,29 +146,6 @@ export default function StorageModal({
             )}
           </>
         )}
-        <Divider
-          aria-hidden="true"
-          component="div"
-          css={{ marginTop: '1rem', marginBottom: '1rem' }}
-        />
-        <ButtonGroup
-          alignment="end"
-          orientation="horizontal"
-        >
-          <Button
-            type="reset"
-            variant="secondary"
-            onPress={handleDialogClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-          >
-            Confirm
-          </Button>
-        </ButtonGroup>
       </Form>
     </Modal>
   );

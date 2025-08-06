@@ -2,6 +2,7 @@
 import { HarvestUnit } from '@/constants';
 import { CropType, NMPFileCropData } from '@/types';
 import { Crop, CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/types/Crops';
+import { CROP_TYPE_BERRIES_ID } from '../../types/Crops';
 
 export function showUnitDropdown(cropTypeId: number) {
   return cropTypeId === GRAIN_OILSEED_ID;
@@ -136,7 +137,6 @@ export function cropsModalReducer(
   action: CropsModalReducerAction,
 ): CropsModalState {
   const { formData, selectedCrop, defaultYieldInTons } = state;
-  const cropSet = isCropSet(formData.cropId, selectedCrop);
   switch (action.type) {
     case 'SET_CROP_TYPE_ID':
       return {
@@ -157,6 +157,14 @@ export function cropsModalReducer(
           yieldHarvestUnit: showUnitDropdown(action.cropTypeId)
             ? HarvestUnit.BushelsPerAcre
             : undefined,
+          // Special case #4: if this is Berry, set berry fields to default, otherwise set to undefined
+          willSawdustBeApplied: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          willPlantsBePruned: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          // These berry fields have a default value of undefined
+          plantAgeYears: undefined,
+          numberOfPlantsPerAcre: undefined,
+          distanceBtwnPlantsRows: undefined,
+          whereWillPruningsGo: undefined,
         },
         selectedCrop: undefined,
         defaultYieldInTons: undefined,
@@ -197,7 +205,7 @@ export function cropsModalReducer(
       };
 
     case 'SET_YIELD_IN_TONS':
-      if (cropSet && formData.yieldHarvestUnit !== undefined) {
+      if (isCropSet(formData.cropId, selectedCrop) && formData.yieldHarvestUnit !== undefined) {
         validateBushelConversion(selectedCrop);
         return {
           ...state,
@@ -225,7 +233,7 @@ export function cropsModalReducer(
         return state;
       }
       // Don't change yield if the crop isn't set
-      if (!cropSet) {
+      if (!isCropSet(formData.cropId, selectedCrop)) {
         return {
           ...state,
           formData: {
@@ -242,13 +250,11 @@ export function cropsModalReducer(
           ...formData,
           yieldHarvestUnit: action.unit,
           yield:
-            formData.yield !== undefined
-              ? action.unit === HarvestUnit.TonsPerAcre
-                ? // Going from bu/ac to tons/ac
-                  formData.yield / selectedCrop!.harvestbushelsperton
-                : // Going from tons/ac to bu/ac
-                  formData.yield * selectedCrop!.harvestbushelsperton
-              : undefined,
+            action.unit === HarvestUnit.TonsPerAcre
+              ? // Going from bu/ac to tons/ac
+                formData.yield / selectedCrop!.harvestbushelsperton
+              : // Going from tons/ac to bu/ac
+                formData.yield * selectedCrop!.harvestbushelsperton,
         },
       };
 
@@ -285,20 +291,17 @@ export function cropsModalReducer(
       return {
         ...state,
         defaultYieldInTons: action.amount,
-        isFormYieldEqualToDefault:
-          formData.yield === undefined
-            ? true
-            : compareYieldToDefaultYield(
-                formData.yield,
-                action.amount,
-                formData.yieldHarvestUnit,
-                formData.cropId,
-                selectedCrop,
-              ),
+        isFormYieldEqualToDefault: compareYieldToDefaultYield(
+          formData.yield,
+          action.amount,
+          formData.yieldHarvestUnit,
+          formData.cropId,
+          selectedCrop,
+        ),
       };
 
     case 'RESTORE_DEFAULT_YIELD':
-      if (defaultYieldInTons === undefined || !cropSet) {
+      if (defaultYieldInTons === undefined || !isCropSet(formData.cropId, selectedCrop)) {
         throw new Error('Crops modal entered bad state');
       }
       if (formData.yieldHarvestUnit !== undefined) {

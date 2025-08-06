@@ -15,7 +15,6 @@ import { NMPFileFieldData, NMPFileOtherNutrient } from './NMPFileFieldData';
 import NMPFileImportedManureData from './NMPFileImportedManureData';
 import SolidManureConversionFactors from './SolidManureConversionFactors';
 import Region from './Region';
-import Manure from './Manure';
 import {
   CalculateNutrientsColumn,
   CropNutrients,
@@ -24,6 +23,7 @@ import {
   Fertilizer,
   FertilizerType,
   FertilizerUnit,
+  DensityUnit,
 } from './calculateNutrients';
 import NMPFileYear from './NMPFileYear';
 import {
@@ -31,6 +31,7 @@ import {
   DAIRY_COW_ID,
   MILKING_COW_ID,
   POULTRY_ID,
+  SWINE_ID,
   DUCK_ID,
   PER_DAY_PER_ANIMAL_UNIT,
   PER_DAY_UNIT,
@@ -62,12 +63,14 @@ import {
   SlopedWallStorage,
   Shape,
 } from './NMPFileManureStorageSystem';
+import { Manure, Units } from './ManureAPI';
 
 export {
   BEEF_COW_ID,
   DAIRY_COW_ID,
   MILKING_COW_ID,
   POULTRY_ID,
+  SWINE_ID,
   DUCK_ID,
   PER_DAY_PER_ANIMAL_UNIT,
   PER_DAY_UNIT,
@@ -100,6 +103,7 @@ export type {
   NMPFileSoilTestData,
   NMPFileCropData,
   Manure,
+  Units,
   NMPFileFarmManureData,
   CalculateNutrientsColumn,
   CropNutrients,
@@ -116,6 +120,7 @@ export type {
   Fertilizer,
   FertilizerType,
   FertilizerUnit,
+  DensityUnit,
   NMPFileOtherNutrient,
   ManureStorage,
   Subregion,

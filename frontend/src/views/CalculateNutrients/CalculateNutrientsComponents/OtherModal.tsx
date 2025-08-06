@@ -2,13 +2,11 @@
  * @summary The field table on the calculate nutrients page
  */
 import React, { useState } from 'react';
-import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import Form from '@/components/common/Form/Form';
 import { NMPFileFieldData, NMPFileOtherNutrient } from '@/types';
 import { ModalContent, SectionTitle } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { textFieldStyle } from '@/common.styles';
+import { NumberField, TextField, Form } from '@/components/common';
 
 type OtherModalProps = {
   fieldIndex: number;
@@ -72,8 +70,8 @@ export default function OtherModal({
     setFormData((prev) => ({ ...prev, name: newName }));
   };
 
-  const handleNutrientChange = (prop: keyof NMPFileOtherNutrient, value: string) => {
-    setFormData((prev) => ({ ...prev, [prop]: Number(value) }));
+  const handleNutrientChange = (prop: keyof NMPFileOtherNutrient, value: number) => {
+    setFormData((prev) => ({ ...prev, [prop]: value }));
   };
 
   return (
@@ -84,9 +82,9 @@ export default function OtherModal({
     >
       <ModalContent css={{ width: '100%' }}>
         <Form
-          onCancel={() => onClose()}
-          onSubmit={() => handleSubmit()}
-          submitButtonText="Add to Field"
+          onCancel={onClose}
+          onConfirm={handleSubmit}
+          confirmButtonText="Add to Field"
         >
           <Grid
             container
@@ -101,87 +99,73 @@ export default function OtherModal({
                 onChange={(v) => handleNameChange(v)}
               />
             </Grid>
-            <SectionTitle className="bcds-react-aria-TextField--Label">
-              Available This Year (lb/ac)
-            </SectionTitle>
+            <SectionTitle>Available This Year (lb/ac)</SectionTitle>
             <Grid container>
               <Grid size="grow">
-                <span className="bcds-react-aria-TextField--Label">N</span>
-                <TextField
+                <NumberField
                   isRequired
-                  type="number"
-                  aria-label="N"
-                  value={formData.reqN.toString()}
+                  label="N"
+                  value={formData.reqN}
                   onChange={(v) => handleNutrientChange('reqN', v)}
-                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
-                <span className="bcds-react-aria-TextField--Label">
-                  P<sub>2</sub>O<sub>5</sub>
-                </span>
-                <TextField
+                <NumberField
                   isRequired
-                  type="number"
-                  aria-label="P2O5"
-                  value={formData.reqP2o5.toString()}
+                  label={
+                    <span>
+                      P<sub>2</sub>O<sub>5</sub>
+                    </span>
+                  }
+                  value={formData.reqP2o5}
                   onChange={(v) => handleNutrientChange('reqP2o5', v)}
-                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
-                <span className="bcds-react-aria-TextField--Label">
-                  K<sub>2</sub>O
-                </span>
-                <TextField
+                <NumberField
                   isRequired
-                  type="number"
-                  aria-label="K2O"
-                  value={formData.reqK2o.toString()}
+                  label={
+                    <span>
+                      K<sub>2</sub>O
+                    </span>
+                  }
+                  value={formData.reqK2o}
                   onChange={(v) => handleNutrientChange('reqK2o', v)}
-                  css={textFieldStyle}
                 />
               </Grid>
             </Grid>
-            <SectionTitle className="bcds-react-aria-TextField--Label">
-              Available Long Term (lb/ac)
-            </SectionTitle>
+            <SectionTitle>Available Long Term (lb/ac)</SectionTitle>
             <Grid container>
               <Grid size="grow">
-                <span className="bcds-react-aria-TextField--Label">N</span>
-                <TextField
+                <NumberField
                   isRequired
-                  type="number"
-                  aria-label="N"
-                  value={formData.remN.toString()}
+                  label="N"
+                  value={formData.remN}
                   onChange={(v) => handleNutrientChange('remN', v)}
-                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
-                <span className="bcds-react-aria-TextField--Label">
-                  P<sub>2</sub>O<sub>5</sub>
-                </span>
-                <TextField
+                <NumberField
                   isRequired
-                  type="number"
-                  aria-label="P2O5"
-                  value={formData.remP2o5.toString()}
+                  label={
+                    <span>
+                      P<sub>2</sub>O<sub>5</sub>
+                    </span>
+                  }
+                  value={formData.remP2o5}
                   onChange={(v) => handleNutrientChange('remP2o5', v)}
-                  css={textFieldStyle}
                 />
               </Grid>
               <Grid size="grow">
-                <span className="bcds-react-aria-TextField--Label">
-                  K<sub>2</sub>O
-                </span>
-                <TextField
+                <NumberField
                   isRequired
-                  type="number"
-                  aria-label="K2O"
-                  value={formData.remK2o.toString()}
+                  label={
+                    <span>
+                      K<sub>2</sub>O
+                    </span>
+                  }
+                  value={formData.remK2o}
                   onChange={(v) => handleNutrientChange('remK2o', v)}
-                  css={textFieldStyle}
                 />
               </Grid>
             </Grid>

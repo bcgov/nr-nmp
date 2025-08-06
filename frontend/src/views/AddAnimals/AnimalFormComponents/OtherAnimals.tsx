@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
+import { Checkbox } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -8,9 +8,9 @@ import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../util
 import { MANURE_TYPE_OPTIONS } from '@/constants';
 import AnimalFormWrapper from './AnimalFormWrapper';
 import { Animal, OtherAnimalData } from '@/types/Animals';
+import { NumberField, Select } from '@/components/common';
 
 type Subtype = {
-  animalid: number;
   name: string;
   liquidpergalperanimalperday: number;
   solidperpoundperanimalperday: number;
@@ -18,7 +18,7 @@ type Subtype = {
 
 type OtherAnimalsProps = {
   formData: OtherAnimalData;
-  animalOptions: SelectOption<Animal>[];
+  animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -78,7 +78,7 @@ export default function OtherAnimals({
       if (response.status === 200) {
         const { data } = response;
         const mappedSubtypes = data.map((row: any) => ({
-          id: row.id,
+          id: String(row.id),
           label: row.name,
           value: {
             name: row.name,
@@ -117,29 +117,29 @@ export default function OtherAnimals({
             isRequired
           />
 
-          <Select
-            label="Manure Type"
-            name="manureType"
-            selectedKey={formData.manureType}
-            items={MANURE_TYPE_OPTIONS}
-            onSelectionChange={(e) => {
-              handleInputChanges({ manureType: e as number });
-            }}
-            isRequired
-          />
+          {formData.subtype &&
+          subtypes.find((s) => s.id.toString() === formData.subtype)?.value
+            .solidperpoundperanimalperday !== 0 ? (
+            <Select
+              label="Manure Type"
+              name="manureType"
+              selectedKey={formData.manureType}
+              items={MANURE_TYPE_OPTIONS}
+              onSelectionChange={(e) => {
+                handleInputChanges({ manureType: e as number });
+              }}
+              isRequired
+            />
+          ) : null}
         </Grid>
       )}
       <Grid size={formGridBreakpoints}>
-        <TextField
+        <NumberField
           isRequired
           label="Average Animal Number on Farm"
-          type="number"
-          name="animalsPerFarm"
-          value={formData.animalsPerFarm?.toString()}
-          onChange={(e: string) => {
-            handleInputChanges({ animalsPerFarm: e });
-          }}
-          maxLength={7}
+          value={formData.animalsPerFarm}
+          onChange={(e) => handleInputChanges({ animalsPerFarm: e })}
+          minValue={0}
         />
       </Grid>
       <Grid size={12}>
@@ -155,17 +155,14 @@ export default function OtherAnimals({
       </Grid>
       {showCollectionDays && (
         <Grid size={formGridBreakpoints}>
-          <TextField
+          <NumberField
+            isRequired
             label="How many days is the manure collected?"
-            type="number"
-            name="daysCollected"
             size="small"
-            value={formData.daysCollected?.toString()}
-            onChange={(e: string) => {
-              handleInputChanges({ daysCollected: e });
-            }}
-            maxLength={3}
-            isRequired={showCollectionDays}
+            value={formData.daysCollected}
+            onChange={(e) => handleInputChanges({ daysCollected: e })}
+            minValue={0}
+            maxValue={365}
           />
         </Grid>
       )}

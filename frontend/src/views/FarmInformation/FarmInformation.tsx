@@ -8,24 +8,24 @@ import {
   ButtonGroup,
   Checkbox,
   CheckboxGroup,
+  // This is the one file where Form needs to be imported from the BC DS
+  // instead of the common components folder
   Form,
-  TextField,
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import type { Key } from 'react-aria-components';
 import useAppState from '@/hooks/useAppState';
 import { NMPFileFarmDetails } from '@/types/NMPFile';
-import { AppTitle, PageTitle, ProgressStepper, Select } from '@/components/common';
+import { Select, TextField, View } from '@/components/common';
 import {
   formCss,
   formGridBreakpoints,
   hideCheckboxGroup,
   showCheckboxGroup,
 } from '@/common.styles';
-import { StyledContent, subHeader } from './farmInformation.styles';
+import Subheader from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ADD_ANIMALS, FIELD_LIST, LANDING_PAGE } from '@/constants/routes';
-import { SelectOption } from '@/types';
+import { Region, SelectOption, Subregion } from '@/types';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 
 export default function FarmInformation() {
@@ -52,10 +52,8 @@ export default function FarmInformation() {
   const [rawAnimalNames, setRawAnimalNames] = useState<{ [id: string]: string }>({});
 
   // Props for region selections
-  const [regionOptions, setRegionOptions] = useState<Array<SelectOption>>([]);
-  const [subregionOptions, setSubregionOptions] = useState<Array<SelectOption>>([]);
-
-  const [isFormInvalid, setIsFormInvalid] = useState<boolean>(false);
+  const [regionOptions, setRegionOptions] = useState<SelectOption<Region>[]>([]);
+  const [subregionOptions, setSubregionOptions] = useState<SelectOption<Subregion>[]>([]);
 
   // Initialize year list up to current year + 1
   const yearOptions = useMemo(() => {
@@ -76,26 +74,28 @@ export default function FarmInformation() {
     apiCache.callEndpoint('api/animals/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
-        const animalDict: { [id: string]: string } = (data as { id: number; name: string }[])
-          .reduce(
-            (dict, row) => {
-              // eslint-disable-next-line no-param-reassign
-              dict[row.id] = row.name;
-              return dict;
-            },
-            {} as { [id: string]: string },
-          );
+        const animalDict: { [id: string]: string } = (
+          data as { id: number; name: string }[]
+        ).reduce(
+          (dict, row) => {
+            // eslint-disable-next-line no-param-reassign
+            dict[row.id] = row.name;
+            return dict;
+          },
+          {} as { [id: string]: string },
+        );
         setRawAnimalNames(animalDict);
       }
     });
 
     apiCache.callEndpoint('api/regions/').then((response) => {
       const { data } = response;
-      const regions = (data as { id: number; name: string }[]).map((row) => ({
-        id: row?.id.toString(),
+      const regions: SelectOption<Region>[] = (data as Region[]).map((row) => ({
+        id: row.id,
         label: row.name,
+        value: row,
       }));
-      setRegionOptions(regions as SelectOption[]);
+      setRegionOptions(regions);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -108,12 +108,13 @@ export default function FarmInformation() {
     }
     apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
       const { data } = response;
-      const subregions = (data as { id: number; name: string }[]).map((row) => ({
-        id: row?.id.toString(),
+      const subregions: SelectOption<Subregion>[] = (data as Subregion[]).map((row) => ({
+        id: row.id,
         label: row.name,
+        value: row,
       }));
 
-      setSubregionOptions(subregions as SelectOption[]);
+      setSubregionOptions(subregions);
     });
   }, [formData.FarmRegion, apiCache]);
 
@@ -152,8 +153,8 @@ export default function FarmInformation() {
   );
 
   const handleChange = useCallback(
-    (name: Key | string, value: boolean | string | number | string[]) => {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    (changes: Partial<NMPFileFarmDetails>) => {
+      setFormData((prevData) => ({ ...prevData, ...changes }));
     },
     [setFormData],
   );
@@ -177,14 +178,9 @@ export default function FarmInformation() {
   };
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Farm Information" />
+    <View title="Farm Information">
       <Form
         css={formCss}
-        validationBehavior="native"
-        onInvalid={() => setIsFormInvalid(true)}
         onSubmit={onSubmit}
       >
         <Grid
@@ -192,86 +188,60 @@ export default function FarmInformation() {
           spacing={2}
         >
           <Grid size={formGridBreakpoints}>
-            <span
-              id="FarmName-label"
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmName ? '--error' : ''}`}
-            >
-              Farm Name
-            </span>
             <TextField
-              aria-labelledby="FarmName-label"
-              isRequired
+              label="Farm Name"
               name="FarmName"
+              isRequired
               value={formData.FarmName}
               onInput={handleInputChange}
               id="farmName"
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <span
-              id="Year-label"
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.Year ? '--error' : ''}`}
-            >
-              Year
-            </span>
             <Select
-              aria-labelledby="Year-label"
+              label="Year"
               isRequired
-              name="Year"
               items={yearOptions}
               selectedKey={formData.Year}
-              onSelectionChange={(e) => handleChange('Year', e as string)}
+              onSelectionChange={(e) => handleChange({ Year: e as string })}
               noSort
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <span
-              id="FarmRegion-label"
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmRegion ? '--error' : ''}`}
-            >
-              Region
-            </span>
             <Select
-              aria-labelledby="FarmRegion-label"
+              label="Region"
               isRequired
               items={regionOptions}
               selectedKey={formData.FarmRegion}
-              onSelectionChange={(e) => handleChange('FarmRegion', e as string)}
+              onSelectionChange={(e) => {
+                const opt = regionOptions.find((r) => r.id === e)!;
+                handleChange({ FarmRegion: e as number, RegionLocationId: opt.value.locationid });
+              }}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <span
-              id="FarmSubRegion-label"
-              className={`bcds-react-aria-Select--Label ${isFormInvalid && !formData.FarmSubRegion ? '--error' : ''}`}
-            >
-              Subregion
-            </span>
             <Select
-              aria-labelledby="FarmSubRegion-label"
+              label="Subregion"
               isRequired
               items={subregionOptions}
               selectedKey={formData.FarmSubRegion}
-              onSelectionChange={(e) => handleChange('FarmSubRegion', e as string)}
+              onSelectionChange={(e) => handleChange({ FarmSubRegion: e as number })}
               isDisabled={!(subregionOptions && subregionOptions.length)}
             />
           </Grid>
-          <div css={subHeader}>
-            Select all agriculture that occupy your farm (check all that apply)
-          </div>
+          <Subheader>Select all agriculture that occupy your farm (check all that apply)</Subheader>
           <Grid size={12}>
             <YesNoRadioButtons
               value={formData.HasHorticulturalCrops || false}
               text="I have Horticultural crops"
-              onChange={(b) => {
-                handleChange('HasHorticulturalCrops', b);
-              }}
+              onChange={(b) => handleChange({ HasHorticulturalCrops: b })}
               orientation="horizontal"
             />
             <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
               <Checkbox
                 value="HasVegetables"
                 isSelected={formData.HasVegetables}
-                onChange={(s) => handleChange('HasVegetables', s)}
+                onChange={(s) => handleChange({ HasVegetables: s })}
               >
                 I have vegetables
               </Checkbox>
@@ -309,7 +279,7 @@ export default function FarmInformation() {
               }
               orientation="vertical"
               value={formData.FarmAnimals}
-              onChange={(val) => handleChange('FarmAnimals', val)}
+              onChange={(val) => handleChange({ FarmAnimals: val })}
             >
               {animalCheckboxes}
             </CheckboxGroup>
@@ -337,6 +307,6 @@ export default function FarmInformation() {
           </Button>
         </ButtonGroup>
       </Form>
-    </StyledContent>
+    </View>
   );
 }

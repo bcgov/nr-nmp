@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react';
 import Grid from '@mui/material/Grid';
-import { TextField } from '@bcgov/design-system-react-components';
-import { Select } from '@/components/common';
+import { NumberField, Select, TextField, YesNoRadioButtons } from '@/components/common';
 import { formGridBreakpoints } from '../../common.styles';
-import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
 import { LiquidManureStorageSystem } from '@/types';
 import {
   CircularStorage,
@@ -26,9 +24,6 @@ const storageShapeOptions = [
   { id: Shape.Circular, label: Shape[Shape.Circular] },
   { id: Shape.SlopedWallRectangular, label: Shape[Shape.SlopedWallRectangular] },
 ];
-
-const measurementValidation = (value: string) =>
-  Number(value) <= 0 ? 'Please enter a valid measurement.' : null;
 
 type LiquidStorageDetailsProps = {
   formData: LiquidManureStorageSystem;
@@ -138,129 +133,121 @@ export default function LiquidStorageDetails({
       >
         {selectedStorage.structure?.shape === Shape.Circular && (
           <div>
-            <TextField
+            <NumberField
               isRequired
               label="Diameter(ft)"
-              type="number"
-              value={String(selectedStorage.structure.diameterFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.diameterFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as CircularStorage),
-                  diameterFt: Number(e),
+                  diameterFt: e,
                 })
               }
+              minValue={0}
             />
-            <TextField
+            <NumberField
               isRequired
               label="Height(ft)"
-              type="number"
-              value={String(selectedStorage.structure.heightFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.heightFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as CircularStorage),
-                  heightFt: Number(e),
+                  heightFt: e,
                 })
               }
+              minValue={0}
             />
           </div>
         )}
         {selectedStorage.structure?.shape === Shape.Rectangular && (
           <div>
-            <TextField
+            <NumberField
               isRequired
               label="Length(ft)"
-              type="number"
-              value={String(selectedStorage.structure.lengthFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.lengthFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
-                  lengthFt: Number(e),
+                  lengthFt: e,
                 })
               }
+              minValue={0}
             />
-            <TextField
+            <NumberField
               isRequired
               label="Width(ft)"
-              type="number"
-              value={String(selectedStorage.structure.widthFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.widthFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
-                  widthFt: Number(e),
+                  widthFt: e,
                 })
               }
+              minValue={0}
             />
-            <TextField
+            <NumberField
               isRequired
               label="Height(ft)"
-              type="number"
-              value={String(selectedStorage.structure.heightFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.heightFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as RectangularStorage),
-                  heightFt: Number(e),
+                  heightFt: e,
                 })
               }
+              minValue={0}
             />
           </div>
         )}
         {selectedStorage.structure?.shape === Shape.SlopedWallRectangular && (
           <div>
-            <TextField
+            <NumberField
               isRequired
               label="Top-Length(ft)"
-              type="number"
-              value={String(selectedStorage.structure.topLengthFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.topLengthFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
-                  topLengthFt: Number(e),
+                  topLengthFt: e,
                 })
               }
+              minValue={0}
             />
-            <TextField
+            <NumberField
               isRequired
               label="Top-Width(ft)"
-              type="number"
-              value={String(selectedStorage.structure.topWidthFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.topWidthFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
-                  topWidthFt: Number(e),
+                  topWidthFt: e,
                 })
               }
+              minValue={0}
             />
-            <TextField
+            <NumberField
               isRequired
               label="Height(ft)"
-              type="number"
-              value={String(selectedStorage.structure.heightFt)}
-              validate={measurementValidation}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.heightFt}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
-                  heightFt: Number(e),
+                  heightFt: e,
                 })
               }
+              minValue={0}
             />
-            <TextField
+            <NumberField
               isRequired
               label="Slope of wall (X:1)"
-              type="number"
-              value={String(selectedStorage.structure.slopeOfWall)}
-              onChange={(e: string) =>
+              value={selectedStorage.structure.slopeOfWall}
+              onChange={(e: number) =>
                 handleStructureChange({
                   ...(selectedStorage.structure as SlopedWallStorage),
-                  slopeOfWall: Number(e),
+                  slopeOfWall: e,
                 })
               }
+              minValue={0}
             />
           </div>
         )}
