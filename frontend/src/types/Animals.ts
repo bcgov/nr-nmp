@@ -54,15 +54,18 @@ export type PoultryData = {
 
 // I didn't want to define the type like this but Typescript
 // doesn't allow defining types as an exclusion of specific strings
-export type OtherAnimalId = '4' | '5' | '7' | '8';
-export const OTHER_ANIMAL_IDS: OtherAnimalId[] = ['4', '5', '7', '8'];
+export type OtherAnimalId = '4' | '5' | '7' | '8' | '9';
+export const OTHER_ANIMAL_IDS: OtherAnimalId[] = ['4', '5', '7', '8', '9'];
 
 export type OtherAnimalData = {
   animalId: OtherAnimalId;
-  manureType: ManureType.Solid;
+  subtype?: string;
+  manureType: ManureType;
   animalsPerFarm?: number;
   daysCollected?: number;
-  manureData?: { name: string; annualSolidManure: number };
+  manureData?:
+    | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
+    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
   manureId: string;
 };
 

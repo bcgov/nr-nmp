@@ -94,9 +94,6 @@ export default function AddAnimalsModal({
       if (response.status === 200) {
         const { data } = response;
         const options = (data as Animal[]).map((row) => ({ id: String(row.id), label: row.name }));
-        // TODO: REMOVE ONCE WE HAVE SWINE
-        // This is a lazy way to take it out of the list
-        options.splice(options.length - 1, 1);
         setAnimalOptions(options);
       }
     });
