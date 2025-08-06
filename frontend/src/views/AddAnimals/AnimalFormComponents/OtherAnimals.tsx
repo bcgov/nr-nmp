@@ -1,22 +1,24 @@
-import { FormEvent, useContext, useEffect, useState } from 'react';
-import { Checkbox, TextField } from '@bcgov/design-system-react-components';
+import { useContext, useEffect, useState } from 'react';
+import { Checkbox, Select, TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { AnimalData, ManureType, SelectOption } from '@/types';
-import { calculateAnnualSolidManure } from '../utils';
+import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
+import { MANURE_TYPE_OPTIONS } from '@/constants';
 import AnimalFormWrapper from './AnimalFormWrapper';
-import { OtherAnimalData } from '@/types/Animals';
+import { Animal, OtherAnimalData } from '@/types/Animals';
 
 type Subtype = {
   animalid: number;
   name: string;
+  liquidpergalperanimalperday: number;
   solidperpoundperanimalperday: number;
 };
 
 type OtherAnimalsProps = {
   formData: OtherAnimalData;
-  animalOptions: SelectOption[];
+  animalOptions: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -30,37 +32,66 @@ export default function OtherAnimals({
 }: OtherAnimalsProps) {
   const apiCache = useContext(APICacheContext);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
-  const [subtype, setSubtype] = useState<Subtype | null>(null);
+  const [subtypes, setSubtypes] = useState<SelectOption<Subtype>[]>([]);
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = () => {
     // Calculate manure
-    if (subtype === null) throw new Error('Submit occurred when it should be disabled.');
-    const withManureCalc = {
-      ...formData,
-      manureData: {
-        name: subtype.name,
-        manureType: ManureType.Solid,
-        annualSolidManure: calculateAnnualSolidManure(
-          subtype.solidperpoundperanimalperday,
-          formData.animalsPerFarm!,
-          formData.daysCollected || 0,
-        ),
-      },
-    };
-    handleSubmit(withManureCalc);
+    const selectedSubtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    if (selectedSubtype !== null && selectedSubtype !== undefined) {
+      let withManureCalc: OtherAnimalData;
+      if (formData.manureType === ManureType.Liquid) {
+        withManureCalc = {
+          ...formData,
+          manureData: {
+            name: selectedSubtype.value.name,
+            annualLiquidManure: calculateAnnualLiquidManure(
+              selectedSubtype.value.liquidpergalperanimalperday,
+              formData.animalsPerFarm!,
+              formData.daysCollected || 0,
+            ),
+            annualSolidManure: undefined,
+          },
+        };
+      } else {
+        withManureCalc = {
+          ...formData,
+          manureData: {
+            name: selectedSubtype.value.name,
+            annualLiquidManure: undefined,
+            annualSolidManure: calculateAnnualSolidManure(
+              selectedSubtype.value.solidperpoundperanimalperday,
+              formData.animalsPerFarm!,
+              formData.daysCollected || 0,
+            ),
+          },
+        };
+      }
+      handleSubmit(withManureCalc);
+    } else {
+      throw new Error('Submit occurred when it should be disabled.');
+    }
   };
 
+  // autoset subtype for animals that only have one subtype
   useEffect(() => {
     apiCache.callEndpoint(`api/animal_subtypes/${formData.animalId}/`).then((response) => {
       if (response.status === 200) {
-        const castedData = response.data as Subtype[];
-        setSubtype({
-          animalid: castedData[0].animalid,
-          name: castedData[0].name,
-          solidperpoundperanimalperday: castedData[0].solidperpoundperanimalperday,
-        });
+        const { data } = response;
+        const mappedSubtypes = data.map((row: Subtype) => ({
+          id: row.name,
+          label: row.name,
+          value: {
+            name: row.name,
+            solidperpoundperanimalperday: row.solidperpoundperanimalperday,
+            liquidpergalperanimalperday: row.liquidpergalperanimalperday,
+          },
+        }));
+        console.log(mappedSubtypes);
+        setSubtypes(mappedSubtypes);
+        // if animal not swine and only has one subtype option set subtype automatically
+        if (mappedSubtypes.length === 1) {
+          handleInputChanges({ subtype: String(mappedSubtypes[0].id) });
+        }
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,9 +102,34 @@ export default function OtherAnimals({
       selectedAnimalId={formData.animalId}
       handleInputChanges={handleInputChanges}
       onSubmit={onSubmit}
-      isConfirmDisabled={subtype === null || String(subtype.animalid) !== formData.animalId}
+      isConfirmDisabled={!formData.subtype}
       {...props}
     >
+      {formData.animalId === '9' && (
+        <Grid size={formGridBreakpoints}>
+          <Select
+            label="Sub Type"
+            name="subtype"
+            selectedKey={formData.subtype}
+            items={subtypes}
+            onSelectionChange={(e) => {
+              handleInputChanges({ subtype: String(e) });
+            }}
+            isRequired
+          />
+
+          <Select
+            label="Manure Type"
+            name="manureType"
+            selectedKey={formData.manureType}
+            items={MANURE_TYPE_OPTIONS}
+            onSelectionChange={(e) => {
+              handleInputChanges({ manureType: e as number });
+            }}
+            isRequired
+          />
+        </Grid>
+      )}
       <Grid size={formGridBreakpoints}>
         <TextField
           isRequired
