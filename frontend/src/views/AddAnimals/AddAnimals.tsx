@@ -132,6 +132,7 @@ export default function AddAnimals() {
           }
           return <div>{params.value}</div>;
         },
+        sortable: false,
       },
       {
         field: 'manureData',
@@ -157,6 +158,7 @@ export default function AddAnimals() {
           }
           return <div>{params.value}</div>;
         },
+        sortable: false,
       },
       {
         field: 'actions',

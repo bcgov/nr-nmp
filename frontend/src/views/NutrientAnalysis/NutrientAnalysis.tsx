@@ -110,6 +110,7 @@ export default function NutrientAnalysis() {
         width: 200,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'Moisture',
@@ -117,6 +118,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'N (%)',
@@ -125,6 +127,7 @@ export default function NutrientAnalysis() {
         minWidth: 100,
         maxWidth: 300,
         valueGetter: (param: string | number) => param,
+        sortable: false,
       },
       {
         headerName: 'NH4-N (%)',
@@ -132,6 +135,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'P (%)',
@@ -139,6 +143,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         headerName: 'K (%)',
@@ -146,6 +151,7 @@ export default function NutrientAnalysis() {
         width: 100,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         field: 'actions',

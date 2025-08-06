@@ -96,9 +96,29 @@ export default function FieldList() {
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'FieldName', headerName: 'Field Name', width: 200, minWidth: 150, maxWidth: 300 },
-      { field: 'Area', headerName: 'Acres', width: 150, minWidth: 125, maxWidth: 300 },
-      { field: 'Comment', headerName: 'Comments (optional)', minWidth: 200, maxWidth: 300 },
+      {
+        field: 'FieldName',
+        headerName: 'Field Name',
+        width: 200,
+        minWidth: 150,
+        maxWidth: 300,
+        sortable: false,
+      },
+      {
+        field: 'Area',
+        headerName: 'Acres',
+        width: 150,
+        minWidth: 125,
+        maxWidth: 300,
+        sortable: false,
+      },
+      {
+        field: 'Comment',
+        headerName: 'Comments (optional)',
+        minWidth: 200,
+        maxWidth: 300,
+        sortable: false,
+      },
       {
         field: '',
         headerName: 'Actions',

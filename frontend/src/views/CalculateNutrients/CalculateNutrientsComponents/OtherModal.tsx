@@ -3,11 +3,10 @@
  */
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import Form from '@/components/common/Form/Form';
 import { NMPFileFieldData, NMPFileOtherNutrient } from '@/types';
 import { ModalContent, SectionTitle } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { NumberField, TextField } from '@/components/common';
+import { NumberField, TextField, Form } from '@/components/common';
 
 type OtherModalProps = {
   fieldIndex: number;

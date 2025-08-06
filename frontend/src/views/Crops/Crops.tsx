@@ -78,7 +78,14 @@ function Crops() {
 
   // each field can have up to 2 crops, render another add crop button after first crop inputted
   const fieldColumns: GridColDef[] = [
-    { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
+    {
+      field: 'FieldName',
+      headerName: 'Field Name',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 400,
+      sortable: false,
+    },
     {
       field: 'Crops1',
       headerName: 'Crop 1',
@@ -86,6 +93,7 @@ function Crops() {
       width: 170,
       minWidth: 100,
       maxWidth: 300,
+      sortable: false,
     },
     {
       field: 'ActionsCrop1',

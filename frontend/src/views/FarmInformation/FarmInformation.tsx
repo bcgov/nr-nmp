@@ -8,6 +8,8 @@ import {
   ButtonGroup,
   Checkbox,
   CheckboxGroup,
+  // This is the one file where Form needs to be imported from the BC DS
+  // instead of the common components folder
   Form,
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';

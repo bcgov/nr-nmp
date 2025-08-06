@@ -111,6 +111,7 @@ export default function SoilTests() {
         width: 120,
         minWidth: 100,
         maxWidth: 300,
+        sortable: false,
       },
       {
         field: 'valP',
@@ -119,6 +120,7 @@ export default function SoilTests() {
         width: 110,
         minWidth: 110,
         maxWidth: 300,
+        sortable: false,
       },
       {
         field: 'valK',
@@ -127,6 +129,7 @@ export default function SoilTests() {
         width: 110,
         minWidth: 110,
         maxWidth: 300,
+        sortable: false,
       },
       {
         field: 'valPH',
@@ -135,6 +138,7 @@ export default function SoilTests() {
         width: 80,
         minWidth: 80,
         maxWidth: 100,
+        sortable: false,
       },
       {
         field: '',
