@@ -10,12 +10,11 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
+import { Tabs, View } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
-import { customTableStyle } from '../../common.styles';
-import { ErrorText, StyledContent } from '../FieldList/fieldList.styles';
+import { customTableStyle, ErrorText } from '../../common.styles';
 
 import { Error, Message, Icon } from './CalculateNutrients.styles';
 import { NutrientMessage } from './nutrientMessages';
@@ -226,10 +225,18 @@ export default function CalculateNutrients() {
   );
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Calculate Nutrients" />
+    <View
+      title="Calculate Nutrients"
+      handleBack={handlePreviousPage}
+      // Go to next tab or if none navigate to nutrient analysis
+      handleNext={() => {
+        if (activeField < fieldList.length - 1) {
+          setActiveField(activeField + 1);
+        } else {
+          handleNextPage();
+        }
+      }}
+    >
       <ButtonGroup>
         <Button
           size="medium"
@@ -247,35 +254,34 @@ export default function CalculateNutrients() {
         activeTab={activeField}
         tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.FieldName) : ['Field 1']}
       />
-      <>
-        <ButtonGroup
-          alignment="end"
-          ariaLabel="A group of buttons"
-          orientation="horizontal"
+      <ButtonGroup
+        alignment="end"
+        ariaLabel="A group of buttons"
+        orientation="horizontal"
+      >
+        <Button
+          size="medium"
+          aria-label="Add Manure"
+          onPress={() => {
+            setOpenDialog(['manure', undefined]);
+          }}
+          variant="secondary"
         >
-          <Button
-            size="medium"
-            aria-label="Add Manure"
-            onPress={() => {
-              setOpenDialog(['manure', undefined]);
-            }}
-            variant="secondary"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            Add Manure
-          </Button>
-          <Button
-            size="medium"
-            aria-label="Add Fertilizer"
-            onPress={() => {
-              setOpenDialog(['fertilizer', undefined]);
-            }}
-            variant="secondary"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            Add Fertilizer
-          </Button>
-          {/* <Button
+          <FontAwesomeIcon icon={faPlus} />
+          Add Manure
+        </Button>
+        <Button
+          size="medium"
+          aria-label="Add Fertilizer"
+          onPress={() => {
+            setOpenDialog(['fertilizer', undefined]);
+          }}
+          variant="secondary"
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          Add Fertilizer
+        </Button>
+        {/* <Button
             size="medium"
             aria-label="Add Fertigation"
             onPress={() => {
@@ -286,70 +292,70 @@ export default function CalculateNutrients() {
             <FontAwesomeIcon icon={faPlus} />
             Add Fertigation
           </Button> */}
-          <Button
-            size="medium"
-            aria-label="Add Other"
-            onPress={() => {
-              setOpenDialog(['other', undefined]);
-            }}
-            variant="secondary"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            Add Other
-          </Button>
-        </ButtonGroup>
-        {openDialog[0] === 'field' && (
-          <FieldListModal
-            mode="Duplicate Field"
-            initialModalData={fieldList[activeField]}
-            rowEditIndex={undefined}
-            setFieldList={setFieldList}
-            isFieldNameUnique={isFieldNameUnique}
-            isOpen={openDialog[0] === 'field'}
-            onClose={handleDialogClose}
-          />
-        )}
-        {openDialog[0] === 'crop' && (
-          <CropsModal
-            field={fieldList[activeField]}
-            fieldIndex={activeField}
-            cropIndex={openDialog[1]}
-            initialModalData={fieldList[activeField].Crops[openDialog[1]!]}
-            setFields={setFieldList}
-            farmRegion={state.nmpFile.farmDetails.FarmRegion}
-            isOpen={openDialog[0] === 'crop'}
-            onClose={handleDialogClose}
-          />
-        )}
-        {openDialog[0] === 'fertilizer' && (
-          <FertilizerModal
-            fieldIndex={activeField}
-            initialModalData={
-              openDialog[1] !== undefined
-                ? fieldList[activeField].Fertilizers[openDialog[1]]
-                : undefined
-            }
-            rowEditIndex={openDialog[1]}
-            setFields={setFieldList}
-            balanceRow={balanceRow}
-            isOpen={openDialog[0] === 'fertilizer'}
-            onClose={handleDialogClose}
-            modalStyle={{ width: '800px' }}
-          />
-        )}
-        {openDialog[0] === 'manure' && (
-          <ManureModal
-            initialModalData={undefined}
-            farmManures={state.nmpFile.years[0].FarmManures || []}
-            field={fieldList[activeField]}
-            rowEditIndex={openDialog[1]}
-            setFields={setFieldList}
-            isOpen={openDialog[0] === 'manure'}
-            onCancel={handleDialogClose}
-            modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
-          />
-        )}
-        {/*
+        <Button
+          size="medium"
+          aria-label="Add Other"
+          onPress={() => {
+            setOpenDialog(['other', undefined]);
+          }}
+          variant="secondary"
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          Add Other
+        </Button>
+      </ButtonGroup>
+      {openDialog[0] === 'field' && (
+        <FieldListModal
+          mode="Duplicate Field"
+          initialModalData={fieldList[activeField]}
+          rowEditIndex={undefined}
+          setFieldList={setFieldList}
+          isFieldNameUnique={isFieldNameUnique}
+          isOpen={openDialog[0] === 'field'}
+          onClose={handleDialogClose}
+        />
+      )}
+      {openDialog[0] === 'crop' && (
+        <CropsModal
+          field={fieldList[activeField]}
+          fieldIndex={activeField}
+          cropIndex={openDialog[1]}
+          initialModalData={fieldList[activeField].Crops[openDialog[1]!]}
+          setFields={setFieldList}
+          farmRegion={state.nmpFile.farmDetails.FarmRegion}
+          isOpen={openDialog[0] === 'crop'}
+          onClose={handleDialogClose}
+        />
+      )}
+      {openDialog[0] === 'fertilizer' && (
+        <FertilizerModal
+          fieldIndex={activeField}
+          initialModalData={
+            openDialog[1] !== undefined
+              ? fieldList[activeField].Fertilizers[openDialog[1]]
+              : undefined
+          }
+          rowEditIndex={openDialog[1]}
+          setFields={setFieldList}
+          balanceRow={balanceRow}
+          isOpen={openDialog[0] === 'fertilizer'}
+          onClose={handleDialogClose}
+          modalStyle={{ width: '800px' }}
+        />
+      )}
+      {openDialog[0] === 'manure' && (
+        <ManureModal
+          initialModalData={undefined}
+          farmManures={state.nmpFile.years[0].FarmManures || []}
+          field={fieldList[activeField]}
+          rowEditIndex={openDialog[1]}
+          setFields={setFieldList}
+          isOpen={openDialog[0] === 'manure'}
+          onCancel={handleDialogClose}
+          modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
+        />
+      )}
+      {/*
           // Note: this is currently unimplemented
           openDialog[0] === 'fertigation' && (
             <FertigationModal
@@ -362,22 +368,21 @@ export default function CalculateNutrients() {
             />
           )
         */}
-        {openDialog[0] === 'other' && (
-          <OtherModal
-            fieldIndex={activeField}
-            initialModalData={
-              openDialog[1] !== undefined
-                ? fieldList[activeField].OtherNutrients[openDialog[1]]
-                : undefined
-            }
-            rowEditIndex={openDialog[1]}
-            setFields={setFieldList}
-            isOpen={openDialog[0] === 'other'}
-            onClose={handleDialogClose}
-            modalStyle={{ width: '700px' }}
-          />
-        )}
-      </>
+      {openDialog[0] === 'other' && (
+        <OtherModal
+          fieldIndex={activeField}
+          initialModalData={
+            openDialog[1] !== undefined
+              ? fieldList[activeField].OtherNutrients[openDialog[1]]
+              : undefined
+          }
+          rowEditIndex={openDialog[1]}
+          setFields={setFieldList}
+          isOpen={openDialog[0] === 'other'}
+          onClose={handleDialogClose}
+          modalStyle={{ width: '700px' }}
+        />
+      )}
       <div
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >
@@ -466,35 +471,6 @@ export default function CalculateNutrients() {
           <Message>{msg.Text}</Message>
         </Error>
       ))}
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        {/* go to last tab or if none navigate to nuttrient analysis */}
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        {/* go to next tab or if none navigate to next page */}
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={() => {
-            if (activeField < fieldList.length - 1) {
-              setActiveField(activeField + 1);
-            } else {
-              handleNextPage();
-            }
-          }}
-          type="submit"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

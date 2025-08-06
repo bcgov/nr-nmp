@@ -1,0 +1,46 @@
+import React from 'react';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
+import ProgressStepper from '../ProgressStepper/ProgressStepper';
+import { StyledContent, PageTitleStyle, AppTitleStyle } from './view.style';
+
+interface ViewProps {
+  title: string;
+  children: React.ReactNode;
+  handleBack?: () => void;
+  handleNext?: () => void;
+}
+
+export default function View({ title, children, handleBack, handleNext }: ViewProps) {
+  return (
+    <StyledContent>
+      <ProgressStepper />
+      <AppTitleStyle>Nutrient Management Calculator</AppTitleStyle>
+      <PageTitleStyle>{title}</PageTitleStyle>
+      {children}
+      <ButtonGroup
+        alignment="start"
+        ariaLabel="A group of buttons"
+        orientation="horizontal"
+      >
+        {handleBack && (
+          <Button
+            size="medium"
+            onPress={handleBack}
+            variant="secondary"
+          >
+            Back
+          </Button>
+        )}
+        {handleNext && (
+          <Button
+            size="medium"
+            onPress={handleNext}
+            variant="primary"
+          >
+            Next
+          </Button>
+        )}
+      </ButtonGroup>
+    </StyledContent>
+  );
+}

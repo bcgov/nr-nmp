@@ -65,44 +65,34 @@ export type PreviousCrop = {
 
 export type NMPFileSoilTestData = {
   soilTestId: number;
-  valNO3H?: string;
-  valP?: string;
-  valK?: string;
-  valPH?: string;
-  convertedKelownaK?: string;
-  convertedKelownaP?: string;
+  valNO3H?: number;
+  valP?: number;
+  valK?: number;
+  valPH?: number;
+  convertedKelownaK?: number;
+  convertedKelownaP?: number;
   sampleDate?: Date;
-};
-
-export type FormErrors = {
-  sampleDate?: string;
-  valNO3H?: string;
-  valP?: string;
-  valK?: string;
-  valPH?: string;
-  convertedKelownaK?: string;
-  convertedKelownaP?: string;
 };
 
 export interface NMPFileCropData extends CalculateNutrientsColumn {
   cropId: number;
   cropTypeId: number;
   yield: number;
-  stdN?: number;
   crudeProtein?: number;
   prevCropId?: number;
   coverCropHarvested?: boolean;
   yieldHarvestUnit?: string;
   nCredit: number;
-  plantAgeYears: number;
-  numberOfPlantsPerAcre: number;
-  distanceBtwnPlantsRows: string;
-  willPlantsBePruned: boolean;
-  whereWillPruningsGo: string;
-  willSawdustBeApplied: boolean;
+  plantAgeYears?: number;
+  numberOfPlantsPerAcre?: number;
+  distanceBtwnPlantsRows?: string;
+  willPlantsBePruned?: boolean;
+  whereWillPruningsGo?: string;
+  willSawdustBeApplied?: boolean;
 
   /*
   Fields from old NMP, currently unused, feel free to re-add
+  stdN?: number;
   prevYearManureAppl_volCatCd?: number;
   */
 }

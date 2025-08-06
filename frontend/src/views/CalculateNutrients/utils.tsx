@@ -317,8 +317,7 @@ export const BALANCE_COLUMNS = [
   {
     field: '',
     width: 100,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    renderCell: (_row: any) => null,
+    renderCell: () => null,
     sortable: false,
     resizable: false,
   },

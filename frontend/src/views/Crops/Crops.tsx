@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable eqeqeq */
+
 /**
  * @summary This is the Crops Tab component for managing crop data for fields
  * @description Allows users to view, add, edit and delete crops associated with fields
@@ -9,12 +9,11 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
+import { Button } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import { AppTitle, PageTitle, ProgressStepper, Tabs } from '../../components/common';
-import { StyledContent } from './crops.styles';
+import { Tabs, View } from '../../components/common';
 import { NMPFileFieldData } from '@/types';
 import {
   CALCULATE_NUTRIENTS,
@@ -79,7 +78,14 @@ function Crops() {
 
   // each field can have up to 2 crops, render another add crop button after first crop inputted
   const fieldColumns: GridColDef[] = [
-    { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
+    {
+      field: 'FieldName',
+      headerName: 'Field Name',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 400,
+      sortable: false,
+    },
     {
       field: 'Crops1',
       headerName: 'Crop 1',
@@ -87,6 +93,7 @@ function Crops() {
       width: 170,
       minWidth: 100,
       maxWidth: 300,
+      sortable: false,
     },
     {
       field: 'ActionsCrop1',
@@ -115,7 +122,7 @@ function Crops() {
               <Button
                 variant="primary"
                 size="small"
-                onClick={() => {
+                onPress={() => {
                   setEditingFieldIndex(fieldIndex);
                   // Set editing index to undefined because this is a new crop
                   setEditingCropIndex(undefined);
@@ -189,10 +196,11 @@ function Crops() {
   ];
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Field Information" />
+    <View
+      title="Field Information"
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+    >
       <Tabs
         activeTab={2}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
@@ -224,29 +232,7 @@ function Crops() {
         hideFooterPagination
         hideFooter
       />
-
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onClick={handlePreviousPage}
-        >
-          Back
-        </Button>
-        <Button
-          size="medium"
-          variant="primary"
-          onClick={handleNextPage}
-          type="submit"
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }
 

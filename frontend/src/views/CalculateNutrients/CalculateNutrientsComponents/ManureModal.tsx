@@ -2,26 +2,32 @@
  * @summary The field table on the calculate nutrients page
  */
 import { useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { TextField } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
-import { Form, Select } from '@/components/common';
+import { Form, NumberField, Select } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 // Data not seeded in DB.
 import SEASON_APPLICATION from '../unseededData';
 import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-import { CropNutrients, NMPFileFieldData } from '@/types';
+import { CropNutrients, NMPFileFieldData, SelectOption, Units } from '@/types';
 import { NutrientManures } from '@/types/calculateNutrients';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 
+// TODO: Remove once we start filtering by manure type. This is to prevent
+// re-running the map function on each render
+const MANURE_APPLICATION_METHODS = SEASON_APPLICATION.map((ele) => ({
+  id: ele.Id,
+  label: ele.Name,
+}));
+
 type ManureFormFields = {
   materialType: string;
-  applicationMethod: string;
+  applicationMethod: number;
   applicationRate: number;
   applUnit: number;
   retentionAmmoniumN: number;
@@ -69,12 +75,13 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
 
 const DEFAULT_MANURE_FORM_FIELDS: ManureFormFields = {
   materialType: '',
-  applicationMethod: '',
+  applicationMethod: 0,
   applicationRate: 0,
   applUnit: 0,
   retentionAmmoniumN: 0,
   organicNAvailable: 0,
 };
+
 export default function ManureModal({
   initialModalData,
   farmManures,
@@ -89,14 +96,7 @@ export default function ManureModal({
   const apiCache = useContext(APICacheContext);
   const { state, dispatch } = useAppState();
 
-  const [manureUnits, setManureUnits] = useState<
-    {
-      id: number;
-      name: string;
-      dryliquid: string;
-      conversiontoimperialgallonsperacre: number;
-    }[]
-  >([]);
+  const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
 
   const [availableThisYearTable, setAvailableThisYearTable] =
     useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
@@ -109,7 +109,13 @@ export default function ManureModal({
     apiCache.callEndpoint('api/units/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        setManureUnits(data);
+        setManureUnits(
+          (data as Units[]).map((unit) => ({
+            value: unit,
+            id: unit.id,
+            label: unit.name,
+          })),
+        );
       }
     });
   }, [apiCache, manureForm.materialType]);
@@ -139,9 +145,9 @@ export default function ManureModal({
 
     // Create new nutrient manure entry
     const newNutrientManure: NutrientManures = {
-      manureId: selectedFarmManure.Nutrients.ManureId || 0,
-      applicationId: Number(manureForm.applicationMethod) || 0,
-      unitId: Number(manureForm.applUnit) || 0,
+      manureId: selectedFarmManure.Nutrients.ManureId,
+      applicationId: manureForm.applicationMethod,
+      unitId: manureForm.applUnit,
       rate: manureForm.applicationRate,
       nh4Retention: manureForm.retentionAmmoniumN,
       nAvail: manureForm.organicNAvailable,
@@ -187,7 +193,7 @@ export default function ManureModal({
       farmManure,
       state.nmpFile.farmDetails.FarmRegion,
       manureForm.applicationRate,
-      manureForm.applUnit?.toString(),
+      manureUnits.find((opt) => opt.id === manureForm.applUnit)!.value,
       manureForm.retentionAmmoniumN,
       manureForm.organicNAvailable,
     );
@@ -224,9 +230,9 @@ export default function ManureModal({
       {...props}
     >
       <Form
-        onCancel={() => handleModalClose()}
-        onSubmit={() => handleSubmit()}
-        isConfirmDisabled={false}
+        onCancel={handleModalClose}
+        onCalculate={handleCalculate}
+        onConfirm={handleSubmit}
       >
         <Grid
           container
@@ -250,25 +256,20 @@ export default function ManureModal({
             <Select
               isRequired
               label="Application Season/Method"
-              name="applicationMethod"
               placeholder="Select an application method"
               selectedKey={manureForm.applicationMethod}
               // TODO: filter by material type
-              items={SEASON_APPLICATION.map((ele) => ({ id: ele.Id, label: ele.Name }))}
-              onSelectionChange={(e) => handleChange({ applicationMethod: Number(e) })}
+              items={MANURE_APPLICATION_METHODS}
+              onSelectionChange={(e) => handleChange({ applicationMethod: e as number })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <TextField
+            <NumberField
               isRequired
               label="Application Rate"
-              type="number"
-              name="applicationRate"
-              value={String(manureForm.applicationRate)}
-              onChange={(e: string) => {
-                handleChange({ applicationRate: e });
-              }}
-              maxLength={7}
+              value={manureForm.applicationRate}
+              onChange={(e) => handleChange({ applicationRate: e })}
+              minValue={0}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -276,36 +277,27 @@ export default function ManureModal({
               isRequired
               label="Units"
               placeholder="Select a unit"
-              selectedKey={manureForm?.applUnit}
-              items={manureUnits.map((unit) => ({
-                value: { id: unit.id },
-                label: unit.name,
-              }))}
-              onSelectionChange={(e) => handleChange({ applUnit: e?.toString() })}
+              selectedKey={manureForm.applUnit}
+              items={manureUnits}
+              onSelectionChange={(e) => handleChange({ applUnit: e as number })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <TextField
+            <NumberField
               label="Ammonium-N Retention (%)"
-              type="number"
-              name="retentionAmmoniumN"
-              value={manureForm.retentionAmmoniumN.toString()}
-              onChange={(e: string) => {
-                handleChange({ retentionAmmoniumN: Number.isNaN(Number(e)) ? e : Number(e) });
-              }}
-              maxLength={5}
+              value={manureForm.retentionAmmoniumN}
+              onChange={(e) => handleChange({ retentionAmmoniumN: e })}
+              minValue={0}
+              maxValue={100}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
-            <TextField
-              label="Organic N Available"
-              type="number"
-              name="organicNAvailable"
-              value={manureForm.organicNAvailable.toString()}
-              onChange={(e: string) => {
-                handleChange({ organicNAvailable: Number.isNaN(Number(e)) ? e : Number(e) });
-              }}
-              maxLength={5}
+            <NumberField
+              label="Organic N Available (%)"
+              value={manureForm.organicNAvailable}
+              onChange={(e) => handleChange({ organicNAvailable: e })}
+              minValue={0}
+              maxValue={100}
             />
           </Grid>
           <Grid size={{ ...formGridBreakpoints, md: 4 }}>
@@ -346,27 +338,6 @@ export default function ManureModal({
               hideFooterPagination
               hideFooter
             />
-          </Grid>
-          <Grid
-            size={12}
-            sx={{ textAlign: 'center', mt: 2 }}
-          >
-            <button
-              type="button"
-              onClick={handleCalculate}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#003366',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: 'bold',
-              }}
-            >
-              Calculate
-            </button>
           </Grid>
         </Grid>
       </Form>

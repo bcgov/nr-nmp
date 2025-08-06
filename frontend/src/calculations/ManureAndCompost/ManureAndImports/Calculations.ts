@@ -1,56 +1,15 @@
 import { evaluate } from 'mathjs';
 import axios from 'axios';
 import { env } from '@/env';
-import { NMPFileFarmManureData } from '@/types';
+import { NMPFileFarmManureData, Manure, Units } from '@/types';
 import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
-import { ManureData, UnitsData } from '@/types/ManureAPI';
 
-export async function getManure(id: number): Promise<ManureData> {
+export async function getManure(id: number): Promise<Manure> {
   try {
     const response = await axios.get(`${env.VITE_BACKEND_URL}/api/manures/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Failed to fetch manure with id ${id}:`, error);
-    throw error;
-  }
-}
-
-export async function getManures(): Promise<ManureData[]> {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/manures/`);
-    return response.data;
-  } catch (error) {
-    console.error('Failed to fetch manures:', error);
-    throw error;
-  }
-}
-
-export async function getManuresByName(manureName: string): Promise<ManureData | undefined> {
-  try {
-    const manures = await getManures();
-    return manures.find((manure: ManureData) => manure.name === manureName);
-  } catch (error) {
-    console.error(`Failed to fetch manure by name ${manureName}:`, error);
-    throw error;
-  }
-}
-
-export async function getUnits(): Promise<UnitsData[]> {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/units/`);
-    return response.data;
-  } catch (error) {
-    console.error('Failed to fetch units:', error);
-    throw error;
-  }
-}
-
-export async function getUnitByName(unitName: string): Promise<UnitsData | undefined> {
-  try {
-    const units = await getUnits();
-    return units.find((unit: any) => unit.name === unitName);
-  } catch (error) {
-    console.error(`Failed to fetch unit by name ${unitName}:`, error);
     throw error;
   }
 }
@@ -125,7 +84,7 @@ export async function getNutrientInputs(
   farmManure: NMPFileFarmManureData,
   region: number | undefined,
   applicationRate: number,
-  applicationRateUnit: string = '',
+  applicationRateUnit: Units,
   ammoniaNRetentionPct: number = 0,
   organicNAvailable: number = 0,
 ) {
@@ -154,16 +113,15 @@ export async function getNutrientInputs(
     const tenThousand = 10000;
 
     // Get application rate unit conversion factor
-    const applicationUnit = await getUnitByName(applicationRateUnit);
-    const unitConversionFactor =
-      applicationUnit && applicationUnit.conversionlbton ? applicationUnit.conversionlbton : 1;
+    const unitConversionFactor = applicationRateUnit.conversionlbton
+      ? applicationRateUnit.conversionlbton
+      : 1;
 
     let adjustedApplicationRate = applicationRate;
 
     // Adjust application rate for solid manure in cubic yards
     if (
-      applicationUnit &&
-      applicationUnit.id === 6 &&
+      applicationRateUnit.id === 6 &&
       farmManure.Nutrients.SolidLiquid &&
       farmManure.Nutrients.SolidLiquid.toUpperCase() === 'SOLID'
     ) {
@@ -215,11 +173,12 @@ export async function getNutrientInputs(
     // Calculate organic nitrogen content (total nitrogen minus ammonium nitrogen)
     const organicNitrogenContent = farmManure.Nutrients.N - farmManure.Nutrients.NH4N / tenThousand;
 
-    const manureTypeData = await getManuresByName(farmManure.materialType);
-    const nMineralizationID = manureTypeData?.nmineralizationid;
     let organicNMineralizationRates = { OrganicN_FirstYear: 0, OrganicN_LongTerm: 0 };
     if (region !== undefined) {
-      organicNMineralizationRates = await GetNMineralizations(nMineralizationID ?? 0, region);
+      organicNMineralizationRates = await GetNMineralizations(
+        farmManure.nMineralizationId || 0,
+        region,
+      );
     }
     // Override first year organic N availability with user-provided value
     organicNMineralizationRates.OrganicN_FirstYear = organicNAvailable / 100;

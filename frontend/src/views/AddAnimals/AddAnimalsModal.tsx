@@ -17,6 +17,7 @@ import {
   OtherAnimalId,
   SelectOption,
   Animal,
+  SWINE_ID,
 } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
@@ -39,7 +40,7 @@ export default function AddAnimalsModal({
   ...props
 }: AddAnimalsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState<AnimalData | undefined>(initialModalData);
-  const [animalOptions, setAnimalOptions] = useState<SelectOption[]>([]);
+  const [animals, setAnimals] = useState<SelectOption<Animal>[]>([]);
   const apiCache = useContext(APICacheContext);
 
   const handleSubmit = (newFormData: AnimalData) => {
@@ -74,7 +75,7 @@ export default function AddAnimalsModal({
           throw new Error(`Invalid animalId: ${changes.animalId}`);
         }
         return {
-          manureType: ManureType.Solid,
+          manureType: changes.animalId === SWINE_ID ? ManureType.Liquid : ManureType.Solid,
           daysCollected: 0,
           ...changes,
           animalId: changes.animalId as OtherAnimalId,
@@ -93,8 +94,12 @@ export default function AddAnimalsModal({
     apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        const options = (data as Animal[]).map((row) => ({ id: String(row.id), label: row.name }));
-        setAnimalOptions(options);
+        const options = (data as Animal[]).map((row) => ({
+          id: String(row.id),
+          label: row.name,
+          value: row,
+        }));
+        setAnimals(options);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,14 +113,14 @@ export default function AddAnimalsModal({
     >
       {formData === undefined && (
         <UnselectedAnimal
-          animalOptions={animalOptions}
+          animals={animals}
           handleInputChanges={handleInputChanges}
           onCancel={onClose}
         />
       )}
       {formData?.animalId === BEEF_COW_ID && (
         <BeefCattle
-          animalOptions={animalOptions}
+          animals={animals}
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
@@ -124,7 +129,7 @@ export default function AddAnimalsModal({
       )}
       {formData?.animalId === DAIRY_COW_ID && (
         <DairyCattle
-          animalOptions={animalOptions}
+          animals={animals}
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
@@ -133,7 +138,7 @@ export default function AddAnimalsModal({
       )}
       {formData?.animalId === POULTRY_ID && (
         <Poultry
-          animalOptions={animalOptions}
+          animals={animals}
           formData={formData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
@@ -142,7 +147,7 @@ export default function AddAnimalsModal({
       )}
       {formData !== undefined && OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
         <OtherAnimals
-          animalOptions={animalOptions}
+          animals={animals}
           formData={formData as OtherAnimalData}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}

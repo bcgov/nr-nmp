@@ -8,18 +8,17 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { customTableStyle, tableActionButtonCss, addRecordGroupStyle } from '../../common.styles';
+import {
+  customTableStyle,
+  tableActionButtonCss,
+  addRecordGroupStyle,
+  ErrorText,
+} from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
-import { AppTitle, PageTitle, Tabs } from '@/components/common';
+import { Tabs, View } from '@/components/common';
 import { Animal, AnimalData, DAIRY_COW_ID } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
-import ProgressStepper from '@/components/common/ProgressStepper/ProgressStepper';
-import {
-  DoubleRowStyle,
-  ErrorText,
-  specialTableRowStyle,
-  StyledContent,
-} from './addAnimals.styles';
+import { DoubleRowStyle, specialTableRowStyle } from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
 import { isDairyAndMilkingCattle, liquidSolidManureDisplay } from '@/utils/utils';
 import { calculateAnnualWashWater } from './utils';
@@ -133,6 +132,7 @@ export default function AddAnimals() {
           }
           return <div>{params.value}</div>;
         },
+        sortable: false,
       },
       {
         field: 'manureData',
@@ -158,6 +158,7 @@ export default function AddAnimals() {
           }
           return <div>{params.value}</div>;
         },
+        sortable: false,
       },
       {
         field: 'actions',
@@ -186,37 +187,36 @@ export default function AddAnimals() {
   );
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Livestock Information" />
-      <>
-        <div css={addRecordGroupStyle}>
-          <ButtonGroup
-            alignment="end"
-            ariaLabel="A group of buttons"
-            orientation="horizontal"
+    <View
+      title="Livestock Information"
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+    >
+      <div css={addRecordGroupStyle}>
+        <ButtonGroup
+          alignment="end"
+          ariaLabel="A group of buttons"
+          orientation="horizontal"
+        >
+          <Button
+            size="medium"
+            onPress={() => setIsDialogOpen(true)}
+            variant="secondary"
           >
-            <Button
-              size="medium"
-              onPress={() => setIsDialogOpen(true)}
-              variant="secondary"
-            >
-              Add Animal
-            </Button>
-          </ButtonGroup>
-        </div>
-        {isDialogOpen && (
-          <AddAnimalsModal
-            initialModalData={rowEditIndex !== undefined ? animalList[rowEditIndex] : undefined}
-            rowEditIndex={rowEditIndex}
-            setAnimalList={setAnimalList}
-            isOpen={isDialogOpen}
-            onClose={handleDialogClose}
-            modalStyle={{ width: '700px' }}
-          />
-        )}
-      </>
+            Add Animal
+          </Button>
+        </ButtonGroup>
+      </div>
+      {isDialogOpen && (
+        <AddAnimalsModal
+          initialModalData={rowEditIndex !== undefined ? animalList[rowEditIndex] : undefined}
+          rowEditIndex={rowEditIndex}
+          setAnimalList={setAnimalList}
+          isOpen={isDialogOpen}
+          onClose={handleDialogClose}
+          modalStyle={{ width: '700px' }}
+        />
+      )}
       <Tabs
         activeTab={0}
         tabLabel={tabs}
@@ -232,29 +232,6 @@ export default function AddAnimals() {
         hideFooter
       />
       <ErrorText>{showViewError}</ErrorText>
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={handleNextPage}
-          type="submit"
-          // imo this button should be disabled instead of showing error text on click
-          // isDisabled={animalList.length === 0}
-        >
-          Next
-        </Button>
-      </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

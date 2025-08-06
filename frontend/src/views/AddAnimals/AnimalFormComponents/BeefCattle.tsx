@@ -1,10 +1,10 @@
-import { FormEvent, useContext, useEffect, useState } from 'react';
-import { Checkbox, TextField } from '@bcgov/design-system-react-components';
+import { useContext, useEffect, useState } from 'react';
+import { Checkbox } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
-import { Select } from '@/components/common';
+import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, BEEF_COW_ID, BeefCattleData, ManureType, SelectOption } from '@/types';
+import { Animal, AnimalData, BEEF_COW_ID, BeefCattleData, ManureType, SelectOption } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 
@@ -16,7 +16,7 @@ interface BeefCattleSubtype {
 
 type BeefCattleProps = {
   formData: BeefCattleData;
-  animalOptions: SelectOption[];
+  animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -33,9 +33,7 @@ export default function BeefCattle({
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = () => {
     // Calculate manure
     const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
     if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
@@ -91,22 +89,16 @@ export default function BeefCattle({
           placeholder="Select a cattle type"
           selectedKey={formData.subtype}
           items={subtypeOptions}
-          onSelectionChange={(e) => {
-            handleInputChanges({ subtype: e?.toString() });
-          }}
+          onSelectionChange={(e) => handleInputChanges({ subtype: e as string })}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
-        <TextField
+        <NumberField
           isRequired
           label="Average Animal Number on Farm"
-          type="number"
-          name="animalsPerFarm"
-          value={formData.animalsPerFarm?.toString()}
-          onChange={(e: string) => {
-            handleInputChanges({ animalsPerFarm: e });
-          }}
-          maxLength={7}
+          value={formData.animalsPerFarm}
+          onChange={(e) => handleInputChanges({ animalsPerFarm: e })}
+          minValue={0}
         />
       </Grid>
       <Grid size={12}>
@@ -122,17 +114,14 @@ export default function BeefCattle({
       </Grid>
       {showCollectionDays && (
         <Grid size={formGridBreakpoints}>
-          <TextField
+          <NumberField
+            isRequired
             label="How many days is the manure collected?"
-            type="number"
-            name="daysCollected"
             size="small"
-            value={formData.daysCollected?.toString()}
-            onChange={(e: string) => {
-              handleInputChanges({ daysCollected: e });
-            }}
-            maxLength={3}
-            isRequired={showCollectionDays}
+            value={formData.daysCollected}
+            onChange={(e) => handleInputChanges({ daysCollected: e })}
+            minValue={0}
+            maxValue={365}
           />
         </Grid>
       )}

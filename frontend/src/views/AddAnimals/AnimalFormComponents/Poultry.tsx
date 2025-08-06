@@ -1,17 +1,24 @@
-import { FormEvent, useContext, useEffect, useState } from 'react';
-import { TextField } from '@bcgov/design-system-react-components';
+import { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Select } from '@/components/common';
+import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, PoultryData, DUCK_ID, ManureType, POULTRY_ID, SelectOption } from '@/types';
+import {
+  AnimalData,
+  PoultryData,
+  DUCK_ID,
+  ManureType,
+  POULTRY_ID,
+  SelectOption,
+  Animal,
+} from '@/types';
 import { calculatePoultryAnnualLiquidManure, calculatePoultryAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 import { MANURE_TYPE_OPTIONS } from '@/constants';
 
 type PoultryProps = {
   formData: PoultryData;
-  animalOptions: SelectOption[];
+  animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
   handleSubmit: (newFormData: AnimalData) => void;
   onCancel: () => void;
@@ -34,9 +41,7 @@ export default function Poultry({
   const [subtypes, setSubtypes] = useState<PoultrySubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = () => {
     // Calculate manure
     const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
     if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
@@ -106,13 +111,12 @@ export default function Poultry({
       <Grid size={formGridBreakpoints}>
         <Select
           label="Sub Type"
-          name="subtype"
           selectedKey={formData.subtype}
           items={subtypeOptions}
           onSelectionChange={(e) => {
             e === DUCK_ID
-              ? handleInputChanges({ subtype: String(e), manureType: ManureType.Solid })
-              : handleInputChanges({ subtype: String(e) });
+              ? handleInputChanges({ subtype: e as string, manureType: ManureType.Solid })
+              : handleInputChanges({ subtype: e as string });
           }}
           isRequired
         />
@@ -122,54 +126,40 @@ export default function Poultry({
         <Grid size={formGridBreakpoints}>
           <Select
             label="Manure Type"
-            name="manureType"
             selectedKey={formData.manureType}
             items={MANURE_TYPE_OPTIONS}
-            onSelectionChange={(e) => {
-              handleInputChanges({ manureType: e as number });
-            }}
+            onSelectionChange={(e) => handleInputChanges({ manureType: e as number })}
             isRequired
           />
         </Grid>
       )}
       <Grid size={formGridBreakpoints}>
-        <TextField
+        <NumberField
+          isRequired
           label="Number of birds per flock"
-          type="number"
-          name="birdsPerFlock"
-          value={formData.birdsPerFlock?.toString()}
-          onChange={(e: string) => {
-            handleInputChanges({ birdsPerFlock: Number(e) });
-          }}
-          maxLength={7}
-          isRequired
+          value={formData.birdsPerFlock}
+          onChange={(e) => handleInputChanges({ birdsPerFlock: e })}
+          minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
-        <TextField
+        <NumberField
+          isRequired
           label="Number of flocks per year"
-          type="number"
-          name="flocksPerYear"
-          value={formData.flocksPerYear?.toString()}
-          onChange={(e: string) => {
-            handleInputChanges({ flocksPerYear: Number(e) });
-          }}
-          maxLength={7}
-          isRequired
+          value={formData.flocksPerYear}
+          onChange={(e) => handleInputChanges({ flocksPerYear: e })}
+          minValue={0}
         />
       </Grid>
-      {/*  nuymber of days before flock is removed or replaced */}
+      {/*  number of days before flock is removed or replaced */}
       <Grid size={formGridBreakpoints}>
-        <TextField
-          label="Number of days per flock"
-          type="number"
-          name="daysPerFlock"
-          value={formData.daysPerFlock?.toString()}
-          onChange={(e: string) => {
-            handleInputChanges({ daysPerFlock: Number(e) });
-          }}
-          maxLength={3}
+        <NumberField
           isRequired
+          label="Number of days per flock"
+          value={formData.daysPerFlock}
+          onChange={(e) => handleInputChanges({ daysPerFlock: e })}
+          minValue={0}
+          maxValue={365}
         />
       </Grid>
     </AnimalFormWrapper>

@@ -4,8 +4,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import useAppState from '../../hooks/useAppState';
-import { StyledContent } from './landingPage.styles';
-import { AppTitle, PageTitle, ProgressStepper } from '../../components/common';
+import { View } from '../../components/common';
 
 export default function LandingPage() {
   const { dispatch } = useAppState();
@@ -41,10 +40,7 @@ export default function LandingPage() {
   };
 
   return (
-    <StyledContent>
-      <ProgressStepper />
-      <AppTitle />
-      <PageTitle title="Nutrient Management Calculator" />
+    <View title="Nutrient Management Calculator">
       <p>
         The Nutrient Management Calculator provides a starting point for the efficient use of
         fertilizer and manure on farms. This tool assists in you choosing the right rate and
@@ -81,6 +77,6 @@ export default function LandingPage() {
           hidden
         />
       </ButtonGroup>
-    </StyledContent>
+    </View>
   );
 }

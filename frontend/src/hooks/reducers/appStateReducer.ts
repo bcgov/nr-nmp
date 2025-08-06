@@ -15,6 +15,7 @@ import {
   NMPFile,
   NMPFileFarmDetails,
   ManureType,
+  POULTRY_ID,
 } from '@/types';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
@@ -135,6 +136,12 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
         // TODO: Add wash water as manure. We're ignoring a lot of dairy cow stuff for now
       }
 
+      let animalStr;
+      if (animal.animalId === POULTRY_ID) {
+        animalStr = `${animal.flocksPerYear} flock${animal.flocksPerYear === 1 ? '' : 's'}`;
+      } else {
+        animalStr = `${animal.animalsPerFarm} animal${animal.animalsPerFarm === 1 ? '' : 's'}`;
+      }
       if (animal.manureData.annualSolidManure !== undefined) {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
@@ -145,7 +152,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           AnnualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
           // ManagedManureName is the name of the manure, number of animals and manure type
           // Calves (0 to 3 months old), 2 animals, Solid
-          ManagedManureName: `${animal.manureData.name}, ${animal.animalsPerFarm} animal${animal.animalsPerFarm === 1 ? '' : 's'}, Solid`,
+          ManagedManureName: `${animal.manureData.name}, ${animalStr}, Solid`,
           // Link the generated manure to the animal that created it
           manureId: animal.manureId,
         });
@@ -157,7 +164,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           AnnualAmount: animal.manureData.annualLiquidManure,
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
-          ManagedManureName: `${animal.manureData.name}, ${animal.animalsPerFarm} animal${animal.animalsPerFarm === 1 ? '' : 's'}, Liquid`,
+          ManagedManureName: `${animal.manureData.name}, ${animalStr}, Liquid`,
           manureId: animal.manureId,
         });
       }

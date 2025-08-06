@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import axios from 'axios';
 import { env } from '@/env';
 import {
@@ -180,9 +179,9 @@ export function getCropRemovalK20(
 
   // Calculate removal differently based on crop harvesting method
   if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
-    k2oRemoval = (combinedCropData.yield! / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
+    k2oRemoval = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
   } else {
-    k2oRemoval = combinedCropData.yield! * crop.cropremovalfactork2o;
+    k2oRemoval = combinedCropData.yield * crop.cropremovalfactork2o;
   }
 
   return Math.round(k2oRemoval) || 0;
@@ -211,10 +210,9 @@ export function getCropRemovalP205(
 
   // Calculate removal differently based on crop harvesting method
   if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
-    p2o5Removal =
-      (combinedCropData.yield! / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
+    p2o5Removal = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
   } else {
-    p2o5Removal = combinedCropData.yield! * crop.cropremovalfactorp2o5;
+    p2o5Removal = combinedCropData.yield * crop.cropremovalfactorp2o5;
   }
 
   return Math.round(p2o5Removal) || 0;
@@ -238,21 +236,21 @@ export function getCropRemovalN(
 
   // Special calculation for forage crops with crude protein data
   if (cropType.crudeproteinrequired) {
-    if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein == 0) {
-      nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield!;
+    if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein === 0) {
+      nRemoval = crop.cropremovalfactornitrogen * combinedCropData.yield;
     } else {
       const nToProteinConversionFactor = 0.625;
       const unitConversionFactor = 0.5;
 
       const newCropRemovalFactorNitrogen =
         combinedCropData.crudeProtein / (nToProteinConversionFactor * unitConversionFactor);
-      nRemoval = newCropRemovalFactorNitrogen * combinedCropData.yield!;
+      nRemoval = newCropRemovalFactorNitrogen * combinedCropData.yield;
     }
   } else if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
     nRemoval =
-      (combinedCropData.yield! / crop.harvestbushelsperton) * crop.cropremovalfactornitrogen;
+      (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactornitrogen;
   } else {
-    nRemoval = combinedCropData.yield! * crop.cropremovalfactornitrogen;
+    nRemoval = combinedCropData.yield * crop.cropremovalfactornitrogen;
   }
 
   return Math.round(nRemoval) || 0;
@@ -289,10 +287,10 @@ export function getCropRequirementN(
       nRequirement = getCropRemovalN(combinedCropData, crop, cropType);
       break;
     case 4: {
-      if (combinedCropData.yield! !== 0) {
+      if (combinedCropData.yield !== 0) {
         // Wait wtf, why do we calculate 1????
         nRequirement = Math.round(
-          (combinedCropData.yield! / combinedCropData.yield!) *
+          (combinedCropData.yield / combinedCropData.yield) *
             crop.nitrogenrecommendationpoundperacre,
         );
       }
@@ -327,7 +325,7 @@ export async function getCropRequirementK2O(
 
   // Use default if soil test data is missing
   let STK = soilTest?.convertedKelownaK || defaultSoilTestData.convertedKelownaK;
-  if (STK == '0' || STK == null) STK = String(conversionFactors.defaultsoiltestkelownapotassium);
+  if (!STK) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
   const cropSTKRegionCd = await getCropSoilTestRegions(
     combinedCropData.cropId,
@@ -337,7 +335,7 @@ export async function getCropRequirementK2O(
 
   const potassiumCropGroupRegionCd = cropSTKRegionCd[0].potassiumcropgroupregioncode;
 
-  const sTKKelownaRange = await getKelownaRangeByPpm(Number(STK), 'soiltestpotassiumkelonwaranges');
+  const sTKKelownaRange = await getKelownaRangeByPpm(STK, 'soiltestpotassiumkelonwaranges');
 
   const stkKelownaRangeId = sTKKelownaRange.id;
   if (potassiumCropGroupRegionCd == null) {
@@ -376,7 +374,7 @@ export async function getCropRequirementP205(
 
   // Use default if soil test data is missing
   let STP = soilTest?.convertedKelownaP || defaultSoilTestData.convertedKelownaP;
-  if (STP == '0' || STP == null) STP = String(conversionFactors.defaultsoiltestkelownaphosphorous);
+  if (!STP) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 
   const cropSTPRegionCd = await getCropSoilTestRegions(
     combinedCropData.cropId,
@@ -386,10 +384,7 @@ export async function getCropRequirementP205(
 
   const phosphorousCropGroupRegionCd = cropSTPRegionCd[0].phosphorouscropgroupregioncode;
 
-  const sTPKelownaRange = await getKelownaRangeByPpm(
-    Number(STP),
-    'soiltestphosphorouskelonwaranges',
-  );
+  const sTPKelownaRange = await getKelownaRangeByPpm(STP, 'soiltestphosphorouskelonwaranges');
 
   const stpKelownaRangeId = sTPKelownaRange.id;
   if (phosphorousCropGroupRegionCd == null) {
