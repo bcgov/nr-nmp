@@ -22,7 +22,7 @@ jobs:
         with:
           keep_versions: 50
           package: ${{ matrix.package }}
-          tag: ${{ github.event.number }}
+          tags: ${{ github.event.number }}
           tag_fallback: latest
           triggers: ('${{ matrix.package }}/')
 
