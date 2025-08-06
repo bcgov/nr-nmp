@@ -17,6 +17,7 @@ import {
   OtherAnimalId,
   SelectOption,
   Animal,
+  SWINE_ID,
 } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
@@ -74,7 +75,7 @@ export default function AddAnimalsModal({
           throw new Error(`Invalid animalId: ${changes.animalId}`);
         }
         return {
-          manureType: ManureType.Solid,
+          manureType: changes.animalId === SWINE_ID ? ManureType.Liquid : ManureType.Solid,
           daysCollected: 0,
           ...changes,
           animalId: changes.animalId as OtherAnimalId,
@@ -93,14 +94,11 @@ export default function AddAnimalsModal({
     apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const { data } = response;
-        const options: SelectOption<Animal>[] = (data as Animal[]).map((row) => ({
-          id: row.id,
+        const options = (data as Animal[]).map((row) => ({
+          id: String(row.id),
           label: row.name,
           value: row,
         }));
-        // TODO: REMOVE ONCE WE HAVE SWINE
-        // This is a lazy way to take it out of the list
-        options.splice(options.length - 1, 1);
         setAnimals(options);
       }
     });
