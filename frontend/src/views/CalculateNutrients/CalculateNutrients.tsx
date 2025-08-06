@@ -33,6 +33,7 @@ import {
 } from './utils.tsx';
 import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
 import CropsModal from '../Crops/CropsModal.tsx';
+import FertigationModal from './CalculateNutrientsComponents/FertigationModal.tsx';
 
 function NoRows() {
   return <div />;
@@ -275,7 +276,7 @@ export default function CalculateNutrients() {
             <FontAwesomeIcon icon={faPlus} />
             Add Fertilizer
           </Button>
-          {/* <Button
+          <Button
             size="medium"
             aria-label="Add Fertigation"
             onPress={() => {
@@ -285,7 +286,7 @@ export default function CalculateNutrients() {
           >
             <FontAwesomeIcon icon={faPlus} />
             Add Fertigation
-          </Button> */}
+          </Button>
           <Button
             size="medium"
             aria-label="Add Other"
@@ -349,19 +350,18 @@ export default function CalculateNutrients() {
             modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
           />
         )}
-        {/*
-          // Note: this is currently unimplemented
-          openDialog[0] === 'fertigation' && (
-            <FertigationModal
-              initialModalData={undefined}
-              rowEditIndex={openDialog[1]}
-              setFieldList={setFieldList}
-              isOpen={openDialog[0] === 'fertigation'}
-              onCancel={handleDialogClose}
-              modalStyle={{ width: '700px' }}
-            />
-          )
-        */}
+        {openDialog[0] === 'fertigation' && (
+          <FertigationModal
+            fieldIndex={activeField}
+            initialModalData={undefined}
+            rowEditIndex={openDialog[1]}
+            field={fieldList[activeField]}
+            setFields={setFieldList}
+            isOpen={openDialog[0] === 'fertigation'}
+            onClose={handleDialogClose}
+            modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
+          />
+        )}
         {openDialog[0] === 'other' && (
           <OtherModal
             fieldIndex={activeField}

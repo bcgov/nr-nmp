@@ -45,6 +45,19 @@ export interface NMPFileFertilizer extends CalculateNutrientsColumn {
   densityUnitId?: number;
 }
 
+export interface NMPFileFertigation extends CalculateNutrientsColumn {
+  fertilizerTypeId: number;
+  fertilizerId: number;
+  applicationRate: number;
+  density: number;
+  tankVolume: number;
+  solubility: number;
+  amountToDissolve: number;
+  injectionRate: number;
+  eventsPerSeason: number;
+  applicationPeriod: number;
+}
+
 export interface CropNutrients {
   N: number; // Nitrogen
   P2O5: number; // Phosphorus pentoxide
