@@ -32,7 +32,7 @@ import {
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '../../common.styles';
 import { ModalProps } from '@/components/common/Modal/Modal';
-import { DEFAULT_NMPFILE_CROPS, HarvestUnit } from '@/constants';
+import { DEFAULT_NMPFILE_CROPS, HarvestUnit, DEFAULT_BERRY_DATA } from '@/constants';
 import {
   CROP_OTHER_ID,
   CROP_TYPE_OTHER_ID,
@@ -336,8 +336,12 @@ function CropsModal({
             formData.whereWillPruningsGo!,
             soilTestValP,
             soilTestValK,
-            formData.leafTissueP!,
-            formData.leafTissueK!,
+            formData.leafTissueP !== undefined
+              ? formData.leafTissueP
+              : DEFAULT_BERRY_DATA.defaultRaspberryLeafTestP,
+            formData.leafTissueK !== undefined
+              ? formData.leafTissueK
+              : DEFAULT_BERRY_DATA.defaultRaspberryLeafTestK,
           );
           nutrientValues = extractNutrientValues(nutrients);
         } else if (selectedCrop.id === CROP_BLUEBERRIES_ID) {
@@ -349,8 +353,12 @@ function CropsModal({
             formData.plantAgeYears!,
             formData.numberOfPlantsPerAcre!,
             soilTestValP,
-            formData.leafTissueP!,
-            formData.leafTissueK!,
+            formData.leafTissueP !== undefined
+              ? formData.leafTissueP
+              : DEFAULT_BERRY_DATA.defaultBlueberryLeafTestP,
+            formData.leafTissueK !== undefined
+              ? formData.leafTissueK
+              : DEFAULT_BERRY_DATA.defaultBlueberryLeafTestK,
           );
           nutrientValues = extractNutrientValues(nutrients);
         } else {
