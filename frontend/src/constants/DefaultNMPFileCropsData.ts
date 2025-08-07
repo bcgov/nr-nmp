@@ -12,6 +12,9 @@ const DEFAULT_NMPFILE_CROPS: NMPFileCropData = {
   remP2o5: 0,
   remK2o: 0,
   nCredit: 0,
+  hasLeafTest: false,
+  leafTissueP: 0,
+  leafTissueK: 0,
 };
 
 export default DEFAULT_NMPFILE_CROPS;

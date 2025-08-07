@@ -641,6 +641,16 @@ function CropsModal({
                       orientation="horizontal"
                     />
                   </Grid>
+                  <Grid size={formGridBreakpoints}>
+                    <YesNoRadioButtons
+                      value={formData.hasLeafTest || false}
+                      text="Do you have a leaf test from the past three years?"
+                      onChange={(b: boolean) => {
+                        handleFormFieldChange('hasLeafTest', b);
+                      }}
+                      orientation="horizontal"
+                    />
+                  </Grid>
                 </>
               )}
               {!selectedCropType?.customcrop && (
