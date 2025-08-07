@@ -52,7 +52,6 @@ export default function CalculateNutrients() {
     !backendUrl.includes('test') &&
     !backendUrl.includes('prod');
   const enableFertigation = backendUrl.includes('localhost') || isDev;
-  console.log(enableFertigation);
 
   const navigate = useNavigate();
 
