@@ -1,14 +1,12 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
-import { Button, ButtonGroup, Form } from '@bcgov/design-system-react-components';
-import { Select } from '@/components/common';
+import { Select, Form } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import type { FertilizerType, NMPFileFieldData } from '@/types';
-import { formCss, formGridBreakpoints } from '@/common.styles';
+import type { FertilizerType, NMPFileFieldData, SelectOption } from '@/types';
+import { formGridBreakpoints } from '@/common.styles';
 import { NMPFileFertigation } from '@/types/calculateNutrients';
 import { APICacheContext } from '@/context/APICacheContext';
 
@@ -46,7 +44,7 @@ export default function FertigationModal({
   onClose,
   ...props
 }: FertigationModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [fertilizerTypes, setFertilizerTypes] = useState<FertilizerType[]>([]);
+  const [fertilizerTypes, setFertilizerTypes] = useState<SelectOption<FertilizerType>[]>([]);
   const [formData, setFormData] = useState<NMPFileFertigation>(
     initialModalData || EMPTY_FERTIGATION_FORM_DATA,
   );
@@ -56,17 +54,19 @@ export default function FertigationModal({
     apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
         const fertilizerTs: FertilizerType[] = response.data;
-        setFertilizerTypes(fertilizerTs);
+        setFertilizerTypes(
+          fertilizerTs.map((ele) => ({ id: ele.id, label: ele.name, value: ele })),
+        );
       }
     });
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = () => {
     onClose();
   };
 
-  const handleModalCalculate = (e: FormEvent) => {
-    e.preventDefault();
+  const handleModalCalculate = () => {
     setFormData((prev) => ({
       ...prev,
       fertilizerTypeId: formData.fertilizerTypeId,
@@ -84,8 +84,10 @@ export default function FertigationModal({
       {...props}
     >
       <Form
-        css={formCss}
-        onSubmit={handleModalCalculate}
+        onCancel={onClose}
+        onConfirm={handleSubmit}
+        onCalculate={handleModalCalculate}
+        // isConfirmDisabled={!calculatedData}
       >
         <Grid
           container
@@ -94,8 +96,7 @@ export default function FertigationModal({
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              name="fertilizerTypeId"
-              items={fertilizerTypes.map((ele) => ({ id: ele.id, label: ele.name }))}
+              items={fertilizerTypes}
               label="Fertilizer Type"
               placeholder="Select Fertilizer Type"
               selectedKey={formData.fertilizerTypeId}
@@ -105,36 +106,6 @@ export default function FertigationModal({
             />
           </Grid>
         </Grid>
-        <Divider
-          aria-hidden="true"
-          component="div"
-          css={{ marginTop: '1rem', marginBottom: '1rem' }}
-        />
-        <ButtonGroup
-          alignment="end"
-          orientation="horizontal"
-        >
-          <Button
-            type="reset"
-            variant="secondary"
-            onPress={onClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-          >
-            Calculate
-          </Button>
-          <Button
-            // isDisabled={!calculatedData}
-            variant="primary"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </ButtonGroup>
       </Form>
     </Modal>
   );
