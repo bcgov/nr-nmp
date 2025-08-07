@@ -328,8 +328,6 @@ function CropsModal({
           ? Number(field.SoilTest.convertedKelownaK)
           : 500; // Default from defaultSoilTestData
         // Leaf tissue will be completed after this ticket and updated here. Using temp values for now
-        const leafTissueP = 0;
-        const leafTissueK = 0;
         if (selectedCrop.id === CROP_RASPBERRIES_ID) {
           const nutrients = await getRaspberryNutrients(
             formData.yield,
@@ -338,8 +336,8 @@ function CropsModal({
             formData.whereWillPruningsGo!,
             soilTestValP,
             soilTestValK,
-            leafTissueP,
-            leafTissueK,
+            formData.leafTissueP!,
+            formData.leafTissueK!,
           );
           nutrientValues = extractNutrientValues(nutrients);
         } else if (selectedCrop.id === CROP_BLUEBERRIES_ID) {
@@ -351,8 +349,8 @@ function CropsModal({
             formData.plantAgeYears!,
             formData.numberOfPlantsPerAcre!,
             soilTestValP,
-            leafTissueP,
-            leafTissueK,
+            formData.leafTissueP!,
+            formData.leafTissueK!,
           );
           nutrientValues = extractNutrientValues(nutrients);
         } else {
@@ -651,6 +649,30 @@ function CropsModal({
                       orientation="horizontal"
                     />
                   </Grid>
+                  {formData.hasLeafTest && (
+                    <>
+                      <Grid size={formGridBreakpoints}>
+                        <NumberField
+                          isRequired={formData.hasLeafTest}
+                          label="Leaf Tissue P (%)"
+                          value={formData.leafTissueP}
+                          onChange={(e) => handleFormFieldChange('leafTissueP', e)}
+                          minValue={0}
+                          maxValue={100}
+                        />
+                      </Grid>
+                      <Grid size={formGridBreakpoints}>
+                        <NumberField
+                          isRequired={formData.hasLeafTest}
+                          label="Leaf Tissue K (%)"
+                          value={formData.leafTissueK}
+                          onChange={(e) => handleFormFieldChange('leafTissueK', e)}
+                          minValue={0}
+                          maxValue={100}
+                        />
+                      </Grid>
+                    </>
+                  )}
                 </>
               )}
               {!selectedCropType?.customcrop && (

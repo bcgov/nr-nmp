@@ -160,11 +160,14 @@ export function cropsModalReducer(
           // Special case #4: if this is Berry, set berry fields to default, otherwise set to undefined
           willSawdustBeApplied: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
           willPlantsBePruned: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          hasLeafTest: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
           // These berry fields have a default value of undefined
           plantAgeYears: undefined,
           numberOfPlantsPerAcre: undefined,
           distanceBtwnPlantsRows: undefined,
           whereWillPruningsGo: undefined,
+          leafTissueP: undefined,
+          leafTissueK: undefined,
         },
         selectedCrop: undefined,
         defaultYieldInTons: undefined,
