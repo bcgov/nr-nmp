@@ -8,8 +8,6 @@ const DEFAULT_NMPFILE: NMPFile = {
     RegionLocationId: 0,
     FarmAnimals: [],
     HasHorticulturalCrops: false,
-    HasBerries: false,
-    HasVegetables: false,
   },
   years: [],
 };
