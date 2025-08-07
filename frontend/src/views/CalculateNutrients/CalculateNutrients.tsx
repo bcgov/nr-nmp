@@ -45,13 +45,9 @@ export default function CalculateNutrients() {
   const [activeField, setActiveField] = useState<number>(0);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
 
-  // shows fertigation if on localhost or openshift dev
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const isDev =
-    backendUrl.includes('apps.silver.devops.gov.bc.ca') &&
-    !backendUrl.includes('test') &&
-    !backendUrl.includes('prod');
-  const enableFertigation = backendUrl.includes('localhost') || isDev;
+  // shows fertigation if on localhost
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+  const enableFertigation = backendUrl.includes('localhost');
 
   const navigate = useNavigate();
 
