@@ -45,6 +45,7 @@ export default function ApplicationReportSection({
         disableColumnMenu
         hideFooterPagination
         hideFooter
+        getRowHeight={() => 'auto'}
         slots={{
           noRowsOverlay: NO_ROWS,
         }}

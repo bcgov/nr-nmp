@@ -24,6 +24,10 @@ const HIDE_COLUMN_CSS = {
   },
 };
 
+function NO_ROWS() {
+  return <div />;
+}
+
 const CROP_COLUMNS: GridColDef[] = [
   { field: 'name', headerName: 'Crop Name', width: 250, minWidth: 200 },
   { field: 'cropTypeName', headerName: 'Crop Type', width: 180, minWidth: 150 },
@@ -230,8 +234,7 @@ export default function CompleteReportTemplate({
         disableColumnMenu
         hideFooterPagination
         hideFooter
-        rowHeight={ROW_HEIGHT}
-        autoHeight
+        getRowHeight={() => 'auto'}
       />
 
       {booleanChecker(SoilTest) ? (
@@ -253,8 +256,7 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
-            rowHeight={ROW_HEIGHT}
-            autoHeight
+            getRowHeight={() => 'auto'}
           />
         </>
       ) : null}
@@ -301,8 +303,7 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
-            rowHeight={ROW_HEIGHT}
-            autoHeight
+            getRowHeight={() => 'auto'}
           />
         )}
 
@@ -310,17 +311,16 @@ export default function CompleteReportTemplate({
           <>
             <SubsectionLabel>Fertilizers</SubsectionLabel>
             <DataGrid
-              sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
+              sx={{ ...customTableStyle }}
               rows={Fertilizers}
               columns={CALC_COLUMNS}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
-              columnHeaderHeight={0}
+              columnHeaderHeight={Crops.length > 0 ? 0 : 28}
               hideFooterPagination
               hideFooter
-              rowHeight={ROW_HEIGHT}
-              autoHeight
+              getRowHeight={() => 'auto'}
             />
           </>
         )}
@@ -329,17 +329,16 @@ export default function CompleteReportTemplate({
           <>
             <SubsectionLabel>Nutrient Sources</SubsectionLabel>
             <DataGrid
-              sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
+              sx={{ ...customTableStyle }}
               rows={OtherNutrients}
               columns={CALC_COLUMNS}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
-              columnHeaderHeight={0}
+              columnHeaderHeight={Crops.length || Fertilizers.length ? 0 : 28}
               hideFooterPagination
               hideFooter
-              rowHeight={ROW_HEIGHT}
-              autoHeight
+              getRowHeight={() => 'auto'}
             />
           </>
         )}
@@ -354,8 +353,7 @@ export default function CompleteReportTemplate({
           disableColumnMenu
           hideFooterPagination
           hideFooter
-          rowHeight={ROW_HEIGHT}
-          autoHeight
+          getRowHeight={() => 'auto'}
         />
 
         {balanceMessages.length > 0 && (

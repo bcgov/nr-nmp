@@ -1,73 +1,68 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
-import { NMPFileManureStorageSystem, ManureType } from '@/types';
-
-const TABLE_COLUMNS: GridColDef[] = [
-  {
-    field: 'title',
-    headerName: 'Material',
-    width: 275,
-    renderCell: (params) => {
-      const styleObj = {
-        fontWeight: '',
-        paddingLeft: '',
-      };
-      if (params.row.bold) styleObj.fontWeight = 'bold';
-      if (params.row.paddingLeft) styleObj.paddingLeft = '2rem';
-
-      return <div style={styleObj}>{params.value}</div>;
-    },
-  },
-  {
-    field: 'amount',
-    headerName: '',
-    width: 200,
-    renderCell: (params) => {
-      const styleObj = {
-        textAlign: '',
-      };
-      if (params.row.alignRight) styleObj.textAlign = 'right';
-      // Somehow the standard css attribute is not in the type def, so any
-      return <div style={styleObj as any}>{params.value}</div>;
-    },
-  },
-  {
-    field: 'units',
-    headerName: '',
-    width: 150,
-  },
-];
+import { customTableStyle } from '../reporting.styles';
+import { LiquidManureStorageSystem } from '@/types';
 
 function NO_ROWS() {
   return <div style={{ width: '100%', textAlign: 'center', paddingTop: '2rem' }}>No data</div>;
 }
 
 export default function LiquidStorageCapacitySection({
-  ManureStorageSystems = [],
+  storageSystemLiquid,
 }: {
-  ManureStorageSystems?: NMPFileManureStorageSystem[];
+  storageSystemLiquid: LiquidManureStorageSystem;
 }) {
-  const liquidStorageSystems = ManureStorageSystems.filter(
-    (manureEle) => manureEle.manureType === ManureType.Liquid,
+  const TABLE_COLUMNS: GridColDef[] = [
+    {
+      field: 'title',
+      headerName: storageSystemLiquid.name,
+      width: 275,
+      renderCell: (params) => {
+        const styleObj = {
+          fontWeight: '',
+          paddingLeft: '',
+        };
+        if (params.row.bold) styleObj.fontWeight = 'bold';
+        if (params.row.paddingLeft) styleObj.paddingLeft = '2rem';
+
+        return <div style={styleObj}>{params.value}</div>;
+      },
+    },
+    {
+      field: 'amount',
+      headerName: '',
+      width: 200,
+      renderHeader: () => <div style={{ fontWeight: 'bold' }}>October to March volume</div>,
+      renderCell: (params) => {
+        const styleObj = {
+          textAlign: '',
+        };
+        if (params.row.alignRight) styleObj.textAlign = 'right';
+        // Somehow the standard css attribute is not in the type def, so any
+        return <div style={styleObj as any}>{params.value}</div>;
+      },
+    },
+    {
+      field: 'units',
+      headerName: '',
+      width: 150,
+    },
+  ];
+
+  const storedLiquidManuresAmount = storageSystemLiquid.manuresInSystem.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount,
+    0,
   );
-  const storedLiquidManuresAmount = liquidStorageSystems
-    .flatMap((manureEle) => manureEle.manuresInSystem)
-    .reduce((accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount, 0);
 
-  const totalYardRoofRunoff = liquidStorageSystems
-    .filter((systemEle) => systemEle.getsRunoff)
-    .reduce((accumulator, currentValue) => accumulator + currentValue.runoffAreaSqFt, 0);
+  const totalYardRoofRunoff = storageSystemLiquid.getsRunoff
+    ? storageSystemLiquid.runoffAreaSqFt
+    : 0;
 
-  const totalPrecipitation = liquidStorageSystems
-    .filter((systemEle) => systemEle.annualPrecipitation)
-    .reduce(
-      (accumulator, currentValue) => accumulator + (currentValue?.annualPrecipitation ?? 0),
-      0,
-    );
+  const totalPrecipitation = storageSystemLiquid?.annualPrecipitation ?? 0;
 
-  const totalVolume = liquidStorageSystems
-    .flatMap((manureEle) => manureEle.manureStorages)
-    .reduce((accumulator, currentValue) => accumulator + (currentValue?.volumeUSGallons ?? 0), 0);
+  const totalVolume = storageSystemLiquid.manureStorages.reduce(
+    (accumulator, currentValue) => accumulator + (currentValue?.volumeUSGallons ?? 0),
+    0,
+  );
   return (
     <div>
       <DataGrid
@@ -127,7 +122,7 @@ export default function LiquidStorageCapacitySection({
         disableColumnMenu
         hideFooterPagination
         hideFooter
-        rowHeight={ROW_HEIGHT}
+        getRowHeight={() => 'auto'}
         slots={{
           noRowsOverlay: NO_ROWS,
         }}

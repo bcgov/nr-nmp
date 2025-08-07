@@ -93,7 +93,7 @@ export default function RecordKeepingSheets() {
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
-              rowHeight={40}
+              getRowHeight={() => 'auto'}
               hideFooterPagination
               hideFooter
               slots={{

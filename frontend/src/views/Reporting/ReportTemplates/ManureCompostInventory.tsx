@@ -111,7 +111,7 @@ export default function ManureCompostInventory({
           )}
           <tr style={{ fontWeight: 'bold' }}>
             <td>
-              Material in {systemEle.manureType === ManureType.Liquid ? 'Liquid' : 'Solid'}
+              Material in {`${systemEle.name} `}
               Storage System
             </td>
             <td style={{ textAlign: 'right' }}>

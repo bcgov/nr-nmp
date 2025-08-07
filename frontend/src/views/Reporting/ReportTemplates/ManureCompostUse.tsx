@@ -1,17 +1,22 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
+import { customTableStyle } from '../reporting.styles';
 import { NMPFileManureStorageSystem, ManureType } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
   {
     field: 'title',
     headerName: 'Material',
-    width: 200,
+    width: 150,
+  },
+  {
+    field: 'UniqueMaterialName',
+    headerName: 'Material Source',
+    width: 150,
   },
   {
     field: 'AnnualAmount',
     headerName: 'Annual amount',
-    width: 200,
+    width: 150,
   },
   {
     // Not currently collected, awaiting Fertigation function
@@ -25,7 +30,7 @@ const TABLE_COLUMNS: GridColDef[] = [
     // Not enough info collected to calculate, awaiting Fertigation function
     field: 'amountRemaining',
     headerName: 'Amount remaining',
-    width: 150,
+    width: 125,
     valueGetter: (value) => `${value ?? 0}%`,
   },
 ];
@@ -73,7 +78,7 @@ export default function ManureCompostUse({
         disableColumnMenu
         hideFooterPagination
         hideFooter
-        rowHeight={ROW_HEIGHT}
+        getRowHeight={() => 'auto'}
         slots={{
           noRowsOverlay: NO_ROWS,
         }}

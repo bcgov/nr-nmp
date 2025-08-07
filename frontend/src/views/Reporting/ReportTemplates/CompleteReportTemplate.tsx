@@ -6,7 +6,7 @@ import ManureCompostInventory from './ManureCompostInventory';
 import ManureCompostUse from './ManureCompostUse';
 import ManureCompostAnalysis from './ManureCompostAnalysis';
 import { APICacheContext } from '@/context/APICacheContext';
-import { Region, SelectOption, Subregion } from '@/types';
+import { ManureType, Region, SelectOption, Subregion } from '@/types';
 import LiquidStorageCapacitySection from './LiquidStorageCapacitySection';
 
 export default function CompleteReportTemplate() {
@@ -70,7 +70,7 @@ export default function CompleteReportTemplate() {
           />
         )),
       )}
-      <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure/Compost Inventory</div>
+      <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure / Compost Inventory</div>
       {years[0] && (
         <ManureCompostInventory
           FarmAnimals={years[0].FarmAnimals}
@@ -85,9 +85,17 @@ export default function CompleteReportTemplate() {
       <div style={{ fontWeight: 'bold', marginTop: '64px' }}>
         Liquid Storage Capacity: October to March
       </div>
-      {years[0] && (
-        <LiquidStorageCapacitySection ManureStorageSystems={years[0].ManureStorageSystems} />
-      )}
+      {years[0] &&
+        years[0]?.ManureStorageSystems &&
+        years[0].ManureStorageSystems.length > 0 &&
+        years[0].ManureStorageSystems.filter(
+          (storeEle) => storeEle.manureType === ManureType.Liquid,
+        ).map((storeEle) => (
+          <LiquidStorageCapacitySection
+            key={storeEle.name}
+            storageSystemLiquid={storeEle}
+          />
+        ))}
 
       <div style={{ marginTop: '64px' }}>
         {years.map((yearEle) =>
