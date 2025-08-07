@@ -46,7 +46,7 @@ export default function CalculateNutrients() {
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
 
   // shows fertigation if on localhost or openshift dev
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = window?.config?.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL || '';
   const isDev =
     backendUrl.includes('apps.silver.devops.gov.bc.ca') &&
     !backendUrl.includes('test') &&
