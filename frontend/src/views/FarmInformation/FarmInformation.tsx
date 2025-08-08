@@ -37,8 +37,6 @@ export default function FarmInformation() {
   const [formData, setFormData] = useState<NMPFileFarmDetails>({
     // These are default values if the NMPFile doesn't have values
     FarmAnimals: [],
-    HasVegetables: false,
-    HasBerries: false,
     HasHorticulturalCrops: false,
     // Overwrite with existing file values
     ...state.nmpFile.farmDetails,
@@ -233,26 +231,10 @@ export default function FarmInformation() {
           <Grid size={12}>
             <YesNoRadioButtons
               value={formData.HasHorticulturalCrops || false}
-              text="I have Horticultural crops"
+              text="I have crops"
               onChange={(b) => handleChange({ HasHorticulturalCrops: b })}
               orientation="horizontal"
             />
-            <div css={formData.HasHorticulturalCrops ? showCheckboxGroup : hideCheckboxGroup}>
-              <Checkbox
-                value="HasVegetables"
-                isSelected={formData.HasVegetables}
-                onChange={(s) => handleChange({ HasVegetables: s })}
-              >
-                I have vegetables
-              </Checkbox>
-              {/* <Checkbox
-                value="HasBerries"
-                isSelected={formData.HasBerries}
-                onChange={(s) => handleChange('HasBerries', s)}
-              >
-                I have berries
-              </Checkbox> */}
-            </div>
           </Grid>
           <Grid size={12}>
             <YesNoRadioButtons
