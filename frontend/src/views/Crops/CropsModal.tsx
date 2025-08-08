@@ -320,22 +320,18 @@ function CropsModal({
     if (fieldIndex !== null && selectedCrop !== undefined && selectedCropType !== undefined) {
       try {
         let nutrientValues;
-        // Get soil test P and K values, use defaults if not available
-        const soilTestValP = field.SoilTest?.convertedKelownaP
-          ? Number(field.SoilTest.convertedKelownaP)
-          : 250; // Default from defaultSoilTestData
-        const soilTestValK = field.SoilTest?.convertedKelownaK
-          ? Number(field.SoilTest.convertedKelownaK)
-          : 500; // Default from defaultSoilTestData
-        // Leaf tissue will be completed after this ticket and updated here. Using temp values for now
         if (selectedCrop.id === CROP_RASPBERRIES_ID) {
           const nutrients = await getRaspberryNutrients(
             formData.yield,
             formData.willSawdustBeApplied!,
             formData.willPlantsBePruned!,
             formData.whereWillPruningsGo!,
-            soilTestValP,
-            soilTestValK,
+            field.SoilTest?.valP !== undefined
+              ? field.SoilTest.valP
+              : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestP,
+            field.SoilTest?.valK !== undefined
+              ? field.SoilTest.valK
+              : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestK,
             formData.leafTissueP !== undefined
               ? formData.leafTissueP
               : DEFAULT_BERRY_DATA.defaultRaspberryLeafTestP,
@@ -352,7 +348,9 @@ function CropsModal({
             formData.whereWillPruningsGo!,
             formData.plantAgeYears!,
             formData.numberOfPlantsPerAcre!,
-            soilTestValP,
+            field.SoilTest?.valP !== undefined
+              ? field.SoilTest.valP
+              : DEFAULT_BERRY_DATA.defaultBlueberrySoilTestP,
             formData.leafTissueP !== undefined
               ? formData.leafTissueP
               : DEFAULT_BERRY_DATA.defaultBlueberryLeafTestP,
