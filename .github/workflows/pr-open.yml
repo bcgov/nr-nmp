@@ -18,11 +18,11 @@ jobs:
         package: [database, backend, frontend]
     timeout-minutes: 20
     steps:
-      - uses: bcgov-nr/action-builder-ghcr@v2.3.0
+      - uses: bcgov-nr/action-builder-ghcr@v4.0.0
         with:
           keep_versions: 50
           package: ${{ matrix.package }}
-          tag: ${{ github.event.number }}
+          tags: ${{ github.event.number }}
           tag_fallback: latest
           triggers: ('${{ matrix.package }}/')
 
