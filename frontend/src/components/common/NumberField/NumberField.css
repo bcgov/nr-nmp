@@ -1,4 +1,3 @@
-
 .bcds-react-aria-NumberField {
   display: inline-flex;
   flex-direction: column;
@@ -36,8 +35,7 @@
   gap: var(--layout-margin-small);
   background: var(--surface-color-forms-default);
   box-sizing: border-box;
-  border: var(--layout-border-width-small) solid
-    var(--surface-color-border-default);
+  border: var(--layout-border-width-small) solid var(--surface-color-border-default);
   border-radius: var(--layout-border-radius-medium);
   padding: var(--layout-padding-small) 12px;
 }
@@ -68,17 +66,14 @@
 
 /* Hover and focus states */
 
-.bcds-react-aria-NumberField--container
-  > .bcds-react-aria-NumberField--Input[data-focused] {
+.bcds-react-aria-NumberField--container > .bcds-react-aria-NumberField--Input[data-focused] {
   outline: none;
 }
 
 .bcds-react-aria-NumberField--container:focus-within {
   border-radius: var(--layout-border-radius-large);
-  border: var(--layout-border-width-small) solid
-    var(--surface-color-border-active);
-  outline: solid var(--layout-border-width-medium)
-    var(--surface-color-border-active);
+  border: var(--layout-border-width-small) solid var(--surface-color-border-active);
+  outline: solid var(--layout-border-width-medium) var(--surface-color-border-active);
   outline-offset: var(--layout-margin-hair);
 }
 
@@ -88,8 +83,7 @@
 
 /* Disabled and invalid states */
 
-.bcds-react-aria-NumberField[data-disabled]
-  > .bcds-react-aria-NumberField--container {
+.bcds-react-aria-NumberField[data-disabled] > .bcds-react-aria-NumberField--container {
   background: var(--surface-color-forms-disabled);
   cursor: not-allowed;
 }
@@ -99,16 +93,13 @@
   cursor: not-allowed;
 }
 
-.bcds-react-aria-NumberField[data-invalid]
-  > .bcds-react-aria-NumberField--container {
+.bcds-react-aria-NumberField[data-invalid] > .bcds-react-aria-NumberField--container {
   border-radius: var(--layout-border-radius-medium);
-  border: var(--layout-border-width-small) solid
-    var(--support-border-color-danger);
+  border: var(--layout-border-width-small) solid var(--support-border-color-danger);
   background: var(--surface-color-forms-default);
 }
 
-.bcds-react-aria-NumberField[data-readonly]
-  > .bcds-react-aria-NumberField--container {
+.bcds-react-aria-NumberField[data-readonly] > .bcds-react-aria-NumberField--container {
   background: var(--surface-color-forms-disabled);
 }
 

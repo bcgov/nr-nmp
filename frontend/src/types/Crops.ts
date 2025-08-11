@@ -89,6 +89,9 @@ export interface NMPFileCropData extends CalculateNutrientsColumn {
   willPlantsBePruned?: boolean;
   whereWillPruningsGo?: string;
   willSawdustBeApplied?: boolean;
+  hasLeafTest?: boolean;
+  leafTissueP?: number;
+  leafTissueK?: number;
 
   /*
   Fields from old NMP, currently unused, feel free to re-add

@@ -5,7 +5,17 @@ import { booleanChecker } from '@/utils/utils';
 import { APICacheContext } from '@/context/APICacheContext';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
 import { findBalanceMessage } from '@/views/CalculateNutrients/utils';
-import { customTableStyle, Message, ROW_HEIGHT } from '../reporting.styles';
+import {
+  customTableStyle,
+  Message,
+  ROW_HEIGHT,
+  FieldContainer,
+  FieldInfoSection,
+  FieldInfoItem,
+  SectionTitle,
+  TableHeader,
+  SubsectionLabel,
+} from '../reporting.styles';
 import { NutrientMessage } from '@/views/CalculateNutrients/nutrientMessages';
 
 const HIDE_COLUMN_CSS = {
@@ -15,33 +25,44 @@ const HIDE_COLUMN_CSS = {
 };
 
 const CROP_COLUMNS: GridColDef[] = [
-  { field: 'name', headerName: 'Crop Name', width: 200 },
-  { field: 'cropTypeName', headerName: 'Crop Type', width: 150 },
-  { field: 'yield', headerName: 'Yield', width: 100 },
-  { field: 'nCredit', headerName: 'Previous crop ploughed down (N credit)', width: 150 },
+  { field: 'name', headerName: 'Crop Name', width: 250, minWidth: 200 },
+  { field: 'cropTypeName', headerName: 'Crop Type', width: 180, minWidth: 150 },
+  { field: 'yield', headerName: 'Yield', width: 120, minWidth: 100 },
+  {
+    field: 'nCredit',
+    headerName: 'Previous crop ploughed down (N credit)',
+    width: 280,
+    minWidth: 250,
+  },
 ];
 
 const SOIL_TEST_COLUMNS: GridColDef[] = [
-  { field: 'valNO3H', headerName: 'Nitrate-N', width: 200 },
-  { field: 'valP', headerName: 'Phosphorus', width: 150 },
-  { field: 'valK', headerName: 'Potassium', width: 150 },
-  { field: 'valPH', headerName: 'pH', width: 150 },
+  { field: 'valNO3H', headerName: 'Nitrate-N', width: 180, minWidth: 150 },
+  { field: 'valP', headerName: 'Phosphorus', width: 180, minWidth: 150 },
+  { field: 'valK', headerName: 'Potassium', width: 180, minWidth: 150 },
+  { field: 'valPH', headerName: 'pH', width: 120, minWidth: 100 },
+];
+
+const LEAF_TISSUE_COLUMNS: GridColDef[] = [
+  { field: 'name', headerName: 'Crop Name', width: 250, minWidth: 200 },
+  { field: 'leafTissueP', headerName: 'Phosphorus (%)', width: 180, minWidth: 150 },
+  { field: 'leafTissueK', headerName: 'Potassium (%)', width: 180, minWidth: 150 },
 ];
 
 const CALC_COLUMNS: GridColDef[] = [
-  { field: 'name', width: 230, minWidth: 200, maxWidth: 300, renderHeader: () => null },
+  { field: 'name', width: 280, minWidth: 250, maxWidth: 350, renderHeader: () => null },
   {
     field: 'reqN',
-    width: 75,
-    minWidth: 75,
-    maxWidth: 100,
+    width: 90,
+    minWidth: 80,
+    maxWidth: 120,
     renderHeader: () => <span>N</span>,
   },
   {
     field: 'reqP2o5',
-    width: 75,
-    minWidth: 75,
-    maxWidth: 100,
+    width: 90,
+    minWidth: 80,
+    maxWidth: 120,
     renderHeader: () => (
       <span>
         P<sub>2</sub>O<sub>5</sub>
@@ -50,9 +71,9 @@ const CALC_COLUMNS: GridColDef[] = [
   },
   {
     field: 'reqK2o',
-    width: 75,
-    minWidth: 75,
-    maxWidth: 100,
+    width: 90,
+    minWidth: 80,
+    maxWidth: 120,
     renderHeader: () => (
       <span>
         K<sub>2</sub>O
@@ -61,16 +82,16 @@ const CALC_COLUMNS: GridColDef[] = [
   },
   {
     field: 'remN',
-    width: 75,
-    minWidth: 75,
-    maxWidth: 100,
+    width: 90,
+    minWidth: 80,
+    maxWidth: 120,
     renderHeader: () => <span>N</span>,
   },
   {
     field: 'remP2o5',
-    width: 75,
-    minWidth: 75,
-    maxWidth: 100,
+    width: 90,
+    minWidth: 80,
+    maxWidth: 120,
     renderHeader: () => (
       <span>
         P<sub>2</sub>O<sub>5</sub>
@@ -79,9 +100,9 @@ const CALC_COLUMNS: GridColDef[] = [
   },
   {
     field: 'remK2o',
-    width: 75,
-    minWidth: 75,
-    maxWidth: 130,
+    width: 90,
+    minWidth: 80,
+    maxWidth: 150,
     renderHeader: () => (
       <span>
         K<sub>2</sub>O
@@ -110,6 +131,12 @@ export default function CompleteReportTemplate({
   const apiCache = useContext(APICacheContext);
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
+
+  // Filter crops that have leaf tissue test data
+  const cropsWithLeafTests = Crops.filter(
+    (crop) =>
+      crop.hasLeafTest && (crop.leafTissueP !== undefined || crop.leafTissueK !== undefined),
+  );
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
     const allRows = [...Crops, ...Fertilizers, ...OtherNutrients];
@@ -159,30 +186,43 @@ export default function CompleteReportTemplate({
   }, []);
 
   return (
-    <div style={{ marginTop: '16px', marginBottom: '16px' }}>
-      <div>
-        <span style={{ textDecoration: 'underline' }}>Field Name: {FieldName}</span>
-      </div>
-      <div>
-        <span>Planning Year: {year}</span>
-      </div>
-      <div>
-        <span>Field Area: {Area}</span>
-      </div>
-      <div>
-        <span>
-          Application Frequency:
-          {
-            MANURE_APPLICATION_FREQ.find((ele) => ele.id === PreviousYearManureApplicationFrequency)
-              ?.label
-          }
-        </span>
-      </div>
-      <div>
-        <span>Comments: {Comment}</span>
-      </div>
+    <FieldContainer>
+      <FieldInfoSection>
+        <FieldInfoItem>
+          <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
+            Field Name: {FieldName}
+          </span>
+        </FieldInfoItem>
+        <FieldInfoItem>
+          <span>
+            <strong>Planning Year:</strong> {year}
+          </span>
+        </FieldInfoItem>
+        <FieldInfoItem>
+          <span>
+            <strong>Field Area:</strong> {Area}
+          </span>
+        </FieldInfoItem>
+        <FieldInfoItem>
+          <span>
+            <strong>Application Frequency:</strong>{' '}
+            {
+              MANURE_APPLICATION_FREQ.find(
+                (ele) => ele.id === PreviousYearManureApplicationFrequency,
+              )?.label
+            }
+          </span>
+        </FieldInfoItem>
+        <FieldInfoItem>
+          <span>
+            <strong>Comments:</strong> {Comment}
+          </span>
+        </FieldInfoItem>
+      </FieldInfoSection>
+
+      <SectionTitle>Crop Information</SectionTitle>
       <DataGrid
-        sx={{ ...customTableStyle, marginTop: '8px' }}
+        sx={{ ...customTableStyle }}
         rows={Crops}
         columns={CROP_COLUMNS}
         getRowId={() => crypto.randomUUID()}
@@ -191,15 +231,21 @@ export default function CompleteReportTemplate({
         hideFooterPagination
         hideFooter
         rowHeight={ROW_HEIGHT}
+        autoHeight
       />
+
       {booleanChecker(SoilTest) ? (
         <>
-          <div>Soil Test Results: {SoilTest?.sampleDate}</div>
-          <div>
-            Soil Test Method: {soilTestMethods.find((ele) => ele.id === SoilTest?.soilTestId)?.name}
-          </div>
+          <SectionTitle>Soil Test Information</SectionTitle>
+          <FieldInfoItem style={{ marginBottom: '12px' }}>
+            <strong>Soil Test Results:</strong> {SoilTest?.sampleDate?.toString()}
+          </FieldInfoItem>
+          <FieldInfoItem style={{ marginBottom: '16px' }}>
+            <strong>Soil Test Method:</strong>{' '}
+            {soilTestMethods.find((ele) => ele.id === SoilTest?.soilTestId)?.name}
+          </FieldInfoItem>
           <DataGrid
-            sx={{ ...customTableStyle, marginTop: '8px' }}
+            sx={{ ...customTableStyle }}
             rows={[SoilTest]}
             columns={SOIL_TEST_COLUMNS}
             getRowId={() => crypto.randomUUID()}
@@ -208,24 +254,42 @@ export default function CompleteReportTemplate({
             hideFooterPagination
             hideFooter
             rowHeight={ROW_HEIGHT}
+            autoHeight
           />
         </>
-      ) : (
-        ''
-      )}
-      <div
-        style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
-      >
-        <div style={{ width: 200 }} />
-        <div style={{ width: 290 }}>
+      ) : null}
+
+      {cropsWithLeafTests.length > 0 ? (
+        <>
+          <SectionTitle>Leaf Tissue Test Information</SectionTitle>
+          <DataGrid
+            sx={{ ...customTableStyle }}
+            rows={cropsWithLeafTests}
+            columns={LEAF_TISSUE_COLUMNS}
+            getRowId={() => crypto.randomUUID()}
+            disableRowSelectionOnClick
+            disableColumnMenu
+            hideFooterPagination
+            hideFooter
+            rowHeight={ROW_HEIGHT}
+            autoHeight
+          />
+        </>
+      ) : null}
+
+      <SectionTitle>Nutrient Requirements and Removal</SectionTitle>
+      <TableHeader>
+        <div style={{ width: 280 }} />
+        <div style={{ width: 280 }}>
           Agronomic (lb/ac)
           <br />
         </div>
-        <div style={{ width: 250 }}>
+        <div style={{ width: 280 }}>
           Crop Removal (lb/ac)
           <br />
         </div>
-      </div>
+      </TableHeader>
+
       <div>
         {Crops.length > 0 && (
           <DataGrid
@@ -238,11 +302,13 @@ export default function CompleteReportTemplate({
             hideFooterPagination
             hideFooter
             rowHeight={ROW_HEIGHT}
+            autoHeight
           />
         )}
+
         {Fertilizers.length > 0 && (
           <>
-            <span>Fertilizers</span>
+            <SubsectionLabel>Fertilizers</SubsectionLabel>
             <DataGrid
               sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
               rows={Fertilizers}
@@ -254,12 +320,14 @@ export default function CompleteReportTemplate({
               hideFooterPagination
               hideFooter
               rowHeight={ROW_HEIGHT}
+              autoHeight
             />
           </>
         )}
+
         {OtherNutrients.length > 0 && (
           <>
-            <span>Nutrient Sources</span>
+            <SubsectionLabel>Nutrient Sources</SubsectionLabel>
             <DataGrid
               sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
               rows={OtherNutrients}
@@ -271,10 +339,12 @@ export default function CompleteReportTemplate({
               hideFooterPagination
               hideFooter
               rowHeight={ROW_HEIGHT}
+              autoHeight
             />
           </>
         )}
-        <span>Balance</span>
+
+        <SubsectionLabel>Balance</SubsectionLabel>
         <DataGrid
           sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
           rows={[balanceRow]}
@@ -285,11 +355,17 @@ export default function CompleteReportTemplate({
           hideFooterPagination
           hideFooter
           rowHeight={ROW_HEIGHT}
+          autoHeight
         />
-        {balanceMessages.map((msg) => (
-          <Message key={msg.Id}>{msg.Text}</Message>
-        ))}
+
+        {balanceMessages.length > 0 && (
+          <div style={{ marginTop: '16px' }}>
+            {balanceMessages.map((msg) => (
+              <Message key={msg.Id}>{msg.Text}</Message>
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </FieldContainer>
   );
 }
