@@ -1,6 +1,6 @@
 import { NMPFileSoilTestData } from '@/types';
 
-const DEFAULT_LEAF_TEST_DATA: Omit<NMPFileSoilTestData, 'soilTestId'> = {
+const DEFAULT_SOIL_TEST_DATA: Omit<NMPFileSoilTestData, 'soilTestId'> = {
   valNO3H: 0,
   valP: 250,
   valK: 500,
@@ -10,4 +10,4 @@ const DEFAULT_LEAF_TEST_DATA: Omit<NMPFileSoilTestData, 'soilTestId'> = {
   sampleDate: undefined,
 };
 
-export default DEFAULT_LEAF_TEST_DATA;
+export default DEFAULT_SOIL_TEST_DATA;
