@@ -43,6 +43,12 @@ const SOIL_TEST_COLUMNS: GridColDef[] = [
   { field: 'valPH', headerName: 'pH', width: 120, minWidth: 100 },
 ];
 
+const LEAF_TISSUE_COLUMNS: GridColDef[] = [
+  { field: 'name', headerName: 'Crop Name', width: 250, minWidth: 200 },
+  { field: 'leafTissueP', headerName: 'Phosphorus (%)', width: 180, minWidth: 150 },
+  { field: 'leafTissueK', headerName: 'Potassium (%)', width: 180, minWidth: 150 },
+];
+
 const CALC_COLUMNS: GridColDef[] = [
   { field: 'name', width: 280, minWidth: 250, maxWidth: 350, renderHeader: () => null },
   {
@@ -125,6 +131,12 @@ export default function CompleteReportTemplate({
   const apiCache = useContext(APICacheContext);
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
+
+  // Filter crops that have leaf tissue test data
+  const cropsWithLeafTests = Crops.filter(
+    (crop) =>
+      crop.hasLeafTest && (crop.leafTissueP !== undefined || crop.leafTissueK !== undefined),
+  );
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
     const allRows = [...Crops, ...Fertilizers, ...OtherNutrients];
@@ -236,6 +248,24 @@ export default function CompleteReportTemplate({
             sx={{ ...customTableStyle }}
             rows={[SoilTest]}
             columns={SOIL_TEST_COLUMNS}
+            getRowId={() => crypto.randomUUID()}
+            disableRowSelectionOnClick
+            disableColumnMenu
+            hideFooterPagination
+            hideFooter
+            rowHeight={ROW_HEIGHT}
+            autoHeight
+          />
+        </>
+      ) : null}
+
+      {cropsWithLeafTests.length > 0 ? (
+        <>
+          <SectionTitle>Leaf Tissue Test Information</SectionTitle>
+          <DataGrid
+            sx={{ ...customTableStyle }}
+            rows={cropsWithLeafTests}
+            columns={LEAF_TISSUE_COLUMNS}
             getRowId={() => crypto.randomUUID()}
             disableRowSelectionOnClick
             disableColumnMenu
