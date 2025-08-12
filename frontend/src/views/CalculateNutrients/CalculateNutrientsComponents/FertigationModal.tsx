@@ -3,9 +3,11 @@
  */
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Select, Form, NumberField } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import type {
+  CalculateNutrientsColumn,
   DensityUnit,
   Fertilizer,
   FertilizerType,
@@ -14,25 +16,88 @@ import type {
   Schedule,
   SelectOption,
 } from '@/types';
-import { formGridBreakpoints } from '@/common.styles';
+import { customTableStyle, formGridBreakpoints } from '@/common.styles';
 import { NMPFileFertigation } from '@/types/calculateNutrients';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
   DRY_CUSTOM_ID,
   EMPTY_CUSTOM_FERTILIZER,
   INJECTION_RATE_UNITS,
+  INJECTION_UNIT_OPTIONS,
   LIQUID_CUSTOM_ID,
   SCHEDULE_OPTIONS,
 } from '@/constants';
+import useAppState from '@/hooks/useAppState';
+import {
+  getAppliedNutrientPerApplication,
+  getProductWeightInPounds,
+} from '../../../calculations/CalculateNutrients/Fertigation/calculations';
+import {
+  getProductVolumePerApplication,
+  getTimePerApplication,
+} from '@/calculations/CalculateNutrients/Fertigation/calculations';
+import { renderBalanceCell } from '../utils';
 
 type FertigationModalProps = {
   fieldIndex: number;
   initialModalData?: NMPFileFertigation;
   rowEditIndex?: number;
+  balanceRow: CalculateNutrientsColumn;
   field: NMPFileFieldData;
   setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
   onClose: () => void;
 };
+
+type BalanceCalcRow = {
+  reqN: number;
+  reqP2o5: number;
+  reqK2o: number;
+};
+
+const NUTRIENT_COLUMNS: GridColDef[] = [
+  {
+    field: 'reqN',
+    headerName: 'N',
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'reqP2o5',
+    headerName: 'P2O5',
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'reqK2o',
+    headerName: 'K2O',
+    sortable: false,
+    resizable: false,
+  },
+];
+
+const BALANCE_COLUMNS: GridColDef[] = [
+  {
+    field: 'reqN',
+    headerName: 'N',
+    renderCell: renderBalanceCell('reqN', true),
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'reqP2o5',
+    headerName: 'P2O5',
+    renderCell: renderBalanceCell('reqP2o5', true),
+    sortable: false,
+    resizable: false,
+  },
+  {
+    field: 'reqK2o',
+    headerName: 'K2O',
+    renderCell: renderBalanceCell('reqK2o', true),
+    sortable: false,
+    resizable: false,
+  },
+];
 
 const EMPTY_FERTIGATION_FORM_DATA: NMPFileFertigation = {
   name: '',
@@ -52,16 +117,27 @@ const EMPTY_FERTIGATION_FORM_DATA: NMPFileFertigation = {
   solubility: 0,
   amountToDissolve: 0,
   injectionRate: 0,
+  injectionUnitId: undefined,
   eventsPerSeason: 0,
   applicationPeriod: 0,
   schedule: undefined,
+  volume: 0,
+  volumeForSeason: 0,
+  applicationTime: 0,
 };
 
 export default function FertigationModal({
+  fieldIndex,
   initialModalData,
+  balanceRow,
   onClose,
   ...props
 }: FertigationModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+  const { state } = useAppState();
+  const field = useMemo(
+    () => state.nmpFile.years[0].Fields![fieldIndex],
+    [state.nmpFile, fieldIndex],
+  );
   const [fertilizerTypes, setFertilizerTypes] = useState<SelectOption<FertilizerType>[]>([]);
   const [fertilizers, setFertilizers] = useState<SelectOption<Fertilizer>[]>([]);
   const [filteredFertilizers, setFilteredFertilizers] = useState<SelectOption<Fertilizer>[]>([]);
@@ -74,6 +150,14 @@ export default function FertigationModal({
   );
   const [formCustomFertilizer, setFormCustomFertilizer] =
     useState<Fertilizer>(EMPTY_CUSTOM_FERTILIZER);
+  const [isCalculationCurrent, setIsCalculationCurrent] = useState<boolean>(
+    initialModalData !== undefined,
+  );
+  const [balanceCalcRow, setBalanceCacRow] = useState<BalanceCalcRow>({
+    reqN: Math.min(balanceRow.reqN, 0),
+    reqP2o5: Math.min(balanceRow.reqP2o5, 0),
+    reqK2o: Math.min(balanceRow.reqK2o, 0),
+  });
   const apiCache = useContext(APICacheContext);
 
   const isLiquidFertilizer = useMemo(
@@ -151,10 +235,84 @@ export default function FertigationModal({
   };
 
   const handleModalCalculate = () => {
-    console.log('Hello!');
+    let fertilizer: Fertilizer;
+    if (isCustomFertilizer) {
+      fertilizer = formCustomFertilizer;
+    } else {
+      const f = fertilizers.find((ele) => ele.id === formData.fertilizerId)?.value;
+      if (f === undefined)
+        throw new Error(`Fertilizer ${formData.fertilizerId} is missing from list.`);
+      fertilizer = f;
+    }
+
+    // Common to liquid and dry calc
+    const injectionUnit = INJECTION_RATE_UNITS.find(
+      (unit) => unit.id === formData.injectionUnitId!,
+    )!;
+
+    if (isLiquidFertilizer) {
+      const applicationUnit = liquidUnits.find((u) => u.id === formData.applUnitId)?.value;
+      if (!applicationUnit)
+        throw new Error(`Fertilizer unit ${formData.applUnitId} is missing from list.`);
+      const densityUnit = densityUnits.find((u) => u.id === formData.densityUnitId)?.value;
+      if (!densityUnit)
+        throw new Error(`Density unit ${formData.densityUnitId} is missing from list.`);
+
+      const volume = getProductVolumePerApplication(
+        formData.applicationRate!,
+        applicationUnit,
+        field.Area,
+      );
+      const volumeForSeason = volume * formData.eventsPerSeason;
+      const applicationTime = getTimePerApplication(
+        formData.applicationRate!,
+        applicationUnit,
+        field.Area,
+        formData.injectionRate,
+        injectionUnit,
+      );
+      const weight = getProductWeightInPounds(
+        formData.applicationRate!,
+        applicationUnit,
+        field.Area,
+        formData.density!,
+        densityUnit,
+      );
+      const reqN =
+        Math.round(getAppliedNutrientPerApplication(weight, field.Area, fertilizer.nitrogen) * 10) /
+        10;
+      const reqP2o5 =
+        Math.round(
+          getAppliedNutrientPerApplication(weight, field.Area, fertilizer.phosphorous) * 10,
+        ) / 10;
+      const reqK2o =
+        Math.round(
+          getAppliedNutrientPerApplication(weight, field.Area, fertilizer.potassium) * 10,
+        ) / 10;
+      setFormData((prev) => ({
+        ...prev,
+        volume,
+        volumeForSeason,
+        applicationTime,
+        reqN,
+        remN: reqN,
+        reqP2o5,
+        remP2o5: reqP2o5,
+        reqK2o,
+        remK2o: reqK2o,
+      }));
+      setBalanceCacRow({
+        reqN: Math.min(0, balanceRow.reqN + reqN),
+        reqP2o5: Math.min(0, balanceRow.reqP2o5 + reqP2o5),
+        reqK2o: Math.min(0, balanceRow.reqK2o + reqK2o),
+      });
+    }
+
+    setIsCalculationCurrent(true);
   };
 
   const handleInputChanges = (updates: Partial<NMPFileFertigation>) => {
+    setIsCalculationCurrent(false);
     setFormData((prev) => {
       let next = { ...prev };
 
@@ -203,6 +361,7 @@ export default function FertigationModal({
   };
 
   const handleCustomChanges = (name: keyof Fertilizer, value: number) => {
+    setIsCalculationCurrent(false);
     setFormCustomFertilizer((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -216,7 +375,7 @@ export default function FertigationModal({
         onCancel={onClose}
         onConfirm={handleSubmit}
         onCalculate={handleModalCalculate}
-        // isConfirmDisabled={!calculatedData}
+        isConfirmDisabled={!isCalculationCurrent}
       >
         <Grid
           container
@@ -340,19 +499,19 @@ export default function FertigationModal({
             <NumberField
               isRequired
               label="Injection Rate"
-              value={formData.applicationRate}
-              onChange={(e) => handleInputChanges({ applicationRate: e })}
+              value={formData.injectionRate}
+              onChange={(e) => handleInputChanges({ injectionRate: e })}
               minValue={0}
             />
           </Grid>
           <Grid size={{ xs: 6 }}>
             <Select
               isRequired
-              items={INJECTION_RATE_UNITS}
+              items={INJECTION_UNIT_OPTIONS}
               label="Units"
               placeholder="Select Units"
-              selectedKey={formData.applUnitId}
-              onSelectionChange={(e) => handleInputChanges({ applUnitId: e as number })}
+              selectedKey={formData.injectionUnitId}
+              onSelectionChange={(e) => handleInputChanges({ injectionUnitId: e as number })}
               noSort
               autoselectFirst
             />
@@ -378,6 +537,94 @@ export default function FertigationModal({
             />
           </Grid>
         </Grid>
+        {isLiquidFertilizer && (
+          <>
+            <Grid
+              container
+              spacing={2}
+            >
+              <Grid size={4}>
+                <span className="bcds-react-aria-Text primary small">
+                  Total Product Volume per Application
+                </span>
+                <div>
+                  <span css={{ display: 'block', marginTop: '8px' }}>
+                    {formData.volume.toFixed(2)}
+                  </span>
+                </div>
+              </Grid>
+              <Grid size={4}>
+                <span className="bcds-react-aria-Text primary small">
+                  Total Product Volume for Growing Season
+                </span>
+                <div>
+                  <span css={{ display: 'block', marginTop: '8px' }}>
+                    {formData.volumeForSeason.toFixed(2)}
+                  </span>
+                </div>
+              </Grid>
+              <Grid size={4}>
+                <span className="bcds-react-aria-Text primary small">
+                  Time per Application (minutes)
+                </span>
+                <div>
+                  <span css={{ display: 'block', marginTop: '8px' }}>
+                    {formData.applicationTime.toFixed(2)}
+                  </span>
+                </div>
+              </Grid>
+            </Grid>
+            <Grid size={12}>
+              <div>
+                <Grid
+                  container
+                  spacing={1}
+                  sx={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Grid
+                    size={{ xs: 12, md: 6 }}
+                    sx={{ maxWidth: '400px', justifyItems: 'center' }}
+                  >
+                    <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
+                      Available This Year (lb/ac)
+                      <DataGrid
+                        sx={{ ...customTableStyle }}
+                        columns={NUTRIENT_COLUMNS}
+                        rows={[formData]}
+                        getRowId={() => crypto.randomUUID()}
+                        disableRowSelectionOnClick
+                        disableColumnMenu
+                        hideFooterPagination
+                        hideFooter
+                      />
+                    </div>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 6 }}
+                    sx={{ maxWidth: '400px', justifyItems: 'center' }}
+                  >
+                    <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
+                      Still Required This Year (lb/ac)
+                      <DataGrid
+                        sx={{ ...customTableStyle }}
+                        columns={BALANCE_COLUMNS}
+                        rows={[balanceCalcRow]}
+                        getRowId={() => crypto.randomUUID()}
+                        disableRowSelectionOnClick
+                        disableColumnMenu
+                        hideFooterPagination
+                        hideFooter
+                      />
+                    </div>
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </>
+        )}
       </Form>
     </Modal>
   );

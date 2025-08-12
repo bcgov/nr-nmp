@@ -37,7 +37,14 @@ export type FertilizerUnit = {
 export type DensityUnit = {
   id: number;
   name: string;
+  // Conversion factor to get from unit to lb/imp gallon
   convfactor: number;
+};
+
+export type InjectionUnit = {
+  id: number;
+  name: string;
+  conversionToImpGallonsPerMinute: number;
 };
 
 export interface NMPFileFertilizer extends CalculateNutrientsColumn {
@@ -70,9 +77,14 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   solubility: number;
   amountToDissolve: number;
   injectionRate: number;
+  injectionUnitId?: number;
   eventsPerSeason: number;
   applicationPeriod: number;
   schedule?: Schedule;
+  // Calculations for liquid
+  volume: number;
+  volumeForSeason: number;
+  applicationTime: number;
 }
 
 export interface CropNutrients {

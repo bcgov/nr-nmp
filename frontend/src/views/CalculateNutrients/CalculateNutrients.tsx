@@ -371,6 +371,7 @@ export default function CalculateNutrients() {
           fieldIndex={activeField}
           initialModalData={undefined}
           rowEditIndex={openDialog[1]}
+          balanceRow={balanceRow}
           field={fieldList[activeField]}
           setFields={setFieldList}
           isOpen={openDialog[0] === 'fertigation'}

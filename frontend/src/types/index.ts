@@ -24,6 +24,7 @@ import {
   FertilizerType,
   FertilizerUnit,
   DensityUnit,
+  InjectionUnit,
   Schedule,
 } from './calculateNutrients';
 import NMPFileYear from './NMPFileYear';
@@ -123,6 +124,7 @@ export type {
   FertilizerType,
   FertilizerUnit,
   DensityUnit,
+  InjectionUnit,
   NMPFileOtherNutrient,
   ManureStorage,
   Subregion,
