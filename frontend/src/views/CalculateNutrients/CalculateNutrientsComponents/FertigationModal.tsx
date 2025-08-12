@@ -360,7 +360,7 @@ export default function FertigationModal({
           <Grid size={formGridBreakpoints}>
             <NumberField
               isRequired
-              label="Number of Fertigation Applications Per Season"
+              label="Fertigation Applications Per Season"
               value={formData.eventsPerSeason}
               onChange={(e) => handleInputChanges({ eventsPerSeason: e })}
               minValue={0}
