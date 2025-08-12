@@ -125,13 +125,13 @@ export default function FertigationModal({
       if (response.status === 200) {
         const units: FertilizerUnit[] = response.data;
         const unitOptions = units.map((ele) => ({ id: ele.id, label: ele.name, value: ele }));
-        const dryUnitz: SelectOption<FertilizerUnit>[] = [];
-        const liquidUnitz: SelectOption<FertilizerUnit>[] = [];
+        const unitsDry: SelectOption<FertilizerUnit>[] = [];
+        const unitsLiquid: SelectOption<FertilizerUnit>[] = [];
         unitOptions.forEach((u) =>
-          u.value.dryliquid === 'dry' ? dryUnitz.push(u) : liquidUnitz.push(u),
+          u.value.dryliquid === 'dry' ? unitsDry.push(u) : unitsLiquid.push(u),
         );
-        setDryUnits(dryUnitz);
-        setLiquidUnits(liquidUnitz);
+        setDryUnits(unitsDry);
+        setLiquidUnits(unitsLiquid);
       }
     });
 
