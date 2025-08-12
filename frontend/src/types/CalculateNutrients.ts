@@ -51,17 +51,28 @@ export interface NMPFileFertilizer extends CalculateNutrientsColumn {
   densityUnitId?: number;
 }
 
+// eslint-disable-next-line no-shadow
+export enum Schedule {
+  Monthly = 1,
+  Biweekly,
+  Weekly,
+  Daily,
+}
+
 export interface NMPFileFertigation extends CalculateNutrientsColumn {
   fertilizerTypeId: number;
   fertilizerId: number;
-  applicationRate: number;
-  density: number;
+  applicationRate?: number;
+  applUnitId?: number;
+  density?: number;
+  densityUnitId?: number;
   tankVolume: number;
   solubility: number;
   amountToDissolve: number;
   injectionRate: number;
   eventsPerSeason: number;
   applicationPeriod: number;
+  schedule?: Schedule;
 }
 
 export interface CropNutrients {
@@ -100,4 +111,11 @@ export type NutrientManures = {
 
 export type NMPNutrients = {
   nutrientManures: NutrientManures[];
+};
+
+export type DryFertilizerSolubility = {
+  id: number;
+  fertilizerId: number;
+  solubilityUnitId: number;
+  value: number;
 };

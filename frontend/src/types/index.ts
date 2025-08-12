@@ -24,6 +24,7 @@ import {
   FertilizerType,
   FertilizerUnit,
   DensityUnit,
+  Schedule,
 } from './calculateNutrients';
 import NMPFileYear from './NMPFileYear';
 import {
@@ -77,6 +78,7 @@ export {
   OTHER_ANIMAL_IDS,
   ManureType,
   Shape,
+  Schedule,
 };
 
 export type {
