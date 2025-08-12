@@ -20,6 +20,7 @@ import { HarvestUnit, HARVEST_UNIT_OPTIONS } from './harvestUnits';
 import MANURE_TYPE_OPTIONS from './ManureTypeOptions';
 import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 import PLANT_AGES from './PlantsAges';
+import DEFAULT_BERRY_DATA from './DefaultBerryData';
 import {
   DEFAULT_CIRCULAR_STORAGE,
   DEFAULT_LIQUID_MANURE_STORAGE,
@@ -61,4 +62,5 @@ export {
   DEFAULT_LIQUID_MANURE_SYSTEM,
   DEFAULT_SOLID_MANURE_SYSTEM,
   PLANT_AGES,
+  DEFAULT_BERRY_DATA,
 };

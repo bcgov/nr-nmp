@@ -8,8 +8,7 @@ export type NMPFileFarmDetails = {
   FarmSubRegion?: number;
   FarmAnimals?: string[];
   HasHorticulturalCrops?: boolean;
-  HasBerries?: boolean;
-  HasVegetables?: boolean;
+
   /*
     Fields from old NMP, currently unused, feel free to re-add
     Manure?: any | null;

@@ -16,7 +16,6 @@ export type NMPFileFieldData = {
   /*
   Fields from old NMP, currently unused, feel free to re-add
   FeedForageAnalyses?: any[];
-  LeafTest?: any | null;
   PreviousYearManureApplicationNitrogenCredit?: any | null;
   SoilTestNitrateOverrideNitrogenCredit?: any | null;
   IsSeasonalFeedingArea?: boolean;
