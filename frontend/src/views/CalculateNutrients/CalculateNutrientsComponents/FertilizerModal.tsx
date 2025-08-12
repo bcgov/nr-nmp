@@ -21,6 +21,7 @@ import {
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
 import { NMPFileFertilizer } from '@/types/calculateNutrients';
+import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
 
 type FertilizerModalProps = {
   fieldIndex: number;
@@ -85,9 +86,6 @@ const BALANCE_COLUMNS: GridColDef[] = [
   },
 ];
 
-const DRY_CUSTOM_ID = 2;
-const LIQUID_CUSTOM_ID = 4;
-
 const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
   name: '',
   fertilizerTypeId: 0,
@@ -104,16 +102,6 @@ const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
   remN: 0,
   remP2o5: 0,
   remK2o: 0,
-};
-
-const EMPTY_CUSTOM_FERTILIZER: Fertilizer = {
-  id: 0,
-  name: 'Custom fertilizer',
-  dryliquid: 'dry',
-  nitrogen: 0,
-  phosphorous: 0,
-  potassium: 0,
-  sortnum: 0,
 };
 
 const FERTILIZER_METHODS: { id: string; label: string }[] = [
