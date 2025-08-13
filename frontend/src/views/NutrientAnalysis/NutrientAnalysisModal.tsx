@@ -90,12 +90,14 @@ export default function NutrientAnalysisModal({
     return manures.map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
       id: ele.UniqueMaterialName,
       label: ele.UniqueMaterialName,
+      value: ele,
     }));
   };
 
   const handleInputChanges = (changes: Partial<NMPFileNutrientAnalysisData>) => {
     setFormData((prev: NMPFileNutrientAnalysisData): NMPFileNutrientAnalysisData => {
-      let next: NMPFileNutrientAnalysisData = { ...prev };
+      let next = { ...prev };
+      console.log(changes);
       Object.entries(changes).forEach(([name, value]) => {
         if (name === 'materialSource') {
           next = {
@@ -174,7 +176,10 @@ export default function NutrientAnalysisModal({
               label="Source of Material"
               placeholder="Select Source of Material"
               selectedKey={formData.materialSource}
-              onSelectionChange={(e) => handleInputChanges({ materialSource: e as string })}
+              onSelectionChange={(e) => {
+                console.log('e', e);
+                handleInputChanges({ materialSource: e as string });
+              }}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

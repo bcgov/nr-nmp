@@ -22,54 +22,6 @@ import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import NutrientAnalysisModal from './NutrientAnalysisModal';
 
-const TEST_MANURE_NUTRIENTS: NMPFileNutrientAnalysisData[] = [
-  {
-    materialSource: '111',
-    Moisture: '',
-    N: 1,
-    NH4N: 2,
-    P2O5: 3,
-    K2O: 4,
-    ManureId: 1,
-    SolidLiquid: 'liquid',
-    linkedUuid: 'uuuid1',
-    nMineralizationId: 1,
-    bookLab: 'book',
-    UniqueMaterialName: 'string1',
-    materialType: '',
-  },
-  {
-    materialSource: '222',
-    Moisture: '',
-    N: 5,
-    NH4N: 6,
-    P2O5: 7,
-    K2O: 8,
-    ManureId: 1,
-    SolidLiquid: 'liquid',
-    linkedUuid: 'uuuid2',
-    nMineralizationId: 1,
-    bookLab: 'book',
-    UniqueMaterialName: 'string2',
-    materialType: '',
-  },
-  {
-    materialSource: '333',
-    Moisture: '',
-    N: 9,
-    NH4N: 9,
-    P2O5: 9,
-    K2O: 9,
-    ManureId: 2,
-    SolidLiquid: 'solid',
-    linkedUuid: 'uuuid3',
-    nMineralizationId: 1,
-    bookLab: 'book',
-    UniqueMaterialName: 'string3',
-    materialType: '',
-  },
-];
-
 export default function NutrientAnalysis() {
   const { state, dispatch } = useAppState();
 

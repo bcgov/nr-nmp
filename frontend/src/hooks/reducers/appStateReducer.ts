@@ -162,7 +162,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           // Calves (0 to 3 months old), 2 animals, Solid
           ManagedManureName: `${animal.manureData.name}, ${animalStr}, Solid`,
           // Link the generated manure to the animal that created it
-          manureId: animal.manureId,
+          uuid: animal.uuid,
         });
       } else {
         generatedManures.push({
@@ -173,7 +173,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
           ManagedManureName: `${animal.manureData.name}, ${animalStr}, Liquid`,
-          manureId: animal.manureId,
+          uuid: animal.uuid,
         });
       }
     }
