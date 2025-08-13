@@ -69,9 +69,10 @@ export enum Schedule {
 export interface NMPFileFertigation extends CalculateNutrientsColumn {
   fertilizerTypeId: number;
   fertilizerId: number;
-  applicationRate?: number;
+  applicationRate: number;
   applUnitId?: number;
-  density?: number;
+  applUnitName?: string;
+  density: number;
   densityUnitId?: number;
   tankVolume: number;
   solubility: number;
@@ -81,6 +82,7 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   eventsPerSeason: number;
   applicationPeriod: number;
   schedule?: Schedule;
+  startDate?: string;
   // Calculations for liquid
   volume: number;
   volumeForSeason: number;

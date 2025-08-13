@@ -110,6 +110,21 @@ export default function CalculateNutrients() {
     );
   }, [activeField]);
 
+  // TODO: Add Date column
+  const fertigationColumns: GridColDef[] = useMemo(() => {
+    const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setOpenDialog(['fertigation', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
+    };
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'Fertigations', setFieldList);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      <div>Fertigation</div>,
+      true,
+    );
+  }, [activeField]);
+
   const otherColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['other', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
@@ -128,6 +143,7 @@ export default function CalculateNutrients() {
     const allRows = [
       ...fieldList[activeField].Crops,
       ...fieldList[activeField].Fertilizers,
+      ...fieldList[activeField].Fertigations,
       ...fieldList[activeField].OtherNutrients,
       ...fieldList[activeField].Nutrients.nutrientManures,
     ];
