@@ -90,9 +90,9 @@ export default function SoilTestsModal({
             <div css={{ label: { margin: '0' } }}>
               <StyledDatePicker>
                 <ReactDatePicker
-                  selected={formData.sampleDate}
-                  onChange={(e: any) => {
-                    handleFormFieldChange({ sampleDate: e });
+                  selected={formData.sampleDate ? new Date(formData.sampleDate) : undefined}
+                  onChange={(e: Date) => {
+                    handleFormFieldChange({ sampleDate: e.toISOString() });
                   }}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker

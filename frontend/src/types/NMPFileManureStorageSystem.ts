@@ -5,10 +5,12 @@ export type ManureInSystem =
   | {
       type: 'Generated';
       data: NMPFileGeneratedManureData;
+      uuid: string;
     }
   | {
       type: 'Imported';
       data: NMPFileImportedManureData;
+      uuid: string;
     };
 
 export type SolidManureStorage = {
@@ -65,6 +67,7 @@ export type SolidManureStorageSystem = {
   manuresInSystem: ManureInSystem[];
   manureStorage: SolidManureStorage;
   annualPrecipitation?: number;
+  uuid: string;
 };
 
 export type LiquidManureStorageSystem = {
@@ -79,6 +82,7 @@ export type LiquidManureStorageSystem = {
   separatedSolidsTons: number;
   manureStorages: LiquidManureStorage[];
   annualPrecipitation?: number;
+  uuid: string;
 };
 
 export type NMPFileManureStorageSystem = SolidManureStorageSystem | LiquidManureStorageSystem;

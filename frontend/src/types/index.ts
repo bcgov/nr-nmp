@@ -25,7 +25,7 @@ import {
   FertilizerUnit,
   DensityUnit,
   Schedule,
-} from './calculateNutrients';
+} from './CalculateNutrients';
 import NMPFileYear from './NMPFileYear';
 import {
   BEEF_COW_ID,
@@ -47,6 +47,7 @@ import {
   AnimalData,
   Animal,
 } from './Animals';
+import { NMPFileNutrientAnalysisData } from './NMPFileNutrientAnalysisData';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import Subregion from './Subregion';
@@ -132,4 +133,5 @@ export type {
   RectangularStorage,
   CircularStorage,
   SlopedWallStorage,
+  NMPFileNutrientAnalysisData,
 };

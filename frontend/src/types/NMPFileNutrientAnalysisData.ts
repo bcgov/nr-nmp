@@ -1,11 +1,10 @@
 import { ManureNutrients } from './CalculateNutrients';
 
-export type NMPFileFarmManureData = {
+export interface NMPFileNutrientAnalysisData extends ManureNutrients {
   materialSource: string;
-  materialType: string;
+  linkedUuid: string;
   nMineralizationId?: number;
   bookLab: string;
-  // Can't search-and-replace these :(
   UniqueMaterialName: string;
-  Nutrients: ManureNutrients;
-};
+  materialType: string;
+}

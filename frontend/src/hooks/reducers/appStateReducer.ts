@@ -16,6 +16,7 @@ import {
   NMPFileFarmDetails,
   ManureType,
   POULTRY_ID,
+  NMPFileNutrientAnalysisData,
 } from '@/types';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
@@ -41,6 +42,12 @@ type SaveFarmManureAction = {
   type: 'SAVE_FARM_MANURE';
   year: string;
   newManures: NMPFileFarmManureData[];
+};
+
+type SaveNutrientAnalysisAction = {
+  type: 'SAVE_NUTRIENT_ANALYSIS';
+  year: string;
+  newNutrientAnalysis: NMPFileNutrientAnalysisData[];
 };
 
 type SaveImportedManureAction = {
@@ -80,6 +87,7 @@ export type AppStateAction =
   | SaveFarmDetailsAction
   | SaveFieldsAction
   | SaveFarmManureAction
+  | SaveNutrientAnalysisAction
   | SaveImportedManureAction
   | SaveManureStorageSystemsAction
   | SaveAnimalsAction
@@ -233,6 +241,8 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     year.Fields = structuredClone(action.newFields);
   } else if (action.type === 'SAVE_FARM_MANURE') {
     year.FarmManures = structuredClone(action.newManures);
+  } else if (action.type === 'SAVE_NUTRIENT_ANALYSIS') {
+    year.NutrientAnalysis = structuredClone(action.newNutrientAnalysis);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {
     year.ImportedManures = structuredClone(action.newManures);
     if (year.ManureStorageSystems) {
