@@ -20,6 +20,7 @@ export default function FieldList() {
   const navigate = useNavigate();
 
   const unassignedManures = useMemo(() => {
+    // remove dairy cattle generated manures
     const generatedManures = state.nmpFile?.years[0].GeneratedManures || [];
     const importedManures = state.nmpFile?.years[0].ImportedManures || [];
     const unassignedM: ManureInSystem[] = [];
@@ -38,6 +39,7 @@ export default function FieldList() {
         unassignedM.push({ type: 'Imported', data: manure });
       }
     });
+    console.log(unassignedM);
     return unassignedM;
   }, [state.nmpFile?.years]);
 
@@ -113,6 +115,7 @@ export default function FieldList() {
 
   return (
     <View title="Reporting">
+      {/* only for dairy cows */}
       {unassignedManures.length > 0 && (
         <Grid
           container
@@ -122,9 +125,9 @@ export default function FieldList() {
             The following materials are not stored:
             <ul>
               {unassignedManures.map((manure) => (
-                <span key={`${manure.data?.ManagedManureName}`}>
+                <li key={`${manure.data?.ManagedManureName}`}>
                   {manure.type} - {manure.data?.ManagedManureName}
-                </span>
+                </li>
               ))}
             </ul>
           </div>
