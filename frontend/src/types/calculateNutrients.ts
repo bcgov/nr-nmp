@@ -74,8 +74,11 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   density?: number;
   densityUnitId?: number;
   tankVolume: number;
+  tankUnitId?: number;
   solubility: number;
+  solubilityUnitId?: number;
   amountToDissolve: number;
+  amountToDissolveUnitId?: number;
   injectionRate: number;
   injectionUnitId?: number;
   eventsPerSeason: number;
