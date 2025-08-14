@@ -3,7 +3,7 @@ import {
   NMPFileFertigation,
   NMPFileFertilizer,
   NMPNutrients,
-} from './calculateNutrients';
+} from './CalculateNutrients';
 import { NMPFileCropData, NMPFileSoilTestData } from './Crops';
 
 export type NMPFileOtherNutrient = CalculateNutrientsColumn;

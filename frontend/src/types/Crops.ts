@@ -1,4 +1,4 @@
-import { CalculateNutrientsColumn } from './calculateNutrients';
+import { CalculateNutrientsColumn } from './CalculateNutrients';
 
 export const FORAGE_ID = 1;
 export const COVER_CROP_ID = 2;
@@ -71,7 +71,7 @@ export type NMPFileSoilTestData = {
   valPH?: number;
   convertedKelownaK?: number;
   convertedKelownaP?: number;
-  sampleDate?: Date;
+  sampleDate?: string;
 };
 
 export interface NMPFileCropData extends CalculateNutrientsColumn {

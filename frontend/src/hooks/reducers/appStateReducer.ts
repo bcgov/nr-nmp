@@ -16,6 +16,7 @@ import {
   NMPFileFarmDetails,
   ManureType,
   POULTRY_ID,
+  NMPFileNutrientAnalysisData,
 } from '@/types';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
@@ -41,6 +42,12 @@ type SaveFarmManureAction = {
   type: 'SAVE_FARM_MANURE';
   year: string;
   newManures: NMPFileFarmManureData[];
+};
+
+type SaveNutrientAnalysisAction = {
+  type: 'SAVE_NUTRIENT_ANALYSIS';
+  year: string;
+  newNutrientAnalysis: NMPFileNutrientAnalysisData[];
 };
 
 type SaveImportedManureAction = {
@@ -80,6 +87,7 @@ export type AppStateAction =
   | SaveFarmDetailsAction
   | SaveFieldsAction
   | SaveFarmManureAction
+  | SaveNutrientAnalysisAction
   | SaveImportedManureAction
   | SaveManureStorageSystemsAction
   | SaveAnimalsAction
@@ -154,7 +162,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           // Calves (0 to 3 months old), 2 animals, Solid
           ManagedManureName: `${animal.manureData.name}, ${animalStr}, Solid`,
           // Link the generated manure to the animal that created it
-          manureId: animal.manureId,
+          uuid: animal.uuid,
         });
       } else {
         generatedManures.push({
@@ -165,7 +173,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
           ManagedManureName: `${animal.manureData.name}, ${animalStr}, Liquid`,
-          manureId: animal.manureId,
+          uuid: animal.uuid,
         });
       }
     }
@@ -233,6 +241,8 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     year.Fields = structuredClone(action.newFields);
   } else if (action.type === 'SAVE_FARM_MANURE') {
     year.FarmManures = structuredClone(action.newManures);
+  } else if (action.type === 'SAVE_NUTRIENT_ANALYSIS') {
+    year.NutrientAnalysis = structuredClone(action.newNutrientAnalysis);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {
     year.ImportedManures = structuredClone(action.newManures);
     if (year.ManureStorageSystems) {

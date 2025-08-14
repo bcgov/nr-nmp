@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
@@ -26,6 +26,11 @@ export default function SoilTestsModal({
 }: SoilModalProps) {
   const [formData, setFormData] = useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(
     initialFormData || {},
+  );
+
+  const formDataDate = useMemo(
+    () => (formData?.sampleDate ? new Date(formData.sampleDate) : undefined),
+    [formData?.sampleDate],
   );
 
   const handleFormFieldChange = (changes: Partial<Omit<NMPFileSoilTestData, 'soilTestId'>>) => {
@@ -90,9 +95,9 @@ export default function SoilTestsModal({
             <div css={{ label: { margin: '0' } }}>
               <StyledDatePicker>
                 <ReactDatePicker
-                  selected={formData.sampleDate}
-                  onChange={(e: any) => {
-                    handleFormFieldChange({ sampleDate: e });
+                  selected={formDataDate}
+                  onChange={(e: Date) => {
+                    handleFormFieldChange({ sampleDate: e.toISOString() });
                   }}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker

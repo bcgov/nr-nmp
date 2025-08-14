@@ -21,7 +21,7 @@ export type BeefCattleData = {
   manureType: ManureType.Solid;
   daysCollected?: number;
   manureData?: { name: string; annualSolidManure: number };
-  manureId: string;
+  uuid: string;
 };
 
 export type DairyCattleData = {
@@ -37,7 +37,7 @@ export type DairyCattleData = {
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
     | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
-  manureId: string;
+  uuid: string;
 };
 
 export type PoultryData = {
@@ -50,7 +50,7 @@ export type PoultryData = {
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
     | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
-  manureId: string;
+  uuid: string;
 };
 
 // I didn't want to define the type like this but Typescript
@@ -67,7 +67,7 @@ export type OtherAnimalData = {
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
     | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
-  manureId: string;
+  uuid: string;
 };
 
 export type AnimalData = BeefCattleData | DairyCattleData | PoultryData | OtherAnimalData;

@@ -5,7 +5,12 @@ import { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Checkbox } from '@bcgov/design-system-react-components';
 import { ModalProps } from '@/components/common/Modal/Modal';
-import { ManureNutrients, NMPFileFarmManureData, Manure, SelectOption } from '@/types';
+import {
+  Manure,
+  SelectOption,
+  NMPFileNutrientAnalysisData,
+  NMPFileManureStorageSystem,
+} from '@/types';
 import { formGridBreakpoints } from '@/common.styles';
 import { Form, Select, Modal, TextField, NumberField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -13,13 +18,15 @@ import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 
 type NutrientAnalysisModalProps = {
-  initialModalData?: NMPFileFarmManureData;
+  initialModalData?: NMPFileNutrientAnalysisData;
   manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[];
-  handleSubmit: (data: NMPFileFarmManureData) => void;
+  storageSystems: NMPFileManureStorageSystem[];
+  handleSubmit: (data: NMPFileNutrientAnalysisData) => void;
   onCancel: () => void;
 };
 
-const EMPTY_MANURE_NUTRIENTS: ManureNutrients = {
+const EMPTY_NUTRIENT_ANALYSIS: NMPFileNutrientAnalysisData = {
+  materialSource: '',
   Moisture: '',
   N: 0,
   NH4N: 0,
@@ -27,29 +34,41 @@ const EMPTY_MANURE_NUTRIENTS: ManureNutrients = {
   K2O: 0,
   ManureId: 0,
   SolidLiquid: '',
-};
-
-const EMPTY_MANURE_DATA: NMPFileFarmManureData = {
-  materialSource: '',
+  linkedUuid: '',
   materialType: '',
   bookLab: '',
   UniqueMaterialName: '',
-  Nutrients: EMPTY_MANURE_NUTRIENTS,
 };
 
 export default function NutrientAnalysisModal({
   initialModalData,
   handleSubmit,
   manures,
+  storageSystems,
   onCancel,
   ...props
 }: NutrientAnalysisModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [formData, setFormData] = useState<NMPFileFarmManureData>(
-    initialModalData || EMPTY_MANURE_DATA,
+  const [formData, setFormData] = useState<NMPFileNutrientAnalysisData>(
+    initialModalData || EMPTY_NUTRIENT_ANALYSIS,
   );
   const apiCache = useContext(APICacheContext);
 
   const [manureOptions, setManureOptions] = useState<SelectOption<Manure>[]>([]);
+  const materialSourceOptions = [
+    ...storageSystems.map((storageEle) => ({
+      id: storageEle.uuid,
+      label: storageEle.name,
+      value: storageEle,
+    })),
+
+    ...manures
+      .filter((ele) => !ele.AssignedToStoredSystem)
+      .map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
+        id: ele.uuid,
+        label: ele.UniqueMaterialName,
+        value: ele,
+      })),
+  ];
 
   useEffect(() => {
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
@@ -62,15 +81,13 @@ export default function NutrientAnalysisModal({
     });
   }, [apiCache]);
 
-  const handleInputChanges = (
-    changes: Partial<NMPFileFarmManureData> | Partial<ManureNutrients>,
-  ) => {
-    setFormData((prev: NMPFileFarmManureData): NMPFileFarmManureData => {
+  const handleInputChanges = (changes: Partial<NMPFileNutrientAnalysisData>) => {
+    setFormData((prev: NMPFileNutrientAnalysisData): NMPFileNutrientAnalysisData => {
       let next = { ...prev };
       Object.entries(changes).forEach(([name, value]) => {
         if (name === 'materialSource') {
           next = {
-            ...EMPTY_MANURE_DATA,
+            ...EMPTY_NUTRIENT_ANALYSIS,
             bookLab: '',
             ...changes,
           };
@@ -85,19 +102,14 @@ export default function NutrientAnalysisModal({
           if (!selectedManure) {
             throw new Error(`Manure type "${value}" not found.`);
           }
-
-          const Nutrients: ManureNutrients = {
-            Moisture: selectedManure.moisture,
-            N: selectedManure.nitrogen,
-            NH4N: selectedManure.ammonia,
-            P2O5: selectedManure.phosphorous,
-            K2O: selectedManure.potassium,
-            ManureId: selectedManure.id,
-            SolidLiquid: selectedManure.solidliquid || '',
-          };
+          next.Moisture = selectedManure.moisture;
+          next.N = selectedManure.nitrogen;
+          next.NH4N = selectedManure.ammonia;
+          next.P2O5 = selectedManure.phosphorous;
+          next.K2O = selectedManure.potassium;
+          next.ManureId = selectedManure.id;
           next.materialType = value ? value.toString() : '';
           next.UniqueMaterialName = updatedUniqueMaterialName;
-          next.Nutrients = Nutrients;
         }
 
         // reset nutrient values when book value is selected
@@ -109,23 +121,13 @@ export default function NutrientAnalysisModal({
             throw new Error(`Manure type "${value}" not found.`);
           }
           next.bookLab = value ? value.toString() : '';
-          next.Nutrients = {
-            ManureId: selectedManure.id,
-            Moisture: selectedManure.moisture,
-            N: selectedManure.nitrogen,
-            NH4N: selectedManure.ammonia,
-            P2O5: selectedManure.phosphorous,
-            K2O: selectedManure.potassium,
-            SolidLiquid: selectedManure.solidliquid,
-          };
-        }
-
-        // update nutrients if changed
-        if (name in next.Nutrients) {
-          next.Nutrients = {
-            ...next.Nutrients,
-            [name]: value,
-          };
+          next.ManureId = selectedManure.id;
+          next.Moisture = selectedManure.moisture;
+          next.N = selectedManure.nitrogen;
+          next.NH4N = selectedManure.ammonia;
+          next.P2O5 = selectedManure.phosphorous;
+          next.K2O = selectedManure.potassium;
+          next.SolidLiquid = selectedManure.solidliquid;
         }
       });
 
@@ -140,7 +142,9 @@ export default function NutrientAnalysisModal({
       {...props}
     >
       <Form
-        onConfirm={() => handleSubmit(formData)}
+        onConfirm={() => {
+          handleSubmit(formData);
+        }}
         onCancel={onCancel}
       >
         <Grid
@@ -150,14 +154,20 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              items={manures.map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
-                id: ele.UniqueMaterialName,
-                label: ele.UniqueMaterialName,
-              }))}
+              items={materialSourceOptions}
               label="Source of Material"
               placeholder="Select Source of Material"
-              selectedKey={formData.materialSource}
-              onSelectionChange={(e) => handleInputChanges({ materialSource: e as string })}
+              selectedKey={formData.linkedUuid}
+              onSelectionChange={(e) => {
+                const selectedSource = materialSourceOptions.find((ele) => ele.id === e);
+                if (!selectedSource) {
+                  throw new Error(`Source manure or storage "${e}" not found.`);
+                }
+                handleInputChanges({
+                  materialSource: selectedSource?.label,
+                  linkedUuid: e as string,
+                });
+              }}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -215,11 +225,7 @@ export default function NutrientAnalysisModal({
               <NumberField
                 isRequired
                 label="Moisture (%)"
-                value={
-                  Number.isNaN(formData.Nutrients.Moisture)
-                    ? undefined
-                    : Number(formData.Nutrients.Moisture)
-                }
+                value={Number.isNaN(formData.Moisture) ? undefined : Number(formData.Moisture)}
                 onChange={(e) => handleInputChanges({ Moisture: String(e) })}
                 minValue={0}
                 maxValue={100}
@@ -228,7 +234,7 @@ export default function NutrientAnalysisModal({
               <TextField
                 isDisabled
                 label="Moisture (%)"
-                value={formData.Nutrients.Moisture}
+                value={formData.Moisture}
               />
             )}
           </Grid>
@@ -237,7 +243,7 @@ export default function NutrientAnalysisModal({
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="N"
-              value={formData.Nutrients.N}
+              value={formData.N}
               onChange={(e) => handleInputChanges({ N: e })}
               minValue={0}
             />
@@ -247,7 +253,7 @@ export default function NutrientAnalysisModal({
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="NH4-N (%)"
-              value={formData.Nutrients.NH4N}
+              value={formData.NH4N}
               onChange={(e) => handleInputChanges({ NH4N: e })}
               minValue={0}
               maxValue={100}
@@ -258,7 +264,7 @@ export default function NutrientAnalysisModal({
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="P (%)"
-              value={formData.Nutrients.P2O5}
+              value={formData.P2O5}
               onChange={(e) => handleInputChanges({ P2O5: e })}
               minValue={0}
               maxValue={100}
@@ -269,7 +275,7 @@ export default function NutrientAnalysisModal({
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="K (%)"
-              value={formData.Nutrients.K2O}
+              value={formData.K2O}
               onChange={(e) => handleInputChanges({ K2O: e })}
               minValue={0}
               maxValue={100}

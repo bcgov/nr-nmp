@@ -16,8 +16,8 @@ import type {
   Schedule,
   SelectOption,
 } from '@/types';
-import { customTableStyle, formGridBreakpoints } from '@/common.styles';
-import { NMPFileFertigation } from '@/types/calculateNutrients';
+import { formGridBreakpoints } from '@/common.styles';
+import { NMPFileFertigation } from '@/types';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
   DRY_CUSTOM_ID,

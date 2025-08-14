@@ -67,7 +67,7 @@ export default function ManureCompostInventory({
       });
       if ('manureId' in ele && ele.UniqueMaterialName === 'Milking Cow') {
         const milkCowEntry = FarmAnimals.find(
-          (animalEle) => animalEle.uuid === ele.manureId,
+          (animalEle) => animalEle.uuid === ele.uuid,
         ) as DairyCattleData;
         const washWaterGallons = calculateAnnualWashWater(
           milkCowEntry.washWater!,

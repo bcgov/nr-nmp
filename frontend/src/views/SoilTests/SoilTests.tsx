@@ -95,10 +95,12 @@ export default function SoilTests() {
         field: 'SoilTest',
         headerName: 'Sampling Month',
         valueGetter: (_value, row) =>
-          row?.SoilTest?.sampleDate.toLocaleDateString('en-CA', {
-            year: 'numeric',
-            month: 'long',
-          }),
+          row?.SoilTest?.sampleDate
+            ? new Date(row?.SoilTest?.sampleDate).toLocaleDateString('en-CA', {
+                year: 'numeric',
+                month: 'long',
+              })
+            : '',
         width: 150,
         minWidth: 150,
         maxWidth: 300,

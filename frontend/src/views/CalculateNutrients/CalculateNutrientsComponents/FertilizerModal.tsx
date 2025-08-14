@@ -18,9 +18,9 @@ import {
   CalculateNutrientsColumn,
   DensityUnit,
   SelectOption,
+  NMPFileFertilizer,
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
-import { NMPFileFertilizer } from '@/types/calculateNutrients';
 import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
 
 type FertilizerModalProps = {

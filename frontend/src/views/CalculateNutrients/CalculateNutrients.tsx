@@ -31,7 +31,7 @@ import {
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
+import { CalculateNutrientsColumn } from '@/types';
 
 function NoRows() {
   return <div />;
