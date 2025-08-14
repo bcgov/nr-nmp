@@ -1,4 +1,4 @@
-import { CalculateNutrientsColumn } from './calculateNutrients';
+import { CalculateNutrientsColumn } from './CalculateNutrients';
 
 export const FORAGE_ID = 1;
 export const COVER_CROP_ID = 2;

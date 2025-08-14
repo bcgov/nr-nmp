@@ -14,7 +14,7 @@ import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import { CropNutrients, NMPFileFieldData, SelectOption, Units } from '@/types';
-import { NutrientManures } from '@/types/calculateNutrients';
+import { NutrientManures } from '@/types/CalculateNutrients';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 

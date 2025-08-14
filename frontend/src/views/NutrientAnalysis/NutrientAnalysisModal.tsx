@@ -54,13 +54,21 @@ export default function NutrientAnalysisModal({
   const apiCache = useContext(APICacheContext);
 
   const [manureOptions, setManureOptions] = useState<SelectOption<Manure>[]>([]);
-  const storageOptions: SelectOption<NMPFileManureStorageSystem>[] = storageSystems?.map(
-    (storageEle) => ({
+  const materialSourceOptions = [
+    ...storageSystems.map((storageEle) => ({
       id: storageEle.uuid,
       label: storageEle.name,
       value: storageEle,
-    }),
-  );
+    })),
+
+    ...manures
+      .filter((ele) => !ele.AssignedToStoredSystem)
+      .map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
+        id: ele.uuid,
+        label: ele.UniqueMaterialName,
+        value: ele,
+      })),
+  ];
 
   useEffect(() => {
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
@@ -73,31 +81,9 @@ export default function NutrientAnalysisModal({
     });
   }, [apiCache]);
 
-  function setValue<K extends keyof NMPFileNutrientAnalysisData>(
-    nutrients: NMPFileNutrientAnalysisData,
-    key: K,
-    value: NMPFileNutrientAnalysisData[K],
-  ): NMPFileNutrientAnalysisData {
-    const newNutrients = nutrients;
-    newNutrients[key] = value;
-    return newNutrients;
-  }
-
-  const materialSourceOptions = () => {
-    if (storageOptions?.length) {
-      return storageOptions;
-    }
-    return manures.map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
-      id: ele.UniqueMaterialName,
-      label: ele.UniqueMaterialName,
-      value: ele,
-    }));
-  };
-
   const handleInputChanges = (changes: Partial<NMPFileNutrientAnalysisData>) => {
     setFormData((prev: NMPFileNutrientAnalysisData): NMPFileNutrientAnalysisData => {
       let next = { ...prev };
-      console.log(changes);
       Object.entries(changes).forEach(([name, value]) => {
         if (name === 'materialSource') {
           next = {
@@ -143,12 +129,6 @@ export default function NutrientAnalysisModal({
           next.K2O = selectedManure.potassium;
           next.SolidLiquid = selectedManure.solidliquid;
         }
-
-        // update nutrients if changed
-        if (name in ['Moisture', 'N', 'NH4N', 'P2O5', 'K2O', 'SolidLiquid']) {
-          // Necessary to bypass TS issue
-          next = setValue(next, name as keyof NMPFileNutrientAnalysisData, value);
-        }
       });
 
       return { ...next, ...changes };
@@ -162,7 +142,9 @@ export default function NutrientAnalysisModal({
       {...props}
     >
       <Form
-        onConfirm={() => handleSubmit(formData)}
+        onConfirm={() => {
+          handleSubmit(formData);
+        }}
         onCancel={onCancel}
       >
         <Grid
@@ -172,13 +154,19 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              items={materialSourceOptions()}
+              items={materialSourceOptions}
               label="Source of Material"
               placeholder="Select Source of Material"
-              selectedKey={formData.materialSource}
+              selectedKey={formData.linkedUuid}
               onSelectionChange={(e) => {
-                console.log('e', e);
-                handleInputChanges({ materialSource: e as string });
+                const selectedSource = materialSourceOptions.find((ele) => ele.id === e);
+                if (!selectedSource) {
+                  throw new Error(`Source manure or storage "${e}" not found.`);
+                }
+                handleInputChanges({
+                  materialSource: selectedSource?.label,
+                  linkedUuid: e as string,
+                });
               }}
             />
           </Grid>

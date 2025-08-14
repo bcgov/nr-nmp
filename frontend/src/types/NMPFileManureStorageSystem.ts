@@ -5,12 +5,10 @@ export type ManureInSystem =
   | {
       type: 'Generated';
       data: NMPFileGeneratedManureData;
-      uuid: string;
     }
   | {
       type: 'Imported';
       data: NMPFileImportedManureData;
-      uuid: string;
     };
 
 export type SolidManureStorage = {

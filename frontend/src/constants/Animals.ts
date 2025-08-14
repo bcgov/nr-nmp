@@ -8,14 +8,14 @@ import {
   PoultryData,
 } from '@/types';
 
-export const INITIAL_BEEF_FORM_DATA: Omit<BeefCattleData, 'manureId'> = {
+export const INITIAL_BEEF_FORM_DATA: Omit<BeefCattleData, 'uuid'> = {
   animalId: BEEF_COW_ID,
   subtype: '',
   daysCollected: 0,
   manureType: ManureType.Solid,
 };
 
-export const INITIAL_DAIRY_FORM_DATA: Omit<DairyCattleData, 'manureId'> = {
+export const INITIAL_DAIRY_FORM_DATA: Omit<DairyCattleData, 'uuid'> = {
   animalId: DAIRY_COW_ID,
   subtype: '',
   // Breed MUST start defined bc of weird milking cow logic
@@ -24,7 +24,7 @@ export const INITIAL_DAIRY_FORM_DATA: Omit<DairyCattleData, 'manureId'> = {
   grazingDaysPerYear: 0,
 };
 
-export const INITIAL_POULTRY_FORM_DATA: Omit<PoultryData, 'manureId'> = {
+export const INITIAL_POULTRY_FORM_DATA: Omit<PoultryData, 'uuid'> = {
   animalId: POULTRY_ID,
   subtype: '',
   birdsPerFlock: 0,

@@ -33,17 +33,13 @@ export default function NutrientAnalysis() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const storageSystems: NMPFileManureStorageSystem[] = useMemo(
-    () => state.nmpFile.years[0].ManureStorageSystems || [],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const storageSystems: NMPFileManureStorageSystem[] =
+    state.nmpFile.years[0].ManureStorageSystems || [];
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editName, setEditName] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
   const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileNutrientAnalysisData[]>(
-    // TEST_MANURE_NUTRIENTS,
     state.nmpFile.years[0]?.NutrientAnalysis || [],
   );
   // for each manuresource user can create nutrient analysis' objects
@@ -218,8 +214,12 @@ export default function NutrientAnalysis() {
       {isDialogOpen && (
         <NutrientAnalysisModal
           initialModalData={analysisForm}
-          manures={manures}
-          storageSystems={storageSystems}
+          manures={manures.filter(
+            (manureEle) => !nutrientAnalysisData.some((ele) => ele.linkedUuid === manureEle.uuid),
+          )}
+          storageSystems={storageSystems.filter(
+            (storeEle) => !nutrientAnalysisData.some((ele) => ele.linkedUuid === storeEle.uuid),
+          )}
           handleSubmit={handleModalSubmit}
           isOpen={isDialogOpen}
           onCancel={handleDialogClose}
@@ -244,7 +244,6 @@ export default function NutrientAnalysis() {
       )}
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        // rows={nutrientAnalysisData.map((ele) => ({ ...ele, ...ele.Nutrients }))}
         rows={nutrientAnalysisData}
         columns={nutrientTableColumns}
         getRowId={() => crypto.randomUUID()}

@@ -20,7 +20,7 @@ import {
   SelectOption,
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
-import { NMPFileFertilizer } from '@/types/calculateNutrients';
+import { NMPFileFertilizer } from '@/types/CalculateNutrients';
 import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
 
 type FertilizerModalProps = {
