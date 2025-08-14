@@ -10,7 +10,7 @@ import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
 import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem } from '@/types';
+import { DAIRY_COW_ID, ManureInSystem } from '@/types';
 
 export default function FieldList() {
   const reportRef = useRef(null);
@@ -20,7 +20,6 @@ export default function FieldList() {
   const navigate = useNavigate();
 
   const unassignedManures = useMemo(() => {
-    // remove dairy cattle generated manures
     const generatedManures = state.nmpFile?.years[0].GeneratedManures || [];
     const importedManures = state.nmpFile?.years[0].ImportedManures || [];
     const unassignedM: ManureInSystem[] = [];
@@ -39,8 +38,12 @@ export default function FieldList() {
         unassignedM.push({ type: 'Imported', data: manure });
       }
     });
-    console.log(unassignedM);
     return unassignedM;
+  }, [state.nmpFile?.years]);
+
+  const isDairyCattle = useMemo(() => {
+    const animalList = state.nmpFile?.years[0].FarmAnimals || [];
+    return animalList.some((animal) => animal.animalId === DAIRY_COW_ID);
   }, [state.nmpFile?.years]);
 
   async function downloadBlob() {
@@ -115,8 +118,8 @@ export default function FieldList() {
 
   return (
     <View title="Reporting">
-      {/* only for dairy cows */}
-      {unassignedManures.length > 0 && (
+      {/* only show if you have dairy cattle */}
+      {unassignedManures.length > 0 && isDairyCattle && (
         <Grid
           container
           sx={{ marginTop: '1rem' }}
