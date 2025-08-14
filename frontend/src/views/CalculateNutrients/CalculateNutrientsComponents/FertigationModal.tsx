@@ -4,7 +4,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Select, Form, NumberField } from '@/components/common';
+import { Select, Form, NumberField, InputField } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import type {
   CalculateNutrientsColumn,
@@ -48,7 +48,7 @@ type FertigationModalProps = {
   onClose: () => void;
 };
 
-type BalanceCalcRow = {
+type NutrientRow = {
   reqN: number;
   reqP2o5: number;
   reqK2o: number;
@@ -109,9 +109,9 @@ const EMPTY_FERTIGATION_FORM_DATA: NMPFileFertigation = {
   remK2o: 0,
   fertilizerTypeId: 0,
   fertilizerId: 0,
-  applicationRate: undefined,
+  applicationRate: 0,
   applUnitId: undefined,
-  density: undefined,
+  density: 0,
   densityUnitId: undefined,
   tankVolume: 0,
   tankUnitId: undefined,
@@ -132,7 +132,9 @@ const EMPTY_FERTIGATION_FORM_DATA: NMPFileFertigation = {
 export default function FertigationModal({
   fieldIndex,
   initialModalData,
+  rowEditIndex,
   balanceRow,
+  setFields,
   onClose,
   ...props
 }: FertigationModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
@@ -148,6 +150,7 @@ export default function FertigationModal({
   const [dryUnits, setDryUnits] = useState<SelectOption<FertilizerUnit>[]>([]);
   const [liquidUnits, setLiquidUnits] = useState<SelectOption<FertilizerUnit>[]>([]);
   const [densityUnits, setDensityUnits] = useState<SelectOption<DensityUnit>[]>([]);
+  const [liqDensityFactors, setLiqDensityFactors] = useState<any[]>([]);
   const [formData, setFormData] = useState<NMPFileFertigation>(
     initialModalData || EMPTY_FERTIGATION_FORM_DATA,
   );
@@ -156,7 +159,7 @@ export default function FertigationModal({
   const [isCalculationCurrent, setIsCalculationCurrent] = useState<boolean>(
     initialModalData !== undefined,
   );
-  const [balanceCalcRow, setBalanceCacRow] = useState<BalanceCalcRow>({
+  const [balanceCalcRow, setBalanceCacRow] = useState<NutrientRow>({
     reqN: Math.min(balanceRow.reqN, 0),
     reqP2o5: Math.min(balanceRow.reqP2o5, 0),
     reqK2o: Math.min(balanceRow.reqK2o, 0),
@@ -237,10 +240,30 @@ export default function FertigationModal({
         );
       }
     });
+
+    apiCache.callEndpoint('api/liquidfertilizerdensities/').then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        setLiqDensityFactors(data);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = () => {
+    setFields((prevFields) => {
+      const newFields = [...prevFields];
+      const newField = newFields[fieldIndex];
+      if (rowEditIndex !== undefined) {
+        const newFertigations = [...newField.Fertigations];
+        newFertigations[rowEditIndex] = { ...formData };
+        newField.Fertigations = newFertigations;
+      } else {
+        newField.Fertigations = [...newField.Fertigations, { ...formData }];
+      }
+      return newFields;
+    });
+
     onClose();
   };
 
@@ -362,6 +385,23 @@ export default function FertigationModal({
 
         if (name === 'fertilizerId') {
           next.name = filteredFertilizers.find((f) => f.id === value)!.label;
+          // Load liquid densities.
+          if (isLiquidFertilizer && !isCustomFertilizer) {
+            const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value);
+
+            next.density = densityValue.value;
+            next.densityUnitId = densityValue.densityunitid;
+          }
+        }
+
+        if (name === 'densityUnitId') {
+          if (isLiquidFertilizer && !isCustomFertilizer) {
+            const densityValue = liqDensityFactors.find(
+              (ele) => ele.fertilizerid === formData.fertilizerId && ele.densityunitid === value,
+            );
+            // densityValue is undef when a fertilizer is unselected
+            next.density = densityValue ? densityValue.value : 0;
+          }
         }
       });
 
@@ -545,7 +585,12 @@ export default function FertigationModal({
                   label="Units"
                   placeholder="Select Units"
                   selectedKey={formData.applUnitId}
-                  onSelectionChange={(e) => handleInputChanges({ applUnitId: e as number })}
+                  onSelectionChange={(e) =>
+                    handleInputChanges({
+                      applUnitId: e as number,
+                      applUnitName: liquidUnits.find((u) => u.id === e)!.label,
+                    })
+                  }
                   noSort
                   autoselectFirst
                 />
@@ -613,6 +658,11 @@ export default function FertigationModal({
               noSort
               autoselectFirst
             />
+            <InputField
+              type="date"
+              value={formData.startDate || ''}
+              onChange={(e) => handleInputChanges({ startDate: e.target.value })}
+            />
           </Grid>
         </Grid>
         {isLiquidFertilizer && (
@@ -624,6 +674,9 @@ export default function FertigationModal({
               <Grid size={4}>
                 <span className="bcds-react-aria-Text primary small">
                   Total Product Volume per Application
+                  {formData.applUnitName
+                    ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
+                    : ''}
                 </span>
                 <div>
                   <span css={{ display: 'block', marginTop: '8px' }}>
@@ -634,6 +687,9 @@ export default function FertigationModal({
               <Grid size={4}>
                 <span className="bcds-react-aria-Text primary small">
                   Total Product Volume for Growing Season
+                  {formData.applUnitName
+                    ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
+                    : ''}
                 </span>
                 <div>
                   <span css={{ display: 'block', marginTop: '8px' }}>

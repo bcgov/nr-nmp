@@ -1,7 +1,7 @@
 /**
  * @summary A reusable Select component
  */
-import { ComponentProps, useEffect, useState } from 'react';
+import { ComponentProps, useEffect, useMemo } from 'react';
 import { Select as BcGovSelect } from '@bcgov/design-system-react-components';
 
 // Copied from @bcgov/design-system-react-components library
@@ -15,13 +15,19 @@ interface ListBoxItemProps {
 type SortFunction = (a: any, b: any) => -1 | 0 | 1;
 
 type ThisComponentProps = {
+  // Note: sort function must return number, no booleans
   sortFunction?: SortFunction;
   noSort?: boolean;
   autoselectFirst?: boolean;
 };
 
+const defaultSortFcn = (a: ListBoxItemProps, b: ListBoxItemProps) => {
+  if (a.label < b.label) return -1;
+  if (b.label > a.label) return 1;
+  return 0;
+};
+
 function Select({
-  // Note: sort function must return number, no booleans
   sortFunction,
   noSort,
   autoselectFirst,
@@ -30,29 +36,7 @@ function Select({
   items,
   ...props
 }: ThisComponentProps & ComponentProps<typeof BcGovSelect>) {
-  const [isAutoHandled, setIsAutoHandled] = useState<boolean>(
-    autoselectFirst !== undefined ? !autoselectFirst : true,
-  );
-  useEffect(() => {
-    if (!isAutoHandled && onSelectionChange) {
-      if (selectedKey === null || selectedKey === undefined) {
-        if (!items || items.length === 0) return;
-        onSelectionChange(items[0].id!);
-        setIsAutoHandled(true);
-      } else {
-        setIsAutoHandled(true);
-      }
-    }
-  }, [isAutoHandled, selectedKey, items, onSelectionChange]);
-
-  let selectedSortFcn: SortFunction = () => 0;
-
-  const defaultSortFcn = (a: ListBoxItemProps, b: ListBoxItemProps) => {
-    if (a.label < b.label) return -1;
-    if (b.label > a.label) return 1;
-    return 0;
-  };
-
+  let selectedSortFcn: SortFunction | undefined;
   if (!noSort) {
     if (sortFunction) {
       selectedSortFcn = sortFunction;
@@ -60,11 +44,22 @@ function Select({
       selectedSortFcn = defaultSortFcn;
     }
   }
+  const sortedItems = useMemo(() => items?.sort(selectedSortFcn), [items, selectedSortFcn]);
+
+  useEffect(() => {
+    if (autoselectFirst && onSelectionChange && sortedItems && sortedItems.length > 0) {
+      if (selectedKey === null || selectedKey === undefined) {
+        onSelectionChange(sortedItems[0].id!);
+      } else if (!sortedItems.some((elem) => elem.id === selectedKey)) {
+        onSelectionChange(sortedItems[0].id!);
+      }
+    }
+  }, [autoselectFirst, selectedKey, sortedItems, onSelectionChange]);
 
   return (
     <BcGovSelect
       {...props}
-      items={items?.sort(selectedSortFcn)}
+      items={sortedItems}
       selectedKey={selectedKey}
       onSelectionChange={onSelectionChange}
     />

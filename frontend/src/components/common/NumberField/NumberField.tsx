@@ -72,7 +72,7 @@ export default function NumberField({
               {label}
               {isRequired && (
                 <span className="bcds-react-aria-NumberField--Label">
-                  {shortenRequired ? '(req)' : ' (required)'}
+                  {shortenRequired ? ' (req)' : ' (required)'}
                 </span>
               )}
             </Label>
