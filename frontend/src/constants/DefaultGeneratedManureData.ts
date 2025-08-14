@@ -1,6 +1,6 @@
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 
-const DefaultGeneratedManureFormData: Omit<NMPFileGeneratedManureData, 'manureId'> = {
+const DefaultGeneratedManureFormData: Omit<NMPFileGeneratedManureData, 'uuid'> = {
   UniqueMaterialName: '',
   AnnualAmount: 0,
   AnnualAmountUSGallonsVolume: 0,

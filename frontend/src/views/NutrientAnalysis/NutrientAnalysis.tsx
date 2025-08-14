@@ -9,10 +9,15 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { Tabs, View } from '../../components/common';
-import { AnimalData, DAIRY_COW_ID, NMPFileImportedManureData } from '@/types';
+import {
+  AnimalData,
+  DAIRY_COW_ID,
+  NMPFileImportedManureData,
+  NMPFileManureStorageSystem,
+  NMPFileNutrientAnalysisData,
+} from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
-import { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import NutrientAnalysisModal from './NutrientAnalysisModal';
@@ -28,15 +33,19 @@ export default function NutrientAnalysis() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+  const storageSystems: NMPFileManureStorageSystem[] =
+    state.nmpFile.years[0].ManureStorageSystems || [];
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editName, setEditName] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
-  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileFarmManureData[]>(
-    state.nmpFile.years[0]?.FarmManures || [],
+  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileNutrientAnalysisData[]>(
+    state.nmpFile.years[0]?.NutrientAnalysis || [],
   );
   // for each manuresource user can create nutrient analysis' objects
-  const [analysisForm, setAnalysisForm] = useState<NMPFileFarmManureData | undefined>(undefined);
+  const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysisData | undefined>(
+    undefined,
+  );
 
   const hasDairyCattle = useMemo(
     () =>
@@ -48,7 +57,7 @@ export default function NutrientAnalysis() {
 
   const handleEdit = (name: string) => {
     setEditName(name);
-    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.materialSource === name));
+    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.linkedUuid === name));
     setIsDialogOpen(true);
   };
 
@@ -61,12 +70,12 @@ export default function NutrientAnalysis() {
     setEditName(null);
   };
 
-  const handleModalSubmit = (data: NMPFileFarmManureData) => {
+  const handleModalSubmit = (data: NMPFileNutrientAnalysisData) => {
     setNutrientAnalysisData((prevState) => {
       // if editing an entry then updates that entry
       if (editName !== null) {
-        return prevState.map((item: NMPFileFarmManureData) =>
-          item.materialSource === editName ? { ...data } : item,
+        return prevState.map((item: NMPFileNutrientAnalysisData) =>
+          item.linkedUuid === editName ? { ...data } : item,
         );
       }
       // else add this new entry
@@ -78,9 +87,9 @@ export default function NutrientAnalysis() {
 
   const handleNextPage = () => {
     dispatch({
-      type: 'SAVE_FARM_MANURE',
+      type: 'SAVE_NUTRIENT_ANALYSIS',
       year: state.nmpFile.farmDetails.Year!,
-      newManures: nutrientAnalysisData,
+      newNutrientAnalysis: nutrientAnalysisData,
     });
     if (!state.showAnimalsStep) {
       navigate(CALCULATE_NUTRIENTS);
@@ -91,9 +100,9 @@ export default function NutrientAnalysis() {
 
   const handlePreviousPage = () => {
     dispatch({
-      type: 'SAVE_FARM_MANURE',
+      type: 'SAVE_NUTRIENT_ANALYSIS',
       year: state.nmpFile.farmDetails.Year!,
-      newManures: nutrientAnalysisData,
+      newNutrientAnalysis: nutrientAnalysisData,
     });
     if (hasDairyCattle) {
       navigate(STORAGE);
@@ -161,13 +170,13 @@ export default function NutrientAnalysis() {
           <>
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleEdit(row.row.materialSource)}
+              onClick={() => handleEdit(row.row.linkedUuid)}
               icon={faEdit}
               aria-label="Edit"
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDelete(row.row.materialSource)}
+              onClick={() => handleDelete(row.row.linkedUuid)}
               icon={faTrash}
               aria-label="Delete"
             />
@@ -205,15 +214,12 @@ export default function NutrientAnalysis() {
       {isDialogOpen && (
         <NutrientAnalysisModal
           initialModalData={analysisForm}
-          manures={manures.filter((manureEle) => {
-            const existingList = nutrientAnalysisData.map(
-              (nutrientEle) => nutrientEle.materialSource,
-            );
-            // Disallow manurer sources already entered, unless it is being edited
-            return !existingList.some(
-              (ele) => ele === manureEle.UniqueMaterialName && ele !== editName,
-            );
-          })}
+          manures={manures.filter(
+            (manureEle) => !nutrientAnalysisData.some((ele) => ele.linkedUuid === manureEle.uuid),
+          )}
+          storageSystems={storageSystems.filter(
+            (storeEle) => !nutrientAnalysisData.some((ele) => ele.linkedUuid === storeEle.uuid),
+          )}
           handleSubmit={handleModalSubmit}
           isOpen={isDialogOpen}
           onCancel={handleDialogClose}
@@ -238,7 +244,7 @@ export default function NutrientAnalysis() {
       )}
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
-        rows={nutrientAnalysisData.map((ele) => ({ ...ele, ...ele.Nutrients }))}
+        rows={nutrientAnalysisData}
         columns={nutrientTableColumns}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick

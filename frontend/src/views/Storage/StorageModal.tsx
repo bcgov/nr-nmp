@@ -55,6 +55,9 @@ export default function StorageModal({
     if (formData.manureType === undefined) throw new Error('Form validation failed.');
     if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
 
+    if (!formData.uuid) {
+      formData.uuid = crypto.randomUUID();
+    }
     // Add precipitation data to the form
     const withRainData = { ...formData };
     if (withRainData.manureType === ManureType.Liquid) {

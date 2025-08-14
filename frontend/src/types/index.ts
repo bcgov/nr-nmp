@@ -18,6 +18,7 @@ import Region from './Region';
 import {
   CalculateNutrientsColumn,
   CropNutrients,
+  DryFertilizerSolubility,
   NutrientColumns,
   ManureNutrients,
   Fertilizer,
@@ -25,7 +26,10 @@ import {
   FertilizerUnit,
   DensityUnit,
   Schedule,
-} from './calculateNutrients';
+  NMPFileFertigation,
+  NMPFileFertilizer,
+  NutrientManures,
+} from './CalculateNutrients';
 import NMPFileYear from './NMPFileYear';
 import {
   BEEF_COW_ID,
@@ -47,6 +51,7 @@ import {
   AnimalData,
   Animal,
 } from './Animals';
+import { NMPFileNutrientAnalysisData } from './NMPFileNutrientAnalysisData';
 import { NMPFileFarmManureData } from './NMPFileFarmManureData';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import Subregion from './Subregion';
@@ -132,4 +137,9 @@ export type {
   RectangularStorage,
   CircularStorage,
   SlopedWallStorage,
+  NMPFileNutrientAnalysisData,
+  DryFertilizerSolubility,
+  NMPFileFertigation,
+  NMPFileFertilizer,
+  NutrientManures,
 };

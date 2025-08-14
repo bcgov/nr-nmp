@@ -15,7 +15,7 @@ import type {
   SelectOption,
 } from '@/types';
 import { formGridBreakpoints } from '@/common.styles';
-import { NMPFileFertigation } from '@/types/calculateNutrients';
+import { NMPFileFertigation } from '@/types';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
   DRY_CUSTOM_ID,

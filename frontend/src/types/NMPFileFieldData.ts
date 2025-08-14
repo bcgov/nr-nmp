@@ -1,4 +1,4 @@
-import { CalculateNutrientsColumn, NMPFileFertilizer, NMPNutrients } from './calculateNutrients';
+import { CalculateNutrientsColumn, NMPFileFertilizer, NMPNutrients } from './CalculateNutrients';
 import { NMPFileCropData, NMPFileSoilTestData } from './Crops';
 
 export type NMPFileOtherNutrient = CalculateNutrientsColumn;
