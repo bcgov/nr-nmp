@@ -11,7 +11,7 @@ import { NUTRIENT_MESSAGES } from './nutrientMessages';
 const initialAgronomicBalance: CropNutrients = { N: 0, P2O5: 0, K2O: 0 };
 const COLUMN_WIDTH: number = 90;
 const COLUMN_STYLE = css({
-  textAlign: 'right',
+  textAlign: 'center',
   width: `${COLUMN_WIDTH}px`,
 });
 
@@ -53,7 +53,7 @@ export const generateColumns = (
   handleEditRow: (e: any) => void,
   handleDeleteRow: (e: any) => void,
   renderCell: (params: GridRenderCellParams<any, any, any>) => React.ReactNode,
-  renderTableHeader?: React.ReactNode,
+  tableHeader?: string,
   hideColumnHeaders?: boolean,
 ): GridColDef[] => [
   {
@@ -61,7 +61,15 @@ export const generateColumns = (
     width: 230,
     minWidth: 200,
     maxWidth: 300,
-    renderHeader: () => renderTableHeader ?? <div />,
+    renderHeader: () => (tableHeader ? <div>{tableHeader}</div> : <div />),
+    sortable: false,
+  },
+  {
+    field: 'date',
+    width: COLUMN_WIDTH / 2,
+    minWidth: COLUMN_WIDTH / 2,
+    maxWidth: 100,
+    renderHeader: () => <div />,
     sortable: false,
   },
   {
@@ -202,8 +210,8 @@ export function genHandleDeleteRow(
 export function renderNutrientCell({ value }: any) {
   return React.createElement(
     'div',
-    { style: { display: 'flex', alignItems: 'center', justifyContent: 'right' } },
-    React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
+    { style: { display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+    React.createElement('span', { style: {} }, value),
   );
 }
 

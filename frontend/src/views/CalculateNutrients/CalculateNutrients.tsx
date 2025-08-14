@@ -21,8 +21,9 @@ import { NutrientMessage } from './nutrientMessages';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
-// import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
+import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
+import CropsModal from '../Crops/CropsModal';
 import {
   BALANCE_COLUMNS,
   findBalanceMessage,
@@ -31,8 +32,6 @@ import {
   renderNutrientCell,
 } from './utils.tsx';
 import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
-import CropsModal from '../Crops/CropsModal.tsx';
-import FertigationModal from './CalculateNutrientsComponents/FertigationModal.tsx';
 
 function NoRows() {
   return <div />;
@@ -68,7 +67,7 @@ export default function CalculateNutrients() {
       handleEditRow,
       handleDeleteRow,
       renderNutrientCell,
-      fieldList[activeField].Crops?.length ? <div>Crops</div> : <div />,
+      fieldList[activeField].Crops?.length ? 'Crops' : undefined,
       false,
     );
   }, [activeField, fieldList]);
@@ -87,13 +86,7 @@ export default function CalculateNutrients() {
         return nextFieldArray;
       });
     };
-    return generateColumns(
-      handleEditRow,
-      handleDeleteRow,
-      renderNutrientCell,
-      <div>Manures</div>,
-      true,
-    );
+    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Manures', true);
   }, [activeField]);
 
   const fertilizerColumns: GridColDef[] = useMemo(() => {
@@ -101,13 +94,7 @@ export default function CalculateNutrients() {
       setOpenDialog(['fertilizer', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = genHandleDeleteRow(activeField, 'Fertilizers', setFieldList);
-    return generateColumns(
-      handleEditRow,
-      handleDeleteRow,
-      renderNutrientCell,
-      <div>Fertilizers</div>,
-      true,
-    );
+    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertilizers', true);
   }, [activeField]);
 
   // TODO: Add Date column
@@ -116,13 +103,7 @@ export default function CalculateNutrients() {
       setOpenDialog(['fertigation', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = genHandleDeleteRow(activeField, 'Fertigations', setFieldList);
-    return generateColumns(
-      handleEditRow,
-      handleDeleteRow,
-      renderNutrientCell,
-      <div>Fertigation</div>,
-      true,
-    );
+    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertigation', true);
   }, [activeField]);
 
   const otherColumns: GridColDef[] = useMemo(() => {
@@ -130,13 +111,7 @@ export default function CalculateNutrients() {
       setOpenDialog(['other', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = genHandleDeleteRow(activeField, 'OtherNutrients', setFieldList);
-    return generateColumns(
-      handleEditRow,
-      handleDeleteRow,
-      renderNutrientCell,
-      <div>Other</div>,
-      true,
-    );
+    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
   }, [activeField]);
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
