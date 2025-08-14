@@ -18,6 +18,7 @@ import Region from './Region';
 import {
   CalculateNutrientsColumn,
   CropNutrients,
+  DryFertilizerSolubility,
   NutrientColumns,
   ManureNutrients,
   Fertilizer,
@@ -134,4 +135,5 @@ export type {
   CircularStorage,
   SlopedWallStorage,
   NMPFileNutrientAnalysisData,
+  DryFertilizerSolubility,
 };
