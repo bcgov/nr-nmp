@@ -26,6 +26,9 @@ import {
   FertilizerUnit,
   DensityUnit,
   Schedule,
+  NMPFileFertigation,
+  NMPFileFertilizer,
+  NutrientManures,
 } from './CalculateNutrients';
 import NMPFileYear from './NMPFileYear';
 import {
@@ -136,4 +139,7 @@ export type {
   SlopedWallStorage,
   NMPFileNutrientAnalysisData,
   DryFertilizerSolubility,
+  NMPFileFertigation,
+  NMPFileFertilizer,
+  NutrientManures,
 };
