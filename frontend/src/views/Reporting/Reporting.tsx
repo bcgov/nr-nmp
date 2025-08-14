@@ -10,7 +10,7 @@ import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
 import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem } from '@/types';
+import { DAIRY_COW_ID, ManureInSystem } from '@/types';
 
 export default function FieldList() {
   const reportRef = useRef(null);
@@ -39,6 +39,11 @@ export default function FieldList() {
       }
     });
     return unassignedM;
+  }, [state.nmpFile?.years]);
+
+  const isDairyCattle = useMemo(() => {
+    const animalList = state.nmpFile?.years[0].FarmAnimals || [];
+    return animalList.some((animal) => animal.animalId === DAIRY_COW_ID);
   }, [state.nmpFile?.years]);
 
   async function downloadBlob() {
@@ -113,7 +118,8 @@ export default function FieldList() {
 
   return (
     <View title="Reporting">
-      {unassignedManures.length > 0 && (
+      {/* only show if you have dairy cattle */}
+      {unassignedManures.length > 0 && isDairyCattle && (
         <Grid
           container
           sx={{ marginTop: '1rem' }}
@@ -122,9 +128,9 @@ export default function FieldList() {
             The following materials are not stored:
             <ul>
               {unassignedManures.map((manure) => (
-                <span key={`${manure.data?.ManagedManureName}`}>
+                <li key={`${manure.data?.ManagedManureName}`}>
                   {manure.type} - {manure.data?.ManagedManureName}
-                </span>
+                </li>
               ))}
             </ul>
           </div>
