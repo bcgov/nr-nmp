@@ -30,7 +30,7 @@ import {
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import { CalculateNutrientsColumn } from '@/types/calculateNutrients.ts';
+import { CalculateNutrientsColumn } from '@/types';
 import CropsModal from '../Crops/CropsModal.tsx';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal.tsx';
 

@@ -55,9 +55,10 @@ export const DEFAULT_LIQUID_MANURE_SYSTEM: LiquidManureStorageSystem = {
   separatedLiquidsUSGallons: 0,
   separatedSolidsTons: 0,
   manureStorages: [DEFAULT_LIQUID_MANURE_STORAGE],
+  uuid: '',
 };
 
-export const DEFAULT_SOLID_MANURE_SYSTEM: SolidManureStorageSystem = {
+export const DEFAULT_SOLID_MANURE_SYSTEM: Omit<SolidManureStorageSystem, 'uuid'> = {
   name: '',
   manureType: ManureType.Solid,
   manuresInSystem: [],

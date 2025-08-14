@@ -1,5 +1,10 @@
-import { CropNutrients, Fertilizer, NutrientColumns, SelectOption } from '@/types';
-import { DryFertilizerSolubility, Schedule } from '@/types/calculateNutrients';
+import {
+  CropNutrients,
+  Fertilizer,
+  NutrientColumns,
+  DryFertilizerSolubility,
+  Schedule,
+} from '@/types';
 
 export const DRY_CUSTOM_ID = 2;
 export const LIQUID_CUSTOM_ID = 4;

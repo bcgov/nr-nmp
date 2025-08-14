@@ -28,12 +28,12 @@ export default function Storage() {
     const unassignedM: ManureInSystem[] = [];
     (generatedManures || []).forEach((manure) => {
       if (!manure.AssignedToStoredSystem) {
-        unassignedM.push({ type: 'Generated', data: manure });
+        unassignedM.push({ type: 'Generated', data: manure, uuid: crypto.randomUUID() });
       }
     });
     (importedManures || []).forEach((manure) => {
       if (!manure.AssignedToStoredSystem) {
-        unassignedM.push({ type: 'Imported', data: manure });
+        unassignedM.push({ type: 'Imported', data: manure, uuid: crypto.randomUUID() });
       }
     });
     return unassignedM;

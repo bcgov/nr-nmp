@@ -7,6 +7,7 @@ const DEFAULT_NMPFILE_YEAR: Omit<NMPFileYear, 'Year'> = {
   GeneratedManures: [],
   ImportedManures: [],
   ManureStorageSystems: [],
+  NutrientAnalysis: [],
 };
 
 export default DEFAULT_NMPFILE_YEAR;

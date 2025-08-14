@@ -215,12 +215,12 @@ export default function ManureAndImports() {
         sortable: false,
       },
       {
-        field: 'manureId',
+        field: 'uuid',
         headerName: 'Animal Sub Type',
         width: 325,
         minWidth: 150,
         maxWidth: 500,
-        valueGetter: (val: string) => animalList.find((a) => a.manureId === val)!.manureData?.name,
+        valueGetter: (val: string) => animalList.find((a) => a.uuid === val)!.manureData?.name,
         sortable: false,
       },
       {

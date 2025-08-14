@@ -62,13 +62,13 @@ export default function AddAnimalsModal({
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {
         if (changes.animalId === BEEF_COW_ID) {
-          return { ...INITIAL_BEEF_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
+          return { ...INITIAL_BEEF_FORM_DATA, ...changes, uuid: crypto.randomUUID() };
         }
         if (changes.animalId === DAIRY_COW_ID) {
-          return { ...INITIAL_DAIRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
+          return { ...INITIAL_DAIRY_FORM_DATA, ...changes, uuid: crypto.randomUUID() };
         }
         if (changes.animalId === POULTRY_ID) {
-          return { ...INITIAL_POULTRY_FORM_DATA, ...changes, manureId: crypto.randomUUID() };
+          return { ...INITIAL_POULTRY_FORM_DATA, ...changes, uuid: crypto.randomUUID() };
         }
 
         if (!OTHER_ANIMAL_IDS.some((id) => id === changes.animalId)) {
@@ -79,7 +79,7 @@ export default function AddAnimalsModal({
           daysCollected: 0,
           ...changes,
           animalId: changes.animalId as OtherAnimalId,
-          manureId: crypto.randomUUID(),
+          uuid: crypto.randomUUID(),
         };
       }
 
