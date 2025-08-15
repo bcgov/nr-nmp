@@ -95,37 +95,21 @@ export interface CropNutrients {
   K2O: number; // Potassium oxide
 }
 
-// TODO: Maybe choose better name?
-export type NutrientColumns = {
-  agronomic: CropNutrients; // "This year"
-  cropRemoval: CropNutrients; // "Long term"
-};
-
 export interface ManureNutrients extends CropNutrients {
   ManureId: number;
   SolidLiquid: string;
-  Moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number?
+  Moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number
   NH4N: number;
 }
 
-export type NutrientManures = {
+export interface NMPFileAppliedManure extends CalculateNutrientsColumn {
   manureId: number;
   applicationId: number;
   unitId: number;
   rate: number;
   nh4Retention: number;
   nAvail: number;
-  reqN: number;
-  reqP2o5: number;
-  reqK2o: number;
-  remN: number;
-  remP2o5: number;
-  remK2o: number;
-};
-
-export type NMPNutrients = {
-  nutrientManures: NutrientManures[];
-};
+}
 
 export type DryFertilizerSolubility = {
   id: number;

@@ -1,6 +1,6 @@
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 
-const DefaultManureFormData: NMPFileImportedManureData = {
+const DefaultManureFormData: Omit<NMPFileImportedManureData, 'uuid'> = {
   UniqueMaterialName: '',
   AnnualAmount: 0,
   AnnualAmountUSGallonsVolume: 0,
@@ -10,11 +10,10 @@ const DefaultManureFormData: NMPFileImportedManureData = {
   AnnualAmountDisplayVolume: '',
   AnnualAmountDisplayWeight: '',
   Units: 0,
-  Moisture: '50.0',
+  Moisture: 50,
   IsMaterialStored: false,
   ManagedManureName: '',
   AssignedToStoredSystem: false,
-  AssignedWithNutrientAnalysis: false,
 };
 
 export default DefaultManureFormData;

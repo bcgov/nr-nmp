@@ -80,9 +80,9 @@ export default function CalculateNutrients() {
       setFieldList((prev) => {
         const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
         const nextFieldArray = [...prev];
-        const nutrientManures = [...nextFieldArray[activeField].Nutrients.nutrientManures];
-        nutrientManures.splice(index, 1);
-        nextFieldArray[activeField].Nutrients.nutrientManures = nutrientManures;
+        const manures = [...nextFieldArray[activeField].Manures];
+        manures.splice(index, 1);
+        nextFieldArray[activeField].Manures = manures;
         return nextFieldArray;
       });
     };
@@ -97,7 +97,6 @@ export default function CalculateNutrients() {
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertilizers', true);
   }, [activeField]);
 
-  // TODO: Add Date column
   const fertigationColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['fertigation', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
@@ -120,7 +119,7 @@ export default function CalculateNutrients() {
       ...fieldList[activeField].Fertilizers,
       ...fieldList[activeField].Fertigations,
       ...fieldList[activeField].OtherNutrients,
-      ...fieldList[activeField].Nutrients.nutrientManures,
+      ...fieldList[activeField].Manures,
     ];
 
     return {
@@ -208,21 +207,6 @@ export default function CalculateNutrients() {
       borderColor: 'none !important',
     },
   };
-
-  // Transform manure data to match CalculateNutrientsColumn structure
-  const transformedManureData: CalculateNutrientsColumn[] = useMemo(
-    () =>
-      fieldList[activeField].Nutrients.nutrientManures.map((manure, index) => ({
-        name: `Manure ${index + 1}`,
-        reqN: manure.reqN ?? 0,
-        reqP2o5: manure.reqP2o5 ?? 0,
-        reqK2o: manure.reqK2o ?? 0,
-        remN: manure.remN ?? 0,
-        remP2o5: manure.remP2o5 ?? 0,
-        remK2o: manure.remK2o ?? 0,
-      })),
-    [fieldList, activeField],
-  );
 
   return (
     <View
@@ -348,7 +332,7 @@ export default function CalculateNutrients() {
       {openDialog[0] === 'manure' && (
         <ManureModal
           initialModalData={undefined}
-          farmManures={state.nmpFile.years[0].FarmManures || []}
+          manuresWithNutrients={state.nmpFile.years[0].NutrientAnalyses}
           field={fieldList[activeField]}
           rowEditIndex={openDialog[1]}
           setFields={setFieldList}
@@ -425,11 +409,24 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {transformedManureData.length > 0 && (
+      {fieldList[activeField].Manures.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={transformedManureData}
+          rows={fieldList[activeField].Manures}
           columns={manureColumns}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          columnHeaderHeight={16}
+          hideFooterPagination
+          hideFooter
+        />
+      )}
+      {fieldList[activeField].Fertigations.length > 0 && (
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={fieldList[activeField].Fertigations}
+          columns={fertigationColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
           disableColumnMenu

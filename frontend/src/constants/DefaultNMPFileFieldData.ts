@@ -10,9 +10,7 @@ const initialFieldFormData: NMPFileFieldData = {
   Fertilizers: [],
   Fertigations: [],
   OtherNutrients: [],
-  Nutrients: {
-    nutrientManures: [],
-  },
+  Manures: [],
 };
 
 export default initialFieldFormData;

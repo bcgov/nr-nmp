@@ -233,9 +233,10 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
 
     return React.createElement(
       'div',
-      { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'right' } },
+      { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'center' } },
       message?.Icon
         ? [
+            React.createElement('span', { style: { marginLeft: '-1.5em' } }),
             React.createElement('img', {
               key: 'icon',
               src: message.Icon,
@@ -248,7 +249,7 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
               showAsAbs ? Math.abs(value as number) : value,
             ),
           ]
-        : React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
+        : React.createElement('span', { style: {} }, value),
     );
   };
 
@@ -260,6 +261,14 @@ export const BALANCE_COLUMNS = [
     maxWidth: 300,
     renderHeader: () => null,
     renderCell: () => <div style={{ fontWeight: 'bold' }}>Balance</div>,
+    sortable: false,
+  },
+  {
+    field: 'date',
+    width: COLUMN_WIDTH / 2,
+    minWidth: COLUMN_WIDTH / 2,
+    maxWidth: 100,
+    renderHeader: () => <div />,
     sortable: false,
   },
   {
