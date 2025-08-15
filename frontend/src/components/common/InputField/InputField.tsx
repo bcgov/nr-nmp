@@ -6,9 +6,9 @@ import React from 'react';
 import { InputWrapper, StyledLabel, StyledInput } from './inputField.styles';
 
 interface InputFieldProps {
-  label: string;
+  label?: string;
   type: string;
-  name: string;
+  name?: string;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onInput?: React.FormEventHandler<HTMLInputElement>;
@@ -30,7 +30,7 @@ function InputField({
 }: InputFieldProps) {
   return (
     <InputWrapper flex={flex}>
-      <StyledLabel htmlFor={name}>{label}</StyledLabel>
+      {label && <StyledLabel htmlFor={name}>{label}</StyledLabel>}
       <StyledInput
         type={type}
         name={name}

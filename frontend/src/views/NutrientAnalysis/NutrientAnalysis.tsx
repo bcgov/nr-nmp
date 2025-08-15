@@ -14,7 +14,7 @@ import {
   DAIRY_COW_ID,
   NMPFileImportedManureData,
   NMPFileManureStorageSystem,
-  NMPFileNutrientAnalysisData,
+  NMPFileNutrientAnalysis,
 } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
@@ -37,15 +37,13 @@ export default function NutrientAnalysis() {
     state.nmpFile.years[0].ManureStorageSystems || [];
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [editName, setEditName] = useState<string | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
-  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileNutrientAnalysisData[]>(
-    state.nmpFile.years[0]?.NutrientAnalysis || [],
+  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileNutrientAnalysis[]>(
+    state.nmpFile.years[0].NutrientAnalyses,
   );
   // for each manuresource user can create nutrient analysis' objects
-  const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysisData | undefined>(
-    undefined,
-  );
+  const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysis | undefined>(undefined);
 
   const hasDairyCattle = useMemo(
     () =>
@@ -55,9 +53,9 @@ export default function NutrientAnalysis() {
     [state.nmpFile.years],
   );
 
-  const handleEdit = (name: string) => {
-    setEditName(name);
-    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.linkedUuid === name));
+  const handleEdit = (uuid: string) => {
+    setEditId(uuid);
+    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.linkedUuid === uuid));
     setIsDialogOpen(true);
   };
 
@@ -67,29 +65,29 @@ export default function NutrientAnalysis() {
   const handleDialogClose = () => {
     setIsDialogOpen(false);
     setAnalysisForm(undefined);
-    setEditName(null);
+    setEditId(null);
   };
 
-  const handleModalSubmit = (data: NMPFileNutrientAnalysisData) => {
+  const handleModalSubmit = (data: NMPFileNutrientAnalysis) => {
     setNutrientAnalysisData((prevState) => {
       // if editing an entry then updates that entry
-      if (editName !== null) {
-        return prevState.map((item: NMPFileNutrientAnalysisData) =>
-          item.linkedUuid === editName ? { ...data } : item,
+      if (editId !== null) {
+        return prevState.map((item: NMPFileNutrientAnalysis) =>
+          item.linkedUuid === editId ? { ...data } : item,
         );
       }
       // else add this new entry
       return [...prevState, { ...data }];
     });
     handleDialogClose();
-    setEditName(null);
+    setEditId(null);
   };
 
   const handleNextPage = () => {
     dispatch({
       type: 'SAVE_NUTRIENT_ANALYSIS',
       year: state.nmpFile.farmDetails.Year!,
-      newNutrientAnalysis: nutrientAnalysisData,
+      newNutrientAnalyses: nutrientAnalysisData,
     });
     if (!state.showAnimalsStep) {
       navigate(CALCULATE_NUTRIENTS);
@@ -102,7 +100,7 @@ export default function NutrientAnalysis() {
     dispatch({
       type: 'SAVE_NUTRIENT_ANALYSIS',
       year: state.nmpFile.farmDetails.Year!,
-      newNutrientAnalysis: nutrientAnalysisData,
+      newNutrientAnalyses: nutrientAnalysisData,
     });
     if (hasDairyCattle) {
       navigate(STORAGE);

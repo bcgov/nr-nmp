@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
-import type { NMPFileFarmManureData } from '@/types';
+import type { NMPFileNutrientAnalysis } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
   { field: 'materialSource', headerName: 'Source of Material', width: 200 },
@@ -9,7 +9,7 @@ const TABLE_COLUMNS: GridColDef[] = [
     field: 'Moisture',
     headerName: 'Moisture (%)',
     width: 90,
-    valueGetter: (_value, row) => row.Nutrients.Moisture,
+    valueGetter: (_value, row) => row.Moisture,
   },
   {
     field: 'N',
@@ -19,19 +19,19 @@ const TABLE_COLUMNS: GridColDef[] = [
       </span>
     ),
     width: 75,
-    valueGetter: (_value, row) => row.Nutrients.N,
+    valueGetter: (_value, row) => row.N,
   },
   {
     field: 'NH4N',
     headerName: 'P (%)',
     width: 75,
-    valueGetter: (_value, row) => row.Nutrients.NH4N,
+    valueGetter: (_value, row) => row.NH4N,
   },
   {
     field: 'P2O5',
     headerName: 'K (%)',
     width: 75,
-    valueGetter: (_value, row) => row.Nutrients.P2O5,
+    valueGetter: (_value, row) => row.P2O5,
   },
 ];
 
@@ -40,14 +40,14 @@ function NO_ROWS() {
 }
 
 export default function ManureCompostAnalysis({
-  farmManures,
+  nutrientAnalyses,
 }: {
-  farmManures: NMPFileFarmManureData[];
+  nutrientAnalyses: NMPFileNutrientAnalysis[];
 }) {
   return (
     <DataGrid
       sx={{ ...customTableStyle, marginTop: '8px' }}
-      rows={farmManures}
+      rows={nutrientAnalyses}
       columns={TABLE_COLUMNS}
       getRowId={() => crypto.randomUUID()}
       disableRowSelectionOnClick

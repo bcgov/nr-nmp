@@ -37,7 +37,14 @@ export type FertilizerUnit = {
 export type DensityUnit = {
   id: number;
   name: string;
+  // Conversion factor to get from unit to lb/imp gallon
   convfactor: number;
+};
+
+export type InjectionUnit = {
+  id: number;
+  name: string;
+  conversionToImpGallonsPerMinute: number;
 };
 
 export interface NMPFileFertilizer extends CalculateNutrientsColumn {
@@ -62,17 +69,24 @@ export enum Schedule {
 export interface NMPFileFertigation extends CalculateNutrientsColumn {
   fertilizerTypeId: number;
   fertilizerId: number;
-  applicationRate?: number;
+  applicationRate: number;
   applUnitId?: number;
-  density?: number;
+  applUnitName?: string;
+  density: number;
   densityUnitId?: number;
   tankVolume: number;
   solubility: number;
   amountToDissolve: number;
   injectionRate: number;
+  injectionUnitId?: number;
   eventsPerSeason: number;
   applicationPeriod: number;
   schedule?: Schedule;
+  startDate?: string;
+  // Calculations for liquid
+  volume: number;
+  volumeForSeason: number;
+  applicationTime: number;
 }
 
 export interface CropNutrients {
@@ -81,37 +95,21 @@ export interface CropNutrients {
   K2O: number; // Potassium oxide
 }
 
-// TODO: Maybe choose better name?
-export type NutrientColumns = {
-  agronomic: CropNutrients; // "This year"
-  cropRemoval: CropNutrients; // "Long term"
-};
-
 export interface ManureNutrients extends CropNutrients {
   ManureId: number;
   SolidLiquid: string;
-  Moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number?
+  Moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number
   NH4N: number;
 }
 
-export type NutrientManures = {
+export interface NMPFileAppliedManure extends CalculateNutrientsColumn {
   manureId: number;
   applicationId: number;
   unitId: number;
   rate: number;
   nh4Retention: number;
   nAvail: number;
-  reqN: number;
-  reqP2o5: number;
-  reqK2o: number;
-  remN: number;
-  remP2o5: number;
-  remK2o: number;
-};
-
-export type NMPNutrients = {
-  nutrientManures: NutrientManures[];
-};
+}
 
 export type DryFertilizerSolubility = {
   id: number;

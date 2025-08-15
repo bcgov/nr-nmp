@@ -9,7 +9,6 @@ const DefaultGeneratedManureFormData: Omit<NMPFileGeneratedManureData, 'uuid'> =
   ManagedManureName: '',
   IsMaterialStored: false,
   AssignedToStoredSystem: false,
-  AssignedWithNutrientAnalysis: false,
 };
 
 export default DefaultGeneratedManureFormData;

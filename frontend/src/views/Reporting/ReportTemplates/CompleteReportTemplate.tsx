@@ -95,10 +95,10 @@ export default function CompleteReportTemplate() {
           )),
         )}
       </div>
-      {years[0].FarmManures && (
+      {years[0].NutrientAnalyses.length > 0 && (
         <div>
           <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure and Compost Analysis</div>
-          <ManureCompostAnalysis farmManures={years[0].FarmManures} />
+          <ManureCompostAnalysis nutrientAnalyses={years[0].NutrientAnalyses} />
         </div>
       )}
     </div>

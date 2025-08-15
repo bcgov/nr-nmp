@@ -15,7 +15,6 @@ interface NMPFileImportedManureData {
   IsMaterialStored?: boolean;
   ManagedManureName: string;
   AssignedToStoredSystem?: boolean;
-  AssignedWithNutrientAnalysis?: boolean;
   uuid: string;
 }
 

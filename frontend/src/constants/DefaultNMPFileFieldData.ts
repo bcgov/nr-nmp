@@ -8,10 +8,9 @@ const initialFieldFormData: NMPFileFieldData = {
   SoilTest: undefined,
   Crops: [],
   Fertilizers: [],
+  Fertigations: [],
   OtherNutrients: [],
-  Nutrients: {
-    nutrientManures: [],
-  },
+  Manures: [],
 };
 
 export default initialFieldFormData;

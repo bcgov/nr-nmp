@@ -3,7 +3,6 @@ import { DEFAULT_NMPFILE, DEFAULT_NMPFILE_YEAR, APP_STATE_KEY } from '@/constant
 import DefaultGeneratedManureFormData from '@/constants/DefaultGeneratedManureData';
 import {
   NMPFileFieldData,
-  NMPFileFarmManureData,
   NMPFileImportedManureData,
   NMPFileManureStorageSystem,
   AnimalData,
@@ -16,7 +15,7 @@ import {
   NMPFileFarmDetails,
   ManureType,
   POULTRY_ID,
-  NMPFileNutrientAnalysisData,
+  NMPFileNutrientAnalysis,
 } from '@/types';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
@@ -38,16 +37,10 @@ type SaveFieldsAction = {
   newFields: NMPFileFieldData[];
 };
 
-type SaveFarmManureAction = {
-  type: 'SAVE_FARM_MANURE';
-  year: string;
-  newManures: NMPFileFarmManureData[];
-};
-
 type SaveNutrientAnalysisAction = {
   type: 'SAVE_NUTRIENT_ANALYSIS';
   year: string;
-  newNutrientAnalysis: NMPFileNutrientAnalysisData[];
+  newNutrientAnalyses: NMPFileNutrientAnalysis[];
 };
 
 type SaveImportedManureAction = {
@@ -86,7 +79,6 @@ export type AppStateAction =
   | SetShowAnimalsStepAction
   | SaveFarmDetailsAction
   | SaveFieldsAction
-  | SaveFarmManureAction
   | SaveNutrientAnalysisAction
   | SaveImportedManureAction
   | SaveManureStorageSystemsAction
@@ -130,6 +122,20 @@ function updateManureStorageSystems(
     }
     return acc;
   }, [] as NMPFileManureStorageSystem[]);
+}
+
+function updateNutrientAnalyses(
+  nutrients: NMPFileNutrientAnalysis[],
+  systems: NMPFileManureStorageSystem[],
+  generatedManures: NMPFileGeneratedManureData[],
+  importedManures: NMPFileImportedManureData[],
+) {
+  const allUuids = [
+    ...systems.map((s) => s.uuid),
+    ...generatedManures.filter((m) => !m.IsMaterialStored).map((m) => m.uuid),
+    ...importedManures.filter((m) => !m.IsMaterialStored).map((m) => m.uuid),
+  ];
+  return nutrients.filter((n) => allUuids.some((uuid) => n.linkedUuid === uuid));
 }
 
 function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
@@ -180,6 +186,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
   }
   newFileYear.GeneratedManures = generatedManures;
 
+  // Update storage systems with new generated manures
   if (newFileYear.ManureStorageSystems) {
     newFileYear.ManureStorageSystems = updateManureStorageSystems(
       newFileYear.ManureStorageSystems,
@@ -187,6 +194,13 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
       generatedManures,
     );
   }
+  // Update nutrient analyses with new generated manures
+  newFileYear.NutrientAnalyses = updateNutrientAnalyses(
+    newFileYear.NutrientAnalyses,
+    newFileYear.ManureStorageSystems || [],
+    generatedManures,
+    newFileYear.ImportedManures || [],
+  );
 }
 
 export function appStateReducer(state: AppState, action: AppStateAction): AppState {
@@ -239,12 +253,11 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   if (year === undefined) throw new Error(`Reducer received nonexistent year: ${action.year}`);
   if (action.type === 'SAVE_FIELDS') {
     year.Fields = structuredClone(action.newFields);
-  } else if (action.type === 'SAVE_FARM_MANURE') {
-    year.FarmManures = structuredClone(action.newManures);
   } else if (action.type === 'SAVE_NUTRIENT_ANALYSIS') {
-    year.NutrientAnalysis = structuredClone(action.newNutrientAnalysis);
+    year.NutrientAnalyses = structuredClone(action.newNutrientAnalyses);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {
     year.ImportedManures = structuredClone(action.newManures);
+    // Update storage systems with new imported manures
     if (year.ManureStorageSystems) {
       year.ManureStorageSystems = updateManureStorageSystems(
         year.ManureStorageSystems,
@@ -252,6 +265,13 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
         action.newManures,
       );
     }
+    // Update nutrient analyses with new imported manures
+    year.NutrientAnalyses = updateNutrientAnalyses(
+      year.NutrientAnalyses,
+      year.ManureStorageSystems || [],
+      year.GeneratedManures || [],
+      action.newManures,
+    );
   } else if (action.type === 'SAVE_MANURE_STORAGE_SYSTEMS') {
     year.ManureStorageSystems = structuredClone(action.newManureStorageSystems);
 
@@ -289,11 +309,19 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     });
     year.GeneratedManures = newGeneratedManures;
     year.ImportedManures = newImportedManures;
+
+    year.NutrientAnalyses = updateNutrientAnalyses(
+      year.NutrientAnalyses,
+      year.ManureStorageSystems,
+      newGeneratedManures,
+      newImportedManures,
+    );
   } else if (action.type === 'SAVE_ANIMALS') {
     saveAnimals(year, action.newAnimals);
   } else if (action.type === 'CLEAR_ANIMALS') {
     year.FarmAnimals = undefined;
     year.GeneratedManures = undefined;
+    // Update storage systems to remove generated manures
     if (year.ManureStorageSystems) {
       year.ManureStorageSystems = updateManureStorageSystems(
         year.ManureStorageSystems,
@@ -301,6 +329,13 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
         [],
       );
     }
+    // Update nutrient analyses to remove generated manures
+    year.NutrientAnalyses = updateNutrientAnalyses(
+      year.NutrientAnalyses,
+      year.ManureStorageSystems || [],
+      [],
+      year.ImportedManures || [],
+    );
   }
   // Save the file to local storage
   saveDataToLocalStorage(APP_STATE_KEY, newAppState);

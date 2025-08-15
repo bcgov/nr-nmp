@@ -19,16 +19,16 @@ import {
   CalculateNutrientsColumn,
   CropNutrients,
   DryFertilizerSolubility,
-  NutrientColumns,
   ManureNutrients,
   Fertilizer,
   FertilizerType,
   FertilizerUnit,
   DensityUnit,
+  InjectionUnit,
   Schedule,
   NMPFileFertigation,
   NMPFileFertilizer,
-  NutrientManures,
+  NMPFileAppliedManure,
 } from './CalculateNutrients';
 import NMPFileYear from './NMPFileYear';
 import {
@@ -51,8 +51,7 @@ import {
   AnimalData,
   Animal,
 } from './Animals';
-import { NMPFileNutrientAnalysisData } from './NMPFileNutrientAnalysisData';
-import { NMPFileFarmManureData } from './NMPFileFarmManureData';
+import { NMPFileNutrientAnalysis } from './NMPFileNutrientAnalysis';
 import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
 import Subregion from './Subregion';
 import {
@@ -111,10 +110,8 @@ export type {
   NMPFileCropData,
   Manure,
   Units,
-  NMPFileFarmManureData,
   CalculateNutrientsColumn,
   CropNutrients,
-  NutrientColumns,
   ManureNutrients,
   WashWaterUnit,
   BeefCattleData,
@@ -128,6 +125,7 @@ export type {
   FertilizerType,
   FertilizerUnit,
   DensityUnit,
+  InjectionUnit,
   NMPFileOtherNutrient,
   ManureStorage,
   Subregion,
@@ -137,9 +135,9 @@ export type {
   RectangularStorage,
   CircularStorage,
   SlopedWallStorage,
-  NMPFileNutrientAnalysisData,
+  NMPFileNutrientAnalysis,
   DryFertilizerSolubility,
   NMPFileFertigation,
   NMPFileFertilizer,
-  NutrientManures,
+  NMPFileAppliedManure,
 };
