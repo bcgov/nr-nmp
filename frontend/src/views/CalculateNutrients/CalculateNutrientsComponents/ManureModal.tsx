@@ -180,11 +180,6 @@ export default function ManureModal({
 
     // Update fields state and dispatch to global state
     setFields(updatedFields);
-    dispatch({
-      type: 'SAVE_FIELDS',
-      year: state.nmpFile.farmDetails.Year!,
-      newFields: updatedFields,
-    });
     handleModalClose();
   };
 

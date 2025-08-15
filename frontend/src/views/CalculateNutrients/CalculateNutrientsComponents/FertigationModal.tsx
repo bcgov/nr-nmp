@@ -16,7 +16,7 @@ import type {
   Schedule,
   SelectOption,
 } from '@/types';
-import { formGridBreakpoints } from '@/common.styles';
+import { customTableStyle, formGridBreakpoints } from '@/common.styles';
 import { NMPFileFertigation } from '@/types';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
@@ -118,7 +118,7 @@ const EMPTY_FERTIGATION_FORM_DATA: NMPFileFertigation = {
   amountToDissolve: 0,
   injectionRate: 0,
   injectionUnitId: undefined,
-  eventsPerSeason: 0,
+  eventsPerSeason: 1,
   applicationPeriod: 0,
   schedule: undefined,
   volume: 0,
@@ -161,6 +161,14 @@ export default function FertigationModal({
     reqP2o5: Math.min(balanceRow.reqP2o5, 0),
     reqK2o: Math.min(balanceRow.reqK2o, 0),
   });
+  const totalNutrientRow = useMemo<NutrientRow>(
+    () => ({
+      reqN: formData.reqN * formData.eventsPerSeason,
+      reqP2o5: formData.reqP2o5 * formData.eventsPerSeason,
+      reqK2o: formData.reqK2o * formData.eventsPerSeason,
+    }),
+    [formData],
+  );
   const apiCache = useContext(APICacheContext);
 
   const isLiquidFertilizer = useMemo(
@@ -567,7 +575,8 @@ export default function FertigationModal({
               label="Fertigation Applications Per Season"
               value={formData.eventsPerSeason}
               onChange={(e) => handleInputChanges({ eventsPerSeason: e })}
-              minValue={0}
+              minValue={1}
+              step={1}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -630,55 +639,71 @@ export default function FertigationModal({
                 </div>
               </Grid>
             </Grid>
-            <Grid size={12}>
-              <div>
+            <div>
+              <Grid
+                container
+                spacing={1}
+                sx={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <Grid
-                  container
-                  spacing={1}
-                  sx={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
+                  size={{ xs: 12, md: 4 }}
+                  sx={{ maxWidth: '400px', justifyItems: 'center' }}
                 >
-                  <Grid
-                    size={{ xs: 12, md: 6 }}
-                    sx={{ maxWidth: '400px', justifyItems: 'center' }}
-                  >
-                    <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
-                      Available This Year (lb/ac)
-                      <DataGrid
-                        sx={{ ...customTableStyle }}
-                        columns={NUTRIENT_COLUMNS}
-                        rows={[formData]}
-                        getRowId={() => crypto.randomUUID()}
-                        disableRowSelectionOnClick
-                        disableColumnMenu
-                        hideFooterPagination
-                        hideFooter
-                      />
-                    </div>
-                  </Grid>
-                  <Grid
-                    size={{ xs: 6 }}
-                    sx={{ maxWidth: '400px', justifyItems: 'center' }}
-                  >
-                    <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
-                      Still Required This Year (lb/ac)
-                      <DataGrid
-                        sx={{ ...customTableStyle }}
-                        columns={BALANCE_COLUMNS}
-                        rows={[balanceCalcRow]}
-                        getRowId={() => crypto.randomUUID()}
-                        disableRowSelectionOnClick
-                        disableColumnMenu
-                        hideFooterPagination
-                        hideFooter
-                      />
-                    </div>
-                  </Grid>
+                  <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
+                    Applied Nutrients per Fertigation (lb/ac)
+                    <DataGrid
+                      sx={{ ...customTableStyle }}
+                      columns={NUTRIENT_COLUMNS}
+                      rows={[formData]}
+                      getRowId={() => crypto.randomUUID()}
+                      disableRowSelectionOnClick
+                      disableColumnMenu
+                      hideFooterPagination
+                      hideFooter
+                    />
+                  </div>
                 </Grid>
-              </div>
-            </Grid>
+                <Grid
+                  size={{ xs: 12, md: 4 }}
+                  sx={{ maxWidth: '400px', justifyItems: 'center' }}
+                >
+                  <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
+                    Total Applied Nutrients (lb/ac)
+                    <DataGrid
+                      sx={{ ...customTableStyle }}
+                      columns={NUTRIENT_COLUMNS}
+                      rows={[totalNutrientRow]}
+                      getRowId={() => crypto.randomUUID()}
+                      disableRowSelectionOnClick
+                      disableColumnMenu
+                      hideFooterPagination
+                      hideFooter
+                    />
+                  </div>
+                </Grid>
+                <Grid
+                  size={{ xs: 12, md: 4 }}
+                  sx={{ maxWidth: '400px', justifyItems: 'center' }}
+                >
+                  <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
+                    Still Required This Year (lb/ac)
+                    <DataGrid
+                      sx={{ ...customTableStyle }}
+                      columns={BALANCE_COLUMNS}
+                      rows={[balanceCalcRow]}
+                      getRowId={() => crypto.randomUUID()}
+                      disableRowSelectionOnClick
+                      disableColumnMenu
+                      hideFooterPagination
+                      hideFooter
+                    />
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
           </>
         )}
       </Form>

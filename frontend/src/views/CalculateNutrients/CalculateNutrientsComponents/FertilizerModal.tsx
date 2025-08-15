@@ -513,7 +513,7 @@ export default function FertilizerModal({
               label="Date"
               type="date"
               name="applDate"
-              value={formState.applDate || 0}
+              value={formState.applDate || ''}
               onChange={(e: any) => {
                 // Current NMP stores this, but not for calculations
                 // Right now not passed to parent componet for storing.

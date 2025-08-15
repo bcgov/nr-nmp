@@ -58,16 +58,16 @@ export const generateColumns = (
 ): GridColDef[] => [
   {
     field: 'name',
-    width: 230,
-    minWidth: 200,
-    maxWidth: 300,
+    width: COLUMN_WIDTH * 2,
+    minWidth: COLUMN_WIDTH * 2,
+    maxWidth: COLUMN_WIDTH * 2.5,
     renderHeader: () => (tableHeader ? <div>{tableHeader}</div> : <div />),
     sortable: false,
   },
   {
     field: 'date',
-    width: COLUMN_WIDTH / 2,
-    minWidth: COLUMN_WIDTH / 2,
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     renderHeader: () => <div />,
     sortable: false,
@@ -161,29 +161,35 @@ export const generateColumns = (
     sortable: false,
   },
   {
-    field: '',
+    field: 'action',
     width: 100,
     renderHeader: () => null,
-    renderCell: (row: any) => (
-      <>
-        <FontAwesomeIcon
-          css={tableActionButtonCss}
-          onClick={(e) => {
-            handleEditRow(row);
-            e.stopPropagation();
-          }}
-          icon={faEdit}
-        />
-        <FontAwesomeIcon
-          css={tableActionButtonCss}
-          onClick={(e) => {
-            handleDeleteRow(row);
-            e.stopPropagation();
-          }}
-          icon={faTrash}
-        />
-      </>
-    ),
+    renderCell: (row: any) =>
+      // If 'action' isn't defined or is 0 (indicating
+      // that this is the first row) then show buttons
+      // 'action' is only defined for fertigation rows
+      !row.value ? (
+        <>
+          <FontAwesomeIcon
+            css={tableActionButtonCss}
+            onClick={(e) => {
+              handleEditRow(row);
+              e.stopPropagation();
+            }}
+            icon={faEdit}
+          />
+          <FontAwesomeIcon
+            css={tableActionButtonCss}
+            onClick={(e) => {
+              handleDeleteRow(row);
+              e.stopPropagation();
+            }}
+            icon={faTrash}
+          />
+        </>
+      ) : (
+        <div />
+      ),
     sortable: false,
     resizable: false,
   },
