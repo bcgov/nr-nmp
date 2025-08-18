@@ -265,7 +265,6 @@ export default function FertigationModal({
   };
 
   const handleModalCalculate = () => {
-    debugger;
     let nutrients: CropNutrients;
     if (formData.customNutrients) {
       nutrients = formData.customNutrients;
@@ -353,14 +352,15 @@ export default function FertigationModal({
             ),
           );
 
+          // Reset values on changes
+          next = { ...EMPTY_FERTIGATION_FORM_DATA };
+
           if (value === DRY_CUSTOM_ID || value === LIQUID_CUSTOM_ID) {
             next.customNutrients = EMPTY_CROP_NUTRIENTS;
+            next.name = 'Custom fertilizer';
           } else {
             next.customNutrients = undefined;
           }
-
-          // Reset values on changes
-          next = { ...EMPTY_FERTIGATION_FORM_DATA };
         }
 
         if (name === 'fertilizerId') {
@@ -572,6 +572,7 @@ export default function FertigationModal({
               type="date"
               value={formData.startDate || ''}
               onChange={(e) => handleInputChanges({ startDate: e.target.value })}
+              required
             />
           </Grid>
         </Grid>
