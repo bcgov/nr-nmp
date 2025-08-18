@@ -143,7 +143,6 @@ export default function LiquidStorageDetails({
                   diameterFt: e,
                 })
               }
-              minValue={0}
             />
             <NumberField
               isRequired
@@ -155,7 +154,6 @@ export default function LiquidStorageDetails({
                   heightFt: e,
                 })
               }
-              minValue={0}
             />
           </div>
         )}
@@ -171,7 +169,6 @@ export default function LiquidStorageDetails({
                   lengthFt: e,
                 })
               }
-              minValue={0}
             />
             <NumberField
               isRequired
@@ -183,7 +180,6 @@ export default function LiquidStorageDetails({
                   widthFt: e,
                 })
               }
-              minValue={0}
             />
             <NumberField
               isRequired
@@ -195,7 +191,6 @@ export default function LiquidStorageDetails({
                   heightFt: e,
                 })
               }
-              minValue={0}
             />
           </div>
         )}
@@ -211,7 +206,6 @@ export default function LiquidStorageDetails({
                   topLengthFt: e,
                 })
               }
-              minValue={0}
             />
             <NumberField
               isRequired
@@ -223,7 +217,6 @@ export default function LiquidStorageDetails({
                   topWidthFt: e,
                 })
               }
-              minValue={0}
             />
             <NumberField
               isRequired
@@ -235,7 +228,6 @@ export default function LiquidStorageDetails({
                   heightFt: e,
                 })
               }
-              minValue={0}
             />
             <NumberField
               isRequired
@@ -247,7 +239,6 @@ export default function LiquidStorageDetails({
                   slopeOfWall: e,
                 })
               }
-              minValue={0}
             />
           </div>
         )}

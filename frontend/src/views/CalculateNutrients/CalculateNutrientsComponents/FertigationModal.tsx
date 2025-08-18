@@ -436,7 +436,6 @@ export default function FertigationModal({
                     label="N (%)"
                     value={formData.customNutrients.N}
                     onChange={(e) => handleCustomChanges('N', e)}
-                    minValue={0}
                     maxValue={100}
                   />
                 </Grid>
@@ -450,7 +449,6 @@ export default function FertigationModal({
                     }
                     value={formData.customNutrients.P2O5}
                     onChange={(e) => handleCustomChanges('P2O5', e)}
-                    minValue={0}
                     maxValue={100}
                   />
                 </Grid>
@@ -464,7 +462,6 @@ export default function FertigationModal({
                     }
                     value={formData.customNutrients.K2O}
                     onChange={(e) => handleCustomChanges('K2O', e)}
-                    minValue={0}
                     maxValue={100}
                   />
                 </Grid>
@@ -490,7 +487,6 @@ export default function FertigationModal({
                   label="Application Rate"
                   value={formData.applicationRate}
                   onChange={(e) => handleInputChanges({ applicationRate: e })}
-                  minValue={0}
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>
@@ -516,8 +512,6 @@ export default function FertigationModal({
                   label="Density"
                   value={formData.density}
                   onChange={(e) => handleInputChanges({ density: e })}
-                  minValue={0}
-                  step={0.01}
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>
@@ -540,7 +534,6 @@ export default function FertigationModal({
               label="Injection Rate"
               value={formData.injectionRate}
               onChange={(e) => handleInputChanges({ injectionRate: e })}
-              minValue={0}
             />
           </Grid>
           <Grid size={{ xs: 6 }}>

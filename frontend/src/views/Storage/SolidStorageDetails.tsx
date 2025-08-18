@@ -55,7 +55,6 @@ export default function SolidStorageDetails({ formData, setFormData }: SolidStor
             onChange={(e: number) => {
               handleStorageChange({ uncoveredAreaSqFt: e });
             }}
-            minValue={0}
           />
         )}
       </Grid>

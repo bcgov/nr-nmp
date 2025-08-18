@@ -38,9 +38,10 @@ export default function NumberField({
   description,
   iconLeft,
   iconRight,
-  minValue,
+  minValue = 0,
   maxValue,
   shortenRequired,
+  step = 0.01,
   ...props
 }: NumberFieldProps) {
   const validate = useMemo(() => {
@@ -63,6 +64,7 @@ export default function NumberField({
     <ReactAriaNumberField
       className="bcds-react-aria-NumberField"
       validate={validate}
+      step={step}
       {...props}
     >
       {({ isRequired, isInvalid }) => (

@@ -74,7 +74,6 @@ export default function MilkingFields({
             setMilkProduction(e);
             handleInputChanges({ milkProduction: e });
           }}
-          minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
@@ -86,7 +85,6 @@ export default function MilkingFields({
             setWashWater(e);
             handleInputChanges({ washWater: e });
           }}
-          minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>

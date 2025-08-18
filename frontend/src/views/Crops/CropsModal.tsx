@@ -545,7 +545,6 @@ function CropsModal({
                       </button>
                     ) : undefined
                   }
-                  minValue={0}
                 />
               </Grid>
               {showUnitDropdown(formData.cropTypeId) && (
@@ -568,7 +567,6 @@ function CropsModal({
                     label="Crude Protein (%)"
                     value={formData.crudeProtein}
                     onChange={(e) => handleFormFieldChange('crudeProtein', e)}
-                    minValue={0}
                     maxValue={100}
                   />
                 </Grid>
@@ -663,7 +661,6 @@ function CropsModal({
                           label="Leaf Tissue P (%)"
                           value={formData.leafTissueP}
                           onChange={(e) => handleFormFieldChange('leafTissueP', e)}
-                          minValue={0}
                           maxValue={100}
                         />
                       </Grid>
@@ -673,7 +670,6 @@ function CropsModal({
                           label="Leaf Tissue K (%)"
                           value={formData.leafTissueK}
                           onChange={(e) => handleFormFieldChange('leafTissueK', e)}
-                          minValue={0}
                           maxValue={100}
                         />
                       </Grid>

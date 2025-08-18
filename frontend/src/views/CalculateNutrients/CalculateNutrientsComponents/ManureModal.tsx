@@ -269,7 +269,6 @@ export default function ManureModal({
               label="Application Rate"
               value={manureForm.applicationRate}
               onChange={(e) => handleChange({ applicationRate: e })}
-              minValue={0}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -288,7 +287,6 @@ export default function ManureModal({
               label="Ammonium-N Retention (%)"
               value={manureForm.retentionAmmoniumN}
               onChange={(e) => handleChange({ retentionAmmoniumN: e })}
-              minValue={0}
               maxValue={100}
             />
           </Grid>
@@ -297,7 +295,6 @@ export default function ManureModal({
               label="Organic N Available (%)"
               value={manureForm.organicNAvailable}
               onChange={(e) => handleChange({ organicNAvailable: e })}
-              minValue={0}
               maxValue={100}
             />
           </Grid>
