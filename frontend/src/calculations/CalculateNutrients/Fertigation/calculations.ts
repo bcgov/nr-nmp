@@ -9,6 +9,8 @@ function getFertilizerUnitImpGallonConversion(unit: FertilizerUnit) {
     // US gallons per imperial gallon
     case 5:
       return 1.201;
+    case 4: // imperial gallons
+      return 1;
     default:
       console.error(`Unrecognized liquid fertilizer unit: ${unit.id}`);
       return 0;
