@@ -24,10 +24,6 @@ const HIDE_COLUMN_CSS = {
   },
 };
 
-function NO_ROWS() {
-  return <div />;
-}
-
 const CROP_COLUMNS: GridColDef[] = [
   { field: 'name', headerName: 'Crop Name', width: 250, minWidth: 200 },
   { field: 'cropTypeName', headerName: 'Crop Type', width: 180, minWidth: 150 },
