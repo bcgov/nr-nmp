@@ -86,7 +86,7 @@ export default function FieldListModal({
               label="Area in acres"
               value={formData.Area}
               onChange={(e) => handleFormFieldChange({ Area: e })}
-              minValue={0}
+              minValue={0.01} // A min value of 0 will cause a divide by 0 error elsewhere
             />
           </Grid>
           <Grid size={6}>

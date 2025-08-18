@@ -66,9 +66,16 @@ export enum Schedule {
   Daily,
 }
 
+export interface CropNutrients {
+  N: number; // Nitrogen
+  P2O5: number; // Phosphorus pentoxide
+  K2O: number; // Potassium oxide
+}
+
 export interface NMPFileFertigation extends CalculateNutrientsColumn {
   fertilizerTypeId: number;
   fertilizerId: number;
+  customNutrients?: CropNutrients;
   applicationRate: number;
   applUnitId?: number;
   applUnitName?: string;
@@ -87,12 +94,6 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   volume: number;
   volumeForSeason: number;
   applicationTime: number;
-}
-
-export interface CropNutrients {
-  N: number; // Nitrogen
-  P2O5: number; // Phosphorus pentoxide
-  K2O: number; // Potassium oxide
 }
 
 export interface ManureNutrients extends CropNutrients {

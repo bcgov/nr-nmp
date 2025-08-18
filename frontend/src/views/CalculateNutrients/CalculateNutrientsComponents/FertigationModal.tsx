@@ -8,6 +8,7 @@ import { Select, Form, NumberField, InputField } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import type {
   CalculateNutrientsColumn,
+  CropNutrients,
   DensityUnit,
   Fertilizer,
   FertilizerType,
@@ -21,7 +22,7 @@ import { NMPFileFertigation } from '@/types';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
   DRY_CUSTOM_ID,
-  EMPTY_CUSTOM_FERTILIZER,
+  EMPTY_CROP_NUTRIENTS,
   INJECTION_RATE_UNITS,
   INJECTION_UNIT_OPTIONS,
   LIQUID_CUSTOM_ID,
@@ -151,8 +152,6 @@ export default function FertigationModal({
   const [formData, setFormData] = useState<NMPFileFertigation>(
     initialModalData || EMPTY_FERTIGATION_FORM_DATA,
   );
-  const [formCustomFertilizer, setFormCustomFertilizer] =
-    useState<Fertilizer>(EMPTY_CUSTOM_FERTILIZER);
   const [isCalculationCurrent, setIsCalculationCurrent] = useState<boolean>(
     initialModalData !== undefined,
   );
@@ -266,14 +265,15 @@ export default function FertigationModal({
   };
 
   const handleModalCalculate = () => {
-    let fertilizer: Fertilizer;
-    if (isCustomFertilizer) {
-      fertilizer = formCustomFertilizer;
+    debugger;
+    let nutrients: CropNutrients;
+    if (formData.customNutrients) {
+      nutrients = formData.customNutrients;
     } else {
       const f = fertilizers.find((ele) => ele.id === formData.fertilizerId)?.value;
       if (f === undefined)
         throw new Error(`Fertilizer ${formData.fertilizerId} is missing from list.`);
-      fertilizer = f;
+      nutrients = { N: f.nitrogen, P2O5: f.phosphorous, K2O: f.potassium };
     }
 
     // Common to liquid and dry calc
@@ -310,16 +310,11 @@ export default function FertigationModal({
         densityUnit,
       );
       const reqN =
-        Math.round(getAppliedNutrientPerApplication(weight, field.Area, fertilizer.nitrogen) * 10) /
-        10;
+        Math.round(getAppliedNutrientPerApplication(weight, field.Area, nutrients.N) * 10) / 10;
       const reqP2o5 =
-        Math.round(
-          getAppliedNutrientPerApplication(weight, field.Area, fertilizer.phosphorous) * 10,
-        ) / 10;
+        Math.round(getAppliedNutrientPerApplication(weight, field.Area, nutrients.P2O5) * 10) / 10;
       const reqK2o =
-        Math.round(
-          getAppliedNutrientPerApplication(weight, field.Area, fertilizer.potassium) * 10,
-        ) / 10;
+        Math.round(getAppliedNutrientPerApplication(weight, field.Area, nutrients.K2O) * 10) / 10;
       setFormData((prev) => ({
         ...prev,
         volume,
@@ -359,22 +354,9 @@ export default function FertigationModal({
           );
 
           if (value === DRY_CUSTOM_ID || value === LIQUID_CUSTOM_ID) {
-            setFormCustomFertilizer((pr) => {
-              // Reset if we're switching type
-              if (formData.fertilizerTypeId !== value) {
-                return {
-                  ...EMPTY_CUSTOM_FERTILIZER,
-                  dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
-                };
-              }
-              return {
-                ...pr,
-                dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
-              };
-            });
+            next.customNutrients = EMPTY_CROP_NUTRIENTS;
           } else {
-            // Reset for other values
-            setFormCustomFertilizer(EMPTY_CUSTOM_FERTILIZER);
+            next.customNutrients = undefined;
           }
 
           // Reset values on changes
@@ -408,9 +390,12 @@ export default function FertigationModal({
     });
   };
 
-  const handleCustomChanges = (name: keyof Fertilizer, value: number) => {
+  const handleCustomChanges = (name: keyof CropNutrients, value: number) => {
     setIsCalculationCurrent(false);
-    setFormCustomFertilizer((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      customNutrients: { ...prev.customNutrients!, [name]: value },
+    }));
   };
 
   return (
@@ -439,7 +424,7 @@ export default function FertigationModal({
               onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
             />
           </Grid>
-          {isCustomFertilizer ? (
+          {formData.customNutrients ? (
             <Grid size={{ xs: 12 }}>
               <Grid
                 container
@@ -449,8 +434,8 @@ export default function FertigationModal({
                   <NumberField
                     isRequired
                     label="N (%)"
-                    value={formCustomFertilizer.nitrogen}
-                    onChange={(e) => handleCustomChanges('nitrogen', e)}
+                    value={formData.customNutrients.N}
+                    onChange={(e) => handleCustomChanges('N', e)}
                     minValue={0}
                     maxValue={100}
                   />
@@ -463,8 +448,8 @@ export default function FertigationModal({
                         P<sub>2</sub>O<sub>5</sub> (%)
                       </span>
                     }
-                    value={formCustomFertilizer.phosphorous}
-                    onChange={(e) => handleCustomChanges('phosphorous', e)}
+                    value={formData.customNutrients.P2O5}
+                    onChange={(e) => handleCustomChanges('P2O5', e)}
                     minValue={0}
                     maxValue={100}
                   />
@@ -477,8 +462,8 @@ export default function FertigationModal({
                         K<sub>2</sub>O (%)
                       </span>
                     }
-                    value={formCustomFertilizer.potassium}
-                    onChange={(e) => handleCustomChanges('potassium', e)}
+                    value={formData.customNutrients.K2O}
+                    onChange={(e) => handleCustomChanges('K2O', e)}
                     minValue={0}
                     maxValue={100}
                   />
@@ -532,6 +517,7 @@ export default function FertigationModal({
                   value={formData.density}
                   onChange={(e) => handleInputChanges({ density: e })}
                   minValue={0}
+                  step={0.01}
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>
