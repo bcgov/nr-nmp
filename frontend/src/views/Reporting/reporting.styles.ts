@@ -44,7 +44,6 @@ export const customTableStyle = {
     whiteSpace: 'break-spaces',
     padding: '8px 12px',
     fontSize: '14px',
-    lineHeight: '1.4',
   },
   '& .MuiDataGrid-row:hover': {
     backgroundColor: 'transparent',
@@ -53,9 +52,6 @@ export const customTableStyle = {
     fontWeight: '700',
     whiteSpace: 'break-spaces',
     fontSize: '14px',
-  },
-  '& .MuiDataGrid-columnHeader': {
-    padding: '8px 12px',
   },
   marginBottom: '16px',
   border: '1px solid #e0e0e0',
@@ -67,10 +63,9 @@ export const ROW_HEIGHT = 48;
 export const FieldContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  // padding: 24px;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
 export const FieldInfoSection = styled.div`

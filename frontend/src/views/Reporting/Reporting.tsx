@@ -204,7 +204,6 @@ export default function FieldList() {
         </Button>
       </ButtonGroup>
       {/* <div style={{ height: '0px', overflow: 'hidden' }}> */}
-      <pre>{JSON.stringify(state.nmpFile, null, 2)}</pre>
       <div>
         <div ref={reportRef}>
           <CompleteReportTemplate />

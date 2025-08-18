@@ -25,14 +25,13 @@ const HIDE_COLUMN_CSS = {
 };
 
 const CROP_COLUMNS: GridColDef[] = [
-  { field: 'name', headerName: 'Crop Name', width: 250, minWidth: 200 },
-  { field: 'cropTypeName', headerName: 'Crop Type', width: 180, minWidth: 150 },
-  { field: 'yield', headerName: 'Yield', width: 120, minWidth: 100 },
+  { field: 'name', headerName: 'Crop Name', width: 200 },
+  { field: 'cropTypeName', headerName: 'Crop Type', width: 180 },
+  { field: 'yield', headerName: 'Yield', width: 120 },
   {
     field: 'nCredit',
     headerName: 'Previous crop ploughed down (N credit)',
-    width: 280,
-    minWidth: 250,
+    width: 200,
   },
 ];
 
@@ -50,19 +49,15 @@ const LEAF_TISSUE_COLUMNS: GridColDef[] = [
 ];
 
 const CALC_COLUMNS: GridColDef[] = [
-  { field: 'name', width: 280, minWidth: 250, maxWidth: 350, renderHeader: () => null },
+  { field: 'name', width: 190, renderHeader: () => null },
   {
     field: 'reqN',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => <span>N</span>,
   },
   {
     field: 'reqP2o5',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => (
       <span>
         P<sub>2</sub>O<sub>5</sub>
@@ -72,8 +67,6 @@ const CALC_COLUMNS: GridColDef[] = [
   {
     field: 'reqK2o',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => (
       <span>
         K<sub>2</sub>O
@@ -83,15 +76,11 @@ const CALC_COLUMNS: GridColDef[] = [
   {
     field: 'remN',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => <span>N</span>,
   },
   {
     field: 'remP2o5',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => (
       <span>
         P<sub>2</sub>O<sub>5</sub>
@@ -101,8 +90,6 @@ const CALC_COLUMNS: GridColDef[] = [
   {
     field: 'remK2o',
     width: 90,
-    minWidth: 80,
-    maxWidth: 150,
     renderHeader: () => (
       <span>
         K<sub>2</sub>O
@@ -277,7 +264,7 @@ export default function CompleteReportTemplate({
 
       <SectionTitle>Nutrient Requirements and Removal</SectionTitle>
       <TableHeader>
-        <div style={{ width: 280 }} />
+        <div style={{ width: 200 }} />
         <div style={{ width: 280 }}>
           Agronomic (lb/ac)
           <br />
@@ -349,11 +336,13 @@ export default function CompleteReportTemplate({
           disableColumnMenu
           hideFooterPagination
           hideFooter
+          disableColumnSorting
           getRowHeight={() => 'auto'}
+          scrollbarSize={0}
         />
 
         {balanceMessages.length > 0 && (
-          <div style={{ marginTop: '16px' }}>
+          <div style={{ marginTop: '16px', marginBottom: '16px' }}>
             {balanceMessages.map((msg) => (
               <Message key={msg.Id}>{msg.Text}</Message>
             ))}
