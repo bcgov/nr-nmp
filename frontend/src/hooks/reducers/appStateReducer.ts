@@ -259,8 +259,8 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     year.ImportedManures = structuredClone(action.newManures).map(
       (ele: NMPFileImportedManureData) => {
         // Inserts unique uuid
-        if ('manureId' in ele) return ele;
-        return { ...(ele as NMPFileImportedManureData), manureId: crypto.randomUUID() };
+        if ('uuid' in ele) return ele;
+        return { ...(ele as NMPFileImportedManureData), uuid: crypto.randomUUID() };
       },
     );
     if (year.ManureStorageSystems) {

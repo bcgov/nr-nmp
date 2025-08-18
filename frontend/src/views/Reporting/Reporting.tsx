@@ -203,8 +203,7 @@ export default function FieldList() {
           Finished
         </Button>
       </ButtonGroup>
-      {/* <div style={{ height: '0px', overflow: 'hidden' }}> */}
-      <div>
+      <div style={{ height: '0px', overflow: 'hidden' }}>
         <div ref={reportRef}>
           <CompleteReportTemplate />
         </div>
