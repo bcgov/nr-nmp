@@ -139,7 +139,7 @@ export default function Poultry({
           label="Number of birds per flock"
           value={formData.birdsPerFlock}
           onChange={(e) => handleInputChanges({ birdsPerFlock: e })}
-          minValue={0}
+          step={1}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
@@ -148,7 +148,7 @@ export default function Poultry({
           label="Number of flocks per year"
           value={formData.flocksPerYear}
           onChange={(e) => handleInputChanges({ flocksPerYear: e })}
-          minValue={0}
+          step={1}
         />
       </Grid>
       {/*  number of days before flock is removed or replaced */}
@@ -158,7 +158,7 @@ export default function Poultry({
           label="Number of days per flock"
           value={formData.daysPerFlock}
           onChange={(e) => handleInputChanges({ daysPerFlock: e })}
-          minValue={0}
+          step={1}
           maxValue={365}
         />
       </Grid>

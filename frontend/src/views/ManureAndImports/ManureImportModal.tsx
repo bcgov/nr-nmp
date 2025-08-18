@@ -143,7 +143,6 @@ export default function ManureImportModal({
               onChange={(e: number) => {
                 handleInputChange({ AnnualAmount: e });
               }}
-              minValue={0}
             />
           </Grid>
 
@@ -170,7 +169,7 @@ export default function ManureImportModal({
                   label="Moisture (%)"
                   value={formData.Moisture}
                   onChange={(e) => handleInputChange({ Moisture: e })}
-                  minValue={0}
+                  step={0.1}
                   maxValue={100}
                 />
               </Grid>

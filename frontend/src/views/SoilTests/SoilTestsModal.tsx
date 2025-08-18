@@ -114,7 +114,7 @@ export default function SoilTestsModal({
               label="NO3-N (ppm), nitrate-nitrogen"
               value={formData.valNO3H}
               onChange={(e) => handleFormFieldChange({ valNO3H: e })}
-              minValue={0}
+              step={1}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -123,7 +123,7 @@ export default function SoilTestsModal({
               label="P (ppm), phosphorus"
               value={formData.valP}
               onChange={(e) => handleFormFieldChange({ valP: e })}
-              minValue={0}
+              step={1}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -132,7 +132,7 @@ export default function SoilTestsModal({
               label="K (ppm), potassium"
               value={formData.valK}
               onChange={(e) => handleFormFieldChange({ valK: e })}
-              minValue={0}
+              step={1}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -141,7 +141,6 @@ export default function SoilTestsModal({
               label="pH"
               value={formData.valPH}
               onChange={(e) => handleFormFieldChange({ valPH: e })}
-              minValue={0}
               maxValue={14}
             />
           </Grid>

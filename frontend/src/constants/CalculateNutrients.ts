@@ -1,9 +1,10 @@
 import {
   CropNutrients,
   Fertilizer,
-  NutrientColumns,
   DryFertilizerSolubility,
   Schedule,
+  InjectionUnit,
+  SelectOption,
 } from '@/types';
 
 export const DRY_CUSTOM_ID = 2;
@@ -13,11 +14,6 @@ export const EMPTY_CROP_NUTRIENTS: CropNutrients = {
   N: 0,
   P2O5: 0,
   K2O: 0,
-};
-
-export const EMPTY_NUTRIENT_COLUMNS: NutrientColumns = {
-  agronomic: { ...EMPTY_CROP_NUTRIENTS },
-  cropRemoval: { ...EMPTY_CROP_NUTRIENTS },
 };
 
 export const EMPTY_CUSTOM_FERTILIZER: Fertilizer = {
@@ -108,11 +104,15 @@ export const DRY_FERTILIZER_SOLUBILITY: DryFertilizerSolubility[] = [
 ];
 
 // Taken from https://github.com/bcgov/agri-nmp/blob/ce60d005a1990fe441ee347a9bfac700dd092bd3/app/Agri.Data/SeedData/FertigationData.json
-export const INJECTION_RATE_UNITS: { id: number; label: string }[] = [
-  { id: 1, label: 'US gallon/min' },
-  { id: 2, label: 'L/min' },
-  { id: 3, label: 'Imp. gallon/min' },
+export const INJECTION_RATE_UNITS: InjectionUnit[] = [
+  { id: 1, name: 'US gallon/min', conversionToImpGallonsPerMinute: 0.836 },
+  { id: 2, name: 'L/min', conversionToImpGallonsPerMinute: 0.22 },
+  { id: 3, name: 'Imp. gallon/min', conversionToImpGallonsPerMinute: 1 },
 ];
+
+export const INJECTION_UNIT_OPTIONS: SelectOption<InjectionUnit>[] = INJECTION_RATE_UNITS.map(
+  (value) => ({ id: value.id, label: value.name, value }),
+);
 
 export const SOLUBILITY_RATE_UNITS: { id: number; label: string }[] = [
   { id: 1, label: 'g/L' },

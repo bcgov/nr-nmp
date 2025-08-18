@@ -193,7 +193,6 @@ export default function DairyCattle({
           label="Average Animal Number on Farm"
           value={formData.animalsPerFarm}
           onChange={(e) => handleInputChanges({ animalsPerFarm: e })}
-          minValue={0}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
@@ -211,7 +210,7 @@ export default function DairyCattle({
           label="Grazing Days per Year"
           value={formData.grazingDaysPerYear}
           onChange={(e) => handleInputChanges({ grazingDaysPerYear: e })}
-          minValue={0}
+          step={1}
           maxValue={365}
         />
       </Grid>

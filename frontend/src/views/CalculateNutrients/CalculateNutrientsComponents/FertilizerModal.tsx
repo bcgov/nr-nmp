@@ -412,7 +412,6 @@ export default function FertilizerModal({
                     label="N (%)"
                     value={formCustomFertilizer.nitrogen}
                     onChange={(e) => handleInputChanges({ nitrogen: e })}
-                    minValue={0}
                     maxValue={100}
                   />
                 </Grid>
@@ -426,7 +425,6 @@ export default function FertilizerModal({
                     }
                     value={formCustomFertilizer.phosphorous}
                     onChange={(e) => handleInputChanges({ phosphorous: e })}
-                    minValue={0}
                     maxValue={100}
                   />
                 </Grid>
@@ -440,7 +438,6 @@ export default function FertilizerModal({
                     }
                     value={formCustomFertilizer.potassium}
                     onChange={(e) => handleInputChanges({ potassium: e })}
-                    minValue={0}
                     maxValue={100}
                   />
                 </Grid>
@@ -464,7 +461,6 @@ export default function FertilizerModal({
               label="Application Rate"
               value={formState.applicationRate}
               onChange={(e) => handleInputChanges({ applicationRate: e })}
-              minValue={0}
             />
           </Grid>
           <Grid size={{ xs: 6 }}>
@@ -485,7 +481,6 @@ export default function FertilizerModal({
                   label="Density"
                   value={formState.density}
                   onChange={(e) => handleInputChanges({ density: e })}
-                  minValue={0}
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>
@@ -513,7 +508,7 @@ export default function FertilizerModal({
               label="Date"
               type="date"
               name="applDate"
-              value={formState.applDate || 0}
+              value={formState.applDate || ''}
               onChange={(e: any) => {
                 // Current NMP stores this, but not for calculations
                 // Right now not passed to parent componet for storing.

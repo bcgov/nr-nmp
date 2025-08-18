@@ -139,7 +139,6 @@ export default function OtherAnimals({
           label="Average Animal Number on Farm"
           value={formData.animalsPerFarm}
           onChange={(e) => handleInputChanges({ animalsPerFarm: e })}
-          minValue={0}
         />
       </Grid>
       <Grid size={12}>
@@ -161,7 +160,6 @@ export default function OtherAnimals({
             size="small"
             value={formData.daysCollected}
             onChange={(e) => handleInputChanges({ daysCollected: e })}
-            minValue={0}
             maxValue={365}
           />
         </Grid>

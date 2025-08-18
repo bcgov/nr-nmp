@@ -12,8 +12,14 @@ import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import SEASON_APPLICATION from '../unseededData';
 import { EMPTY_CROP_NUTRIENTS } from '@/constants';
 
-import type { NMPFileFarmManureData } from '@/types/NMPFileFarmManureData';
-import { CropNutrients, NMPFileFieldData, NutrientManures, SelectOption, Units } from '@/types';
+import {
+  CropNutrients,
+  NMPFileFieldData,
+  NMPFileNutrientAnalysis,
+  NMPFileAppliedManure,
+  SelectOption,
+  Units,
+} from '@/types';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 
@@ -35,7 +41,7 @@ type ManureFormFields = {
 
 type AddManureModalProps = {
   initialModalData?: ManureFormFields;
-  farmManures: NMPFileFarmManureData[];
+  manuresWithNutrients: NMPFileNutrientAnalysis[];
   rowEditIndex?: number;
   field: NMPFileFieldData;
   setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
@@ -83,7 +89,7 @@ const DEFAULT_MANURE_FORM_FIELDS: ManureFormFields = {
 
 export default function ManureModal({
   initialModalData,
-  farmManures,
+  manuresWithNutrients,
   onCancel,
   field,
   setFields,
@@ -127,35 +133,37 @@ export default function ManureModal({
   };
 
   const handleSubmit = () => {
+    debugger;
     if (!field) {
       console.error('No field selected for manure application');
       return;
     }
 
     // Find the selected farm manure
-    const selectedFarmManure = farmManures.find(
+    const selectedManure = manuresWithNutrients.find(
       (manure) => manure.materialType === manureForm.materialType,
     );
 
-    if (!selectedFarmManure) {
+    if (!selectedManure) {
       console.error('Selected farm manure not found');
       return;
     }
 
     // Create new nutrient manure entry
-    const newNutrientManure: NutrientManures = {
-      manureId: selectedFarmManure.Nutrients.ManureId,
+    const newAppliedManure: NMPFileAppliedManure = {
+      manureId: selectedManure.ManureId,
+      name: selectedManure.materialType,
       applicationId: manureForm.applicationMethod,
       unitId: manureForm.applUnit,
       rate: manureForm.applicationRate,
       nh4Retention: manureForm.retentionAmmoniumN,
       nAvail: manureForm.organicNAvailable,
-      reqN: availableThisYearTable?.N || 0,
-      reqP2o5: availableThisYearTable?.P2O5 || 0,
-      reqK2o: availableThisYearTable?.K2O || 0,
-      remN: availableLongTermTable?.N || 0,
-      remP2o5: availableLongTermTable?.P2O5 || 0,
-      remK2o: availableLongTermTable?.K2O || 0,
+      reqN: availableThisYearTable.N,
+      reqP2o5: availableThisYearTable.P2O5,
+      reqK2o: availableThisYearTable.K2O,
+      remN: availableLongTermTable.N,
+      remP2o5: availableLongTermTable.P2O5,
+      remK2o: availableLongTermTable.K2O,
     };
 
     // Update the fields array
@@ -164,9 +172,7 @@ export default function ManureModal({
       if (f.FieldName === field.FieldName) {
         return {
           ...f,
-          Nutrients: {
-            nutrientManures: [...(f.Nutrients?.nutrientManures || []), newNutrientManure],
-          },
+          Manures: [...f.Manures, newAppliedManure],
         };
       }
       return f;
@@ -174,16 +180,11 @@ export default function ManureModal({
 
     // Update fields state and dispatch to global state
     setFields(updatedFields);
-    dispatch({
-      type: 'SAVE_FIELDS',
-      year: state.nmpFile.farmDetails.Year!,
-      newFields: updatedFields,
-    });
     handleModalClose();
   };
 
   const handleCalculate = async () => {
-    const farmManure = state.nmpFile?.years?.[0]?.FarmManures?.[0];
+    const farmManure = state.nmpFile.years[0].NutrientAnalyses[0];
     if (!farmManure) {
       console.error('No farm manure data available for calculation.');
       return;
@@ -244,7 +245,7 @@ export default function ManureModal({
               label="Material Type"
               placeholder="Select a material type"
               selectedKey={manureForm.materialType}
-              items={farmManures.map((ele: NMPFileFarmManureData) => ({
+              items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
                 id: ele.materialType,
                 label: ele.materialType,
               }))}
@@ -268,7 +269,6 @@ export default function ManureModal({
               label="Application Rate"
               value={manureForm.applicationRate}
               onChange={(e) => handleChange({ applicationRate: e })}
-              minValue={0}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -279,6 +279,7 @@ export default function ManureModal({
               selectedKey={manureForm.applUnit}
               items={manureUnits}
               onSelectionChange={(e) => handleChange({ applUnit: e as number })}
+              autoselectFirst
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -286,7 +287,6 @@ export default function ManureModal({
               label="Ammonium-N Retention (%)"
               value={manureForm.retentionAmmoniumN}
               onChange={(e) => handleChange({ retentionAmmoniumN: e })}
-              minValue={0}
               maxValue={100}
             />
           </Grid>
@@ -295,7 +295,6 @@ export default function ManureModal({
               label="Organic N Available (%)"
               value={manureForm.organicNAvailable}
               onChange={(e) => handleChange({ organicNAvailable: e })}
-              minValue={0}
               maxValue={100}
             />
           </Grid>

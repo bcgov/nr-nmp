@@ -11,7 +11,7 @@ import { NUTRIENT_MESSAGES } from './nutrientMessages';
 const initialAgronomicBalance: CropNutrients = { N: 0, P2O5: 0, K2O: 0 };
 const COLUMN_WIDTH: number = 90;
 const COLUMN_STYLE = css({
-  textAlign: 'right',
+  textAlign: 'center',
   width: `${COLUMN_WIDTH}px`,
 });
 
@@ -53,15 +53,23 @@ export const generateColumns = (
   handleEditRow: (e: any) => void,
   handleDeleteRow: (e: any) => void,
   renderCell: (params: GridRenderCellParams<any, any, any>) => React.ReactNode,
-  renderTableHeader?: React.ReactNode,
+  tableHeader?: string,
   hideColumnHeaders?: boolean,
 ): GridColDef[] => [
   {
     field: 'name',
-    width: 230,
-    minWidth: 200,
-    maxWidth: 300,
-    renderHeader: () => renderTableHeader ?? <div />,
+    width: COLUMN_WIDTH * 2,
+    minWidth: COLUMN_WIDTH * 2,
+    maxWidth: COLUMN_WIDTH * 2.5,
+    renderHeader: () => (tableHeader ? <div>{tableHeader}</div> : <div />),
+    sortable: false,
+  },
+  {
+    field: 'date',
+    width: COLUMN_WIDTH,
+    minWidth: COLUMN_WIDTH,
+    maxWidth: 100,
+    renderHeader: () => <div />,
     sortable: false,
   },
   {
@@ -153,29 +161,35 @@ export const generateColumns = (
     sortable: false,
   },
   {
-    field: '',
+    field: 'action',
     width: 100,
     renderHeader: () => null,
-    renderCell: (row: any) => (
-      <>
-        <FontAwesomeIcon
-          css={tableActionButtonCss}
-          onClick={(e) => {
-            handleEditRow(row);
-            e.stopPropagation();
-          }}
-          icon={faEdit}
-        />
-        <FontAwesomeIcon
-          css={tableActionButtonCss}
-          onClick={(e) => {
-            handleDeleteRow(row);
-            e.stopPropagation();
-          }}
-          icon={faTrash}
-        />
-      </>
-    ),
+    renderCell: (row: any) =>
+      // If 'action' isn't defined or is 0 (indicating
+      // that this is the first row) then show buttons
+      // 'action' is only defined for fertigation rows
+      !row.value ? (
+        <>
+          <FontAwesomeIcon
+            css={tableActionButtonCss}
+            onClick={(e) => {
+              handleEditRow(row);
+              e.stopPropagation();
+            }}
+            icon={faEdit}
+          />
+          <FontAwesomeIcon
+            css={tableActionButtonCss}
+            onClick={(e) => {
+              handleDeleteRow(row);
+              e.stopPropagation();
+            }}
+            icon={faTrash}
+          />
+        </>
+      ) : (
+        <div />
+      ),
     sortable: false,
     resizable: false,
   },
@@ -202,8 +216,8 @@ export function genHandleDeleteRow(
 export function renderNutrientCell({ value }: any) {
   return React.createElement(
     'div',
-    { style: { display: 'flex', alignItems: 'center', justifyContent: 'right' } },
-    React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
+    { style: { display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+    React.createElement('span', { style: {} }, value),
   );
 }
 
@@ -225,9 +239,10 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
 
     return React.createElement(
       'div',
-      { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'right' } },
+      { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'center' } },
       message?.Icon
         ? [
+            React.createElement('span', { style: { marginLeft: '-1.5em' } }),
             React.createElement('img', {
               key: 'icon',
               src: message.Icon,
@@ -240,7 +255,7 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
               showAsAbs ? Math.abs(value as number) : value,
             ),
           ]
-        : React.createElement('span', { style: { marginLeft: '1.5em' } }, value),
+        : React.createElement('span', { style: {} }, value),
     );
   };
 
@@ -252,6 +267,14 @@ export const BALANCE_COLUMNS = [
     maxWidth: 300,
     renderHeader: () => null,
     renderCell: () => <div style={{ fontWeight: 'bold' }}>Balance</div>,
+    sortable: false,
+  },
+  {
+    field: 'date',
+    width: COLUMN_WIDTH / 2,
+    minWidth: COLUMN_WIDTH / 2,
+    maxWidth: 100,
+    renderHeader: () => <div />,
     sortable: false,
   },
   {

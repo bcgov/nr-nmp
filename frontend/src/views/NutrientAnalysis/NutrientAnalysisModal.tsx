@@ -5,12 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Checkbox } from '@bcgov/design-system-react-components';
 import { ModalProps } from '@/components/common/Modal/Modal';
-import {
-  Manure,
-  SelectOption,
-  NMPFileNutrientAnalysisData,
-  NMPFileManureStorageSystem,
-} from '@/types';
+import { Manure, SelectOption, NMPFileNutrientAnalysis, NMPFileManureStorageSystem } from '@/types';
 import { formGridBreakpoints } from '@/common.styles';
 import { Form, Select, Modal, TextField, NumberField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -18,14 +13,14 @@ import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 
 type NutrientAnalysisModalProps = {
-  initialModalData?: NMPFileNutrientAnalysisData;
+  initialModalData?: NMPFileNutrientAnalysis;
   manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[];
   storageSystems: NMPFileManureStorageSystem[];
-  handleSubmit: (data: NMPFileNutrientAnalysisData) => void;
+  handleSubmit: (data: NMPFileNutrientAnalysis) => void;
   onCancel: () => void;
 };
 
-const EMPTY_NUTRIENT_ANALYSIS: NMPFileNutrientAnalysisData = {
+const EMPTY_NUTRIENT_ANALYSIS: NMPFileNutrientAnalysis = {
   materialSource: '',
   Moisture: '',
   N: 0,
@@ -48,7 +43,7 @@ export default function NutrientAnalysisModal({
   onCancel,
   ...props
 }: NutrientAnalysisModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [formData, setFormData] = useState<NMPFileNutrientAnalysisData>(
+  const [formData, setFormData] = useState<NMPFileNutrientAnalysis>(
     initialModalData || EMPTY_NUTRIENT_ANALYSIS,
   );
   const apiCache = useContext(APICacheContext);
@@ -81,8 +76,8 @@ export default function NutrientAnalysisModal({
     });
   }, [apiCache]);
 
-  const handleInputChanges = (changes: Partial<NMPFileNutrientAnalysisData>) => {
-    setFormData((prev: NMPFileNutrientAnalysisData): NMPFileNutrientAnalysisData => {
+  const handleInputChanges = (changes: Partial<NMPFileNutrientAnalysis>) => {
+    setFormData((prev: NMPFileNutrientAnalysis): NMPFileNutrientAnalysis => {
       let next = { ...prev };
       Object.entries(changes).forEach(([name, value]) => {
         if (name === 'materialSource') {
@@ -227,7 +222,7 @@ export default function NutrientAnalysisModal({
                 label="Moisture (%)"
                 value={Number.isNaN(formData.Moisture) ? undefined : Number(formData.Moisture)}
                 onChange={(e) => handleInputChanges({ Moisture: String(e) })}
-                minValue={0}
+                step={0.1}
                 maxValue={100}
               />
             ) : (
@@ -242,10 +237,9 @@ export default function NutrientAnalysisModal({
             <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
-              label="N"
+              label="N" // QUESTION: Is this not a percent too?
               value={formData.N}
               onChange={(e) => handleInputChanges({ N: e })}
-              minValue={0}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
@@ -255,7 +249,6 @@ export default function NutrientAnalysisModal({
               label="NH4-N (%)"
               value={formData.NH4N}
               onChange={(e) => handleInputChanges({ NH4N: e })}
-              minValue={0}
               maxValue={100}
             />
           </Grid>
@@ -266,7 +259,6 @@ export default function NutrientAnalysisModal({
               label="P (%)"
               value={formData.P2O5}
               onChange={(e) => handleInputChanges({ P2O5: e })}
-              minValue={0}
               maxValue={100}
             />
           </Grid>
@@ -277,7 +269,6 @@ export default function NutrientAnalysisModal({
               label="K (%)"
               value={formData.K2O}
               onChange={(e) => handleInputChanges({ K2O: e })}
-              minValue={0}
               maxValue={100}
             />
           </Grid>
