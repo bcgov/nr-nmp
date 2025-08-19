@@ -37,8 +37,13 @@ export default function ManureImportModal({
 }: ModalComponentProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const apiCache = useContext(APICacheContext);
 
+  const defaultManureDataWithUuid = (): NMPFileImportedManureData => ({
+    ...DefaultManureFormData,
+    uuid: crypto.randomUUID(),
+  });
+
   const [formData, setFormData] = useState<NMPFileImportedManureData>(
-    initialModalData || DefaultManureFormData,
+    initialModalData || defaultManureDataWithUuid(),
   );
 
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
