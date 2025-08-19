@@ -392,8 +392,10 @@ export default function CalculateNutrients() {
       )}
       {openDialog[0] === 'manure' && (
         <ManureModal
-          // TODO: Add in support for initial data
-          initialModalData={undefined}
+          fieldIndex={activeField}
+          initialModalData={
+            openDialog[1] !== undefined ? fieldList[activeField].Manures[openDialog[1]] : undefined
+          }
           manuresWithNutrients={state.nmpFile.years[0].NutrientAnalyses}
           field={fieldList[activeField]}
           rowEditIndex={openDialog[1]}

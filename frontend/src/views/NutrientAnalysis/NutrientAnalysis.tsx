@@ -59,8 +59,8 @@ export default function NutrientAnalysis() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (name: string) => {
-    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.materialSource !== name));
+  const handleDelete = (uuid: string) => {
+    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.linkedUuid !== uuid));
   };
   const handleDialogClose = () => {
     setIsDialogOpen(false);

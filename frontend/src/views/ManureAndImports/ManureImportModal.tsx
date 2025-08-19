@@ -37,7 +37,7 @@ export default function ManureImportModal({
 }: ModalComponentProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const apiCache = useContext(APICacheContext);
 
-  const [formData, setFormData] = useState<NMPFileImportedManureData>(
+  const [formData, setFormData] = useState<Omit<NMPFileImportedManureData, 'uuid'>>(
     initialModalData || DefaultManureFormData,
   );
 
@@ -83,7 +83,7 @@ export default function ManureImportModal({
   };
 
   const handleInputChange = (changes: Partial<NMPFileImportedManureData>) => {
-    setFormData((prev: NMPFileImportedManureData) => {
+    setFormData((prev) => {
       const updatedData = { ...prev, ...changes };
       return updatedData;
     });
@@ -121,11 +121,11 @@ export default function ManureImportModal({
               isRequired
               label="Manure Type"
               placeholder="Select manure type"
-              selectedKey={formData.ManureType}
+              selectedKey={formData.manureType}
               items={MANURE_TYPE_OPTIONS}
               onSelectionChange={(e) => {
                 handleInputChange({
-                  ManureType: e as number,
+                  manureType: e as number,
                   ManagedManureName: `${formData.UniqueMaterialName}, ${ManureType[e as number]}`,
                   // Reset dependent inputs on changes
                   Units: undefined,
@@ -146,7 +146,7 @@ export default function ManureImportModal({
             />
           </Grid>
 
-          {formData.ManureType === 2 && (
+          {formData.manureType === 2 && (
             <>
               <Grid size={formGridBreakpoints}>
                 <Select
@@ -176,7 +176,7 @@ export default function ManureImportModal({
             </>
           )}
 
-          {formData.ManureType === 1 && (
+          {formData.manureType === 1 && (
             <Grid size={formGridBreakpoints}>
               <Select
                 isRequired

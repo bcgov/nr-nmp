@@ -122,8 +122,8 @@ export async function getNutrientInputs(
     // Adjust application rate for solid manure in cubic yards
     if (
       applicationRateUnit.id === 6 &&
-      manureWithNutrients.SolidLiquid &&
-      manureWithNutrients.SolidLiquid.toUpperCase() === 'SOLID'
+      manureWithNutrients.solidLiquid &&
+      manureWithNutrients.solidLiquid.toUpperCase() === 'SOLID'
     ) {
       const manureTypeForVolumeConversion = await getManure(manureWithNutrients.ManureId);
       adjustedApplicationRate = applicationRate * manureTypeForVolumeConversion.cubicyardconversion;

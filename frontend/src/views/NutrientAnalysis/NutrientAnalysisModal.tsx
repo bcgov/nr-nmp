@@ -1,11 +1,17 @@
 /**
  * @summary This is the Add Animal list Tab
  */
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Checkbox } from '@bcgov/design-system-react-components';
 import { ModalProps } from '@/components/common/Modal/Modal';
-import { Manure, SelectOption, NMPFileNutrientAnalysis, NMPFileManureStorageSystem } from '@/types';
+import {
+  Manure,
+  SelectOption,
+  NMPFileNutrientAnalysis,
+  NMPFileManureStorageSystem,
+  ManureType,
+} from '@/types';
 import { formGridBreakpoints } from '@/common.styles';
 import { Form, Select, Modal, TextField, NumberField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -28,7 +34,7 @@ const EMPTY_NUTRIENT_ANALYSIS: NMPFileNutrientAnalysis = {
   P2O5: 0,
   K2O: 0,
   ManureId: 0,
-  SolidLiquid: '',
+  solidLiquid: '',
   linkedUuid: '',
   materialType: '',
   bookLab: '',
@@ -49,6 +55,10 @@ export default function NutrientAnalysisModal({
   const apiCache = useContext(APICacheContext);
 
   const [manureOptions, setManureOptions] = useState<SelectOption<Manure>[]>([]);
+  const filteredManureOptions = useMemo(() => {
+    if (manureOptions.length === 0 || !formData.solidLiquid) return [];
+    return manureOptions.filter((m) => m.value.solidliquid === formData.solidLiquid);
+  }, [manureOptions, formData.solidLiquid]);
   const materialSourceOptions = [
     ...storageSystems.map((storageEle) => ({
       id: storageEle.uuid,
@@ -116,13 +126,11 @@ export default function NutrientAnalysisModal({
             throw new Error(`Manure type "${value}" not found.`);
           }
           next.bookLab = value ? value.toString() : '';
-          next.ManureId = selectedManure.id;
           next.Moisture = selectedManure.moisture;
           next.N = selectedManure.nitrogen;
           next.NH4N = selectedManure.ammonia;
           next.P2O5 = selectedManure.phosphorous;
           next.K2O = selectedManure.potassium;
-          next.SolidLiquid = selectedManure.solidliquid;
         }
       });
 
@@ -159,8 +167,9 @@ export default function NutrientAnalysisModal({
                   throw new Error(`Source manure or storage "${e}" not found.`);
                 }
                 handleInputChanges({
-                  materialSource: selectedSource?.label,
+                  materialSource: selectedSource.label,
                   linkedUuid: e as string,
+                  solidLiquid: ManureType[selectedSource.value.manureType!] as any, // type shenanigans
                 });
               }}
             />
@@ -168,7 +177,7 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              items={manureOptions}
+              items={filteredManureOptions}
               label="Material Type"
               placeholder="Select Material Type"
               selectedKey={formData.materialType}
