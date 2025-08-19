@@ -126,6 +126,12 @@ export const AMOUNT_TO_DISSOLVE_UNITS: { id: number; label: string }[] = [
   { id: 3, label: 'grams' },
 ];
 
+export const TANK_VOLUME_UNITS: { id: number; label: string }[] = [
+  { id: 1, label: 'Imperial Gallons' },
+  { id: 2, label: 'US Gallons' },
+  { id: 3, label: 'Litres' },
+];
+
 export const SCHEDULE_OPTIONS = [
   { id: Schedule.Monthly, label: Schedule[Schedule.Monthly] },
   { id: Schedule.Biweekly, label: Schedule[Schedule.Biweekly] },

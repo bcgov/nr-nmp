@@ -17,7 +17,7 @@ import type {
   Schedule,
   SelectOption,
 } from '@/types';
-import { customTableStyle, formGridBreakpoints } from '@/common.styles';
+import { customTableStyle } from '@/common.styles';
 import { NMPFileFertigation } from '@/types';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
@@ -36,9 +36,14 @@ import {
 import {
   getProductVolumePerApplication,
   getTimePerApplication,
+  calculateSolidFertigation,
 } from '@/calculations/CalculateNutrients/Fertigation/calculations';
 import { renderBalanceCell } from '../utils';
-import { AMOUNT_TO_DISSOLVE_UNITS, SOLUBILITY_RATE_UNITS } from '@/constants/CalculateNutrients';
+import {
+  AMOUNT_TO_DISSOLVE_UNITS,
+  SOLUBILITY_RATE_UNITS,
+  TANK_VOLUME_UNITS,
+} from '@/constants/CalculateNutrients';
 
 type FertigationModalProps = {
   fieldIndex: number;
@@ -126,6 +131,13 @@ const EMPTY_FERTIGATION_FORM_DATA: NMPFileFertigation = {
   volume: 0,
   volumeForSeason: 0,
   applicationTime: 0,
+  dryAction: undefined,
+  nutrientConcentrationN: 0,
+  nutrientConcentrationP2O5: 0,
+  nutrientConcentrationK2O: 0,
+  kglNutrientConcentrationN: 0,
+  kglNutrientConcentrationP2O5: 0,
+  kglNutrientConcentrationK2O: 0,
 };
 
 export default function FertigationModal({
@@ -145,8 +157,6 @@ export default function FertigationModal({
   const [fertilizerTypes, setFertilizerTypes] = useState<SelectOption<FertilizerType>[]>([]);
   const [fertilizers, setFertilizers] = useState<SelectOption<Fertilizer>[]>([]);
   const [filteredFertilizers, setFilteredFertilizers] = useState<SelectOption<Fertilizer>[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dryUnits, setDryUnits] = useState<SelectOption<FertilizerUnit>[]>([]);
   const [liquidUnits, setLiquidUnits] = useState<SelectOption<FertilizerUnit>[]>([]);
   const [densityUnits, setDensityUnits] = useState<SelectOption<DensityUnit>[]>([]);
   const [liqDensityFactors, setLiqDensityFactors] = useState<any[]>([]);
@@ -232,7 +242,6 @@ export default function FertigationModal({
         unitOptions.forEach((u) =>
           u.value.dryliquid === 'dry' ? unitsDry.push(u) : unitsLiquid.push(u),
         );
-        setDryUnits(unitsDry);
         setLiquidUnits(unitsLiquid);
       }
     });
@@ -341,6 +350,60 @@ export default function FertigationModal({
       });
     }
 
+    if (isDryFertilizer) {
+      // Validate required fields for dry fertigation
+      if (!formData.tankVolume || !formData.tankUnitId) {
+        throw new Error('Tank volume and units are required for dry fertigation');
+      }
+      if (!formData.solubility || !formData.solubilityUnitId) {
+        throw new Error('Solubility and units are required for dry fertigation');
+      }
+      if (!formData.amountToDissolve || !formData.amountToDissolveUnitId) {
+        throw new Error('Amount to dissolve and units are required for dry fertigation');
+      }
+
+      const solidCalc = calculateSolidFertigation(
+        formData.amountToDissolve,
+        formData.amountToDissolveUnitId,
+        formData.tankVolume,
+        formData.tankUnitId,
+        formData.solubility,
+        formData.solubilityUnitId,
+        formData.injectionRate,
+        formData.injectionUnitId!,
+        field.Area,
+        formData.eventsPerSeason,
+        nutrients.N,
+        nutrients.P2O5,
+        nutrients.K2O,
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        applicationTime: solidCalc.fertigationTime,
+        reqN: solidCalc.calcN,
+        remN: solidCalc.calcN,
+        reqP2o5: solidCalc.calcP2O5,
+        remP2o5: solidCalc.calcP2O5,
+        reqK2o: solidCalc.calcK2O,
+        remK2o: solidCalc.calcK2O,
+        // Store additional dry fertigation results
+        dryAction: solidCalc.dryAction,
+        nutrientConcentrationN: solidCalc.nutrientConcentrationN,
+        nutrientConcentrationP2O5: solidCalc.nutrientConcentrationP2O5,
+        nutrientConcentrationK2O: solidCalc.nutrientConcentrationK2O,
+        kglNutrientConcentrationN: solidCalc.kglNutrientConcentrationN,
+        kglNutrientConcentrationP2O5: solidCalc.kglNutrientConcentrationP2O5,
+        kglNutrientConcentrationK2O: solidCalc.kglNutrientConcentrationK2O,
+      }));
+
+      setBalanceCacRow({
+        reqN: Math.min(0, balanceRow.reqN + solidCalc.calcN),
+        reqP2o5: Math.min(0, balanceRow.reqP2o5 + solidCalc.calcP2O5),
+        reqK2o: Math.min(0, balanceRow.reqK2o + solidCalc.calcK2O),
+      });
+    }
+
     setIsCalculationCurrent(true);
   };
 
@@ -412,357 +475,525 @@ export default function FertigationModal({
       onOpenChange={onClose}
       {...props}
     >
-      <Form
-        onCancel={onClose}
-        onConfirm={handleSubmit}
-        onCalculate={handleModalCalculate}
-        isConfirmDisabled={!isCalculationCurrent}
-      >
-        <Grid
-          container
-          spacing={2}
+      <div css={{ maxHeight: '80vh', overflowY: 'auto', padding: '1rem' }}>
+        <Form
+          onCancel={onClose}
+          onConfirm={handleSubmit}
+          onCalculate={handleModalCalculate}
+          isConfirmDisabled={!isCalculationCurrent}
         >
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              items={fertilizerTypes}
-              label="Fertilizer Type"
-              placeholder="Select Fertilizer Type"
-              selectedKey={formData.fertilizerTypeId}
-              onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
-            />
-          </Grid>
-          {formData.customNutrients ? (
-            <Grid size={{ xs: 12 }}>
-              <Grid
-                container
-                spacing={2}
-              >
-                <Grid size={{ xs: 4 }}>
-                  <NumberField
-                    isRequired
-                    label="N (%)"
-                    value={formData.customNutrients.N}
-                    onChange={(e) => handleCustomChanges('N', e)}
-                    maxValue={100}
-                  />
-                </Grid>
-                <Grid size={{ xs: 4 }}>
-                  <NumberField
-                    isRequired
-                    label={
-                      <span>
-                        P<sub>2</sub>O<sub>5</sub> (%)
-                      </span>
-                    }
-                    value={formData.customNutrients.P2O5}
-                    onChange={(e) => handleCustomChanges('P2O5', e)}
-                    maxValue={100}
-                  />
-                </Grid>
-                <Grid size={{ xs: 4 }}>
-                  <NumberField
-                    isRequired
-                    label={
-                      <span>
-                        K<sub>2</sub>O (%)
-                      </span>
-                    }
-                    value={formData.customNutrients.K2O}
-                    onChange={(e) => handleCustomChanges('K2O', e)}
-                    maxValue={100}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-          ) : (
-            <Grid size={formGridBreakpoints}>
+          <Grid
+            container
+            spacing={1.5}
+          >
+            <Grid size={{ xs: 12, md: 6 }}>
               <Select
                 isRequired
-                items={filteredFertilizers}
-                label="Fertilizer"
-                placeholder="Select Fertilizer"
-                selectedKey={formData.fertilizerId}
-                onSelectionChange={(e) => handleInputChanges({ fertilizerId: e as number })}
+                items={fertilizerTypes}
+                label="Fertilizer Type"
+                placeholder="Select Fertilizer Type"
+                selectedKey={formData.fertilizerTypeId}
+                onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
               />
             </Grid>
-          )}
-          {isDryFertilizer && (
-            <>
-              <Grid size={{ xs: 6 }}>
-                <NumberField
-                  isRequired
-                  label="Tank Volume"
-                  value={formData.tankVolume}
-                  onChange={(e) => handleInputChanges({ tankVolume: e })}
-                />
+            {formData.customNutrients ? (
+              <Grid size={{ xs: 12 }}>
+                <Grid
+                  container
+                  spacing={1.5}
+                >
+                  <Grid size={{ xs: 4 }}>
+                    <NumberField
+                      isRequired
+                      label="N (%)"
+                      value={formData.customNutrients.N}
+                      onChange={(e) => handleCustomChanges('N', e)}
+                      maxValue={100}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 4 }}>
+                    <NumberField
+                      isRequired
+                      label={
+                        <span>
+                          P<sub>2</sub>O<sub>5</sub> (%)
+                        </span>
+                      }
+                      value={formData.customNutrients.P2O5}
+                      onChange={(e) => handleCustomChanges('P2O5', e)}
+                      maxValue={100}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 4 }}>
+                    <NumberField
+                      isRequired
+                      label={
+                        <span>
+                          K<sub>2</sub>O (%)
+                        </span>
+                      }
+                      value={formData.customNutrients.K2O}
+                      onChange={(e) => handleCustomChanges('K2O', e)}
+                      maxValue={100}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid size={{ xs: 6 }}>
+            ) : (
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Select
                   isRequired
-                  items={dryUnits}
-                  label="Units"
-                  placeholder="Select Units"
-                  selectedKey={formData.tankUnitId}
-                  onSelectionChange={(e) => handleInputChanges({ tankUnitId: e as number })}
-                  noSort
-                  autoselectFirst
+                  items={filteredFertilizers}
+                  label="Fertilizer"
+                  placeholder="Select Fertilizer"
+                  selectedKey={formData.fertilizerId}
+                  onSelectionChange={(e) => handleInputChanges({ fertilizerId: e as number })}
                 />
               </Grid>
-              <Grid size={{ xs: 6 }}>
-                <NumberField
-                  isRequired
-                  label="Solubility"
-                  value={formData.solubility}
-                  onChange={(e) => handleInputChanges({ solubility: e })}
-                  minValue={0}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <Select
-                  isRequired
-                  items={SOLUBILITY_RATE_UNITS}
-                  label="Units"
-                  placeholder="Select Units"
-                  selectedKey={formData.solubilityUnitId}
-                  onSelectionChange={(e) => handleInputChanges({ solubilityUnitId: e as number })}
-                  noSort
-                  autoselectFirst
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <NumberField
-                  isRequired
-                  label="Amount to Dissolve"
-                  value={formData.amountToDissolve}
-                  onChange={(e) => handleInputChanges({ amountToDissolve: e })}
-                  minValue={0}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <Select
-                  isRequired
-                  items={AMOUNT_TO_DISSOLVE_UNITS}
-                  label="Units"
-                  placeholder="Select Units"
-                  selectedKey={formData.amountToDissolveUnitId}
-                  onSelectionChange={(e) =>
-                    handleInputChanges({ amountToDissolveUnitId: e as number })
-                  }
-                  noSort
-                  autoselectFirst
-                />
-              </Grid>
-            </>
-          )}
+            )}
+            {isDryFertilizer && (
+              <>
+                <Grid size={{ xs: 6 }}>
+                  <NumberField
+                    isRequired
+                    label="Tank Volume"
+                    value={formData.tankVolume}
+                    onChange={(e) => handleInputChanges({ tankVolume: e })}
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Select
+                    isRequired
+                    items={TANK_VOLUME_UNITS}
+                    label="Units"
+                    placeholder="Select Units"
+                    selectedKey={formData.tankUnitId}
+                    onSelectionChange={(e) => handleInputChanges({ tankUnitId: e as number })}
+                    noSort
+                    autoselectFirst
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <NumberField
+                    isRequired
+                    label="Solubility"
+                    value={formData.solubility}
+                    onChange={(e) => handleInputChanges({ solubility: e })}
+                    minValue={0}
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Select
+                    isRequired
+                    items={SOLUBILITY_RATE_UNITS}
+                    label="Units"
+                    placeholder="Select Units"
+                    selectedKey={formData.solubilityUnitId}
+                    onSelectionChange={(e) => handleInputChanges({ solubilityUnitId: e as number })}
+                    noSort
+                    autoselectFirst
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <NumberField
+                    isRequired
+                    label="Amount to Dissolve"
+                    value={formData.amountToDissolve}
+                    onChange={(e) => handleInputChanges({ amountToDissolve: e })}
+                    minValue={0}
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Select
+                    isRequired
+                    items={AMOUNT_TO_DISSOLVE_UNITS}
+                    label="Units"
+                    placeholder="Select Units"
+                    selectedKey={formData.amountToDissolveUnitId}
+                    onSelectionChange={(e) =>
+                      handleInputChanges({ amountToDissolveUnitId: e as number })
+                    }
+                    noSort
+                    autoselectFirst
+                  />
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                  <div
+                    css={{
+                      display: 'flex',
+                      gap: '1rem',
+                      justifyContent: 'space-between',
+                      marginTop: '1rem',
+                      '@media (max-width: 768px)': {
+                        flexDirection: 'column',
+                      },
+                    }}
+                  >
+                    <div css={{ flex: 1, minWidth: '280px' }}>
+                      <div
+                        css={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          fontSize: '14px',
+                          marginBottom: '8px',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Nutrient Concentration (lb/US gallon)
+                      </div>
+                      <DataGrid
+                        sx={{ ...customTableStyle, fontSize: '12px' }}
+                        columns={NUTRIENT_COLUMNS}
+                        rows={[
+                          {
+                            reqN: formData.nutrientConcentrationN || 0,
+                            reqP2o5: formData.nutrientConcentrationP2O5 || 0,
+                            reqK2o: formData.nutrientConcentrationK2O || 0,
+                          },
+                        ]}
+                        getRowId={() => crypto.randomUUID()}
+                        disableRowSelectionOnClick
+                        disableColumnMenu
+                        hideFooterPagination
+                        hideFooter
+                      />
+                    </div>
+                    <div css={{ flex: 1, minWidth: '280px' }}>
+                      <div
+                        css={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          fontSize: '14px',
+                          marginBottom: '8px',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        Nutrient Concentration (kg/L)
+                      </div>
+                      <DataGrid
+                        sx={{ ...customTableStyle, fontSize: '12px' }}
+                        columns={NUTRIENT_COLUMNS}
+                        rows={[
+                          {
+                            reqN: formData.kglNutrientConcentrationN || 0,
+                            reqP2o5: formData.kglNutrientConcentrationP2O5 || 0,
+                            reqK2o: formData.kglNutrientConcentrationK2O || 0,
+                          },
+                        ]}
+                        getRowId={() => crypto.randomUUID()}
+                        disableRowSelectionOnClick
+                        disableColumnMenu
+                        hideFooterPagination
+                        hideFooter
+                      />
+                    </div>
+                  </div>
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                  <div
+                    css={{
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      fontSize: '14px',
+                      marginBottom: '8px',
+                      marginTop: '1rem',
+                    }}
+                  >
+                    Solubility Assessment
+                  </div>
+                  {formData.dryAction ? (
+                    <div
+                      css={{
+                        textAlign: 'center',
+                        padding: '8px 16px',
+                        backgroundColor: formData.dryAction === 'Soluble' ? '#d4edda' : '#f8d7da',
+                        color: formData.dryAction === 'Soluble' ? '#155724' : '#721c24',
+                        borderRadius: '4px',
+                        fontWeight: 'bold',
+                        fontSize: '14px',
+                      }}
+                    >
+                      Status: {formData.dryAction}
+                    </div>
+                  ) : (
+                    <div
+                      css={{
+                        textAlign: 'center',
+                        padding: '8px 16px',
+                        backgroundColor: '#f8f9fa',
+                        color: '#6c757d',
+                        borderRadius: '4px',
+                        fontSize: '14px',
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      Normal
+                    </div>
+                  )}
+                </Grid>
+              </>
+            )}
+            {isLiquidFertilizer && (
+              <>
+                <Grid size={{ xs: 6 }}>
+                  <NumberField
+                    isRequired
+                    label="Application Rate"
+                    value={formData.applicationRate}
+                    onChange={(e) => handleInputChanges({ applicationRate: e })}
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Select
+                    isRequired
+                    items={liquidUnits}
+                    label="Units"
+                    placeholder="Select Units"
+                    selectedKey={formData.applUnitId}
+                    onSelectionChange={(e) =>
+                      handleInputChanges({
+                        applUnitId: e as number,
+                        applUnitName: liquidUnits.find((u) => u.id === e)!.label,
+                      })
+                    }
+                    noSort
+                    autoselectFirst
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <NumberField
+                    isRequired
+                    label="Density"
+                    value={formData.density}
+                    onChange={(e) => handleInputChanges({ density: e })}
+                  />
+                </Grid>
+                <Grid size={{ xs: 6 }}>
+                  <Select
+                    isRequired
+                    items={densityUnits}
+                    label="Units"
+                    placeholder="Select Units"
+                    selectedKey={formData.densityUnitId}
+                    onSelectionChange={(e) => handleInputChanges({ densityUnitId: e as number })}
+                    noSort
+                    autoselectFirst
+                  />
+                </Grid>
+              </>
+            )}
+            <Grid size={{ xs: 6 }}>
+              <NumberField
+                isRequired
+                label="Injection Rate"
+                value={formData.injectionRate}
+                onChange={(e) => handleInputChanges({ injectionRate: e })}
+              />
+            </Grid>
+            <Grid size={{ xs: 6 }}>
+              <Select
+                isRequired
+                items={INJECTION_UNIT_OPTIONS}
+                label="Units"
+                placeholder="Select Units"
+                selectedKey={formData.injectionUnitId}
+                onSelectionChange={(e) => handleInputChanges({ injectionUnitId: e as number })}
+                noSort
+                autoselectFirst
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <NumberField
+                isRequired
+                label="Fertigation Applications Per Season"
+                value={formData.eventsPerSeason}
+                onChange={(e) => handleInputChanges({ eventsPerSeason: e })}
+                minValue={1}
+                step={1}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Select
+                isRequired
+                items={SCHEDULE_OPTIONS}
+                label="Application Frequency"
+                selectedKey={formData.schedule}
+                onSelectionChange={(e) => handleInputChanges({ schedule: e as Schedule })}
+                noSort
+                autoselectFirst
+              />
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <InputField
+                type="date"
+                value={formData.startDate || ''}
+                onChange={(e) => handleInputChanges({ startDate: e.target.value })}
+                required
+              />
+            </Grid>
+          </Grid>
           {isLiquidFertilizer && (
-            <>
-              <Grid size={{ xs: 6 }}>
-                <NumberField
-                  isRequired
-                  label="Application Rate"
-                  value={formData.applicationRate}
-                  onChange={(e) => handleInputChanges({ applicationRate: e })}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <Select
-                  isRequired
-                  items={liquidUnits}
-                  label="Units"
-                  placeholder="Select Units"
-                  selectedKey={formData.applUnitId}
-                  onSelectionChange={(e) =>
-                    handleInputChanges({
-                      applUnitId: e as number,
-                      applUnitName: liquidUnits.find((u) => u.id === e)!.label,
-                    })
-                  }
-                  noSort
-                  autoselectFirst
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <NumberField
-                  isRequired
-                  label="Density"
-                  value={formData.density}
-                  onChange={(e) => handleInputChanges({ density: e })}
-                />
-              </Grid>
-              <Grid size={{ xs: 6 }}>
-                <Select
-                  isRequired
-                  items={densityUnits}
-                  label="Units"
-                  placeholder="Select Units"
-                  selectedKey={formData.densityUnitId}
-                  onSelectionChange={(e) => handleInputChanges({ densityUnitId: e as number })}
-                  noSort
-                  autoselectFirst
-                />
-              </Grid>
-            </>
-          )}
-          <Grid size={{ xs: 6 }}>
-            <NumberField
-              isRequired
-              label="Injection Rate"
-              value={formData.injectionRate}
-              onChange={(e) => handleInputChanges({ injectionRate: e })}
-            />
-          </Grid>
-          <Grid size={{ xs: 6 }}>
-            <Select
-              isRequired
-              items={INJECTION_UNIT_OPTIONS}
-              label="Units"
-              placeholder="Select Units"
-              selectedKey={formData.injectionUnitId}
-              onSelectionChange={(e) => handleInputChanges({ injectionUnitId: e as number })}
-              noSort
-              autoselectFirst
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <NumberField
-              isRequired
-              label="Fertigation Applications Per Season"
-              value={formData.eventsPerSeason}
-              onChange={(e) => handleInputChanges({ eventsPerSeason: e })}
-              minValue={1}
-              step={1}
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              items={SCHEDULE_OPTIONS}
-              label="Application Frequency"
-              selectedKey={formData.schedule}
-              onSelectionChange={(e) => handleInputChanges({ schedule: e as Schedule })}
-              noSort
-              autoselectFirst
-            />
-            <InputField
-              type="date"
-              value={formData.startDate || ''}
-              onChange={(e) => handleInputChanges({ startDate: e.target.value })}
-              required
-            />
-          </Grid>
-        </Grid>
-        {isLiquidFertilizer && (
-          <>
-            <Grid
-              container
-              spacing={2}
+            <div
+              css={{
+                display: 'flex',
+                gap: '1rem',
+                marginTop: '1rem',
+                justifyContent: 'space-between',
+                '@media (max-width: 768px)': {
+                  flexDirection: 'column',
+                },
+              }}
             >
-              <Grid size={4}>
-                <span className="bcds-react-aria-Text primary small">
+              <div css={{ flex: 1, minWidth: '150px' }}>
+                <span
+                  css={{
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    display: 'block',
+                    marginBottom: '4px',
+                  }}
+                >
                   Total Product Volume per Application
                   {formData.applUnitName
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div>
-                  <span css={{ display: 'block', marginTop: '8px' }}>
-                    {formData.volume.toFixed(2)}
-                  </span>
+                <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
+                  {formData.volume.toFixed(2)}
                 </div>
-              </Grid>
-              <Grid size={4}>
-                <span className="bcds-react-aria-Text primary small">
+              </div>
+              <div css={{ flex: 1, minWidth: '150px' }}>
+                <span
+                  css={{
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    display: 'block',
+                    marginBottom: '4px',
+                  }}
+                >
                   Total Product Volume for Growing Season
                   {formData.applUnitName
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div>
-                  <span css={{ display: 'block', marginTop: '8px' }}>
-                    {formData.volumeForSeason.toFixed(2)}
-                  </span>
+                <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
+                  {formData.volumeForSeason.toFixed(2)}
                 </div>
-              </Grid>
-              <Grid size={4}>
-                <span className="bcds-react-aria-Text primary small">
+              </div>
+              <div css={{ flex: 1, minWidth: '150px' }}>
+                <span
+                  css={{
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                    display: 'block',
+                    marginBottom: '4px',
+                  }}
+                >
                   Time per Application (minutes)
                 </span>
-                <div>
-                  <span css={{ display: 'block', marginTop: '8px' }}>
-                    {formData.applicationTime.toFixed(2)}
-                  </span>
+                <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
+                  {formData.applicationTime.toFixed(2)}
                 </div>
-              </Grid>
-            </Grid>
-            <div>
-              <Grid
-                container
-                spacing={1}
-                sx={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
+              </div>
+            </div>
+          )}
+          {isDryFertilizer && (
+            <div css={{ marginTop: '1rem', textAlign: 'center' }}>
+              <span
+                css={{
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  display: 'block',
+                  marginBottom: '4px',
                 }}
               >
-                <Grid
-                  size={{ xs: 12, md: 4 }}
-                  sx={{ maxWidth: '400px', justifyItems: 'center' }}
-                >
-                  <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
-                    Applied Nutrients per Fertigation (lb/ac)
-                    <DataGrid
-                      sx={{ ...customTableStyle }}
-                      columns={NUTRIENT_COLUMNS}
-                      rows={[formData]}
-                      getRowId={() => crypto.randomUUID()}
-                      disableRowSelectionOnClick
-                      disableColumnMenu
-                      hideFooterPagination
-                      hideFooter
-                    />
-                  </div>
-                </Grid>
-                <Grid
-                  size={{ xs: 12, md: 4 }}
-                  sx={{ maxWidth: '400px', justifyItems: 'center' }}
-                >
-                  <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
-                    Total Applied Nutrients (lb/ac)
-                    <DataGrid
-                      sx={{ ...customTableStyle }}
-                      columns={NUTRIENT_COLUMNS}
-                      rows={[totalNutrientRow]}
-                      getRowId={() => crypto.randomUUID()}
-                      disableRowSelectionOnClick
-                      disableColumnMenu
-                      hideFooterPagination
-                      hideFooter
-                    />
-                  </div>
-                </Grid>
-                <Grid
-                  size={{ xs: 12, md: 4 }}
-                  sx={{ maxWidth: '400px', justifyItems: 'center' }}
-                >
-                  <div css={{ fontWeight: 'bold', textAlign: 'center', maxWidth: '300px' }}>
-                    Still Required This Year (lb/ac)
-                    <DataGrid
-                      sx={{ ...customTableStyle }}
-                      columns={BALANCE_COLUMNS}
-                      rows={[balanceCalcRow]}
-                      getRowId={() => crypto.randomUUID()}
-                      disableRowSelectionOnClick
-                      disableColumnMenu
-                      hideFooterPagination
-                      hideFooter
-                    />
-                  </div>
-                </Grid>
-              </Grid>
+                Time per Application (minutes)
+              </span>
+              <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
+                {formData.applicationTime.toFixed(2)}
+              </div>
             </div>
-          </>
-        )}
-      </Form>
+          )}
+          <div
+            css={{
+              display: 'flex',
+              gap: '1rem',
+              justifyContent: 'space-between',
+              marginTop: '1.5rem',
+              '@media (max-width: 768px)': {
+                flexDirection: 'column',
+              },
+            }}
+          >
+            <div css={{ flex: 1, minWidth: '250px' }}>
+              <div
+                css={{
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  fontSize: '14px',
+                  marginBottom: '8px',
+                }}
+              >
+                Applied Nutrients per Fertigation (lb/ac)
+              </div>
+              <DataGrid
+                sx={{ ...customTableStyle, fontSize: '12px' }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[formData]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </div>
+            <div css={{ flex: 1, minWidth: '250px' }}>
+              <div
+                css={{
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  fontSize: '14px',
+                  marginBottom: '8px',
+                }}
+              >
+                Total Applied Nutrients (lb/ac)
+              </div>
+              <DataGrid
+                sx={{ ...customTableStyle, fontSize: '12px' }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[totalNutrientRow]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </div>
+            <div css={{ flex: 1, minWidth: '250px' }}>
+              <div
+                css={{
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  fontSize: '14px',
+                  marginBottom: '8px',
+                }}
+              >
+                Still Required This Year (lb/ac)
+              </div>
+              <DataGrid
+                sx={{ ...customTableStyle, fontSize: '12px' }}
+                columns={BALANCE_COLUMNS}
+                rows={[balanceCalcRow]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </div>
+          </div>
+        </Form>
+      </div>
     </Modal>
   );
 }

@@ -97,6 +97,14 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   volume: number;
   volumeForSeason: number;
   applicationTime: number;
+  // Additional fields for dry fertigation
+  dryAction?: 'Soluble' | 'Reduce the amount to dissolve';
+  nutrientConcentrationN?: number;
+  nutrientConcentrationP2O5?: number;
+  nutrientConcentrationK2O?: number;
+  kglNutrientConcentrationN?: number;
+  kglNutrientConcentrationP2O5?: number;
+  kglNutrientConcentrationK2O?: number;
 }
 
 export interface ManureNutrients extends CropNutrients {
