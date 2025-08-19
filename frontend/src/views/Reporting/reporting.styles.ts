@@ -48,10 +48,14 @@ export const customTableStyle = {
   '& .MuiDataGrid-row:hover': {
     backgroundColor: 'transparent',
   },
+  '& .MuiDataGrid-columnHeaderTitleContainer': {
+    height: 'auto',
+  },
   '& .MuiDataGrid-columnHeaderTitle': {
     fontWeight: '700',
     whiteSpace: 'break-spaces',
     fontSize: '14px',
+    overflow: 'visible',
   },
   marginBottom: '16px',
   border: '1px solid #e0e0e0',

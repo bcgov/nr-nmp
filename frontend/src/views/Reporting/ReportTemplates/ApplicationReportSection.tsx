@@ -68,6 +68,9 @@ export default function ApplicationReportSection({
         slots={{
           noRowsOverlay: NO_ROWS,
         }}
+        disableAutosize
+        disableColumnSorting
+        disableColumnSelector
       />
     </div>
   );

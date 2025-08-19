@@ -105,7 +105,7 @@ export default function CompleteReportTemplate() {
       {years[0] && (
         <ManureCompostUse
           ManureStorageSystems={years[0].ManureStorageSystems}
-          NutrientAnalysisData={years[0].NutrientAnalysis}
+          NutrientAnalysisData={years[0].NutrientAnalyses}
           GeneratedManures={years[0].GeneratedManures}
           ImportedManures={years[0].ImportedManures}
         />

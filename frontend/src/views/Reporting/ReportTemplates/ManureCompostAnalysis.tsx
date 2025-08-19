@@ -1,6 +1,6 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { customTableStyle } from '../reporting.styles';
-import type { NMPFileFarmManureData } from '@/types';
+import { NMPFileNutrientAnalysis } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
   { field: 'materialSource', headerName: 'Source of Material', width: 150 },
@@ -8,7 +8,8 @@ const TABLE_COLUMNS: GridColDef[] = [
   {
     field: 'Moisture',
     headerName: 'Moisture (%)',
-    valueGetter: (_value, row) => row.Nutrients.Moisture,
+    width: 75,
+    valueGetter: (_value, row) => row.Moisture,
   },
   {
     field: 'N',
@@ -17,20 +18,20 @@ const TABLE_COLUMNS: GridColDef[] = [
         NH<sub>4</sub>N (ppm)
       </span>
     ),
-
-    valueGetter: (_value, row) => row.Nutrients.N,
+    width: 75,
+    valueGetter: (_value, row) => row.N,
   },
   {
     field: 'NH4N',
     headerName: 'P (%)',
-
-    valueGetter: (_value, row) => row.Nutrients.NH4N,
+    width: 75,
+    valueGetter: (_value, row) => row.NH4N,
   },
   {
     field: 'P2O5',
     headerName: 'K (%)',
-
-    valueGetter: (_value, row) => row.Nutrients.P2O5,
+    width: 75,
+    valueGetter: (_value, row) => row.P2O5,
   },
 ];
 
