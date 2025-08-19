@@ -37,6 +37,7 @@ import {
   getTimePerApplication,
 } from '@/calculations/CalculateNutrients/Fertigation/calculations';
 import { renderBalanceCell } from '../utils';
+import { SOLUBILITY_RATE_UNITS, AMOUNT_TO_DISSOLVE_UNITS } from '@/constants/CalculateNutrients';
 
 type FertigationModalProps = {
   fieldIndex: number;
@@ -533,7 +534,7 @@ export default function FertigationModal({
               <Grid size={{ xs: 6 }}>
                 <Select
                   isRequired
-                  items={solubilityUnits}
+                  items={SOLUBILITY_RATE_UNITS}
                   label="Units"
                   placeholder="Select Units"
                   selectedKey={formData.solubilityUnitId}
@@ -554,7 +555,7 @@ export default function FertigationModal({
               <Grid size={{ xs: 6 }}>
                 <Select
                   isRequired
-                  items={amountToDissolveUnits}
+                  items={AMOUNT_TO_DISSOLVE_UNITS}
                   label="Units"
                   placeholder="Select Units"
                   selectedKey={formData.amountToDissolveUnitId}

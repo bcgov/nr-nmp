@@ -119,6 +119,12 @@ export const SOLUBILITY_RATE_UNITS: { id: number; label: string }[] = [
   { id: 3, label: 'lb/imp. gallon' },
 ];
 
+export const AMOUNT_TO_DISSOLVE_UNITS: { id: number; label: string }[] = [
+  { id: 1, label: 'lbs' },
+  { id: 2, label: 'kgs' },
+  { id: 3, label: 'grams' },
+];
+
 export const SCHEDULE_OPTIONS = [
   { id: Schedule.Monthly, label: Schedule[Schedule.Monthly] },
   { id: Schedule.Biweekly, label: Schedule[Schedule.Biweekly] },
