@@ -1,6 +1,7 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { customTableStyle } from '../reporting.styles';
 import { NMPFileNutrientAnalysis } from '@/types';
+import { mathSymbolConverter } from '@/utils/utils';
 
 const TABLE_COLUMNS: GridColDef[] = [
   { field: 'materialSource', headerName: 'Source of Material', width: 150 },
@@ -8,6 +9,7 @@ const TABLE_COLUMNS: GridColDef[] = [
   {
     field: 'Moisture',
     headerName: 'Moisture (%)',
+    valueGetter: (value) => mathSymbolConverter(value),
   },
   {
     field: 'N',
