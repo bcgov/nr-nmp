@@ -123,9 +123,13 @@ export default function LiquidStorageCapacitySection({
         hideFooterPagination
         hideFooter
         getRowHeight={() => 'auto'}
+        columnHeaderHeight={80}
         slots={{
           noRowsOverlay: NO_ROWS,
         }}
+        disableAutosize
+        disableColumnSorting
+        disableColumnSelector
       />
       {storedLiquidManuresAmount + totalYardRoofRunoff + totalPrecipitation > totalVolume ? (
         <div style={{ marginTop: '2rem', fontSize: '0.75rem' }}>

@@ -13,10 +13,6 @@ const TABLE_COLUMNS: GridColDef[] = [
   { field: 'applicationRate', headerName: 'Rate', width: 150 },
 ];
 
-function NO_ROWS() {
-  return <div style={{ width: '100%', textAlign: 'center', paddingTop: '2rem' }}>No data</div>;
-}
-
 export default function ApplicationReportSection({
   field,
   year,
@@ -56,7 +52,7 @@ export default function ApplicationReportSection({
         </FieldInfoSection>
       </FieldContainer>
       <DataGrid
-        sx={{ ...customTableStyle, marginTop: '16px' }}
+        sx={{ ...customTableStyle }}
         rows={Fertilizers}
         columns={TABLE_COLUMNS}
         getRowId={() => crypto.randomUUID()}
@@ -65,12 +61,11 @@ export default function ApplicationReportSection({
         hideFooterPagination
         hideFooter
         getRowHeight={() => 'auto'}
-        slots={{
-          noRowsOverlay: NO_ROWS,
-        }}
+        columnHeaderHeight={80}
         disableAutosize
         disableColumnSorting
         disableColumnSelector
+        disableColumnResize
       />
     </div>
   );

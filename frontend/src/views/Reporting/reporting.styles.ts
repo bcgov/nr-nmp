@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import { css } from '@emotion/react';
-// import { componentContainer, buttonGroup, paragraphCss } from '../../common.styles';
 
 export const SectionHeader = styled.div({
   width: '100%',
@@ -40,6 +39,12 @@ export const customTableStyle = {
   '& .MuiDataGrid-row--borderBottom > div': {
     backgroundColor: 'lightblue !important',
   },
+  '& .MuiDataGrid-topContainer': {
+    backgroundColor: 'green',
+  },
+  '& .MuiDataGrid-columnHeaders': {
+    backgroundColor: 'green',
+  },
   '& div div div div >.MuiDataGrid-cell': {
     whiteSpace: 'break-spaces',
     padding: '8px 12px',
@@ -53,8 +58,9 @@ export const customTableStyle = {
   },
   '& .MuiDataGrid-columnHeaderTitle': {
     fontWeight: '700',
-    whiteSpace: 'break-spaces',
-    fontSize: '14px',
+    wordBreak: 'break-word',
+    wordWrap: 'break-word',
+    whiteSpace: 'wrap',
     overflow: 'visible',
   },
   marginBottom: '16px',
@@ -67,7 +73,6 @@ export const ROW_HEIGHT = 48;
 export const FieldContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  // padding: 24px;
   background-color: #ffffff;
   border-radius: 8px;
 `;
@@ -142,6 +147,7 @@ export const SubsectionLabel = styled.div`
 export const inventoryTableHeader = css({
   fontWeight: 'bold',
   backgroundColor: 'lightblue',
+  height: '80px',
 });
 
 export const inventoryTableCss = css({

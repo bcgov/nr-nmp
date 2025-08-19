@@ -256,13 +256,8 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   } else if (action.type === 'SAVE_NUTRIENT_ANALYSIS') {
     year.NutrientAnalyses = structuredClone(action.newNutrientAnalyses);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {
-    year.ImportedManures = structuredClone(action.newManures).map(
-      (ele: NMPFileImportedManureData) => {
-        // Inserts unique uuid
-        if ('uuid' in ele) return ele;
-        return { ...(ele as NMPFileImportedManureData), uuid: crypto.randomUUID() };
-      },
-    );
+    year.ImportedManures = structuredClone(action.newManures);
+
     if (year.ManureStorageSystems) {
       year.ManureStorageSystems = updateManureStorageSystems(
         year.ManureStorageSystems,

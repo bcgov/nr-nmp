@@ -8,8 +8,6 @@ const TABLE_COLUMNS: GridColDef[] = [
   {
     field: 'Moisture',
     headerName: 'Moisture (%)',
-    width: 75,
-    valueGetter: (_value, row) => row.Moisture,
   },
   {
     field: 'N',
@@ -18,7 +16,7 @@ const TABLE_COLUMNS: GridColDef[] = [
         NH<sub>4</sub>N (ppm)
       </span>
     ),
-    width: 75,
+    width: 80,
     valueGetter: (_value, row) => row.N,
   },
   {
@@ -55,9 +53,13 @@ export default function ManureCompostAnalysis({
       hideFooterPagination
       hideFooter
       getRowHeight={() => 'auto'}
+      columnHeaderHeight={80}
       slots={{
         noRowsOverlay: NO_ROWS,
       }}
+      disableAutosize
+      disableColumnSorting
+      disableColumnSelector
     />
   );
 }

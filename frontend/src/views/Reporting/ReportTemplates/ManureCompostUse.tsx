@@ -3,7 +3,7 @@ import { customTableStyle } from '../reporting.styles';
 import {
   NMPFileManureStorageSystem,
   ManureType,
-  NMPFileNutrientAnalysisData,
+  NMPFileNutrientAnalysis,
   NMPFileImportedManureData,
   NMPFileGeneratedManureData,
 } from '@/types';
@@ -52,7 +52,7 @@ export default function ManureCompostUse({
   ImportedManures = [],
 }: {
   ManureStorageSystems?: NMPFileManureStorageSystem[];
-  NutrientAnalysisData?: NMPFileNutrientAnalysisData[];
+  NutrientAnalysisData?: NMPFileNutrientAnalysis[];
   GeneratedManures?: NMPFileGeneratedManureData[];
   ImportedManures?: NMPFileImportedManureData[];
 }) {
@@ -105,9 +105,13 @@ export default function ManureCompostUse({
         hideFooterPagination
         hideFooter
         getRowHeight={() => 'auto'}
+        columnHeaderHeight={80}
         slots={{
           noRowsOverlay: NO_ROWS,
         }}
+        disableAutosize
+        disableColumnSorting
+        disableColumnSelector
       />
     </div>
   );

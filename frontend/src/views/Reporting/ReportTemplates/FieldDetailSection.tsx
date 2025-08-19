@@ -8,7 +8,6 @@ import { findBalanceMessage } from '@/views/CalculateNutrients/utils';
 import {
   customTableStyle,
   Message,
-  ROW_HEIGHT,
   FieldContainer,
   FieldInfoSection,
   FieldInfoItem,
@@ -31,7 +30,7 @@ const CROP_COLUMNS: GridColDef[] = [
   {
     field: 'nCredit',
     headerName: 'Previous crop ploughed down (N credit)',
-    width: 200,
+    minWidth: 200,
   },
 ];
 
@@ -218,6 +217,10 @@ export default function CompleteReportTemplate({
         hideFooterPagination
         hideFooter
         getRowHeight={() => 'auto'}
+        columnHeaderHeight={80}
+        disableAutosize
+        disableColumnSorting
+        disableColumnSelector
       />
 
       {booleanChecker(SoilTest) ? (
@@ -243,6 +246,9 @@ export default function CompleteReportTemplate({
             hideFooterPagination
             hideFooter
             getRowHeight={() => 'auto'}
+            disableAutosize
+            disableColumnSorting
+            disableColumnSelector
           />
         </>
       ) : null}
@@ -259,8 +265,10 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
-            rowHeight={ROW_HEIGHT}
-            autoHeight
+            getRowHeight={() => 'auto'}
+            disableAutosize
+            disableColumnSorting
+            disableColumnSelector
           />
         </>
       ) : null}
@@ -290,6 +298,9 @@ export default function CompleteReportTemplate({
             hideFooterPagination
             hideFooter
             getRowHeight={() => 'auto'}
+            disableAutosize
+            disableColumnSorting
+            disableColumnSelector
           />
         )}
 
@@ -307,6 +318,9 @@ export default function CompleteReportTemplate({
               hideFooterPagination
               hideFooter
               getRowHeight={() => 'auto'}
+              disableAutosize
+              disableColumnSorting
+              disableColumnSelector
             />
           </>
         )}
@@ -325,6 +339,9 @@ export default function CompleteReportTemplate({
               hideFooterPagination
               hideFooter
               getRowHeight={() => 'auto'}
+              disableAutosize
+              disableColumnSorting
+              disableColumnSelector
             />
           </>
         )}
