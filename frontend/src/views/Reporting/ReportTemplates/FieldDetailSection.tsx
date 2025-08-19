@@ -224,7 +224,10 @@ export default function CompleteReportTemplate({
         <>
           <SectionTitle>Soil Test Information</SectionTitle>
           <FieldInfoItem style={{ marginBottom: '12px' }}>
-            <strong>Soil Test Results:</strong> {SoilTest?.sampleDate?.toString()}
+            <strong>Soil Test Results:</strong>{' '}
+            {SoilTest?.sampleDate
+              ? new Date(SoilTest.sampleDate).toLocaleDateString('sv-SE', { dateStyle: 'short' })
+              : 'N/A'}
           </FieldInfoItem>
           <FieldInfoItem style={{ marginBottom: '16px' }}>
             <strong>Soil Test Method:</strong>{' '}
@@ -264,12 +267,12 @@ export default function CompleteReportTemplate({
 
       <SectionTitle>Nutrient Requirements and Removal</SectionTitle>
       <TableHeader>
-        <div style={{ width: 200 }} />
-        <div style={{ width: 280 }}>
+        <div style={{ width: 180 }} />
+        <div style={{ width: 260 }}>
           Agronomic (lb/ac)
           <br />
         </div>
-        <div style={{ width: 280 }}>
+        <div style={{ width: 305 }}>
           Crop Removal (lb/ac)
           <br />
         </div>

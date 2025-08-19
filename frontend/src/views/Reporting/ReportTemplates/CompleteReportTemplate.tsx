@@ -8,6 +8,7 @@ import ManureCompostAnalysis from './ManureCompostAnalysis';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ManureType, Region, SelectOption, Subregion } from '@/types';
 import LiquidStorageCapacitySection from './LiquidStorageCapacitySection';
+import { FieldContainer, FieldInfoItem, FieldInfoSection } from '../reporting.styles';
 
 export default function CompleteReportTemplate() {
   const { nmpFile } = useAppState().state;
@@ -43,24 +44,41 @@ export default function CompleteReportTemplate() {
 
   return (
     <div style={{ width: '744px' }}>
-      <div style={{ fontSize: '32px', marginBottom: '8px', fontWeight: 'bold' }}>
-        NMP Farm Report
-      </div>
-      <div>
-        <span>Farm name: {FarmName}</span>
-      </div>
-      <div>
-        <span>
-          Farm Region: {regionOptions.find((ele) => ele.id === FarmRegion)?.label ?? FarmRegion}
-        </span>
-      </div>
-      <div>
-        <span>
-          Farm Sub Region:{' '}
-          {subregionOptions.find((ele) => ele.id === FarmSubRegion)?.label ?? FarmSubRegion}
-        </span>
-      </div>
-      <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Application Schedule</div>
+      <FieldContainer>
+        <FieldInfoSection>
+          <FieldInfoItem>
+            <span
+              style={{
+                fontWeight: 'bold',
+                textDecoration: 'underline',
+                fontSize: '32px',
+                marginBottom: '8px',
+              }}
+            >
+              NMP Farm Report
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Farm name:</strong> {FarmName}
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Farm region:</strong>{' '}
+              {regionOptions.find((ele) => ele.id === FarmRegion?.toString())?.label ?? FarmRegion}
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Farm subregion:</strong>{' '}
+              {subregionOptions.find((ele) => ele.id === FarmSubRegion?.toString())?.label ??
+                FarmSubRegion}
+            </span>
+          </FieldInfoItem>
+        </FieldInfoSection>
+      </FieldContainer>
+      <div style={{ fontWeight: 'bold', marginTop: '32px' }}>Application Schedule</div>
       {years.map((yearEle) =>
         yearEle.Fields?.map((fieldEle) => (
           <ApplicationReportSection
@@ -70,7 +88,9 @@ export default function CompleteReportTemplate() {
           />
         )),
       )}
-      <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure / Compost Inventory</div>
+      <div style={{ fontWeight: 'bold', marginTop: '64px', marginBottom: '8px' }}>
+        Manure / Compost Inventory
+      </div>
       {years[0] && (
         <ManureCompostInventory
           FarmAnimals={years[0].FarmAnimals}
@@ -79,8 +99,17 @@ export default function CompleteReportTemplate() {
           ManureStorageSystems={years[0].ManureStorageSystems}
         />
       )}
-      <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure and Compost Use</div>
-      {years[0] && <ManureCompostUse ManureStorageSystems={years[0].ManureStorageSystems} />}
+      <div style={{ fontWeight: 'bold', marginTop: '64px', marginBottom: '8px' }}>
+        Manure and Compost Use
+      </div>
+      {years[0] && (
+        <ManureCompostUse
+          ManureStorageSystems={years[0].ManureStorageSystems}
+          NutrientAnalysisData={years[0].NutrientAnalysis}
+          GeneratedManures={years[0].GeneratedManures}
+          ImportedManures={years[0].ImportedManures}
+        />
+      )}
 
       <div style={{ fontWeight: 'bold', marginTop: '64px' }}>
         Liquid Storage Capacity: October to March

@@ -1,7 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import useAppState from '@/hooks/useAppState';
-import { customTableStyle } from '../reporting.styles';
+import {
+  customTableStyle,
+  FieldContainer,
+  FieldInfoItem,
+  FieldInfoSection,
+} from '../reporting.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { Region, SelectOption, Subregion } from '@/types';
 
@@ -49,43 +54,73 @@ export default function RecordKeepingSheets() {
 
   return (
     <div style={{ width: '744px' }}>
-      <div style={{ fontSize: '32px', marginBottom: '8px', fontWeight: 'bold' }}>
-        NMP Farm Report
-      </div>
-      <div>
-        <span>Farm name: {FarmName}</span>
-      </div>
-      <div>
-        <span>
-          Farm Region: {regionOptions.find((ele) => ele.id === FarmRegion)?.label ?? FarmRegion}
-        </span>
-      </div>
-      <div>
-        <span>
-          Farm Sub Region:{' '}
-          {subregionOptions.find((ele) => ele.id === FarmSubRegion)?.label ?? FarmSubRegion}
-        </span>
-      </div>
-      <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Application Schedule</div>
+      <FieldContainer>
+        <FieldInfoSection>
+          <FieldInfoItem>
+            <span
+              style={{
+                fontWeight: 'bold',
+                textDecoration: 'underline',
+                fontSize: '32px',
+                marginBottom: '8px',
+              }}
+            >
+              NMP Farm Report
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Farm name:</strong> {FarmName}
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Farm region:</strong>{' '}
+              {regionOptions.find((ele) => ele.id === FarmRegion)?.label ?? FarmRegion}
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Farm subregion:</strong>{' '}
+              {subregionOptions.find((ele) => ele.id === FarmSubRegion)?.label ?? FarmSubRegion}
+            </span>
+          </FieldInfoItem>
+        </FieldInfoSection>
+      </FieldContainer>
+      <div style={{ fontWeight: 'bold', marginTop: '32px' }}>Application Schedule</div>
       {years.map((yearEle) =>
         yearEle.Fields?.map((fieldEle) => (
           <div
             key={fieldEle.FieldName}
             style={{ marginTop: '16px' }}
           >
-            <div>
-              <span style={{ textDecoration: 'underline' }}>Field Name: {fieldEle.FieldName}</span>
-            </div>
-            <div>
-              <span>Planning Year: {farmDetails.Year}</span>
-            </div>
-            <div>
-              <span>Field Area: {fieldEle.Area}</span>
-            </div>
-            <div>Crops:</div>
-            {fieldEle.Crops.map((cropEle) => (
-              <div key={cropEle.name}>{cropEle.name}</div>
-            ))}
+            <FieldContainer>
+              <FieldInfoSection>
+                <FieldInfoItem>
+                  <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
+                    Field Name: {fieldEle.FieldName}
+                  </span>
+                </FieldInfoItem>
+                <FieldInfoItem>
+                  <span>
+                    <strong>Planning Year:</strong> {farmDetails.Year}
+                  </span>
+                </FieldInfoItem>
+                <FieldInfoItem>
+                  <span>
+                    <strong>Field Area:</strong> {fieldEle.Area}
+                  </span>
+                </FieldInfoItem>
+                <FieldInfoItem>
+                  <span>
+                    <strong>Crops</strong>{' '}
+                    {fieldEle.Crops.map((cropEle) => (
+                      <div key={cropEle.name}>{cropEle.name}</div>
+                    ))}
+                  </span>
+                </FieldInfoItem>
+              </FieldInfoSection>
+            </FieldContainer>
             <DataGrid
               sx={{ ...customTableStyle, marginTop: '16px' }}
               rows={fieldEle.Fertilizers}

@@ -133,7 +133,7 @@ export default function LiquidStorageCapacitySection({
           non-growing season of an average year
         </div>
       ) : (
-        <div>none</div>
+        <div />
       )}
     </div>
   );

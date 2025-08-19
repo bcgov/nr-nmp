@@ -1,6 +1,12 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { customTableStyle } from '../reporting.styles';
-import { NMPFileManureStorageSystem, ManureType } from '@/types';
+import {
+  NMPFileManureStorageSystem,
+  ManureType,
+  NMPFileNutrientAnalysisData,
+  NMPFileImportedManureData,
+  NMPFileGeneratedManureData,
+} from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
   {
@@ -41,37 +47,57 @@ function NO_ROWS() {
 
 export default function ManureCompostUse({
   ManureStorageSystems = [],
+  NutrientAnalysisData = [],
+  GeneratedManures = [],
+  ImportedManures = [],
 }: {
   ManureStorageSystems?: NMPFileManureStorageSystem[];
+  NutrientAnalysisData?: NMPFileNutrientAnalysisData[];
+  GeneratedManures?: NMPFileGeneratedManureData[];
+  ImportedManures?: NMPFileImportedManureData[];
 }) {
-  const storedLiquidManuresAmount = ManureStorageSystems.filter(
-    (manureEle) => manureEle.manureType === ManureType.Liquid,
-  )
-    .flatMap((manureEle) => manureEle.manuresInSystem)
-    .reduce((accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount, 0);
+  const storageSystemEntries = ManureStorageSystems.map((systemEle) => {
+    const sumAmount = systemEle.manuresInSystem.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount,
+      0,
+    );
 
-  const storedSolidManuresAmount = ManureStorageSystems.filter(
-    (manureEle) => manureEle.manureType === ManureType.Solid,
-  )
-    .flatMap((manureEle) => manureEle.manuresInSystem)
-    .reduce((accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount, 0);
+    const nutrientSource = NutrientAnalysisData.find(
+      (nurtrientEle) => nurtrientEle.linkedUuid === systemEle.uuid,
+    );
+
+    return {
+      title: systemEle.name,
+      AnnualAmount: sumAmount,
+      UniqueMaterialName: nutrientSource?.UniqueMaterialName,
+      // TODO: when application rates/schedules implemented
+      landApplied: undefined,
+      amountRemaining: (sumAmount / sumAmount) * 100,
+    };
+  });
+
+  const unAssignedManures = [
+    ...GeneratedManures.filter((ele) => !ele.AssignedToStoredSystem),
+    ...ImportedManures.filter((ele) => !ele.AssignedToStoredSystem),
+  ].map((unassignedEle) => {
+    const nutrientSource = NutrientAnalysisData.find(
+      (nurtrientEle) => nurtrientEle.linkedUuid === unassignedEle.uuid,
+    );
+    return {
+      title: unassignedEle.ManagedManureName,
+      AnnualAmount: unassignedEle.AnnualAmount,
+      UniqueMaterialName: nutrientSource?.UniqueMaterialName,
+      // TODO: when application rates/schedules implemented
+      landApplied: undefined,
+      amountRemaining: (unassignedEle.AnnualAmount / unassignedEle.AnnualAmount) * 100,
+    };
+  });
 
   return (
     <div>
       <DataGrid
-        sx={{ ...customTableStyle, marginTop: '8px' }}
-        rows={[
-          {
-            liqOrSol: ManureType.Liquid,
-            title: 'Material in Liquid Storage System',
-            AnnualAmount: `${storedLiquidManuresAmount} US Gallons`,
-          },
-          {
-            liqOrSol: ManureType.Solid,
-            title: 'Material in Solid Storage System',
-            AnnualAmount: `${storedSolidManuresAmount} tons`,
-          },
-        ]}
+        sx={{ ...customTableStyle }}
+        rows={[...storageSystemEntries, ...unAssignedManures]}
         columns={TABLE_COLUMNS}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick

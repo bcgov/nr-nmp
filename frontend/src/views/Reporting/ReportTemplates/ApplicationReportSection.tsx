@@ -1,5 +1,10 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { customTableStyle } from '../reporting.styles';
+import {
+  customTableStyle,
+  FieldContainer,
+  FieldInfoItem,
+  FieldInfoSection,
+} from '../reporting.styles';
 import type { NMPFileFieldData } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
@@ -23,19 +28,33 @@ export default function ApplicationReportSection({
 
   return (
     <div style={{ marginTop: '16px' }}>
-      <div>
-        <span style={{ textDecoration: 'underline' }}>Field Name: {FieldName}</span>
-      </div>
-      <div>
-        <span>Planning Year: {year}</span>
-      </div>
-      <div>
-        <span>Field Area: {Area}</span>
-      </div>
-      <div>Crops:</div>
-      {Crops.map((cropEle) => (
-        <div key={cropEle.name}>{cropEle.name}</div>
-      ))}
+      <FieldContainer>
+        <FieldInfoSection>
+          <FieldInfoItem>
+            <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
+              Field Name: {FieldName}
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Planning Year:</strong> {year}
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Field Area:</strong> {Area}
+            </span>
+          </FieldInfoItem>
+          <FieldInfoItem>
+            <span>
+              <strong>Crops:</strong>
+              {Crops.map((cropEle) => (
+                <div key={cropEle.name}>{cropEle.name}</div>
+              ))}
+            </span>
+          </FieldInfoItem>
+        </FieldInfoSection>
+      </FieldContainer>
       <DataGrid
         sx={{ ...customTableStyle, marginTop: '16px' }}
         rows={Fertilizers}
