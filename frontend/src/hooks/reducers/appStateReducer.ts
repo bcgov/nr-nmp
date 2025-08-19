@@ -257,7 +257,7 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     year.NutrientAnalyses = structuredClone(action.newNutrientAnalyses);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {
     year.ImportedManures = structuredClone(action.newManures);
-    // Update storage systems with new imported manures
+
     if (year.ManureStorageSystems) {
       year.ManureStorageSystems = updateManureStorageSystems(
         year.ManureStorageSystems,

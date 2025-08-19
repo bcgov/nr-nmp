@@ -8,7 +8,6 @@ import { findBalanceMessage } from '@/views/CalculateNutrients/utils';
 import {
   customTableStyle,
   Message,
-  ROW_HEIGHT,
   FieldContainer,
   FieldInfoSection,
   FieldInfoItem,
@@ -25,14 +24,13 @@ const HIDE_COLUMN_CSS = {
 };
 
 const CROP_COLUMNS: GridColDef[] = [
-  { field: 'name', headerName: 'Crop Name', width: 250, minWidth: 200 },
-  { field: 'cropTypeName', headerName: 'Crop Type', width: 180, minWidth: 150 },
-  { field: 'yield', headerName: 'Yield', width: 120, minWidth: 100 },
+  { field: 'name', headerName: 'Crop Name', width: 200 },
+  { field: 'cropTypeName', headerName: 'Crop Type', width: 180 },
+  { field: 'yield', headerName: 'Yield', width: 120 },
   {
     field: 'nCredit',
     headerName: 'Previous crop ploughed down (N credit)',
-    width: 280,
-    minWidth: 250,
+    minWidth: 200,
   },
 ];
 
@@ -50,19 +48,15 @@ const LEAF_TISSUE_COLUMNS: GridColDef[] = [
 ];
 
 const CALC_COLUMNS: GridColDef[] = [
-  { field: 'name', width: 280, minWidth: 250, maxWidth: 350, renderHeader: () => null },
+  { field: 'name', width: 190, renderHeader: () => null },
   {
     field: 'reqN',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => <span>N</span>,
   },
   {
     field: 'reqP2o5',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => (
       <span>
         P<sub>2</sub>O<sub>5</sub>
@@ -72,8 +66,6 @@ const CALC_COLUMNS: GridColDef[] = [
   {
     field: 'reqK2o',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => (
       <span>
         K<sub>2</sub>O
@@ -83,15 +75,11 @@ const CALC_COLUMNS: GridColDef[] = [
   {
     field: 'remN',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => <span>N</span>,
   },
   {
     field: 'remP2o5',
     width: 90,
-    minWidth: 80,
-    maxWidth: 120,
     renderHeader: () => (
       <span>
         P<sub>2</sub>O<sub>5</sub>
@@ -101,8 +89,6 @@ const CALC_COLUMNS: GridColDef[] = [
   {
     field: 'remK2o',
     width: 90,
-    minWidth: 80,
-    maxWidth: 150,
     renderHeader: () => (
       <span>
         K<sub>2</sub>O
@@ -230,15 +216,21 @@ export default function CompleteReportTemplate({
         disableColumnMenu
         hideFooterPagination
         hideFooter
-        rowHeight={ROW_HEIGHT}
-        autoHeight
+        getRowHeight={() => 'auto'}
+        columnHeaderHeight={80}
+        disableAutosize
+        disableColumnSorting
+        disableColumnSelector
       />
 
       {booleanChecker(SoilTest) ? (
         <>
           <SectionTitle>Soil Test Information</SectionTitle>
           <FieldInfoItem style={{ marginBottom: '12px' }}>
-            <strong>Soil Test Results:</strong> {SoilTest?.sampleDate?.toString()}
+            <strong>Soil Test Results:</strong>{' '}
+            {SoilTest?.sampleDate
+              ? new Date(SoilTest.sampleDate).toLocaleDateString('sv-SE', { dateStyle: 'short' })
+              : 'N/A'}
           </FieldInfoItem>
           <FieldInfoItem style={{ marginBottom: '16px' }}>
             <strong>Soil Test Method:</strong>{' '}
@@ -253,8 +245,10 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
-            rowHeight={ROW_HEIGHT}
-            autoHeight
+            getRowHeight={() => 'auto'}
+            disableAutosize
+            disableColumnSorting
+            disableColumnSelector
           />
         </>
       ) : null}
@@ -271,20 +265,22 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
-            rowHeight={ROW_HEIGHT}
-            autoHeight
+            getRowHeight={() => 'auto'}
+            disableAutosize
+            disableColumnSorting
+            disableColumnSelector
           />
         </>
       ) : null}
 
       <SectionTitle>Nutrient Requirements and Removal</SectionTitle>
       <TableHeader>
-        <div style={{ width: 280 }} />
-        <div style={{ width: 280 }}>
+        <div style={{ width: 180 }} />
+        <div style={{ width: 260 }}>
           Agronomic (lb/ac)
           <br />
         </div>
-        <div style={{ width: 280 }}>
+        <div style={{ width: 305 }}>
           Crop Removal (lb/ac)
           <br />
         </div>
@@ -301,8 +297,10 @@ export default function CompleteReportTemplate({
             disableColumnMenu
             hideFooterPagination
             hideFooter
-            rowHeight={ROW_HEIGHT}
-            autoHeight
+            getRowHeight={() => 'auto'}
+            disableAutosize
+            disableColumnSorting
+            disableColumnSelector
           />
         )}
 
@@ -310,17 +308,19 @@ export default function CompleteReportTemplate({
           <>
             <SubsectionLabel>Fertilizers</SubsectionLabel>
             <DataGrid
-              sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
+              sx={{ ...customTableStyle }}
               rows={Fertilizers}
               columns={CALC_COLUMNS}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
-              columnHeaderHeight={0}
+              columnHeaderHeight={Crops.length > 0 ? 0 : 28}
               hideFooterPagination
               hideFooter
-              rowHeight={ROW_HEIGHT}
-              autoHeight
+              getRowHeight={() => 'auto'}
+              disableAutosize
+              disableColumnSorting
+              disableColumnSelector
             />
           </>
         )}
@@ -329,17 +329,19 @@ export default function CompleteReportTemplate({
           <>
             <SubsectionLabel>Nutrient Sources</SubsectionLabel>
             <DataGrid
-              sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
+              sx={{ ...customTableStyle }}
               rows={OtherNutrients}
               columns={CALC_COLUMNS}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
-              columnHeaderHeight={0}
+              columnHeaderHeight={Crops.length || Fertilizers.length ? 0 : 28}
               hideFooterPagination
               hideFooter
-              rowHeight={ROW_HEIGHT}
-              autoHeight
+              getRowHeight={() => 'auto'}
+              disableAutosize
+              disableColumnSorting
+              disableColumnSelector
             />
           </>
         )}
@@ -354,12 +356,13 @@ export default function CompleteReportTemplate({
           disableColumnMenu
           hideFooterPagination
           hideFooter
-          rowHeight={ROW_HEIGHT}
-          autoHeight
+          disableColumnSorting
+          getRowHeight={() => 'auto'}
+          scrollbarSize={0}
         />
 
         {balanceMessages.length > 0 && (
-          <div style={{ marginTop: '16px' }}>
+          <div style={{ marginTop: '16px', marginBottom: '16px' }}>
             {balanceMessages.map((msg) => (
               <Message key={msg.Id}>{msg.Text}</Message>
             ))}
