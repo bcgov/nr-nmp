@@ -75,15 +75,17 @@ export interface CropNutrients {
 export interface NMPFileFertigation extends CalculateNutrientsColumn {
   fertilizerTypeId: number;
   fertilizerId: number;
-  customNutrients?: CropNutrients;
   applicationRate: number;
   applUnitId?: number;
   applUnitName?: string;
   density: number;
   densityUnitId?: number;
   tankVolume: number;
+  tankUnitId?: number;
   solubility: number;
+  solubilityUnitId?: number;
   amountToDissolve: number;
+  amountToDissolveUnitId?: number;
   injectionRate: number;
   injectionUnitId?: number;
   eventsPerSeason: number;

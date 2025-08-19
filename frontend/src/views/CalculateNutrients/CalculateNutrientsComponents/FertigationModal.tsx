@@ -38,6 +38,7 @@ import {
   getTimePerApplication,
 } from '@/calculations/CalculateNutrients/Fertigation/calculations';
 import { renderBalanceCell } from '../utils';
+import { AMOUNT_TO_DISSOLVE_UNITS, SOLUBILITY_RATE_UNITS } from '@/constants/CalculateNutrients';
 
 type FertigationModalProps = {
   fieldIndex: number;
@@ -174,6 +175,13 @@ export default function FertigationModal({
     () =>
       fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value.dryliquid ===
       'liquid',
+    [fertilizerTypes, formData.fertilizerTypeId],
+  );
+
+  const isDryFertilizer = useMemo(
+    () =>
+      fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value.dryliquid ===
+      'dry',
     [fertilizerTypes, formData.fertilizerTypeId],
   );
 
@@ -478,6 +486,74 @@ export default function FertigationModal({
                 onSelectionChange={(e) => handleInputChanges({ fertilizerId: e as number })}
               />
             </Grid>
+          )}
+          {isDryFertilizer && (
+            <>
+              <Grid size={{ xs: 6 }}>
+                <NumberField
+                  isRequired
+                  label="Tank Volume"
+                  value={formData.tankVolume}
+                  onChange={(e) => handleInputChanges({ tankVolume: e })}
+                />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <Select
+                  isRequired
+                  items={dryUnits}
+                  label="Units"
+                  placeholder="Select Units"
+                  selectedKey={formData.tankUnitId}
+                  onSelectionChange={(e) => handleInputChanges({ tankUnitId: e as number })}
+                  noSort
+                  autoselectFirst
+                />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <NumberField
+                  isRequired
+                  label="Solubility"
+                  value={formData.solubility}
+                  onChange={(e) => handleInputChanges({ solubility: e })}
+                  minValue={0}
+                />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <Select
+                  isRequired
+                  items={SOLUBILITY_RATE_UNITS}
+                  label="Units"
+                  placeholder="Select Units"
+                  selectedKey={formData.solubilityUnitId}
+                  onSelectionChange={(e) => handleInputChanges({ solubilityUnitId: e as number })}
+                  noSort
+                  autoselectFirst
+                />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <NumberField
+                  isRequired
+                  label="Amount to Dissolve"
+                  value={formData.amountToDissolve}
+                  onChange={(e) => handleInputChanges({ amountToDissolve: e })}
+                  minValue={0}
+                />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <Select
+                  isRequired
+                  items={AMOUNT_TO_DISSOLVE_UNITS}
+                  label="Units"
+                  placeholder="Select Units"
+                  selectedKey={formData.amountToDissolveUnitId}
+                  onSelectionChange={(e) =>
+                    handleInputChanges({ amountToDissolveUnitId: e as number })
+                  }
+                  noSort
+                  autoselectFirst
+                />
+              </Grid>
+            </>
           )}
           {isLiquidFertilizer && (
             <>
