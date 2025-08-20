@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-24.04
     services:
       postgres:
-        image: postgis/postgis:16-3.4
+        image: postgis/postgis:16-3.4@sha256:44126d872ac91993766c341e369c539e8196614321765d36a6f1bab0419a5fa5
         env:
           POSTGRES_DB: default
           POSTGRES_USER: postgres
@@ -72,7 +72,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Flyway
-        uses: docker://flyway/flyway:10
+        uses: docker://flyway/flyway:10@sha256:43592cc125eb0594d9b013e8dced2fa67d473c091abaa5dec03b22f49e682949
         env:
           FLYWAY_URL: jdbc:postgresql://postgres:5432/default
           FLYWAY_USER: postgres
@@ -89,7 +89,7 @@ jobs:
       - name: Run Schemaspy
         run: docker run --network host -v "$PWD/output:/output" schemaspy/schemaspy:6.2.4 -t pgsql11 -db default -host 127.0.0.1 -port 5432 -u postgres -p default -schemas users
       - name: Deploy to Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8 # v4
         with:
           folder: output
           target-folder: schemaspy
@@ -109,7 +109,7 @@ jobs:
       PREFIX: ${{ github.event.repository.name }}-test
     steps:
       - name: ZAP Scan
-        uses: zaproxy/action-full-scan@v0.12.0
+        uses: zaproxy/action-full-scan@75ee1686750ab1511a73b26b77a2aedd295053ed # v0.12.0
         with:
           allow_issue_writing: true
           artifact_name: "zap_backend"
@@ -118,7 +118,7 @@ jobs:
           target: https://${{ env.PREFIX }}-frontend.${{ env.DOMAIN }}/api
 
       - name: ZAP Scan - Frontend
-        uses: zaproxy/action-full-scan@v0.12.0
+        uses: zaproxy/action-full-scan@75ee1686750ab1511a73b26b77a2aedd295053ed # v0.12.0
         with:
           allow_issue_writing: true
           artifact_name: "zap_frontend"
