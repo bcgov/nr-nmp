@@ -351,14 +351,13 @@ export default function FertigationModal({
     }
 
     if (isDryFertilizer) {
-      // Validate required fields for dry fertigation
-      if (!formData.tankVolume || !formData.tankUnitId) {
+      if (!formData.tankUnitId) {
         throw new Error('Tank volume and units are required for dry fertigation');
       }
-      if (!formData.solubility || !formData.solubilityUnitId) {
+      if (!formData.solubilityUnitId) {
         throw new Error('Solubility and units are required for dry fertigation');
       }
-      if (!formData.amountToDissolve || !formData.amountToDissolveUnitId) {
+      if (!formData.amountToDissolveUnitId) {
         throw new Error('Amount to dissolve and units are required for dry fertigation');
       }
 
