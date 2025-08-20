@@ -59,8 +59,8 @@ export default function NutrientAnalysis() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (name: string) => {
-    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.materialSource !== name));
+  const handleDelete = (id: string) => {
+    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.linkedUuid !== id));
   };
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -213,10 +213,16 @@ export default function NutrientAnalysis() {
         <NutrientAnalysisModal
           initialModalData={analysisForm}
           manures={manures.filter(
-            (manureEle) => !nutrientAnalysisData.some((ele) => ele.linkedUuid === manureEle.uuid),
+            (manureEle) =>
+              !nutrientAnalysisData.some(
+                (ele) => ele.linkedUuid === manureEle.uuid && editId !== manureEle.uuid,
+              ),
           )}
           storageSystems={storageSystems.filter(
-            (storeEle) => !nutrientAnalysisData.some((ele) => ele.linkedUuid === storeEle.uuid),
+            (storeEle) =>
+              !nutrientAnalysisData.some(
+                (ele) => ele.linkedUuid === storeEle.uuid && editId !== storeEle.uuid,
+              ),
           )}
           handleSubmit={handleModalSubmit}
           isOpen={isDialogOpen}
