@@ -125,7 +125,7 @@ export async function getNutrientInputs(
       manureWithNutrients.solidLiquid &&
       manureWithNutrients.solidLiquid.toUpperCase() === 'SOLID'
     ) {
-      const manureTypeForVolumeConversion = await getManure(manureWithNutrients.ManureId);
+      const manureTypeForVolumeConversion = await getManure(manureWithNutrients.manureId);
       adjustedApplicationRate = applicationRate * manureTypeForVolumeConversion.cubicyardconversion;
     }
 

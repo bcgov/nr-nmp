@@ -209,11 +209,11 @@ export default function ManureModal({
               placeholder="Select a material type"
               selectedKey={manureForm.manureId}
               items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
-                id: ele.ManureId,
+                id: ele.manureId,
                 label: ele.materialType,
               }))}
               onSelectionChange={(e) => {
-                const manureWNutrients = manuresWithNutrients.find((m) => m.ManureId === e)!;
+                const manureWNutrients = manuresWithNutrients.find((m) => m.manureId === e)!;
                 handleChanges({
                   manureId: e as number,
                   materialType: manureWNutrients.materialType,

@@ -97,7 +97,7 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
 }
 
 export interface ManureNutrients extends CropNutrients {
-  ManureId: number;
+  manureId: number;
   solidLiquid: 'Solid' | 'Liquid' | '';
   Moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number
   NH4N: number;

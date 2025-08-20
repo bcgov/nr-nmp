@@ -33,7 +33,7 @@ const EMPTY_NUTRIENT_ANALYSIS: NMPFileNutrientAnalysis = {
   NH4N: 0,
   P2O5: 0,
   K2O: 0,
-  ManureId: 0,
+  manureId: 0,
   solidLiquid: '',
   linkedUuid: '',
   materialType: '',
@@ -112,7 +112,7 @@ export default function NutrientAnalysisModal({
           next.NH4N = selectedManure.ammonia;
           next.P2O5 = selectedManure.phosphorous;
           next.K2O = selectedManure.potassium;
-          next.ManureId = selectedManure.id;
+          next.manureId = selectedManure.id;
           next.materialType = value ? value.toString() : '';
           next.UniqueMaterialName = updatedUniqueMaterialName;
         }
