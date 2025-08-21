@@ -44,6 +44,24 @@ import {
   SOLUBILITY_RATE_UNITS,
   TANK_VOLUME_UNITS,
 } from '@/constants/CalculateNutrients';
+import {
+  modalContentStyles,
+  calculationDisplayStyles,
+  calculationItemStyles,
+  calculationLabelStyles,
+  calculationValueStyles,
+  concentrationDisplayStyles,
+  concentrationItemStyles,
+  concentrationHeaderStyles,
+  solubilityHeaderStyles,
+  solubilityStatusSoluble,
+  solubilityStatusNotSoluble,
+  solubilityStatusNormal,
+  dryApplicationTimeStyles,
+  nutrientTablesContainerStyles,
+  nutrientTableItemStyles,
+  nutrientTableHeaderStyles,
+} from './fertigationModal.styles';
 
 type FertigationModalProps = {
   fieldIndex: number;
@@ -474,7 +492,7 @@ export default function FertigationModal({
       onOpenChange={onClose}
       {...props}
     >
-      <div css={{ maxHeight: '80vh', overflowY: 'auto', padding: '1rem' }}>
+      <div css={modalContentStyles}>
         <Form
           onCancel={onClose}
           onConfirm={handleSubmit}
@@ -617,27 +635,9 @@ export default function FertigationModal({
                   />
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <div
-                    css={{
-                      display: 'flex',
-                      gap: '1rem',
-                      justifyContent: 'space-between',
-                      marginTop: '1rem',
-                      '@media (max-width: 768px)': {
-                        flexDirection: 'column',
-                      },
-                    }}
-                  >
-                    <div css={{ flex: 1, minWidth: '280px' }}>
-                      <div
-                        css={{
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          fontSize: '14px',
-                          marginBottom: '8px',
-                          lineHeight: '1.2',
-                        }}
-                      >
+                  <div css={concentrationDisplayStyles}>
+                    <div css={concentrationItemStyles}>
+                      <div css={concentrationHeaderStyles}>
                         Nutrient Concentration (lb/US gallon)
                       </div>
                       <DataGrid
@@ -657,18 +657,8 @@ export default function FertigationModal({
                         hideFooter
                       />
                     </div>
-                    <div css={{ flex: 1, minWidth: '280px' }}>
-                      <div
-                        css={{
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          fontSize: '14px',
-                          marginBottom: '8px',
-                          lineHeight: '1.2',
-                        }}
-                      >
-                        Nutrient Concentration (kg/L)
-                      </div>
+                    <div css={concentrationItemStyles}>
+                      <div css={concentrationHeaderStyles}>Nutrient Concentration (kg/L)</div>
                       <DataGrid
                         sx={{ ...customTableStyle, fontSize: '12px' }}
                         columns={NUTRIENT_COLUMNS}
@@ -689,45 +679,19 @@ export default function FertigationModal({
                   </div>
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <div
-                    css={{
-                      fontWeight: 'bold',
-                      textAlign: 'center',
-                      fontSize: '14px',
-                      marginBottom: '8px',
-                      marginTop: '1rem',
-                    }}
-                  >
-                    Solubility Assessment
-                  </div>
+                  <div css={solubilityHeaderStyles}>Solubility Assessment</div>
                   {formData.dryAction ? (
                     <div
-                      css={{
-                        textAlign: 'center',
-                        padding: '8px 16px',
-                        backgroundColor: formData.dryAction === 'Soluble' ? '#d4edda' : '#f8d7da',
-                        color: formData.dryAction === 'Soluble' ? '#155724' : '#721c24',
-                        borderRadius: '4px',
-                        fontWeight: 'bold',
-                        fontSize: '14px',
-                      }}
+                      css={
+                        formData.dryAction === 'Soluble'
+                          ? solubilityStatusSoluble
+                          : solubilityStatusNotSoluble
+                      }
                     >
                       Status: {formData.dryAction}
                     </div>
                   ) : (
-                    <div
-                      css={{
-                        textAlign: 'center',
-                        padding: '8px 16px',
-                        backgroundColor: '#f8f9fa',
-                        color: '#6c757d',
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                        fontStyle: 'italic',
-                      }}
-                    >
-                      Normal
-                    </div>
+                    <div css={solubilityStatusNormal}>Normal</div>
                   )}
                 </Grid>
               </>
@@ -832,109 +796,40 @@ export default function FertigationModal({
             </Grid>
           </Grid>
           {isLiquidFertilizer && (
-            <div
-              css={{
-                display: 'flex',
-                gap: '1rem',
-                marginTop: '1rem',
-                justifyContent: 'space-between',
-                '@media (max-width: 768px)': {
-                  flexDirection: 'column',
-                },
-              }}
-            >
-              <div css={{ flex: 1, minWidth: '150px' }}>
-                <span
-                  css={{
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    display: 'block',
-                    marginBottom: '4px',
-                  }}
-                >
+            <div css={calculationDisplayStyles}>
+              <div css={calculationItemStyles}>
+                <span css={calculationLabelStyles}>
                   Total Product Volume per Application
                   {formData.applUnitName
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
-                  {formData.volume.toFixed(2)}
-                </div>
+                <div css={calculationValueStyles}>{formData.volume.toFixed(2)}</div>
               </div>
-              <div css={{ flex: 1, minWidth: '150px' }}>
-                <span
-                  css={{
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    display: 'block',
-                    marginBottom: '4px',
-                  }}
-                >
+              <div css={calculationItemStyles}>
+                <span css={calculationLabelStyles}>
                   Total Product Volume for Growing Season
                   {formData.applUnitName
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
-                  {formData.volumeForSeason.toFixed(2)}
-                </div>
+                <div css={calculationValueStyles}>{formData.volumeForSeason.toFixed(2)}</div>
               </div>
-              <div css={{ flex: 1, minWidth: '150px' }}>
-                <span
-                  css={{
-                    fontSize: '14px',
-                    fontWeight: 'bold',
-                    display: 'block',
-                    marginBottom: '4px',
-                  }}
-                >
-                  Time per Application (minutes)
-                </span>
-                <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
-                  {formData.applicationTime.toFixed(2)}
-                </div>
+              <div css={calculationItemStyles}>
+                <span css={calculationLabelStyles}>Time per Application (minutes)</span>
+                <div css={calculationValueStyles}>{formData.applicationTime.toFixed(2)}</div>
               </div>
             </div>
           )}
           {isDryFertilizer && (
-            <div css={{ marginTop: '1rem', textAlign: 'center' }}>
-              <span
-                css={{
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  display: 'block',
-                  marginBottom: '4px',
-                }}
-              >
-                Time per Application (minutes)
-              </span>
-              <div css={{ fontSize: '16px', fontWeight: 'bold' }}>
-                {formData.applicationTime.toFixed(2)}
-              </div>
+            <div css={dryApplicationTimeStyles}>
+              <span css={calculationLabelStyles}>Time per Application (minutes)</span>
+              <div css={calculationValueStyles}>{formData.applicationTime.toFixed(2)}</div>
             </div>
           )}
-          <div
-            css={{
-              display: 'flex',
-              gap: '1rem',
-              justifyContent: 'space-between',
-              marginTop: '1.5rem',
-              '@media (max-width: 768px)': {
-                flexDirection: 'column',
-              },
-            }}
-          >
-            <div css={{ flex: 1, minWidth: '250px' }}>
-              <div
-                css={{
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  fontSize: '14px',
-                  marginBottom: '8px',
-                }}
-              >
-                Applied Nutrients per Fertigation (lb/ac)
-              </div>
+          <div css={nutrientTablesContainerStyles}>
+            <div css={nutrientTableItemStyles}>
+              <div css={nutrientTableHeaderStyles}>Applied Nutrients per Fertigation (lb/ac)</div>
               <DataGrid
                 sx={{ ...customTableStyle, fontSize: '12px' }}
                 columns={NUTRIENT_COLUMNS}
@@ -946,17 +841,8 @@ export default function FertigationModal({
                 hideFooter
               />
             </div>
-            <div css={{ flex: 1, minWidth: '250px' }}>
-              <div
-                css={{
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  fontSize: '14px',
-                  marginBottom: '8px',
-                }}
-              >
-                Total Applied Nutrients (lb/ac)
-              </div>
+            <div css={nutrientTableItemStyles}>
+              <div css={nutrientTableHeaderStyles}>Total Applied Nutrients (lb/ac)</div>
               <DataGrid
                 sx={{ ...customTableStyle, fontSize: '12px' }}
                 columns={NUTRIENT_COLUMNS}
@@ -968,17 +854,8 @@ export default function FertigationModal({
                 hideFooter
               />
             </div>
-            <div css={{ flex: 1, minWidth: '250px' }}>
-              <div
-                css={{
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  fontSize: '14px',
-                  marginBottom: '8px',
-                }}
-              >
-                Still Required This Year (lb/ac)
-              </div>
+            <div css={nutrientTableItemStyles}>
+              <div css={nutrientTableHeaderStyles}>Still Required This Year (lb/ac)</div>
               <DataGrid
                 sx={{ ...customTableStyle, fontSize: '12px' }}
                 columns={BALANCE_COLUMNS}

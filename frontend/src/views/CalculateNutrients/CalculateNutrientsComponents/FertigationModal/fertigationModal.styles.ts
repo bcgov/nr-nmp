@@ -9,8 +9,8 @@ export const modalContentStyles = css({
 export const calculationDisplayStyles = css({
   display: 'flex',
   gap: '1rem',
-  justifyContent: 'space-between',
   marginTop: '1rem',
+  justifyContent: 'space-between',
   '@media (max-width: 768px)': {
     flexDirection: 'column',
   },
@@ -64,22 +64,24 @@ export const solubilityHeaderStyles = css({
   marginTop: '1rem',
 });
 
-export const solubilityStatusStyles = css({
+export const solubilityStatusSoluble = css({
   textAlign: 'center',
   padding: '8px 16px',
+  backgroundColor: '#d4edda',
+  color: '#155724',
   borderRadius: '4px',
   fontWeight: 'bold',
   fontSize: '14px',
 });
 
-export const solubilityStatusSoluble = css(solubilityStatusStyles, {
-  backgroundColor: '#d4edda',
-  color: '#155724',
-});
-
-export const solubilityStatusNotSoluble = css(solubilityStatusStyles, {
+export const solubilityStatusNotSoluble = css({
+  textAlign: 'center',
+  padding: '8px 16px',
   backgroundColor: '#f8d7da',
   color: '#721c24',
+  borderRadius: '4px',
+  fontWeight: 'bold',
+  fontSize: '14px',
 });
 
 export const solubilityStatusNormal = css({
@@ -117,8 +119,4 @@ export const nutrientTableHeaderStyles = css({
   textAlign: 'center',
   fontSize: '14px',
   marginBottom: '8px',
-});
-
-export const dataGridStyles = css({
-  fontSize: '12px',
 });
