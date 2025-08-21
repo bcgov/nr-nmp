@@ -131,7 +131,7 @@ DATABASES = {
 
 ## Authentication
 
-LOGOUT_REDIRECT_URL='/accounts/login'
+LOGOUT_REDIRECT_URL = '/accounts/login'
 
 AUTHENTICATION_BACKENDS = [
     # "oauth2_provider.backends.OAuth2Backend",
