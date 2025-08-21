@@ -12,6 +12,7 @@ export interface Fertilizer {
   id: number;
   name: string;
   dryliquid: 'dry' | 'liquid';
+  fertigation: boolean;
   nitrogen: number;
   phosphorous: number;
   potassium: number;

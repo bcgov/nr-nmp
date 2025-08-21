@@ -436,7 +436,8 @@ export default function FertigationModal({
             fertilizers.filter(
               (ele) =>
                 ele.value.dryliquid ===
-                fertilizerTypes.find((fertType) => fertType.id === value)?.value.dryliquid,
+                  fertilizerTypes.find((fertType) => fertType.id === value)?.value.dryliquid &&
+                ele.value.fertigation === true,
             ),
           );
 
