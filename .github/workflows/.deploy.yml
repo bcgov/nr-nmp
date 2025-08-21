@@ -61,6 +61,7 @@ jobs:
             -p DB_NAME=${{ secrets.DB_NAME }}
             -p SSO_CLIENT_ID=${{ vars.SSO_CLIENT_ID }}
             -p SSO_CLIENT_SECRET=${{ secrets.SSO_CLIENT_SECRET }}
+            -p SSO_AUTH_SERVER_URL=${{ secrets.SSO_AUTH_SERVER_URL }}
   
   deploy:
     name: Deploy
@@ -80,7 +81,6 @@ jobs:
           - name: backend
             overwrite: true
             parameters:
-              -p SSO_AUTH_SERVER_URL=${{ vars.SSO_AUTH_SERVER_URL }}
               -p CPU_REQUEST=${{ inputs.backend-cpu-request }}
             verification_path: /healthcheck/
           - name: frontend
