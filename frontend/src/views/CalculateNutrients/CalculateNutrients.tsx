@@ -44,14 +44,6 @@ export default function CalculateNutrients() {
   const [activeField, setActiveField] = useState<number>(0);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
 
-  // shows fertigation if on localhost or openshift dev
-  const backendUrl = window?.config?.VITE_BACKEND_URL || import.meta.env.VITE_BACKEND_URL || '';
-  const isDev =
-    backendUrl.includes('apps.silver.devops.gov.bc.ca') &&
-    !backendUrl.includes('test') &&
-    !backendUrl.includes('prod');
-  const enableFertigation = backendUrl.includes('localhost') || isDev;
-
   const navigate = useNavigate();
 
   const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
@@ -325,19 +317,17 @@ export default function CalculateNutrients() {
           <FontAwesomeIcon icon={faPlus} />
           Add Fertilizer
         </Button>
-        {enableFertigation && (
-          <Button
-            size="medium"
-            aria-label="Add Fertigation"
-            onPress={() => {
-              setOpenDialog(['fertigation', undefined]);
-            }}
-            variant="secondary"
-          >
-            <FontAwesomeIcon icon={faPlus} />
-            Add Fertigation
-          </Button>
-        )}
+        <Button
+          size="medium"
+          aria-label="Add Fertigation"
+          onPress={() => {
+            setOpenDialog(['fertigation', undefined]);
+          }}
+          variant="secondary"
+        >
+          <FontAwesomeIcon icon={faPlus} />
+          Add Fertigation
+        </Button>
         <Button
           size="medium"
           aria-label="Add Other"
