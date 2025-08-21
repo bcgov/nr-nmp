@@ -53,20 +53,21 @@ export async function GetNMineralizations(nMineralizationID: number, region: num
   }
 
   try {
-    const response = await axios.get(
-      `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${region}/`,
+    const location = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${region}`);
+    const locationId = location.data[0].locationid;
+    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/nmineralizations`);
+    const filtered = response.data.find(
+      (nm: any) => nm.locationid === locationId && nm.name === 'Solid - Other (<50%)',
     );
-
-    if (!response.data || response.data.length === 0) {
+    if (!filtered) {
       return {
         OrganicN_FirstYear: 0,
         OrganicN_LongTerm: 0,
       };
     }
-    const nMineralization = response.data[0];
     return {
-      OrganicN_FirstYear: nMineralization.firstyearvalue,
-      OrganicN_LongTerm: nMineralization.longtermvalue,
+      OrganicN_FirstYear: filtered.firstyearvalue,
+      OrganicN_LongTerm: filtered.longtermvalue,
     };
   } catch (error) {
     console.error(
@@ -209,8 +210,7 @@ export async function getNutrientInputs(
     const mineralizedOrganicNLongTerm =
       organicNitrogenContent * organicNMineralizationRates.OrganicN_LongTerm;
     // Total available nitrogen = ammonium + mineralized organic + total nitrogen baseline
-    const totalAvailableNLongTerm =
-      availableAmmoniumNitrogen + mineralizedOrganicNLongTerm + manureWithNutrients.N / tenThousand;
+    const totalAvailableNLongTerm = availableAmmoniumNitrogen + mineralizedOrganicNLongTerm;
     const nitrogenPerTonLongTerm = totalAvailableNLongTerm * lbPerTonConversion;
     nutrientInputs.N_LongTerm = Math.round(
       applicationRate * nitrogenPerTonLongTerm * unitConversionFactor,

@@ -9,8 +9,8 @@ urlpatterns = [
     path('liquidmaterialsconversionfactors/', ManuresViewset.as_view({'get': 'liquidMaterialsConversionFactors'})),
     path('units/', ManuresViewset.as_view({'get': 'units'}), name='units'),
     path('units/<str:unit>/', ManuresViewset.as_view({'get': 'units'}), name='unit_detail'),
-    path('nmineralization/', ManuresViewset.as_view({'get': 'nMineralization'}), name='n_mineralization'),
-    path('nmineralization/<int:nMineralizationID>/<int:region>/',
-         ManuresViewset.as_view({'get': 'nMineralization'}),
+    path('nmineralizations/', ManuresViewset.as_view({'get': 'nMineralizations'}), name='n_mineralizations'),
+    path('nmineralizations/<int:nMineralizationID>/',
+         ManuresViewset.as_view({'get': 'nMineralizations'}),
          name='n_mineralization_detail'),
 ]
