@@ -22,6 +22,8 @@ type NutrientAnalysisModalProps = {
   initialModalData?: NMPFileNutrientAnalysis;
   manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[];
   storageSystems: NMPFileManureStorageSystem[];
+  // Passed in to filter manures and storageSystems
+  currentNutrientAnalyses: NMPFileNutrientAnalysis[];
   handleSubmit: (data: NMPFileNutrientAnalysis) => void;
   onCancel: () => void;
 };
@@ -46,6 +48,7 @@ export default function NutrientAnalysisModal({
   handleSubmit,
   manures,
   storageSystems,
+  currentNutrientAnalyses,
   onCancel,
   ...props
 }: NutrientAnalysisModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
@@ -60,14 +63,29 @@ export default function NutrientAnalysisModal({
     return manureOptions.filter((m) => m.value.solidliquid === formData.solidLiquid);
   }, [manureOptions, formData.solidLiquid]);
   const materialSourceOptions = [
-    ...storageSystems.map((storageEle) => ({
-      id: storageEle.uuid,
-      label: storageEle.name,
-      value: storageEle,
-    })),
+    ...storageSystems
+      .filter(
+        (ele) =>
+          // Don't filter out an id that's currently being edited
+          (initialModalData && ele.uuid === initialModalData.linkedUuid) ||
+          // Filter out ids that already have a nutrient analysis
+          !currentNutrientAnalyses.some((n) => n.linkedUuid === ele.uuid),
+      )
+      .map((storageEle) => ({
+        id: storageEle.uuid,
+        label: storageEle.name,
+        value: storageEle,
+      })),
 
     ...manures
-      .filter((ele) => !ele.AssignedToStoredSystem)
+      .filter(
+        (ele) =>
+          !ele.AssignedToStoredSystem &&
+          // Don't filter out an id that's currently being edited
+          ((initialModalData && ele.uuid === initialModalData.linkedUuid) ||
+            // Filter out ids that already have a nutrient analysis
+            !currentNutrientAnalyses.some((n) => n.linkedUuid === ele.uuid)),
+      )
       .map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
         id: ele.uuid,
         label: ele.UniqueMaterialName,
