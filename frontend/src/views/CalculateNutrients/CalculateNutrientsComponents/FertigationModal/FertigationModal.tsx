@@ -32,13 +32,13 @@ import useAppState from '@/hooks/useAppState';
 import {
   getAppliedNutrientPerApplication,
   getProductWeightInPounds,
-} from '../../../calculations/CalculateNutrients/Fertigation/calculations';
+} from '../../../../calculations/CalculateNutrients/Fertigation/calculations';
 import {
   getProductVolumePerApplication,
   getTimePerApplication,
   calculateSolidFertigation,
 } from '@/calculations/CalculateNutrients/Fertigation/calculations';
-import { renderBalanceCell } from '../utils';
+import { renderBalanceCell } from '../../utils';
 import {
   AMOUNT_TO_DISSOLVE_UNITS,
   SOLUBILITY_RATE_UNITS,

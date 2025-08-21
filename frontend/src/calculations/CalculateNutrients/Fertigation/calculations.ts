@@ -123,9 +123,9 @@ function convertDissolveToLbs(amount: number, fromUnit: number): number {
     case 1: // lbs
       return amount;
     case 2: // kgs
-      return amount * 2.20462;
+      return amount * 2.205;
     case 3: // grams
-      return amount * 0.00220462;
+      return amount * 0.002;
     default:
       console.error(`Unrecognized dissolve unit: ${fromUnit}`);
       return amount;
@@ -137,9 +137,9 @@ function convertTankVolumeToImpGallons(volume: number, fromUnit: number): number
     case 1: // Imperial Gallons
       return volume;
     case 2: // US Gallons
-      return volume / 1.20095;
+      return volume / 1.201;
     case 3: // Litres
-      return volume / 4.54609;
+      return volume / 4.546;
     default:
       console.error(`Unrecognized tank volume unit: ${fromUnit}`);
       return volume;
@@ -166,9 +166,9 @@ function convertInjectionRateToImpGallonsPerMin(
 ): number {
   switch (injectionUnitId) {
     case 1: // US gallon/min to Imperial Gallon/min
-      return injectionRate / 1.20095;
+      return injectionRate / 1.201;
     case 2: // L/min to Imperial Gallon/min
-      return injectionRate / 4.54609;
+      return injectionRate / 4.546;
     case 3: // Imperial Gallon/min
       return injectionRate;
     default:
@@ -225,8 +225,8 @@ export function calculateSolidFertigation(
 
   // Check if the amount to dissolve is soluble
   // Convert amountToDissolve from lbs to kgs and tankVolume from imp gal to litres
-  const amountToDissolveInKgs = amountToDissolveInLbs * 0.45359237;
-  const tankVolumeInLitres = tankVolumeInImpGal * 4.54609;
+  const amountToDissolveInKgs = amountToDissolveInLbs * 0.454;
+  const tankVolumeInLitres = tankVolumeInImpGal * 4.546;
   const maxSolubility = (tankVolumeInLitres * solInWaterInGramsPerL) / 1000; // Convert g to kg
 
   let nutrientConcentrationN = 0;
@@ -241,7 +241,7 @@ export function calculateSolidFertigation(
     dryAction = 'Soluble';
 
     // Need in lb/us gallon - convert from imperial gallons to US gallons
-    const tankVolumeInUSGal = tankVolumeInImpGal * 1.20095;
+    const tankVolumeInUSGal = tankVolumeInImpGal * 1.201;
 
     nutrientConcentrationN =
       Math.round(((amountToDissolveInLbs * valN) / 100 / tankVolumeInUSGal) * 100) / 100;
@@ -251,20 +251,17 @@ export function calculateSolidFertigation(
       Math.round(((amountToDissolveInLbs * valK2O) / 100 / tankVolumeInUSGal) * 100) / 100;
 
     // kg/L concentrations
-    kglNutrientConcentrationN = Math.round((nutrientConcentrationN / 8.3454043) * 100) / 100;
-    kglNutrientConcentrationP2O5 = Math.round(nutrientConcentrationP2O5 * 0.119826 * 100) / 100;
-    kglNutrientConcentrationK2O = Math.round(nutrientConcentrationK2O * 0.119826 * 100) / 100;
+    kglNutrientConcentrationN = Math.round(nutrientConcentrationN * 0.12 * 100) / 100;
+    kglNutrientConcentrationP2O5 = Math.round(nutrientConcentrationP2O5 * 0.12 * 100) / 100;
+    kglNutrientConcentrationK2O = Math.round(nutrientConcentrationK2O * 0.12 * 100) / 100;
   } else {
     dryAction = 'Reduce the amount to dissolve';
   }
 
   // Calculate applied nutrients per application
-  const calcN =
-    Math.round(((nutrientConcentrationN * amountToDissolveInLbs) / fieldArea) * 100) / 100;
-  const calcP2O5 =
-    Math.round(((nutrientConcentrationP2O5 * amountToDissolveInLbs) / fieldArea) * 100) / 100;
-  const calcK2O =
-    Math.round(((nutrientConcentrationK2O * amountToDissolveInLbs) / fieldArea) * 100) / 100;
+  const calcN = Math.round((((valN / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
+  const calcP2O5 = Math.round((((valP2O5 / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
+  const calcK2O = Math.round((((valK2O / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
 
   // Calculate total applied nutrients
   const totN = Math.round(calcN * eventsPerSeason * 100) / 100;
