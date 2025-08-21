@@ -43,6 +43,7 @@ import {
   AMOUNT_TO_DISSOLVE_UNITS,
   SOLUBILITY_RATE_UNITS,
   TANK_VOLUME_UNITS,
+  DRY_FERTILIZER_SOLUBILITIES,
 } from '@/constants/CalculateNutrients';
 import {
   modalContentStyles,
@@ -461,6 +462,17 @@ export default function FertigationModal({
             next.density = densityValue.value;
             next.densityUnitId = densityValue.densityunitid;
           }
+
+          // Auto-populate solubility for dry fertilizers
+          if (isDryFertilizer && next.solubilityUnitId) {
+            const solubilityData = DRY_FERTILIZER_SOLUBILITIES.find(
+              (item) =>
+                item.fertilizerId === value && item.solubilityUnitId === next.solubilityUnitId,
+            );
+            if (solubilityData) {
+              next.solubility = solubilityData.value;
+            }
+          }
         }
 
         if (name === 'densityUnitId') {
@@ -470,6 +482,18 @@ export default function FertigationModal({
             );
             // densityValue is undef when a fertilizer is unselected
             next.density = densityValue ? densityValue.value : 0;
+          }
+        }
+
+        if (name === 'solubilityUnitId') {
+          // Auto-populate solubility when units change for dry fertilizers
+          if (isDryFertilizer && next.fertilizerId) {
+            const solubilityData = DRY_FERTILIZER_SOLUBILITIES.find(
+              (item) => item.fertilizerId === next.fertilizerId && item.solubilityUnitId === value,
+            );
+            if (solubilityData) {
+              next.solubility = solubilityData.value;
+            }
           }
         }
       });

@@ -1,7 +1,7 @@
 type DryFertigationSolubilities = {
-  Id: number;
-  FertilizerId: number;
-  SolubilityUnitId: number;
-  Value: number;
+  id: number;
+  fertilizerId: number;
+  solubilityUnitId: number;
+  value: number;
 };
 export default DryFertigationSolubilities;

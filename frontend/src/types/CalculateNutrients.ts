@@ -124,7 +124,7 @@ export interface NMPFileAppliedManure extends CalculateNutrientsColumn {
   nAvail: number;
 }
 
-export type DryFertilizerSolubility = {
+export type DryFertilizerSolubilities = {
   id: number;
   fertilizerId: number;
   solubilityUnitId: number;
