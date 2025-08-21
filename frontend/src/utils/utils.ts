@@ -41,3 +41,14 @@ export function getLiquidManureDisplay(amount: number) {
 
 export const isDairyAndMilkingCattle = (animalId: string, subType: string) =>
   animalId === DAIRY_COW_ID && subType === MILKING_COW_ID;
+
+export const mathSymbolConverter = (input: string) => {
+  let newStr = '';
+  for (let i = 0; i < input.length; i += 1) {
+    const current = input.charAt(i);
+    if (current === '≥') newStr = `${newStr}>=`;
+    else if (current === '≤') newStr = `${newStr}<=`;
+    else newStr = `${newStr + current}`;
+  }
+  return newStr;
+};

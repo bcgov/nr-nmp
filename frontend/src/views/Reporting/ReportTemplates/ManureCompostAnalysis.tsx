@@ -1,15 +1,15 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { customTableStyle, ROW_HEIGHT } from '../reporting.styles';
-import type { NMPFileNutrientAnalysis } from '@/types';
+import { customTableStyle } from '../reporting.styles';
+import { NMPFileNutrientAnalysis } from '@/types';
+import { mathSymbolConverter } from '@/utils/utils';
 
 const TABLE_COLUMNS: GridColDef[] = [
-  { field: 'materialSource', headerName: 'Source of Material', width: 200 },
-  { field: 'materialType', headerName: 'Material Type', width: 200 },
+  { field: 'materialSource', headerName: 'Source of Material', width: 150 },
+  { field: 'materialType', headerName: 'Material Type', width: 150 },
   {
     field: 'Moisture',
     headerName: 'Moisture (%)',
-    width: 90,
-    valueGetter: (_value, row) => row.Moisture,
+    valueGetter: (value) => mathSymbolConverter(value),
   },
   {
     field: 'N',
@@ -18,7 +18,7 @@ const TABLE_COLUMNS: GridColDef[] = [
         NH<sub>4</sub>N (ppm)
       </span>
     ),
-    width: 75,
+    width: 80,
     valueGetter: (_value, row) => row.N,
   },
   {
@@ -36,7 +36,7 @@ const TABLE_COLUMNS: GridColDef[] = [
 ];
 
 function NO_ROWS() {
-  return <div style={{ width: '100%', textAlign: 'center' }}>No data</div>;
+  return <div style={{ width: '100%', textAlign: 'center', paddingTop: '2rem' }}>No data</div>;
 }
 
 export default function ManureCompostAnalysis({
@@ -54,10 +54,14 @@ export default function ManureCompostAnalysis({
       disableColumnMenu
       hideFooterPagination
       hideFooter
-      rowHeight={ROW_HEIGHT}
+      getRowHeight={() => 'auto'}
+      columnHeaderHeight={80}
       slots={{
         noRowsOverlay: NO_ROWS,
       }}
+      disableAutosize
+      disableColumnSorting
+      disableColumnSelector
     />
   );
 }
