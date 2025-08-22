@@ -2,7 +2,7 @@ import { ManureType } from './Animals';
 
 interface NMPFileImportedManureData {
   UniqueMaterialName: string;
-  ManureType?: ManureType;
+  manureType?: ManureType;
   AnnualAmount: number;
   AnnualAmountUSGallonsVolume?: number;
   AnnualAmountCubicYardsVolume?: number;

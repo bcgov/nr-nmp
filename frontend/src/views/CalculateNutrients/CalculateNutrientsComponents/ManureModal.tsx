@@ -1,7 +1,7 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import { useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { useContext, useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -10,7 +10,7 @@ import { Form, NumberField, Select } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 // Data not seeded in DB.
 import SEASON_APPLICATION from '../unseededData';
-import { EMPTY_CROP_NUTRIENTS } from '@/constants';
+import { DEFAULT_NMPFILE_APPLIED_MANURE, EMPTY_CROP_NUTRIENTS } from '@/constants';
 
 import {
   CropNutrients,
@@ -19,28 +19,14 @@ import {
   NMPFileAppliedManure,
   SelectOption,
   Units,
+  ManureType,
 } from '@/types';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 
-// TODO: Remove once we start filtering by manure type. This is to prevent
-// re-running the map function on each render
-const MANURE_APPLICATION_METHODS = SEASON_APPLICATION.map((ele) => ({
-  id: ele.Id,
-  label: ele.Name,
-}));
-
-type ManureFormFields = {
-  materialType: string;
-  applicationMethod: number;
-  applicationRate: number;
-  applUnit: number;
-  retentionAmmoniumN: number;
-  organicNAvailable: number;
-};
-
 type AddManureModalProps = {
-  initialModalData?: ManureFormFields;
+  fieldIndex: number;
+  initialModalData?: NMPFileAppliedManure;
   manuresWithNutrients: NMPFileNutrientAnalysis[];
   rowEditIndex?: number;
   field: NMPFileFieldData;
@@ -78,30 +64,44 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   },
 ];
 
-const DEFAULT_MANURE_FORM_FIELDS: ManureFormFields = {
-  materialType: '',
-  applicationMethod: 0,
-  applicationRate: 0,
-  applUnit: 0,
-  retentionAmmoniumN: 0,
-  organicNAvailable: 0,
-};
+// TODO: Calculate Material Remaining. This is a fairly complex calculation because the user
+// can select multiple kinds of units and the manure amount unit varies on if it's solid/liquid.
+// For generated and imported manures, the number is stored in AnnualAmountUSGallonsVolume or
+// AnnualAmountTonsWeight depending on type. For storage systems, the annual amount is calculated
+// by summing up the manuresInSystem annual amounts. Note that these annual amount values are stored
+// in separate arrays from the nutrient analysis
+
+// TODO: Ingest ammonia retention table
 
 export default function ManureModal({
+  fieldIndex,
   initialModalData,
   manuresWithNutrients,
+  rowEditIndex,
   onCancel,
   field,
   setFields,
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [manureForm, setManureForm] = useState<ManureFormFields>(
-    initialModalData || DEFAULT_MANURE_FORM_FIELDS,
+  const [manureForm, setManureForm] = useState<NMPFileAppliedManure>(
+    initialModalData || DEFAULT_NMPFILE_APPLIED_MANURE,
   );
   const apiCache = useContext(APICacheContext);
-  const { state, dispatch } = useAppState();
+  const { state } = useAppState();
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
+
+  const filteredApplicationMethods = useMemo(() => {
+    if (!manureForm.solidLiquid) return [];
+    return SEASON_APPLICATION.filter(
+      (a) =>
+        a.ManureType === 3 ||
+        a.ManureType === ManureType[manureForm.solidLiquid as keyof typeof ManureType],
+    ).map((a) => ({
+      id: a.Id,
+      label: a.Name,
+    }));
+  }, [manureForm.solidLiquid]);
 
   const [availableThisYearTable, setAvailableThisYearTable] =
     useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
@@ -133,53 +133,21 @@ export default function ManureModal({
   };
 
   const handleSubmit = () => {
-    debugger;
-    if (!field) {
-      console.error('No field selected for manure application');
-      return;
-    }
-
-    // Find the selected farm manure
-    const selectedManure = manuresWithNutrients.find(
-      (manure) => manure.materialType === manureForm.materialType,
-    );
-
-    if (!selectedManure) {
-      console.error('Selected farm manure not found');
-      return;
-    }
-
-    // Create new nutrient manure entry
-    const newAppliedManure: NMPFileAppliedManure = {
-      manureId: selectedManure.ManureId,
-      name: selectedManure.materialType,
-      applicationId: manureForm.applicationMethod,
-      unitId: manureForm.applUnit,
-      rate: manureForm.applicationRate,
-      nh4Retention: manureForm.retentionAmmoniumN,
-      nAvail: manureForm.organicNAvailable,
-      reqN: availableThisYearTable.N,
-      reqP2o5: availableThisYearTable.P2O5,
-      reqK2o: availableThisYearTable.K2O,
-      remN: availableLongTermTable.N,
-      remP2o5: availableLongTermTable.P2O5,
-      remK2o: availableLongTermTable.K2O,
-    };
-
-    // Update the fields array
-    const currentFields = state.nmpFile.years[0].Fields || [];
-    const updatedFields = currentFields.map((f: NMPFileFieldData) => {
-      if (f.FieldName === field.FieldName) {
-        return {
-          ...f,
-          Manures: [...f.Manures, newAppliedManure],
-        };
+    setFields((prevFields) => {
+      const newFields = [...prevFields];
+      const newField = newFields[fieldIndex];
+      if (rowEditIndex !== undefined) {
+        // Replace manure at index
+        const newManures = [...newField.Manures];
+        newManures[rowEditIndex] = { ...manureForm };
+        newField.Manures = newManures;
+      } else {
+        // Append to end of list
+        newField.Manures = [...newField.Manures, { ...manureForm }];
       }
-      return f;
+      return newFields;
     });
 
-    // Update fields state and dispatch to global state
-    setFields(updatedFields);
     handleModalClose();
   };
 
@@ -193,9 +161,9 @@ export default function ManureModal({
       farmManure,
       state.nmpFile.farmDetails.FarmRegion,
       manureForm.applicationRate,
-      manureUnits.find((opt) => opt.id === manureForm.applUnit)!.value,
-      manureForm.retentionAmmoniumN,
-      manureForm.organicNAvailable,
+      manureUnits.find((opt) => opt.id === manureForm.applUnitId)!.value,
+      manureForm.nh4Retention,
+      manureForm.nAvailable,
     );
     setAvailableLongTermTable({
       N: nutrientInputs.N_LongTerm,
@@ -208,19 +176,14 @@ export default function ManureModal({
       K2O: nutrientInputs.K2O_FirstYear,
     });
     setStillReqTable({
-      N: field.Crops[0].reqN + (field.Crops[1]?.reqN ?? 0),
-      P2O5: field.Crops[0].reqP2o5 + (field.Crops[1]?.reqP2o5 ?? 0),
-      K2O: field.Crops[0].reqK2o + (field.Crops[1]?.reqK2o ?? 0),
+      N: field.Crops[0].reqN + (field.Crops[1]?.reqN || 0),
+      P2O5: field.Crops[0].reqP2o5 + (field.Crops[1]?.reqP2o5 || 0),
+      K2O: field.Crops[0].reqK2o + (field.Crops[1]?.reqK2o || 0),
     });
   };
 
-  const handleChange = (changes: { [name: string]: string | number | undefined }) => {
-    const name = Object.keys(changes)[0];
-    const value = changes[name];
-    setManureForm((prev) => {
-      if (!prev) return prev;
-      return { ...prev, [name]: value };
-    });
+  const handleChanges = (changes: Partial<NMPFileAppliedManure>) => {
+    setManureForm((prev) => ({ ...prev, ...changes }));
   };
 
   return (
@@ -244,12 +207,19 @@ export default function ManureModal({
               isRequired
               label="Material Type"
               placeholder="Select a material type"
-              selectedKey={manureForm.materialType}
+              selectedKey={manureForm.manureId}
               items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
-                id: ele.materialType,
+                id: ele.manureId,
                 label: ele.materialType,
               }))}
-              onSelectionChange={(e) => handleChange({ materialType: e as string })}
+              onSelectionChange={(e) => {
+                const manureWNutrients = manuresWithNutrients.find((m) => m.manureId === e)!;
+                handleChanges({
+                  manureId: e as number,
+                  materialType: manureWNutrients.materialType,
+                  solidLiquid: manureWNutrients.solidLiquid,
+                });
+              }}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -257,10 +227,9 @@ export default function ManureModal({
               isRequired
               label="Application Season/Method"
               placeholder="Select an application method"
-              selectedKey={manureForm.applicationMethod}
-              // TODO: filter by material type
-              items={MANURE_APPLICATION_METHODS}
-              onSelectionChange={(e) => handleChange({ applicationMethod: e as number })}
+              selectedKey={manureForm.applicationId}
+              items={filteredApplicationMethods}
+              onSelectionChange={(e) => handleChanges({ applicationId: e as number })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -268,7 +237,7 @@ export default function ManureModal({
               isRequired
               label="Application Rate"
               value={manureForm.applicationRate}
-              onChange={(e) => handleChange({ applicationRate: e })}
+              onChange={(e) => handleChanges({ applicationRate: e })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -276,25 +245,25 @@ export default function ManureModal({
               isRequired
               label="Units"
               placeholder="Select a unit"
-              selectedKey={manureForm.applUnit}
+              selectedKey={manureForm.applUnitId}
               items={manureUnits}
-              onSelectionChange={(e) => handleChange({ applUnit: e as number })}
+              onSelectionChange={(e) => handleChanges({ applUnitId: e as number })}
               autoselectFirst
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <NumberField
               label="Ammonium-N Retention (%)"
-              value={manureForm.retentionAmmoniumN}
-              onChange={(e) => handleChange({ retentionAmmoniumN: e })}
+              value={manureForm.nh4Retention}
+              onChange={(e) => handleChanges({ nh4Retention: e })}
               maxValue={100}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
             <NumberField
               label="Organic N Available (%)"
-              value={manureForm.organicNAvailable}
-              onChange={(e) => handleChange({ organicNAvailable: e })}
+              value={manureForm.nAvailable}
+              onChange={(e) => handleChanges({ nAvailable: e })}
               maxValue={100}
             />
           </Grid>

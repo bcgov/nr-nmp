@@ -2,7 +2,7 @@ export interface Manure {
   id: number;
   name: string;
   manureclass: string;
-  solidliquid: string;
+  solidliquid: 'Solid' | 'Liquid' | '';
   moisture: string;
   nitrogen: number;
   ammonia: number;
@@ -31,7 +31,7 @@ export interface Units {
   valuek2o: string;
   farmreqdnutrientsstdunitsconversion: number;
   farmreqdnutrientsstdunitsareaconversion: number;
-  solidliquid: string;
+  solidliquid: 'Solid' | 'Liquid' | '';
 }
 
 /*

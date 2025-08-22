@@ -56,7 +56,7 @@ export default function StorageSystemDetailsEdit({
   );
 
   const availableManures: ManureInSystem[] = useMemo(
-    () => fullManureList.filter((m) => m.data.ManureType === formData.manureType),
+    () => fullManureList.filter((m) => m.data.manureType === formData.manureType),
     [formData, fullManureList],
   );
 
@@ -84,6 +84,7 @@ export default function StorageSystemDetailsEdit({
         next = {
           ...DEFAULT_SOLID_MANURE_SYSTEM,
           name: prev.name,
+          uuid: prev.uuid,
         };
         if (prev.manureType === ManureType.Liquid) {
           next.manureStorage = {

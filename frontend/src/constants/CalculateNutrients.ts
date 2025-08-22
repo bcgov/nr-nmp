@@ -5,6 +5,7 @@ import {
   Schedule,
   InjectionUnit,
   SelectOption,
+  NMPFileAppliedManure,
 } from '@/types';
 
 export const DRY_CUSTOM_ID = 2;
@@ -139,3 +140,21 @@ export const SCHEDULE_OPTIONS = [
   { id: Schedule.Weekly, label: Schedule[Schedule.Weekly] },
   { id: Schedule.Daily, label: Schedule[Schedule.Daily] },
 ];
+
+export const DEFAULT_NMPFILE_APPLIED_MANURE: NMPFileAppliedManure = {
+  name: '',
+  reqN: 0,
+  reqP2o5: 0,
+  reqK2o: 0,
+  remN: 0,
+  remP2o5: 0,
+  remK2o: 0,
+  manureId: 0,
+  materialType: '',
+  applicationId: 0,
+  applUnitId: 0,
+  applicationRate: 0,
+  nh4Retention: 0,
+  nAvailable: 0,
+  solidLiquid: '',
+};

@@ -8,7 +8,7 @@ export type StorageModalMode =
 
 export type StorageModalFormData =
   | NMPFileManureStorageSystem
-  | { name: string; manureType: undefined; manuresInSystem: ManureInSystem[] };
+  | { name: string; manureType: undefined; manuresInSystem: ManureInSystem[]; uuid: string };
 
 export const DEFAULT_FORM_DATA = {
   name: '',
