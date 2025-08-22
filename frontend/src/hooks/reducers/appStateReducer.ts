@@ -160,7 +160,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
           UniqueMaterialName: animal.manureData.name,
-          ManureType: ManureType.Solid,
+          manureType: ManureType.Solid,
           AnnualAmount: animal.manureData.annualSolidManure,
           AnnualAmountTonsWeight: animal.manureData.annualSolidManure,
           AnnualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
@@ -174,7 +174,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {
         generatedManures.push({
           ...DefaultGeneratedManureFormData,
           UniqueMaterialName: animal.manureData.name,
-          ManureType: ManureType.Liquid,
+          manureType: ManureType.Liquid,
           AnnualAmount: animal.manureData.annualLiquidManure,
           AnnualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
           AnnualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
