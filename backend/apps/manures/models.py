@@ -71,7 +71,7 @@ class Units(models.Model):
 
 class NitrogenMineralization(models.Model):
     id = models.IntegerField(primary_key=True)
-    nmineralizationid=models.IntegerField()
+    nmineralizationid = models.IntegerField()
     locationid = models.IntegerField()
     name = models.CharField(max_length=100)
     firstyearvalue = models.FloatField()
