@@ -29,6 +29,7 @@ class Fertilizers(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     dryliquid = models.CharField(max_length=100)
+    fertigation = models.BooleanField(default=False)
     nitrogen = models.FloatField()
     phosphorous = models.FloatField()
     potassium = models.FloatField()

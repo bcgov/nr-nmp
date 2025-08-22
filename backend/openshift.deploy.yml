@@ -17,9 +17,6 @@ parameters:
     description: Deployment target; e.g. PR number, test or prod
     required: true
     generate: expression
-  - name: SSO_AUTH_SERVER_URL
-    description: SSO Auth Server URL
-    required: true
   - name: CPU_REQUEST
     value: 50m
   - name: MEMORY_REQUEST
@@ -69,8 +66,6 @@ objects:
                   value: info
                 - name: POSTGRES_HOST
                   value: ${REPO}-${TARGET}-database
-                - name: SSO_AUTH_SERVER_URL
-                  value: ${SSO_AUTH_SERVER_URL}
                 - name: POSTGRES_DB
                   valueFrom:
                     secretKeyRef:
@@ -96,6 +91,11 @@ objects:
                     secretKeyRef:
                       name: ${REPO}-${TARGET}-backend
                       key: sso-client-secret
+                - name: SSO_AUTH_SERVER_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${REPO}-${TARGET}-backend
+                      key: sso-auth-server-url
                 - name: SSO_REDIRECT_URL
                   value: https://${REPO}-${TARGET}-${COMPONENT}.apps.silver.devops.gov.bc.ca/admin
               ports:

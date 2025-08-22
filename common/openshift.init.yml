@@ -17,6 +17,9 @@ parameters:
     required: true
   - name: SSO_CLIENT_SECRET
     required: true
+  - name: SSO_AUTH_SERVER_URL
+    description: SSO Auth Server URL
+    required: true
 objects:
   - apiVersion: v1
     kind: Secret
@@ -35,6 +38,7 @@ objects:
     stringData:
       sso-client-id: ${SSO_CLIENT_ID}
       sso-client-secret: ${SSO_CLIENT_SECRET}
+      sso-auth-server-url: ${SSO_AUTH_SERVER_URL}
   - apiVersion: networking.k8s.io/v1
     kind: NetworkPolicy
     metadata:

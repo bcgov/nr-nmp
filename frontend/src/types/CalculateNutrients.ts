@@ -12,6 +12,7 @@ export interface Fertilizer {
   id: number;
   name: string;
   dryliquid: 'dry' | 'liquid';
+  fertigation: boolean;
   nitrogen: number;
   phosphorous: number;
   potassium: number;
@@ -82,8 +83,11 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   density: number;
   densityUnitId?: number;
   tankVolume: number;
+  tankUnitId?: number;
   solubility: number;
+  solubilityUnitId?: number;
   amountToDissolve: number;
+  amountToDissolveUnitId?: number;
   injectionRate: number;
   injectionUnitId?: number;
   eventsPerSeason: number;
@@ -94,6 +98,14 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   volume: number;
   volumeForSeason: number;
   applicationTime: number;
+  // Additional fields for dry fertigation
+  dryAction?: 'Soluble' | 'Reduce the amount to dissolve';
+  nutrientConcentrationN?: number;
+  nutrientConcentrationP2O5?: number;
+  nutrientConcentrationK2O?: number;
+  kglNutrientConcentrationN?: number;
+  kglNutrientConcentrationP2O5?: number;
+  kglNutrientConcentrationK2O?: number;
 }
 
 export interface ManureNutrients extends CropNutrients {
@@ -112,7 +124,7 @@ export interface NMPFileAppliedManure extends CalculateNutrientsColumn {
   nAvail: number;
 }
 
-export type DryFertilizerSolubility = {
+export type DryFertilizerSolubilities = {
   id: number;
   fertilizerId: number;
   solubilityUnitId: number;
