@@ -145,6 +145,7 @@ def main():
 
         with open(fixture_file, 'w') as f:
             json.dump(fixture_data, f, indent=2)
+            f.write('\n')
 
         print(f"Saved {len(fixture_data)} records to {fixture_file}")
 
@@ -155,6 +156,7 @@ def main():
     combined_file = os.path.join(FIXTURE_DIR, "all_data.json")
     with open(combined_file, 'w') as f:
         json.dump(all_fixtures, f, indent=2)
+        f.write('\n')
 
     print(f"Saved combined fixture with {len(all_fixtures)} records to {combined_file}")
 
