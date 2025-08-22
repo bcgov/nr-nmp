@@ -110,7 +110,6 @@ objects:
               startupProbe:
                 tcpSocket:
                   port: container-port
-                failureThreshold: 5
                 initialDelaySeconds: 15
                 periodSeconds: 15
                 timeoutSeconds: 10

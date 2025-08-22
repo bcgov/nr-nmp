@@ -131,6 +131,8 @@ DATABASES = {
 
 ## Authentication
 
+LOGOUT_REDIRECT_URL = '/accounts/login'
+
 AUTHENTICATION_BACKENDS = [
     # "oauth2_provider.backends.OAuth2Backend",
     # "django.contrib.auth.backends.ModelBackend",
