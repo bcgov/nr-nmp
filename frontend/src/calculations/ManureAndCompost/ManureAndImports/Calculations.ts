@@ -44,7 +44,7 @@ export function getDensityFactoredConversionUsingMoisture(
   return getDensityFactoredConversion(density, conversionFactor);
 }
 
-export async function GetNMineralizations(nMineralizationID: number, region: number) {
+export async function getNMineralizations(nMineralizationID: number, region: number) {
   if (!nMineralizationID || !region) {
     return {
       OrganicN_FirstYear: 0,
@@ -55,19 +55,19 @@ export async function GetNMineralizations(nMineralizationID: number, region: num
   try {
     const location = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${region}`);
     const locationId = location.data[0].locationid;
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/nmineralizations`);
-    const filtered = response.data.find(
-      (nm: any) => nm.locationid === locationId && nm.name === 'Solid - Other (<50%)',
+    const response = await axios.get(
+      `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${locationId}/`,
     );
-    if (!filtered) {
+    if (!response.data || response.data.length === 0) {
       return {
         OrganicN_FirstYear: 0,
         OrganicN_LongTerm: 0,
       };
     }
+    const nMineralization = response.data[0];
     return {
-      OrganicN_FirstYear: filtered.firstyearvalue,
-      OrganicN_LongTerm: filtered.longtermvalue,
+      OrganicN_FirstYear: nMineralization.firstyearvalue,
+      OrganicN_LongTerm: nMineralization.longtermvalue,
     };
   } catch (error) {
     console.error(
@@ -83,7 +83,7 @@ export async function GetNMineralizations(nMineralizationID: number, region: num
 
 export async function getNutrientInputs(
   manureWithNutrients: NMPFileNutrientAnalysis,
-  region: number | undefined,
+  regionId: number | undefined,
   applicationRate: number,
   applicationRateUnit: Units,
   ammoniaNRetentionPct: number = 0,
@@ -175,10 +175,10 @@ export async function getNutrientInputs(
     const organicNitrogenContent = manureWithNutrients.N - manureWithNutrients.NH4N / tenThousand;
 
     let organicNMineralizationRates = { OrganicN_FirstYear: 0, OrganicN_LongTerm: 0 };
-    if (region !== undefined) {
-      organicNMineralizationRates = await GetNMineralizations(
+    if (regionId !== undefined) {
+      organicNMineralizationRates = await getNMineralizations(
         manureWithNutrients.nMineralizationId || 0,
-        region,
+        regionId,
       );
     }
     // Override first year organic N availability with user-provided value

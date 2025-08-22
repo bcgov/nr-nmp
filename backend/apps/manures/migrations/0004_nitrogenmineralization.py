@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
             name='NitrogenMineralization',
             fields=[
                 ('Id', models.IntegerField(primary_key=True, serialize=False)),
+                ('nmineralizationid', models.IntegerField()), # line manually added
                 ('LocationId', models.IntegerField()),
                 ('Name', models.CharField(max_length=100)),
                 ('FirstYearValue', models.FloatField()),

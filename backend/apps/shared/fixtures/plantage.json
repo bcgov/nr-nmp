@@ -1,74 +1,65 @@
 [
-    {
-        "model": "crops.plantage",
-        "pk": 1,
-        "fields": {
-            "id": 1,
-            "label": "1"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 2,
-        "fields": {
-            "id": 2,
-            "label": "2"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 3,
-        "fields": {
-            "id": 3,
-            "label": "3"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 4,
-        "fields": {
-            "id": 4,
-            "label": "4"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 5,
-        "fields": {
-            "id": 5,
-            "label": "5"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 6,
-        "fields": {
-            "id": 6,
-            "label": "6"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 7,
-        "fields": {
-            "id": 7,
-            "label": "7"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 8,
-        "fields": {
-            "id": 8,
-            "label": "8"
-        }
-    },
-    {
-        "model": "crops.plantage",
-        "pk": 9,
-        "fields": {
-            "id": 9,
-            "label": "9 or more"
-        }
+  {
+    "model": "crops.plantage",
+    "pk": 1,
+    "fields": {
+      "label": 1.0
     }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 2,
+    "fields": {
+      "label": 2.0
+    }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 3,
+    "fields": {
+      "label": 3.0
+    }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 4,
+    "fields": {
+      "label": 4.0
+    }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 5,
+    "fields": {
+      "label": 5.0
+    }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 6,
+    "fields": {
+      "label": 6.0
+    }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 7,
+    "fields": {
+      "label": 7.0
+    }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 8,
+    "fields": {
+      "label": 8.0
+    }
+  },
+  {
+    "model": "crops.plantage",
+    "pk": 9,
+    "fields": {
+      "label": "9 or more"
+    }
+  }
 ]

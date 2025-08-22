@@ -50,7 +50,7 @@ python3 convert_csv_to_fixtures.py
 ```
 
 This script:
-- Reads CSV files from `database/db/trimmed_tables/`
+- Reads CSV files from `database/db/`
 - Converts them to JSON fixtures in `backend/apps/shared/fixtures/`
 - Creates both individual model fixtures and a combined `all_data.json`
 - May need to be modified to use integers instead of floating point numbers
@@ -79,7 +79,7 @@ MODEL_MAPPINGS = {
 ```
 
 ### 3. Add CSV Data
-Place your CSV file in `database/db/trimmed_tables/_YourNewTable/`
+Place your CSV file in `database/db/_YourNewTable/`
 
 ### 4. Generate Migration and Fixtures
 ```bash
@@ -123,5 +123,5 @@ backend/
 │   └── *.json                    # Individual model fixtures
 ├── scripts/
 │   └── convert_csv_to_fixtures.py # CSV to JSON conversion script
-└── database/db/trimmed_tables/    # Source CSV files
+└── database/db/    # Source CSV files
 ```
