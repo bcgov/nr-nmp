@@ -8402,6 +8402,7 @@
       "nitrogen": 46.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 10.0
     }
   },
@@ -8414,6 +8415,7 @@
       "nitrogen": 10.0,
       "phosphorous": 16.0,
       "potassium": 18.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -8426,6 +8428,7 @@
       "nitrogen": 18.0,
       "phosphorous": 18.0,
       "potassium": 18.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -8438,6 +8441,7 @@
       "nitrogen": 18.0,
       "phosphorous": 9.0,
       "potassium": 9.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -8450,6 +8454,7 @@
       "nitrogen": 30.0,
       "phosphorous": 10.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -8462,6 +8467,7 @@
       "nitrogen": 34.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8474,6 +8480,7 @@
       "nitrogen": 21.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8486,6 +8493,7 @@
       "nitrogen": 12.0,
       "phosphorous": 1.0,
       "potassium": 1.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -8498,6 +8506,7 @@
       "nitrogen": 3.0,
       "phosphorous": 20.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -8510,6 +8519,7 @@
       "nitrogen": 18.0,
       "phosphorous": 46.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8522,6 +8532,7 @@
       "nitrogen": 12.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -8534,6 +8545,7 @@
       "nitrogen": 10.0,
       "phosphorous": 6.0,
       "potassium": 2.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -8546,6 +8558,7 @@
       "nitrogen": 0.0,
       "phosphorous": 1.0,
       "potassium": 6.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -8558,6 +8571,7 @@
       "nitrogen": 11.0,
       "phosphorous": 52.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8570,6 +8584,7 @@
       "nitrogen": 0.0,
       "phosphorous": 0.0,
       "potassium": 62.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8582,6 +8597,7 @@
       "nitrogen": 0.0,
       "phosphorous": 0.0,
       "potassium": 50.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8594,6 +8610,7 @@
       "nitrogen": 82.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8606,6 +8623,7 @@
       "nitrogen": 10.0,
       "phosphorous": 34.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8618,6 +8636,7 @@
       "nitrogen": 32.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8630,6 +8649,7 @@
       "nitrogen": 30.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8642,6 +8662,7 @@
       "nitrogen": 28.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8654,6 +8675,7 @@
       "nitrogen": 3.0,
       "phosphorous": 18.0,
       "potassium": 18.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -8666,6 +8688,7 @@
       "nitrogen": 12.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -8678,6 +8701,7 @@
       "nitrogen": 20.5,
       "phosphorous": 5.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -8690,6 +8714,7 @@
       "nitrogen": 0.0,
       "phosphorous": 0.0,
       "potassium": 15.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -8702,6 +8727,7 @@
       "nitrogen": 0.0,
       "phosphorous": 54.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8714,6 +8740,7 @@
       "nitrogen": 23.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8726,6 +8753,7 @@
       "nitrogen": 16.0,
       "phosphorous": 20.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8738,6 +8766,7 @@
       "nitrogen": 15.5,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -8750,6 +8779,7 @@
       "nitrogen": 40.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8762,6 +8792,7 @@
       "nitrogen": 8.0,
       "phosphorous": 18.0,
       "potassium": 22.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8774,6 +8805,7 @@
       "nitrogen": 8.0,
       "phosphorous": 24.0,
       "potassium": 24.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8786,6 +8818,7 @@
       "nitrogen": 15.0,
       "phosphorous": 8.0,
       "potassium": 11.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8798,6 +8831,7 @@
       "nitrogen": 20.0,
       "phosphorous": 10.0,
       "potassium": 6.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8810,6 +8844,7 @@
       "nitrogen": 15.0,
       "phosphorous": 15.0,
       "potassium": 17.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8822,6 +8857,7 @@
       "nitrogen": 6.0,
       "phosphorous": 20.0,
       "potassium": 14.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8834,6 +8870,7 @@
       "nitrogen": 8.0,
       "phosphorous": 10.0,
       "potassium": 20.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -8846,6 +8883,7 @@
       "nitrogen": 3.0,
       "phosphorous": 10.0,
       "potassium": 10.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -8858,6 +8896,7 @@
       "nitrogen": 12.0,
       "phosphorous": 5.0,
       "potassium": 8.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -8870,6 +8909,7 @@
       "nitrogen": 0.0,
       "phosphorous": 10.0,
       "potassium": 10.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -8882,6 +8922,7 @@
       "nitrogen": 16.0,
       "phosphorous": 16.0,
       "potassium": 16.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
