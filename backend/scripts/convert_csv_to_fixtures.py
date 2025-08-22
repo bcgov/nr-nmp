@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Converts CSV files from database/db/trimmed_tables to Django fixtures
-and saves them as JSON files in backend/apps/shared/fixtures/ (may need to be updated to handle some null values and floats)
+Converts CSV files from database/db to Django fixtures and saves them as JSON files
+in backend/apps/shared/fixtures/ (may need to be updated to handle some null values and floats)
 """
 
 import csv
@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 
 # Directory mappings of the file paths
-CSV_DIR = "../../database/db/trimmed_tables"
+CSV_DIR = "../../database/db"
 FIXTURE_DIR = "../apps/shared/fixtures"
 
 # Model mappings (directory name -> model)
@@ -44,11 +44,8 @@ MODEL_MAPPINGS = {
     "_SoilTestPotassiumRecommendation": "crops.soiltestpotassiumrecommendation",
     "_Previous_Crop_Types": "crops.previouscroptypes",
     "_Units": "manures.units",
-    "_NMineralizations": "manures.nmineralization",
+    "_NitrogenMineralizations": "manures.nitrogenmineralization",
     "_PlantAge": "crops.plantage",
-    "_PlantsPerActre": "crops.plantsperacre",
-    "_WhereWillPruningsGo": "crops.wherewillpruningsgo",
-    "_DistanceBetweenPLants": "crops.distancebetweenplants",
 }
 
 
@@ -91,6 +88,7 @@ def convert_csv_to_fixture(csv_path, model_name):
         for row in reader:
             # Clean up the data and convert types
             fields = {}
+            print(row)
             for field, value in row.items():
                 if field.lower() == 'id':
                     pk = clean_value(value, field)
@@ -147,6 +145,7 @@ def main():
 
         with open(fixture_file, 'w') as f:
             json.dump(fixture_data, f, indent=2)
+            f.write('\n')
 
         print(f"Saved {len(fixture_data)} records to {fixture_file}")
 
@@ -157,6 +156,7 @@ def main():
     combined_file = os.path.join(FIXTURE_DIR, "all_data.json")
     with open(combined_file, 'w') as f:
         json.dump(all_fixtures, f, indent=2)
+        f.write('\n')
 
     print(f"Saved combined fixture with {len(all_fixtures)} records to {combined_file}")
 

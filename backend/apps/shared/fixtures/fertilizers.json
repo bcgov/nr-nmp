@@ -5,10 +5,10 @@
     "fields": {
       "name": "Urea (46-0-0)",
       "dryliquid": "dry",
-      "fertigation": true,
       "nitrogen": 46.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 10.0
     }
   },
@@ -18,10 +18,10 @@
     "fields": {
       "name": "10-16-18",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 10.0,
       "phosphorous": 16.0,
       "potassium": 18.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -31,10 +31,10 @@
     "fields": {
       "name": "18-18-18",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 18.0,
       "phosphorous": 18.0,
       "potassium": 18.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -44,10 +44,10 @@
     "fields": {
       "name": "18-9-9",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 18.0,
       "phosphorous": 9.0,
       "potassium": 9.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -57,10 +57,10 @@
     "fields": {
       "name": "30-10-0-7S",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 30.0,
       "phosphorous": 10.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 200.0
     }
   },
@@ -70,10 +70,10 @@
     "fields": {
       "name": "Ammonium nitrate (34-0-0)",
       "dryliquid": "dry",
-      "fertigation": true,
       "nitrogen": 34.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -83,10 +83,10 @@
     "fields": {
       "name": "Ammonium sulphate (21-0-0-24S)",
       "dryliquid": "dry",
-      "fertigation": true,
       "nitrogen": 21.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -96,10 +96,10 @@
     "fields": {
       "name": "Blood meal (12-1-1)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 12.0,
       "phosphorous": 1.0,
       "potassium": 1.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -109,10 +109,10 @@
     "fields": {
       "name": "Bone meal (3-20-0)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 3.0,
       "phosphorous": 20.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -122,10 +122,10 @@
     "fields": {
       "name": "Diammonium phosphate (DAP, 18-46-0)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 18.0,
       "phosphorous": 46.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -135,10 +135,10 @@
     "fields": {
       "name": "Feather meal (12-0-0)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 12.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -148,10 +148,10 @@
     "fields": {
       "name": "Fish meal (10-6-2)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 10.0,
       "phosphorous": 6.0,
       "potassium": 2.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -161,10 +161,10 @@
     "fields": {
       "name": "Greensand (0-1-6)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 0.0,
       "phosphorous": 1.0,
       "potassium": 6.0,
+      "fertigation": false,
       "sortnum": 300.0
     }
   },
@@ -174,10 +174,10 @@
     "fields": {
       "name": "Monoammonium phosphate (MAP, 11-52-0)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 11.0,
       "phosphorous": 52.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -187,10 +187,10 @@
     "fields": {
       "name": "Muriate of potash (0-0-62)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 0.0,
       "phosphorous": 0.0,
       "potassium": 62.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -200,10 +200,10 @@
     "fields": {
       "name": "Sulphate of potash (0-0-50-17S)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 0.0,
       "phosphorous": 0.0,
       "potassium": 50.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -213,10 +213,10 @@
     "fields": {
       "name": "Anhydrous ammonia (82-0-0)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 82.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -226,10 +226,10 @@
     "fields": {
       "name": "Ammonium polyphosphate (10-34-0)",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 10.0,
       "phosphorous": 34.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -239,10 +239,10 @@
     "fields": {
       "name": "Urea ammonium nitrate (UAN 32-0-0)",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 32.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -252,10 +252,10 @@
     "fields": {
       "name": "Urea ammonium nitrate (UAN 30-0-0)",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 30.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -265,10 +265,10 @@
     "fields": {
       "name": "Urea ammonium nitrate (UAN 28-0-0)",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 28.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -278,10 +278,10 @@
     "fields": {
       "name": "3-18-18",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 3.0,
       "phosphorous": 18.0,
       "potassium": 18.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -291,10 +291,10 @@
     "fields": {
       "name": "12-0-0-26S",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 12.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -304,10 +304,10 @@
     "fields": {
       "name": "20.5-5-0",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 20.5,
       "phosphorous": 5.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -317,10 +317,10 @@
     "fields": {
       "name": "0-0-15-9.7S",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 0.0,
       "phosphorous": 0.0,
       "potassium": 15.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -330,10 +330,10 @@
     "fields": {
       "name": "Phosphoric acid (0-54-0)",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 0.0,
       "phosphorous": 54.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -343,10 +343,10 @@
     "fields": {
       "name": "Liquid urea (23-0-0)",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 23.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -356,10 +356,10 @@
     "fields": {
       "name": "Ammonium phosphate-sulfate (16-20-0)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 16.0,
       "phosphorous": 20.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -369,10 +369,10 @@
     "fields": {
       "name": "Calcium nitrate (15.5-0-0-18Ca)",
       "dryliquid": "dry",
-      "fertigation": true,
       "nitrogen": 15.5,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": true,
       "sortnum": 100.0
     }
   },
@@ -382,10 +382,10 @@
     "fields": {
       "name": "Sulphur coated urea (40-0-0)",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 40.0,
       "phosphorous": 0.0,
       "potassium": 0.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -395,10 +395,10 @@
     "fields": {
       "name": "8-18-22",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 8.0,
       "phosphorous": 18.0,
       "potassium": 22.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -408,10 +408,10 @@
     "fields": {
       "name": "8-24-24",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 8.0,
       "phosphorous": 24.0,
       "potassium": 24.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -421,10 +421,10 @@
     "fields": {
       "name": "15-8-11",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 15.0,
       "phosphorous": 8.0,
       "potassium": 11.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -434,10 +434,10 @@
     "fields": {
       "name": "20-10-6",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 20.0,
       "phosphorous": 10.0,
       "potassium": 6.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -447,10 +447,10 @@
     "fields": {
       "name": "15-15-17",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 15.0,
       "phosphorous": 15.0,
       "potassium": 17.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -460,10 +460,10 @@
     "fields": {
       "name": "6-20-14",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 6.0,
       "phosphorous": 20.0,
       "potassium": 14.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -473,10 +473,10 @@
     "fields": {
       "name": "8-10-20",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 8.0,
       "phosphorous": 10.0,
       "potassium": 20.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   },
@@ -486,10 +486,10 @@
     "fields": {
       "name": "3-10-10",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 3.0,
       "phosphorous": 10.0,
       "potassium": 10.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -499,10 +499,10 @@
     "fields": {
       "name": "12-5-8",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 12.0,
       "phosphorous": 5.0,
       "potassium": 8.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -512,10 +512,10 @@
     "fields": {
       "name": "0-10-10",
       "dryliquid": "liquid",
-      "fertigation": true,
       "nitrogen": 0.0,
       "phosphorous": 10.0,
       "potassium": 10.0,
+      "fertigation": true,
       "sortnum": 200.0
     }
   },
@@ -525,10 +525,10 @@
     "fields": {
       "name": "16-16-16",
       "dryliquid": "dry",
-      "fertigation": false,
       "nitrogen": 16.0,
       "phosphorous": 16.0,
       "potassium": 16.0,
+      "fertigation": false,
       "sortnum": 100.0
     }
   }
