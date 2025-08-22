@@ -78,7 +78,7 @@ export default function ManureImportModal({
   };
 
   const onSubmit = () => {
-    handleSubmit({ ...formData, uuid: crypto.randomUUID() });
+    handleSubmit({ uuid: crypto.randomUUID(), ...formData });
     handleDialogClose();
   };
 
