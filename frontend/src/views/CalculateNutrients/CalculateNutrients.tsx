@@ -21,7 +21,7 @@ import { NutrientMessage } from './nutrientMessages';
 import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
-import FertigationModal from './CalculateNutrientsComponents/FertigationModal';
+import FertigationModal from './CalculateNutrientsComponents/FertigationModal/FertigationModal.tsx';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 import CropsModal from '../Crops/CropsModal';
 import {
