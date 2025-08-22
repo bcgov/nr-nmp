@@ -4,6 +4,7 @@
 import { useContext, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
 import { Form, NumberField, Select } from '@/components/common';
@@ -11,6 +12,7 @@ import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 // Data not seeded in DB.
 import SEASON_APPLICATION from '../unseededData';
 import { EMPTY_CROP_NUTRIENTS } from '@/constants';
+import { ADD_ANIMALS } from '@/constants/routes';
 
 import {
   CropNutrients,
@@ -46,6 +48,7 @@ type AddManureModalProps = {
   field: NMPFileFieldData;
   setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
+  navigateAway: (navigateTo: string) => void;
 };
 
 const NUTRIENT_COLUMNS: GridColDef[] = [
@@ -93,13 +96,14 @@ export default function ManureModal({
   onCancel,
   field,
   setFields,
+  navigateAway,
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [manureForm, setManureForm] = useState<ManureFormFields>(
     initialModalData || DEFAULT_MANURE_FORM_FIELDS,
   );
   const apiCache = useContext(APICacheContext);
-  const { state, dispatch } = useAppState();
+  const { state } = useAppState();
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
 
@@ -133,7 +137,6 @@ export default function ManureModal({
   };
 
   const handleSubmit = () => {
-    debugger;
     if (!field) {
       console.error('No field selected for manure application');
       return;
@@ -229,116 +232,149 @@ export default function ManureModal({
       onOpenChange={handleModalClose}
       {...props}
     >
-      <Form
-        onCancel={handleModalClose}
-        onCalculate={handleCalculate}
-        onConfirm={handleSubmit}
-      >
-        <Grid
-          container
-          spacing={2}
-          sx={{ alignItems: 'end' }}
+      {manuresWithNutrients.length > 0 ? (
+        <Form
+          onCancel={handleModalClose}
+          onCalculate={handleCalculate}
+          onConfirm={handleSubmit}
         >
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              label="Material Type"
-              placeholder="Select a material type"
-              selectedKey={manureForm.materialType}
-              items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
-                id: ele.materialType,
-                label: ele.materialType,
-              }))}
-              onSelectionChange={(e) => handleChange({ materialType: e as string })}
-            />
+          <Grid
+            container
+            spacing={2}
+            sx={{ alignItems: 'end' }}
+          >
+            <Grid size={formGridBreakpoints}>
+              <Select
+                isRequired
+                label="Material Type"
+                placeholder="Select a material type"
+                selectedKey={manureForm.materialType}
+                items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
+                  id: ele.materialType,
+                  label: ele.materialType,
+                }))}
+                onSelectionChange={(e) => handleChange({ materialType: e as string })}
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <Select
+                isRequired
+                label="Application Season/Method"
+                placeholder="Select an application method"
+                selectedKey={manureForm.applicationMethod}
+                // TODO: filter by material type
+                items={MANURE_APPLICATION_METHODS}
+                onSelectionChange={(e) => handleChange({ applicationMethod: e as number })}
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <NumberField
+                isRequired
+                label="Application Rate"
+                value={manureForm.applicationRate}
+                onChange={(e) => handleChange({ applicationRate: e })}
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <Select
+                isRequired
+                label="Units"
+                placeholder="Select a unit"
+                selectedKey={manureForm.applUnit}
+                items={manureUnits}
+                onSelectionChange={(e) => handleChange({ applUnit: e as number })}
+                autoselectFirst
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <NumberField
+                label="Ammonium-N Retention (%)"
+                value={manureForm.retentionAmmoniumN}
+                onChange={(e) => handleChange({ retentionAmmoniumN: e })}
+                maxValue={100}
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <NumberField
+                label="Organic N Available (%)"
+                value={manureForm.organicNAvailable}
+                onChange={(e) => handleChange({ organicNAvailable: e })}
+                maxValue={100}
+              />
+            </Grid>
+            <Grid size={{ ...formGridBreakpoints, md: 4 }}>
+              <span css={{ fontWeight: 'bold' }}>Available This Year (lb/ac) </span>
+              <DataGrid
+                sx={{ ...customTableStyle }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[availableThisYearTable]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </Grid>
+            <Grid size={{ ...formGridBreakpoints, md: 4 }}>
+              <span css={{ fontWeight: 'bold' }}>Available Long Term (lb/ac) </span>
+              <DataGrid
+                sx={{ ...customTableStyle }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[availableLongTermTable]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </Grid>
+            <Grid size={{ ...formGridBreakpoints, md: 4 }}>
+              <span css={{ fontWeight: 'bold' }}>Still Required This Year (lb/ac) </span>
+              <DataGrid
+                sx={{ ...customTableStyle }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[stillReqTable]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </Grid>
           </Grid>
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              label="Application Season/Method"
-              placeholder="Select an application method"
-              selectedKey={manureForm.applicationMethod}
-              // TODO: filter by material type
-              items={MANURE_APPLICATION_METHODS}
-              onSelectionChange={(e) => handleChange({ applicationMethod: e as number })}
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <NumberField
-              isRequired
-              label="Application Rate"
-              value={manureForm.applicationRate}
-              onChange={(e) => handleChange({ applicationRate: e })}
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              label="Units"
-              placeholder="Select a unit"
-              selectedKey={manureForm.applUnit}
-              items={manureUnits}
-              onSelectionChange={(e) => handleChange({ applUnit: e as number })}
-              autoselectFirst
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <NumberField
-              label="Ammonium-N Retention (%)"
-              value={manureForm.retentionAmmoniumN}
-              onChange={(e) => handleChange({ retentionAmmoniumN: e })}
-              maxValue={100}
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <NumberField
-              label="Organic N Available (%)"
-              value={manureForm.organicNAvailable}
-              onChange={(e) => handleChange({ organicNAvailable: e })}
-              maxValue={100}
-            />
-          </Grid>
-          <Grid size={{ ...formGridBreakpoints, md: 4 }}>
-            <span css={{ fontWeight: 'bold' }}>Available This Year (lb/ac) </span>
-            <DataGrid
-              sx={{ ...customTableStyle }}
-              columns={NUTRIENT_COLUMNS}
-              rows={[availableThisYearTable]}
-              getRowId={() => crypto.randomUUID()}
-              disableRowSelectionOnClick
-              disableColumnMenu
-              hideFooterPagination
-              hideFooter
-            />
-          </Grid>
-          <Grid size={{ ...formGridBreakpoints, md: 4 }}>
-            <span css={{ fontWeight: 'bold' }}>Available Long Term (lb/ac) </span>
-            <DataGrid
-              sx={{ ...customTableStyle }}
-              columns={NUTRIENT_COLUMNS}
-              rows={[availableLongTermTable]}
-              getRowId={() => crypto.randomUUID()}
-              disableRowSelectionOnClick
-              disableColumnMenu
-              hideFooterPagination
-              hideFooter
-            />
-          </Grid>
-          <Grid size={{ ...formGridBreakpoints, md: 4 }}>
-            <span css={{ fontWeight: 'bold' }}>Still Required This Year (lb/ac) </span>
-            <DataGrid
-              sx={{ ...customTableStyle }}
-              columns={NUTRIENT_COLUMNS}
-              rows={[stillReqTable]}
-              getRowId={() => crypto.randomUUID()}
-              disableRowSelectionOnClick
-              disableColumnMenu
-              hideFooterPagination
-              hideFooter
-            />
-          </Grid>
-        </Grid>
-      </Form>
+        </Form>
+      ) : (
+        <div style={{ color: 'red' }}>
+          <div style={{ padding: '1rem' }}>
+            Warning, no manure or compose sources have been added this farm with assigned nutrient
+            analyses.
+          </div>
+          <div style={{ padding: '1rem' }}>
+            Return to the manure section and add either animals or an imported manure, then assign a
+            nutrient analysis to the manures before adding manure applications to a field.
+          </div>
+          <ButtonGroup
+            alignment="end"
+            orientation="horizontal"
+          >
+            <Button
+              variant="secondary"
+              onPress={handleModalClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              onPress={() => {
+                navigateAway(ADD_ANIMALS);
+              }}
+            >
+              Return to manure
+            </Button>
+          </ButtonGroup>
+        </div>
+      )}
     </Modal>
   );
 }

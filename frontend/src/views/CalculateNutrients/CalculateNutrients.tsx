@@ -219,7 +219,7 @@ export default function CalculateNutrients() {
     [fieldList],
   );
 
-  const handleNextPage = () => {
+  const handleNextPage = (navigateTo: string = '') => {
     setShowViewError('');
     dispatch({
       type: 'SAVE_FIELDS',
@@ -227,7 +227,7 @@ export default function CalculateNutrients() {
       newFields: fieldList,
     });
 
-    navigate(REPORTING);
+    navigate(navigateTo || REPORTING);
   };
 
   const handlePreviousPage = () => {
@@ -391,6 +391,7 @@ export default function CalculateNutrients() {
           isOpen={openDialog[0] === 'manure'}
           onCancel={handleDialogClose}
           modalStyle={{ minWidth: '800px', overflowY: 'auto' }}
+          navigateAway={handleNextPage}
         />
       )}
       {openDialog[0] === 'fertigation' && (
