@@ -191,3 +191,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://nr-nmp-test-backend.apps.silver.devops.gov.bc.ca",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
