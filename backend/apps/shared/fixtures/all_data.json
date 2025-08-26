@@ -14678,5 +14678,117 @@
     "fields": {
       "label": "9 or more"
     }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 2498,
+    "fields": {
+      "label": 2498.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 2248,
+    "fields": {
+      "label": 2248.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1999,
+    "fields": {
+      "label": 1999.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1799,
+    "fields": {
+      "label": 1799.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1665,
+    "fields": {
+      "label": 1665.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1499,
+    "fields": {
+      "label": 1499.0
+    }
+  },
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 1,
+    "fields": {
+      "label": "N/A"
+    }
+  },
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 2,
+    "fields": {
+      "label": "Removed from field"
+    }
+  },
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 3,
+    "fields": {
+      "label": "Left in row"
+    }
+  },
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 4,
+    "fields": {
+      "label": "Left between rows"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 1,
+    "fields": {
+      "label": "0.6 m x 2.7 m (2 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 2,
+    "fields": {
+      "label": "0.6 m x 3.0 m (2 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 3,
+    "fields": {
+      "label": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 4,
+    "fields": {
+      "label": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 5,
+    "fields": {
+      "label": "0.9 m x 2.7 m (3 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.distancebetweenplants",
+    "pk": 6,
+    "fields": {
+      "label": "0.9 m x 3.0 m (3 ft x 10 ft)"
+    }
   }
 ]
