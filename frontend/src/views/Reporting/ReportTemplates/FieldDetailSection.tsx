@@ -160,27 +160,27 @@ const FERTIGATION_SUMMARY_COLUMNS: GridColDef[] = [
   {
     field: 'name',
     headerName: 'Fertilizer',
-    width: 80,
+    width: 180,
     flex: 1,
   },
   {
     field: 'schedule',
     headerName: 'Schedule',
-    width: 80,
+    width: 90,
     headerAlign: 'center',
     align: 'center',
   },
   {
     field: 'eventsPerSeason',
-    headerName: 'Applications',
-    width: 80,
+    headerName: 'Apps',
+    width: 70,
     headerAlign: 'center',
     align: 'center',
   },
   {
     field: 'startDate',
     headerName: 'Start Date',
-    width: 80,
+    width: 100,
     headerAlign: 'center',
     align: 'center',
     valueGetter: (value) => {
@@ -191,28 +191,27 @@ const FERTIGATION_SUMMARY_COLUMNS: GridColDef[] = [
   },
   {
     field: 'reqN',
-    headerName: 'N',
-    width: 80,
+    headerName: 'N (lb/ac)',
+    width: 90,
     headerAlign: 'center',
     align: 'center',
   },
   {
     field: 'reqP2o5',
-    headerName: 'P₂O₅',
-    width: 80,
+    headerName: 'P₂O₅ (lb/ac)',
+    width: 100,
     headerAlign: 'center',
     align: 'center',
   },
   {
     field: 'reqK2o',
-    headerName: 'K₂O',
-    width: 80,
+    headerName: 'K₂O (lb/ac)',
+    width: 100,
     headerAlign: 'center',
     align: 'center',
   },
 ];
 
-// Enhanced columns for fertigation schedule with additional information
 const FERTIGATION_SCHEDULE_COLUMNS: GridColDef[] = [
   {
     field: 'name',
@@ -294,6 +293,63 @@ const FERTIGATION_SCHEDULE_COLUMNS: GridColDef[] = [
         K<sub>2</sub>O
       </span>
     ),
+  },
+];
+
+const BALANCE_COLUMNS: GridColDef[] = [
+  {
+    field: 'name',
+    headerName: '',
+    width: 190,
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'reqN',
+    headerName: 'N',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'reqP2o5',
+    headerName: 'P₂O₅',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'reqK2o',
+    headerName: 'K₂O',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'remN',
+    headerName: 'N',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'remP2o5',
+    headerName: 'P₂O₅',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'remK2o',
+    headerName: 'K₂O',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
   },
 ];
 
@@ -566,6 +622,7 @@ export default function CompleteReportTemplate({
 
         {Fertigations.length > 0 && (
           <>
+            <SectionTitle>Fertigation</SectionTitle>
             <SubsectionLabel>Fertigation Summary</SubsectionLabel>
             <DataGrid
               sx={{
@@ -643,7 +700,7 @@ export default function CompleteReportTemplate({
         <DataGrid
           sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
           rows={[balanceRow]}
-          columns={CALC_COLUMNS}
+          columns={BALANCE_COLUMNS}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
           disableColumnMenu
