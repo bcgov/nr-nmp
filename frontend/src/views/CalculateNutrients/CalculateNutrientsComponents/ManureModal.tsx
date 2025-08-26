@@ -4,6 +4,7 @@
 import { useContext, useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
 import { Form, NumberField, Select } from '@/components/common';
@@ -23,6 +24,7 @@ import {
 } from '@/types';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
+import { MANURE_IMPORTS } from '@/constants/routes';
 
 type AddManureModalProps = {
   fieldIndex: number;
@@ -32,6 +34,7 @@ type AddManureModalProps = {
   field: NMPFileFieldData;
   setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
+  navigateAway: (navigateTo: string) => void;
 };
 
 const NUTRIENT_COLUMNS: GridColDef[] = [
@@ -81,6 +84,7 @@ export default function ManureModal({
   onCancel,
   field,
   setFields,
+  navigateAway,
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [manureForm, setManureForm] = useState<NMPFileAppliedManure>(
@@ -192,15 +196,11 @@ export default function ManureModal({
       onOpenChange={handleModalClose}
       {...props}
     >
-      <Form
-        onCancel={handleModalClose}
-        onCalculate={handleCalculate}
-        onConfirm={handleSubmit}
-      >
-        <Grid
-          container
-          spacing={2}
-          sx={{ alignItems: 'end' }}
+      {manuresWithNutrients.length > 0 ? (
+        <Form
+          onCancel={handleModalClose}
+          onCalculate={handleCalculate}
+          onConfirm={handleSubmit}
         >
           <Grid size={formGridBreakpoints}>
             <Select
@@ -306,8 +306,39 @@ export default function ManureModal({
               hideFooter
             />
           </Grid>
-        </Grid>
-      </Form>
+        </Form>
+      ) : (
+        <div style={{ color: 'red' }}>
+          <div style={{ padding: '1rem' }}>
+            Warning, no manure or compose sources have been added this farm with assigned nutrient
+            analyses.
+          </div>
+          <div style={{ padding: '1rem' }}>
+            Return to the manure section and add either animals or an imported manure, then assign a
+            nutrient analysis to the manures before adding manure applications to a field.
+          </div>
+          <ButtonGroup
+            alignment="end"
+            orientation="horizontal"
+          >
+            <Button
+              variant="secondary"
+              onPress={handleModalClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              onPress={() => {
+                navigateAway(MANURE_IMPORTS);
+              }}
+            >
+              Return to manure
+            </Button>
+          </ButtonGroup>
+        </div>
+      )}
     </Modal>
   );
 }
