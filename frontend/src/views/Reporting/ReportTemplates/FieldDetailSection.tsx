@@ -17,12 +17,6 @@ import {
 } from '../reporting.styles';
 import { NutrientMessage } from '@/views/CalculateNutrients/nutrientMessages';
 
-const HIDE_COLUMN_CSS = {
-  '& .MuiDataGrid-row--borderBottom': {
-    height: '0px !important',
-  },
-};
-
 // Helper function to expand fertigations into individual applications with dates
 const expandFertigationsToApplications = (fertigations: any[]) =>
   fertigations.reduce((accRows, fertigation, index) => {
@@ -698,7 +692,7 @@ export default function CompleteReportTemplate({
 
         <SubsectionLabel>Balance</SubsectionLabel>
         <DataGrid
-          sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
+          sx={{ ...customTableStyle }}
           rows={[balanceRow]}
           columns={BALANCE_COLUMNS}
           getRowId={() => crypto.randomUUID()}
