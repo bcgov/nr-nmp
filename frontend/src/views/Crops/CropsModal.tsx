@@ -256,7 +256,6 @@ function CropsModal({
       .callEndpoint('api/wherewillpruningsgo/')
       .then((response: { status?: any; data: any }) => {
         if (response.status === 200) {
-          console.log(response.data);
           setWhereWillPruningsGo(response.data);
         }
       });
