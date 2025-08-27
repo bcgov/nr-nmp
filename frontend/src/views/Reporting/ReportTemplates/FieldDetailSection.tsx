@@ -607,7 +607,7 @@ export default function CompleteReportTemplate({
           </>
         )}
 
-        {Fertigations.length > 0 && (
+        {expandedFertigations.length > 0 && (
           <>
             <SectionTitle>Fertigation</SectionTitle>
             <SubsectionLabel>Fertigation Summary</SubsectionLabel>
@@ -637,11 +637,7 @@ export default function CompleteReportTemplate({
               disableColumnSorting
               disableColumnSelector
             />
-          </>
-        )}
 
-        {expandedFertigations.length > 0 && (
-          <>
             <SubsectionLabel>Fertigation Application Schedule</SubsectionLabel>
             <DataGrid
               sx={{ ...customTableStyle }}
