@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import type { CalculateNutrientsColumn, NMPFileFieldData, SoilTestMethodsData } from '@/types';
+import { Schedule } from '@/types';
 import { booleanChecker } from '@/utils/utils';
 import { APICacheContext } from '@/context/APICacheContext';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
@@ -33,13 +34,13 @@ const expandFertigationsToApplications = (fertigations: any[]) =>
     // Determine day jump based on schedule
     let dayJump;
     switch (fertigation.schedule) {
-      case 4: // Daily
+      case Schedule.Daily:
         dayJump = 1;
         break;
-      case 3: // Weekly
+      case Schedule.Weekly:
         dayJump = 7;
         break;
-      case 2: // Biweekly
+      case Schedule.Biweekly:
         dayJump = 14;
         break;
       default: // Monthly
@@ -384,24 +385,16 @@ export default function CompleteReportTemplate({
   // Create fertigation summary for display
   const fertigationSummary = useMemo(() => {
     const getScheduleName = (scheduleId: number) => {
-      switch (scheduleId) {
-        case 4:
-          return 'Daily';
-        case 3:
-          return 'Weekly';
-        case 2:
-          return 'Biweekly';
-        case 1:
-          return 'Monthly';
-        default:
-          return 'Monthly';
+      if (scheduleId in Schedule) {
+        return Schedule[scheduleId as Schedule];
       }
+      return Schedule[Schedule.Monthly];
     };
 
     return Fertigations.map((fertigation) => ({
-      id: fertigation.name,
+      id: crypto.randomUUID(),
       name: fertigation.name,
-      schedule: getScheduleName(fertigation.schedule || 1),
+      schedule: getScheduleName(fertigation.schedule || Schedule.Monthly),
       eventsPerSeason: fertigation.eventsPerSeason,
       startDate: fertigation.startDate || 'Not specified',
       reqN: fertigation.reqN,
