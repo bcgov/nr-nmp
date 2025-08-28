@@ -56,7 +56,7 @@ export async function getNMineralizations(nMineralizationID: number, region: num
     const location = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${region}`);
     const locationId = location.data[0].locationid;
     const response = await axios.get(
-      `${env.VITE_BACKEND_URL}/api/nmineralization/${nMineralizationID}/${locationId}/`,
+      `${env.VITE_BACKEND_URL}/api/nmineralizations/${nMineralizationID}/${locationId}/`,
     );
     if (!response.data || response.data.length === 0) {
       return {

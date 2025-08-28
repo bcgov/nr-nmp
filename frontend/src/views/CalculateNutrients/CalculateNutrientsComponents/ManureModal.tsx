@@ -103,6 +103,11 @@ export default function ManureModal({
   */
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
+  const filteredManureUnits = useMemo(
+    () => manureUnits.filter((u) => u.value.solidliquid === manureForm.solidLiquid),
+    [manureUnits, manureForm.solidLiquid],
+  );
+
   const [manures, setManures] = useState<Manure[]>([]);
   const selectedManure = useMemo(
     () => manures.find((m) => m.id === manureForm.manureId),
@@ -127,10 +132,23 @@ export default function ManureModal({
     }));
   }, [manureForm.solidLiquid]);
 
-  const [availableThisYearTable, setAvailableThisYearTable] =
-    useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
-  const [availableLongTermTable, setAvailableLongTermTable] =
-    useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
+  const availableThisYearTable: CropNutrients = useMemo(
+    () => ({
+      N: manureForm.reqN,
+      P2O5: manureForm.reqP2o5,
+      K2O: manureForm.reqK2o,
+    }),
+    [manureForm],
+  );
+  const availableLongTermTable: CropNutrients = useMemo(
+    () => ({
+      N: manureForm.remN,
+      P2O5: manureForm.remP2o5,
+      K2O: manureForm.remK2o,
+    }),
+    [manureForm],
+  );
+  // TODO: Replace this with a calculation based on the balance row
   const [stillReqTable, setStillReqTable] = useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
 
   // Set the default values for NH4 and organic N //
@@ -198,8 +216,6 @@ export default function ManureModal({
   }, [apiCache]);
 
   const handleModalClose = () => {
-    setAvailableThisYearTable(EMPTY_CROP_NUTRIENTS);
-    setAvailableLongTermTable(EMPTY_CROP_NUTRIENTS);
     setStillReqTable(EMPTY_CROP_NUTRIENTS);
     onCancel();
   };
@@ -236,16 +252,16 @@ export default function ManureModal({
       manureForm.nh4Retention,
       manureForm.nAvailable,
     );
-    setAvailableLongTermTable({
-      N: nutrientInputs.N_LongTerm,
-      P2O5: nutrientInputs.P2O5_LongTerm,
-      K2O: nutrientInputs.K2O_LongTerm,
-    });
-    setAvailableThisYearTable({
-      N: nutrientInputs.N_FirstYear,
-      P2O5: nutrientInputs.P2O5_FirstYear,
-      K2O: nutrientInputs.K2O_FirstYear,
-    });
+    setManureForm((prev) => ({
+      ...prev,
+      reqN: nutrientInputs.N_FirstYear,
+      reqP2o5: nutrientInputs.P2O5_FirstYear,
+      reqK2o: nutrientInputs.K2O_FirstYear,
+      remN: nutrientInputs.N_LongTerm,
+      remP2o5: nutrientInputs.P2O5_LongTerm,
+      remK2o: nutrientInputs.K2O_LongTerm,
+    }));
+    // TODO: Calculate the balance column correctly!
     setStillReqTable({
       N: field.Crops[0].reqN + (field.Crops[1]?.reqN || 0),
       P2O5: field.Crops[0].reqP2o5 + (field.Crops[1]?.reqP2o5 || 0),
@@ -289,6 +305,7 @@ export default function ManureModal({
                   handleChanges({
                     manureId: e as number,
                     manureName: manureWNutrients.manureName,
+                    name: manureWNutrients.manureName,
                     solidLiquid: manureWNutrients.solidLiquid,
                     sourceUuid: manureWNutrients.sourceUuid,
                   });
@@ -319,9 +336,10 @@ export default function ManureModal({
                 label="Units"
                 placeholder="Select a unit"
                 selectedKey={manureForm.applUnitId}
-                items={manureUnits}
+                items={filteredManureUnits}
                 onSelectionChange={(e) => handleChanges({ applUnitId: e as number })}
                 autoselectFirst
+                noSort
               />
             </Grid>
             <Grid size={formGridBreakpoints}>
