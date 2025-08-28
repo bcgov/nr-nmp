@@ -46,6 +46,7 @@ MODEL_MAPPINGS = {
     "_Units": "manures.units",
     "_NitrogenMineralizations": "manures.nitrogenmineralization",
     "_PlantAge": "crops.plantage",
+    "_AmmoniaRetentions": "manures.ammoniaretentions",
 }
 
 

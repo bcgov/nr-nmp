@@ -108,6 +108,7 @@ export default function ManureAndImports() {
         ...data,
         AnnualAmountCubicYardsVolume: annualAmountCubicYardsVolume,
         AnnualAmountCubicMetersVolume: annualAmountCubicMetersVolume,
+        AnnualAmountTonsWeight: annualAmountTonsWeight,
         AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10)} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10)} m³)`,
         AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10)} tons`,
       };

@@ -108,27 +108,28 @@ export interface NMPFileFertigation extends CalculateNutrientsColumn {
   kglNutrientConcentrationK2O?: number;
 }
 
-export interface ManureNutrients extends CropNutrients {
-  manureId: number;
-  solidLiquid: 'Solid' | 'Liquid' | '';
-  Moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number
-  NH4N: number;
-}
-
 export interface NMPFileAppliedManure extends CalculateNutrientsColumn {
   manureId: number;
-  materialType: string;
+  manureName: string;
   applicationId: number;
   applUnitId: number;
   applicationRate: number;
   nh4Retention: number;
   nAvailable: number;
   solidLiquid: 'Solid' | 'Liquid' | '';
+  sourceUuid: string;
 }
 
 export type DryFertilizerSolubilities = {
   id: number;
   fertilizerId: number;
   solubilityUnitId: number;
+  value: number;
+};
+
+export type AmmoniaRetention = {
+  id: number;
+  seasonapplicationid: number;
+  drymatter: number;
   value: number;
 };

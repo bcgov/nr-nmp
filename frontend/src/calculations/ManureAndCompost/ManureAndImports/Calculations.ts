@@ -101,16 +101,35 @@ export async function getNutrientInputs(
 
   try {
     const conversionFactors = await getConversionFactors();
+    if (conversionFactors === null) throw new Error('No conversion factors received.');
+
+    // Uncomment when/if work on fixing the manure calculations continues
+    /*
+    // Calculate decimal factors
+    const phosphorusPentoxideDecimal =
+      (manureWithNutrients.P / 100) * conversionFactors.phosphorousptop2o5conversion;
+    const potassiumOxideDecimal =
+      (manureWithNutrients.K / 100) * conversionFactors.potassiumktok2oconversion;
+
+    // Calculate first year and long term
+    const phosphorusPentoxideFirstYear =
+      phosphorusPentoxideDecimal * conversionFactors.phosphorousavailabilityfirstyear;
+    const phosphorusPentoxideLongTerm =
+      phosphorusPentoxideDecimal * conversionFactors.phosphorousavailabilitylongterm;
+    const potassiumOxideFirstYear =
+      potassiumOxideDecimal * conversionFactors.potassiumavailabilityfirstyear;
+    const potassiumOxideLongTerm =
+      potassiumOxideDecimal * conversionFactors.potassiumavailabilitylongterm;
+    */
 
     // Extract conversion factors with descriptive names
-    const potassiumAvailabilityFirstYear = conversionFactors?.potassiumavailabilityfirstyear ?? 0;
-    const potassiumAvailabilityLongTerm = conversionFactors?.potassiumavailabilitylongterm ?? 0;
-    const potassiumKtoK2OConversion = conversionFactors?.potassiumktok2oconversion ?? 0;
-    const phosphorousAvailabilityFirstYear =
-      conversionFactors?.phosphorousavailabilityfirstyear ?? 0;
-    const phosphorousAvailabilityLongTerm = conversionFactors?.phosphorousavailabilitylongterm ?? 0;
-    const phosphorousPtoP2O5Conversion = conversionFactors?.phosphorousptop2o5conversion ?? 0;
-    const lbPerTonConversion = conversionFactors?.poundpertonconversion ?? 1;
+    const potassiumAvailabilityFirstYear = conversionFactors.potassiumavailabilityfirstyear;
+    const potassiumAvailabilityLongTerm = conversionFactors.potassiumavailabilitylongterm;
+    const potassiumKtoK2OConversion = conversionFactors.potassiumktok2oconversion;
+    const phosphorousAvailabilityFirstYear = conversionFactors.phosphorousavailabilityfirstyear;
+    const phosphorousAvailabilityLongTerm = conversionFactors.phosphorousavailabilitylongterm;
+    const phosphorousPtoP2O5Conversion = conversionFactors.phosphorousptop2o5conversion;
+    const lbPerTonConversion = conversionFactors.poundpertonconversion;
     const tenThousand = 10000;
 
     // Get application rate unit conversion factor
@@ -131,44 +150,40 @@ export async function getNutrientInputs(
     }
 
     // Calculate potassium first year and long term
-    if (manureWithNutrients.K2O !== undefined) {
-      nutrientInputs.K2O_FirstYear = Math.round(
-        adjustedApplicationRate *
-          manureWithNutrients.K2O *
-          lbPerTonConversion *
-          potassiumKtoK2OConversion *
-          potassiumAvailabilityFirstYear *
-          unitConversionFactor,
-      );
-      nutrientInputs.K2O_LongTerm = Math.round(
-        adjustedApplicationRate *
-          manureWithNutrients.K2O *
-          lbPerTonConversion *
-          potassiumKtoK2OConversion *
-          potassiumAvailabilityLongTerm *
-          unitConversionFactor,
-      );
-    }
+    nutrientInputs.K2O_FirstYear = Math.round(
+      adjustedApplicationRate *
+        manureWithNutrients.K *
+        lbPerTonConversion *
+        potassiumKtoK2OConversion *
+        potassiumAvailabilityFirstYear *
+        unitConversionFactor,
+    );
+    nutrientInputs.K2O_LongTerm = Math.round(
+      adjustedApplicationRate *
+        manureWithNutrients.K *
+        lbPerTonConversion *
+        potassiumKtoK2OConversion *
+        potassiumAvailabilityLongTerm *
+        unitConversionFactor,
+    );
 
     // Calculate phosphorous first year and long term
-    if (manureWithNutrients.P2O5 !== undefined) {
-      nutrientInputs.P2O5_FirstYear = Math.round(
-        adjustedApplicationRate *
-          manureWithNutrients.P2O5 *
-          lbPerTonConversion *
-          phosphorousPtoP2O5Conversion *
-          phosphorousAvailabilityFirstYear *
-          unitConversionFactor,
-      );
-      nutrientInputs.P2O5_LongTerm = Math.round(
-        adjustedApplicationRate *
-          manureWithNutrients.P2O5 *
-          lbPerTonConversion *
-          phosphorousPtoP2O5Conversion *
-          phosphorousAvailabilityLongTerm *
-          unitConversionFactor,
-      );
-    }
+    nutrientInputs.P2O5_FirstYear = Math.round(
+      adjustedApplicationRate *
+        manureWithNutrients.P *
+        lbPerTonConversion *
+        phosphorousPtoP2O5Conversion *
+        phosphorousAvailabilityFirstYear *
+        unitConversionFactor,
+    );
+    nutrientInputs.P2O5_LongTerm = Math.round(
+      adjustedApplicationRate *
+        manureWithNutrients.P *
+        lbPerTonConversion *
+        phosphorousPtoP2O5Conversion *
+        phosphorousAvailabilityLongTerm *
+        unitConversionFactor,
+    );
 
     // Calculate nitrogen first year and long term availability
     // Calculate organic nitrogen content (total nitrogen minus ammonium nitrogen)

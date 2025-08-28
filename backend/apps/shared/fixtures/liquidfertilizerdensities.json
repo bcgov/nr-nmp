@@ -358,5 +358,77 @@
       "densityunitid": 4,
       "value": 10.86
     }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 41,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 1,
+      "value": 4.656056
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 42,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 2,
+      "value": 1.23
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 43,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 3,
+      "value": 12.327567
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 44,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 4,
+      "value": 10.264847
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 45,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 1,
+      "value": 4.731765
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 46,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 2,
+      "value": 1.25
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 47,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 3,
+      "value": 12.528016
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 48,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 4,
+      "value": 10.431755
+    }
   }
 ]

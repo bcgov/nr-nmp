@@ -80,3 +80,13 @@ class NitrogenMineralization(models.Model):
     class Meta:
         managed = True
         db_table = 'nitrogen_mineralization'
+
+class AmmoniaRetentions(models.Model):
+    id = models.IntegerField(primary_key=True)
+    seasonapplicationid = models.IntegerField()
+    drymatter = models.IntegerField()
+    value = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'ammonia_retentions'

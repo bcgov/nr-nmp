@@ -8350,6 +8350,78 @@
     }
   },
   {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 41,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 1,
+      "value": 4.656056
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 42,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 2,
+      "value": 1.23
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 43,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 3,
+      "value": 12.327567
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 44,
+    "fields": {
+      "fertilizerid": 38,
+      "densityunitid": 4,
+      "value": 10.264847
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 45,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 1,
+      "value": 4.731765
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 46,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 2,
+      "value": 1.25
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 47,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 3,
+      "value": 12.528016
+    }
+  },
+  {
+    "model": "fertilizers.liquidfertilizerdensities",
+    "pk": 48,
+    "fields": {
+      "fertilizerid": 39,
+      "densityunitid": 4,
+      "value": 10.431755
+    }
+  },
+  {
     "model": "manures.solidmaterialsconversionfactors",
     "pk": 1,
     "fields": {
@@ -8896,19 +8968,6 @@
       "nitrogen": 12.0,
       "phosphorous": 5.0,
       "potassium": 8.0,
-      "fertigation": true,
-      "sortnum": 200.0
-    }
-  },
-  {
-    "model": "fertilizers.fertilizers",
-    "pk": 40,
-    "fields": {
-      "name": "0-10-10",
-      "dryliquid": "liquid",
-      "nitrogen": 0.0,
-      "phosphorous": 10.0,
-      "potassium": 10.0,
       "fertigation": true,
       "sortnum": 200.0
     }
@@ -14677,6 +14736,870 @@
     "pk": 9,
     "fields": {
       "label": "9 or more"
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 1,
+    "fields": {
+      "seasonapplicationid": 1,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 2,
+    "fields": {
+      "seasonapplicationid": 1,
+      "drymatter": 2.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 3,
+    "fields": {
+      "seasonapplicationid": 1,
+      "drymatter": 3.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 4,
+    "fields": {
+      "seasonapplicationid": 1,
+      "drymatter": 4.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 5,
+    "fields": {
+      "seasonapplicationid": 1,
+      "drymatter": 5.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 6,
+    "fields": {
+      "seasonapplicationid": 1,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 7,
+    "fields": {
+      "seasonapplicationid": 2,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 8,
+    "fields": {
+      "seasonapplicationid": 2,
+      "drymatter": 2.0,
+      "value": 0.7
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 9,
+    "fields": {
+      "seasonapplicationid": 2,
+      "drymatter": 3.0,
+      "value": 0.6
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 10,
+    "fields": {
+      "seasonapplicationid": 2,
+      "drymatter": 4.0,
+      "value": 0.5
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 11,
+    "fields": {
+      "seasonapplicationid": 2,
+      "drymatter": 5.0,
+      "value": 0.7
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 12,
+    "fields": {
+      "seasonapplicationid": 2,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 13,
+    "fields": {
+      "seasonapplicationid": 3,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 14,
+    "fields": {
+      "seasonapplicationid": 3,
+      "drymatter": 2.0,
+      "value": 0.6
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 15,
+    "fields": {
+      "seasonapplicationid": 3,
+      "drymatter": 3.0,
+      "value": 0.45
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 16,
+    "fields": {
+      "seasonapplicationid": 3,
+      "drymatter": 4.0,
+      "value": 0.3
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 17,
+    "fields": {
+      "seasonapplicationid": 3,
+      "drymatter": 5.0,
+      "value": 0.5
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 18,
+    "fields": {
+      "seasonapplicationid": 3,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 19,
+    "fields": {
+      "seasonapplicationid": 4,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 20,
+    "fields": {
+      "seasonapplicationid": 4,
+      "drymatter": 2.0,
+      "value": 0.55
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 21,
+    "fields": {
+      "seasonapplicationid": 4,
+      "drymatter": 3.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 22,
+    "fields": {
+      "seasonapplicationid": 4,
+      "drymatter": 4.0,
+      "value": 0.28
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 23,
+    "fields": {
+      "seasonapplicationid": 4,
+      "drymatter": 5.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 24,
+    "fields": {
+      "seasonapplicationid": 4,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 25,
+    "fields": {
+      "seasonapplicationid": 7,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 26,
+    "fields": {
+      "seasonapplicationid": 7,
+      "drymatter": 2.0,
+      "value": 0.55
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 27,
+    "fields": {
+      "seasonapplicationid": 7,
+      "drymatter": 3.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 28,
+    "fields": {
+      "seasonapplicationid": 7,
+      "drymatter": 4.0,
+      "value": 0.28
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 29,
+    "fields": {
+      "seasonapplicationid": 7,
+      "drymatter": 5.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 30,
+    "fields": {
+      "seasonapplicationid": 7,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 31,
+    "fields": {
+      "seasonapplicationid": 8,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 32,
+    "fields": {
+      "seasonapplicationid": 8,
+      "drymatter": 2.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 33,
+    "fields": {
+      "seasonapplicationid": 8,
+      "drymatter": 3.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 34,
+    "fields": {
+      "seasonapplicationid": 8,
+      "drymatter": 4.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 35,
+    "fields": {
+      "seasonapplicationid": 8,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 36,
+    "fields": {
+      "seasonapplicationid": 8,
+      "drymatter": 6.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 37,
+    "fields": {
+      "seasonapplicationid": 9,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 38,
+    "fields": {
+      "seasonapplicationid": 9,
+      "drymatter": 2.0,
+      "value": 0.85
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 39,
+    "fields": {
+      "seasonapplicationid": 9,
+      "drymatter": 3.0,
+      "value": 0.7
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 40,
+    "fields": {
+      "seasonapplicationid": 9,
+      "drymatter": 4.0,
+      "value": 0.7
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 41,
+    "fields": {
+      "seasonapplicationid": 9,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 42,
+    "fields": {
+      "seasonapplicationid": 9,
+      "drymatter": 6.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 43,
+    "fields": {
+      "seasonapplicationid": 10,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 44,
+    "fields": {
+      "seasonapplicationid": 10,
+      "drymatter": 2.0,
+      "value": 0.75
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 45,
+    "fields": {
+      "seasonapplicationid": 10,
+      "drymatter": 3.0,
+      "value": 0.65
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 46,
+    "fields": {
+      "seasonapplicationid": 10,
+      "drymatter": 4.0,
+      "value": 0.6
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 47,
+    "fields": {
+      "seasonapplicationid": 10,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 48,
+    "fields": {
+      "seasonapplicationid": 10,
+      "drymatter": 6.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 49,
+    "fields": {
+      "seasonapplicationid": 11,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 50,
+    "fields": {
+      "seasonapplicationid": 11,
+      "drymatter": 2.0,
+      "value": 0.38
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 51,
+    "fields": {
+      "seasonapplicationid": 11,
+      "drymatter": 3.0,
+      "value": 0.3
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 52,
+    "fields": {
+      "seasonapplicationid": 11,
+      "drymatter": 4.0,
+      "value": 0.2
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 53,
+    "fields": {
+      "seasonapplicationid": 11,
+      "drymatter": 5.0,
+      "value": 0.34
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 54,
+    "fields": {
+      "seasonapplicationid": 11,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 55,
+    "fields": {
+      "seasonapplicationid": 12,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 56,
+    "fields": {
+      "seasonapplicationid": 12,
+      "drymatter": 2.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 57,
+    "fields": {
+      "seasonapplicationid": 12,
+      "drymatter": 3.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 58,
+    "fields": {
+      "seasonapplicationid": 12,
+      "drymatter": 4.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 59,
+    "fields": {
+      "seasonapplicationid": 12,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 60,
+    "fields": {
+      "seasonapplicationid": 12,
+      "drymatter": 6.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 61,
+    "fields": {
+      "seasonapplicationid": 13,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 62,
+    "fields": {
+      "seasonapplicationid": 13,
+      "drymatter": 2.0,
+      "value": 0.65
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 63,
+    "fields": {
+      "seasonapplicationid": 13,
+      "drymatter": 3.0,
+      "value": 0.56
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 64,
+    "fields": {
+      "seasonapplicationid": 13,
+      "drymatter": 4.0,
+      "value": 0.49
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 65,
+    "fields": {
+      "seasonapplicationid": 13,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 66,
+    "fields": {
+      "seasonapplicationid": 13,
+      "drymatter": 6.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 67,
+    "fields": {
+      "seasonapplicationid": 14,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 68,
+    "fields": {
+      "seasonapplicationid": 14,
+      "drymatter": 2.0,
+      "value": 0.6
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 69,
+    "fields": {
+      "seasonapplicationid": 14,
+      "drymatter": 3.0,
+      "value": 0.5
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 70,
+    "fields": {
+      "seasonapplicationid": 14,
+      "drymatter": 4.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 71,
+    "fields": {
+      "seasonapplicationid": 14,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 72,
+    "fields": {
+      "seasonapplicationid": 14,
+      "drymatter": 6.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 73,
+    "fields": {
+      "seasonapplicationid": 15,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 74,
+    "fields": {
+      "seasonapplicationid": 15,
+      "drymatter": 2.0,
+      "value": 0.55
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 75,
+    "fields": {
+      "seasonapplicationid": 15,
+      "drymatter": 3.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 76,
+    "fields": {
+      "seasonapplicationid": 15,
+      "drymatter": 4.0,
+      "value": 0.28
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 77,
+    "fields": {
+      "seasonapplicationid": 15,
+      "drymatter": 5.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 78,
+    "fields": {
+      "seasonapplicationid": 15,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 79,
+    "fields": {
+      "seasonapplicationid": 16,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 80,
+    "fields": {
+      "seasonapplicationid": 16,
+      "drymatter": 2.0,
+      "value": 0.55
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 81,
+    "fields": {
+      "seasonapplicationid": 16,
+      "drymatter": 3.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 82,
+    "fields": {
+      "seasonapplicationid": 16,
+      "drymatter": 4.0,
+      "value": 0.28
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 83,
+    "fields": {
+      "seasonapplicationid": 16,
+      "drymatter": 5.0,
+      "value": 0.4
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 84,
+    "fields": {
+      "seasonapplicationid": 16,
+      "drymatter": 6.0,
+      "value": 1.0
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 85,
+    "fields": {
+      "seasonapplicationid": 17,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 86,
+    "fields": {
+      "seasonapplicationid": 17,
+      "drymatter": 2.0,
+      "value": 0.85
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 87,
+    "fields": {
+      "seasonapplicationid": 17,
+      "drymatter": 3.0,
+      "value": 0.7
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 88,
+    "fields": {
+      "seasonapplicationid": 17,
+      "drymatter": 4.0,
+      "value": 0.7
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 89,
+    "fields": {
+      "seasonapplicationid": 17,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 90,
+    "fields": {
+      "seasonapplicationid": 17,
+      "drymatter": 6.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 91,
+    "fields": {
+      "seasonapplicationid": 18,
+      "drymatter": 1.0,
+      "value": 0.95
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 92,
+    "fields": {
+      "seasonapplicationid": 18,
+      "drymatter": 2.0,
+      "value": 0.75
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 93,
+    "fields": {
+      "seasonapplicationid": 18,
+      "drymatter": 3.0,
+      "value": 0.65
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 94,
+    "fields": {
+      "seasonapplicationid": 18,
+      "drymatter": 4.0,
+      "value": 0.6
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 95,
+    "fields": {
+      "seasonapplicationid": 18,
+      "drymatter": 5.0,
+      "value": null
+    }
+  },
+  {
+    "model": "manures.ammoniaretentions",
+    "pk": 96,
+    "fields": {
+      "seasonapplicationid": 18,
+      "drymatter": 6.0,
+      "value": null
     }
   }
 ]

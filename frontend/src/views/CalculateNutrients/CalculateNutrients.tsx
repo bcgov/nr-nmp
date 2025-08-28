@@ -386,7 +386,6 @@ export default function CalculateNutrients() {
           initialModalData={
             openDialog[1] !== undefined ? fieldList[activeField].Manures[openDialog[1]] : undefined
           }
-          manuresWithNutrients={state.nmpFile.years[0].NutrientAnalyses}
           field={fieldList[activeField]}
           rowEditIndex={openDialog[1]}
           setFields={setFieldList}

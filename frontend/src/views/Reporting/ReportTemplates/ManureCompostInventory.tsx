@@ -19,9 +19,9 @@ export default function ManureCompostInventory({
   ImportedManures?: NMPFileImportedManureData[];
   ManureStorageSystems?: NMPFileManureStorageSystem[];
 }) {
-  const getMilkWashAmount = (manureId: string) => {
+  const getMilkWashAmount = (manureSourceUuid: string) => {
     const milkManure = FarmAnimals.find(
-      (animalEle) => animalEle.uuid === manureId,
+      (animalEle) => animalEle.uuid === manureSourceUuid,
     ) as DairyCattleData;
     if (!milkManure) return 0;
     return milkManure.washWater;
@@ -115,7 +115,7 @@ export default function ManureCompostInventory({
             <tr key={manureEle.UniqueMaterialName}>
               <td style={{ paddingLeft: '3rem' }}>{manureEle.UniqueMaterialName}</td>
               <td style={{ textAlign: 'right' }}>{manureEle.AnnualAmount}</td>
-              <td>{manureEle.ManureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
+              <td>{manureEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
             </tr>
           ))}
         </tbody>

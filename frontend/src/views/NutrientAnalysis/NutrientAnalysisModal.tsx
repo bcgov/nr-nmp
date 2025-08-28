@@ -17,6 +17,7 @@ import { Form, Select, Modal, TextField, NumberField } from '@/components/common
 import { APICacheContext } from '@/context/APICacheContext';
 import NMPFileImportedManureData from '@/types/NMPFileImportedManureData';
 import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
+import { getStandardizedAnnualManureAmount } from '@/utils/utils';
 
 type NutrientAnalysisModalProps = {
   initialModalData?: NMPFileNutrientAnalysis;
@@ -29,18 +30,20 @@ type NutrientAnalysisModalProps = {
 };
 
 const EMPTY_NUTRIENT_ANALYSIS: NMPFileNutrientAnalysis = {
-  materialSource: '',
+  sourceUuid: '',
+  sourceName: '',
   Moisture: '',
   N: 0,
   NH4N: 0,
-  P2O5: 0,
-  K2O: 0,
-  manureId: 0,
+  P: 0,
+  K: 0,
   solidLiquid: '',
-  linkedUuid: '',
-  materialType: '',
+  manureId: 0,
+  manureName: '',
   bookLab: '',
   UniqueMaterialName: '',
+  annualAmount: 0,
+  // materialRemaining: 100, // 100%
 };
 
 export default function NutrientAnalysisModal({
@@ -62,14 +65,14 @@ export default function NutrientAnalysisModal({
     if (manureOptions.length === 0 || !formData.solidLiquid) return [];
     return manureOptions.filter((m) => m.value.solidliquid === formData.solidLiquid);
   }, [manureOptions, formData.solidLiquid]);
-  const materialSourceOptions = [
+  const sourceUuidOptions = [
     ...storageSystems
       .filter(
         (ele) =>
           // Don't filter out an id that's currently being edited
-          (initialModalData && ele.uuid === initialModalData.linkedUuid) ||
+          (initialModalData && ele.uuid === initialModalData.sourceUuid) ||
           // Filter out ids that already have a nutrient analysis
-          !currentNutrientAnalyses.some((n) => n.linkedUuid === ele.uuid),
+          !currentNutrientAnalyses.some((n) => n.sourceUuid === ele.uuid),
       )
       .map((storageEle) => ({
         id: storageEle.uuid,
@@ -82,9 +85,9 @@ export default function NutrientAnalysisModal({
         (ele) =>
           !ele.AssignedToStoredSystem &&
           // Don't filter out an id that's currently being edited
-          ((initialModalData && ele.uuid === initialModalData.linkedUuid) ||
+          ((initialModalData && ele.uuid === initialModalData.sourceUuid) ||
             // Filter out ids that already have a nutrient analysis
-            !currentNutrientAnalyses.some((n) => n.linkedUuid === ele.uuid)),
+            !currentNutrientAnalyses.some((n) => n.sourceUuid === ele.uuid)),
       )
       .map((ele: NMPFileImportedManureData | NMPFileGeneratedManureData) => ({
         id: ele.uuid,
@@ -108,17 +111,17 @@ export default function NutrientAnalysisModal({
     setFormData((prev: NMPFileNutrientAnalysis): NMPFileNutrientAnalysis => {
       let next = { ...prev };
       Object.entries(changes).forEach(([name, value]) => {
-        if (name === 'materialSource') {
+        if (name === 'sourceName') {
           next = {
             ...EMPTY_NUTRIENT_ANALYSIS,
             bookLab: '',
             ...changes,
           };
         }
-        if (name === 'materialType') {
+        if (name === 'manureName') {
           const updatedUniqueMaterialName =
             next.UniqueMaterialName === '' ||
-            next.UniqueMaterialName !== `Custom - ${next.materialType}`
+            next.UniqueMaterialName !== `Custom - ${next.manureName}`
               ? `Custom - ${value}`
               : next.UniqueMaterialName;
           const selectedManure = manureOptions.find((manure) => manure.value.name === value)?.value;
@@ -128,17 +131,17 @@ export default function NutrientAnalysisModal({
           next.Moisture = selectedManure.moisture;
           next.N = selectedManure.nitrogen;
           next.NH4N = selectedManure.ammonia;
-          next.P2O5 = selectedManure.phosphorous;
-          next.K2O = selectedManure.potassium;
+          next.P = selectedManure.phosphorous;
+          next.K = selectedManure.potassium;
           next.manureId = selectedManure.id;
-          next.materialType = value ? value.toString() : '';
+          next.manureName = value ? value.toString() : '';
           next.UniqueMaterialName = updatedUniqueMaterialName;
         }
 
         // reset nutrient values when book value is selected
         if (name === 'bookLab' && next.bookLab !== value) {
           const selectedManure = manureOptions.find(
-            (manure) => manure.value.name === next.materialType,
+            (manure) => manure.value.name === next.manureName,
           )?.value;
           if (!selectedManure) {
             throw new Error(`Manure type "${value}" not found.`);
@@ -147,8 +150,8 @@ export default function NutrientAnalysisModal({
           next.Moisture = selectedManure.moisture;
           next.N = selectedManure.nitrogen;
           next.NH4N = selectedManure.ammonia;
-          next.P2O5 = selectedManure.phosphorous;
-          next.K2O = selectedManure.potassium;
+          next.P = selectedManure.phosphorous;
+          next.K = selectedManure.potassium;
         }
       });
 
@@ -175,19 +178,20 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Select
               isRequired
-              items={materialSourceOptions}
+              items={sourceUuidOptions}
               label="Source of Material"
               placeholder="Select Source of Material"
-              selectedKey={formData.linkedUuid}
+              selectedKey={formData.sourceUuid}
               onSelectionChange={(e) => {
-                const selectedSource = materialSourceOptions.find((ele) => ele.id === e);
+                const selectedSource = sourceUuidOptions.find((ele) => ele.id === e);
                 if (!selectedSource) {
                   throw new Error(`Source manure or storage "${e}" not found.`);
                 }
                 handleInputChanges({
-                  materialSource: selectedSource.label,
-                  linkedUuid: e as string,
+                  sourceName: selectedSource.label,
+                  sourceUuid: e as string,
                   solidLiquid: ManureType[selectedSource.value.manureType!] as any, // type shenanigans
+                  annualAmount: getStandardizedAnnualManureAmount(selectedSource.value),
                 });
               }}
             />
@@ -198,11 +202,11 @@ export default function NutrientAnalysisModal({
               items={filteredManureOptions}
               label="Material Type"
               placeholder="Select Material Type"
-              selectedKey={formData.materialType}
+              selectedKey={formData.manureName}
               onSelectionChange={(e) => {
                 const opt = manureOptions.find((r) => r.id === e)!;
                 handleInputChanges({
-                  materialType: e as string,
+                  manureName: e as string,
                   bookLab: 'book',
                   nMineralizationId: opt.value.nmineralizationid,
                 });
@@ -213,7 +217,7 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Checkbox
               isRequired={!formData.bookLab}
-              isDisabled={!(formData.materialSource && formData.materialType)}
+              isDisabled={!(formData.sourceUuid && formData.manureId)}
               value="book"
               isSelected={formData.bookLab === 'book'}
               onChange={(s: boolean) => handleInputChanges({ bookLab: s ? 'book' : '' })}
@@ -224,7 +228,7 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Checkbox
               isRequired={!formData.bookLab}
-              isDisabled={!(formData.materialSource && formData.materialType)}
+              isDisabled={!(formData.sourceUuid && formData.manureId)}
               value="lab"
               isSelected={formData.bookLab === 'lab'}
               onChange={(s: boolean) => handleInputChanges({ bookLab: s ? 'lab' : '' })}
@@ -264,18 +268,9 @@ export default function NutrientAnalysisModal({
             <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
-              label="N" // QUESTION: Is this not a percent too?
+              label="N (%)"
               value={formData.N}
               onChange={(e) => handleInputChanges({ N: e })}
-            />
-          </Grid>
-          <Grid size={{ xs: 4 }}>
-            <NumberField
-              isDisabled={formData.bookLab !== 'lab'}
-              isRequired={formData.bookLab === 'lab'}
-              label="NH4-N (%)"
-              value={formData.NH4N}
-              onChange={(e) => handleInputChanges({ NH4N: e })}
               maxValue={100}
             />
           </Grid>
@@ -283,9 +278,18 @@ export default function NutrientAnalysisModal({
             <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
+              label="NH4-N (ppm)"
+              value={formData.NH4N}
+              onChange={(e) => handleInputChanges({ NH4N: e })}
+            />
+          </Grid>
+          <Grid size={{ xs: 4 }}>
+            <NumberField
+              isDisabled={formData.bookLab !== 'lab'}
+              isRequired={formData.bookLab === 'lab'}
               label="P (%)"
-              value={formData.P2O5}
-              onChange={(e) => handleInputChanges({ P2O5: e })}
+              value={formData.P}
+              onChange={(e) => handleInputChanges({ P: e })}
               maxValue={100}
             />
           </Grid>
@@ -294,8 +298,8 @@ export default function NutrientAnalysisModal({
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
               label="K (%)"
-              value={formData.K2O}
-              onChange={(e) => handleInputChanges({ K2O: e })}
+              value={formData.K}
+              onChange={(e) => handleInputChanges({ K: e })}
               maxValue={100}
             />
           </Grid>

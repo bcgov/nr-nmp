@@ -13,4 +13,6 @@ urlpatterns = [
     path('nmineralization/<int:nMineralization>/<int:location>/',
          ManuresViewset.as_view({'get': 'nMineralization'}),
          name='n_mineralization_detail'),
+    path('ammoniaretentions/',  ManuresViewset.as_view({'get': 'ammoniaRetentions'})),
+    path('ammoniaretentions/<int:seasonApplication>/<int:dryMatter>/',  ManuresViewset.as_view({'get': 'ammoniaRetentions'})),
 ]
