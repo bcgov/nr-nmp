@@ -9,6 +9,7 @@ import {
 } from '@/types';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 import { PLANT_AGES } from '@/constants';
+import { COVER_CROP_ID } from '@/types/Crops';
 
 /**
  * Fetches crop conversion factors from the API
@@ -233,7 +234,6 @@ export function getCropRemovalN(
 ): number {
   validateIds(combinedCropData, crop, cropType);
   let nRemoval: number = 0;
-
   // Special calculation for forage crops with crude protein data
   if (cropType.crudeproteinrequired) {
     if (!combinedCropData.crudeProtein || combinedCropData.crudeProtein === 0) {
@@ -253,6 +253,10 @@ export function getCropRemovalN(
     nRemoval = combinedCropData.yield * crop.cropremovalfactornitrogen;
   }
 
+  if (cropType.id === COVER_CROP_ID && !combinedCropData.coverCropHarvested) {
+    // Override and set amount to zero in this case
+    nRemoval = 0;
+  }
   return Math.round(nRemoval) || 0;
 }
 
@@ -299,10 +303,10 @@ export function getCropRequirementN(
     default:
       break;
   }
+
   // Subtract N credit from previous crop and ensure value isn't negative
   nRequirement -= combinedCropData.nCredit;
   nRequirement = nRequirement < 0 ? 0 : nRequirement;
-
   return Math.round(nRequirement);
 }
 
@@ -371,7 +375,6 @@ export async function getCropRequirementP205(
   const conversionFactors = await getConversionFactors();
   if (conversionFactors === null) throw new Error('Failed to get conversion factors.');
   const region = await getRegion(regionId);
-
   // Use default if soil test data is missing
   let STP = soilTest?.convertedKelownaP || defaultSoilTestData.convertedKelownaP;
   if (!STP) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
@@ -390,6 +393,7 @@ export async function getCropRequirementP205(
   if (phosphorousCropGroupRegionCd == null) {
     return 0;
   }
+
   const sTPRecommended = await getRecommendations(
     stpKelownaRangeId,
     region.soiltestphosphorousregioncd,
