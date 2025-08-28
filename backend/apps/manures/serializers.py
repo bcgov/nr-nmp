@@ -35,6 +35,7 @@ class NMineralizationSerializer(serializers.ModelSerializer):
         model = NitrogenMineralization
         fields = '__all__'
 
+
 class AmmoniaRetentionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AmmoniaRetentions

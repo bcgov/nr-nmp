@@ -62,7 +62,7 @@ class ManuresViewset(viewsets.ViewSet):
             )
         serializer = NMineralizationSerializer(n_mineralizations, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def ammoniaRetentions(self, request, seasonApplication=None, dryMatter=None):
         ammonia_retentions = None

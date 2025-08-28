@@ -81,6 +81,7 @@ class NitrogenMineralization(models.Model):
         managed = True
         db_table = 'nitrogen_mineralization'
 
+
 class AmmoniaRetentions(models.Model):
     id = models.IntegerField(primary_key=True)
     seasonapplicationid = models.IntegerField()
