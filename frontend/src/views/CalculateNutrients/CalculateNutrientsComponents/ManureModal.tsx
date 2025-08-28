@@ -5,6 +5,7 @@ import { useContext, useEffect, useState, Dispatch, SetStateAction, useMemo } fr
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import LoopIcon from '@mui/icons-material/Loop';
+import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
 import { Form, NumberField, Select } from '@/components/common';
@@ -27,6 +28,7 @@ import {
 } from '@/types';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
+import { MANURE_IMPORTS } from '@/constants/routes';
 
 type AddManureModalProps = {
   fieldIndex: number;
@@ -35,6 +37,7 @@ type AddManureModalProps = {
   field: NMPFileFieldData;
   setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
   onCancel: () => void;
+  navigateAway: (navigateTo: string) => void;
 };
 
 const NUTRIENT_COLUMNS: GridColDef[] = [
@@ -74,6 +77,7 @@ export default function ManureModal({
   onCancel,
   field,
   setFields,
+  navigateAway,
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const { state } = useAppState();
@@ -259,145 +263,178 @@ export default function ManureModal({
       onOpenChange={handleModalClose}
       {...props}
     >
-      <Form
-        onCancel={handleModalClose}
-        onCalculate={handleCalculate}
-        onConfirm={handleSubmit}
-      >
-        <Grid
-          container
-          spacing={2}
-          sx={{ alignItems: 'end' }}
+      {manuresWithNutrients.length > 0 ? (
+        <Form
+          onCancel={handleModalClose}
+          onCalculate={handleCalculate}
+          onConfirm={handleSubmit}
         >
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              label="Material Type"
-              placeholder="Select a material type"
-              selectedKey={manureForm.manureId}
-              items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
-                id: ele.manureId,
-                label: ele.manureName,
-              }))}
-              onSelectionChange={(e) => {
-                const manureWNutrients = manuresWithNutrients.find((m) => m.manureId === e)!;
-                handleChanges({
-                  manureId: e as number,
-                  manureName: manureWNutrients.manureName,
-                  solidLiquid: manureWNutrients.solidLiquid,
-                  sourceUuid: manureWNutrients.sourceUuid,
-                });
+          <Grid
+            container
+            spacing={2}
+            sx={{ alignItems: 'end' }}
+          >
+            <Grid size={formGridBreakpoints}>
+              <Select
+                isRequired
+                label="Material Type"
+                placeholder="Select a material type"
+                selectedKey={manureForm.manureId}
+                items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
+                  id: ele.manureId,
+                  label: ele.manureName,
+                }))}
+                onSelectionChange={(e) => {
+                  const manureWNutrients = manuresWithNutrients.find((m) => m.manureId === e)!;
+                  handleChanges({
+                    manureId: e as number,
+                    manureName: manureWNutrients.manureName,
+                    solidLiquid: manureWNutrients.solidLiquid,
+                    sourceUuid: manureWNutrients.sourceUuid,
+                  });
+                }}
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <Select
+                isRequired
+                label="Application Season/Method"
+                placeholder="Select an application method"
+                selectedKey={manureForm.applicationId}
+                items={filteredApplicationMethods}
+                onSelectionChange={(e) => handleChanges({ applicationId: e as number })}
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <NumberField
+                isRequired
+                label="Application Rate"
+                value={manureForm.applicationRate}
+                onChange={(e) => handleChanges({ applicationRate: e })}
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <Select
+                isRequired
+                label="Units"
+                placeholder="Select a unit"
+                selectedKey={manureForm.applUnitId}
+                items={manureUnits}
+                onSelectionChange={(e) => handleChanges({ applUnitId: e as number })}
+                autoselectFirst
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <NumberField
+                label="Ammonium-N Retention (%)"
+                value={manureForm.nh4Retention}
+                onChange={(e) => handleChanges({ nh4Retention: e })}
+                maxValue={100}
+                iconRight={
+                  defaultAmmonia !== undefined && manureForm.nh4Retention !== defaultAmmonia ? (
+                    <button
+                      type="button"
+                      css={{ backgroundColor: '#ffa500' }}
+                      onClick={() => handleChanges({ nh4Retention: defaultAmmonia })}
+                    >
+                      <LoopIcon />
+                    </button>
+                  ) : undefined
+                }
+              />
+            </Grid>
+            <Grid size={formGridBreakpoints}>
+              <NumberField
+                label="Organic N Available (%)"
+                value={manureForm.nAvailable}
+                onChange={(e) => handleChanges({ nAvailable: e })}
+                maxValue={100}
+                iconRight={
+                  defaultOrganicN !== undefined && manureForm.nAvailable !== defaultOrganicN ? (
+                    <button
+                      type="button"
+                      css={{ backgroundColor: '#ffa500' }}
+                      onClick={() => handleChanges({ nAvailable: defaultOrganicN })}
+                    >
+                      <LoopIcon />
+                    </button>
+                  ) : undefined
+                }
+              />
+            </Grid>
+            <Grid size={{ ...formGridBreakpoints, md: 4 }}>
+              <span css={{ fontWeight: 'bold' }}>Available This Year (lb/ac) </span>
+              <DataGrid
+                sx={{ ...customTableStyle }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[availableThisYearTable]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </Grid>
+            <Grid size={{ ...formGridBreakpoints, md: 4 }}>
+              <span css={{ fontWeight: 'bold' }}>Available Long Term (lb/ac) </span>
+              <DataGrid
+                sx={{ ...customTableStyle }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[availableLongTermTable]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </Grid>
+            <Grid size={{ ...formGridBreakpoints, md: 4 }}>
+              <span css={{ fontWeight: 'bold' }}>Still Required This Year (lb/ac) </span>
+              <DataGrid
+                sx={{ ...customTableStyle }}
+                columns={NUTRIENT_COLUMNS}
+                rows={[stillReqTable]}
+                getRowId={() => crypto.randomUUID()}
+                disableRowSelectionOnClick
+                disableColumnMenu
+                hideFooterPagination
+                hideFooter
+              />
+            </Grid>
+          </Grid>
+        </Form>
+      ) : (
+        <div style={{ color: 'red' }}>
+          <div style={{ padding: '1rem' }}>
+            Warning, no manure or compose sources have been added this farm with assigned nutrient
+            analyses.
+          </div>
+          <div style={{ padding: '1rem' }}>
+            Return to the manure section and add either animals or an imported manure, then assign a
+            nutrient analysis to the manures before adding manure applications to a field.
+          </div>
+          <ButtonGroup
+            alignment="end"
+            orientation="horizontal"
+          >
+            <Button
+              variant="secondary"
+              onPress={handleModalClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              onPress={() => {
+                navigateAway(MANURE_IMPORTS);
               }}
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              label="Application Season/Method"
-              placeholder="Select an application method"
-              selectedKey={manureForm.applicationId}
-              items={filteredApplicationMethods}
-              onSelectionChange={(e) => handleChanges({ applicationId: e as number })}
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <NumberField
-              isRequired
-              label="Application Rate"
-              value={manureForm.applicationRate}
-              onChange={(e) => handleChanges({ applicationRate: e })}
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <Select
-              isRequired
-              label="Units"
-              placeholder="Select a unit"
-              selectedKey={manureForm.applUnitId}
-              items={manureUnits}
-              onSelectionChange={(e) => handleChanges({ applUnitId: e as number })}
-              autoselectFirst
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <NumberField
-              label="Ammonium-N Retention (%)"
-              value={manureForm.nh4Retention}
-              onChange={(e) => handleChanges({ nh4Retention: e })}
-              maxValue={100}
-              iconRight={
-                defaultAmmonia !== undefined && manureForm.nh4Retention !== defaultAmmonia ? (
-                  <button
-                    type="button"
-                    css={{ backgroundColor: '#ffa500' }}
-                    onClick={() => handleChanges({ nh4Retention: defaultAmmonia })}
-                  >
-                    <LoopIcon />
-                  </button>
-                ) : undefined
-              }
-            />
-          </Grid>
-          <Grid size={formGridBreakpoints}>
-            <NumberField
-              label="Organic N Available (%)"
-              value={manureForm.nAvailable}
-              onChange={(e) => handleChanges({ nAvailable: e })}
-              maxValue={100}
-              iconRight={
-                defaultOrganicN !== undefined && manureForm.nAvailable !== defaultOrganicN ? (
-                  <button
-                    type="button"
-                    css={{ backgroundColor: '#ffa500' }}
-                    onClick={() => handleChanges({ nAvailable: defaultOrganicN })}
-                  >
-                    <LoopIcon />
-                  </button>
-                ) : undefined
-              }
-            />
-          </Grid>
-          <Grid size={{ ...formGridBreakpoints, md: 4 }}>
-            <span css={{ fontWeight: 'bold' }}>Available This Year (lb/ac) </span>
-            <DataGrid
-              sx={{ ...customTableStyle }}
-              columns={NUTRIENT_COLUMNS}
-              rows={[availableThisYearTable]}
-              getRowId={() => crypto.randomUUID()}
-              disableRowSelectionOnClick
-              disableColumnMenu
-              hideFooterPagination
-              hideFooter
-            />
-          </Grid>
-          <Grid size={{ ...formGridBreakpoints, md: 4 }}>
-            <span css={{ fontWeight: 'bold' }}>Available Long Term (lb/ac) </span>
-            <DataGrid
-              sx={{ ...customTableStyle }}
-              columns={NUTRIENT_COLUMNS}
-              rows={[availableLongTermTable]}
-              getRowId={() => crypto.randomUUID()}
-              disableRowSelectionOnClick
-              disableColumnMenu
-              hideFooterPagination
-              hideFooter
-            />
-          </Grid>
-          <Grid size={{ ...formGridBreakpoints, md: 4 }}>
-            <span css={{ fontWeight: 'bold' }}>Still Required This Year (lb/ac) </span>
-            <DataGrid
-              sx={{ ...customTableStyle }}
-              columns={NUTRIENT_COLUMNS}
-              rows={[stillReqTable]}
-              getRowId={() => crypto.randomUUID()}
-              disableRowSelectionOnClick
-              disableColumnMenu
-              hideFooterPagination
-              hideFooter
-            />
-          </Grid>
-        </Grid>
-      </Form>
+            >
+              Return to manure
+            </Button>
+          </ButtonGroup>
+        </div>
+      )}
     </Modal>
   );
 }

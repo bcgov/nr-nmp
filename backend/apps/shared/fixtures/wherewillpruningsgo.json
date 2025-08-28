@@ -1,0 +1,30 @@
+[
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 1,
+    "fields": {
+      "label": "N/A"
+    }
+  },
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 2,
+    "fields": {
+      "label": "Removed from field"
+    }
+  },
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 3,
+    "fields": {
+      "label": "Left in row"
+    }
+  },
+  {
+    "model": "crops.wherewillpruningsgo",
+    "pk": 4,
+    "fields": {
+      "label": "Left between rows"
+    }
+  }
+]
