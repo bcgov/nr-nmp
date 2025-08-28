@@ -103,25 +103,6 @@ export async function getNutrientInputs(
     const conversionFactors = await getConversionFactors();
     if (conversionFactors === null) throw new Error('No conversion factors received.');
 
-    // Uncomment when/if work on fixing the manure calculations continues
-    /*
-    // Calculate decimal factors
-    const phosphorusPentoxideDecimal =
-      (manureWithNutrients.P / 100) * conversionFactors.phosphorousptop2o5conversion;
-    const potassiumOxideDecimal =
-      (manureWithNutrients.K / 100) * conversionFactors.potassiumktok2oconversion;
-
-    // Calculate first year and long term
-    const phosphorusPentoxideFirstYear =
-      phosphorusPentoxideDecimal * conversionFactors.phosphorousavailabilityfirstyear;
-    const phosphorusPentoxideLongTerm =
-      phosphorusPentoxideDecimal * conversionFactors.phosphorousavailabilitylongterm;
-    const potassiumOxideFirstYear =
-      potassiumOxideDecimal * conversionFactors.potassiumavailabilityfirstyear;
-    const potassiumOxideLongTerm =
-      potassiumOxideDecimal * conversionFactors.potassiumavailabilitylongterm;
-    */
-
     // Extract conversion factors with descriptive names
     const potassiumAvailabilityFirstYear = conversionFactors.potassiumavailabilityfirstyear;
     const potassiumAvailabilityLongTerm = conversionFactors.potassiumavailabilitylongterm;

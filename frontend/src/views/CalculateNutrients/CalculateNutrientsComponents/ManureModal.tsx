@@ -91,16 +91,6 @@ export default function ManureModal({
     () => manuresWithNutrients.find((m) => m.sourceUuid === manureForm.sourceUuid),
     [manuresWithNutrients, manureForm.sourceUuid],
   );
-  /*
-  const [materialRemaining, setMaterialRemaining] = useState<number | undefined>(
-    selectedNutrientAnalysis ? selectedNutrientAnalysis.materialRemaining : undefined,
-  );
-  useEffect(() => {
-    if (selectedNutrientAnalysis) {
-      setMaterialRemaining(selectedNutrientAnalysis.materialRemaining);
-    }
-  }, [selectedNutrientAnalysis]);
-  */
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
   const filteredManureUnits = useMemo(

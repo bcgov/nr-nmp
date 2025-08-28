@@ -191,6 +191,7 @@ export default function NutrientAnalysisModal({
                   sourceName: selectedSource.label,
                   sourceUuid: e as string,
                   solidLiquid: ManureType[selectedSource.value.manureType!] as any, // type shenanigans
+                  // TODO: Add this calculation to reducer updates
                   annualAmount: getStandardizedAnnualManureAmount(selectedSource.value),
                 });
               }}
