@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import type { CalculateNutrientsColumn, NMPFileFieldData, SoilTestMethodsData } from '@/types';
+import { Schedule } from '@/types';
 import { booleanChecker } from '@/utils/utils';
 import { APICacheContext } from '@/context/APICacheContext';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
@@ -17,11 +18,63 @@ import {
 } from '../reporting.styles';
 import { NutrientMessage } from '@/views/CalculateNutrients/nutrientMessages';
 
-const HIDE_COLUMN_CSS = {
-  '& .MuiDataGrid-row--borderBottom': {
-    height: '0px !important',
-  },
-};
+// Helper function to expand fertigations into individual applications with dates
+const expandFertigationsToApplications = (fertigations: any[]) =>
+  fertigations.reduce((accRows, fertigation, index) => {
+    const nutrientColumns: CalculateNutrientsColumn = {
+      name: fertigation.name,
+      reqN: fertigation.reqN,
+      reqP2o5: fertigation.reqP2o5,
+      reqK2o: fertigation.reqK2o,
+      remN: fertigation.remN,
+      remP2o5: fertigation.remP2o5,
+      remK2o: fertigation.remK2o,
+    };
+
+    // Determine day jump based on schedule
+    let dayJump;
+    switch (fertigation.schedule) {
+      case Schedule.Daily:
+        dayJump = 1;
+        break;
+      case Schedule.Weekly:
+        dayJump = 7;
+        break;
+      case Schedule.Biweekly:
+        dayJump = 14;
+        break;
+      default: // Monthly
+        dayJump = undefined;
+    }
+
+    const date = new Date(fertigation.startDate || new Date());
+    for (let i = 0; i < fertigation.eventsPerSeason; i += 1) {
+      const splitDateStr = date.toDateString().split(' ');
+      // Format is like "01 Jan"
+      const formattedDate = `${splitDateStr[2]} ${splitDateStr[1]}`;
+
+      accRows.push({
+        id: `${index}-${i}`,
+        name: `${fertigation.name} (${formattedDate})`,
+        date: formattedDate,
+        application: i + 1,
+        totalApplications: fertigation.eventsPerSeason,
+        reqN: nutrientColumns.reqN,
+        reqP2o5: nutrientColumns.reqP2o5,
+        reqK2o: nutrientColumns.reqK2o,
+        remN: nutrientColumns.remN,
+        remP2o5: nutrientColumns.remP2o5,
+        remK2o: nutrientColumns.remK2o,
+      });
+
+      if (dayJump) {
+        date.setDate(date.getDate() + dayJump);
+      } else {
+        date.setMonth(date.getMonth() + 1);
+      }
+    }
+    return accRows;
+  }, [] as any[]);
 
 const CROP_COLUMNS: GridColDef[] = [
   { field: 'name', headerName: 'Crop Name', width: 200 },
@@ -97,6 +150,204 @@ const CALC_COLUMNS: GridColDef[] = [
   },
 ];
 
+// Columns for fertigation summary
+const FERTIGATION_SUMMARY_COLUMNS: GridColDef[] = [
+  {
+    field: 'name',
+    headerName: 'Fertilizer',
+    width: 180,
+    flex: 1,
+  },
+  {
+    field: 'schedule',
+    headerName: 'Schedule',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'eventsPerSeason',
+    headerName: 'Apps',
+    width: 70,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'startDate',
+    headerName: 'Start Date',
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
+    valueGetter: (value) => {
+      if (!value || value === 'Not specified') return 'Not specified';
+      const date = new Date(value);
+      return date.toLocaleDateString();
+    },
+  },
+  {
+    field: 'reqN',
+    headerName: 'N (lb/ac)',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'reqP2o5',
+    headerName: 'P₂O₅ (lb/ac)',
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'reqK2o',
+    headerName: 'K₂O (lb/ac)',
+    width: 100,
+    headerAlign: 'center',
+    align: 'center',
+  },
+];
+
+const FERTIGATION_SCHEDULE_COLUMNS: GridColDef[] = [
+  {
+    field: 'name',
+    headerName: 'Fertilizer',
+    width: 200,
+    renderCell: (params) => {
+      const { row } = params;
+      return (
+        <div style={{ lineHeight: 1.2 }}>
+          <div style={{ fontWeight: 'bold' }}>{row.name.split(' (')[0]}</div>
+          <div style={{ fontSize: '0.8em', color: '#666' }}>
+            Application {row.application} of {row.totalApplications}
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    field: 'date',
+    headerName: 'Date',
+    width: 80,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'reqN',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderHeader: () => <span>N</span>,
+  },
+  {
+    field: 'reqP2o5',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderHeader: () => (
+      <span>
+        P<sub>2</sub>O<sub>5</sub>
+      </span>
+    ),
+  },
+  {
+    field: 'reqK2o',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderHeader: () => (
+      <span>
+        K<sub>2</sub>O
+      </span>
+    ),
+  },
+  {
+    field: 'remN',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderHeader: () => <span>N</span>,
+  },
+  {
+    field: 'remP2o5',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderHeader: () => (
+      <span>
+        P<sub>2</sub>O<sub>5</sub>
+      </span>
+    ),
+  },
+  {
+    field: 'remK2o',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderHeader: () => (
+      <span>
+        K<sub>2</sub>O
+      </span>
+    ),
+  },
+];
+
+const BALANCE_COLUMNS: GridColDef[] = [
+  {
+    field: 'name',
+    headerName: '',
+    width: 190,
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'reqN',
+    headerName: 'N',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'reqP2o5',
+    headerName: 'P₂O₅',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'reqK2o',
+    headerName: 'K₂O',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'remN',
+    headerName: 'N',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'remP2o5',
+    headerName: 'P₂O₅',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+  {
+    field: 'remK2o',
+    headerName: 'K₂O',
+    width: 90,
+    headerAlign: 'center',
+    align: 'center',
+    renderCell: (params) => <span style={{ fontWeight: 'bold' }}>{params.value}</span>,
+  },
+];
+
 export default function CompleteReportTemplate({
   field,
   year,
@@ -109,6 +360,7 @@ export default function CompleteReportTemplate({
     Comment,
     Crops,
     Fertilizers,
+    Fertigations,
     FieldName,
     OtherNutrients,
     PreviousYearManureApplicationFrequency,
@@ -124,8 +376,38 @@ export default function CompleteReportTemplate({
       crop.hasLeafTest && (crop.leafTissueP !== undefined || crop.leafTissueK !== undefined),
   );
 
+  // Expand fertigations into individual applications
+  const expandedFertigations = useMemo(
+    () => expandFertigationsToApplications(Fertigations),
+    [Fertigations],
+  );
+
+  // Create fertigation summary for display
+  const fertigationSummary = useMemo(() => {
+    const getScheduleName = (scheduleId: number) => {
+      if (scheduleId in Schedule) {
+        return Schedule[scheduleId as Schedule];
+      }
+      return Schedule[Schedule.Monthly];
+    };
+
+    return Fertigations.map((fertigation) => ({
+      id: crypto.randomUUID(),
+      name: fertigation.name,
+      schedule: getScheduleName(fertigation.schedule || Schedule.Monthly),
+      eventsPerSeason: fertigation.eventsPerSeason,
+      startDate: fertigation.startDate || 'Not specified',
+      reqN: fertigation.reqN,
+      reqP2o5: fertigation.reqP2o5,
+      reqK2o: fertigation.reqK2o,
+      remN: fertigation.remN,
+      remP2o5: fertigation.remP2o5,
+      remK2o: fertigation.remK2o,
+    }));
+  }, [Fertigations]);
+
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
-    const allRows = [...Crops, ...Fertilizers, ...OtherNutrients];
+    const allRows = [...Crops, ...Fertilizers, ...expandedFertigations, ...OtherNutrients];
     return {
       name: 'Balance',
       reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
@@ -135,7 +417,7 @@ export default function CompleteReportTemplate({
       remP2o5: allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
       remK2o: allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
     };
-  }, [Crops, Fertilizers, OtherNutrients]);
+  }, [Crops, Fertilizers, expandedFertigations, OtherNutrients]);
 
   const getMessage = useCallback((balanceType: string, balanceValue: number) => {
     const message = findBalanceMessage(balanceType, balanceValue);
@@ -325,6 +607,55 @@ export default function CompleteReportTemplate({
           </>
         )}
 
+        {expandedFertigations.length > 0 && (
+          <>
+            <SectionTitle>Fertigation</SectionTitle>
+            <SubsectionLabel>Fertigation Summary</SubsectionLabel>
+            <DataGrid
+              sx={{
+                ...customTableStyle,
+                width: '100%',
+                '& .MuiDataGrid-main': {
+                  overflow: 'visible',
+                },
+                '& .MuiDataGrid-virtualScroller': {
+                  overflow: 'visible',
+                },
+                '& .MuiDataGrid-columnHeaders': {
+                  overflow: 'visible',
+                },
+              }}
+              rows={fertigationSummary}
+              columns={FERTIGATION_SUMMARY_COLUMNS}
+              getRowId={(row) => row.id}
+              disableRowSelectionOnClick
+              disableColumnMenu
+              hideFooterPagination
+              hideFooter
+              getRowHeight={() => 'auto'}
+              autoHeight
+              disableColumnSorting
+              disableColumnSelector
+            />
+
+            <SubsectionLabel>Fertigation Application Schedule</SubsectionLabel>
+            <DataGrid
+              sx={{ ...customTableStyle }}
+              rows={expandedFertigations}
+              columns={FERTIGATION_SCHEDULE_COLUMNS}
+              getRowId={(row) => row.id}
+              disableRowSelectionOnClick
+              disableColumnMenu
+              hideFooterPagination
+              hideFooter
+              getRowHeight={() => 'auto'}
+              disableAutosize
+              disableColumnSorting
+              disableColumnSelector
+            />
+          </>
+        )}
+
         {OtherNutrients.length > 0 && (
           <>
             <SubsectionLabel>Nutrient Sources</SubsectionLabel>
@@ -335,7 +666,9 @@ export default function CompleteReportTemplate({
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
-              columnHeaderHeight={Crops.length || Fertilizers.length ? 0 : 28}
+              columnHeaderHeight={
+                Crops.length || Fertilizers.length || expandedFertigations.length ? 0 : 28
+              }
               hideFooterPagination
               hideFooter
               getRowHeight={() => 'auto'}
@@ -348,9 +681,9 @@ export default function CompleteReportTemplate({
 
         <SubsectionLabel>Balance</SubsectionLabel>
         <DataGrid
-          sx={{ ...customTableStyle, ...HIDE_COLUMN_CSS }}
+          sx={{ ...customTableStyle }}
           rows={[balanceRow]}
-          columns={CALC_COLUMNS}
+          columns={BALANCE_COLUMNS}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
           disableColumnMenu

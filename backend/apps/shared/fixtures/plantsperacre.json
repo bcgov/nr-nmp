@@ -1,50 +1,44 @@
 [
-    {
-        "model": "crops.plantsperacre",
-        "pk": 1,
-        "fields": {
-            "id": 2498,
-            "label": "2498"
-        }
-    },
-    {
-        "model": "crops.plantsperacre",
-        "pk": 2,
-        "fields": {
-            "id": 2248,
-            "label": "2248"
-        }
-    },
-    {
-        "model": "crops.plantsperacre",
-        "pk": 3,
-        "fields": {
-            "id": 1999,
-            "label": "1999"
-        }
-    },
-    {
-        "model": "crops.plantsperacre",
-        "pk": 4,
-        "fields": {
-            "id": 1799,
-            "label": "1799"
-        }
-    },
-    {
-        "model": "crops.plantsperacre",
-        "pk": 5,
-        "fields": {
-            "id": 1665,
-            "label": "1665"
-        }
-    },
-    {
-        "model": "crops.plantsperacre",
-        "pk": 6,
-        "fields": {
-            "id": 1499,
-            "label": "1499"
-        }
+  {
+    "model": "crops.plantsperacre",
+    "pk": 2498,
+    "fields": {
+      "label": 2498.0
     }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 2248,
+    "fields": {
+      "label": 2248.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1999,
+    "fields": {
+      "label": 1999.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1799,
+    "fields": {
+      "label": 1799.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1665,
+    "fields": {
+      "label": 1665.0
+    }
+  },
+  {
+    "model": "crops.plantsperacre",
+    "pk": 1499,
+    "fields": {
+      "label": 1499.0
+    }
+  }
 ]

@@ -46,6 +46,9 @@ MODEL_MAPPINGS = {
     "_Units": "manures.units",
     "_NitrogenMineralizations": "manures.nitrogenmineralization",
     "_PlantAge": "crops.plantage",
+    "_PlantsPerAcre": "crops.plantsperacre",
+    "_WhereWillPruningsGo": "crops.wherewillpruningsgo",
+    "_DistanceBetweenPlants": "crops.distancebetweenplants",
 }
 
 
