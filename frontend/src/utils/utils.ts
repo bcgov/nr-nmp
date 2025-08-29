@@ -1,4 +1,11 @@
-import { DAIRY_COW_ID, MILKING_COW_ID } from '@/types';
+import {
+  DAIRY_COW_ID,
+  ManureType,
+  MILKING_COW_ID,
+  NMPFileGeneratedManureData,
+  NMPFileImportedManureData,
+  NMPFileManureStorageSystem,
+} from '@/types';
 
 export const booleanChecker = (value: any): boolean => {
   if (!value) {
@@ -52,3 +59,32 @@ export const mathSymbolConverter = (input: string) => {
   }
   return newStr;
 };
+
+/**
+ * Calculates the annual amount of manure produced from a given source.
+ * @param manureSource The source of a manure, before nutrient analysis
+ * @returns The annual amount of manure produced, in tons for solid/dry manure and US gallons for liquid manure
+ */
+export function getStandardizedAnnualManureAmount(
+  manureSource: NMPFileGeneratedManureData | NMPFileImportedManureData | NMPFileManureStorageSystem,
+) {
+  if (!manureSource.manureType) {
+    throw new Error('getStandardizedAnnualManureAmount called without manureType');
+  }
+
+  let total = 0;
+  const amountKey =
+    manureSource.manureType === ManureType.Liquid
+      ? 'AnnualAmountUSGallonsVolume'
+      : 'AnnualAmountTonsWeight';
+  if ('manuresInSystem' in manureSource) {
+    // This is a storage system
+    manureSource.manuresInSystem.forEach((manure) => {
+      total += manure.data[amountKey]!;
+    });
+  } else {
+    // This is a single manure
+    total = manureSource[amountKey]!;
+  }
+  return total;
+}

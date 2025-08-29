@@ -70,6 +70,7 @@ export default function StorageSystemDetailsEdit({
         next = {
           ...DEFAULT_LIQUID_MANURE_SYSTEM,
           name: prev.name,
+          uuid: prev.uuid,
         };
         if (prev.manureType === ManureType.Solid) {
           next.manureStorages = [

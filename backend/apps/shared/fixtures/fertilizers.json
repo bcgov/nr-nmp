@@ -508,19 +508,6 @@
   },
   {
     "model": "fertilizers.fertilizers",
-    "pk": 40,
-    "fields": {
-      "name": "0-10-10",
-      "dryliquid": "liquid",
-      "nitrogen": 0.0,
-      "phosphorous": 10.0,
-      "potassium": 10.0,
-      "fertigation": true,
-      "sortnum": 200.0
-    }
-  },
-  {
-    "model": "fertilizers.fertilizers",
     "pk": 41,
     "fields": {
       "name": "16-16-16",

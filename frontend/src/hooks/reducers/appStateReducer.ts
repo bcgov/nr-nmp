@@ -135,7 +135,7 @@ function updateNutrientAnalyses(
     ...generatedManures.filter((m) => !m.IsMaterialStored).map((m) => m.uuid),
     ...importedManures.filter((m) => !m.IsMaterialStored).map((m) => m.uuid),
   ];
-  return nutrients.filter((n) => allUuids.some((uuid) => n.linkedUuid === uuid));
+  return nutrients.filter((n) => allUuids.some((uuid) => n.sourceUuid === uuid));
 }
 
 function saveAnimals(newFileYear: NMPFileYear, newAnimals: AnimalData[]) {

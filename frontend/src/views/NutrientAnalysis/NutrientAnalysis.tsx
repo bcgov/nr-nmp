@@ -55,12 +55,12 @@ export default function NutrientAnalysis() {
 
   const handleEdit = (uuid: string) => {
     setEditId(uuid);
-    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.linkedUuid === uuid));
+    setAnalysisForm(nutrientAnalysisData.find((ele) => ele.sourceUuid === uuid));
     setIsDialogOpen(true);
   };
 
   const handleDelete = (uuid: string) => {
-    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.linkedUuid !== uuid));
+    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.sourceUuid !== uuid));
   };
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -73,7 +73,7 @@ export default function NutrientAnalysis() {
       // if editing an entry then updates that entry
       if (editId !== null) {
         return prevState.map((item: NMPFileNutrientAnalysis) =>
-          item.linkedUuid === editId ? { ...data } : item,
+          item.sourceUuid === editId ? { ...data } : item,
         );
       }
       // else add this new entry
@@ -113,7 +113,7 @@ export default function NutrientAnalysis() {
     () => [
       {
         headerName: 'Source',
-        field: 'materialSource',
+        field: 'sourceName',
         width: 200,
         minWidth: 100,
         maxWidth: 300,
@@ -137,7 +137,7 @@ export default function NutrientAnalysis() {
         sortable: false,
       },
       {
-        headerName: 'NH4-N (%)',
+        headerName: 'NH4-N (ppm)',
         field: 'NH4N',
         width: 100,
         minWidth: 100,
@@ -168,13 +168,13 @@ export default function NutrientAnalysis() {
           <>
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleEdit(row.row.linkedUuid)}
+              onClick={() => handleEdit(row.row.sourceUuid)}
               icon={faEdit}
               aria-label="Edit"
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDelete(row.row.linkedUuid)}
+              onClick={() => handleDelete(row.row.sourceUuid)}
               icon={faTrash}
               aria-label="Delete"
             />

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .models import (
     Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors,
-    Units, NitrogenMineralization
+    Units, NitrogenMineralization, AmmoniaRetentions
 )
 
 
@@ -33,4 +33,10 @@ class UnitsSerializer(serializers.ModelSerializer):
 class NMineralizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = NitrogenMineralization
+        fields = '__all__'
+
+
+class AmmoniaRetentionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AmmoniaRetentions
         fields = '__all__'

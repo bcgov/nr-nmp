@@ -4,8 +4,8 @@ import { NMPFileNutrientAnalysis } from '@/types';
 import { mathSymbolConverter } from '@/utils/utils';
 
 const TABLE_COLUMNS: GridColDef[] = [
-  { field: 'materialSource', headerName: 'Source of Material', width: 150 },
-  { field: 'materialType', headerName: 'Material Type', width: 150 },
+  { field: 'sourceName', headerName: 'Source of Material', width: 150 },
+  { field: 'manureName', headerName: 'Material Type', width: 150 },
   {
     field: 'Moisture',
     headerName: 'Moisture (%)',
@@ -13,25 +13,30 @@ const TABLE_COLUMNS: GridColDef[] = [
   },
   {
     field: 'N',
-    renderHeader: () => (
-      <span style={{ fontWeight: 'bold' }}>
-        NH<sub>4</sub>N (ppm)
-      </span>
-    ),
-    width: 80,
+    headerName: 'Total N (%)',
     valueGetter: (_value, row) => row.N,
   },
   {
     field: 'NH4N',
-    headerName: 'P (%)',
-    width: 75,
+    renderHeader: () => (
+      <span style={{ fontWeight: 'bold' }}>
+        NH<sub>4</sub>-N (ppm)
+      </span>
+    ),
+    width: 80,
     valueGetter: (_value, row) => row.NH4N,
   },
   {
-    field: 'P2O5',
+    field: 'P',
+    headerName: 'P (%)',
+    width: 75,
+    valueGetter: (_value, row) => row.P,
+  },
+  {
+    field: 'K',
     headerName: 'K (%)',
     width: 75,
-    valueGetter: (_value, row) => row.P2O5,
+    valueGetter: (_value, row) => row.K,
   },
 ];
 

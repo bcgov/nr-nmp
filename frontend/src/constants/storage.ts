@@ -44,7 +44,7 @@ export const DEFAULT_SLOPED_WALL_STORAGE: SlopedWallStorage = {
   slopeOfWall: 0,
 };
 
-export const DEFAULT_LIQUID_MANURE_SYSTEM: LiquidManureStorageSystem = {
+export const DEFAULT_LIQUID_MANURE_SYSTEM: Omit<LiquidManureStorageSystem, 'uuid'> = {
   name: '',
   manureType: ManureType.Liquid,
   manuresInSystem: [],
@@ -55,7 +55,6 @@ export const DEFAULT_LIQUID_MANURE_SYSTEM: LiquidManureStorageSystem = {
   separatedLiquidsUSGallons: 0,
   separatedSolidsTons: 0,
   manureStorages: [DEFAULT_LIQUID_MANURE_STORAGE],
-  uuid: '',
 };
 
 export const DEFAULT_SOLID_MANURE_SYSTEM: Omit<SolidManureStorageSystem, 'uuid'> = {

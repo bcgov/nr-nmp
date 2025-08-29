@@ -63,7 +63,7 @@ export default function ManureCompostUse({
     );
 
     const nutrientSource = NutrientAnalysisData.find(
-      (nurtrientEle) => nurtrientEle.linkedUuid === systemEle.uuid,
+      (nurtrientEle) => nurtrientEle.sourceUuid === systemEle.uuid,
     );
 
     return {
@@ -81,7 +81,7 @@ export default function ManureCompostUse({
     ...ImportedManures.filter((ele) => !ele.AssignedToStoredSystem),
   ].map((unassignedEle) => {
     const nutrientSource = NutrientAnalysisData.find(
-      (nurtrientEle) => nurtrientEle.linkedUuid === unassignedEle.uuid,
+      (nurtrientEle) => nurtrientEle.sourceUuid === unassignedEle.uuid,
     );
     return {
       title: unassignedEle.ManagedManureName,

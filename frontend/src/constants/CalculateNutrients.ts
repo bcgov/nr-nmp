@@ -1,7 +1,7 @@
 import {
   CropNutrients,
   Fertilizer,
-  DryFertilizerSolubility,
+  DryFertilizerSolubilities,
   Schedule,
   InjectionUnit,
   SelectOption,
@@ -30,7 +30,7 @@ export const EMPTY_CUSTOM_FERTILIZER: Fertilizer = {
 
 // Taken from https://github.com/bcgov/agri-nmp/blob/ce60d005a1990fe441ee347a9bfac700dd092bd3/app/Agri.Data/SeedData/FertigationData.json#L232
 // Could get converted into a table, but, given that this seems to just be conversion factors, I wouldn't do it unless we're asked
-export const DRY_FERTILIZER_SOLUBILITIES: DryFertilizerSolubility[] = [
+export const DRY_FERTILIZER_SOLUBILITIES: DryFertilizerSolubilities[] = [
   {
     id: 1,
     fertilizerId: 1,
@@ -150,11 +150,12 @@ export const DEFAULT_NMPFILE_APPLIED_MANURE: NMPFileAppliedManure = {
   remP2o5: 0,
   remK2o: 0,
   manureId: 0,
-  materialType: '',
+  manureName: '',
   applicationId: 0,
   applUnitId: 0,
   applicationRate: 0,
   nh4Retention: 0,
   nAvailable: 0,
   solidLiquid: '',
+  sourceUuid: '',
 };

@@ -18,8 +18,7 @@ import Region from './Region';
 import {
   CalculateNutrientsColumn,
   CropNutrients,
-  DryFertilizerSolubility,
-  ManureNutrients,
+  DryFertilizerSolubilities,
   Fertilizer,
   FertilizerType,
   FertilizerUnit,
@@ -29,6 +28,7 @@ import {
   NMPFileFertigation,
   NMPFileFertilizer,
   NMPFileAppliedManure,
+  AmmoniaRetention,
 } from './CalculateNutrients';
 import NMPFileYear from './NMPFileYear';
 import {
@@ -68,7 +68,7 @@ import {
   SlopedWallStorage,
   Shape,
 } from './NMPFileManureStorageSystem';
-import { Manure, Units } from './ManureAPI';
+import { Manure, Units, NitrogenMineralization } from './ManureAPI';
 
 export {
   BEEF_COW_ID,
@@ -110,9 +110,9 @@ export type {
   NMPFileCropData,
   Manure,
   Units,
+  NitrogenMineralization,
   CalculateNutrientsColumn,
   CropNutrients,
-  ManureNutrients,
   WashWaterUnit,
   BeefCattleData,
   DairyCattleData,
@@ -136,7 +136,8 @@ export type {
   CircularStorage,
   SlopedWallStorage,
   NMPFileNutrientAnalysis,
-  DryFertilizerSolubility,
+  DryFertilizerSolubilities,
+  AmmoniaRetention,
   NMPFileFertigation,
   NMPFileFertilizer,
   NMPFileAppliedManure,
