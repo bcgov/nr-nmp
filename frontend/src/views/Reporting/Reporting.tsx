@@ -1,5 +1,6 @@
 import { useRef, useMemo } from 'react';
 import { jsPDF } from 'jspdf';
+import { autoTable } from 'jspdf-autotable';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
@@ -12,11 +13,18 @@ import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 import useAppState from '@/hooks/useAppState';
 import { DAIRY_COW_ID, ManureInSystem } from '@/types';
 
+// https://stackoverflow.com/questions/65942761/jspdf-add-text-after-another-dynamic-text
+function addText(doc: jsPDF, text: string, start: number, nextY: number) {
+  doc.text(text, start, nextY, { maxWidth: 180 });
+  return Math.ceil(doc.getTextDimensions(doc.splitTextToSize(text, 180)).h) + 2 + nextY;
+}
+
 export default function FieldList() {
   const reportRef = useRef(null);
   const recordRef = useRef(null);
 
   const { state } = useAppState();
+
   const navigate = useNavigate();
 
   const unassignedManures = useMemo(() => {
@@ -62,54 +70,110 @@ export default function FieldList() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
+
   const makeFullReportPdf = async () => {
     // eslint-disable-next-line new-cap
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'px',
-      format: 'a4',
-      putOnlyUsedFonts: true,
-      floatPrecision: 16,
-      hotfixes: ['px_scaling'],
-    });
-    if (reportRef.current) {
-      doc.html(reportRef.current, {
-        callback(output) {
-          const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-          const farmName = state.nmpFile?.farmDetails?.FarmName;
-          output.save(`${prependDate}-${farmName}-Full-Report.pdf`);
-        },
-        margin: [24, 24, 24, 24],
-        width: 1024,
-        windowWidth: 1024,
-        autoPaging: 'text',
-      });
-    }
-  };
+    const doc = new jsPDF();
+    const field = state.nmpFile.years[0].Fields![0];
+    // Field Summary
+    autoTable(doc, {
+      head: [['Crop', 'Yield', 'Previous crop ploughed down (N credit)']],
+      body: field.Crops.map((crop) => [
+        `${crop.name}`,
+        `${crop.yield} ${crop.yieldHarvestUnit ? crop.yieldHarvestUnit : 'ton/ac'}`,
+        `${crop.nCredit === 0 ? 'none (no N credit)' : crop.nCredit}`,
+      ]),
+      theme: 'grid',
+      styles: { lineColor: 'black', lineWidth: 0.5, textColor: 'black' },
+      headStyles: { fillColor: [164, 205, 215], lineWidth: 0.5 },
 
-  const makeRecordPdf = async () => {
-    // eslint-disable-next-line new-cap
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'px',
-      format: 'a4',
-      putOnlyUsedFonts: true,
-      floatPrecision: 16,
-      hotfixes: ['px_scaling'],
+      // Header
+      willDrawPage(data) {
+        doc.setFontSize(14);
+        // NOTE: Start is 15
+        const start = Math.ceil(data.settings.margin.left);
+        let nextY = Math.ceil(data.settings.margin.left);
+        nextY = addText(doc, `Farm Name: ${state.nmpFile.farmDetails.FarmName}`, start, nextY);
+        nextY = addText(doc, `Planning Year: ${state.nmpFile.farmDetails.Year}`, start, nextY);
+        const fieldSummaryY = nextY + 2;
+        nextY = addText(doc, 'Field Summary:', start, fieldSummaryY);
+        doc.setFont(doc.getFont().fontName, 'bold');
+        doc.text(`${field.FieldName}`, start + 40, fieldSummaryY);
+        doc.setFontSize(10);
+        addText(doc, `Area: ${field.Area} ac`, start + 2, nextY + 4);
+        doc.setFont(doc.getFont().fontName, 'normal');
+      },
+      margin: { top: 50 },
     });
-    if (recordRef.current) {
-      doc.html(recordRef.current, {
-        callback(output) {
-          const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-          const farmName = state.nmpFile?.farmDetails?.FarmName;
-          output.save(`${prependDate}-${farmName}-Record-Keeping.pdf`);
-        },
-        margin: [24, 24, 24, 24],
-        width: 1024,
-        windowWidth: 1024,
-        autoPaging: 'text',
-      });
+    const soilTest = state.nmpFile.years[0].Fields![0].SoilTest;
+    let splitDateStr: string[] | undefined;
+    if (soilTest?.sampleDate) {
+      splitDateStr = new Date(soilTest.sampleDate).toDateString().split(' ');
     }
+
+    // Uncomment to show on separate pages
+    // doc.addPage();
+
+    autoTable(doc, {
+      head: [
+        [
+          {
+            content: `Soil Test Results: ${splitDateStr ? `${splitDateStr[1]} ${splitDateStr[3]}` : ''}`,
+            styles: { lineWidth: { top: 0.5, left: 0.5, bottom: 0.5, right: 0 } },
+            colSpan: 1,
+          },
+          {
+            content: `Soil test P & K Method: ${soilTest?.soilTestId || ''}`,
+            styles: { lineWidth: { top: 0.5, left: 0, bottom: 0.5, right: 0.5 } },
+            colSpan: 3,
+          },
+        ],
+      ],
+      body: soilTest
+        ? [
+            [
+              `Nitrate-N: ${soilTest.valNO3H} ppm}`,
+              `Phosphorus: ${soilTest.valP} ppm`,
+              `Potassium: ${soilTest.valK} ppm`,
+              `pH: ${soilTest.valPH}`,
+            ],
+          ]
+        : undefined,
+      foot: [
+        [
+          {
+            content: `Field Comments: ${state.nmpFile.years[0].Fields![0].Comment || ''}`,
+            styles: { fillColor: [255, 255, 255] },
+            colSpan: 4,
+          },
+        ],
+      ],
+      theme: 'grid',
+      styles: { lineColor: 'black', lineWidth: 0.5, textColor: 'black' },
+      headStyles: { fillColor: [164, 205, 215] },
+
+      // Copied from above to show repeated header on pages
+      /*
+      // Header
+      willDrawPage(data) {
+        doc.setFontSize(14);
+        // NOTE: Start is 15
+        const start = Math.ceil(data.settings.margin.left);
+        let nextY = Math.ceil(data.settings.margin.left);
+        nextY = addText(doc, `Farm Name: ${state.nmpFile.farmDetails.FarmName}`, start, nextY);
+        nextY = addText(doc, `Planning Year: ${state.nmpFile.farmDetails.Year}`, start, nextY);
+        const fieldSummaryY = nextY + 2;
+        nextY = addText(doc, 'Field Summary:', start, fieldSummaryY);
+        doc.setFont(doc.getFont().fontName, 'bold');
+        doc.text(`${field.FieldName}`, start + 40, fieldSummaryY);
+        doc.setFontSize(10);
+        addText(doc, `Area: ${field.Area} ac`, start + 2, nextY + 4);
+        doc.setFont(doc.getFont().fontName, 'normal');
+      },
+      margin: { top: 50 },
+      */
+    });
+    doc.save('table.pdf');
   };
 
   const handlePreviousPage = () => {
@@ -158,7 +222,7 @@ export default function FieldList() {
               <Button onPress={() => makeFullReportPdf()}>
                 <div style={{ width: '100%', textAlign: 'center' }}>Complete report</div>
               </Button>
-              <Button onPress={() => makeRecordPdf()}>Record keeping sheets</Button>
+              <Button onPress={() => {}}>Record keeping sheets</Button>
             </ButtonGroup>
           </div>
         </Grid>
