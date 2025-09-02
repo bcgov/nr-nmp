@@ -91,14 +91,13 @@ export async function getCropSoilTestRegions(
  */
 export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
   try {
-    // console.log('ini', STP, endpoint)
     const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
-    // console.log('ranges', ranges.data)
-
+    // Kelowna ranges have a 1 integer gap between.
+    // Just the right soil test may fail to fall into a range.
+    const roundedSTP = Math.round(STP);
     const response = ranges.data.find(
-      (range: any) => range.rangelow <= STP && range.rangehigh >= STP,
+      (range: any) => range.rangelow <= roundedSTP && range.rangehigh >= roundedSTP,
     );
-    // console.log('response', response)
 
     return response;
   } catch (error) {
