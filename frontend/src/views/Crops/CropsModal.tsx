@@ -654,8 +654,12 @@ function CropsModal({
                     />
                   </Grid>
                   {formData.hasLeafTest && (
-                    <>
-                      <Grid size={formGridBreakpoints}>
+                    <Grid
+                      container
+                      spacing={1}
+                      size={12}
+                    >
+                      <Grid size={6}>
                         <NumberField
                           isRequired={formData.hasLeafTest}
                           label="Leaf Tissue P (%)"
@@ -664,7 +668,7 @@ function CropsModal({
                           maxValue={100}
                         />
                       </Grid>
-                      <Grid size={formGridBreakpoints}>
+                      <Grid size={6}>
                         <NumberField
                           isRequired={formData.hasLeafTest}
                           label="Leaf Tissue K (%)"
@@ -673,7 +677,7 @@ function CropsModal({
                           maxValue={100}
                         />
                       </Grid>
-                    </>
+                    </Grid>
                   )}
                 </>
               )}
