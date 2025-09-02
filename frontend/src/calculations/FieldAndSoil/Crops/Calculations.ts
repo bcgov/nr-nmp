@@ -9,6 +9,7 @@ import {
 } from '@/types';
 import defaultSoilTestData from '@/constants/DefaultSoilTestData';
 import { PLANT_AGES } from '@/constants';
+import { COVER_CROP_ID } from '@/types/Crops';
 
 /**
  * Fetches crop conversion factors from the API
@@ -90,10 +91,15 @@ export async function getCropSoilTestRegions(
  */
 export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
   try {
+    // console.log('ini', STP, endpoint)
     const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
+    // console.log('ranges', ranges.data)
+
     const response = ranges.data.find(
       (range: any) => range.rangelow <= STP && range.rangehigh >= STP,
     );
+    // console.log('response', response)
+
     return response;
   } catch (error) {
     console.error(error);
@@ -253,6 +259,10 @@ export function getCropRemovalN(
     nRemoval = combinedCropData.yield * crop.cropremovalfactornitrogen;
   }
 
+  if (cropType?.id === COVER_CROP_ID && !combinedCropData.coverCropHarvested) {
+    // Override and set amount to zero in this case
+    nRemoval = 0;
+  }
   return Math.round(nRemoval) || 0;
 }
 
@@ -322,7 +332,6 @@ export async function getCropRequirementK2O(
   const conversionFactors = await getConversionFactors();
   if (conversionFactors === null) throw new Error('Failed to get conversion factors.');
   const region = await getRegion(regionId);
-
   // Use default if soil test data is missing
   let STK = soilTest?.convertedKelownaK || defaultSoilTestData.convertedKelownaK;
   if (!STK) STK = conversionFactors.defaultsoiltestkelownapotassium;
@@ -336,7 +345,6 @@ export async function getCropRequirementK2O(
   const potassiumCropGroupRegionCd = cropSTKRegionCd[0].potassiumcropgroupregioncode;
 
   const sTKKelownaRange = await getKelownaRangeByPpm(STK, 'soiltestpotassiumkelonwaranges');
-
   const stkKelownaRangeId = sTKKelownaRange.id;
   if (potassiumCropGroupRegionCd == null) {
     return 0;

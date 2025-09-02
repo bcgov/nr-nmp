@@ -60,18 +60,22 @@ export default function SoilTestsModal({
           soilTestMethods.find((method) => method.id === soilTestId)!.value.converttokelownak
         : formData.valK!;
 
-    setFormData((prev) => ({
-      ...prev,
-      convertedKelownaP,
-      convertedKelownaK,
-    }));
+    setFormData((prevFormData) => {
+      const newFormData = {
+        ...prevFormData,
+        convertedKelownaP,
+        convertedKelownaK,
+      };
 
-    setFields((prev) => {
-      const newList = [...prev];
-      if (currentFieldIndex !== null)
-        newList[currentFieldIndex].SoilTest = { ...formData, soilTestId };
-      return newList;
+      setFields((prevFields) => {
+        const newList = [...prevFields];
+        if (currentFieldIndex !== null)
+          newList[currentFieldIndex].SoilTest = { ...newFormData, soilTestId };
+        return newList;
+      });
+      return newFormData;
     });
+
     handleDialogClose();
   };
 
