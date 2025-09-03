@@ -5,13 +5,13 @@ from django.shortcuts import get_object_or_404
 
 from .models import (
     Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors,
-    Units, NitrogenMineralization, AmmoniaRetentions
+    Units, NitrogenMineralization, AmmoniaRetentions, PreviousYearManureApplications
 )
 from .serializers import (
     ManuresSerializer, SolidMaterialsConversionFactorsSerializer,
     LiquidMaterialsConversionFactorsSerializer,
     UnitsSerializer, NMineralizationSerializer,
-    AmmoniaRetentionSerializer
+    AmmoniaRetentionSerializer, PreviousYearManureApplicationsSerializer
 )
 
 
@@ -73,4 +73,10 @@ class ManuresViewset(viewsets.ViewSet):
                 seasonapplicationid=seasonApplication, drymatter=dryMatter
             )
         serializer = AmmoniaRetentionSerializer(ammonia_retentions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def previousYearManureApplications(self, request, pk=None):
+        applications = PreviousYearManureApplications.objects.all()
+        serializer = PreviousYearManureApplicationsSerializer(applications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

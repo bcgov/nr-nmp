@@ -16,4 +16,5 @@ urlpatterns = [
     path('ammoniaretentions/', ManuresViewset.as_view({'get': 'ammoniaRetentions'})),
     path('ammoniaretentions/<int:seasonApplication>/<int:dryMatter>/',
          ManuresViewset.as_view({'get': 'ammoniaRetentions'})),
+    path('previousyearmanureapplications/', ManuresViewset.as_view({'get': 'previousYearManureApplications'})),
 ]

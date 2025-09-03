@@ -91,3 +91,13 @@ class AmmoniaRetentions(models.Model):
     class Meta:
         managed = True
         db_table = 'ammonia_retentions'
+
+class PreviousYearManureApplications(models.Model):
+    id = models.IntegerField(primary_key=True)
+    fieldmanureapplicationhistory = models.IntegerField()
+    defaultnitrogencredit = models.CharField(max_length=100)
+    previousyearmanureaplicationfrequency = models.IntegerField()
+
+    class Meta:
+        managed = True
+        db_table = 'previous_year_manure_applications'
