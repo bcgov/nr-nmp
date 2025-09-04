@@ -11,6 +11,7 @@ import {
   Animal,
   ManureType,
   DairyCattleBreed,
+  AnimalSubtype,
 } from '@/types';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import MilkingFields from './MilkingFields';
@@ -25,15 +26,6 @@ type DairyCattleProps = {
   onCancel: () => void;
 };
 
-interface DairyCattleSubtype {
-  id: number;
-  name: string;
-  liquidpergalperanimalperday: number;
-  solidperpoundperanimalperday: number;
-  washwater: number;
-  milkproduction: number;
-}
-
 export default function DairyCattle({
   formData,
   handleInputChanges,
@@ -41,7 +33,7 @@ export default function DairyCattle({
   ...props
 }: DairyCattleProps) {
   const apiCache = useContext(APICacheContext);
-  const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
+  const [subtypes, setSubtypes] = useState<AnimalSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
@@ -124,21 +116,13 @@ export default function DairyCattle({
   useEffect(() => {
     apiCache.callEndpoint(`api/animal_subtypes/${DAIRY_COW_ID}/`).then((response) => {
       if (response.status === 200) {
-        const { data } = response;
-        // The data in the response has more properties, but we want to trim it down
-        const subtypez: DairyCattleSubtype[] = (data as DairyCattleSubtype[]).map((row) => ({
-          id: row.id,
-          name: row.name,
-          solidperpoundperanimalperday: row.solidperpoundperanimalperday,
-          liquidpergalperanimalperday: row.liquidpergalperanimalperday,
-          washwater: row.washwater,
-          milkproduction: row.milkproduction,
-        }));
-        setSubtypes(subtypez);
-        const subtypeOptionz: { id: string; label: string }[] = subtypez.map((row) => ({
-          id: row.id.toString(),
-          label: row.name,
-        }));
+        setSubtypes(response.data);
+        const subtypeOptionz: { id: string; label: string }[] = response.data.map(
+          (row: AnimalSubtype) => ({
+            id: row.id.toString(),
+            label: row.name,
+          }),
+        );
         setSubtypeOptions(subtypeOptionz);
       }
     });

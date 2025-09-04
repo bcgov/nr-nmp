@@ -3,17 +3,18 @@ import { Checkbox } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { NMPFileAnimal, ManureType, SelectOption, NMPFileOtherAnimal, Animal } from '@/types';
+import {
+  NMPFileAnimal,
+  ManureType,
+  SelectOption,
+  NMPFileOtherAnimal,
+  Animal,
+  AnimalSubtype,
+} from '@/types';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import { MANURE_TYPE_OPTIONS } from '@/constants';
 import AnimalFormWrapper from './AnimalFormWrapper';
 import { NumberField, Select } from '@/components/common';
-
-type Subtype = {
-  name: string;
-  liquidpergalperanimalperday: number;
-  solidperpoundperanimalperday: number;
-};
 
 type OtherAnimalsProps = {
   formData: NMPFileOtherAnimal;
@@ -31,7 +32,7 @@ export default function OtherAnimals({
 }: OtherAnimalsProps) {
   const apiCache = useContext(APICacheContext);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
-  const [subtypes, setSubtypes] = useState<SelectOption<Subtype>[]>([]);
+  const [subtypes, setSubtypes] = useState<SelectOption<AnimalSubtype>[]>([]);
 
   const onSubmit = () => {
     // Calculate manure
@@ -79,11 +80,7 @@ export default function OtherAnimals({
         const mappedSubtypes = data.map((row: any) => ({
           id: String(row.id),
           label: row.name,
-          value: {
-            name: row.name,
-            solidperpoundperanimalperday: row.solidperpoundperanimalperday,
-            liquidpergalperanimalperday: row.liquidpergalperanimalperday,
-          },
+          value: row,
         }));
         setSubtypes(mappedSubtypes);
         // if animal not swine and only has one subtype option set subtype automatically
