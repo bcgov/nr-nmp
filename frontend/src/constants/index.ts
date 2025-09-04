@@ -1,9 +1,6 @@
 import DEFAULT_NMPFILE_YEAR from './DefaultNMPFileYear';
-import DefaultLiquidManureConversionFactors from './DefaultLiquidManureConversionFactors';
-import DefaultManureFormData from './DefaultManureFormData';
 import DEFAULT_NMPFILE from './DefaultNMPFile';
 import DEFAULT_NMPFILE_CROPS from './DefaultNMPFileCropsData';
-import DefaultSolidManureConversionFactors from './DefaultSolidManureConversionFactors';
 import {
   DRY_CUSTOM_ID,
   LIQUID_CUSTOM_ID,
@@ -17,11 +14,22 @@ import {
   TANK_VOLUME_UNITS,
 } from './CalculateNutrients';
 import MANURE_APPLICATION_FREQ from './ManureApplication';
-import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from './Animals';
+import {
+  BEEF_COW_ID,
+  DAIRY_COW_ID,
+  DUCK_ID,
+  INITIAL_BEEF_FORM_DATA,
+  INITIAL_DAIRY_FORM_DATA,
+  INITIAL_POULTRY_FORM_DATA,
+  MILKING_COW_ID,
+  PER_DAY_PER_ANIMAL_UNIT,
+  PER_DAY_UNIT,
+  POULTRY_ID,
+  SWINE_ID,
+} from './Animals';
 import APP_STATE_KEY from './context';
 import { HarvestUnit, HARVEST_UNIT_OPTIONS } from './harvestUnits';
 import MANURE_TYPE_OPTIONS from './ManureTypeOptions';
-import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 import PLANT_AGES from './PlantsAges';
 import DEFAULT_BERRY_DATA from './DefaultBerryData';
 import {
@@ -33,16 +41,25 @@ import {
   DEFAULT_SOLID_MANURE_STORAGE,
   DEFAULT_SOLID_MANURE_SYSTEM,
 } from './storage';
+import {
+  GRAIN_OILSEED_ID,
+  CROP_TYPE_OTHER_ID,
+  CROP_TYPE_BERRIES_ID,
+  CROP_OTHER_ID,
+  CROP_BLUEBERRIES_ID,
+  CROP_RASPBERRIES_ID,
+} from './Crops';
+import DEFAULT_GENERATED_MANURE from './DefaultNMPFileGeneratedManure';
+import DEFAULT_SOIL_TEST from './DefaultNMPFileSoilTest';
+import DEFAULT_IMPORTED_MANURE from './DefaultNMPFileImportedManure';
+import DEFAULT_NMPFILE_FIELD from './DefaultNMPFileField';
+import { COVER_CROP_ID } from './Crops';
 
-// TODO: Standardize these variable names. Global constants should be in all caps
 export {
   DEFAULT_NMPFILE_YEAR,
   APP_STATE_KEY,
-  DefaultLiquidManureConversionFactors,
-  DefaultManureFormData,
   DEFAULT_NMPFILE,
   DEFAULT_NMPFILE_CROPS,
-  DefaultSolidManureConversionFactors,
   DRY_CUSTOM_ID,
   LIQUID_CUSTOM_ID,
   EMPTY_CROP_NUTRIENTS,
@@ -53,11 +70,11 @@ export {
   DEFAULT_NMPFILE_APPLIED_MANURE,
   INITIAL_BEEF_FORM_DATA,
   INITIAL_DAIRY_FORM_DATA,
+  INITIAL_POULTRY_FORM_DATA,
   HarvestUnit,
   HARVEST_UNIT_OPTIONS,
   MANURE_APPLICATION_FREQ,
   MANURE_TYPE_OPTIONS,
-  PrecipitationConversionFactor,
   DEFAULT_LIQUID_MANURE_STORAGE,
   DEFAULT_SOLID_MANURE_STORAGE,
   DEFAULT_RECTANGULAR_STORAGE,
@@ -69,4 +86,23 @@ export {
   DEFAULT_BERRY_DATA,
   AMOUNT_TO_DISSOLVE_UNITS,
   TANK_VOLUME_UNITS,
+  BEEF_COW_ID,
+  DAIRY_COW_ID,
+  MILKING_COW_ID,
+  POULTRY_ID,
+  SWINE_ID,
+  DUCK_ID,
+  PER_DAY_PER_ANIMAL_UNIT,
+  PER_DAY_UNIT,
+  COVER_CROP_ID,
+  GRAIN_OILSEED_ID,
+  CROP_TYPE_OTHER_ID,
+  CROP_TYPE_BERRIES_ID,
+  CROP_OTHER_ID,
+  CROP_BLUEBERRIES_ID,
+  CROP_RASPBERRIES_ID,
+  DEFAULT_GENERATED_MANURE,
+  DEFAULT_IMPORTED_MANURE,
+  DEFAULT_SOIL_TEST,
+  DEFAULT_NMPFILE_FIELD,
 };

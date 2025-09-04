@@ -1,6 +1,11 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import type { CalculateNutrientsColumn, NMPFileFieldData, SoilTestMethodsData } from '@/types';
+import type {
+  CalculateNutrientsRow,
+  NMPFileFertigation,
+  NMPFileField,
+  SoilTestMethods,
+} from '@/types';
 import { Schedule } from '@/types';
 import { booleanChecker } from '@/utils/utils';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -19,9 +24,9 @@ import {
 import { NutrientMessage } from '@/views/CalculateNutrients/nutrientMessages';
 
 // Helper function to expand fertigations into individual applications with dates
-const expandFertigationsToApplications = (fertigations: any[]) =>
+const expandFertigationsToApplications = (fertigations: NMPFileFertigation[]) =>
   fertigations.reduce((accRows, fertigation, index) => {
-    const nutrientColumns: CalculateNutrientsColumn = {
+    const nutrientColumns: CalculateNutrientsRow = {
       name: fertigation.name,
       reqN: fertigation.reqN,
       reqP2o5: fertigation.reqP2o5,
@@ -352,34 +357,34 @@ export default function CompleteReportTemplate({
   field,
   year,
 }: {
-  field: NMPFileFieldData;
+  field: NMPFileField;
   year: string;
 }) {
   const {
-    Area,
-    Comment,
-    Crops,
-    Fertilizers,
-    Fertigations,
-    FieldName,
-    OtherNutrients,
-    PreviousYearManureApplicationFrequency,
-    SoilTest,
+    area,
+    comment,
+    crops,
+    fertilizers,
+    fertigations,
+    fieldName,
+    otherNutrients,
+    previousYearManureApplicationFrequency,
+    soilTest,
   } = field;
   const apiCache = useContext(APICacheContext);
-  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethodsData[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
   const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
 
   // Filter crops that have leaf tissue test data
-  const cropsWithLeafTests = Crops.filter(
+  const cropsWithLeafTests = crops.filter(
     (crop) =>
       crop.hasLeafTest && (crop.leafTissueP !== undefined || crop.leafTissueK !== undefined),
   );
 
   // Expand fertigations into individual applications
   const expandedFertigations = useMemo(
-    () => expandFertigationsToApplications(Fertigations),
-    [Fertigations],
+    () => expandFertigationsToApplications(fertigations),
+    [fertigations],
   );
 
   // Create fertigation summary for display
@@ -391,7 +396,7 @@ export default function CompleteReportTemplate({
       return Schedule[Schedule.Monthly];
     };
 
-    return Fertigations.map((fertigation) => ({
+    return fertigations.map((fertigation) => ({
       id: crypto.randomUUID(),
       name: fertigation.name,
       schedule: getScheduleName(fertigation.schedule || Schedule.Monthly),
@@ -404,10 +409,10 @@ export default function CompleteReportTemplate({
       remP2o5: fertigation.remP2o5,
       remK2o: fertigation.remK2o,
     }));
-  }, [Fertigations]);
+  }, [fertigations]);
 
-  const balanceRow: CalculateNutrientsColumn = useMemo(() => {
-    const allRows = [...Crops, ...Fertilizers, ...expandedFertigations, ...OtherNutrients];
+  const balanceRow: CalculateNutrientsRow = useMemo(() => {
+    const allRows = [...crops, ...fertilizers, ...expandedFertigations, ...otherNutrients];
     return {
       name: 'Balance',
       reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
@@ -417,7 +422,7 @@ export default function CompleteReportTemplate({
       remP2o5: allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
       remK2o: allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
     };
-  }, [Crops, Fertilizers, expandedFertigations, OtherNutrients]);
+  }, [crops, fertilizers, expandedFertigations, otherNutrients]);
 
   const getMessage = useCallback((balanceType: string, balanceValue: number) => {
     const message = findBalanceMessage(balanceType, balanceValue);
@@ -444,12 +449,14 @@ export default function CompleteReportTemplate({
   }, [balanceRow, getMessage]);
 
   useEffect(() => {
-    apiCache.callEndpoint('api/soiltestmethods/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        const { data } = response;
-        setSoilTestMethods(data);
-      }
-    });
+    apiCache
+      .callEndpoint('api/soiltestmethods/')
+      .then((response: { status?: any; data: SoilTestMethods[] }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setSoilTestMethods(data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -458,7 +465,7 @@ export default function CompleteReportTemplate({
       <FieldInfoSection>
         <FieldInfoItem>
           <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
-            Field Name: {FieldName}
+            Field Name: {fieldName}
           </span>
         </FieldInfoItem>
         <FieldInfoItem>
@@ -468,7 +475,7 @@ export default function CompleteReportTemplate({
         </FieldInfoItem>
         <FieldInfoItem>
           <span>
-            <strong>Field Area:</strong> {Area}
+            <strong>Field Area:</strong> {area}
           </span>
         </FieldInfoItem>
         <FieldInfoItem>
@@ -476,14 +483,14 @@ export default function CompleteReportTemplate({
             <strong>Application Frequency:</strong>{' '}
             {
               MANURE_APPLICATION_FREQ.find(
-                (ele) => ele.id === PreviousYearManureApplicationFrequency,
+                (ele) => ele.id === previousYearManureApplicationFrequency,
               )?.label
             }
           </span>
         </FieldInfoItem>
         <FieldInfoItem>
           <span>
-            <strong>Comments:</strong> {Comment}
+            <strong>Comments:</strong> {comment}
           </span>
         </FieldInfoItem>
       </FieldInfoSection>
@@ -491,7 +498,7 @@ export default function CompleteReportTemplate({
       <SectionTitle>Crop Information</SectionTitle>
       <DataGrid
         sx={{ ...customTableStyle }}
-        rows={Crops}
+        rows={crops}
         columns={CROP_COLUMNS}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
@@ -505,22 +512,22 @@ export default function CompleteReportTemplate({
         disableColumnSelector
       />
 
-      {booleanChecker(SoilTest) ? (
+      {booleanChecker(soilTest) ? (
         <>
           <SectionTitle>Soil Test Information</SectionTitle>
           <FieldInfoItem style={{ marginBottom: '12px' }}>
             <strong>Soil Test Results:</strong>{' '}
-            {SoilTest?.sampleDate
-              ? new Date(SoilTest.sampleDate).toLocaleDateString('sv-SE', { dateStyle: 'short' })
+            {soilTest?.sampleDate
+              ? new Date(soilTest.sampleDate).toLocaleDateString('sv-SE', { dateStyle: 'short' })
               : 'N/A'}
           </FieldInfoItem>
           <FieldInfoItem style={{ marginBottom: '16px' }}>
             <strong>Soil Test Method:</strong>{' '}
-            {soilTestMethods.find((ele) => ele.id === SoilTest?.soilTestId)?.name}
+            {soilTestMethods.find((ele) => ele.id === soilTest?.soilTestId)?.name}
           </FieldInfoItem>
           <DataGrid
             sx={{ ...customTableStyle }}
-            rows={[SoilTest]}
+            rows={[soilTest]}
             columns={SOIL_TEST_COLUMNS}
             getRowId={() => crypto.randomUUID()}
             disableRowSelectionOnClick
@@ -569,10 +576,10 @@ export default function CompleteReportTemplate({
       </TableHeader>
 
       <div>
-        {Crops.length > 0 && (
+        {crops.length > 0 && (
           <DataGrid
             sx={{ ...customTableStyle }}
-            rows={Crops}
+            rows={crops}
             columns={CALC_COLUMNS}
             getRowId={() => crypto.randomUUID()}
             disableRowSelectionOnClick
@@ -586,17 +593,17 @@ export default function CompleteReportTemplate({
           />
         )}
 
-        {Fertilizers.length > 0 && (
+        {fertilizers.length > 0 && (
           <>
             <SubsectionLabel>Fertilizers</SubsectionLabel>
             <DataGrid
               sx={{ ...customTableStyle }}
-              rows={Fertilizers}
+              rows={fertilizers}
               columns={CALC_COLUMNS}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
-              columnHeaderHeight={Crops.length > 0 ? 0 : 28}
+              columnHeaderHeight={crops.length > 0 ? 0 : 28}
               hideFooterPagination
               hideFooter
               getRowHeight={() => 'auto'}
@@ -656,18 +663,18 @@ export default function CompleteReportTemplate({
           </>
         )}
 
-        {OtherNutrients.length > 0 && (
+        {otherNutrients.length > 0 && (
           <>
             <SubsectionLabel>Nutrient Sources</SubsectionLabel>
             <DataGrid
               sx={{ ...customTableStyle }}
-              rows={OtherNutrients}
+              rows={otherNutrients}
               columns={CALC_COLUMNS}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick
               disableColumnMenu
               columnHeaderHeight={
-                Crops.length || Fertilizers.length || expandedFertigations.length ? 0 : 28
+                crops.length || fertilizers.length || expandedFertigations.length ? 0 : 28
               }
               hideFooterPagination
               hideFooter

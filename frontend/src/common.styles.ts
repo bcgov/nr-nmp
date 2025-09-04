@@ -102,13 +102,6 @@ export const tableActionButtonCss = css({
   color: 'var(--surface-color-primary-button-default)',
 });
 
-export const modalHeaderStyle = css({
-  fontWeight: '700',
-  fontSize: '1.25rem',
-});
-
-export const modalDividerStyle = css({ marginTop: '0.5rem', marginBottom: '0.5rem' });
-
 export const addRecordGroupStyle = css({
   '.bcds-ButtonGroup': {
     overflow: 'visible',
@@ -118,16 +111,6 @@ export const addRecordGroupStyle = css({
       bottom: '-0.25rem',
       zIndex: '10',
     },
-  },
-});
-
-export const modalPaddingStyle = css({
-  padding: '1rem',
-});
-
-export const textFieldStyle = css({
-  '.bcds-react-aria-TextField--Input': {
-    width: '100%',
   },
 });
 

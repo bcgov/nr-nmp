@@ -7,7 +7,7 @@ const TABLE_COLUMNS: GridColDef[] = [
   { field: 'sourceName', headerName: 'Source of Material', width: 150 },
   { field: 'manureName', headerName: 'Material Type', width: 150 },
   {
-    field: 'Moisture',
+    field: 'moisture',
     headerName: 'Moisture (%)',
     valueGetter: (value) => mathSymbolConverter(value),
   },

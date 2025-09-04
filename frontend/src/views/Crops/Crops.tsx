@@ -14,23 +14,18 @@ import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { Tabs, View } from '../../components/common';
-import { NMPFileFieldData } from '@/types';
-import {
-  CALCULATE_NUTRIENTS,
-  SOIL_TESTS,
-  FARM_INFORMATION,
-  MANURE_IMPORTS,
-} from '@/constants/routes';
+import { NMPFileField } from '@/types';
+import { CALCULATE_NUTRIENTS, SOIL_TESTS, MANURE_IMPORTS } from '@/constants/routes';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import CropsModal from './CropsModal';
 
 function Crops() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
-  const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
+  const [fields, setFields] = useState<NMPFileField[]>(state.nmpFile.years[0].fields || []);
   const farmRegion = useMemo(() => {
     // The region should be set before reaching this page and cannot be changed on this page
-    const region = state.nmpFile.farmDetails.FarmRegion;
+    const region = state.nmpFile.farmDetails.farmRegion;
     if (region === undefined) throw new Error('Region is not set in NMP file.');
     return region;
   }, []);
@@ -48,17 +43,13 @@ function Crops() {
     setFields((prev) => {
       const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
       const newFieldsList = [...prev];
-      newFieldsList[fieldIndex].Crops.splice(cropIndex, 1);
+      newFieldsList[fieldIndex].crops.splice(cropIndex, 1);
       return newFieldsList;
     });
   };
 
   const handleNextPage = () => {
-    if (!state.nmpFile.farmDetails.Year) {
-      // We should show an error popup, but for now force-navigate back to Farm Information
-      navigate(FARM_INFORMATION);
-    }
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
     if (!state.showAnimalsStep) {
       navigate(MANURE_IMPORTS);
     } else {
@@ -67,7 +58,7 @@ function Crops() {
   };
 
   const handlePreviousPage = () => {
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
     navigate(SOIL_TESTS);
   };
 
@@ -79,7 +70,7 @@ function Crops() {
   // each field can have up to 2 crops, render another add crop button after first crop inputted
   const fieldColumns: GridColDef[] = [
     {
-      field: 'FieldName',
+      field: 'fieldName',
       headerName: 'Field Name',
       width: 150,
       minWidth: 150,
@@ -87,21 +78,21 @@ function Crops() {
       sortable: false,
     },
     {
-      field: 'Crops1',
+      field: 'crops1',
       headerName: 'Crop 1',
-      valueGetter: (_value, row) => row?.Crops?.[0]?.name || '',
+      valueGetter: (_value, row) => row?.crops?.[0]?.name || '',
       width: 170,
       minWidth: 100,
       maxWidth: 300,
       sortable: false,
     },
     {
-      field: 'ActionsCrop1',
+      field: 'actionsCrop1',
       headerName: 'Actions',
       width: 150,
       renderCell: (e) => {
         const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
-        const crop = fields[fieldIndex]?.Crops?.[0];
+        const crop = fields[fieldIndex].crops[0];
 
         return (
           <div>
@@ -139,9 +130,9 @@ function Crops() {
       resizable: false,
     },
     {
-      field: 'Crops2',
+      field: 'crops2',
       headerName: 'Crop 2',
-      valueGetter: (_value, row) => row?.Crops?.[1]?.name || '',
+      valueGetter: (_value, row) => row?.crops?.[1]?.name || '',
       width: 170,
       minWidth: 100,
       maxWidth: 300,
@@ -153,8 +144,8 @@ function Crops() {
       width: 200,
       renderCell: (e) => {
         const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
-        const rowHasCrop = !!fields[fieldIndex]?.Crops?.[0];
-        const crop = fields[fieldIndex]?.Crops[1];
+        const rowHasCrop = !!fields[fieldIndex].crops[0];
+        const crop = fields[fieldIndex].crops[1];
 
         if (!rowHasCrop) return null;
 
@@ -215,7 +206,7 @@ function Crops() {
           setFields={setFields}
           initialModalData={
             editingCropIndex !== undefined
-              ? fields[editingFieldIndex].Crops[editingCropIndex]
+              ? fields[editingFieldIndex].crops[editingCropIndex]
               : undefined
           }
           onClose={handleDialogClose}

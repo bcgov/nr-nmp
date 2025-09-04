@@ -4,9 +4,10 @@ import Grid from '@mui/material/Grid';
 import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { Animal, AnimalData, BEEF_COW_ID, BeefCattleData, ManureType, SelectOption } from '@/types';
+import { Animal, NMPFileAnimal, NMPFileBeefCattle, ManureType, SelectOption } from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
+import { BEEF_COW_ID } from '@/constants';
 
 interface BeefCattleSubtype {
   id: number;
@@ -15,10 +16,10 @@ interface BeefCattleSubtype {
 }
 
 type BeefCattleProps = {
-  formData: BeefCattleData;
+  formData: NMPFileBeefCattle;
   animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
-  handleSubmit: (newFormData: AnimalData) => void;
+  handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
 

@@ -177,7 +177,7 @@ function convertInjectionRateToImpGallonsPerMin(
   }
 }
 
-export interface SolidFertigationResult {
+interface SolidFertigationResult {
   fertigationTime: number;
   dryAction: 'Soluble' | 'Reduce the amount to dissolve';
   nutrientConcentrationN: number;

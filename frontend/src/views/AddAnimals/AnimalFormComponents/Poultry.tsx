@@ -3,24 +3,16 @@ import Grid from '@mui/material/Grid';
 import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import {
-  AnimalData,
-  PoultryData,
-  DUCK_ID,
-  ManureType,
-  POULTRY_ID,
-  SelectOption,
-  Animal,
-} from '@/types';
+import { NMPFileAnimal, NMPFilePoultry, ManureType, SelectOption, Animal } from '@/types';
 import { calculatePoultryAnnualLiquidManure, calculatePoultryAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
-import { MANURE_TYPE_OPTIONS } from '@/constants';
+import { DUCK_ID, MANURE_TYPE_OPTIONS, POULTRY_ID } from '@/constants';
 
 type PoultryProps = {
-  formData: PoultryData;
+  formData: NMPFilePoultry;
   animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
-  handleSubmit: (newFormData: AnimalData) => void;
+  handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
 
@@ -46,7 +38,7 @@ export default function Poultry({
     const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
     if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
 
-    let withManureCalc: PoultryData;
+    let withManureCalc: NMPFilePoultry;
     if (formData.manureType === ManureType.Liquid) {
       withManureCalc = {
         ...formData,

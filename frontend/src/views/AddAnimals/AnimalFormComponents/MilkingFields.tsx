@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { PER_DAY_UNIT, PER_DAY_PER_ANIMAL_UNIT, WashWaterUnit } from '@/types';
+import { WashWaterUnit } from '@/types';
 import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
+import { PER_DAY_PER_ANIMAL_UNIT, PER_DAY_UNIT } from '@/constants';
 
 interface MilkingFieldsProps {
   milkProductionInit: number;

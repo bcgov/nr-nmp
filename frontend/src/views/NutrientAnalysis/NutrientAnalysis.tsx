@@ -10,45 +10,45 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { Tabs, View } from '../../components/common';
 import {
-  AnimalData,
-  DAIRY_COW_ID,
-  NMPFileImportedManureData,
+  NMPFileAnimal,
+  NMPFileImportedManure,
   NMPFileManureStorageSystem,
   NMPFileNutrientAnalysis,
+  NMPFileGeneratedManure,
 } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
-import NMPFileGeneratedManureData from '@/types/NMPFileGeneratedManureData';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import NutrientAnalysisModal from './NutrientAnalysisModal';
+import { DAIRY_COW_ID } from '@/constants';
 
 export default function NutrientAnalysis() {
   const { state, dispatch } = useAppState();
 
-  const manures: (NMPFileImportedManureData | NMPFileGeneratedManureData)[] = useMemo(
+  const manures: (NMPFileImportedManure | NMPFileGeneratedManure)[] = useMemo(
     () =>
-      (state.nmpFile.years[0]?.ImportedManures || []).concat(
-        state.nmpFile.years[0]?.GeneratedManures || [],
+      (state.nmpFile.years[0]?.importedManures || []).concat(
+        state.nmpFile.years[0]?.generatedManures || [],
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
   const storageSystems: NMPFileManureStorageSystem[] =
-    state.nmpFile.years[0].ManureStorageSystems || [];
+    state.nmpFile.years[0].manureStorageSystems || [];
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editId, setEditId] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
   const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileNutrientAnalysis[]>(
-    state.nmpFile.years[0].NutrientAnalyses,
+    state.nmpFile.years[0].nutrientAnalyses,
   );
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysis | undefined>(undefined);
 
   const hasDairyCattle = useMemo(
     () =>
-      state.nmpFile.years[0]?.FarmAnimals?.some(
-        (animal: AnimalData) => animal.animalId === DAIRY_COW_ID,
+      state.nmpFile.years[0]?.farmAnimals?.some(
+        (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
       ),
     [state.nmpFile.years],
   );
@@ -86,7 +86,7 @@ export default function NutrientAnalysis() {
   const handleNextPage = () => {
     dispatch({
       type: 'SAVE_NUTRIENT_ANALYSIS',
-      year: state.nmpFile.farmDetails.Year!,
+      year: state.nmpFile.farmDetails.year,
       newNutrientAnalyses: nutrientAnalysisData,
     });
     if (!state.showAnimalsStep) {
@@ -99,7 +99,7 @@ export default function NutrientAnalysis() {
   const handlePreviousPage = () => {
     dispatch({
       type: 'SAVE_NUTRIENT_ANALYSIS',
-      year: state.nmpFile.farmDetails.Year!,
+      year: state.nmpFile.farmDetails.year,
       newNutrientAnalyses: nutrientAnalysisData,
     });
     if (hasDairyCattle) {
@@ -121,7 +121,7 @@ export default function NutrientAnalysis() {
       },
       {
         headerName: 'Moisture',
-        field: 'Moisture',
+        field: 'moisture',
         width: 100,
         minWidth: 100,
         maxWidth: 300,
@@ -146,7 +146,7 @@ export default function NutrientAnalysis() {
       },
       {
         headerName: 'P (%)',
-        field: 'P2O5',
+        field: 'P',
         width: 100,
         minWidth: 100,
         maxWidth: 300,
@@ -154,7 +154,7 @@ export default function NutrientAnalysis() {
       },
       {
         headerName: 'K (%)',
-        field: 'K2O',
+        field: 'K',
         width: 100,
         minWidth: 100,
         maxWidth: 300,

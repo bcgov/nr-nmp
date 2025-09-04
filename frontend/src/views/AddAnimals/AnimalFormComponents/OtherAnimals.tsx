@@ -3,11 +3,10 @@ import { Checkbox } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, ManureType, SelectOption } from '@/types';
+import { NMPFileAnimal, ManureType, SelectOption, NMPFileOtherAnimal, Animal } from '@/types';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import { MANURE_TYPE_OPTIONS } from '@/constants';
 import AnimalFormWrapper from './AnimalFormWrapper';
-import { Animal, OtherAnimalData } from '@/types/Animals';
 import { NumberField, Select } from '@/components/common';
 
 type Subtype = {
@@ -17,10 +16,10 @@ type Subtype = {
 };
 
 type OtherAnimalsProps = {
-  formData: OtherAnimalData;
+  formData: NMPFileOtherAnimal;
   animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
-  handleSubmit: (newFormData: AnimalData) => void;
+  handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
 
@@ -38,7 +37,7 @@ export default function OtherAnimals({
     // Calculate manure
     const selectedSubtype = subtypes.find((s) => s.id.toString() === formData.subtype);
     if (selectedSubtype !== null && selectedSubtype !== undefined) {
-      let withManureCalc: OtherAnimalData;
+      let withManureCalc: NMPFileOtherAnimal;
       if (formData.manureType === ManureType.Liquid) {
         withManureCalc = {
           ...formData,

@@ -13,7 +13,7 @@ import { FieldContainer, FieldInfoItem, FieldInfoSection } from '../reporting.st
 export default function CompleteReportTemplate() {
   const { nmpFile } = useAppState().state;
   const { farmDetails, years } = nmpFile;
-  const { FarmName, FarmRegion, FarmSubRegion } = farmDetails;
+  const { farmName, farmRegion, farmSubregion } = farmDetails;
 
   const [regionOptions, setRegionOptions] = useState<SelectOption<Region>[]>([]);
   const [subregionOptions, setSubregionOptions] = useState<SelectOption<Subregion>[]>([]);
@@ -30,7 +30,7 @@ export default function CompleteReportTemplate() {
       }));
       setRegionOptions(regions);
     });
-    apiCache.callEndpoint(`api/subregions/${FarmRegion}/`).then((response) => {
+    apiCache.callEndpoint(`api/subregions/${farmRegion}/`).then((response) => {
       const { data } = response;
       const subregions: SelectOption<Subregion>[] = (data as Subregion[]).map((row) => ({
         id: row.id.toString(),
@@ -40,7 +40,7 @@ export default function CompleteReportTemplate() {
 
       setSubregionOptions(subregions);
     });
-  }, [apiCache, FarmRegion]);
+  }, [apiCache, farmRegion]);
 
   return (
     <div style={{ width: '744px' }}>
@@ -60,31 +60,31 @@ export default function CompleteReportTemplate() {
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
-              <strong>Farm name:</strong> {FarmName}
+              <strong>Farm name:</strong> {farmName}
             </span>
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
               <strong>Farm region:</strong>{' '}
-              {regionOptions.find((ele) => ele.id === FarmRegion?.toString())?.label ?? FarmRegion}
+              {regionOptions.find((ele) => ele.id === farmRegion?.toString())?.label ?? farmRegion}
             </span>
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
               <strong>Farm subregion:</strong>{' '}
-              {subregionOptions.find((ele) => ele.id === FarmSubRegion?.toString())?.label ??
-                FarmSubRegion}
+              {subregionOptions.find((ele) => ele.id === farmSubregion?.toString())?.label ??
+                farmSubregion}
             </span>
           </FieldInfoItem>
         </FieldInfoSection>
       </FieldContainer>
       <div style={{ fontWeight: 'bold', marginTop: '32px' }}>Application Schedule</div>
       {years.map((yearEle) =>
-        yearEle.Fields?.map((fieldEle) => (
+        yearEle.fields?.map((fieldEle) => (
           <ApplicationReportSection
             field={fieldEle}
-            year={yearEle.Year}
-            key={fieldEle.FieldName}
+            year={yearEle.year}
+            key={fieldEle.fieldName}
           />
         )),
       )}
@@ -93,10 +93,10 @@ export default function CompleteReportTemplate() {
       </div>
       {years[0] && (
         <ManureCompostInventory
-          FarmAnimals={years[0].FarmAnimals}
-          GeneratedManures={years[0].GeneratedManures}
-          ImportedManures={years[0].ImportedManures}
-          ManureStorageSystems={years[0].ManureStorageSystems}
+          FarmAnimals={years[0].farmAnimals}
+          GeneratedManures={years[0].generatedManures}
+          ImportedManures={years[0].importedManures}
+          ManureStorageSystems={years[0].manureStorageSystems}
         />
       )}
       <div style={{ fontWeight: 'bold', marginTop: '64px', marginBottom: '8px' }}>
@@ -104,10 +104,10 @@ export default function CompleteReportTemplate() {
       </div>
       {years[0] && (
         <ManureCompostUse
-          ManureStorageSystems={years[0].ManureStorageSystems}
-          NutrientAnalysisData={years[0].NutrientAnalyses}
-          GeneratedManures={years[0].GeneratedManures}
-          ImportedManures={years[0].ImportedManures}
+          ManureStorageSystems={years[0].manureStorageSystems}
+          NutrientAnalysisData={years[0].nutrientAnalyses}
+          GeneratedManures={years[0].generatedManures}
+          ImportedManures={years[0].importedManures}
         />
       )}
 
@@ -115,32 +115,32 @@ export default function CompleteReportTemplate() {
         Liquid Storage Capacity: October to March
       </div>
       {years[0] &&
-        years[0]?.ManureStorageSystems &&
-        years[0].ManureStorageSystems.length > 0 &&
-        years[0].ManureStorageSystems.filter(
-          (storeEle) => storeEle.manureType === ManureType.Liquid,
-        ).map((storeEle) => (
-          <LiquidStorageCapacitySection
-            key={storeEle.name}
-            storageSystemLiquid={storeEle}
-          />
-        ))}
+        years[0].manureStorageSystems &&
+        years[0].manureStorageSystems.length > 0 &&
+        years[0].manureStorageSystems
+          .filter((storeEle) => storeEle.manureType === ManureType.Liquid)
+          .map((storeEle) => (
+            <LiquidStorageCapacitySection
+              key={storeEle.name}
+              storageSystemLiquid={storeEle}
+            />
+          ))}
 
       <div style={{ marginTop: '64px' }}>
         {years.map((yearEle) =>
-          yearEle.Fields?.map((fieldEle) => (
+          yearEle.fields?.map((fieldEle) => (
             <FieldDataSection
               field={fieldEle}
-              year={yearEle.Year}
-              key={fieldEle.FieldName}
+              year={yearEle.year}
+              key={fieldEle.fieldName}
             />
           )),
         )}
       </div>
-      {years[0].NutrientAnalyses.length > 0 && (
+      {years[0].nutrientAnalyses.length > 0 && (
         <div>
           <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure and Compost Analysis</div>
-          <ManureCompostAnalysis nutrientAnalyses={years[0].NutrientAnalyses} />
+          <ManureCompostAnalysis nutrientAnalyses={years[0].nutrientAnalyses} />
         </div>
       )}
     </div>

@@ -2,12 +2,12 @@ import { NMPFile } from '@/types';
 
 const DEFAULT_NMPFILE: NMPFile = {
   farmDetails: {
-    Year: '',
-    FarmName: '',
-    FarmRegion: 0,
-    RegionLocationId: 0,
-    FarmAnimals: [],
-    HasHorticulturalCrops: false,
+    year: '',
+    farmName: '',
+    farmRegion: 0,
+    regionLocationId: 0,
+    farmAnimals: [],
+    hasHorticulturalCrops: false,
   },
   years: [],
 };

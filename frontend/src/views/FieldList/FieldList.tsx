@@ -8,17 +8,16 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { Tabs, View } from '../../components/common';
+import { FieldListModal, Tabs, View } from '@/components/common';
 import {
   addRecordGroupStyle,
   customTableStyle,
   ErrorText,
   tableActionButtonCss,
 } from '../../common.styles';
-import { NMPFileFieldData } from '@/types/NMPFileFieldData';
+import { NMPFileField } from '@/types/NMPFileField';
 import { FARM_INFORMATION, NUTRIENT_ANALYSIS, SOIL_TESTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
-import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 
 export default function FieldList() {
   const { state, dispatch } = useAppState();
@@ -28,8 +27,8 @@ export default function FieldList() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
-    state.nmpFile.years[0].Fields || [],
+  const [fieldList, setFieldList] = useState<Array<NMPFileField>>(
+    state.nmpFile.years[0].fields || [],
   );
 
   const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -52,14 +51,10 @@ export default function FieldList() {
   };
 
   const handleNextPage = () => {
-    if (!state.nmpFile.farmDetails.Year) {
-      // We should show an error popup, but for now force-navigate back to Farm Information
-      navigate(FARM_INFORMATION);
-    }
     if (fieldList.length) {
       dispatch({
         type: 'SAVE_FIELDS',
-        year: state.nmpFile.farmDetails.Year!,
+        year: state.nmpFile.farmDetails.year,
         newFields: fieldList,
       });
       navigate(SOIL_TESTS);
@@ -73,7 +68,7 @@ export default function FieldList() {
       if (fieldList.length) {
         dispatch({
           type: 'SAVE_FIELDS',
-          year: state.nmpFile.farmDetails.Year!,
+          year: state.nmpFile.farmDetails.year,
           newFields: fieldList,
         });
       }
@@ -89,15 +84,15 @@ export default function FieldList() {
   };
 
   const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileFieldData>, index: number) =>
-      !fieldList.some((fieldRow, idx) => fieldRow.FieldName === data.FieldName && index !== idx),
+    (data: Partial<NMPFileField>, index: number) =>
+      !fieldList.some((fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx),
     [fieldList],
   );
 
   const columns: GridColDef[] = useMemo(
     () => [
       {
-        field: 'FieldName',
+        field: 'fieldName',
         headerName: 'Field Name',
         width: 200,
         minWidth: 150,
@@ -105,7 +100,7 @@ export default function FieldList() {
         sortable: false,
       },
       {
-        field: 'Area',
+        field: 'area',
         headerName: 'Acres',
         width: 150,
         minWidth: 125,
@@ -113,7 +108,7 @@ export default function FieldList() {
         sortable: false,
       },
       {
-        field: 'Comment',
+        field: 'comment',
         headerName: 'Comments (optional)',
         minWidth: 200,
         maxWidth: 300,

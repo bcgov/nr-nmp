@@ -4,8 +4,8 @@ import {
   NMPFileManureStorageSystem,
   ManureType,
   NMPFileNutrientAnalysis,
-  NMPFileImportedManureData,
-  NMPFileGeneratedManureData,
+  NMPFileImportedManure,
+  NMPFileGeneratedManure,
 } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
@@ -15,12 +15,12 @@ const TABLE_COLUMNS: GridColDef[] = [
     width: 150,
   },
   {
-    field: 'UniqueMaterialName',
+    field: 'uniqueMaterialName',
     headerName: 'Material Source',
     width: 150,
   },
   {
-    field: 'AnnualAmount',
+    field: 'annualAmount',
     headerName: 'Annual amount',
     width: 150,
   },
@@ -53,12 +53,12 @@ export default function ManureCompostUse({
 }: {
   ManureStorageSystems?: NMPFileManureStorageSystem[];
   NutrientAnalysisData?: NMPFileNutrientAnalysis[];
-  GeneratedManures?: NMPFileGeneratedManureData[];
-  ImportedManures?: NMPFileImportedManureData[];
+  GeneratedManures?: NMPFileGeneratedManure[];
+  ImportedManures?: NMPFileImportedManure[];
 }) {
   const storageSystemEntries = ManureStorageSystems.map((systemEle) => {
     const sumAmount = systemEle.manuresInSystem.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount,
+      (accumulator, currentValue) => accumulator + currentValue.data.annualAmount,
       0,
     );
 
@@ -68,8 +68,8 @@ export default function ManureCompostUse({
 
     return {
       title: systemEle.name,
-      AnnualAmount: sumAmount,
-      UniqueMaterialName: nutrientSource?.UniqueMaterialName,
+      annualAmount: sumAmount,
+      uniqueMaterialName: nutrientSource?.uniqueMaterialName,
       // TODO: when application rates/schedules implemented
       landApplied: undefined,
       amountRemaining: (sumAmount / sumAmount) * 100,
@@ -77,19 +77,19 @@ export default function ManureCompostUse({
   });
 
   const unAssignedManures = [
-    ...GeneratedManures.filter((ele) => !ele.AssignedToStoredSystem),
-    ...ImportedManures.filter((ele) => !ele.AssignedToStoredSystem),
+    ...GeneratedManures.filter((ele) => !ele.assignedToStoredSystem),
+    ...ImportedManures.filter((ele) => !ele.assignedToStoredSystem),
   ].map((unassignedEle) => {
     const nutrientSource = NutrientAnalysisData.find(
       (nurtrientEle) => nurtrientEle.sourceUuid === unassignedEle.uuid,
     );
     return {
-      title: unassignedEle.ManagedManureName,
-      AnnualAmount: unassignedEle.AnnualAmount,
-      UniqueMaterialName: nutrientSource?.UniqueMaterialName,
+      title: unassignedEle.managedManureName,
+      annualAmount: unassignedEle.annualAmount,
+      uniqueMaterialName: nutrientSource?.uniqueMaterialName,
       // TODO: when application rates/schedules implemented
       landApplied: undefined,
-      amountRemaining: (unassignedEle.AnnualAmount / unassignedEle.AnnualAmount) * 100,
+      amountRemaining: (unassignedEle.annualAmount / unassignedEle.annualAmount) * 100,
     };
   });
 

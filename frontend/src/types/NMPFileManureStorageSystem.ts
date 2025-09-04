@@ -1,14 +1,44 @@
-import { NMPFileGeneratedManureData, NMPFileImportedManureData } from '@/types';
-import { ManureType } from './Animals';
+import { ManureType } from './NMPFileAnimal';
+
+export type NMPFileGeneratedManure = {
+  uniqueMaterialName: string;
+  manureType?: ManureType;
+  annualAmount: number;
+  annualAmountUSGallonsVolume?: number;
+  annualAmountTonsWeight?: number;
+  annualAmountDisplayWeight?: string;
+  managedManureName: string;
+  isMaterialStored?: boolean;
+  assignedToStoredSystem?: boolean;
+  uuid: string;
+};
+
+export type NMPFileImportedManure = {
+  uniqueMaterialName: string;
+  manureType?: ManureType;
+  annualAmount: number;
+  annualAmountUSGallonsVolume?: number;
+  annualAmountCubicYardsVolume?: number;
+  annualAmountCubicMetersVolume?: number;
+  annualAmountTonsWeight?: number;
+  annualAmountDisplayVolume?: string;
+  annualAmountDisplayWeight?: string;
+  units?: number;
+  moisture?: number;
+  isMaterialStored?: boolean;
+  managedManureName: string;
+  assignedToStoredSystem?: boolean;
+  uuid: string;
+};
 
 export type ManureInSystem =
   | {
       type: 'Generated';
-      data: NMPFileGeneratedManureData;
+      data: NMPFileGeneratedManure;
     }
   | {
       type: 'Imported';
-      data: NMPFileImportedManureData;
+      data: NMPFileImportedManure;
     };
 
 export type SolidManureStorage = {

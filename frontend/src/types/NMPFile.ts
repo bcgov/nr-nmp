@@ -1,37 +1,51 @@
-import NMPFileYear from './NMPFileYear';
+import { NMPFileAnimal } from './NMPFileAnimal';
+import { NMPFileField } from './NMPFileField';
+import {
+  NMPFileGeneratedManure,
+  NMPFileImportedManure,
+  NMPFileManureStorageSystem,
+} from './NMPFileManureStorageSystem';
 
 export type NMPFileFarmDetails = {
-  Year: string;
-  FarmName: string;
-  FarmRegion: number;
-  RegionLocationId: number;
-  FarmSubRegion?: number;
-  FarmAnimals?: string[];
-  HasHorticulturalCrops?: boolean;
-
-  /*
-    Fields from old NMP, currently unused, feel free to re-add
-    Manure?: any | null;
-    HasSelectedFarmType?: boolean;
-    ImportsManureCompost?: boolean;
-    TestingMethod?: any | null;
-    SoilTests?: any | null;
-    LeafTests?: any | null;
-    LeafTestingMethod?: any | null;
-    UserJourney?: number;
-    */
+  year: string;
+  farmName: string;
+  farmRegion: number;
+  regionLocationId: number;
+  farmSubregion?: number;
+  farmAnimals?: string[];
+  hasHorticulturalCrops?: boolean;
 };
 
-/**
- * @summary Type definitions for NMP File
- */
+export interface NMPFileNutrientAnalysis {
+  N: number; // Nitrogen
+  P: number; // Phosphorus
+  K: number; // Potassium
+  manureId: number;
+  solidLiquid: 'Solid' | 'Liquid' | '';
+  moisture: string; // Note: This is a weird one. Book val is string but lab val needs to be number
+  NH4N: number;
+  sourceUuid: string;
+  sourceName: string;
+  nMineralizationId?: number;
+  bookLab: string;
+  uniqueMaterialName: string;
+  manureName: string;
+  // For solid manures in tons, for liquid manures in US gallons
+  annualAmount: number;
+  // materialRemaining: number;
+}
+
+export type NMPFileYear = {
+  year: string;
+  fields?: NMPFileField[];
+  farmAnimals?: NMPFileAnimal[];
+  generatedManures?: NMPFileGeneratedManure[];
+  importedManures?: NMPFileImportedManure[];
+  manureStorageSystems?: NMPFileManureStorageSystem[];
+  nutrientAnalyses: NMPFileNutrientAnalysis[];
+};
+
 export type NMPFile = {
   farmDetails: NMPFileFarmDetails;
   years: NMPFileYear[];
-  /*
-  Fields from old NMP, currently unused, feel free to re-add
-  unsaved?: boolean;
-  LastAppliedFarmManureId?: any | null;
-  NMPReleaseVersion?: number;
-  */
 };

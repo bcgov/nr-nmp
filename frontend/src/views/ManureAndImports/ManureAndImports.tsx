@@ -7,32 +7,22 @@ import { DataGrid, GridColDef, GridRowId, GridRenderCellParams } from '@mui/x-da
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
-  NMPFileImportedManureData,
+  NMPFileImportedManure,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
-  AnimalData,
+  NMPFileAnimal,
   ManureType,
   Animal,
-  DAIRY_COW_ID,
 } from '@/types';
-import {
-  DefaultSolidManureConversionFactors,
-  DefaultLiquidManureConversionFactors,
-} from '@/constants';
 import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
-import {
-  ADD_ANIMALS,
-  CROPS,
-  FARM_INFORMATION,
-  NUTRIENT_ANALYSIS,
-  STORAGE,
-} from '@/constants/routes';
+import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/routes';
 
-import { Tabs, View } from '../../components/common';
+import { Tabs, View } from '@/components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
+import { DAIRY_COW_ID } from '@/constants';
 
 // Create a new component for crops manure and imports for now
 export default function ManureAndImports() {
@@ -40,77 +30,77 @@ export default function ManureAndImports() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [animalList] = useState<Array<AnimalData>>(state.nmpFile.years[0]?.FarmAnimals || []);
+  const [animalList] = useState<Array<NMPFileAnimal>>(state.nmpFile.years[0]?.farmAnimals || []);
 
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
-  const [manures, setManures] = useState<NMPFileImportedManureData[]>(
-    state.nmpFile.years[0]?.ImportedManures || [],
+  const [manures, setManures] = useState<NMPFileImportedManure[]>(
+    state.nmpFile.years[0]?.importedManures || [],
   );
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
     SolidManureConversionFactors[]
-  >([DefaultSolidManureConversionFactors]);
+  >([]);
   const [liquidManureDropdownOptions, setLiquidManureDropdownOptions] = useState<
     LiquidManureConversionFactors[]
-  >([DefaultLiquidManureConversionFactors]);
+  >([]);
 
   const hasDairyCattle = useMemo(
     () => animalList.some((animal) => animal.animalId === DAIRY_COW_ID),
     [animalList],
   );
 
-  const handleSubmit = (data: NMPFileImportedManureData) => {
-    let updatedManureFormData: NMPFileImportedManureData;
+  const handleSubmit = (data: NMPFileImportedManure) => {
+    let updatedManureFormData: NMPFileImportedManure;
 
     if (data.manureType === ManureType.Liquid) {
       const liquidManureConversionFactor = liquidManureDropdownOptions.find(
-        (item) => item.inputunit === data.Units,
+        (item) => item.inputunit === data.units,
       );
 
       const annualAmountUSGallonsVolume =
-        (data.AnnualAmount || 0) *
+        (data.annualAmount || 0) *
         (liquidManureConversionFactor?.usgallonsoutput
           ? parseFloat(liquidManureConversionFactor.usgallonsoutput)
           : 0);
 
       updatedManureFormData = {
         ...data,
-        AnnualAmountUSGallonsVolume: annualAmountUSGallonsVolume,
-        AnnualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10)} U.S. gallons`,
+        annualAmountUSGallonsVolume,
+        annualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10)} U.S. gallons`,
       };
     } else if (data.manureType === ManureType.Solid) {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
-        (item) => item.inputunit === data.Units,
+        (item) => item.inputunit === data.units,
       );
 
       const annualAmountCubicMetersVolume =
-        (data.AnnualAmount || 0) *
+        (data.annualAmount || 0) *
         getDensityFactoredConversionUsingMoisture(
-          data.Moisture || 0,
+          data.moisture || 0,
           solidManureConversionFactor?.cubicmetersoutput || '',
         );
 
       const annualAmountCubicYardsVolume =
-        (data.AnnualAmount || 0) *
+        (data.annualAmount || 0) *
         getDensityFactoredConversionUsingMoisture(
-          data.Moisture || 0,
+          data.moisture || 0,
           solidManureConversionFactor?.cubicyardsoutput || '',
         );
 
       const annualAmountTonsWeight =
-        (data.AnnualAmount || 0) *
+        (data.annualAmount || 0) *
         getDensityFactoredConversionUsingMoisture(
-          data.Moisture || 0,
+          data.moisture || 0,
           solidManureConversionFactor?.metrictonsoutput || '',
         );
 
       updatedManureFormData = {
         ...data,
-        AnnualAmountCubicYardsVolume: annualAmountCubicYardsVolume,
-        AnnualAmountCubicMetersVolume: annualAmountCubicMetersVolume,
-        AnnualAmountTonsWeight: annualAmountTonsWeight,
-        AnnualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10)} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10)} m³)`,
-        AnnualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10)} tons`,
+        annualAmountCubicYardsVolume,
+        annualAmountCubicMetersVolume,
+        annualAmountTonsWeight,
+        annualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10)} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10)} m³)`,
+        annualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10)} tons`,
       };
     } else {
       throw new Error("Manure type isn't set.");
@@ -128,13 +118,9 @@ export default function ManureAndImports() {
   };
 
   const handleNextPage = () => {
-    if (!state.nmpFile.farmDetails.Year) {
-      // We should show an error popup, but for now force-navigate back to Farm Information
-      navigate(FARM_INFORMATION);
-    }
     dispatch({
       type: 'SAVE_IMPORTED_MANURE',
-      year: state.nmpFile.farmDetails.Year!,
+      year: state.nmpFile.farmDetails.year,
       newManures: manures,
     });
     if (hasDairyCattle) {
@@ -147,7 +133,7 @@ export default function ManureAndImports() {
   const handlePreviousPage = () => {
     dispatch({
       type: 'SAVE_IMPORTED_MANURE',
-      year: state.nmpFile.farmDetails.Year!,
+      year: state.nmpFile.farmDetails.year,
       newManures: manures,
     });
     if (state.showAnimalsStep) {
@@ -160,24 +146,21 @@ export default function ManureAndImports() {
   useEffect(() => {
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
-      .then((response: { status?: any; data: any }) => {
+      .then((response: { status?: any; data: LiquidManureConversionFactors[] }) => {
         if (response.status === 200) {
-          const { data } = response;
-          setLiquidManureDropdownOptions(data);
+          setLiquidManureDropdownOptions(response.data);
         }
       });
     apiCache
       .callEndpoint('api/solidmaterialsconversionfactors/')
-      .then((response: { status?: any; data: any }) => {
+      .then((response: { status?: any; data: SolidManureConversionFactors[] }) => {
         if (response.status === 200) {
-          const { data } = response;
-          setSolidManureDropdownOptions(data);
+          setSolidManureDropdownOptions(response.data);
         }
       });
-    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: Animal[] }) => {
       if (response.status === 200) {
-        const { data } = response;
-        setAnimals(data);
+        setAnimals(response.data);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -240,7 +223,7 @@ export default function ManureAndImports() {
   const columnsImportedManure: GridColDef[] = useMemo(
     () => [
       {
-        field: 'UniqueMaterialName',
+        field: 'uniqueMaterialName',
         headerName: 'Material Name',
         width: 125,
         minWidth: 150,
@@ -257,7 +240,7 @@ export default function ManureAndImports() {
         sortable: false,
       },
       {
-        field: 'AnnualAmountDisplayVolume',
+        field: 'annualAmountDisplayVolume',
         headerName: 'Annual Amount (Vol)',
         width: 150,
         minWidth: 125,
@@ -265,7 +248,7 @@ export default function ManureAndImports() {
         sortable: false,
       },
       {
-        field: 'AnnualAmountDisplayWeight',
+        field: 'annualAmountDisplayWeight',
         headerName: 'Annual Amount (Weight)',
         width: 150,
         minWidth: 125,
@@ -273,7 +256,7 @@ export default function ManureAndImports() {
         sortable: false,
       },
       {
-        field: 'IsMaterialStored',
+        field: 'isMaterialStored',
         headerName: 'Stored',
         width: 75,
         minWidth: 75,

@@ -5,7 +5,7 @@ import {
   FieldInfoItem,
   FieldInfoSection,
 } from '../reporting.styles';
-import type { NMPFileFieldData } from '@/types';
+import type { NMPFileField } from '@/types';
 
 const TABLE_COLUMNS: GridColDef[] = [
   { field: 'name', headerName: 'Nutrient Source', width: 200 },
@@ -17,10 +17,10 @@ export default function ApplicationReportSection({
   field,
   year,
 }: {
-  field: NMPFileFieldData;
+  field: NMPFileField;
   year: string;
 }) {
-  const { Area, Crops, Fertilizers, FieldName } = field;
+  const { area, crops, fertilizers, fieldName } = field;
 
   return (
     <div style={{ marginTop: '16px' }}>
@@ -28,7 +28,7 @@ export default function ApplicationReportSection({
         <FieldInfoSection>
           <FieldInfoItem>
             <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
-              Field Name: {FieldName}
+              Field Name: {fieldName}
             </span>
           </FieldInfoItem>
           <FieldInfoItem>
@@ -38,13 +38,13 @@ export default function ApplicationReportSection({
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
-              <strong>Field Area:</strong> {Area}
+              <strong>Field Area:</strong> {area}
             </span>
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
               <strong>Crops:</strong>
-              {Crops.map((cropEle) => (
+              {crops.map((cropEle) => (
                 <div key={cropEle.name}>{cropEle.name}</div>
               ))}
             </span>
@@ -53,7 +53,7 @@ export default function ApplicationReportSection({
       </FieldContainer>
       <DataGrid
         sx={{ ...customTableStyle }}
-        rows={Fertilizers}
+        rows={fertilizers}
         columns={TABLE_COLUMNS}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
