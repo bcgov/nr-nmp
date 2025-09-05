@@ -8,7 +8,7 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { Tabs, View } from '../../components/common';
+import { Tabs, View } from '@/components/common';
 import {
   addRecordGroupStyle,
   customTableStyle,

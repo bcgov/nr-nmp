@@ -1,11 +1,9 @@
 /**
  * @summary The Farm Information page for the application
  */
-import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Button,
-  ButtonGroup,
   Checkbox,
   CheckboxGroup,
   // This is the one file where Form needs to be imported from the BC DS
@@ -32,6 +30,7 @@ export default function FarmInformation() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+  const formRef = useRef<null | HTMLFormElement>(null);
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<NMPFileFarmDetails>({
@@ -171,15 +170,22 @@ export default function FarmInformation() {
     }
   };
 
-  const handlePeviousPage = () => {
+  const handlePreviousPage = () => {
     navigate(LANDING_PAGE);
   };
 
   return (
-    <View title="Farm Information">
+    <View
+      title="Farm Information"
+      handleBack={handlePreviousPage}
+      // Trigger submit event to use <Form>'s validation
+      handleNext={() => formRef.current?.requestSubmit()}
+    >
       <Form
         css={formCss}
         onSubmit={onSubmit}
+        // @ts-ignore
+        ref={formRef}
       >
         <Grid
           container
@@ -267,27 +273,6 @@ export default function FarmInformation() {
             </CheckboxGroup>
           </Grid>
         </Grid>
-
-        <ButtonGroup
-          alignment="start"
-          ariaLabel="A group of buttons"
-          orientation="horizontal"
-        >
-          <Button
-            size="medium"
-            onPress={handlePeviousPage}
-            variant="secondary"
-          >
-            Back
-          </Button>
-          <Button
-            size="medium"
-            variant="primary"
-            type="submit"
-          >
-            Next
-          </Button>
-        </ButtonGroup>
       </Form>
     </View>
   );
