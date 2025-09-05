@@ -8,9 +8,18 @@ interface ViewProps {
   children: React.ReactNode;
   handleBack?: () => void;
   handleNext?: () => void;
+  backBtnText?: string;
+  nextBtnText?: string;
 }
 
-export default function View({ title, children, handleBack, handleNext }: ViewProps) {
+export default function View({
+  title,
+  children,
+  handleBack,
+  handleNext,
+  backBtnText = 'Back',
+  nextBtnText = 'Next',
+}: ViewProps) {
   return (
     <StyledContent>
       <ProgressStepper />
@@ -30,7 +39,7 @@ export default function View({ title, children, handleBack, handleNext }: ViewPr
                 onPress={handleBack}
                 variant="secondary"
               >
-                Back
+                {backBtnText}
               </Button>
             )}
             {handleNext && (
@@ -39,7 +48,7 @@ export default function View({ title, children, handleBack, handleNext }: ViewPr
                 onPress={handleNext}
                 variant="primary"
               >
-                Next
+                {nextBtnText}
               </Button>
             )}
           </ButtonGroup>

@@ -2,13 +2,14 @@
  * @summary Styling for AddAnimals view
  */
 import styled from '@emotion/styled';
-import { componentContainer, paragraphCss } from '../../../common.styles';
+import { buttonGroup, componentContainer, paragraphCss } from '../../../common.styles';
 
 export const StyledContent = styled.div`
   margin-bottom: 1rem;
 
   ${componentContainer}
   ${paragraphCss}
+  ${buttonGroup}
 `;
 
 export const AppTitleStyle = styled.div`
@@ -40,4 +41,5 @@ export const ButtonGroupWrapper = styled.div`
   background-color: white;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  margin-top: auto;
 `;
