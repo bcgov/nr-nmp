@@ -10,6 +10,7 @@ import {
   ManureInSystem,
   ManureType,
   NMPFileManureStorageSystem,
+  PrecipitationConversionFactor,
   SolidManureStorageSystem,
 } from '@/types';
 import { Form, Modal } from '@/components/common';
@@ -19,7 +20,7 @@ import StorageSystemDetailsEdit from './StorageSystemDetailsEdit';
 import LiquidStorageDetails from './LiquidStorageDetails';
 import SolidStorageDetails from './SolidStorageDetails';
 import { DEFAULT_FORM_DATA, StorageModalFormData, StorageModalMode } from './types';
-import { DEFAULT_LIQUID_MANURE_STORAGE, PrecipitationConversionFactor } from '@/constants';
+import { DEFAULT_LIQUID_MANURE_STORAGE } from '@/constants';
 import { calcStorageSurfaceAreaSqFt } from '@/utils/manureStorageSystems';
 
 type ModalComponentProps = {
@@ -78,7 +79,7 @@ export default function StorageModal({
         : undefined;
     }
 
-    const newList = [...(state.nmpFile.years[0].ManureStorageSystems || [])];
+    const newList = [...(state.nmpFile.years[0].manureStorageSystems || [])];
     if (mode.mode !== 'create') {
       newList[mode.systemIndex] = withRainData;
     } else {
@@ -86,7 +87,7 @@ export default function StorageModal({
     }
     dispatch({
       type: 'SAVE_MANURE_STORAGE_SYSTEMS',
-      year: state.nmpFile.farmDetails.Year!,
+      year: state.nmpFile.farmDetails.year,
       newManureStorageSystems: newList,
     });
     handleDialogClose();

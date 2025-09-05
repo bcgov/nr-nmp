@@ -1,15 +1,7 @@
 import axios from 'axios';
 import { env } from '@/env';
-import {
-  Crop,
-  CropsConversionFactors,
-  CropType,
-  NMPFileCropData,
-  NMPFileSoilTestData,
-} from '@/types';
-import defaultSoilTestData from '@/constants/DefaultSoilTestData';
-import { PLANT_AGES } from '@/constants';
-import { COVER_CROP_ID } from '@/types/Crops';
+import { Crop, CropsConversionFactors, CropType, NMPFileCrop, NMPFileSoilTest } from '@/types';
+import { PLANT_AGES, DEFAULT_SOIL_TEST, COVER_CROP_ID } from '@/constants';
 
 /**
  * Fetches crop conversion factors from the API
@@ -148,7 +140,7 @@ export async function getRecommendations(
   }
 }
 
-function validateIds(combinedCropData: NMPFileCropData, crop: Crop, cropType: CropType) {
+function validateIds(combinedCropData: NMPFileCrop, crop: Crop, cropType: CropType) {
   if (crop.id !== combinedCropData.cropId) {
     throw new Error(
       `Crop id mismatch: expected ${combinedCropData.cropId} but received ${crop.id}`,
@@ -164,13 +156,13 @@ function validateIds(combinedCropData: NMPFileCropData, crop: Crop, cropType: Cr
 /**
  * Calculates potassium (K2O) removal for a crop
  *
- * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
  * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
  * @returns {number} Amount of K2O removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalK20(
-  combinedCropData: NMPFileCropData,
+  combinedCropData: NMPFileCrop,
   crop: Crop,
   cropType: CropType,
 ): number {
@@ -195,13 +187,13 @@ export function getCropRemovalK20(
 /**
  * Calculates phosphorus (P2O5) removal for a crop
  *
- * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
  * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
  * @returns {number} Amount of P2O5 removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalP205(
-  combinedCropData: NMPFileCropData,
+  combinedCropData: NMPFileCrop,
   crop: Crop,
   cropType: CropType,
 ): number {
@@ -226,13 +218,13 @@ export function getCropRemovalP205(
 /**
  * Calculates nitrogen removal for a crop
  *
- * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
  * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
  * @returns {number} Amount of N removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalN(
-  combinedCropData: NMPFileCropData,
+  combinedCropData: NMPFileCrop,
   crop: Crop,
   cropType: CropType,
 ): number {
@@ -268,13 +260,13 @@ export function getCropRemovalN(
 /**
  * Calculates nitrogen requirement for a crop, accounting for previous crop credit
  *
- * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
+ * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
  * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
  * @returns {number} Required N application in lbs/acre, rounded to nearest integer
  */
 export function getCropRequirementN(
-  combinedCropData: NMPFileCropData,
+  combinedCropData: NMPFileCrop,
   crop: Crop,
   cropType: CropType,
 ): number {
@@ -318,21 +310,21 @@ export function getCropRequirementN(
 /**
  * Calculates potassium (K2O) requirement based on soil test and crop needs
  *
- * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
- * @param {NMPFileSoilTestData | undefined} soilTest - Soil test of field
+ * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
+ * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field
  * @param {number} regionId - ID of the region
  * @returns {Promise<number>} Required K2O application in lbs/acre, rounded to nearest integer
  */
 export async function getCropRequirementK2O(
-  combinedCropData: NMPFileCropData,
-  soilTest: NMPFileSoilTestData | undefined,
+  combinedCropData: NMPFileCrop,
+  soilTest: NMPFileSoilTest | undefined,
   regionId: number,
 ): Promise<number> {
   const conversionFactors = await getConversionFactors();
   if (conversionFactors === null) throw new Error('Failed to get conversion factors.');
   const region = await getRegion(regionId);
   // Use default if soil test data is missing
-  let STK = soilTest?.convertedKelownaK || defaultSoilTestData.convertedKelownaK;
+  let STK = soilTest?.convertedKelownaK || DEFAULT_SOIL_TEST.convertedKelownaK;
   if (!STK) STK = conversionFactors.defaultsoiltestkelownapotassium;
 
   const cropSTKRegionCd = await getCropSoilTestRegions(
@@ -365,14 +357,14 @@ export async function getCropRequirementK2O(
 /**
  * Calculates phosphorus (P2O5) requirement based on soil test and crop needs
  *
- * @param {NMPFileCropData} combinedCropData - Crop data including yields and specifications
- * @param {NMPFileSoilTestData | undefined} soilTest - Soil test of field
+ * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
+ * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field
  * @param {number} regionId - ID of the region
  * @returns {Promise<number>} Required P2O5 application in lbs/acre, rounded to nearest integer
  */
 export async function getCropRequirementP205(
-  combinedCropData: NMPFileCropData,
-  soilTest: NMPFileSoilTestData | undefined,
+  combinedCropData: NMPFileCrop,
+  soilTest: NMPFileSoilTest | undefined,
   regionId: number,
 ): Promise<number> {
   const conversionFactors = await getConversionFactors();
@@ -380,7 +372,7 @@ export async function getCropRequirementP205(
   const region = await getRegion(regionId);
 
   // Use default if soil test data is missing
-  let STP = soilTest?.convertedKelownaP || defaultSoilTestData.convertedKelownaP;
+  let STP = soilTest?.convertedKelownaP || DEFAULT_SOIL_TEST.convertedKelownaP;
   if (!STP) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
 
   const cropSTPRegionCd = await getCropSoilTestRegions(

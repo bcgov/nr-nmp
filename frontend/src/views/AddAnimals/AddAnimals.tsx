@@ -16,13 +16,14 @@ import {
 } from '../../common.styles';
 import useAppState from '@/hooks/useAppState';
 import { Tabs, View } from '@/components/common';
-import { Animal, AnimalData, DAIRY_COW_ID } from '@/types';
+import { Animal, NMPFileAnimal } from '@/types';
 import { FARM_INFORMATION, MANURE_IMPORTS } from '@/constants/routes';
 import { DoubleRowStyle, specialTableRowStyle } from './addAnimals.styles';
 import AddAnimalsModal from './AddAnimalsModal';
 import { isDairyAndMilkingCattle, liquidSolidManureDisplay } from '@/utils/utils';
 import { calculateAnnualWashWater } from './utils';
 import { APICacheContext } from '@/context/APICacheContext';
+import { DAIRY_COW_ID } from '@/constants';
 
 export default function AddAnimals() {
   const { state, dispatch } = useAppState();
@@ -34,8 +35,8 @@ export default function AddAnimals() {
 
   const navigate = useNavigate();
 
-  const [animalList, setAnimalList] = useState<AnimalData[]>(
-    state.nmpFile.years[0].FarmAnimals || [],
+  const [animalList, setAnimalList] = useState<NMPFileAnimal[]>(
+    state.nmpFile.years[0].farmAnimals || [],
   );
 
   useEffect(() => {
@@ -52,8 +53,8 @@ export default function AddAnimals() {
 
   const hasDairyCattle = useMemo(
     () =>
-      state.nmpFile.years[0].FarmAnimals?.some(
-        (animal: AnimalData) => animal.animalId === DAIRY_COW_ID,
+      state.nmpFile.years[0].farmAnimals?.some(
+        (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
       ),
     [state.nmpFile.years],
   );
@@ -86,14 +87,10 @@ export default function AddAnimals() {
   };
 
   const handleNextPage = () => {
-    if (!state.nmpFile.farmDetails.Year) {
-      // We should show an error popup, but for now force-navigate back to Farm Information
-      navigate(FARM_INFORMATION);
-    }
     if (animalList.length) {
       dispatch({
         type: 'SAVE_ANIMALS',
-        year: state.nmpFile.farmDetails.Year!,
+        year: state.nmpFile.farmDetails.year,
         newAnimals: animalList,
       });
       navigate(MANURE_IMPORTS);
@@ -106,7 +103,7 @@ export default function AddAnimals() {
     if (animalList.length) {
       dispatch({
         type: 'SAVE_ANIMALS',
-        year: state.nmpFile.farmDetails.Year!,
+        year: state.nmpFile.farmDetails.year,
         newAnimals: animalList,
       });
     }

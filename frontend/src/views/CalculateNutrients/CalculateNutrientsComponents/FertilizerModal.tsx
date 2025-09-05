@@ -14,8 +14,8 @@ import {
   FertilizerType,
   FertilizerUnit,
   CropNutrients,
-  NMPFileFieldData,
-  CalculateNutrientsColumn,
+  NMPFileField,
+  CalculateNutrientsRow,
   DensityUnit,
   SelectOption,
   NMPFileFertilizer,
@@ -27,8 +27,8 @@ type FertilizerModalProps = {
   fieldIndex: number;
   initialModalData?: NMPFileFertilizer;
   rowEditIndex?: number;
-  balanceRow: CalculateNutrientsColumn;
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+  balanceRow: CalculateNutrientsRow;
+  setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   onClose: () => void;
 };
 
@@ -174,16 +174,16 @@ export default function FertilizerModal({
         if (index !== fieldIndex) return prev;
 
         if (rowEditIndex !== undefined) {
-          const newFertilizers = [...prev.Fertilizers];
+          const newFertilizers = [...prev.fertilizers];
           newFertilizers[rowEditIndex] = { ...formState };
-          return { ...prev, Fertilizers: newFertilizers };
+          return { ...prev, fertilizers: newFertilizers };
         }
 
         // For case where this is a new fertilizer
         return {
           ...prev,
-          Fertilizers: [
-            ...prev.Fertilizers,
+          fertilizers: [
+            ...prev.fertilizers,
             {
               ...formState,
             },

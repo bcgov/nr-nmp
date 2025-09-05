@@ -3,10 +3,9 @@ import Grid from '@mui/material/Grid';
 import Select from '@/components/common/Select/Select';
 import { formGridBreakpoints } from '../../../common.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
-import { NMPFileFieldData } from '@/types';
+import { NMPFileField } from '@/types';
 import Form from '../Form/Form';
-import initialFieldFormData from '@/constants/DefaultNMPFileFieldData';
-import { MANURE_APPLICATION_FREQ } from '@/constants';
+import { MANURE_APPLICATION_FREQ, DEFAULT_NMPFILE_FIELD } from '@/constants';
 import NumberField from '../NumberField/NumberField';
 import TextField from '../TextField/TextField';
 
@@ -14,10 +13,10 @@ type Mode = 'Add Field' | 'Edit Field' | 'Duplicate Field';
 
 interface FieldListModalProps {
   mode: Mode;
-  initialModalData?: NMPFileFieldData;
+  initialModalData?: NMPFileField;
   rowEditIndex?: number;
-  setFieldList: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
-  isFieldNameUnique: (field: Partial<NMPFileFieldData>, index: number) => boolean;
+  setFieldList: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
+  isFieldNameUnique: (field: Partial<NMPFileField>, index: number) => boolean;
   onClose: () => void;
 }
 
@@ -30,8 +29,8 @@ export default function FieldListModal({
   onClose,
   ...props
 }: FieldListModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [formData, setFormData] = useState<NMPFileFieldData>(
-    initialModalData !== undefined ? initialModalData : initialFieldFormData,
+  const [formData, setFormData] = useState<NMPFileField>(
+    initialModalData !== undefined ? initialModalData : DEFAULT_NMPFILE_FIELD,
   );
 
   const onSubmit = () => {
@@ -48,12 +47,12 @@ export default function FieldListModal({
     onClose();
   };
 
-  const handleFormFieldChange = (changes: Partial<NMPFileFieldData>) => {
+  const handleFormFieldChange = (changes: Partial<NMPFileField>) => {
     setFormData((prev) => ({ ...prev, ...changes }));
   };
 
   const validateUniqueName = (): boolean => {
-    if (!formData.FieldName) return true;
+    if (!formData.fieldName) return true;
     return isFieldNameUnique(formData, rowEditIndex === undefined ? -1 : rowEditIndex);
   };
 
@@ -75,8 +74,8 @@ export default function FieldListModal({
             <TextField
               isRequired
               label="Field Name"
-              value={formData.FieldName}
-              onChange={(e) => handleFormFieldChange({ FieldName: e })}
+              value={formData.fieldName}
+              onChange={(e) => handleFormFieldChange({ fieldName: e })}
               validate={() => (validateUniqueName() ? undefined : 'Field name must be unique')}
             />
           </Grid>
@@ -84,8 +83,8 @@ export default function FieldListModal({
             <NumberField
               isRequired
               label="Area in acres"
-              value={formData.Area}
-              onChange={(e) => handleFormFieldChange({ Area: e })}
+              value={formData.area}
+              onChange={(e) => handleFormFieldChange({ area: e })}
               minValue={0.01} // A min value of 0 will cause a divide by 0 error elsewhere
             />
           </Grid>
@@ -94,10 +93,10 @@ export default function FieldListModal({
               label="Manure application"
               isRequired
               items={MANURE_APPLICATION_FREQ}
-              selectedKey={formData.PreviousYearManureApplicationFrequency}
+              selectedKey={formData.previousYearManureApplicationFrequency}
               placeholder="Select"
               onSelectionChange={(e) => {
-                handleFormFieldChange({ PreviousYearManureApplicationFrequency: e as string });
+                handleFormFieldChange({ previousYearManureApplicationFrequency: e as string });
               }}
               noSort
             />
@@ -105,8 +104,8 @@ export default function FieldListModal({
           <Grid size={formGridBreakpoints}>
             <TextField
               label="Comments (optional)"
-              value={formData.Comment}
-              onChange={(e) => handleFormFieldChange({ Comment: e })}
+              value={formData.comment}
+              onChange={(e) => handleFormFieldChange({ comment: e })}
             />
           </Grid>
         </Grid>

@@ -4,15 +4,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '../../common.styles';
 import { Form, Modal, NumberField } from '../../components/common';
-import { NMPFileFieldData, NMPFileSoilTestData, SelectOption, SoilTestMethodsData } from '@/types';
+import { NMPFileField, NMPFileSoilTest, SelectOption, SoilTestMethods } from '@/types';
 import { StyledDatePicker } from './soilTests.styles';
 
 type SoilModalProps = {
-  initialFormData?: Omit<NMPFileSoilTestData, 'soilTestId'>;
+  initialFormData?: Omit<NMPFileSoilTest, 'soilTestId'>;
   currentFieldIndex: number;
   soilTestId: number;
-  soilTestMethods: SelectOption<SoilTestMethodsData>[];
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+  soilTestMethods: SelectOption<SoilTestMethods>[];
+  setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   handleDialogClose: () => void;
 };
 
@@ -24,7 +24,7 @@ export default function SoilTestsModal({
   setFields,
   handleDialogClose,
 }: SoilModalProps) {
-  const [formData, setFormData] = useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(
+  const [formData, setFormData] = useState<Omit<NMPFileSoilTest, 'soilTestId'>>(
     initialFormData || {},
   );
 
@@ -33,7 +33,7 @@ export default function SoilTestsModal({
     [formData?.sampleDate],
   );
 
-  const handleFormFieldChange = (changes: Partial<Omit<NMPFileSoilTestData, 'soilTestId'>>) => {
+  const handleFormFieldChange = (changes: Partial<Omit<NMPFileSoilTest, 'soilTestId'>>) => {
     setFormData((prev) => ({ ...prev, ...changes }));
   };
 
@@ -70,7 +70,7 @@ export default function SoilTestsModal({
       setFields((prevFields) => {
         const newList = [...prevFields];
         if (currentFieldIndex !== null)
-          newList[currentFieldIndex].SoilTest = { ...newFormData, soilTestId };
+          newList[currentFieldIndex].soilTest = { ...newFormData, soilTestId };
         return newList;
       });
       return newFormData;
@@ -100,8 +100,8 @@ export default function SoilTestsModal({
               <StyledDatePicker>
                 <ReactDatePicker
                   selected={formDataDate}
-                  onChange={(e: Date) => {
-                    handleFormFieldChange({ sampleDate: e.toISOString() });
+                  onChange={(e) => {
+                    handleFormFieldChange({ sampleDate: e ? e.toISOString() : undefined });
                   }}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker

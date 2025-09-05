@@ -1,59 +1,33 @@
 import AppState from './AppState';
-import LiquidManureConversionFactors from './LiquidManureConversionFactors';
-import { NMPFile, NMPFileFarmDetails } from './NMPFile';
+import { NMPFile, NMPFileFarmDetails, NMPFileNutrientAnalysis, NMPFileYear } from './NMPFile';
 import { SelectOption } from './Common';
 import {
-  CropsConversionFactors,
-  CropType,
-  Crop,
-  PreviousCrop,
-  SoilTestMethodsData,
-  NMPFileSoilTestData,
-  NMPFileCropData,
-} from './Crops';
-import { NMPFileFieldData, NMPFileOtherNutrient } from './NMPFileFieldData';
-import NMPFileImportedManureData from './NMPFileImportedManureData';
-import SolidManureConversionFactors from './SolidManureConversionFactors';
-import Region from './Region';
-import {
-  CalculateNutrientsColumn,
+  CalculateNutrientsRow,
   CropNutrients,
   DryFertilizerSolubilities,
-  Fertilizer,
-  FertilizerType,
-  FertilizerUnit,
-  DensityUnit,
   InjectionUnit,
   Schedule,
+} from './CalculateNutrients';
+import {
+  NMPFileAppliedManure,
+  NMPFileCrop,
   NMPFileFertigation,
   NMPFileFertilizer,
-  NMPFileAppliedManure,
-  AmmoniaRetention,
-} from './CalculateNutrients';
-import NMPFileYear from './NMPFileYear';
+  NMPFileField,
+  NMPFileOtherNutrient,
+  NMPFileSoilTest,
+} from './NMPFileField';
 import {
-  BEEF_COW_ID,
-  DAIRY_COW_ID,
-  MILKING_COW_ID,
-  POULTRY_ID,
-  SWINE_ID,
-  DUCK_ID,
-  PER_DAY_PER_ANIMAL_UNIT,
-  PER_DAY_UNIT,
   OTHER_ANIMAL_IDS,
   WashWaterUnit,
   ManureType,
-  BeefCattleData,
-  DairyCattleData,
-  PoultryData,
+  NMPFileBeefCattle,
+  NMPFileDairyCattle,
+  NMPFilePoultry,
   OtherAnimalId,
-  OtherAnimalData,
-  AnimalData,
-  Animal,
-} from './Animals';
-import { NMPFileNutrientAnalysis } from './NMPFileNutrientAnalysis';
-import NMPFileGeneratedManureData from './NMPFileGeneratedManureData';
-import Subregion from './Subregion';
+  NMPFileOtherAnimal,
+  NMPFileAnimal,
+} from './NMPFileAnimal';
 import {
   LiquidManureStorageSystem,
   SolidManureStorageSystem,
@@ -67,23 +41,35 @@ import {
   CircularStorage,
   SlopedWallStorage,
   Shape,
+  NMPFileGeneratedManure,
+  NMPFileImportedManure,
 } from './NMPFileManureStorageSystem';
-import { Manure, Units, NitrogenMineralization } from './ManureAPI';
+import {
+  AmmoniaRetention,
+  Animal,
+  AnimalSubtype,
+  DairyCattleBreed,
+  Crop,
+  CropsConversionFactors,
+  CropType,
+  DensityUnit,
+  Fertilizer,
+  FertilizerType,
+  FertilizerUnit,
+  LiquidFertilizerDensity,
+  LiquidManureConversionFactors,
+  Manure,
+  NitrogenMineralization,
+  PreviousCrop,
+  Region,
+  SoilTestMethods,
+  SolidManureConversionFactors,
+  Subregion,
+  Units,
+} from './database';
+import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 
-export {
-  BEEF_COW_ID,
-  DAIRY_COW_ID,
-  MILKING_COW_ID,
-  POULTRY_ID,
-  SWINE_ID,
-  DUCK_ID,
-  PER_DAY_PER_ANIMAL_UNIT,
-  PER_DAY_UNIT,
-  OTHER_ANIMAL_IDS,
-  ManureType,
-  Shape,
-  Schedule,
-};
+export { OTHER_ANIMAL_IDS, ManureType, Shape, Schedule, PrecipitationConversionFactor };
 
 export type {
   AppState,
@@ -92,9 +78,9 @@ export type {
   NMPFile,
   NMPFileFarmDetails,
   NMPFileYear,
-  NMPFileFieldData,
-  NMPFileImportedManureData,
-  NMPFileGeneratedManureData,
+  NMPFileField,
+  NMPFileImportedManure,
+  NMPFileGeneratedManure,
   ManureInSystem,
   NMPFileManureStorageSystem,
   LiquidManureStorageSystem,
@@ -105,21 +91,21 @@ export type {
   CropType,
   Crop,
   PreviousCrop,
-  SoilTestMethodsData,
-  NMPFileSoilTestData,
-  NMPFileCropData,
+  SoilTestMethods,
+  NMPFileSoilTest,
+  NMPFileCrop,
   Manure,
   Units,
   NitrogenMineralization,
-  CalculateNutrientsColumn,
+  CalculateNutrientsRow,
   CropNutrients,
   WashWaterUnit,
-  BeefCattleData,
-  DairyCattleData,
-  OtherAnimalData,
+  NMPFileBeefCattle,
+  NMPFileDairyCattle,
+  NMPFileOtherAnimal,
   OtherAnimalId,
-  PoultryData,
-  AnimalData,
+  NMPFilePoultry,
+  NMPFileAnimal,
   Animal,
   Fertilizer,
   FertilizerType,
@@ -141,4 +127,7 @@ export type {
   NMPFileFertigation,
   NMPFileFertilizer,
   NMPFileAppliedManure,
+  AnimalSubtype,
+  DairyCattleBreed,
+  LiquidFertilizerDensity,
 };
