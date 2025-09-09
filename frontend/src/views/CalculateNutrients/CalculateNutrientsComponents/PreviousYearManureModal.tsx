@@ -38,14 +38,16 @@ export default function PreviousYearManureModal({
   initialModalData,
 }: PreviousYearManureModalProps) {
   const [formData, setFormData] = useState<PreviousYearManureFormData>(
-    initialModalData || defaultFormData,
+    initialModalData ?? defaultFormData,
   );
 
   const [calculatedDefaultCredit, setCalculatedDefaultCredit] = useState<number | null>(null);
 
+  const hasManureApplication = formData.PreviousYearManureApplicationFrequency !== '0';
+
   useEffect(() => {
     const getDefaultCredit = async () => {
-      if (formData.PreviousYearManureApplicationFrequency !== '0') {
+      if (hasManureApplication) {
         try {
           const defaultCredit = await calcPrevYearManureApplDefault({
             ...field,
@@ -62,48 +64,42 @@ export default function PreviousYearManureModal({
     };
 
     getDefaultCredit();
-  }, [formData.PreviousYearManureApplicationFrequency, field]);
+  }, [formData.PreviousYearManureApplicationFrequency, field, hasManureApplication]);
 
   const isFormValid = useMemo(() => {
-    if (formData.PreviousYearManureApplicationFrequency !== '0') {
-      return (
-        formData.PreviousYearManureApplicationNitrogenCredit !== null &&
-        formData.PreviousYearManureApplicationNitrogenCredit >= 0
-      );
-    }
-    return true;
-  }, [formData]);
+    if (!hasManureApplication) return true;
+
+    return (
+      formData.PreviousYearManureApplicationNitrogenCredit !== null &&
+      formData.PreviousYearManureApplicationNitrogenCredit >= 0
+    );
+  }, [formData, hasManureApplication]);
 
   const validationErrors = useMemo(() => {
     const newErrors: Record<string, string> = {};
 
-    if (formData.PreviousYearManureApplicationFrequency !== '0') {
-      if (
-        formData.PreviousYearManureApplicationNitrogenCredit === null ||
-        formData.PreviousYearManureApplicationNitrogenCredit < 0
-      ) {
+    if (hasManureApplication) {
+      const credit = formData.PreviousYearManureApplicationNitrogenCredit;
+      if (credit === null || credit < 0) {
         newErrors.PreviousYearManureApplicationNitrogenCredit =
           'Nitrogen credit must be a positive number when manure application is selected';
       }
     }
 
     return newErrors;
-  }, [formData]);
+  }, [formData, hasManureApplication]);
 
   const handleSubmit = () => {
-    if (!isFormValid) {
-      return;
-    }
+    if (!isFormValid) return;
 
     setFields((prevFields) => {
       const updatedFields = [...prevFields];
       updatedFields[fieldIndex] = {
         ...updatedFields[fieldIndex],
         PreviousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
-        PreviousYearManureApplicationNitrogenCredit:
-          formData.PreviousYearManureApplicationFrequency === '0'
-            ? null
-            : formData.PreviousYearManureApplicationNitrogenCredit,
+        PreviousYearManureApplicationNitrogenCredit: hasManureApplication
+          ? formData.PreviousYearManureApplicationNitrogenCredit
+          : null,
       };
       return updatedFields;
     });
@@ -117,10 +113,9 @@ export default function PreviousYearManureModal({
 
   const handleResetToCalculated = () => {
     if (calculatedDefaultCredit !== null) {
-      setFormData((prev) => ({
-        ...prev,
+      handleFormFieldChange({
         PreviousYearManureApplicationNitrogenCredit: calculatedDefaultCredit,
-      }));
+      });
     }
   };
 
@@ -141,11 +136,11 @@ export default function PreviousYearManureModal({
           container
           spacing={2}
         >
-          {formData.PreviousYearManureApplicationFrequency !== '0' && (
+          {hasManureApplication ? (
             <Grid size={12}>
               <NumberField
                 label="Nitrogen Credit (lb/ac)"
-                value={formData.PreviousYearManureApplicationNitrogenCredit || undefined}
+                value={formData.PreviousYearManureApplicationNitrogenCredit ?? undefined}
                 onChange={(value) => {
                   handleFormFieldChange({
                     PreviousYearManureApplicationNitrogenCredit: value,
@@ -185,9 +180,7 @@ export default function PreviousYearManureModal({
                 </div>
               )}
             </Grid>
-          )}
-
-          {formData.PreviousYearManureApplicationFrequency === '0' && (
+          ) : (
             <Grid size={12}>
               <p style={{ fontStyle: 'italic', color: '#666' }}>
                 No previous year manure application selected. Nitrogen credit will be set to 0.
