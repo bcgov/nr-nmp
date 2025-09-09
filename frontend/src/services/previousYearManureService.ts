@@ -1,6 +1,8 @@
 /**
  * Service for handling previous year manure calculations and data
  */
+import axios from 'axios';
+import { env } from '@/env';
 import { NMPFileFieldData } from '@/types';
 
 export interface PreviousYearManureData {
@@ -13,15 +15,15 @@ export interface PreviousYearManureData {
 
 export const previousYearManureService = {
   /**
-   * Determines if manure was added in previous year based on frequency
-   * @param previousYearManureApplicationFrequency - Field's manure application frequency
-   * @returns Promise<boolean> Whether manure was added in previous year
+   * Checks if manure was added in the previous year based on frequency
+   * @param previousYearManureApplicationFrequency - The frequency ID to check
+   * @returns Promise<boolean> True if manure was applied in previous year
    */
   async wasManureAddedInPreviousYear(
     previousYearManureApplicationFrequency: string,
   ): Promise<boolean> {
     try {
-      // If frequency is '0' or not set, no manure was added
+      // Return false if frequency is empty or 0
       if (
         !previousYearManureApplicationFrequency ||
         previousYearManureApplicationFrequency === '0'
@@ -29,18 +31,11 @@ export const previousYearManureService = {
         return false;
       }
 
-      const response = await fetch('/api/manures/previousyearmanureapplications/', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.get(
+        `${env.VITE_BACKEND_URL}/api/previousyearmanureapplications/`,
+      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const applications = await response.json();
+      const applications = response.data;
 
       // Check if the frequency ID exists in the applications data
       const frequencyExists = applications.some(
@@ -70,18 +65,11 @@ export const previousYearManureService = {
         return 0;
       }
 
-      const response = await fetch('/api/manures/previousyearmanureapplications/', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.get(
+        `${env.VITE_BACKEND_URL}/api/previousyearmanureapplications/`,
+      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const applications = await response.json();
+      const applications = response.data;
 
       // Find the application that matches the field's frequency
       const matchingApplication = applications.find(
@@ -90,13 +78,20 @@ export const previousYearManureService = {
           field.PreviousYearManureApplicationFrequency,
       );
 
-      if (matchingApplication && matchingApplication.defaultnitrogencredit) {
-        // Parse the nitrogen credit value
-        const nitrogenCredit = parseFloat(matchingApplication.defaultnitrogencredit);
-        return Number.isNaN(nitrogenCredit) ? 0 : nitrogenCredit;
+      if (!matchingApplication) {
+        return 0;
       }
 
-      return 0;
+      // Parse the nitrogen credit array from the string format "{22,30,45}"
+      const creditString = matchingApplication.defaultnitrogencredit;
+      const creditArray = creditString
+        .replace(/[{}]/g, '')
+        .split(',')
+        .map((val: string) => parseInt(val.trim(), 10));
+
+      // Return the first value in the array as the default credit
+      // In the C# code, this might depend on specific conditions
+      return creditArray[0] || 0;
     } catch (error) {
       console.error('Error calculating default previous year manure nitrogen credit:', error);
       return 0;
