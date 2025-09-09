@@ -478,6 +478,7 @@ export default function CalculateNutrients() {
           onClose={handleDialogClose}
           setFields={setFieldList}
           modalStyle={{ width: '600px' }}
+          field={fieldList[activeField]}
           initialModalData={{
             PreviousYearManureApplicationFrequency:
               fieldList[activeField]?.PreviousYearManureApplicationFrequency || '0',
