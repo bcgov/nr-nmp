@@ -26,7 +26,6 @@ import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal/FertigationModal.tsx';
-import PreviousYearManureRow from './CalculateNutrientsComponents/PreviousYearManureRow';
 import PreviousYearManureModal from './CalculateNutrientsComponents/PreviousYearManureModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 import CropsModal from '../Crops/CropsModal';
@@ -191,6 +190,21 @@ export default function CalculateNutrients() {
     const handleDeleteRow = genHandleDeleteRow(activeField, 'OtherNutrients', setFieldList);
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
   }, [activeField]);
+
+  const previousYearManureColumns: GridColDef[] = useMemo(() => {
+    const handleEditRow = () => {
+      setOpenDialog(['previousYearManure', 0]);
+    };
+    // No delete function for previous year manure since it's always present
+    const handleDeleteRow = () => {};
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      'Previous Year Manure',
+      false,
+    );
+  }, []);
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
     const allRows = [
@@ -459,12 +473,17 @@ export default function CalculateNutrients() {
       )}
       {openDialog[0] === 'previousYearManure' && (
         <PreviousYearManureModal
-          field={fieldList[activeField]}
           fieldIndex={activeField}
           isOpen={openDialog[0] === 'previousYearManure'}
           onClose={handleDialogClose}
           setFields={setFieldList}
           modalStyle={{ width: '600px' }}
+          initialModalData={{
+            PreviousYearManureApplicationFrequency:
+              fieldList[activeField]?.PreviousYearManureApplicationFrequency || '0',
+            PreviousYearManureApplicationNitrogenCredit:
+              fieldList[activeField]?.PreviousYearManureApplicationNitrogenCredit || null,
+          }}
         />
       )}
       <div
@@ -495,12 +514,27 @@ export default function CalculateNutrients() {
       />
 
       {/* Previous Year Manure Row */}
-      {prevYearManureData && (
-        <PreviousYearManureRow
-          data={prevYearManureData}
-          customTableStyle={customTableStyle}
-          customCalcTableStyle={customCalcTableStyle}
-          onEdit={() => setOpenDialog(['previousYearManure', 0])}
+      {prevYearManureData?.display && (
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={[
+            {
+              name: prevYearManureData.fieldName,
+              reqN: prevYearManureData.nitrogen || 0,
+              reqP2o5: 0,
+              reqK2o: 0,
+              remN: 0,
+              remP2o5: 0,
+              remK2o: 0,
+            },
+          ]}
+          columns={previousYearManureColumns}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          columnHeaderHeight={16}
+          hideFooterPagination
+          hideFooter
         />
       )}
 

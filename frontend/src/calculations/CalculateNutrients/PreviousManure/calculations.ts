@@ -98,7 +98,6 @@ export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Pr
       .map((val: string) => parseInt(val.trim(), 10));
 
     // Return the first value in the array as the default credit
-    // In the C# code, this might depend on specific conditions
     return creditArray[0] || 0;
   } catch (error) {
     console.error('Error calculating previous year manure application default:', error);

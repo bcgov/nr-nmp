@@ -1,16 +1,19 @@
-import { useState, useEffect, SetStateAction } from 'react';
+import { useState, SetStateAction } from 'react';
 import { Grid } from '@mui/material';
 import { Modal, Form, Select, NumberField } from '@/components/common';
 import { NMPFileFieldData } from '@/types';
 import { MANURE_APPLICATION_FREQ } from '@/constants';
 
 interface PreviousYearManureModalProps {
-  field: NMPFileFieldData;
   fieldIndex: number;
   isOpen: boolean;
   onClose: () => void;
   setFields: (value: SetStateAction<NMPFileFieldData[]>) => void;
   modalStyle?: object;
+  initialModalData?: {
+    PreviousYearManureApplicationFrequency: string;
+    PreviousYearManureApplicationNitrogenCredit: number | null;
+  };
 }
 
 interface PreviousYearManureFormData {
@@ -18,32 +21,24 @@ interface PreviousYearManureFormData {
   PreviousYearManureApplicationNitrogenCredit: number | null;
 }
 
+const defaultFormData: PreviousYearManureFormData = {
+  PreviousYearManureApplicationFrequency: '0',
+  PreviousYearManureApplicationNitrogenCredit: null,
+};
+
 export default function PreviousYearManureModal({
-  field,
   fieldIndex,
   isOpen,
   onClose,
   setFields,
   modalStyle,
+  initialModalData,
 }: PreviousYearManureModalProps) {
-  const [formData, setFormData] = useState<PreviousYearManureFormData>({
-    PreviousYearManureApplicationFrequency: field.PreviousYearManureApplicationFrequency || '0',
-    PreviousYearManureApplicationNitrogenCredit:
-      field.PreviousYearManureApplicationNitrogenCredit || null,
-  });
+  const [formData, setFormData] = useState<PreviousYearManureFormData>(
+    initialModalData || defaultFormData,
+  );
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    if (isOpen) {
-      setFormData({
-        PreviousYearManureApplicationFrequency: field.PreviousYearManureApplicationFrequency || '0',
-        PreviousYearManureApplicationNitrogenCredit:
-          field.PreviousYearManureApplicationNitrogenCredit || null,
-      });
-      setErrors({});
-    }
-  }, [isOpen, field]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
