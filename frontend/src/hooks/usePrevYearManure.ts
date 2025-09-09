@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { NMPFileFieldData } from '@/types';
 import {
-  previousYearManureService,
+  calculatePrevYearManure,
   PreviousYearManureData,
-} from '@/services/previousYearManureService';
+} from '@/calculations/CalculateNutrients/PreviousManure';
 
 /**
  * Custom hook for managing previous year manure calculations
@@ -15,12 +15,12 @@ const usePrevYearManure = (field: NMPFileFieldData | null) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const calculatePrevYearManure = useCallback(async (fieldData: NMPFileFieldData) => {
+  const calculate = useCallback(async (fieldData: NMPFileFieldData) => {
     setLoading(true);
     setError(null);
 
     try {
-      const result = await previousYearManureService.calculatePrevYearManure(fieldData);
+      const result = await calculatePrevYearManure(fieldData);
       setData(result);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
@@ -33,17 +33,18 @@ const usePrevYearManure = (field: NMPFileFieldData | null) => {
 
   useEffect(() => {
     if (field) {
-      calculatePrevYearManure(field);
+      calculate(field);
     } else {
       setData(null);
+      setError(null);
     }
-  }, [field, calculatePrevYearManure]);
+  }, [field, calculate]);
 
   const refetch = useCallback(() => {
     if (field) {
-      calculatePrevYearManure(field);
+      calculate(field);
     }
-  }, [field, calculatePrevYearManure]);
+  }, [field, calculate]);
 
   return {
     data,

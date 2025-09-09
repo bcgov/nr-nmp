@@ -1,6 +1,7 @@
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
 import { CalculateNutrientsColumn } from '@/types';
-import { PreviousYearManureData } from '@/services/previousYearManureService';
+import { PreviousYearManureData } from '@/calculations/CalculateNutrients/PreviousManure';
 import { generateColumns, renderNutrientCell } from '../utils';
 
 interface PreviousYearManureRowProps {
