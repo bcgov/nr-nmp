@@ -7,13 +7,14 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Select, Form, NumberField, InputField } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import type {
-  CalculateNutrientsColumn,
+  CalculateNutrientsRow,
   CropNutrients,
   DensityUnit,
   Fertilizer,
   FertilizerType,
   FertilizerUnit,
-  NMPFileFieldData,
+  LiquidFertilizerDensity,
+  NMPFileField,
   Schedule,
   SelectOption,
 } from '@/types';
@@ -68,9 +69,9 @@ type FertigationModalProps = {
   fieldIndex: number;
   initialModalData?: NMPFileFertigation;
   rowEditIndex?: number;
-  balanceRow: CalculateNutrientsColumn;
-  field: NMPFileFieldData;
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+  balanceRow: CalculateNutrientsRow;
+  field: NMPFileField;
+  setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   onClose: () => void;
 };
 
@@ -170,7 +171,7 @@ export default function FertigationModal({
 }: FertigationModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const { state } = useAppState();
   const field = useMemo(
-    () => state.nmpFile.years[0].Fields![fieldIndex],
+    () => state.nmpFile.years[0].fields![fieldIndex],
     [state.nmpFile, fieldIndex],
   );
   const [fertilizerTypes, setFertilizerTypes] = useState<SelectOption<FertilizerType>[]>([]);
@@ -178,7 +179,7 @@ export default function FertigationModal({
   const [filteredFertilizers, setFilteredFertilizers] = useState<SelectOption<Fertilizer>[]>([]);
   const [liquidUnits, setLiquidUnits] = useState<SelectOption<FertilizerUnit>[]>([]);
   const [densityUnits, setDensityUnits] = useState<SelectOption<DensityUnit>[]>([]);
-  const [liqDensityFactors, setLiqDensityFactors] = useState<any[]>([]);
+  const [liqDensityFactors, setLiqDensityFactors] = useState<LiquidFertilizerDensity[]>([]);
   const [formData, setFormData] = useState<NMPFileFertigation>(
     initialModalData || EMPTY_FERTIGATION_FORM_DATA,
   );
@@ -288,11 +289,11 @@ export default function FertigationModal({
       const newFields = [...prevFields];
       const newField = newFields[fieldIndex];
       if (rowEditIndex !== undefined) {
-        const newFertigations = [...newField.Fertigations];
+        const newFertigations = [...newField.fertigations];
         newFertigations[rowEditIndex] = { ...formData };
-        newField.Fertigations = newFertigations;
+        newField.fertigations = newFertigations;
       } else {
-        newField.Fertigations = [...newField.Fertigations, { ...formData }];
+        newField.fertigations = [...newField.fertigations, { ...formData }];
       }
       return newFields;
     });
@@ -327,29 +328,29 @@ export default function FertigationModal({
       const volume = getProductVolumePerApplication(
         formData.applicationRate!,
         applicationUnit,
-        field.Area,
+        field.area,
       );
       const volumeForSeason = volume * formData.eventsPerSeason;
       const applicationTime = getTimePerApplication(
         formData.applicationRate!,
         applicationUnit,
-        field.Area,
+        field.area,
         formData.injectionRate,
         injectionUnit,
       );
       const weight = getProductWeightInPounds(
         formData.applicationRate!,
         applicationUnit,
-        field.Area,
+        field.area,
         formData.density!,
         densityUnit,
       );
       const reqN =
-        Math.round(getAppliedNutrientPerApplication(weight, field.Area, nutrients.N) * 10) / 10;
+        Math.round(getAppliedNutrientPerApplication(weight, field.area, nutrients.N) * 10) / 10;
       const reqP2o5 =
-        Math.round(getAppliedNutrientPerApplication(weight, field.Area, nutrients.P2O5) * 10) / 10;
+        Math.round(getAppliedNutrientPerApplication(weight, field.area, nutrients.P2O5) * 10) / 10;
       const reqK2o =
-        Math.round(getAppliedNutrientPerApplication(weight, field.Area, nutrients.K2O) * 10) / 10;
+        Math.round(getAppliedNutrientPerApplication(weight, field.area, nutrients.K2O) * 10) / 10;
       setFormData((prev) => ({
         ...prev,
         volume,
@@ -389,7 +390,7 @@ export default function FertigationModal({
         formData.solubilityUnitId,
         formData.injectionRate,
         formData.injectionUnitId!,
-        field.Area,
+        field.area,
         formData.eventsPerSeason,
         nutrients.N,
         nutrients.P2O5,
@@ -457,7 +458,7 @@ export default function FertigationModal({
           next.name = filteredFertilizers.find((f) => f.id === value)!.label;
           // Load liquid densities.
           if (isLiquidFertilizer && !isCustomFertilizer) {
-            const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value);
+            const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value)!;
 
             next.density = densityValue.value;
             next.densityUnitId = densityValue.densityunitid;

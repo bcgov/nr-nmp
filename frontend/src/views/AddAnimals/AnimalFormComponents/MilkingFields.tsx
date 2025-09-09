@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { PER_DAY_UNIT, PER_DAY_PER_ANIMAL_UNIT, WashWaterUnit } from '@/types';
+import { WashWaterUnit } from '@/types';
 import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
+import { PER_DAY_PER_ANIMAL_UNIT, PER_DAY_UNIT } from '@/constants';
 
 interface MilkingFieldsProps {
   milkProductionInit: number;
+  milkProductionDefault: number;
   washWaterInit: number;
   animalsPerFarm: number;
   washWaterUnit?: WashWaterUnit;
-  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
+  handleInputChanges: (changes: { [name: string]: string | number | boolean | undefined }) => void;
 }
 
 const washWaterOptions: { id: string; label: string }[] = [
@@ -19,6 +21,7 @@ const washWaterOptions: { id: string; label: string }[] = [
 
 export default function MilkingFields({
   milkProductionInit,
+  milkProductionDefault,
   washWaterInit,
   animalsPerFarm,
   washWaterUnit,
@@ -41,12 +44,17 @@ export default function MilkingFields({
   useEffect(() => {
     handleInputChanges({
       milkProduction: milkProductionInit,
+      milkProductionAdjusted: false,
       washWater: washWaterInit,
       // Per day per animal is the default
       washWaterUnit: washWaterUnit || PER_DAY_PER_ANIMAL_UNIT,
     });
     return () => {
-      handleInputChanges({ milkProduction: undefined, washWater: undefined });
+      handleInputChanges({
+        milkProduction: undefined,
+        milkProductionAdjusted: undefined,
+        washWater: undefined,
+      });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -72,7 +80,10 @@ export default function MilkingFields({
           value={milkProduction}
           onChange={(e) => {
             setMilkProduction(e);
-            handleInputChanges({ milkProduction: e });
+            handleInputChanges({
+              milkProduction: e,
+              milkProductionAdjusted: milkProductionDefault !== e,
+            });
           }}
         />
       </Grid>

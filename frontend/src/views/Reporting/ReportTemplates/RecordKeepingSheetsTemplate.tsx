@@ -23,7 +23,7 @@ function NO_ROWS() {
 export default function RecordKeepingSheets() {
   const { nmpFile } = useAppState().state;
   const { farmDetails, years } = nmpFile;
-  const { FarmName, FarmRegion, FarmSubRegion } = farmDetails;
+  const { farmName, farmRegion, farmSubregion } = farmDetails;
 
   const [regionOptions, setRegionOptions] = useState<SelectOption<Region>[]>([]);
   const [subregionOptions, setSubregionOptions] = useState<SelectOption<Subregion>[]>([]);
@@ -40,7 +40,7 @@ export default function RecordKeepingSheets() {
       }));
       setRegionOptions(regions);
     });
-    apiCache.callEndpoint(`api/subregions/${FarmRegion}/`).then((response) => {
+    apiCache.callEndpoint(`api/subregions/${farmRegion}/`).then((response) => {
       const { data } = response;
       const subregions: SelectOption<Subregion>[] = (data as Subregion[]).map((row) => ({
         id: row.id.toString(),
@@ -50,7 +50,7 @@ export default function RecordKeepingSheets() {
 
       setSubregionOptions(subregions);
     });
-  }, [apiCache, FarmRegion]);
+  }, [apiCache, farmRegion]);
 
   return (
     <div style={{ width: '744px' }}>
@@ -70,51 +70,51 @@ export default function RecordKeepingSheets() {
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
-              <strong>Farm name:</strong> {FarmName}
+              <strong>Farm name:</strong> {farmName}
             </span>
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
               <strong>Farm region:</strong>{' '}
-              {regionOptions.find((ele) => ele.id === FarmRegion)?.label ?? FarmRegion}
+              {regionOptions.find((ele) => ele.id === farmRegion)?.label ?? farmRegion}
             </span>
           </FieldInfoItem>
           <FieldInfoItem>
             <span>
               <strong>Farm subregion:</strong>{' '}
-              {subregionOptions.find((ele) => ele.id === FarmSubRegion)?.label ?? FarmSubRegion}
+              {subregionOptions.find((ele) => ele.id === farmSubregion)?.label ?? farmSubregion}
             </span>
           </FieldInfoItem>
         </FieldInfoSection>
       </FieldContainer>
       <div style={{ fontWeight: 'bold', marginTop: '32px' }}>Application Schedule</div>
       {years.map((yearEle) =>
-        yearEle.Fields?.map((fieldEle) => (
+        yearEle.fields?.map((fieldEle) => (
           <div
-            key={fieldEle.FieldName}
+            key={fieldEle.fieldName}
             style={{ marginTop: '16px' }}
           >
             <FieldContainer>
               <FieldInfoSection>
                 <FieldInfoItem>
                   <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
-                    Field Name: {fieldEle.FieldName}
+                    Field Name: {fieldEle.fieldName}
                   </span>
                 </FieldInfoItem>
                 <FieldInfoItem>
                   <span>
-                    <strong>Planning Year:</strong> {farmDetails.Year}
+                    <strong>Planning Year:</strong> {farmDetails.year}
                   </span>
                 </FieldInfoItem>
                 <FieldInfoItem>
                   <span>
-                    <strong>Field Area:</strong> {fieldEle.Area}
+                    <strong>Field Area:</strong> {fieldEle.area}
                   </span>
                 </FieldInfoItem>
                 <FieldInfoItem>
                   <span>
                     <strong>Crops</strong>{' '}
-                    {fieldEle.Crops.map((cropEle) => (
+                    {fieldEle.crops.map((cropEle) => (
                       <div key={cropEle.name}>{cropEle.name}</div>
                     ))}
                   </span>
@@ -123,7 +123,7 @@ export default function RecordKeepingSheets() {
             </FieldContainer>
             <DataGrid
               sx={{ ...customTableStyle, marginTop: '16px' }}
-              rows={fieldEle.Fertilizers}
+              rows={fieldEle.fertilizers}
               columns={TABLE_COLUMNS}
               getRowId={() => crypto.randomUUID()}
               disableRowSelectionOnClick

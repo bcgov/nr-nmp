@@ -1,21 +1,22 @@
-import {
-  BEEF_COW_ID,
-  BeefCattleData,
-  DAIRY_COW_ID,
-  DairyCattleData,
-  ManureType,
-  POULTRY_ID,
-  PoultryData,
-} from '@/types';
+import { NMPFileBeefCattle, NMPFileDairyCattle, ManureType, NMPFilePoultry } from '@/types';
 
-export const INITIAL_BEEF_FORM_DATA: Omit<BeefCattleData, 'uuid'> = {
+export const BEEF_COW_ID = '1';
+export const DAIRY_COW_ID = '2';
+export const MILKING_COW_ID = '9'; // subtype
+export const POULTRY_ID = '6';
+export const SWINE_ID = '9';
+export const DUCK_ID = '10'; // subtype
+export const PER_DAY_PER_ANIMAL_UNIT = 'PER_DAY_PER_ANIMAL';
+export const PER_DAY_UNIT = 'PER_DAY';
+
+export const INITIAL_BEEF_FORM_DATA: Omit<NMPFileBeefCattle, 'uuid'> = {
   animalId: BEEF_COW_ID,
   subtype: '',
   daysCollected: 0,
   manureType: ManureType.Solid,
 };
 
-export const INITIAL_DAIRY_FORM_DATA: Omit<DairyCattleData, 'uuid'> = {
+export const INITIAL_DAIRY_FORM_DATA: Omit<NMPFileDairyCattle, 'uuid'> = {
   animalId: DAIRY_COW_ID,
   subtype: '',
   // Breed MUST start defined bc of weird milking cow logic
@@ -24,7 +25,7 @@ export const INITIAL_DAIRY_FORM_DATA: Omit<DairyCattleData, 'uuid'> = {
   grazingDaysPerYear: 0,
 };
 
-export const INITIAL_POULTRY_FORM_DATA: Omit<PoultryData, 'uuid'> = {
+export const INITIAL_POULTRY_FORM_DATA: Omit<NMPFilePoultry, 'uuid'> = {
   animalId: POULTRY_ID,
   subtype: '',
   birdsPerFlock: 0,

@@ -4,34 +4,27 @@ import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import { APICacheContext } from '@/context/APICacheContext';
-import { AnimalData, DAIRY_COW_ID, DairyCattleData, MILKING_COW_ID, SelectOption } from '@/types';
+import {
+  NMPFileAnimal,
+  NMPFileDairyCattle,
+  SelectOption,
+  Animal,
+  ManureType,
+  DairyCattleBreed,
+  AnimalSubtype,
+} from '@/types';
 import { calculateAnnualLiquidManure, calculateAnnualSolidManure } from '../utils';
 import MilkingFields from './MilkingFields';
 import AnimalFormWrapper from './AnimalFormWrapper';
-import { Animal, ManureType } from '@/types/Animals';
+import { DAIRY_COW_ID, MILKING_COW_ID } from '@/constants';
 
 type DairyCattleProps = {
-  formData: DairyCattleData;
+  formData: NMPFileDairyCattle;
   animals: SelectOption<Animal>[];
-  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
-  handleSubmit: (newFormData: AnimalData) => void;
+  handleInputChanges: (changes: { [name: string]: string | number | boolean | undefined }) => void;
+  handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
-
-interface DairyCattleSubtype {
-  id: number;
-  name: string;
-  liquidpergalperanimalperday: number;
-  solidperpoundperanimalperday: number;
-  washwater: number;
-  milkproduction: number;
-}
-
-interface DairyCattleBreed {
-  id: number;
-  breedname: string;
-  breedmanurefactor: number;
-}
 
 export default function DairyCattle({
   formData,
@@ -40,7 +33,7 @@ export default function DairyCattle({
   ...props
 }: DairyCattleProps) {
   const apiCache = useContext(APICacheContext);
-  const [subtypes, setSubtypes] = useState<DairyCattleSubtype[]>([]);
+  const [subtypes, setSubtypes] = useState<AnimalSubtype[]>([]);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
   const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
@@ -53,7 +46,7 @@ export default function DairyCattle({
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     return milkingCow.washwater;
   }, [formData.washWater, subtypes]);
-  const milkProductionInit = useMemo(() => {
+  const milkProductionDefault = useMemo(() => {
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
@@ -87,7 +80,7 @@ export default function DairyCattle({
       extraCoefficient = breed.breedmanurefactor;
     }
 
-    let withManureCalc: DairyCattleData;
+    let withManureCalc: NMPFileDairyCattle;
     if (formData.manureType === ManureType.Liquid) {
       withManureCalc = {
         ...formData,
@@ -123,36 +116,21 @@ export default function DairyCattle({
   useEffect(() => {
     apiCache.callEndpoint(`api/animal_subtypes/${DAIRY_COW_ID}/`).then((response) => {
       if (response.status === 200) {
-        const { data } = response;
-        // The data in the response has more properties, but we want to trim it down
-        const subtypez: DairyCattleSubtype[] = (data as DairyCattleSubtype[]).map((row) => ({
-          id: row.id,
-          name: row.name,
-          solidperpoundperanimalperday: row.solidperpoundperanimalperday,
-          liquidpergalperanimalperday: row.liquidpergalperanimalperday,
-          washwater: row.washwater,
-          milkproduction: row.milkproduction,
-        }));
-        setSubtypes(subtypez);
-        const subtypeOptionz: { id: string; label: string }[] = subtypez.map((row) => ({
-          id: row.id.toString(),
-          label: row.name,
-        }));
+        setSubtypes(response.data);
+        const subtypeOptionz: { id: string; label: string }[] = response.data.map(
+          (row: AnimalSubtype) => ({
+            id: row.id.toString(),
+            label: row.name,
+          }),
+        );
         setSubtypeOptions(subtypeOptionz);
       }
     });
 
     apiCache.callEndpoint('api/breeds/').then((response) => {
       if (response.status === 200) {
-        const { data } = response;
-        // The data in the response has more properties, but we want to trim it down
-        const breedz: DairyCattleBreed[] = (data as DairyCattleBreed[]).map((row) => ({
-          id: row.id,
-          breedname: row.breedname,
-          breedmanurefactor: row.breedmanurefactor,
-        }));
-        setBreeds(breedz);
-        const breedOptionz = breedz.map((breed) => ({
+        setBreeds(response.data);
+        const breedOptionz = response.data.map((breed: DairyCattleBreed) => ({
           id: breed.id.toString(),
           label: breed.breedname,
         }));
@@ -215,10 +193,11 @@ export default function DairyCattle({
         />
       </Grid>
       {formData.subtype === MILKING_COW_ID &&
-        milkProductionInit !== undefined &&
+        milkProductionDefault !== undefined &&
         washWaterInit !== undefined && (
           <MilkingFields
-            milkProductionInit={milkProductionInit}
+            milkProductionInit={formData.milkProduction || milkProductionDefault}
+            milkProductionDefault={milkProductionDefault}
             washWaterInit={washWaterInit}
             animalsPerFarm={formData.animalsPerFarm || 0}
             washWaterUnit={formData.washWaterUnit}

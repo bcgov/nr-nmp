@@ -4,20 +4,21 @@ import Grid from '@mui/material/Grid';
 import { Checkbox, CheckboxGroup } from '@bcgov/design-system-react-components';
 import { NumberField, Select, TextField } from '@/components/common';
 import { formGridBreakpoints } from '../../common.styles';
-import MANURE_TYPE_OPTIONS from '@/constants/ManureTypeOptions';
 import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
-import { ManureInSystem, ManureType } from '@/types';
 import {
-  NMPFileManureStorageSystem,
   LiquidManureStorageSystem,
+  ManureInSystem,
+  ManureType,
+  NMPFileManureStorageSystem,
   SolidManureStorageSystem,
-} from '@/types/NMPFileManureStorageSystem';
+} from '@/types';
 import { StorageModalFormData } from './types';
 import {
   DEFAULT_LIQUID_MANURE_STORAGE,
   DEFAULT_LIQUID_MANURE_SYSTEM,
   DEFAULT_SOLID_MANURE_STORAGE,
   DEFAULT_SOLID_MANURE_SYSTEM,
+  MANURE_TYPE_OPTIONS,
 } from '@/constants';
 
 type StorageSystemDetailsEditProps = {
@@ -35,13 +36,13 @@ export default function StorageSystemDetailsEdit({
 }: StorageSystemDetailsEditProps) {
   // Need to maintain a string[] for the CheckboxGroup
   const selectedManureNames = useMemo(
-    () => formData.manuresInSystem.map((m) => m.data.ManagedManureName),
+    () => formData.manuresInSystem.map((m) => m.data.managedManureName),
     [formData],
   );
 
   const [fullManureList, setFullManureList] = useState<ManureInSystem[]>(
     [...unassignedManures, ...formData.manuresInSystem].sort((a, b) =>
-      a.data.ManagedManureName.localeCompare(b.data.ManagedManureName),
+      a.data.managedManureName.localeCompare(b.data.managedManureName),
     ),
   );
 
@@ -49,7 +50,7 @@ export default function StorageSystemDetailsEdit({
   const totalManureGallons = useMemo(
     () =>
       fullManureList.reduce(
-        (sum, manure) => sum + (manure.data.AnnualAmountUSGallonsVolume || 0),
+        (sum, manure) => sum + (manure.data.annualAmountUSGallonsVolume || 0),
         0,
       ),
     [fullManureList],
@@ -110,16 +111,16 @@ export default function StorageSystemDetailsEdit({
     setFullManureList((prev) =>
       prev.map((manure) => {
         let newManure: ManureInSystem;
-        if (selected.includes(manure.data.ManagedManureName)) {
+        if (selected.includes(manure.data.managedManureName)) {
           newManure = {
             ...manure,
-            data: { ...manure.data, AssignedToStoredSystem: true },
+            data: { ...manure.data, assignedToStoredSystem: true },
           } as ManureInSystem;
           selectedManures.push(newManure);
         } else {
           newManure = {
             ...manure,
-            data: { ...manure.data, AssignedToStoredSystem: false },
+            data: { ...manure.data, assignedToStoredSystem: false },
           } as ManureInSystem;
         }
         return newManure;
@@ -152,7 +153,7 @@ export default function StorageSystemDetailsEdit({
                   (m) =>
                     ({
                       ...m,
-                      data: { ...m.data, AssignedToStoredSystem: false },
+                      data: { ...m.data, assignedToStoredSystem: false },
                     }) as ManureInSystem,
                 ),
               );
@@ -180,10 +181,10 @@ export default function StorageSystemDetailsEdit({
           >
             {availableManures.map((manure) => (
               <Checkbox
-                key={manure.data.ManagedManureName}
-                value={manure.data.ManagedManureName}
+                key={manure.data.managedManureName}
+                value={manure.data.managedManureName}
               >
-                {manure.data.ManagedManureName}
+                {manure.data.managedManureName}
               </Checkbox>
             ))}
           </CheckboxGroup>

@@ -22,17 +22,17 @@ export default function Storage() {
   const [subregionData, setSubregionData] = useState<Subregion | undefined>(undefined);
   const [modalMode, setModalMode] = useState<StorageModalMode | undefined>(undefined);
 
-  const generatedManures = state.nmpFile.years[0].GeneratedManures;
-  const importedManures = state.nmpFile.years[0].ImportedManures;
+  const { generatedManures } = state.nmpFile.years[0];
+  const { importedManures } = state.nmpFile.years[0];
   const unassignedManures = useMemo(() => {
     const unassignedM: ManureInSystem[] = [];
     (generatedManures || []).forEach((manure) => {
-      if (!manure.AssignedToStoredSystem) {
+      if (!manure.assignedToStoredSystem) {
         unassignedM.push({ type: 'Generated', data: manure });
       }
     });
     (importedManures || []).forEach((manure) => {
-      if (!manure.AssignedToStoredSystem) {
+      if (!manure.assignedToStoredSystem) {
         unassignedM.push({ type: 'Imported', data: manure });
       }
     });
@@ -41,8 +41,8 @@ export default function Storage() {
 
   // Get subregion precipitation data
   useEffect(() => {
-    const region = state.nmpFile.farmDetails.FarmRegion;
-    const subregion = state.nmpFile.farmDetails.FarmSubRegion;
+    const region = state.nmpFile.farmDetails.farmRegion;
+    const subregion = state.nmpFile.farmDetails.farmSubregion;
     if (region && subregion) {
       apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
         const { data } = response;
@@ -68,11 +68,11 @@ export default function Storage() {
 
   const handleDeleteSystem = useCallback(
     (index: number) => {
-      const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
+      const newList = [...state.nmpFile.years[0].manureStorageSystems!];
       newList.splice(index, 1);
       dispatch({
         type: 'SAVE_MANURE_STORAGE_SYSTEMS',
-        year: state.nmpFile.farmDetails.Year!,
+        year: state.nmpFile.farmDetails.year,
         newManureStorageSystems: newList,
       });
     },
@@ -81,7 +81,7 @@ export default function Storage() {
 
   const handleDeleteStorage = useCallback(
     (systemIndex: number, storageIndex: number) => {
-      const newList = [...state.nmpFile.years[0].ManureStorageSystems!];
+      const newList = [...state.nmpFile.years[0].manureStorageSystems!];
       const system = newList[systemIndex];
       if (system.manureType !== ManureType.Liquid) throw new Error('Storage entered bad state');
       const newStorageList = [...system.manureStorages];
@@ -89,7 +89,7 @@ export default function Storage() {
       newList[systemIndex] = { ...system, manureStorages: newStorageList };
       dispatch({
         type: 'SAVE_MANURE_STORAGE_SYSTEMS',
-        year: state.nmpFile.farmDetails.Year!,
+        year: state.nmpFile.farmDetails.year,
         newManureStorageSystems: newList,
       });
     },
@@ -122,7 +122,7 @@ export default function Storage() {
           mode={modalMode}
           initialModalData={
             modalMode !== undefined && modalMode.mode !== 'create'
-              ? state.nmpFile.years[0].ManureStorageSystems![modalMode.systemIndex]
+              ? state.nmpFile.years[0].manureStorageSystems![modalMode.systemIndex]
               : undefined
           }
           annualPrecipitation={subregionData ? subregionData.annualprecipitation : undefined}
@@ -143,7 +143,7 @@ export default function Storage() {
           container
           size={8}
         >
-          {(state.nmpFile.years[0].ManureStorageSystems || []).map((system, systemIndex) => (
+          {(state.nmpFile.years[0].manureStorageSystems || []).map((system, systemIndex) => (
             <SystemDisplay key={system.name}>
               <div className="row">
                 <div>
@@ -230,7 +230,7 @@ export default function Storage() {
         >
           <div>Materials Needing Storage</div>
           {unassignedManures.map((m) => (
-            <div key={m.data.ManagedManureName}>{m.data.ManagedManureName}</div>
+            <div key={m.data.managedManureName}>{m.data.managedManureName}</div>
           ))}
         </Grid>
       </Grid>

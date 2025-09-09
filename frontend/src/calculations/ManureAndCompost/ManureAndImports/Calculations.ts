@@ -218,3 +218,12 @@ export async function getNutrientInputs(
     return nutrientInputs;
   }
 }
+
+/**
+ * 
+ * @param area Runoff area in square feet
+ * @param precipitation Total precipitation over time period
+ */
+export function getRunoffUsGallons(area: number, precipitation: number) {
+
+}

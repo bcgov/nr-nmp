@@ -2,15 +2,15 @@ import React, { useMemo } from 'react';
 import Grid from '@mui/material/Grid';
 import { NumberField, Select, TextField, YesNoRadioButtons } from '@/components/common';
 import { formGridBreakpoints } from '../../common.styles';
-import { LiquidManureStorageSystem } from '@/types';
 import {
   CircularStorage,
   LiquidManureStorage,
+  LiquidManureStorageSystem,
   RectangularStorage,
   Shape,
   SlopedWallStorage,
   StorageStructure,
-} from '@/types/NMPFileManureStorageSystem';
+} from '@/types';
 import {
   DEFAULT_CIRCULAR_STORAGE,
   DEFAULT_RECTANGULAR_STORAGE,
@@ -104,7 +104,7 @@ export default function LiquidStorageDetails({
           label="Storage Name"
           type="string"
           value={selectedStorage.name}
-          onChange={(e: any) => {
+          onChange={(e: string) => {
             handleStorageChange({ name: e });
           }}
         />

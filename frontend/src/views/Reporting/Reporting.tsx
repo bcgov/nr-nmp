@@ -10,9 +10,10 @@ import { View } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
 
 import useAppState from '@/hooks/useAppState';
-import { DAIRY_COW_ID, FertilizerUnit, ManureType } from '@/types';
 import { APICacheContext } from '@/context/APICacheContext';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
+import { FertilizerUnit, ManureType } from '@/types';
+import { DAIRY_COW_ID } from '@/constants';
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
@@ -35,14 +36,14 @@ export default function Reporting() {
   const unassignedManures = useMemo(
     () =>
       [
-        ...(state.nmpFile.years[0].GeneratedManures || []),
-        ...(state.nmpFile.years[0].ImportedManures || []),
-      ].filter((m) => !m.AssignedToStoredSystem),
+        ...(state.nmpFile.years[0].generatedManures || []),
+        ...(state.nmpFile.years[0].importedManures || []),
+      ].filter((m) => !m.assignedToStoredSystem),
     [state.nmpFile.years],
   );
 
   const isDairyCattle = useMemo(() => {
-    const animalList = state.nmpFile?.years[0].FarmAnimals || [];
+    const animalList = state.nmpFile?.years[0].farmAnimals || [];
     return animalList.some((animal) => animal.animalId === DAIRY_COW_ID);
   }, [state.nmpFile?.years]);
 
@@ -64,7 +65,7 @@ export default function Reporting() {
     a.href = url;
 
     const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-    const farmName = state.nmpFile?.farmDetails?.FarmName;
+    const farmName = state.nmpFile?.farmDetails?.farmName;
 
     a.download = `${prependDate}-${farmName}.nmp`;
     document.body.appendChild(a);
@@ -78,8 +79,8 @@ export default function Reporting() {
     doc.setFontSize(14);
     const x = Math.ceil(data.settings.margin.left);
     let nextY = Math.ceil(data.settings.margin.left);
-    nextY = addText(doc, `Farm Name: ${state.nmpFile.farmDetails.FarmName}`, x, nextY);
-    nextY = addText(doc, `Planning Year: ${state.nmpFile.farmDetails.Year}`, x, nextY);
+    nextY = addText(doc, `Farm Name: ${state.nmpFile.farmDetails.farmName}`, x, nextY);
+    nextY = addText(doc, `Planning Year: ${state.nmpFile.farmDetails.year}`, x, nextY);
     return [x, nextY];
   };
 
@@ -89,11 +90,11 @@ export default function Reporting() {
 
     // TODO: Add Table of Contents as the first page
 
-    // ---------- APPLICATION SCHEDULE ---------- //
-    for (let i = 0; i < state.nmpFile.years[0].Fields!.length; i += 1) {
-      const field = state.nmpFile.years[0].Fields![i];
+    // ---------- APPLICATION SCHEDULE ---------- // DONE
+    for (let i = 0; i < state.nmpFile.years[0].fields!.length; i += 1) {
+      const field = state.nmpFile.years[0].fields![i];
       // QUESTION: Should fertigation go in this table?
-      const allApplied = [...field.Manures, ...field.Fertilizers];
+      const allApplied = [...field.manures, ...field.fertilizers];
       autoTable(doc, {
         ...sharedAutoTableSettings,
         // Page Header
@@ -108,12 +109,31 @@ export default function Reporting() {
         head: [
           [
             {
-              content: `Field: ${field.FieldName}`,
-              colSpan: 3,
-              styles: { fontStyle: 'normal', fillColor: [255, 255, 255] },
+              content: `Field: ${field.fieldName}`,
+              styles: {
+                fontStyle: 'normal',
+                fillColor: [255, 255, 255],
+                lineWidth: { top: 0.5, left: 0.5, bottom: 0.5, right: 0 },
+              },
+            },
+            {
+              content: `Area: ${field.area} ac`,
+              styles: {
+                fontStyle: 'normal',
+                fillColor: [255, 255, 255],
+                lineWidth: { top: 0.5, left: 0, bottom: 0.5, right: 0 },
+              },
+            },
+            {
+              content: `Crops: ${field.crops.map((c) => `${c.name}`).join('\n\t    ')}`, // newline + tab + spaces
+              styles: {
+                fontStyle: 'normal',
+                fillColor: [255, 255, 255],
+                lineWidth: { top: 0.5, left: 0, bottom: 0.5, right: 0.5 },
+              },
             },
           ],
-          ['Nutrient Source', 'Application Timing', 'Rate'], // these are the actual columns
+          ['Nutrient Source', 'Application Timing', 'Rate'], // column names
         ],
         body:
           allApplied.length > 0
@@ -128,11 +148,15 @@ export default function Reporting() {
               ])
             : [['None planned', '', '']],
       });
+      // Text below table
+      doc.setFontSize(10);
+      const nextY: number = (doc as any).lastAutoTable.finalY + 5; // type shenanigans
+      addText(doc, `Comments: ${field.comment}`, 15, nextY);
       doc.addPage();
     }
 
     // ---------- MANURE/COMPOST INVENTORY ---------- //
-    const storageSystems = state.nmpFile.years[0].ManureStorageSystems || [];
+    const storageSystems = state.nmpFile.years[0].manureStorageSystems || [];
     autoTable(doc, {
       ...sharedAutoTableSettings,
       // Page Header
@@ -159,8 +183,8 @@ export default function Reporting() {
                 ];
                 system.manuresInSystem.forEach((m) => {
                   newRows.push([
-                    `\t${m.data.UniqueMaterialName}`,
-                    `${m.data.AnnualAmount} ${m.data.manureType === ManureType.Liquid ? 'US Gallons' : 'tons'}`,
+                    `\t${m.data.uniqueMaterialName}`,
+                    `${m.data.annualAmount} ${m.data.manureType === ManureType.Liquid ? 'US Gallons' : 'tons'}`,
                   ]);
                   // TODO: Add Milking Centre Wash Water
                 });
@@ -179,20 +203,47 @@ export default function Reporting() {
                     ? [[{ content: 'Material not Stored', styles: { fontStyle: 'bold' } }, '']]
                     : [];
                 newRows.push([
-                  `\t${manure.UniqueMaterialName}`,
-                  `${manure.AnnualAmount} ${manure.manureType === ManureType.Liquid ? 'US Gallons' : 'tons'}`,
+                  `\t${manure.uniqueMaterialName}`,
+                  `${manure.annualAmount} ${manure.manureType === ManureType.Liquid ? 'US Gallons' : 'tons'}`,
                 ]);
                 return acc.concat(newRows);
               }, [] as RowInput[]),
             ],
     });
+
+    // ---------- LIQUID STORAGE CAPACITY ---------- //
+    // On the same page as Manure/Compost Inventory
+    for (let i = 0; i < storageSystems.length; i += 1) {
+      const system = storageSystems[i];
+      // eslint-disable-next-line no-continue
+      if (system.manureType === ManureType.Solid) continue;
+      const totalStorageVolume = system.manureStorages.reduce(
+        (acc, m) => acc + m.volumeUSGallons,
+        0,
+      );
+      autoTable(doc, {
+        ...sharedAutoTableSettings,
+        // Table
+        head: [[system.name, 'October to March volume']],
+        body: [
+          ['Material Stored (October to March)', '', ''],
+          ['\tMaterials Generated or Imported', `_ US Gallons`],
+          ['\tYard/Roof Runoff', `_ US Gallons`],
+          ['\tPrecipitation, Direct into Storage', `_ US Gallons`],
+          [
+            { content: 'Storage Volume', styles: { fontStyle: 'bold' } },
+            `${totalStorageVolume} US Gallons`,
+          ],
+        ],
+      });
+    }
     doc.addPage();
 
-    const field = state.nmpFile.years[0].Fields![0];
+    const field = state.nmpFile.years[0].fields![0];
     // Field Summary
     autoTable(doc, {
       head: [['Crop', 'Yield', 'Previous crop ploughed down (N credit)']],
-      body: field.Crops.map((crop) => [
+      body: field.crops.map((crop) => [
         `${crop.name}`,
         `${crop.yield} ${crop.yieldHarvestUnit ? crop.yieldHarvestUnit : 'ton/ac'}`,
         `${crop.nCredit === 0 ? 'none (no N credit)' : crop.nCredit}`,
@@ -207,19 +258,19 @@ export default function Reporting() {
         // NOTE: Start is 15
         const start = Math.ceil(data.settings.margin.left);
         let nextY = Math.ceil(data.settings.margin.left);
-        nextY = addText(doc, `Farm Name: ${state.nmpFile.farmDetails.FarmName}`, start, nextY);
-        nextY = addText(doc, `Planning Year: ${state.nmpFile.farmDetails.Year}`, start, nextY);
+        nextY = addText(doc, `Farm Name: ${state.nmpFile.farmDetails.farmName}`, start, nextY);
+        nextY = addText(doc, `Planning Year: ${state.nmpFile.farmDetails.year}`, start, nextY);
         const fieldSummaryY = nextY + 2;
         nextY = addText(doc, 'Field Summary:', start, fieldSummaryY);
         doc.setFont(doc.getFont().fontName, 'bold');
-        doc.text(`${field.FieldName}`, start + 40, fieldSummaryY);
+        doc.text(`${field.fieldName}`, start + 40, fieldSummaryY);
         doc.setFontSize(10);
-        addText(doc, `Area: ${field.Area} ac`, start + 2, nextY + 4);
+        addText(doc, `Area: ${field.area} ac`, start + 2, nextY + 4);
         doc.setFont(doc.getFont().fontName, 'normal');
       },
       margin: { top: 50 },
     });
-    const soilTest = state.nmpFile.years[0].Fields![0].SoilTest;
+    const { soilTest } = state.nmpFile.years[0].fields![0];
     let splitDateStr: string[] | undefined;
     if (soilTest?.sampleDate) {
       splitDateStr = new Date(soilTest.sampleDate).toDateString().split(' ');
@@ -256,7 +307,7 @@ export default function Reporting() {
       foot: [
         [
           {
-            content: `Field Comments: ${state.nmpFile.years[0].Fields![0].Comment || ''}`,
+            content: `Field Comments: ${state.nmpFile.years[0].fields![0].comment || ''}`,
             styles: { fillColor: [255, 255, 255] },
             colSpan: 4,
           },
@@ -285,8 +336,8 @@ export default function Reporting() {
             The following materials are not stored:
             <ul>
               {unassignedManures.map((manure) => (
-                <li key={`${manure.ManagedManureName}`}>
-                  {manure.manureType} - {manure.ManagedManureName}
+                <li key={`${manure.managedManureName}`}>
+                  {manure.manureType} - {manure.managedManureName}
                 </li>
               ))}
             </ul>

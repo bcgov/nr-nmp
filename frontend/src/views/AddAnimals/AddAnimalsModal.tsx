@@ -7,28 +7,30 @@ import DairyCattle from './AnimalFormComponents/DairyCattle';
 import OtherAnimals from './AnimalFormComponents/OtherAnimals';
 import Poultry from './AnimalFormComponents/Poultry';
 import {
-  AnimalData,
+  NMPFileAnimal,
   ManureType,
-  BEEF_COW_ID,
-  DAIRY_COW_ID,
-  POULTRY_ID,
   OTHER_ANIMAL_IDS,
-  OtherAnimalData,
+  NMPFileOtherAnimal,
   OtherAnimalId,
   SelectOption,
   Animal,
-  SWINE_ID,
 } from '@/types';
 import UnselectedAnimal from './AnimalFormComponents/UnselectedAnimal';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { INITIAL_BEEF_FORM_DATA, INITIAL_DAIRY_FORM_DATA } from '@/constants';
-import { INITIAL_POULTRY_FORM_DATA } from '@/constants/Animals';
+import {
+  BEEF_COW_ID,
+  DAIRY_COW_ID,
+  INITIAL_POULTRY_FORM_DATA,
+  POULTRY_ID,
+  SWINE_ID,
+} from '@/constants/Animals';
 import { APICacheContext } from '@/context/APICacheContext';
 
 type AddAnimalsModalProps = {
-  initialModalData: AnimalData | undefined;
+  initialModalData: NMPFileAnimal | undefined;
   rowEditIndex: number | undefined;
-  setAnimalList: React.Dispatch<React.SetStateAction<AnimalData[]>>;
+  setAnimalList: React.Dispatch<React.SetStateAction<NMPFileAnimal[]>>;
   onClose: () => void;
 };
 
@@ -39,11 +41,11 @@ export default function AddAnimalsModal({
   onClose,
   ...props
 }: AddAnimalsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [formData, setFormData] = useState<AnimalData | undefined>(initialModalData);
+  const [formData, setFormData] = useState<NMPFileAnimal | undefined>(initialModalData);
   const [animals, setAnimals] = useState<SelectOption<Animal>[]>([]);
   const apiCache = useContext(APICacheContext);
 
-  const handleSubmit = (newFormData: AnimalData) => {
+  const handleSubmit = (newFormData: NMPFileAnimal) => {
     if (rowEditIndex !== undefined) {
       // If editing, find and replace field instead of adding new field
       setAnimalList((prev) => {
@@ -57,8 +59,10 @@ export default function AddAnimalsModal({
     onClose();
   };
 
-  const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
-    setFormData((prev: AnimalData | undefined) => {
+  const handleInputChanges = (changes: {
+    [name: string]: string | number | boolean | undefined;
+  }) => {
+    setFormData((prev: NMPFileAnimal | undefined) => {
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {
         if (changes.animalId === BEEF_COW_ID) {
@@ -148,7 +152,7 @@ export default function AddAnimalsModal({
       {formData !== undefined && OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
         <OtherAnimals
           animals={animals}
-          formData={formData as OtherAnimalData}
+          formData={formData as NMPFileOtherAnimal}
           handleInputChanges={handleInputChanges}
           handleSubmit={handleSubmit}
           onCancel={onClose}

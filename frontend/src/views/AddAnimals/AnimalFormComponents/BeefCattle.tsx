@@ -4,21 +4,23 @@ import Grid from '@mui/material/Grid';
 import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { Animal, AnimalData, BEEF_COW_ID, BeefCattleData, ManureType, SelectOption } from '@/types';
+import {
+  Animal,
+  NMPFileAnimal,
+  NMPFileBeefCattle,
+  ManureType,
+  SelectOption,
+  AnimalSubtype,
+} from '@/types';
 import { calculateAnnualSolidManure } from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
-
-interface BeefCattleSubtype {
-  id: number;
-  name: string;
-  solidperpoundperanimalperday: number;
-}
+import { BEEF_COW_ID } from '@/constants';
 
 type BeefCattleProps = {
-  formData: BeefCattleData;
+  formData: NMPFileBeefCattle;
   animals: SelectOption<Animal>[];
   handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
-  handleSubmit: (newFormData: AnimalData) => void;
+  handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
 
@@ -31,7 +33,7 @@ export default function BeefCattle({
   const apiCache = useContext(APICacheContext);
   const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
   const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
-  const [subtypes, setSubtypes] = useState<BeefCattleSubtype[]>([]);
+  const [subtypes, setSubtypes] = useState<AnimalSubtype[]>([]);
 
   const onSubmit = () => {
     // Calculate manure
@@ -56,19 +58,13 @@ export default function BeefCattle({
   useEffect(() => {
     apiCache.callEndpoint(`api/animal_subtypes/${BEEF_COW_ID}/`).then((response) => {
       if (response.status === 200) {
-        const { data } = response;
-        const subtypez: BeefCattleSubtype[] = (
-          data as { id: number; name: string; solidperpoundperanimalperday: number }[]
-        ).map((row) => ({
-          id: row.id,
-          name: row.name,
-          solidperpoundperanimalperday: row.solidperpoundperanimalperday,
-        }));
-        setSubtypes(subtypez);
-        const sOptions: { id: string; label: string }[] = subtypez.map((row) => ({
-          id: row.id.toString(),
-          label: row.name,
-        }));
+        setSubtypes(response.data);
+        const sOptions: { id: string; label: string }[] = response.data.map(
+          (row: AnimalSubtype) => ({
+            id: row.id.toString(),
+            label: row.name,
+          }),
+        );
         setSubtypeOptions(sOptions);
       }
     });

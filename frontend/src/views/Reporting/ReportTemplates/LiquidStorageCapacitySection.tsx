@@ -49,7 +49,7 @@ export default function LiquidStorageCapacitySection({
   ];
 
   const storedLiquidManuresAmount = storageSystemLiquid.manuresInSystem.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.data.AnnualAmount,
+    (accumulator, currentValue) => accumulator + currentValue.data.annualAmount,
     0,
   );
 
@@ -60,7 +60,7 @@ export default function LiquidStorageCapacitySection({
   const totalPrecipitation = storageSystemLiquid?.annualPrecipitation ?? 0;
 
   const totalVolume = storageSystemLiquid.manureStorages.reduce(
-    (accumulator, currentValue) => accumulator + (currentValue?.volumeUSGallons ?? 0),
+    (accumulator, currentValue) => accumulator + currentValue.volumeUSGallons,
     0,
   );
   return (
