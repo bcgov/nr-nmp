@@ -10,7 +10,10 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import usePrevYearManure from '@/hooks/usePrevYearManure';
+import {
+  calculatePrevYearManure,
+  PreviousYearManureData,
+} from '@/calculations/CalculateNutrients/PreviousManure';
 import { Tabs, View } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
@@ -52,9 +55,27 @@ export default function CalculateNutrients() {
   const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
     state.nmpFile.years[0].Fields || [],
   );
+  const [prevYearManureData, setPrevYearManureData] = useState<PreviousYearManureData | null>(null);
 
-  // Get previous year manure data for the active field
-  const { data: prevYearManureData } = usePrevYearManure(fieldList[activeField] || null);
+  // Calculate previous year manure data when active field changes
+  useEffect(() => {
+    const calculatePrevManure = async () => {
+      const currentField = fieldList[activeField];
+      if (currentField) {
+        try {
+          const data = await calculatePrevYearManure(currentField);
+          setPrevYearManureData(data);
+        } catch (error) {
+          console.error('Error calculating previous year manure:', error);
+          setPrevYearManureData(null);
+        }
+      } else {
+        setPrevYearManureData(null);
+      }
+    };
+
+    calculatePrevManure();
+  }, [activeField, fieldList]);
 
   const cropColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
