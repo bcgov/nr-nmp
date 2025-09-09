@@ -64,26 +64,22 @@ export async function wasManureAddedInPreviousYear(
 }
 
 /**
- * Calculates default previous year manure application nitrogen credit
- * @param field - Field object with manure application history
+ * Helper function to get the default nitrogen credit based on frequency and volume category
+ * @param prevYearManureApplicationFrequency - The frequency ID
+ * @param manureApplicationHistory - The volume category (ManureApplicationHistory)
  * @returns Promise<number> Default nitrogen credit value
  */
-export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Promise<number> {
+async function prevYearManureDefaultLookup(
+  prevYearManureApplicationFrequency: string,
+  manureApplicationHistory: number,
+): Promise<number> {
   try {
-    if (
-      !field.PreviousYearManureApplicationFrequency ||
-      field.PreviousYearManureApplicationFrequency === '0'
-    ) {
-      return 0;
-    }
-
     const applications = await getPreviousYearManureApplications();
 
     // Find the application that matches the field's frequency
     const matchingApplication = applications.find(
       (app) =>
-        app.previousyearmanureaplicationfrequency.toString() ===
-        field.PreviousYearManureApplicationFrequency,
+        app.previousyearmanureaplicationfrequency.toString() === prevYearManureApplicationFrequency,
     );
 
     if (!matchingApplication) {
@@ -97,8 +93,51 @@ export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Pr
       .split(',')
       .map((val: string) => parseInt(val.trim(), 10));
 
-    // Return the first value in the array as the default credit
-    return creditArray[0] || 0;
+    // Use the manureApplicationHistory as index into the credit array
+    // Ensure the index is within bounds
+    const index = Math.max(0, Math.min(manureApplicationHistory, creditArray.length - 1));
+    return creditArray[index] || 0;
+  } catch (error) {
+    console.error('Error in prevYearManureDefaultLookup:', error);
+    return 0;
+  }
+}
+
+/**
+ * Calculates default previous year manure application nitrogen credit
+ * @param field - Field object with manure application history
+ * @returns Promise<number> Default nitrogen credit value
+ */
+export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Promise<number> {
+  try {
+    if (!field) {
+      return 0;
+    }
+
+    const prevYearManureApplicationFrequency = field.PreviousYearManureApplicationFrequency;
+
+    if (!prevYearManureApplicationFrequency || prevYearManureApplicationFrequency === '0') {
+      return 0;
+    }
+
+    let largestPrevYearManureVolumeCategory = 0;
+
+    // Check if field has crops
+    if (field.Crops && field.Crops.length > 0) {
+      // Find the largest manureApplicationHistory among all crops using reduce
+      largestPrevYearManureVolumeCategory = field.Crops.reduce((largest, crop) => {
+        const volCatCd = crop.manureApplicationHistory || 0;
+        return volCatCd > largest ? volCatCd : largest;
+      }, 0);
+
+      return await prevYearManureDefaultLookup(
+        prevYearManureApplicationFrequency,
+        largestPrevYearManureVolumeCategory,
+      );
+    }
+
+    // No nitrogen credit as there are no crops
+    return 0;
   } catch (error) {
     console.error('Error calculating previous year manure application default:', error);
     return 0;

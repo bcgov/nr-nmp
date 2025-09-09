@@ -92,11 +92,11 @@ export interface NMPFileCropData extends CalculateNutrientsColumn {
   hasLeafTest?: boolean;
   leafTissueP?: number;
   leafTissueK?: number;
+  manureApplicationHistory?: number;
 
   /*
   Fields from old NMP, currently unused, feel free to re-add
   stdN?: number;
-  prevYearManureAppl_volCatCd?: number;
   */
 }
 
