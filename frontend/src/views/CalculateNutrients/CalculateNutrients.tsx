@@ -10,6 +10,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
+import usePrevYearManure from '@/hooks/usePrevYearManure';
 import { Tabs, View } from '../../components/common';
 import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
@@ -22,6 +23,8 @@ import FertilizerModal from './CalculateNutrientsComponents/FertilizerModal';
 import ManureModal from './CalculateNutrientsComponents/ManureModal';
 import OtherModal from './CalculateNutrientsComponents/OtherModal';
 import FertigationModal from './CalculateNutrientsComponents/FertigationModal/FertigationModal.tsx';
+import PreviousYearManureRow from './CalculateNutrientsComponents/PreviousYearManureRow';
+import PreviousYearManureModal from './CalculateNutrientsComponents/PreviousYearManureModal';
 import FieldListModal from '../../components/common/FieldListModal/FieldListModal';
 import CropsModal from '../Crops/CropsModal';
 import {
@@ -49,6 +52,9 @@ export default function CalculateNutrients() {
   const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
     state.nmpFile.years[0].Fields || [],
   );
+
+  // Get previous year manure data for the active field
+  const { data: prevYearManureData } = usePrevYearManure(fieldList[activeField] || null);
 
   const cropColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -174,16 +180,19 @@ export default function CalculateNutrients() {
       ...fieldList[activeField].Manures,
     ];
 
+    // Add previous year manure nitrogen credit to the balance
+    const prevYearNitrogen = prevYearManureData?.display ? prevYearManureData.nitrogen || 0 : 0;
+
     return {
       name: 'Balance',
-      reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0),
+      reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0) + prevYearNitrogen,
       reqP2o5: allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
       reqK2o: allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
       remN: allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0),
       remP2o5: allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
       remK2o: allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
     };
-  }, [fieldList, activeField]);
+  }, [fieldList, activeField, prevYearManureData]);
 
   const getMessage = useCallback((balanceType: string, balanceValue: number) => {
     const message = findBalanceMessage(balanceType, balanceValue);
@@ -427,6 +436,16 @@ export default function CalculateNutrients() {
           modalStyle={{ width: '700px' }}
         />
       )}
+      {openDialog[0] === 'previousYearManure' && (
+        <PreviousYearManureModal
+          field={fieldList[activeField]}
+          fieldIndex={activeField}
+          isOpen={openDialog[0] === 'previousYearManure'}
+          onClose={handleDialogClose}
+          setFields={setFieldList}
+          modalStyle={{ width: '600px' }}
+        />
+      )}
       <div
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >
@@ -453,6 +472,16 @@ export default function CalculateNutrients() {
         hideFooter
         slots={{ noRowsOverlay: NoRows }}
       />
+
+      {/* Previous Year Manure Row */}
+      {prevYearManureData && (
+        <PreviousYearManureRow
+          data={prevYearManureData}
+          customTableStyle={customTableStyle}
+          customCalcTableStyle={customCalcTableStyle}
+          onEdit={() => setOpenDialog(['previousYearManure', 0])}
+        />
+      )}
 
       {fieldList[activeField].Fertilizers.length > 0 && (
         <DataGrid

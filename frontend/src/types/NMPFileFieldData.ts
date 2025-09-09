@@ -19,6 +19,8 @@ export type NMPFileFieldData = {
   Fertigations: NMPFileFertigation[];
   Manures: NMPFileAppliedManure[];
   OtherNutrients: NMPFileOtherNutrient[];
+  PreviousYearManureApplicationNitrogenCredit?: any | null;
+
   /*
   Fields from old NMP, currently unused, feel free to re-add
   FeedForageAnalyses?: any[];
