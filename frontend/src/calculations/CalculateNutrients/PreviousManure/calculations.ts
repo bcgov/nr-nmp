@@ -13,8 +13,13 @@ export interface PreviousYearManureData {
   fieldName: string;
   display: boolean;
   nitrogen: number | null;
-  url: string;
-  urlText: string;
+}
+
+/**
+ * Checks if frequency indicates no manure application
+ */
+function isNoManureFrequency(frequency: string | undefined): boolean {
+  return !frequency || frequency === '0';
 }
 
 /**
@@ -42,25 +47,30 @@ export async function wasManureAddedInPreviousYear(
   previousYearManureApplicationFrequency: string,
 ): Promise<boolean> {
   try {
-    // Return false if frequency is empty or 0
-    if (!previousYearManureApplicationFrequency || previousYearManureApplicationFrequency === '0') {
+    if (isNoManureFrequency(previousYearManureApplicationFrequency)) {
       return false;
     }
 
     const applications = await getPreviousYearManureApplications();
-
-    // Check if the frequency ID exists in the applications data
-    const frequencyExists = applications.some(
+    return applications.some(
       (app) =>
         app.previousyearmanureaplicationfrequency.toString() ===
         previousYearManureApplicationFrequency,
     );
-
-    return frequencyExists;
   } catch (error) {
     console.error('Error checking if manure was added in previous year:', error);
     return false;
   }
+}
+
+/**
+ * Parses nitrogen credit array from string format "{22,30,45}"
+ */
+function parseNitrogenCreditArray(creditString: string): number[] {
+  return creditString
+    .replace(/[{}]/g, '')
+    .split(',')
+    .map((val: string) => parseInt(val.trim(), 10));
 }
 
 /**
@@ -75,8 +85,6 @@ async function prevYearManureDefaultLookup(
 ): Promise<number> {
   try {
     const applications = await getPreviousYearManureApplications();
-
-    // Find the application that matches the field's frequency
     const matchingApplication = applications.find(
       (app) =>
         app.previousyearmanureaplicationfrequency.toString() === prevYearManureApplicationFrequency,
@@ -86,15 +94,7 @@ async function prevYearManureDefaultLookup(
       return 0;
     }
 
-    // Parse the nitrogen credit array from the string format "{22,30,45}"
-    const creditString = matchingApplication.defaultnitrogencredit;
-    const creditArray = creditString
-      .replace(/[{}]/g, '')
-      .split(',')
-      .map((val: string) => parseInt(val.trim(), 10));
-
-    // Use the manureApplicationHistory as index into the credit array
-    // Ensure the index is within bounds
+    const creditArray = parseNitrogenCreditArray(matchingApplication.defaultnitrogencredit);
     const index = Math.max(0, Math.min(manureApplicationHistory, creditArray.length - 1));
     return creditArray[index] || 0;
   } catch (error) {
@@ -110,34 +110,19 @@ async function prevYearManureDefaultLookup(
  */
 export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Promise<number> {
   try {
-    if (!field) {
+    if (isNoManureFrequency(field.PreviousYearManureApplicationFrequency)) {
       return 0;
     }
 
-    const prevYearManureApplicationFrequency = field.PreviousYearManureApplicationFrequency;
+    const largestManureHistory = field.Crops.reduce((largest, crop) => {
+      const history = crop.manureApplicationHistory || 0;
+      return history > largest ? history : largest;
+    }, 0);
 
-    if (!prevYearManureApplicationFrequency || prevYearManureApplicationFrequency === '0') {
-      return 0;
-    }
-
-    let largestPrevYearManureVolumeCategory = 0;
-
-    // Check if field has crops
-    if (field.Crops && field.Crops.length > 0) {
-      // Find the largest manureApplicationHistory among all crops using reduce
-      largestPrevYearManureVolumeCategory = field.Crops.reduce((largest, crop) => {
-        const volCatCd = crop.manureApplicationHistory || 0;
-        return volCatCd > largest ? volCatCd : largest;
-      }, 0);
-
-      return await prevYearManureDefaultLookup(
-        prevYearManureApplicationFrequency,
-        largestPrevYearManureVolumeCategory,
-      );
-    }
-
-    // No nitrogen credit as there are no crops
-    return 0;
+    return await prevYearManureDefaultLookup(
+      field.PreviousYearManureApplicationFrequency!,
+      largestManureHistory,
+    );
   } catch (error) {
     console.error('Error calculating previous year manure application default:', error);
     return 0;
@@ -153,21 +138,15 @@ export async function calculatePrevYearManure(
   field: NMPFileFieldData,
 ): Promise<PreviousYearManureData> {
   try {
-    const wasAdded = await wasManureAddedInPreviousYear(
-      field.PreviousYearManureApplicationFrequency || '0',
-    );
-
+    const frequency = field.PreviousYearManureApplicationFrequency;
+    const wasAdded = await wasManureAddedInPreviousYear(frequency);
     const defaultCredit = await calcPrevYearManureApplDefault(field);
-
-    // Use field's existing nitrogen credit if available, otherwise use calculated default
     const nitrogenCredit = field.PreviousYearManureApplicationNitrogenCredit ?? defaultCredit;
 
     return {
-      fieldName: field.FieldName || 'Unnamed Field',
+      fieldName: field.FieldName,
       display: wasAdded,
       nitrogen: nitrogenCredit,
-      url: '/fertilizer-options', // TODO: Update with correct URL when available
-      urlText: 'Edit Previous Year Manure',
     };
   } catch (error) {
     console.error('Error calculating previous year manure:', error);
