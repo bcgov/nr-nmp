@@ -18,7 +18,7 @@ import {
 } from '../../common.styles';
 import { Select, Tabs, View } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { NMPFileFieldData, SelectOption, SoilTestMethodsData } from '@/types';
+import { NMPFileField, SelectOption, SoilTestMethods } from '@/types';
 import { InfoBox } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
@@ -29,12 +29,12 @@ export default function SoilTests() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [fields, setFields] = useState<NMPFileFieldData[]>(state.nmpFile.years[0].Fields || []);
+  const [fields, setFields] = useState<NMPFileField[]>(state.nmpFile.years[0].fields || []);
   const [soilTestId, setSoilTestId] = useState<number>(
-    fields.find((field) => field.SoilTest !== undefined)?.SoilTest?.soilTestId || 0,
+    fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
 
-  const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethodsData>[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
   const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -45,10 +45,10 @@ export default function SoilTests() {
   const handleDeleteRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     setFields((prev) => {
       const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-      if (prev[index].SoilTest === undefined) return prev;
+      if (prev[index].soilTest === undefined) return prev;
 
       const newList = [...prev];
-      newList[index].SoilTest = undefined;
+      newList[index].soilTest = undefined;
       return newList;
     });
   }, []);
@@ -57,44 +57,46 @@ export default function SoilTests() {
     setCurrentFieldIndex(null);
   };
 
-  // IMPORTANT QUESTION: when the user changes the soil test method do we update the existing field.SoilTest values?
+  // IMPORTANT QUESTION: when the user changes the soil test method do we update the existing field.soilTest values?
   const soilTestMethodSelect = (value: number) => {
     setSoilTestId(value);
   };
 
   const handleNextPage = () => {
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
     navigate(CROPS);
   };
 
   const handlePreviousPage = () => {
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.Year!, newFields: fields });
+    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
     navigate(FIELD_LIST);
   };
 
   useEffect(() => {
-    apiCache.callEndpoint('api/soiltestmethods/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        const { data } = response;
-        setSoilTestMethods(
-          (data as SoilTestMethodsData[]).map((method) => ({
-            id: method.id,
-            label: method.name,
-            value: method,
-          })),
-        );
-      }
-    });
+    apiCache
+      .callEndpoint('api/soiltestmethods/')
+      .then((response: { status?: any; data: SoilTestMethods[] }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setSoilTestMethods(
+            data.map((method) => ({
+              id: method.id,
+              label: method.name,
+              value: method,
+            })),
+          );
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'FieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
+      { field: 'fieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
       {
-        field: 'SoilTest',
+        field: 'soilTest',
         headerName: 'Sampling Month',
-        valueGetter: (_value, row) => row?.SoilTest?.sampleDate,
+        valueGetter: (_value, row) => row?.soilTest?.sampleDate,
         width: 150,
         minWidth: 150,
         maxWidth: 300,
@@ -103,7 +105,7 @@ export default function SoilTests() {
       {
         field: 'valNO3H',
         headerName: 'NO3-N (ppm)',
-        valueGetter: (_value, row) => row?.SoilTest?.valNO3H,
+        valueGetter: (_value, row) => row?.soilTest?.valNO3H,
         width: 120,
         minWidth: 100,
         maxWidth: 300,
@@ -112,7 +114,7 @@ export default function SoilTests() {
       {
         field: 'valP',
         headerName: 'P (ppm)',
-        valueGetter: (_value, row) => row?.SoilTest?.valP,
+        valueGetter: (_value, row) => row?.soilTest?.valP,
         width: 110,
         minWidth: 110,
         maxWidth: 300,
@@ -121,7 +123,7 @@ export default function SoilTests() {
       {
         field: 'valK',
         headerName: 'K (ppm)',
-        valueGetter: (_value, row) => row?.SoilTest?.valK,
+        valueGetter: (_value, row) => row?.soilTest?.valK,
         width: 110,
         minWidth: 110,
         maxWidth: 300,
@@ -130,7 +132,7 @@ export default function SoilTests() {
       {
         field: 'valPH',
         headerName: 'pH',
-        valueGetter: (_value, row) => row?.SoilTest?.valPH,
+        valueGetter: (_value, row) => row?.soilTest?.valPH,
         width: 80,
         minWidth: 80,
         maxWidth: 100,
@@ -142,7 +144,7 @@ export default function SoilTests() {
         width: 150,
         renderCell: (e: { id: GridRowId; api: GridApiCommunity }) => {
           const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-          const isRowHasSoilTest = fields[index].SoilTest !== undefined;
+          const isRowHasSoilTest = fields[index].soilTest !== undefined;
           return (
             <div>
               {isRowHasSoilTest ? (
@@ -186,7 +188,7 @@ export default function SoilTests() {
       {currentFieldIndex !== null && (
         <SoilTestsModal
           currentFieldIndex={currentFieldIndex}
-          initialFormData={fields[currentFieldIndex].SoilTest}
+          initialFormData={fields[currentFieldIndex].soilTest}
           soilTestId={soilTestId}
           soilTestMethods={soilTestMethods}
           setFields={setFields}

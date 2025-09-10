@@ -7,25 +7,20 @@ import { Form, Modal, NumberField, Select, TextField } from '@/components/common
 import { ModalProps } from '@/components/common/Modal/Modal';
 
 import { APICacheContext } from '@/context/APICacheContext';
-import {
-  DefaultSolidManureConversionFactors,
-  DefaultLiquidManureConversionFactors,
-  MANURE_TYPE_OPTIONS,
-  DefaultManureFormData,
-} from '@/constants';
+import { DEFAULT_IMPORTED_MANURE, MANURE_TYPE_OPTIONS } from '@/constants';
 import { formCss, formGridBreakpoints } from '../../common.styles';
 import {
-  NMPFileImportedManureData,
+  NMPFileImportedManure,
   LiquidManureConversionFactors,
   SolidManureConversionFactors,
   ManureType,
 } from '@/types';
 
 type ModalComponentProps = {
-  initialModalData: NMPFileImportedManureData | undefined;
+  initialModalData: NMPFileImportedManure | undefined;
   handleDialogClose: () => void;
-  handleSubmit: (formData: NMPFileImportedManureData) => void;
-  manuresList: any;
+  handleSubmit: (formData: NMPFileImportedManure) => void;
+  manuresList: NMPFileImportedManure[];
 };
 
 export default function ManureImportModal({
@@ -37,32 +32,30 @@ export default function ManureImportModal({
 }: ModalComponentProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const apiCache = useContext(APICacheContext);
 
-  const [formData, setFormData] = useState<Omit<NMPFileImportedManureData, 'uuid'>>(
-    initialModalData || DefaultManureFormData,
+  const [formData, setFormData] = useState<Omit<NMPFileImportedManure, 'uuid'>>(
+    initialModalData || DEFAULT_IMPORTED_MANURE,
   );
 
   const [solidManureDropdownOptions, setSolidManureDropdownOptions] = useState<
     SolidManureConversionFactors[]
-  >([DefaultSolidManureConversionFactors]);
+  >([]);
   const [liquidManureDropdownOptions, setLiquidManureDropdownOptions] = useState<
     LiquidManureConversionFactors[]
-  >([DefaultLiquidManureConversionFactors]);
+  >([]);
 
   useEffect(() => {
     apiCache
       .callEndpoint('api/liquidmaterialsconversionfactors/')
-      .then((response: { status?: any; data: any }) => {
+      .then((response: { status?: any; data: LiquidManureConversionFactors[] }) => {
         if (response.status === 200) {
-          const { data } = response;
-          setLiquidManureDropdownOptions(data);
+          setLiquidManureDropdownOptions(response.data);
         }
       });
     apiCache
       .callEndpoint('api/solidmaterialsconversionfactors/')
-      .then((response: { status?: any; data: any }) => {
+      .then((response: { status?: any; data: SolidManureConversionFactors[] }) => {
         if (response.status === 200) {
-          const { data } = response;
-          setSolidManureDropdownOptions(data);
+          setSolidManureDropdownOptions(response.data);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +66,7 @@ export default function ManureImportModal({
     if (initialModalData) return true;
     // Otherwise, make sure none of the manures in the list have the same name
     return !manuresList.some(
-      (ele: NMPFileImportedManureData) => ele.UniqueMaterialName === formData.UniqueMaterialName,
+      (ele: NMPFileImportedManure) => ele.uniqueMaterialName === formData.uniqueMaterialName,
     );
   };
 
@@ -82,7 +75,7 @@ export default function ManureImportModal({
     handleDialogClose();
   };
 
-  const handleInputChange = (changes: Partial<NMPFileImportedManureData>) => {
+  const handleInputChange = (changes: Partial<NMPFileImportedManure>) => {
     setFormData((prev) => {
       const updatedData = { ...prev, ...changes };
       return updatedData;
@@ -108,9 +101,9 @@ export default function ManureImportModal({
             <TextField
               isRequired
               label="Material name"
-              value={formData.UniqueMaterialName}
+              value={formData.uniqueMaterialName}
               onChange={(e: string) => {
-                handleInputChange({ UniqueMaterialName: e });
+                handleInputChange({ uniqueMaterialName: e });
               }}
               maxLength={100}
               validate={() => (!isNameUnique() ? 'Unique material name required.' : undefined)}
@@ -126,10 +119,10 @@ export default function ManureImportModal({
               onSelectionChange={(e) => {
                 handleInputChange({
                   manureType: e as number,
-                  ManagedManureName: `${formData.UniqueMaterialName}, ${ManureType[e as number]}`,
+                  managedManureName: `${formData.uniqueMaterialName}, ${ManureType[e as number]}`,
                   // Reset dependent inputs on changes
-                  Units: undefined,
-                  Moisture: 50,
+                  units: undefined,
+                  moisture: 50,
                 });
               }}
               noSort
@@ -139,9 +132,9 @@ export default function ManureImportModal({
             <NumberField
               isRequired
               label="Amount per year"
-              value={formData.AnnualAmount}
+              value={formData.annualAmount}
               onChange={(e: number) => {
-                handleInputChange({ AnnualAmount: e });
+                handleInputChange({ annualAmount: e });
               }}
             />
           </Grid>
@@ -153,13 +146,13 @@ export default function ManureImportModal({
                   isRequired
                   label="Units"
                   placeholder="Select a unit"
-                  selectedKey={formData.Units}
+                  selectedKey={formData.units}
                   items={solidManureDropdownOptions.map((ele) => ({
                     id: ele.inputunit,
                     label: ele.inputunitname ?? '',
                   }))}
                   onSelectionChange={(e) => {
-                    handleInputChange({ Units: e as number });
+                    handleInputChange({ units: e as number });
                   }}
                 />
               </Grid>
@@ -167,8 +160,8 @@ export default function ManureImportModal({
                 <NumberField
                   isRequired
                   label="Moisture (%)"
-                  value={formData.Moisture}
-                  onChange={(e) => handleInputChange({ Moisture: e })}
+                  value={formData.moisture}
+                  onChange={(e) => handleInputChange({ moisture: e })}
                   step={0.1}
                   maxValue={100}
                 />
@@ -182,13 +175,13 @@ export default function ManureImportModal({
                 isRequired
                 label="Units"
                 placeholder="Select a unit"
-                selectedKey={formData.Units}
+                selectedKey={formData.units}
                 items={liquidManureDropdownOptions.map((ele) => ({
                   id: ele.inputunit,
                   label: ele.inputunitname ?? '',
                 }))}
                 onSelectionChange={(e) => {
-                  handleInputChange({ Units: e as number });
+                  handleInputChange({ units: e as number });
                 }}
               />
             </Grid>

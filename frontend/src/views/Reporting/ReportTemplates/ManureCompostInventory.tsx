@@ -1,9 +1,9 @@
 import { inventoryTableCss, inventoryTableHeader } from '../reporting.styles';
 import {
-  NMPFileImportedManureData,
-  NMPFileGeneratedManureData,
-  AnimalData,
-  DairyCattleData,
+  NMPFileImportedManure,
+  NMPFileGeneratedManure,
+  NMPFileAnimal,
+  NMPFileDairyCattle,
   NMPFileManureStorageSystem,
   ManureType,
 } from '@/types';
@@ -14,22 +14,22 @@ export default function ManureCompostInventory({
   ImportedManures = [],
   ManureStorageSystems = [],
 }: {
-  FarmAnimals?: AnimalData[];
-  GeneratedManures?: NMPFileGeneratedManureData[];
-  ImportedManures?: NMPFileImportedManureData[];
+  FarmAnimals?: NMPFileAnimal[];
+  GeneratedManures?: NMPFileGeneratedManure[];
+  ImportedManures?: NMPFileImportedManure[];
   ManureStorageSystems?: NMPFileManureStorageSystem[];
 }) {
   const getMilkWashAmount = (manureSourceUuid: string) => {
     const milkManure = FarmAnimals.find(
       (animalEle) => animalEle.uuid === manureSourceUuid,
-    ) as DairyCattleData;
+    ) as NMPFileDairyCattle;
     if (!milkManure) return 0;
     return milkManure.washWater;
   };
 
   const unAssignedManures = [
-    ...GeneratedManures.filter((ele) => !ele.AssignedToStoredSystem),
-    ...ImportedManures.filter((ele) => !ele.AssignedToStoredSystem),
+    ...GeneratedManures.filter((ele) => !ele.assignedToStoredSystem),
+    ...ImportedManures.filter((ele) => !ele.assignedToStoredSystem),
   ];
 
   return (
@@ -57,7 +57,7 @@ export default function ManureCompostInventory({
             </td>
             <td style={{ textAlign: 'right' }}>
               {systemEle.manuresInSystem.reduce(
-                (accumulator, currentValue) => currentValue.data.AnnualAmount + accumulator,
+                (accumulator, currentValue) => currentValue.data.annualAmount + accumulator,
                 0,
               )}
             </td>
@@ -72,19 +72,19 @@ export default function ManureCompostInventory({
             </td>
           </tr>
           {systemEle.manuresInSystem.map((manureEle) => (
-            <tr key={manureEle.data.UniqueMaterialName}>
-              <td style={{ paddingLeft: '3rem' }}>{manureEle.data.UniqueMaterialName}</td>
-              <td style={{ textAlign: 'right' }}>{manureEle.data.AnnualAmount}</td>
+            <tr key={manureEle.data.uniqueMaterialName}>
+              <td style={{ paddingLeft: '3rem' }}>{manureEle.data.uniqueMaterialName}</td>
+              <td style={{ textAlign: 'right' }}>{manureEle.data.annualAmount}</td>
               <td>{systemEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
             </tr>
           ))}
           {systemEle.manuresInSystem
             .filter(
               (manureEle) =>
-                'manureId' in manureEle.data && manureEle.data.UniqueMaterialName === 'Milking Cow',
+                'manureId' in manureEle.data && manureEle.data.uniqueMaterialName === 'Milking Cow',
             )
             .map((manureEle) => (
-              <tr key={manureEle.data.UniqueMaterialName}>
+              <tr key={manureEle.data.uniqueMaterialName}>
                 <td>Milking Center Wash Water</td>
                 <td style={{ textAlign: 'right' }}>{getMilkWashAmount(manureEle.data.uuid)}</td>
                 <td>{systemEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
@@ -112,9 +112,9 @@ export default function ManureCompostInventory({
             </td>
           </tr>
           {unAssignedManures.map((manureEle) => (
-            <tr key={manureEle.UniqueMaterialName}>
-              <td style={{ paddingLeft: '3rem' }}>{manureEle.UniqueMaterialName}</td>
-              <td style={{ textAlign: 'right' }}>{manureEle.AnnualAmount}</td>
+            <tr key={manureEle.uniqueMaterialName}>
+              <td style={{ paddingLeft: '3rem' }}>{manureEle.uniqueMaterialName}</td>
+              <td style={{ textAlign: 'right' }}>{manureEle.annualAmount}</td>
               <td>{manureEle.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}</td>
             </tr>
           ))}

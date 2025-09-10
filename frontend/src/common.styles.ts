@@ -9,6 +9,7 @@ export const componentContainer = css({
   marginRight: '3rem',
   maxWidth: '900px',
   width: '100%',
+  minHeight: 'calc(100vh - 160px)',
 });
 
 export const formCss = css({
@@ -47,9 +48,7 @@ export const formCss = css({
 });
 
 export const hideCheckboxGroup = css({
-  height: '0',
-  overflow: 'hidden',
-  width: '0',
+  display: 'none',
 });
 
 export const showCheckboxGroup = css({
@@ -70,7 +69,7 @@ export const paragraphCss = css({
 
 export const buttonGroup = css({
   '.bcds-ButtonGroup': {
-    marginTop: '1rem',
+    flexGrow: '0',
   },
 });
 
@@ -102,13 +101,6 @@ export const tableActionButtonCss = css({
   color: 'var(--surface-color-primary-button-default)',
 });
 
-export const modalHeaderStyle = css({
-  fontWeight: '700',
-  fontSize: '1.25rem',
-});
-
-export const modalDividerStyle = css({ marginTop: '0.5rem', marginBottom: '0.5rem' });
-
 export const addRecordGroupStyle = css({
   '.bcds-ButtonGroup': {
     overflow: 'visible',
@@ -118,16 +110,6 @@ export const addRecordGroupStyle = css({
       bottom: '-0.25rem',
       zIndex: '10',
     },
-  },
-});
-
-export const modalPaddingStyle = css({
-  padding: '1rem',
-});
-
-export const textFieldStyle = css({
-  '.bcds-react-aria-TextField--Input': {
-    width: '100%',
   },
 });
 

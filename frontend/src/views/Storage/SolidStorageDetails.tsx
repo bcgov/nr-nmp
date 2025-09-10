@@ -35,7 +35,7 @@ export default function SolidStorageDetails({ formData, setFormData }: SolidStor
           label="Storage Name"
           type="string"
           value={formData.manureStorage.name}
-          onChange={(e: any) => {
+          onChange={(e: string) => {
             handleStorageChange({ name: e });
           }}
         />

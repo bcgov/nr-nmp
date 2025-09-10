@@ -15,7 +15,6 @@ import {
   PreviousYearManureData,
 } from '@/calculations/CalculateNutrients/PreviousManure';
 import { Tabs, View } from '../../components/common';
-import { NMPFileFieldData } from '@/types/NMPFileFieldData';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
 import { customTableStyle, ErrorText } from '../../common.styles';
@@ -36,7 +35,7 @@ import {
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import { CalculateNutrientsColumn, Schedule } from '@/types';
+import { CalculateNutrientsRow, NMPFileField, Schedule } from '@/types';
 
 function NoRows() {
   return <div />;
@@ -51,8 +50,8 @@ export default function CalculateNutrients() {
 
   const navigate = useNavigate();
 
-  const [fieldList, setFieldList] = useState<Array<NMPFileFieldData>>(
-    state.nmpFile.years[0].Fields || [],
+  const [fieldList, setFieldList] = useState<Array<NMPFileField>>(
+    state.nmpFile.years[0].fields || [],
   );
   const [prevYearManureData, setPrevYearManureData] = useState<PreviousYearManureData | null>(null);
 
@@ -76,12 +75,12 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['crop', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = genHandleDeleteRow(activeField, 'Crops', setFieldList);
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'crops', setFieldList);
     return generateColumns(
       handleEditRow,
       handleDeleteRow,
       renderNutrientCell,
-      fieldList[activeField].Crops?.length ? 'Crops' : undefined,
+      fieldList[activeField].crops?.length ? 'Crops' : undefined,
       false,
     );
   }, [activeField, fieldList]);
@@ -94,9 +93,9 @@ export default function CalculateNutrients() {
       setFieldList((prev) => {
         const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
         const nextFieldArray = [...prev];
-        const manures = [...nextFieldArray[activeField].Manures];
+        const manures = [...nextFieldArray[activeField].manures];
         manures.splice(index, 1);
-        nextFieldArray[activeField].Manures = manures;
+        nextFieldArray[activeField].manures = manures;
         return nextFieldArray;
       });
     };
@@ -107,7 +106,7 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['fertilizer', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = genHandleDeleteRow(activeField, 'Fertilizers', setFieldList);
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'fertilizers', setFieldList);
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertilizers', true);
   }, [activeField]);
 
@@ -115,8 +114,8 @@ export default function CalculateNutrients() {
   // An index attr is added to track its spot in the array
   const fertigationRows = useMemo(
     () =>
-      fieldList[activeField].Fertigations.reduce((accRows, fertigation, index) => {
-        const nutrientColumns: CalculateNutrientsColumn = {
+      fieldList[activeField].fertigations.reduce((accRows, fertigation, index) => {
+        const nutrientColumns: CalculateNutrientsRow = {
           name: fertigation.name,
           reqN: fertigation.reqN,
           reqP2o5: fertigation.remP2o5,
@@ -169,10 +168,10 @@ export default function CalculateNutrients() {
     };
     const handleDeleteRow = (e: { row: { index: number } }) => {
       setFieldList((prev) => {
-        const fertigations = [...prev[activeField].Fertigations];
+        const fertigations = [...prev[activeField].fertigations];
         fertigations.splice(e.row.index, 1);
         const nextFieldArray = [...prev];
-        nextFieldArray[activeField].Fertigations = fertigations;
+        nextFieldArray[activeField].fertigations = fertigations;
         return nextFieldArray;
       });
     };
@@ -183,7 +182,7 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['other', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = genHandleDeleteRow(activeField, 'OtherNutrients', setFieldList);
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'otherNutrients', setFieldList);
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
   }, [activeField]);
 
@@ -200,13 +199,13 @@ export default function CalculateNutrients() {
     [],
   );
 
-  const balanceRow: CalculateNutrientsColumn = useMemo(() => {
+  const balanceRow: CalculateNutrientsRow = useMemo(() => {
     const allRows = [
-      ...fieldList[activeField].Crops,
-      ...fieldList[activeField].Fertilizers,
-      ...fieldList[activeField].Fertigations,
-      ...fieldList[activeField].OtherNutrients,
-      ...fieldList[activeField].Manures,
+      ...fieldList[activeField].crops,
+      ...fieldList[activeField].fertilizers,
+      ...fieldList[activeField].fertigations,
+      ...fieldList[activeField].otherNutrients,
+      ...fieldList[activeField].manures,
     ];
 
     // Add previous year manure nitrogen credit to the balance
@@ -252,8 +251,8 @@ export default function CalculateNutrients() {
   const handleDialogClose = useCallback(() => setOpenDialog(['', undefined]), []);
 
   const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileFieldData>, index: number) =>
-      !fieldList.some((fieldRow, idx) => fieldRow.FieldName === data.FieldName && index !== idx),
+    (data: Partial<NMPFileField>, index: number) =>
+      !fieldList.some((fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx),
     [fieldList],
   );
 
@@ -261,7 +260,7 @@ export default function CalculateNutrients() {
     setShowViewError('');
     dispatch({
       type: 'SAVE_FIELDS',
-      year: state.nmpFile.farmDetails.Year!,
+      year: state.nmpFile.farmDetails.year,
       newFields: fieldList,
     });
 
@@ -271,7 +270,7 @@ export default function CalculateNutrients() {
   const handlePreviousPage = () => {
     dispatch({
       type: 'SAVE_FIELDS',
-      year: state.nmpFile.farmDetails.Year!,
+      year: state.nmpFile.farmDetails.year,
       newFields: fieldList,
     });
     if (activeField > 0) {
@@ -326,7 +325,7 @@ export default function CalculateNutrients() {
       {/* tabs = the fields the user has entered */}
       <Tabs
         activeTab={activeField}
-        tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.FieldName) : ['Field 1']}
+        tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.fieldName) : ['Field 1']}
       />
       <ButtonGroup
         alignment="end"
@@ -394,9 +393,9 @@ export default function CalculateNutrients() {
           field={fieldList[activeField]}
           fieldIndex={activeField}
           cropIndex={openDialog[1]}
-          initialModalData={fieldList[activeField].Crops[openDialog[1]!]}
+          initialModalData={fieldList[activeField].crops[openDialog[1]!]}
           setFields={setFieldList}
-          farmRegion={state.nmpFile.farmDetails.FarmRegion}
+          farmRegion={state.nmpFile.farmDetails.farmRegion}
           isOpen={openDialog[0] === 'crop'}
           onClose={handleDialogClose}
         />
@@ -407,7 +406,7 @@ export default function CalculateNutrients() {
           // NOTE: Custom fertilizer nutrients aren't saved
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].Fertilizers[openDialog[1]]
+              ? fieldList[activeField].fertilizers[openDialog[1]]
               : undefined
           }
           rowEditIndex={openDialog[1]}
@@ -422,7 +421,7 @@ export default function CalculateNutrients() {
         <ManureModal
           fieldIndex={activeField}
           initialModalData={
-            openDialog[1] !== undefined ? fieldList[activeField].Manures[openDialog[1]] : undefined
+            openDialog[1] !== undefined ? fieldList[activeField].manures[openDialog[1]] : undefined
           }
           field={fieldList[activeField]}
           rowEditIndex={openDialog[1]}
@@ -438,7 +437,7 @@ export default function CalculateNutrients() {
           fieldIndex={activeField}
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].Fertigations[openDialog[1]]
+              ? fieldList[activeField].fertigations[openDialog[1]]
               : undefined
           }
           rowEditIndex={openDialog[1]}
@@ -455,7 +454,7 @@ export default function CalculateNutrients() {
           fieldIndex={activeField}
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].OtherNutrients[openDialog[1]]
+              ? fieldList[activeField].otherNutrients[openDialog[1]]
               : undefined
           }
           rowEditIndex={openDialog[1]}
@@ -474,10 +473,11 @@ export default function CalculateNutrients() {
           modalStyle={{ width: '600px' }}
           field={fieldList[activeField]}
           initialModalData={{
-            PreviousYearManureApplicationFrequency:
-              fieldList[activeField]?.PreviousYearManureApplicationFrequency || 0,
-            PreviousYearManureApplicationNitrogenCredit:
-              fieldList[activeField]?.PreviousYearManureApplicationNitrogenCredit ?? null,
+            PreviousYearManureApplicationFrequency: parseInt(
+              fieldList[activeField]?.previousYearManureApplicationFrequency || '0',
+              10,
+            ),
+            PreviousYearManureApplicationNitrogenCredit: null, // This field doesn't exist in the new structure
           }}
         />
       )}
@@ -495,9 +495,9 @@ export default function CalculateNutrients() {
           ...customCalcTableStyle,
           '--DataGrid-overlayHeight': '0px',
           '--DataGrid-rowBorderColor':
-            fieldList[activeField]?.Crops.length > 0 ? 'inherit' : 'none',
+            fieldList[activeField]?.crops.length > 0 ? 'inherit' : 'none',
         }}
-        rows={fieldList[activeField].Crops}
+        rows={fieldList[activeField].crops}
         columns={cropColumns}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
@@ -533,10 +533,10 @@ export default function CalculateNutrients() {
         />
       )}
 
-      {fieldList[activeField].Fertilizers.length > 0 && (
+      {fieldList[activeField].fertilizers.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={fieldList[activeField].Fertilizers}
+          rows={fieldList[activeField].fertilizers}
           columns={fertilizerColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
@@ -546,10 +546,10 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].Manures.length > 0 && (
+      {fieldList[activeField].manures.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={fieldList[activeField].Manures}
+          rows={fieldList[activeField].manures}
           columns={manureColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
@@ -559,7 +559,7 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].Fertigations.length > 0 && (
+      {fieldList[activeField].fertigations.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
           rows={fertigationRows}
@@ -572,10 +572,10 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].OtherNutrients.length > 0 && (
+      {fieldList[activeField].otherNutrients.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={fieldList[activeField].OtherNutrients}
+          rows={fieldList[activeField].otherNutrients}
           columns={otherColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick

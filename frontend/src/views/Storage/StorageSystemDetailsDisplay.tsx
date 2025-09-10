@@ -1,7 +1,6 @@
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import { ManureType } from '@/types';
-import { NMPFileManureStorageSystem } from '@/types/NMPFileManureStorageSystem';
+import { ManureType, NMPFileManureStorageSystem } from '@/types';
 import { Text } from './StorageModal.styles';
 
 type StorageSystemDetailsDisplayProps = {
@@ -40,9 +39,9 @@ export default function StorageSystemDetailsDisplay({
               {formData.manuresInSystem.map((m) => (
                 <li
                   className="bcds-react-aria-Text disabled small"
-                  key={m.data.ManagedManureName}
+                  key={m.data.managedManureName}
                 >
-                  {m.data.ManagedManureName}
+                  {m.data.managedManureName}
                 </li>
               ))}
             </ul>

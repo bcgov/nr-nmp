@@ -11,14 +11,7 @@ import {
   NumberField,
   Form,
 } from '@/components/common';
-import {
-  CropType,
-  Crop,
-  PreviousCrop,
-  NMPFileCropData,
-  NMPFileFieldData,
-  SelectOption,
-} from '@/types';
+import { CropType, Crop, PreviousCrop, NMPFileCrop, NMPFileField, SelectOption } from '@/types';
 import {
   getCropRequirementP205,
   getCropRequirementK2O,
@@ -32,14 +25,16 @@ import {
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '../../common.styles';
 import { ModalProps } from '@/components/common/Modal/Modal';
-import { DEFAULT_NMPFILE_CROPS, HarvestUnit, DEFAULT_BERRY_DATA } from '@/constants';
 import {
-  CROP_OTHER_ID,
+  DEFAULT_NMPFILE_CROPS,
+  HarvestUnit,
+  DEFAULT_BERRY_DATA,
   CROP_TYPE_OTHER_ID,
-  CROP_TYPE_BERRIES_ID,
-  CROP_BLUEBERRIES_ID,
+  CROP_OTHER_ID,
   CROP_RASPBERRIES_ID,
-} from '@/types/Crops';
+  CROP_BLUEBERRIES_ID,
+  CROP_TYPE_BERRIES_ID,
+} from '@/constants';
 import { HARVEST_UNIT_OPTIONS } from '../../constants/harvestUnits';
 import useAppState from '@/hooks/useAppState';
 import { cropsModalReducer, showUnitDropdown } from './utils';
@@ -85,7 +80,7 @@ const requireAndRemoveColumns: GridColDef[] = [
  * @param data The initialModalData
  * @returns Identical data with all nutrient values positive
  */
-function preprocessModalData(data: NMPFileCropData): NMPFileCropData {
+function preprocessModalData(data: NMPFileCrop): NMPFileCrop {
   return {
     ...data,
     reqN: Math.abs(data.reqN),
@@ -103,7 +98,7 @@ function preprocessModalData(data: NMPFileCropData): NMPFileCropData {
  * @param data The formData
  * @returns Identical data with all nutrient values negative
  */
-function postprocessModalData(data: NMPFileCropData): NMPFileCropData {
+function postprocessModalData(data: NMPFileCrop): NMPFileCrop {
   return {
     ...data,
     reqN: -1 * data.reqN,
@@ -116,11 +111,11 @@ function postprocessModalData(data: NMPFileCropData): NMPFileCropData {
 }
 
 type CropsModalProps = {
-  field: NMPFileFieldData;
+  field: NMPFileField;
   fieldIndex: number;
   cropIndex?: number;
-  initialModalData?: NMPFileCropData;
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+  initialModalData?: NMPFileCrop;
+  setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   onClose: () => void;
   farmRegion: number;
 };
@@ -170,12 +165,12 @@ function CropsModal({
           // Check if we're editing an existing crop or adding a new crop
           let updatedCrops;
           if (cropIndex !== undefined) {
-            updatedCrops = [...prevField.Crops];
+            updatedCrops = [...prevField.crops];
             updatedCrops[cropIndex] = postprocessModalData(formData);
           } else {
-            updatedCrops = [...prevField.Crops, postprocessModalData(formData)];
+            updatedCrops = [...prevField.crops, postprocessModalData(formData)];
           }
-          return { ...prevField, Crops: updatedCrops };
+          return { ...prevField, crops: updatedCrops };
         }
         return prevField;
       });
@@ -218,19 +213,19 @@ function CropsModal({
 
   // Populate dropdowns on load
   useEffect(() => {
-    apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: CropType[] }) => {
       if (response.status === 200) {
         setCropTypes(response.data);
       }
     });
-    apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: Crop[] }) => {
       if (response.status === 200) {
         setCrops(response.data);
       }
     });
     apiCache
       .callEndpoint('api/previouscroptypes/')
-      .then((response: { status?: any; data: any }) => {
+      .then((response: { status?: any; data: PreviousCrop[] }) => {
         if (response.status === 200) {
           setPreviousCrops(response.data);
         }
@@ -262,7 +257,7 @@ function CropsModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFormFieldChange = (attr: keyof NMPFileCropData, value: string | number | boolean) => {
+  const handleFormFieldChange = (attr: keyof NMPFileCrop, value: string | number | boolean) => {
     // Reset calculation button
     if (formData.cropId !== CROP_OTHER_ID) {
       setCalculationsPerformed(false);
@@ -326,11 +321,11 @@ function CropsModal({
             formData.willSawdustBeApplied!,
             formData.willPlantsBePruned!,
             formData.whereWillPruningsGo!,
-            field.SoilTest?.valP !== undefined
-              ? field.SoilTest.valP
+            field.soilTest?.valP !== undefined
+              ? field.soilTest.valP
               : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestP,
-            field.SoilTest?.valK !== undefined
-              ? field.SoilTest.valK
+            field.soilTest?.valK !== undefined
+              ? field.soilTest.valK
               : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestK,
             formData.leafTissueP !== undefined
               ? formData.leafTissueP
@@ -348,8 +343,8 @@ function CropsModal({
             formData.whereWillPruningsGo!,
             formData.plantAgeYears!,
             formData.numberOfPlantsPerAcre!,
-            field.SoilTest?.valP !== undefined
-              ? field.SoilTest.valP
+            field.soilTest?.valP !== undefined
+              ? field.soilTest.valP
               : DEFAULT_BERRY_DATA.defaultBlueberrySoilTestP,
             formData.leafTissueP !== undefined
               ? formData.leafTissueP
@@ -364,12 +359,12 @@ function CropsModal({
           const cropRequirementN = getCropRequirementN(formData, selectedCrop, selectedCropType);
           const cropRequirementP205 = await getCropRequirementP205(
             formData,
-            field.SoilTest,
+            field.soilTest,
             farmRegion,
           );
           const cropRequirementK2O = await getCropRequirementK2O(
             formData,
-            field.SoilTest,
+            field.soilTest,
             farmRegion,
           );
 
@@ -416,7 +411,7 @@ function CropsModal({
       if (formData.prevCropId && formData.prevCropId !== 0) {
         apiCache
           .callEndpoint(`api/previouscroptypes/${formData.prevCropId}/`)
-          .then((response: { status?: any; data: any }) => {
+          .then((response: { status?: any; data: PreviousCrop[] }) => {
             if (response.status === 200) {
               dispatch({
                 type: 'SET_FORM_DATA_ATTR',
@@ -439,14 +434,14 @@ function CropsModal({
   useEffect(() => {
     if (formData.cropId !== 0 && formData.cropId !== CROP_OTHER_ID && selectedCrop !== undefined) {
       apiCache
-        .callEndpoint(`api/cropyields/${formData.cropId}/${nmpFile.farmDetails.RegionLocationId}/`)
+        .callEndpoint(`api/cropyields/${formData.cropId}/${nmpFile.farmDetails.regionLocationId}/`)
         .then((response) => {
           if (response.status === 200) {
             const { data } = response;
             let amount;
             if ((data as { amount: number }[]).length === 0) {
               console.error(
-                `No yield data for ${formData.cropId} and location id ${nmpFile.farmDetails.RegionLocationId}`,
+                `No yield data for ${formData.cropId} and location id ${nmpFile.farmDetails.regionLocationId}`,
               );
               amount = 0;
             } else {
@@ -654,8 +649,12 @@ function CropsModal({
                     />
                   </Grid>
                   {formData.hasLeafTest && (
-                    <>
-                      <Grid size={formGridBreakpoints}>
+                    <Grid
+                      container
+                      spacing={1}
+                      size={12}
+                    >
+                      <Grid size={6}>
                         <NumberField
                           isRequired={formData.hasLeafTest}
                           label="Leaf Tissue P (%)"
@@ -664,7 +663,7 @@ function CropsModal({
                           maxValue={100}
                         />
                       </Grid>
-                      <Grid size={formGridBreakpoints}>
+                      <Grid size={6}>
                         <NumberField
                           isRequired={formData.hasLeafTest}
                           label="Leaf Tissue K (%)"
@@ -673,7 +672,7 @@ function CropsModal({
                           maxValue={100}
                         />
                       </Grid>
-                    </>
+                    </Grid>
                   )}
                 </>
               )}

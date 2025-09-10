@@ -16,7 +16,7 @@ import { DEFAULT_NMPFILE_APPLIED_MANURE, EMPTY_CROP_NUTRIENTS } from '@/constant
 
 import {
   CropNutrients,
-  NMPFileFieldData,
+  NMPFileField,
   NMPFileNutrientAnalysis,
   NMPFileAppliedManure,
   SelectOption,
@@ -34,8 +34,8 @@ type AddManureModalProps = {
   fieldIndex: number;
   initialModalData?: NMPFileAppliedManure;
   rowEditIndex?: number;
-  field: NMPFileFieldData;
-  setFields: Dispatch<SetStateAction<NMPFileFieldData[]>>;
+  field: NMPFileField;
+  setFields: Dispatch<SetStateAction<NMPFileField[]>>;
   onCancel: () => void;
   navigateAway: (navigateTo: string) => void;
 };
@@ -81,7 +81,7 @@ export default function ManureModal({
   ...props
 }: AddManureModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const { state } = useAppState();
-  const manuresWithNutrients = state.nmpFile.years[0].NutrientAnalyses;
+  const manuresWithNutrients = state.nmpFile.years[0].nutrientAnalyses;
 
   const apiCache = useContext(APICacheContext);
   const [manureForm, setManureForm] = useState<NMPFileAppliedManure>(
@@ -161,21 +161,21 @@ export default function ManureModal({
     const valueDecimal = nmineralizations.find(
       (n) =>
         n.nmineralizationid === selectedManure.nmineralizationid &&
-        n.locationid === state.nmpFile.farmDetails.RegionLocationId,
+        n.locationid === state.nmpFile.farmDetails.regionLocationId,
     )?.firstyearvalue;
     const valuePercent = valueDecimal ? valueDecimal * 100 : undefined;
     setDefaultOrganicN(valuePercent);
     if (valuePercent !== undefined) {
       setManureForm((prev) => ({ ...prev, nAvailable: valuePercent }));
     }
-  }, [state.nmpFile.farmDetails.RegionLocationId, selectedManure, nmineralizations]);
+  }, [state.nmpFile.farmDetails.regionLocationId, selectedManure, nmineralizations]);
 
   useEffect(() => {
-    apiCache.callEndpoint('api/units/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
       if (response.status === 200) {
         const { data } = response;
         setManureUnits(
-          (data as Units[]).map((unit) => ({
+          data.map((unit) => ({
             value: unit,
             id: unit.id,
             label: unit.name,
@@ -184,7 +184,7 @@ export default function ManureModal({
       }
     });
 
-    apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: Manure[] }) => {
       if (response.status === 200) {
         setManures(response.data);
       }
@@ -198,11 +198,13 @@ export default function ManureModal({
         }
       });
 
-    apiCache.callEndpoint('api/nmineralizations/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        setNMineralizations(response.data);
-      }
-    });
+    apiCache
+      .callEndpoint('api/nmineralizations/')
+      .then((response: { status?: any; data: NitrogenMineralization[] }) => {
+        if (response.status === 200) {
+          setNMineralizations(response.data);
+        }
+      });
   }, [apiCache]);
 
   const handleModalClose = () => {
@@ -216,12 +218,12 @@ export default function ManureModal({
       const newField = newFields[fieldIndex];
       if (rowEditIndex !== undefined) {
         // Replace manure at index
-        const newManures = [...newField.Manures];
+        const newManures = [...newField.manures];
         newManures[rowEditIndex] = { ...manureForm };
-        newField.Manures = newManures;
+        newField.manures = newManures;
       } else {
         // Append to end of list
-        newField.Manures = [...newField.Manures, { ...manureForm }];
+        newField.manures = [...newField.manures, { ...manureForm }];
       }
       return newFields;
     });
@@ -236,7 +238,7 @@ export default function ManureModal({
     }
     const nutrientInputs = await getNutrientInputs(
       selectedNutrientAnalysis,
-      state.nmpFile.farmDetails.FarmRegion,
+      state.nmpFile.farmDetails.farmRegion,
       manureForm.applicationRate,
       manureUnits.find((opt) => opt.id === manureForm.applUnitId)!.value,
       manureForm.nh4Retention,
@@ -253,9 +255,9 @@ export default function ManureModal({
     }));
     // TODO: Calculate the balance column correctly!
     setStillReqTable({
-      N: field.Crops[0].reqN + (field.Crops[1]?.reqN || 0),
-      P2O5: field.Crops[0].reqP2o5 + (field.Crops[1]?.reqP2o5 || 0),
-      K2O: field.Crops[0].reqK2o + (field.Crops[1]?.reqK2o || 0),
+      N: field.crops[0].reqN + (field.crops[1]?.reqN || 0),
+      P2O5: field.crops[0].reqP2o5 + (field.crops[1]?.reqP2o5 || 0),
+      K2O: field.crops[0].reqK2o + (field.crops[1]?.reqK2o || 0),
     });
   };
 

@@ -1,11 +1,3 @@
-export const BEEF_COW_ID = '1';
-export const DAIRY_COW_ID = '2';
-export const MILKING_COW_ID = '9'; // subtype
-export const POULTRY_ID = '6';
-export const SWINE_ID = '9';
-export const DUCK_ID = '10'; // subtype
-export const PER_DAY_PER_ANIMAL_UNIT = 'PER_DAY_PER_ANIMAL';
-export const PER_DAY_UNIT = 'PER_DAY';
 export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
 
 // eslint-disable-next-line no-shadow
@@ -14,7 +6,7 @@ export enum ManureType {
   Solid = 2,
 }
 
-export type BeefCattleData = {
+export type NMPFileBeefCattle = {
   animalId: '1';
   subtype?: string;
   animalsPerFarm?: number;
@@ -24,7 +16,7 @@ export type BeefCattleData = {
   uuid: string;
 };
 
-export type DairyCattleData = {
+export type NMPFileDairyCattle = {
   animalId: '2';
   subtype?: string;
   breed?: string;
@@ -40,7 +32,7 @@ export type DairyCattleData = {
   uuid: string;
 };
 
-export type PoultryData = {
+export type NMPFilePoultry = {
   animalId: '6';
   subtype?: string;
   manureType?: ManureType;
@@ -58,7 +50,7 @@ export type PoultryData = {
 export type OtherAnimalId = '4' | '5' | '7' | '8' | '9';
 export const OTHER_ANIMAL_IDS: OtherAnimalId[] = ['4', '5', '7', '8', '9'];
 
-export type OtherAnimalData = {
+export type NMPFileOtherAnimal = {
   animalId: OtherAnimalId;
   subtype?: string;
   manureType: ManureType;
@@ -70,10 +62,8 @@ export type OtherAnimalData = {
   uuid: string;
 };
 
-export type AnimalData = BeefCattleData | DairyCattleData | PoultryData | OtherAnimalData;
-
-export type Animal = {
-  id: number;
-  name: string;
-  usesortorder: boolean;
-};
+export type NMPFileAnimal =
+  | NMPFileBeefCattle
+  | NMPFileDairyCattle
+  | NMPFilePoultry
+  | NMPFileOtherAnimal;

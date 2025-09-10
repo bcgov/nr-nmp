@@ -10,6 +10,7 @@ import Select from './Select/Select';
 import NumberField from './NumberField/NumberField';
 import TextField from './TextField/TextField';
 import View from './View/View';
+import FieldListModal from './FieldListModal/FieldListModal';
 
 export {
   Header,
@@ -24,4 +25,5 @@ export {
   NumberField,
   TextField,
   View,
+  FieldListModal,
 };

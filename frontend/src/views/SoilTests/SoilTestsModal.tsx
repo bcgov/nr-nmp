@@ -4,15 +4,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
 import { formGridBreakpoints } from '../../common.styles';
 import { Form, Modal, NumberField } from '../../components/common';
-import { NMPFileFieldData, NMPFileSoilTestData, SelectOption, SoilTestMethodsData } from '@/types';
+import { NMPFileField, NMPFileSoilTest, SelectOption, SoilTestMethods } from '@/types';
 import { StyledDatePicker } from './soilTests.styles';
 
 type SoilModalProps = {
-  initialFormData?: Omit<NMPFileSoilTestData, 'soilTestId'>;
+  initialFormData?: Omit<NMPFileSoilTest, 'soilTestId'>;
   currentFieldIndex: number;
   soilTestId: number;
-  soilTestMethods: SelectOption<SoilTestMethodsData>[];
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+  soilTestMethods: SelectOption<SoilTestMethods>[];
+  setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   handleDialogClose: () => void;
 };
 
@@ -24,7 +24,7 @@ export default function SoilTestsModal({
   setFields,
   handleDialogClose,
 }: SoilModalProps) {
-  const [formData, setFormData] = useState<Omit<NMPFileSoilTestData, 'soilTestId'>>(
+  const [formData, setFormData] = useState<Omit<NMPFileSoilTest, 'soilTestId'>>(
     initialFormData || {},
   );
 
@@ -33,7 +33,7 @@ export default function SoilTestsModal({
     [formData?.sampleDate],
   );
 
-  const handleFormFieldChange = (changes: Partial<Omit<NMPFileSoilTestData, 'soilTestId'>>) => {
+  const handleFormFieldChange = (changes: Partial<Omit<NMPFileSoilTest, 'soilTestId'>>) => {
     setFormData((prev) => ({ ...prev, ...changes }));
   };
 
@@ -46,7 +46,7 @@ export default function SoilTestsModal({
 
     let convertedKelownaP = formData.valP!;
 
-    if (formData.valP! < 7.2 && lessThan72 !== undefined) {
+    if (formData.valPH! < 7.2 && lessThan72 !== undefined) {
       convertedKelownaP = formData.valP! * lessThan72;
     } else if (formData.valPH! >= 7.2 && greaterThan72 !== undefined) {
       convertedKelownaP = formData.valP! * greaterThan72;
@@ -60,18 +60,22 @@ export default function SoilTestsModal({
           soilTestMethods.find((method) => method.id === soilTestId)!.value.converttokelownak
         : formData.valK!;
 
-    setFormData((prev) => ({
-      ...prev,
-      convertedKelownaP,
-      convertedKelownaK,
-    }));
+    setFormData((prevFormData) => {
+      const newFormData = {
+        ...prevFormData,
+        convertedKelownaP,
+        convertedKelownaK,
+      };
 
-    setFields((prev) => {
-      const newList = [...prev];
-      if (currentFieldIndex !== null)
-        newList[currentFieldIndex].SoilTest = { ...formData, soilTestId };
-      return newList;
+      setFields((prevFields) => {
+        const newList = [...prevFields];
+        if (currentFieldIndex !== null)
+          newList[currentFieldIndex].soilTest = { ...newFormData, soilTestId };
+        return newList;
+      });
+      return newFormData;
     });
+
     handleDialogClose();
   };
 
@@ -96,8 +100,8 @@ export default function SoilTestsModal({
               <StyledDatePicker>
                 <ReactDatePicker
                   selected={formDataDate}
-                  onChange={(e: Date) => {
-                    handleFormFieldChange({ sampleDate: e.toISOString() });
+                  onChange={(e) => {
+                    handleFormFieldChange({ sampleDate: e ? e.toISOString() : undefined });
                   }}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker

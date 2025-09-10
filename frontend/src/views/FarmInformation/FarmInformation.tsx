@@ -1,11 +1,9 @@
 /**
  * @summary The Farm Information page for the application
  */
-import React, { useState, useEffect, useContext, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useContext, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Button,
-  ButtonGroup,
   Checkbox,
   CheckboxGroup,
   // This is the one file where Form needs to be imported from the BC DS
@@ -14,8 +12,7 @@ import {
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
-import { NMPFileFarmDetails } from '@/types/NMPFile';
-import { Select, TextField, View } from '@/components/common';
+import { Select, TextField, View, YesNoRadioButtons } from '@/components/common';
 import {
   formCss,
   formGridBreakpoints,
@@ -25,27 +22,27 @@ import {
 import Subheader from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ADD_ANIMALS, FIELD_LIST, LANDING_PAGE } from '@/constants/routes';
-import { Region, SelectOption, Subregion } from '@/types';
-import YesNoRadioButtons from '@/components/common/YesNoRadioButtons/YesNoRadioButtons';
+import { NMPFileFarmDetails, Region, SelectOption, Subregion } from '@/types';
 
 export default function FarmInformation() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+  const formRef = useRef<null | HTMLFormElement>(null);
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<NMPFileFarmDetails>({
     // These are default values if the NMPFile doesn't have values
-    FarmAnimals: [],
-    HasHorticulturalCrops: false,
+    farmAnimals: [],
+    hasHorticulturalCrops: false,
     // Overwrite with existing file values
     ...state.nmpFile.farmDetails,
   });
 
   // Props for animal selections
   const [hasAnimals, setHasAnimals] = useState<boolean>(
-    state.nmpFile.farmDetails.FarmAnimals !== undefined &&
-      state.nmpFile.farmDetails.FarmAnimals.length > 0,
+    state.nmpFile.farmDetails.farmAnimals !== undefined &&
+      state.nmpFile.farmDetails.farmAnimals.length > 0,
   );
   const [rawAnimalNames, setRawAnimalNames] = useState<{ [id: string]: string }>({});
 
@@ -99,7 +96,7 @@ export default function FarmInformation() {
   }, []);
 
   useEffect(() => {
-    const region = formData.FarmRegion;
+    const region = formData.farmRegion;
     if (region === 0) {
       setSubregionOptions([]);
       return;
@@ -114,7 +111,7 @@ export default function FarmInformation() {
 
       setSubregionOptions(subregions);
     });
-  }, [formData.FarmRegion, apiCache]);
+  }, [formData.farmRegion, apiCache]);
 
   const animalCheckboxes = useMemo(() => {
     if (Object.keys(rawAnimalNames).length === 0) {
@@ -162,7 +159,7 @@ export default function FarmInformation() {
     e.preventDefault();
     dispatch({ type: 'SAVE_FARM_DETAILS', newFarmDetails: formData });
 
-    if (formData.FarmAnimals === undefined || formData.FarmAnimals.length === 0) {
+    if (formData.farmAnimals === undefined || formData.farmAnimals.length === 0) {
       dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: false });
       navigate(FIELD_LIST);
     } else {
@@ -171,15 +168,22 @@ export default function FarmInformation() {
     }
   };
 
-  const handlePeviousPage = () => {
+  const handlePreviousPage = () => {
     navigate(LANDING_PAGE);
   };
 
   return (
-    <View title="Farm Information">
+    <View
+      title="Farm Information"
+      handleBack={handlePreviousPage}
+      // Trigger submit event to use <Form>'s validation
+      handleNext={() => formRef.current?.requestSubmit()}
+    >
       <Form
         css={formCss}
         onSubmit={onSubmit}
+        // @ts-ignore
+        ref={formRef}
       >
         <Grid
           container
@@ -188,9 +192,9 @@ export default function FarmInformation() {
           <Grid size={formGridBreakpoints}>
             <TextField
               label="Farm Name"
-              name="FarmName"
+              name="farmName"
               isRequired
-              value={formData.FarmName}
+              value={formData.farmName}
               onInput={handleInputChange}
               id="farmName"
             />
@@ -200,8 +204,8 @@ export default function FarmInformation() {
               label="Year"
               isRequired
               items={yearOptions}
-              selectedKey={formData.Year}
-              onSelectionChange={(e) => handleChange({ Year: e as string })}
+              selectedKey={formData.year}
+              onSelectionChange={(e) => handleChange({ year: e as string })}
               noSort
             />
           </Grid>
@@ -210,10 +214,10 @@ export default function FarmInformation() {
               label="Region"
               isRequired
               items={regionOptions}
-              selectedKey={formData.FarmRegion}
+              selectedKey={formData.farmRegion}
               onSelectionChange={(e) => {
                 const opt = regionOptions.find((r) => r.id === e)!;
-                handleChange({ FarmRegion: e as number, RegionLocationId: opt.value.locationid });
+                handleChange({ farmRegion: e as number, regionLocationId: opt.value.locationid });
               }}
             />
           </Grid>
@@ -222,17 +226,17 @@ export default function FarmInformation() {
               label="Subregion"
               isRequired
               items={subregionOptions}
-              selectedKey={formData.FarmSubRegion}
-              onSelectionChange={(e) => handleChange({ FarmSubRegion: e as number })}
+              selectedKey={formData.farmSubregion}
+              onSelectionChange={(e) => handleChange({ farmSubregion: e as number })}
               isDisabled={!(subregionOptions && subregionOptions.length)}
             />
           </Grid>
           <Subheader>Select all agriculture that occupy your farm (check all that apply)</Subheader>
           <Grid size={12}>
             <YesNoRadioButtons
-              value={formData.HasHorticulturalCrops || false}
+              value={formData.hasHorticulturalCrops || false}
               text="I have crops"
-              onChange={(b) => handleChange({ HasHorticulturalCrops: b })}
+              onChange={(b) => handleChange({ hasHorticulturalCrops: b })}
               orientation="horizontal"
             />
           </Grid>
@@ -260,34 +264,13 @@ export default function FarmInformation() {
                   : hideCheckboxGroup
               }
               orientation="vertical"
-              value={formData.FarmAnimals}
-              onChange={(val) => handleChange({ FarmAnimals: val })}
+              value={formData.farmAnimals}
+              onChange={(val) => handleChange({ farmAnimals: val })}
             >
               {animalCheckboxes}
             </CheckboxGroup>
           </Grid>
         </Grid>
-
-        <ButtonGroup
-          alignment="start"
-          ariaLabel="A group of buttons"
-          orientation="horizontal"
-        >
-          <Button
-            size="medium"
-            onPress={handlePeviousPage}
-            variant="secondary"
-          >
-            Back
-          </Button>
-          <Button
-            size="medium"
-            variant="primary"
-            type="submit"
-          >
-            Next
-          </Button>
-        </ButtonGroup>
       </Form>
     </View>
   );

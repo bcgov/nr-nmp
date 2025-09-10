@@ -1,15 +1,15 @@
 /* eslint-disable no-case-declarations */
 import { HarvestUnit } from '@/constants';
-import { CropType, NMPFileCropData } from '@/types';
-import { Crop, CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/types/Crops';
-import { CROP_TYPE_BERRIES_ID } from '../../types/Crops';
+import { Crop, CropType, NMPFileCrop } from '@/types';
+import { CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/constants/Crops';
+import { CROP_TYPE_BERRIES_ID } from '../../constants/Crops';
 
 export function showUnitDropdown(cropTypeId: number) {
   return cropTypeId === GRAIN_OILSEED_ID;
 }
 
 export type CropsModalState = {
-  formData: NMPFileCropData;
+  formData: NMPFileCrop;
   selectedCropType?: CropType;
   selectedCrop?: Crop;
   defaultYieldInTons?: number;
@@ -56,7 +56,7 @@ type SetCalculatedValuesAction = {
 
 type SetFormDataAttrAction = {
   type: 'SET_FORM_DATA_ATTR';
-  attr: keyof NMPFileCropData;
+  attr: keyof NMPFileCrop;
   value: string | number | boolean;
 };
 

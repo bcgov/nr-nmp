@@ -3,7 +3,7 @@
  */
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { NMPFileFieldData, NMPFileOtherNutrient } from '@/types';
+import { NMPFileField, NMPFileOtherNutrient } from '@/types';
 import { ModalContent, SectionTitle } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NumberField, TextField, Form } from '@/components/common';
@@ -12,7 +12,7 @@ type OtherModalProps = {
   fieldIndex: number;
   initialModalData?: NMPFileOtherNutrient;
   rowEditIndex?: number;
-  setFields: React.Dispatch<React.SetStateAction<NMPFileFieldData[]>>;
+  setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   onClose: () => void;
 };
 
@@ -42,16 +42,16 @@ export default function OtherModal({
         if (index !== fieldIndex) return prev;
 
         if (rowEditIndex !== undefined) {
-          const newOther = [...prev.OtherNutrients];
+          const newOther = [...prev.otherNutrients];
           newOther[rowEditIndex] = { ...formData };
-          return { ...prev, OtherNutrients: newOther };
+          return { ...prev, otherNutrients: newOther };
         }
 
         // For case where this is a new nutrient source
         return {
           ...prev,
-          OtherNutrients: [
-            ...prev.OtherNutrients,
+          otherNutrients: [
+            ...prev.otherNutrients,
             {
               ...formData,
             },

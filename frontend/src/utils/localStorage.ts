@@ -23,6 +23,7 @@ export const getDataFromLocalStorage = (key: string) => {
   return data ? JSON.parse(data) : null;
 };
 
+// Currently unused
 /**
  * @summary Checks to see if the key exists in localstorage
  * @param   key is the key name used to store the value in localStorage
@@ -31,6 +32,7 @@ export const getDataFromLocalStorage = (key: string) => {
  */
 export const localStorageKeyExists = (key: string) => getDataFromLocalStorage(key) !== null;
 
+// Currently unused
 /**
  * @summary Deletes localStorage key
  * @param   key is the key name used to store the value in localStorage

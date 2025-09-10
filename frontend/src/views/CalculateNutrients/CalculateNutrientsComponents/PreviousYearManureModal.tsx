@@ -2,7 +2,7 @@ import { useState, SetStateAction, useMemo, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import LoopIcon from '@mui/icons-material/Loop';
 import { Modal, Form, NumberField } from '@/components/common';
-import { NMPFileFieldData } from '@/types';
+import { NMPFileField } from '@/types';
 import { calcPrevYearManureApplDefault } from '@/calculations/CalculateNutrients/PreviousManure/calculations';
 
 interface PreviousYearManureFormData {
@@ -14,9 +14,9 @@ interface PreviousYearManureModalProps {
   fieldIndex: number;
   isOpen: boolean;
   onClose: () => void;
-  setFields: (value: SetStateAction<NMPFileFieldData[]>) => void;
+  setFields: (value: SetStateAction<NMPFileField[]>) => void;
   modalStyle?: object;
-  field: NMPFileFieldData;
+  field: NMPFileField;
   initialModalData?: PreviousYearManureFormData;
 }
 
@@ -124,10 +124,10 @@ export default function PreviousYearManureModal({
       const updatedFields = [...prevFields];
       updatedFields[fieldIndex] = {
         ...updatedFields[fieldIndex],
-        PreviousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
-        PreviousYearManureApplicationNitrogenCredit: hasManureApplication
-          ? formData.PreviousYearManureApplicationNitrogenCredit
-          : null,
+        previousYearManureApplicationFrequency:
+          formData.PreviousYearManureApplicationFrequency.toString(),
+        // Note: NMPFileField doesn't have PreviousYearManureApplicationNitrogenCredit field
+        // This data might need to be stored elsewhere or the field structure updated
       };
       return updatedFields;
     });

@@ -10,7 +10,8 @@ import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
 import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
 
 import useAppState from '@/hooks/useAppState';
-import { DAIRY_COW_ID, ManureInSystem } from '@/types';
+import { ManureInSystem } from '@/types';
+import { DAIRY_COW_ID } from '@/constants';
 
 export default function FieldList() {
   const reportRef = useRef(null);
@@ -20,19 +21,19 @@ export default function FieldList() {
   const navigate = useNavigate();
 
   const unassignedManures = useMemo(() => {
-    const generatedManures = state.nmpFile?.years[0].GeneratedManures || [];
-    const importedManures = state.nmpFile?.years[0].ImportedManures || [];
+    const generatedManures = state.nmpFile?.years[0].generatedManures || [];
+    const importedManures = state.nmpFile?.years[0].importedManures || [];
     const unassignedM: ManureInSystem[] = [];
     const assignedM: ManureInSystem[] = [];
     generatedManures.forEach((manure) => {
-      if (manure.AssignedToStoredSystem) {
+      if (manure.assignedToStoredSystem) {
         assignedM.push({ type: 'Generated', data: manure });
       } else {
         unassignedM.push({ type: 'Generated', data: manure });
       }
     });
     importedManures.forEach((manure) => {
-      if (manure.AssignedToStoredSystem) {
+      if (manure.assignedToStoredSystem) {
         assignedM.push({ type: 'Imported', data: manure });
       } else {
         unassignedM.push({ type: 'Imported', data: manure });
@@ -42,7 +43,7 @@ export default function FieldList() {
   }, [state.nmpFile?.years]);
 
   const isDairyCattle = useMemo(() => {
-    const animalList = state.nmpFile?.years[0].FarmAnimals || [];
+    const animalList = state.nmpFile?.years[0].farmAnimals || [];
     return animalList.some((animal) => animal.animalId === DAIRY_COW_ID);
   }, [state.nmpFile?.years]);
 
@@ -54,7 +55,7 @@ export default function FieldList() {
     a.href = url;
 
     const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-    const farmName = state.nmpFile?.farmDetails?.FarmName;
+    const farmName = state.nmpFile?.farmDetails?.farmName;
 
     a.download = `${prependDate}-${farmName}.nmp`;
     document.body.appendChild(a);
@@ -76,7 +77,7 @@ export default function FieldList() {
       doc.html(reportRef.current, {
         callback(output) {
           const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-          const farmName = state.nmpFile?.farmDetails?.FarmName;
+          const farmName = state.nmpFile?.farmDetails?.farmName;
           output.save(`${prependDate}-${farmName}-Full-Report.pdf`);
         },
         margin: [24, 24, 24, 24],
@@ -101,7 +102,7 @@ export default function FieldList() {
       doc.html(recordRef.current, {
         callback(output) {
           const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-          const farmName = state.nmpFile?.farmDetails?.FarmName;
+          const farmName = state.nmpFile?.farmDetails?.farmName;
           output.save(`${prependDate}-${farmName}-Record-Keeping.pdf`);
         },
         margin: [24, 24, 24, 24],
@@ -116,8 +117,19 @@ export default function FieldList() {
     navigate(CALCULATE_NUTRIENTS);
   };
 
+  const handleNextPage = () => {
+    window.location.href =
+      'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-' +
+      'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing';
+  };
+
   return (
-    <View title="Reporting">
+    <View
+      title="Reporting"
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+      nextBtnText="Finish"
+    >
       {/* only show if you have dairy cattle */}
       {unassignedManures.length > 0 && isDairyCattle && (
         <Grid
@@ -128,8 +140,8 @@ export default function FieldList() {
             The following materials are not stored:
             <ul>
               {unassignedManures.map((manure) => (
-                <li key={`${manure.data?.ManagedManureName}`}>
-                  {manure.type} - {manure.data?.ManagedManureName}
+                <li key={`${manure.data?.managedManureName}`}>
+                  {manure.type} - {manure.data?.managedManureName}
                 </li>
               ))}
             </ul>
@@ -177,32 +189,6 @@ export default function FieldList() {
           </div>
         </Grid>
       </Grid>
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        {/* Go to BC soil nutrient testing site */}
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={() => {
-            navigate(
-              'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-' +
-                'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing',
-            );
-          }}
-        >
-          Finished
-        </Button>
-      </ButtonGroup>
       <div style={{ height: '0px', overflow: 'hidden' }}>
         <div ref={reportRef}>
           <CompleteReportTemplate />

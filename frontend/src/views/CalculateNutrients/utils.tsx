@@ -4,7 +4,7 @@ import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { css } from '@emotion/react';
-import type { CropNutrients, Fertilizer, NMPFileFieldData, FertilizerUnit } from '@/types';
+import type { CropNutrients, Fertilizer, NMPFileField, FertilizerUnit } from '@/types';
 import { tableActionButtonCss } from '../../common.styles';
 import { NUTRIENT_MESSAGES } from './nutrientMessages';
 
@@ -200,8 +200,8 @@ export const generateColumns = (
 
 export function genHandleDeleteRow(
   activeField: number,
-  editProp: keyof NMPFileFieldData,
-  setFieldList: (value: React.SetStateAction<NMPFileFieldData[]>) => void,
+  editProp: keyof NMPFileField,
+  setFieldList: (value: React.SetStateAction<NMPFileField[]>) => void,
 ) {
   const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
     setFieldList((prev) => {
