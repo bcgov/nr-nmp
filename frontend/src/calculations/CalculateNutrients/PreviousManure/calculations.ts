@@ -98,7 +98,7 @@ export async function calcPrevYearManureApplDefault(field: NMPFileField): Promis
   try {
     if (
       !field.previousYearManureApplicationFrequency ||
-      parseInt(field.previousYearManureApplicationFrequency, 10) === NO_MANURE_FREQUENCY
+      field.previousYearManureApplicationFrequency === NO_MANURE_FREQUENCY
     ) {
       return 0;
     }
@@ -109,7 +109,7 @@ export async function calcPrevYearManureApplDefault(field: NMPFileField): Promis
     );
 
     return await prevYearManureDefaultLookup(
-      parseInt(field.previousYearManureApplicationFrequency, 10),
+      field.previousYearManureApplicationFrequency,
       largestManureHistory,
     );
   } catch (error) {
@@ -127,7 +127,7 @@ export async function calculatePrevYearManure(
   field: NMPFileField,
 ): Promise<PreviousYearManureData> {
   try {
-    const frequency = parseInt(field.previousYearManureApplicationFrequency, 10);
+    const frequency = field.previousYearManureApplicationFrequency;
     const wasAdded = wasManureAddedInPreviousYear(frequency);
     const defaultCredit = await calcPrevYearManureApplDefault(field);
     const nitrogenCredit = field.previousYearManureApplicationNitrogenCredit ?? defaultCredit;

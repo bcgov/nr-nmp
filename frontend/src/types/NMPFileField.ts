@@ -95,7 +95,7 @@ export type NMPFileOtherNutrient = CalculateNutrientsRow;
 export type NMPFileField = {
   fieldName: string;
   area: number;
-  previousYearManureApplicationFrequency: string;
+  previousYearManureApplicationFrequency: number;
   comment: string;
   crops: NMPFileCrop[];
   soilTest?: NMPFileSoilTest;

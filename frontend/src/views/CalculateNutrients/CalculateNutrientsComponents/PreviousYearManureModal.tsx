@@ -70,8 +70,7 @@ export default function PreviousYearManureModal({
 
     calcPrevYearManureApplDefault({
       ...field,
-      previousYearManureApplicationFrequency:
-        formData.PreviousYearManureApplicationFrequency.toString(),
+      previousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
     })
       .then(setCalculatedDefaultCredit)
       .catch((error) => {
@@ -125,8 +124,7 @@ export default function PreviousYearManureModal({
       const updatedFields = [...prevFields];
       updatedFields[fieldIndex] = {
         ...updatedFields[fieldIndex],
-        previousYearManureApplicationFrequency:
-          formData.PreviousYearManureApplicationFrequency.toString(),
+        previousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
         previousYearManureApplicationNitrogenCredit: hasManureApplication
           ? formData.PreviousYearManureApplicationNitrogenCredit
           : null,

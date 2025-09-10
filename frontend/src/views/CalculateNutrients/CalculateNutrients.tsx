@@ -473,10 +473,8 @@ export default function CalculateNutrients() {
           modalStyle={{ width: '600px' }}
           field={fieldList[activeField]}
           initialModalData={{
-            PreviousYearManureApplicationFrequency: parseInt(
-              fieldList[activeField]?.previousYearManureApplicationFrequency || '0',
-              10,
-            ),
+            PreviousYearManureApplicationFrequency:
+              fieldList[activeField]?.previousYearManureApplicationFrequency || 0,
             PreviousYearManureApplicationNitrogenCredit:
               fieldList[activeField]?.previousYearManureApplicationNitrogenCredit ?? null,
           }}
