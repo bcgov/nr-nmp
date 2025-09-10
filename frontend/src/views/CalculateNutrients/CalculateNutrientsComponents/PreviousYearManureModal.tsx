@@ -66,6 +66,23 @@ export default function PreviousYearManureModal({
     getDefaultCredit();
   }, [formData.PreviousYearManureApplicationFrequency, field, hasManureApplication]);
 
+  useEffect(() => {
+    if (
+      hasManureApplication &&
+      formData.PreviousYearManureApplicationNitrogenCredit === null &&
+      calculatedDefaultCredit !== null
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        PreviousYearManureApplicationNitrogenCredit: calculatedDefaultCredit,
+      }));
+    }
+  }, [
+    hasManureApplication,
+    formData.PreviousYearManureApplicationNitrogenCredit,
+    calculatedDefaultCredit,
+  ]);
+
   const isFormValid = useMemo(() => {
     if (!hasManureApplication) return true;
 
