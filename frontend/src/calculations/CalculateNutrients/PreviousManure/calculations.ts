@@ -119,7 +119,7 @@ export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Pr
 }
 
 /**
- * Calculates comprehensive previous year manure data for a field
+ * Calculates previous year manure data for a field
  * @param field - Field data object
  * @returns Promise<PreviousYearManureData> Complete previous year manure data
  */
