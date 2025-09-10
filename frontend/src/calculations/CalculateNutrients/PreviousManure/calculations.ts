@@ -17,6 +17,8 @@ export interface PreviousYearManureData {
 
 /**
  * Checks if frequency indicates no manure application
+ * @param frequency - The frequency value to check
+ * @returns boolean True if frequency indicates no manure application
  */
 function isNoManureFrequency(frequency: string | undefined): boolean {
   return !frequency || frequency === '0';
@@ -65,6 +67,8 @@ export async function wasManureAddedInPreviousYear(
 
 /**
  * Parses nitrogen credit array from string format "{22,30,45}"
+ * @param creditString - The credit string in format "{22,30,45}" to parse
+ * @returns number[] Array of parsed nitrogen credit numbers
  */
 function parseNitrogenCreditArray(creditString: string): number[] {
   return creditString
