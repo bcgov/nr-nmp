@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { Checkbox, CheckboxGroup } from '@bcgov/design-system-react-components';
@@ -20,6 +20,26 @@ import {
   DEFAULT_SOLID_MANURE_SYSTEM,
   MANURE_TYPE_OPTIONS,
 } from '@/constants';
+
+function calculateSeparatedSolidAndLiquid(
+  manureAmount: number,
+  percentSeparation: number | undefined,
+): [number, number] {
+  if (percentSeparation === undefined) return [0, 0];
+  // Old formula is here:
+  // https://github.com/bcgov/agri-nmp/blob/ce60d005a1990fe441ee347a9bfac700dd092bd3/app/Agri.CalculateService/ManureLiquidSolidSeparationCalculator.cs#L9
+  const solidsSeparatedGallons = manureAmount * (percentSeparation / 100);
+  const separatedLiquidsUSGallons = manureAmount - solidsSeparatedGallons;
+  const separatedSolidsCubicMeters = solidsSeparatedGallons / 264.172; // US gallons to cubic meters
+  // For some reason, the solid moisture percent is hard-coded in old NMP
+  // TODO: Correct this calculation part. It uses the density
+  // const moistureWholePercent = 70;
+  const separatedSolidsTons = separatedSolidsCubicMeters * 0.883;
+  return [
+    Math.round(separatedLiquidsUSGallons * 100) / 100,
+    Math.round(separatedSolidsTons * 100) / 100,
+  ];
+}
 
 type StorageSystemDetailsEditProps = {
   mode: 'create' | 'system_edit';
@@ -46,14 +66,17 @@ export default function StorageSystemDetailsEdit({
     ),
   );
 
-  // get sum of all entered manures, used for solid and liquid seperation
+  // get sum of all chosen manures, used for solid and liquid seperation
   const totalManureGallons = useMemo(
     () =>
-      fullManureList.reduce(
-        (sum, manure) => sum + (manure.data.annualAmountUSGallonsVolume || 0),
+      selectedManureNames.reduce(
+        (sum, manure) =>
+          sum +
+          (fullManureList.find((m) => m.data.managedManureName === manure)?.data
+            ?.annualAmountUSGallonsVolume || 0),
         0,
       ),
-    [fullManureList],
+    [selectedManureNames, fullManureList],
   );
 
   const availableManures: ManureInSystem[] = useMemo(
@@ -103,8 +126,48 @@ export default function StorageSystemDetailsEdit({
   const handleInputChange = (
     changes: Partial<SolidManureStorageSystem> | Partial<LiquidManureStorageSystem>,
   ) => {
-    setFormData((prev) => ({ ...prev, ...changes }) as NMPFileManureStorageSystem);
+    let updatedChanges = changes;
+    if (Object.prototype.hasOwnProperty.call(changes, 'hasSeperation')) {
+      updatedChanges = changes as Partial<LiquidManureStorageSystem>;
+      if (updatedChanges.hasSeperation === false) {
+        updatedChanges.percentLiquidSeperation =
+          DEFAULT_LIQUID_MANURE_SYSTEM.percentLiquidSeperation;
+        updatedChanges.separatedLiquidsUSGallons =
+          DEFAULT_LIQUID_MANURE_SYSTEM.separatedLiquidsUSGallons;
+        updatedChanges.separatedSolidsTons = DEFAULT_LIQUID_MANURE_SYSTEM.separatedSolidsTons;
+      } else {
+        const [separatedLiquids, separatedSolids] = calculateSeparatedSolidAndLiquid(
+          totalManureGallons,
+          (formData as LiquidManureStorageSystem).percentLiquidSeperation,
+        );
+        updatedChanges.separatedLiquidsUSGallons = separatedLiquids;
+        updatedChanges.separatedSolidsTons = separatedSolids;
+      }
+    }
+    if (Object.prototype.hasOwnProperty.call(changes, 'percentLiquidSeperation')) {
+      updatedChanges = changes as Partial<LiquidManureStorageSystem>;
+      const [separatedLiquids, separatedSolids] = calculateSeparatedSolidAndLiquid(
+        totalManureGallons,
+        updatedChanges.percentLiquidSeperation,
+      );
+      updatedChanges.separatedLiquidsUSGallons = separatedLiquids;
+      updatedChanges.separatedSolidsTons = separatedSolids;
+    }
+    setFormData((prev) => ({ ...prev, ...updatedChanges }) as NMPFileManureStorageSystem);
   };
+
+  // Set the seperated liquid/solid when the total amount changes
+  useEffect(() => {
+    setFormData((prev) => {
+      if (prev.manureType !== ManureType.Liquid || !prev.hasSeperation) return prev;
+      const [separatedLiquidsUSGallons, separatedSolidsTons] = calculateSeparatedSolidAndLiquid(
+        totalManureGallons,
+        prev.percentLiquidSeperation,
+      );
+      return { ...prev, separatedLiquidsUSGallons, separatedSolidsTons };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalManureGallons]);
 
   const handleSelectedChange = (selected: string[]) => {
     const selectedManures: ManureInSystem[] = [];
@@ -263,14 +326,7 @@ export default function StorageSystemDetailsEdit({
                       label="% of liquid volume separated"
                       value={formData.percentLiquidSeperation}
                       onChange={(e) => {
-                        const solidsSeparatedGallons = totalManureGallons * (e / 100);
-                        const separatedLiquidsGallons = totalManureGallons - solidsSeparatedGallons;
-                        const separatedSolidsTons = (solidsSeparatedGallons / 264.172) * 0.5;
-                        handleInputChange({
-                          percentLiquidSeperation: e,
-                          separatedLiquidsUSGallons: Math.round(separatedLiquidsGallons),
-                          separatedSolidsTons: Math.round(separatedSolidsTons),
-                        });
+                        handleInputChange({ percentLiquidSeperation: e });
                       }}
                     />
                   </div>
