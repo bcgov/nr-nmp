@@ -195,13 +195,13 @@ export default function CalculateNutrients() {
     const handleEditRow = () => {
       setOpenDialog(['previousYearManure', 0]);
     };
-    // No delete function for previous year manure since it's always present
     const handleDeleteRow = () => {};
     return generateColumns(
       handleEditRow,
       handleDeleteRow,
       renderNutrientCell,
       'Previous Year Manure',
+      true,
       false,
     );
   }, []);
@@ -520,7 +520,7 @@ export default function CalculateNutrients() {
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
           rows={[
             {
-              name: prevYearManureData.fieldName,
+              name: '',
               reqN: prevYearManureData.nitrogen || 0,
               reqP2o5: 0,
               reqK2o: 0,
