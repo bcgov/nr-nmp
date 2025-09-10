@@ -11,7 +11,7 @@ export type NMPFileOtherNutrient = CalculateNutrientsColumn;
 export type NMPFileFieldData = {
   FieldName: string;
   Area: number;
-  PreviousYearManureApplicationFrequency: string;
+  PreviousYearManureApplicationFrequency: number;
   Comment: string;
   SoilTest?: NMPFileSoilTestData;
   Crops: NMPFileCropData[];
@@ -19,7 +19,7 @@ export type NMPFileFieldData = {
   Fertigations: NMPFileFertigation[];
   Manures: NMPFileAppliedManure[];
   OtherNutrients: NMPFileOtherNutrient[];
-  PreviousYearManureApplicationNitrogenCredit?: any | null;
+  PreviousYearManureApplicationNitrogenCredit?: number | null;
 
   /*
   Fields from old NMP, currently unused, feel free to re-add

@@ -58,22 +58,18 @@ export default function CalculateNutrients() {
 
   // Calculate previous year manure data when active field changes
   useEffect(() => {
-    const calculatePrevManure = async () => {
-      const currentField = fieldList[activeField];
-      if (currentField) {
-        try {
-          const data = await calculatePrevYearManure(currentField);
-          setPrevYearManureData(data);
-        } catch (error) {
-          console.error('Error calculating previous year manure:', error);
-          setPrevYearManureData(null);
-        }
-      } else {
-        setPrevYearManureData(null);
-      }
-    };
+    const currentField = fieldList[activeField];
+    if (!currentField) {
+      setPrevYearManureData(null);
+      return;
+    }
 
-    calculatePrevManure();
+    calculatePrevYearManure(currentField)
+      .then(setPrevYearManureData)
+      .catch((error) => {
+        console.error('Error calculating previous year manure:', error);
+        setPrevYearManureData(null);
+      });
   }, [activeField, fieldList]);
 
   const cropColumns: GridColDef[] = useMemo(() => {
@@ -191,20 +187,18 @@ export default function CalculateNutrients() {
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
   }, [activeField]);
 
-  const previousYearManureColumns: GridColDef[] = useMemo(() => {
-    const handleEditRow = () => {
-      setOpenDialog(['previousYearManure', 0]);
-    };
-    const handleDeleteRow = () => {};
-    return generateColumns(
-      handleEditRow,
-      handleDeleteRow,
-      renderNutrientCell,
-      'Previous Year Manure',
-      true,
-      false,
-    );
-  }, []);
+  const previousYearManureColumns: GridColDef[] = useMemo(
+    () =>
+      generateColumns(
+        () => setOpenDialog(['previousYearManure', 0]),
+        () => {},
+        renderNutrientCell,
+        'Previous Year Manure',
+        true,
+        false,
+      ),
+    [],
+  );
 
   const balanceRow: CalculateNutrientsColumn = useMemo(() => {
     const allRows = [
@@ -474,14 +468,14 @@ export default function CalculateNutrients() {
       {openDialog[0] === 'previousYearManure' && (
         <PreviousYearManureModal
           fieldIndex={activeField}
-          isOpen={openDialog[0] === 'previousYearManure'}
+          isOpen
           onClose={handleDialogClose}
           setFields={setFieldList}
           modalStyle={{ width: '600px' }}
           field={fieldList[activeField]}
           initialModalData={{
             PreviousYearManureApplicationFrequency:
-              fieldList[activeField]?.PreviousYearManureApplicationFrequency || '0',
+              fieldList[activeField]?.PreviousYearManureApplicationFrequency || 0,
             PreviousYearManureApplicationNitrogenCredit:
               fieldList[activeField]?.PreviousYearManureApplicationNitrogenCredit ?? null,
           }}

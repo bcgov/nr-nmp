@@ -5,6 +5,11 @@ import { Modal, Form, NumberField } from '@/components/common';
 import { NMPFileFieldData } from '@/types';
 import { calcPrevYearManureApplDefault } from '@/calculations/CalculateNutrients/PreviousManure/calculations';
 
+interface PreviousYearManureFormData {
+  PreviousYearManureApplicationFrequency: number;
+  PreviousYearManureApplicationNitrogenCredit: number | null;
+}
+
 interface PreviousYearManureModalProps {
   fieldIndex: number;
   isOpen: boolean;
@@ -12,21 +17,33 @@ interface PreviousYearManureModalProps {
   setFields: (value: SetStateAction<NMPFileFieldData[]>) => void;
   modalStyle?: object;
   field: NMPFileFieldData;
-  initialModalData?: {
-    PreviousYearManureApplicationFrequency: string;
-    PreviousYearManureApplicationNitrogenCredit: number | null;
-  };
-}
-
-interface PreviousYearManureFormData {
-  PreviousYearManureApplicationFrequency: string;
-  PreviousYearManureApplicationNitrogenCredit: number | null;
+  initialModalData?: PreviousYearManureFormData;
 }
 
 const defaultFormData: PreviousYearManureFormData = {
-  PreviousYearManureApplicationFrequency: '0',
+  PreviousYearManureApplicationFrequency: 0,
   PreviousYearManureApplicationNitrogenCredit: null,
 };
+
+const resetButtonStyle = {
+  backgroundColor: '#ffa500',
+  border: 'none',
+  borderRadius: '4px',
+  padding: '4px',
+  cursor: 'pointer',
+} as const;
+
+const helperTextStyle = {
+  fontSize: '0.875rem',
+  color: '#666',
+  marginTop: '0.25rem',
+} as const;
+
+const errorTextStyle = {
+  color: 'red',
+  fontSize: '0.875rem',
+  marginTop: '0.25rem',
+} as const;
 
 export default function PreviousYearManureModal({
   fieldIndex,
@@ -43,27 +60,23 @@ export default function PreviousYearManureModal({
 
   const [calculatedDefaultCredit, setCalculatedDefaultCredit] = useState<number | null>(null);
 
-  const hasManureApplication = formData.PreviousYearManureApplicationFrequency !== '0';
+  const hasManureApplication = formData.PreviousYearManureApplicationFrequency !== 0;
 
   useEffect(() => {
-    const getDefaultCredit = async () => {
-      if (hasManureApplication) {
-        try {
-          const defaultCredit = await calcPrevYearManureApplDefault({
-            ...field,
-            PreviousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
-          });
-          setCalculatedDefaultCredit(defaultCredit);
-        } catch (error) {
-          console.error('Error calculating default nitrogen credit:', error);
-          setCalculatedDefaultCredit(null);
-        }
-      } else {
-        setCalculatedDefaultCredit(0);
-      }
-    };
+    if (!hasManureApplication) {
+      setCalculatedDefaultCredit(0);
+      return;
+    }
 
-    getDefaultCredit();
+    calcPrevYearManureApplDefault({
+      ...field,
+      PreviousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
+    })
+      .then(setCalculatedDefaultCredit)
+      .catch((error) => {
+        console.error('Error calculating default nitrogen credit:', error);
+        setCalculatedDefaultCredit(null);
+      });
   }, [formData.PreviousYearManureApplicationFrequency, field, hasManureApplication]);
 
   useEffect(() => {
@@ -78,33 +91,31 @@ export default function PreviousYearManureModal({
       }));
     }
   }, [
-    hasManureApplication,
     formData.PreviousYearManureApplicationNitrogenCredit,
     calculatedDefaultCredit,
+    hasManureApplication,
   ]);
 
   const isFormValid = useMemo(() => {
     if (!hasManureApplication) return true;
 
-    return (
-      formData.PreviousYearManureApplicationNitrogenCredit !== null &&
-      formData.PreviousYearManureApplicationNitrogenCredit >= 0
-    );
-  }, [formData, hasManureApplication]);
+    const credit = formData.PreviousYearManureApplicationNitrogenCredit;
+    return credit !== null && credit >= 0;
+  }, [formData.PreviousYearManureApplicationNitrogenCredit, hasManureApplication]);
 
   const validationErrors = useMemo(() => {
-    const newErrors: Record<string, string> = {};
+    const errors: Record<string, string> = {};
 
     if (hasManureApplication) {
       const credit = formData.PreviousYearManureApplicationNitrogenCredit;
       if (credit === null || credit < 0) {
-        newErrors.PreviousYearManureApplicationNitrogenCredit =
+        errors.PreviousYearManureApplicationNitrogenCredit =
           'Nitrogen credit must be a positive number when manure application is selected';
       }
     }
 
-    return newErrors;
-  }, [formData, hasManureApplication]);
+    return errors;
+  }, [formData.PreviousYearManureApplicationNitrogenCredit, hasManureApplication]);
 
   const handleSubmit = () => {
     if (!isFormValid) return;
@@ -129,11 +140,9 @@ export default function PreviousYearManureModal({
   };
 
   const handleResetToCalculated = () => {
-    if (calculatedDefaultCredit !== null) {
-      handleFormFieldChange({
-        PreviousYearManureApplicationNitrogenCredit: calculatedDefaultCredit,
-      });
-    }
+    handleFormFieldChange({
+      PreviousYearManureApplicationNitrogenCredit: calculatedDefaultCredit,
+    });
   };
 
   return (
@@ -171,13 +180,7 @@ export default function PreviousYearManureModal({
                     calculatedDefaultCredit ? (
                     <button
                       type="button"
-                      css={{
-                        backgroundColor: '#ffa500',
-                        border: 'none',
-                        borderRadius: '4px',
-                        padding: '4px',
-                        cursor: 'pointer',
-                      }}
+                      css={resetButtonStyle}
                       onClick={handleResetToCalculated}
                       title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
                     >
@@ -187,12 +190,12 @@ export default function PreviousYearManureModal({
                 }
               />
               {calculatedDefaultCredit !== null && (
-                <div style={{ fontSize: '0.875rem', color: '#666', marginTop: '0.25rem' }}>
+                <div style={helperTextStyle}>
                   Calculated default: {calculatedDefaultCredit} lb/ac
                 </div>
               )}
               {validationErrors.PreviousYearManureApplicationNitrogenCredit && (
-                <div style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                <div style={errorTextStyle}>
                   {validationErrors.PreviousYearManureApplicationNitrogenCredit}
                 </div>
               )}
