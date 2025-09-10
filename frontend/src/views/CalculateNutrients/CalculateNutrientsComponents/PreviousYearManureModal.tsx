@@ -70,7 +70,8 @@ export default function PreviousYearManureModal({
 
     calcPrevYearManureApplDefault({
       ...field,
-      PreviousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
+      previousYearManureApplicationFrequency:
+        formData.PreviousYearManureApplicationFrequency.toString(),
     })
       .then(setCalculatedDefaultCredit)
       .catch((error) => {
@@ -126,8 +127,9 @@ export default function PreviousYearManureModal({
         ...updatedFields[fieldIndex],
         previousYearManureApplicationFrequency:
           formData.PreviousYearManureApplicationFrequency.toString(),
-        // Note: NMPFileField doesn't have PreviousYearManureApplicationNitrogenCredit field
-        // This data might need to be stored elsewhere or the field structure updated
+        previousYearManureApplicationNitrogenCredit: hasManureApplication
+          ? formData.PreviousYearManureApplicationNitrogenCredit
+          : null,
       };
       return updatedFields;
     });

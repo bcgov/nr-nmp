@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { env } from '@/env';
-import { NMPFileFieldData } from '@/types';
+import { NMPFileField } from '@/types';
 
 export interface PreviousYearManureApplication {
   id: number;
@@ -94,22 +94,22 @@ async function prevYearManureDefaultLookup(
  * @param field - Field object with manure application history
  * @returns Promise<number> Default nitrogen credit value
  */
-export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Promise<number> {
+export async function calcPrevYearManureApplDefault(field: NMPFileField): Promise<number> {
   try {
     if (
-      !field.PreviousYearManureApplicationFrequency ||
-      field.PreviousYearManureApplicationFrequency === NO_MANURE_FREQUENCY
+      !field.previousYearManureApplicationFrequency ||
+      parseInt(field.previousYearManureApplicationFrequency, 10) === NO_MANURE_FREQUENCY
     ) {
       return 0;
     }
 
     const largestManureHistory = Math.max(
       0,
-      ...field.Crops.map((crop) => crop.manureApplicationHistory || 0),
+      ...field.crops.map((crop) => crop.manureApplicationHistory || 0),
     );
 
     return await prevYearManureDefaultLookup(
-      field.PreviousYearManureApplicationFrequency,
+      parseInt(field.previousYearManureApplicationFrequency, 10),
       largestManureHistory,
     );
   } catch (error) {
@@ -124,16 +124,16 @@ export async function calcPrevYearManureApplDefault(field: NMPFileFieldData): Pr
  * @returns Promise<PreviousYearManureData> Complete previous year manure data
  */
 export async function calculatePrevYearManure(
-  field: NMPFileFieldData,
+  field: NMPFileField,
 ): Promise<PreviousYearManureData> {
   try {
-    const frequency = field.PreviousYearManureApplicationFrequency;
+    const frequency = parseInt(field.previousYearManureApplicationFrequency, 10);
     const wasAdded = wasManureAddedInPreviousYear(frequency);
     const defaultCredit = await calcPrevYearManureApplDefault(field);
-    const nitrogenCredit = field.PreviousYearManureApplicationNitrogenCredit ?? defaultCredit;
+    const nitrogenCredit = field.previousYearManureApplicationNitrogenCredit ?? defaultCredit;
 
     return {
-      fieldName: field.FieldName,
+      fieldName: field.fieldName,
       display: wasAdded,
       nitrogen: nitrogenCredit,
     };

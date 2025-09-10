@@ -477,7 +477,8 @@ export default function CalculateNutrients() {
               fieldList[activeField]?.previousYearManureApplicationFrequency || '0',
               10,
             ),
-            PreviousYearManureApplicationNitrogenCredit: null, // This field doesn't exist in the new structure
+            PreviousYearManureApplicationNitrogenCredit:
+              fieldList[activeField]?.previousYearManureApplicationNitrogenCredit ?? null,
           }}
         />
       )}
