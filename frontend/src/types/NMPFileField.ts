@@ -18,6 +18,7 @@ export interface NMPFileCrop extends CalculateNutrientsRow {
   hasLeafTest?: boolean;
   leafTissueP?: number;
   leafTissueK?: number;
+  manureApplicationHistory?: number;
 }
 
 export type NMPFileSoilTest = {
@@ -94,7 +95,7 @@ export type NMPFileOtherNutrient = CalculateNutrientsRow;
 export type NMPFileField = {
   fieldName: string;
   area: number;
-  previousYearManureApplicationFrequency: string;
+  previousYearManureApplicationFrequency: number;
   comment: string;
   crops: NMPFileCrop[];
   soilTest?: NMPFileSoilTest;
@@ -102,4 +103,5 @@ export type NMPFileField = {
   fertilizers: NMPFileFertilizer[];
   fertigations: NMPFileFertigation[];
   otherNutrients: NMPFileOtherNutrient[];
+  previousYearManureApplicationNitrogenCredit?: number | null;
 };
