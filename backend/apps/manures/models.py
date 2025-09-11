@@ -92,6 +92,7 @@ class AmmoniaRetentions(models.Model):
         managed = True
         db_table = 'ammonia_retentions'
 
+
 class PreviousYearManureApplications(models.Model):
     id = models.IntegerField(primary_key=True)
     fieldmanureapplicationhistory = models.IntegerField()

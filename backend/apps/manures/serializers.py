@@ -41,6 +41,7 @@ class AmmoniaRetentionSerializer(serializers.ModelSerializer):
         model = AmmoniaRetentions
         fields = '__all__'
 
+
 class PreviousYearManureApplicationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreviousYearManureApplications
