@@ -1,0 +1,29 @@
+[
+  {
+    "model": "manures.previousyearmanureapplications",
+    "pk": 1,
+    "fields": {
+      "fieldmanureapplicationhistory": 1.0,
+      "defaultnitrogencredit": "{22,30,45}",
+      "previousyearmanureaplicationfrequency": 1.0
+    }
+  },
+  {
+    "model": "manures.previousyearmanureapplications",
+    "pk": 2,
+    "fields": {
+      "fieldmanureapplicationhistory": 0.0,
+      "defaultnitrogencredit": "{0,0,0}",
+      "previousyearmanureaplicationfrequency": 0.0
+    }
+  },
+  {
+    "model": "manures.previousyearmanureapplications",
+    "pk": 3,
+    "fields": {
+      "fieldmanureapplicationhistory": 2.0,
+      "defaultnitrogencredit": "{45,60,90}",
+      "previousyearmanureaplicationfrequency": 2.0
+    }
+  }
+]
