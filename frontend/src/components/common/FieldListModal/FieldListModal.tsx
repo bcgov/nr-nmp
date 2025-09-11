@@ -96,7 +96,7 @@ export default function FieldListModal({
               selectedKey={formData.previousYearManureApplicationFrequency}
               placeholder="Select"
               onSelectionChange={(e) => {
-                handleFormFieldChange({ previousYearManureApplicationFrequency: e as string });
+                handleFormFieldChange({ previousYearManureApplicationFrequency: e as number });
               }}
               noSort
             />
