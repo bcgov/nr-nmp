@@ -154,6 +154,7 @@ export default function ManureImportModal({
                   onSelectionChange={(e) => {
                     handleInputChange({ units: e as number });
                   }}
+                  autoselectFirst
                 />
               </Grid>
               <Grid size={formGridBreakpoints}>
@@ -183,6 +184,7 @@ export default function ManureImportModal({
                 onSelectionChange={(e) => {
                   handleInputChange({ units: e as number });
                 }}
+                autoselectFirst
               />
             </Grid>
           )}

@@ -141,6 +141,8 @@ export default function CalculateNutrients() {
             dayJump = undefined;
         }
         const date = new Date(fertigation.startDate!);
+        // Javascript Date quirk, need to add a day here
+        date.setDate(date.getDate() + 1);
         for (let i = 0; i < fertigation.eventsPerSeason; i += 1) {
           const splitDateStr = date.toDateString().split(' ');
           // Format is like 01 Jan
@@ -263,7 +265,6 @@ export default function CalculateNutrients() {
       year: state.nmpFile.farmDetails.year,
       newFields: fieldList,
     });
-
     navigate(navigateTo || REPORTING);
   };
 
@@ -275,9 +276,7 @@ export default function CalculateNutrients() {
     });
     if (activeField > 0) {
       setActiveField(activeField - 1);
-    }
-
-    if (!state.showAnimalsStep) {
+    } else if (!state.showAnimalsStep) {
       navigate(NUTRIENT_ANALYSIS);
     } else {
       navigate(CROPS);
@@ -301,9 +300,13 @@ export default function CalculateNutrients() {
     <View
       title="Calculate Nutrients"
       handleBack={handlePreviousPage}
-      // Go to next tab or if none navigate to nutrient analysis
       handleNext={() => {
         if (activeField < fieldList.length - 1) {
+          dispatch({
+            type: 'SAVE_FIELDS',
+            year: state.nmpFile.farmDetails.year,
+            newFields: fieldList,
+          });
           setActiveField(activeField + 1);
         } else {
           handleNextPage();
