@@ -46,7 +46,7 @@ export default function SoilTestsModal({
 
     let convertedKelownaP = formData.valP!;
 
-    if (formData.valP! < 7.2 && lessThan72 !== undefined) {
+    if (formData.valPH! < 7.2 && lessThan72 !== undefined) {
       convertedKelownaP = formData.valP! * lessThan72;
     } else if (formData.valPH! >= 7.2 && greaterThan72 !== undefined) {
       convertedKelownaP = formData.valP! * greaterThan72;

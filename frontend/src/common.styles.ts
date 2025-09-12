@@ -9,6 +9,7 @@ export const componentContainer = css({
   marginRight: '3rem',
   maxWidth: '900px',
   width: '100%',
+  minHeight: 'calc(100vh - 160px)',
 });
 
 export const formCss = css({
@@ -47,9 +48,7 @@ export const formCss = css({
 });
 
 export const hideCheckboxGroup = css({
-  height: '0',
-  overflow: 'hidden',
-  width: '0',
+  display: 'none',
 });
 
 export const showCheckboxGroup = css({
@@ -70,7 +69,7 @@ export const paragraphCss = css({
 
 export const buttonGroup = css({
   '.bcds-ButtonGroup': {
-    marginTop: '1rem',
+    flexGrow: '0',
   },
 });
 

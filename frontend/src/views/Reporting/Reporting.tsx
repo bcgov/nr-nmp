@@ -647,8 +647,19 @@ export default function Reporting() {
     navigate(CALCULATE_NUTRIENTS);
   };
 
+  const handleNextPage = () => {
+    window.location.href =
+      'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-' +
+      'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing';
+  };
+
   return (
-    <View title="Reporting">
+    <View
+      title="Reporting"
+      handleBack={handlePreviousPage}
+      handleNext={handleNextPage}
+      nextBtnText="Finish"
+    >
       {/* only show if you have dairy cattle */}
       {unassignedManures.length > 0 && isDairyCattle && (
         <Grid
@@ -708,32 +719,6 @@ export default function Reporting() {
           </div>
         </Grid>
       </Grid>
-      <ButtonGroup
-        alignment="start"
-        ariaLabel="A group of buttons"
-        orientation="horizontal"
-      >
-        <Button
-          size="medium"
-          variant="secondary"
-          onPress={handlePreviousPage}
-        >
-          Back
-        </Button>
-        {/* Go to BC soil nutrient testing site */}
-        <Button
-          size="medium"
-          variant="primary"
-          onPress={() => {
-            navigate(
-              'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-' +
-                'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing',
-            );
-          }}
-        >
-          Finished
-        </Button>
-      </ButtonGroup>
     </View>
   );
 }

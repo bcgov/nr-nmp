@@ -56,6 +56,7 @@ export const generateColumns = (
   renderCell: (params: GridRenderCellParams<any, any, any>) => React.ReactNode,
   tableHeader?: string,
   hideColumnHeaders?: boolean,
+  showDeleteButton?: boolean,
 ): GridColDef[] => [
   {
     field: 'name',
@@ -179,14 +180,16 @@ export const generateColumns = (
             }}
             icon={faEdit}
           />
-          <FontAwesomeIcon
-            css={tableActionButtonCss}
-            onClick={(e) => {
-              handleDeleteRow(row);
-              e.stopPropagation();
-            }}
-            icon={faTrash}
-          />
+          {showDeleteButton !== false && (
+            <FontAwesomeIcon
+              css={tableActionButtonCss}
+              onClick={(e) => {
+                handleDeleteRow(row);
+                e.stopPropagation();
+              }}
+              icon={faTrash}
+            />
+          )}
         </>
       ) : (
         <div />

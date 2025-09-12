@@ -11,7 +11,7 @@ export const HeaderWrapper = styled.header`
   padding: 0;
   color: #fff;
   display: flex;
-  flex: 0 1 65px;
+  flex: 0 1 72px;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -36,6 +36,7 @@ export const Banner = styled.div`
   display: flex;
   align-items: center;
   margin: 0;
+  height: 72px;
 `;
 
 export const BannerRight = styled.div`

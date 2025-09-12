@@ -96,7 +96,13 @@ export default function SoilTests() {
       {
         field: 'soilTest',
         headerName: 'Sampling Month',
-        valueGetter: (_value, row) => row?.soilTest?.sampleDate,
+        valueGetter: (_value, row) => {
+          let splitDateStr: string[] | undefined;
+          if (row?.soilTest?.sampleDate) {
+            splitDateStr = new Date(row.soilTest.sampleDate).toDateString().split(' ');
+          }
+          return splitDateStr ? `${splitDateStr[1]} ${splitDateStr[3]}` : '';
+        },
         width: 150,
         minWidth: 150,
         maxWidth: 300,

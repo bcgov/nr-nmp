@@ -91,6 +91,9 @@ export default function ManureModal({
     () => manuresWithNutrients.find((m) => m.sourceUuid === manureForm.sourceUuid),
     [manuresWithNutrients, manureForm.sourceUuid],
   );
+  const [isCalculationCurrent, setIsCalculationCurrent] = useState<boolean>(
+    initialModalData !== undefined,
+  );
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
   const filteredManureUnits = useMemo(
@@ -259,9 +262,11 @@ export default function ManureModal({
       P2O5: field.crops[0].reqP2o5 + (field.crops[1]?.reqP2o5 || 0),
       K2O: field.crops[0].reqK2o + (field.crops[1]?.reqK2o || 0),
     });
+    setIsCalculationCurrent(true);
   };
 
   const handleChanges = (changes: Partial<NMPFileAppliedManure>) => {
+    setIsCalculationCurrent(false);
     setManureForm((prev) => ({ ...prev, ...changes }));
   };
 
@@ -276,6 +281,7 @@ export default function ManureModal({
           onCancel={handleModalClose}
           onCalculate={handleCalculate}
           onConfirm={handleSubmit}
+          isConfirmDisabled={!isCalculationCurrent}
         >
           <Grid
             container
