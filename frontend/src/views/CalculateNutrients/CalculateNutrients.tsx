@@ -265,11 +265,7 @@ export default function CalculateNutrients() {
       year: state.nmpFile.farmDetails.year,
       newFields: fieldList,
     });
-    if (activeField < fieldList.length - 1) {
-      setActiveField(activeField + 1);
-    } else {
-      navigate(navigateTo || REPORTING);
-    }
+    navigate(navigateTo || REPORTING);
   };
 
   const handlePreviousPage = () => {
@@ -304,7 +300,18 @@ export default function CalculateNutrients() {
     <View
       title="Calculate Nutrients"
       handleBack={handlePreviousPage}
-      handleNext={handleNextPage}
+      handleNext={() => {
+        if (activeField < fieldList.length - 1) {
+          dispatch({
+            type: 'SAVE_FIELDS',
+            year: state.nmpFile.farmDetails.year,
+            newFields: fieldList,
+          });
+          setActiveField(activeField + 1);
+        } else {
+          handleNextPage();
+        }
+      }}
     >
       <ButtonGroup>
         <Button
