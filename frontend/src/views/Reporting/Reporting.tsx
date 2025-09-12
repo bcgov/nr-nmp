@@ -12,8 +12,18 @@ import { CALCULATE_NUTRIENTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
 import { APICacheContext } from '@/context/APICacheContext';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
-import { FertilizerUnit, ManureType } from '@/types';
-import { DAIRY_COW_ID } from '@/constants';
+import { FertilizerUnit, ManureType, SoilTestMethods } from '@/types';
+import { DAIRY_COW_ID, DEFAULT_SOIL_TEST } from '@/constants';
+import {
+  getFertilizerUnitKgPerAcreConversion,
+  getFertilizerUnitUSGallonPerAcreConversion,
+} from './utils';
+
+type FertilizerRequiredStep = {
+  name: string;
+  totalAmount: number;
+  unit: string;
+};
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
@@ -32,6 +42,7 @@ export default function Reporting() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
 
   const unassignedManures = useMemo(
     () =>
@@ -49,11 +60,20 @@ export default function Reporting() {
 
   // Fetch all of the data tables needed to generate the report
   useEffect(() => {
-    apiCache.callEndpoint('api/fertilizerunits/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        setFertilizerUnits(response.data);
-      }
-    });
+    apiCache
+      .callEndpoint('api/fertilizerunits/')
+      .then((response: { status?: any; data: FertilizerUnit[] }) => {
+        if (response.status === 200) {
+          setFertilizerUnits(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/soiltestmethods/')
+      .then((response: { status?: any; data: SoilTestMethods[] }) => {
+        if (response.status === 200) {
+          setSoilTestMethods(response.data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -87,12 +107,14 @@ export default function Reporting() {
   const makeFullReportPdf = async () => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
+    const pageWidth: number = doc.internal.pageSize.getWidth() - 30;
+    const nmpFileYear = state.nmpFile.years[0];
 
     // TODO: Add Table of Contents as the first page
 
     // ---------- APPLICATION SCHEDULE ---------- // DONE
-    for (let i = 0; i < state.nmpFile.years[0].fields!.length; i += 1) {
-      const field = state.nmpFile.years[0].fields![i];
+    for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
+      const field = nmpFileYear.fields[i];
       // QUESTION: Should fertigation go in this table?
       const allApplied = [...field.manures, ...field.fertilizers];
       autoTable(doc, {
@@ -114,6 +136,7 @@ export default function Reporting() {
                 fontStyle: 'normal',
                 fillColor: [255, 255, 255],
                 lineWidth: { top: 0.5, left: 0.5, bottom: 0.5, right: 0 },
+                cellWidth: pageWidth * 0.2,
               },
             },
             {
@@ -122,6 +145,7 @@ export default function Reporting() {
                 fontStyle: 'normal',
                 fillColor: [255, 255, 255],
                 lineWidth: { top: 0.5, left: 0, bottom: 0.5, right: 0 },
+                cellWidth: pageWidth * 0.15,
               },
             },
             {
@@ -135,6 +159,11 @@ export default function Reporting() {
           ],
           ['Nutrient Source', 'Application Timing', 'Rate'], // column names
         ],
+        columnStyles: {
+          0: { cellWidth: pageWidth * 0.35 },
+          1: { cellWidth: pageWidth * 0.2 },
+          2: { cellWidth: 'auto' },
+        },
         body:
           allApplied.length > 0
             ? allApplied.map((nutrientSource) => [
@@ -152,11 +181,11 @@ export default function Reporting() {
       doc.setFontSize(10);
       const nextY: number = (doc as any).lastAutoTable.finalY + 5; // type shenanigans
       addText(doc, `Comments: ${field.comment}`, 15, nextY);
-      doc.addPage();
     }
 
     // ---------- MANURE/COMPOST INVENTORY ---------- //
-    const storageSystems = state.nmpFile.years[0].manureStorageSystems || [];
+    doc.addPage();
+    const storageSystems = nmpFileYear.manureStorageSystems || [];
     autoTable(doc, {
       ...sharedAutoTableSettings,
       // Page Header
@@ -169,6 +198,10 @@ export default function Reporting() {
       },
       // Table
       head: [['Material', 'Annual Amount']],
+      columnStyles: {
+        0: { cellWidth: pageWidth * 0.6 },
+        1: { cellWidth: 'auto' },
+      },
       body:
         storageSystems.length === 0 && unassignedManures.length === 0
           ? [['TODO']]
@@ -184,14 +217,14 @@ export default function Reporting() {
                 system.manuresInSystem.forEach((m) => {
                   newRows.push([
                     `\t${m.data.uniqueMaterialName}`,
-                    `${m.data.annualAmount} ${m.data.manureType === ManureType.Liquid ? 'US Gallons' : 'tons'}`,
+                    `${m.data.annualAmount} ${m.data.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
                   ]);
                   // TODO: Add Milking Centre Wash Water
                 });
                 if (system.annualPrecipitation) {
                   newRows.push([
                     'Precipitation',
-                    `${system.annualPrecipitation} ${system.manureType === ManureType.Liquid ? 'US Gallons' : 'tons'}`,
+                    `${system.annualPrecipitation} ${system.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
                   ]);
                 }
                 return acc.concat(newRows);
@@ -204,118 +237,408 @@ export default function Reporting() {
                     : [];
                 newRows.push([
                   `\t${manure.uniqueMaterialName}`,
-                  `${manure.annualAmount} ${manure.manureType === ManureType.Liquid ? 'US Gallons' : 'tons'}`,
+                  `${manure.annualAmount} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
                 ]);
                 return acc.concat(newRows);
               }, [] as RowInput[]),
             ],
     });
 
-    // ---------- LIQUID STORAGE CAPACITY ---------- //
-    // On the same page as Manure/Compost Inventory
-    for (let i = 0; i < storageSystems.length; i += 1) {
-      const system = storageSystems[i];
-      // eslint-disable-next-line no-continue
-      if (system.manureType === ManureType.Solid) continue;
-      const totalStorageVolume = system.manureStorages.reduce(
-        (acc, m) => acc + m.volumeUSGallons,
-        0,
-      );
+    if (nmpFileYear.nutrientAnalyses.length > 0) {
+      // ---------- MANURE AND COMPOST USE ---------- //
+      doc.addPage();
       autoTable(doc, {
         ...sharedAutoTableSettings,
+        // Page Header
+        margin: { top: 40 },
+        willDrawPage(data) {
+          let [nextX, nextY] = drawStandardHeader(data, doc);
+          doc.setFont(doc.getFont().fontName, 'bold');
+          addText(doc, 'Manure and Compost Use', nextX, nextY + 2);
+          doc.setFont(doc.getFont().fontName, 'normal');
+        },
         // Table
-        head: [[system.name, 'October to March volume']],
-        body: [
-          ['Material Stored (October to March)', '', ''],
-          ['\tMaterials Generated or Imported', `_ US Gallons`],
-          ['\tYard/Roof Runoff', `_ US Gallons`],
-          ['\tPrecipitation, Direct into Storage', `_ US Gallons`],
+        head: [
+          ['Material', 'Material Source', 'Annual Amount', 'Land-applied', 'Amount Remaining'],
+        ],
+        columnStyles: {
+          0: { cellWidth: pageWidth * 0.25 },
+          1: { cellWidth: pageWidth * 0.25 },
+          2: { cellWidth: pageWidth * 0.17 },
+          3: { cellWidth: pageWidth * 0.14 },
+          4: { cellWidth: 'auto' },
+        },
+        body: nmpFileYear.nutrientAnalyses.map((analysis) => [
+          analysis.manureName,
+          analysis.uniqueMaterialName,
+          `${Math.round(analysis.annualAmount)} ${analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons'}`,
+          'TBC',
+          'TBC',
+        ]),
+      });
+
+      // ---------- LIQUID STORAGE CAPACITY ---------- //
+      // On the same page as Manure and Compost Use
+      for (let i = 0; i < storageSystems.length; i += 1) {
+        const system = storageSystems[i];
+        // eslint-disable-next-line no-continue
+        if (system.manureType === ManureType.Solid) continue;
+        const totalStored = 9999;
+        const totalStorageVolume = system.manureStorages.reduce(
+          (acc, m) => acc + m.volumeUSGallons,
+          0,
+        );
+        autoTable(doc, {
+          ...sharedAutoTableSettings,
+          // Table
+          head: [[system.name, 'October to March volume']],
+          columnStyles: {
+            0: { cellWidth: pageWidth * 0.6 },
+            1: { cellWidth: 'auto' },
+          },
+          body: [
+            [
+              { content: 'Material Stored (October to March)', styles: { fontStyle: 'bold' } },
+              '',
+              '',
+            ],
+            ['\tMaterials Generated or Imported', `_ US gallons`],
+            ['\tYard/Roof Runoff', `_ US gallons`],
+            ['\tPrecipitation, Direct into Storage', `_ US gallons`],
+            [
+              { content: '\tTotal Stored', styles: { fontStyle: 'bold' } },
+              `${totalStored} US gallons`,
+            ],
+            [
+              { content: 'Storage Volume', styles: { fontStyle: 'bold' } },
+              `${totalStorageVolume} US gallons`,
+            ],
+          ],
+        });
+        if (totalStored > totalStorageVolume) {
+          // Text below table
+          doc.setFontSize(10);
+          const nextY: number = (doc as any).lastAutoTable.finalY + 5; // type shenanigans
+          addText(
+            doc,
+            'There may not be enough capacity to contain the manure and water to be stored during the non-growing season of an average year.',
+            15,
+            nextY,
+          );
+        }
+      }
+    }
+
+    // ---------- FERTILIZER REQUIRED ---------- //
+    const fertilizers: FertilizerRequiredStep[] =
+      // Group fertilizers across each field by name and sum the amounts
+      nmpFileYear.fields.reduce((acc, field) => {
+        field.fertilizers.forEach((fert) => {
+          let idx = acc.findIndex((f) => f.name === fert.name);
+          if (idx === -1) {
+            idx = acc.length;
+            const fertilizerUnit = fertilizerUnits.find((u) => u.id === fert.applUnitId);
+            if (fertilizerUnit === undefined) {
+              throw new Error(`Fertilizer unit ${fert.applUnitId} not found.`);
+            }
+            acc.push({
+              name: fert.name,
+              totalAmount: 0,
+              unit: fertilizerUnit.dryliquid === 'dry' ? 'kg' : 'US gallons',
+            });
+          }
+          // Add the converted amount and field acreage
+          const stats = acc[idx];
+          stats.totalAmount +=
+            // Converts to kg/ac or US gal/ac and multiplies by # of acres
+            fert.applicationRate *
+            (stats.unit === 'kg'
+              ? getFertilizerUnitKgPerAcreConversion(fert.applUnitId)
+              : getFertilizerUnitUSGallonPerAcreConversion(fert.applUnitId)) *
+            field.area;
+        });
+        return acc;
+      }, [] as FertilizerRequiredStep[]);
+
+    if (fertilizers.length > 0) {
+      doc.addPage();
+      autoTable(doc, {
+        ...sharedAutoTableSettings,
+        // Page Header
+        margin: { top: 40 },
+        willDrawPage(data) {
+          let [nextX, nextY] = drawStandardHeader(data, doc);
+          doc.setFont(doc.getFont().fontName, 'bold');
+          addText(doc, 'Fertilizer Required', nextX, nextY + 2);
+          doc.setFont(doc.getFont().fontName, 'normal');
+        },
+        // Table
+        head: [['Material', `Total Amount Required in ${nmpFileYear.year}`]],
+        columnStyles: {
+          0: { cellWidth: pageWidth * 0.6 },
+          1: { cellWidth: 'auto' },
+        },
+        body: fertilizers.map((f) => [f.name, `${Math.round(f.totalAmount)} ${f.unit}`]),
+      });
+    }
+
+    // ---------- FIELD SUMMARY ---------- //
+    for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
+      doc.addPage();
+      const field = nmpFileYear.fields[i];
+
+      // First table shows crops
+      autoTable(doc, {
+        ...sharedAutoTableSettings,
+        // Page Header
+        margin: { top: 50 },
+        willDrawPage(data) {
+          let [nextX, nextY] = drawStandardHeader(data, doc);
+          const fieldSummaryY = nextY + 2;
+          nextY = addText(doc, 'Field Summary:', nextX, fieldSummaryY);
+          doc.setFont(doc.getFont().fontName, 'bold');
+          doc.text(`${field.fieldName}`, nextX + 40, fieldSummaryY);
+          doc.setFontSize(10);
+          addText(doc, `Area: ${field.area} ac`, nextX + 2, nextY + 4);
+          doc.setFont(doc.getFont().fontName, 'normal');
+        },
+        head: [['Crop', 'Yield', 'Previous crop ploughed down (N credit)']],
+        columnStyles: {
+          0: { cellWidth: pageWidth * 0.4 },
+          1: { cellWidth: pageWidth * 0.2 },
+          2: { cellWidth: 'auto' },
+        },
+        body: field.crops.map((crop) => [
+          `${crop.name}`,
+          `${crop.yield} ${crop.yieldHarvestUnit ? crop.yieldHarvestUnit : 'ton/ac'}`,
+          `${crop.nCredit === 0 ? 'none (no N credit)' : crop.nCredit}`,
+        ]),
+      });
+
+      // Second table shows the soil test results
+      const { soilTest } = field;
+      let splitDateStr: string[] | undefined;
+      if (soilTest?.sampleDate) {
+        splitDateStr = new Date(soilTest.sampleDate).toDateString().split(' ');
+      }
+      const soilTestName =
+        soilTestMethods.find((m) => m.id === soilTest?.soilTestId)?.name || 'not selected';
+      autoTable(doc, {
+        ...sharedAutoTableSettings,
+        head: [
           [
-            { content: 'Storage Volume', styles: { fontStyle: 'bold' } },
-            `${totalStorageVolume} US Gallons`,
+            {
+              content: `Soil Test Results: ${splitDateStr ? `${splitDateStr[1]} ${splitDateStr[3]}` : ''}`,
+              styles: { lineWidth: { top: 0.5, left: 0.5, bottom: 0.5, right: 0 } },
+              colSpan: soilTest ? 1 : undefined,
+            },
+            {
+              content: `Soil test P & K Method: ${soilTestName}`,
+              styles: { lineWidth: { top: 0.5, left: 0, bottom: 0.5, right: 0.5 } },
+              colSpan: soilTest ? 3 : undefined,
+            },
+          ],
+        ],
+        columnStyles: {
+          0: { cellWidth: pageWidth * 0.3 },
+          1: { cellWidth: pageWidth * 0.3 },
+          2: { cellWidth: pageWidth * 0.3 },
+          3: { cellWidth: 'auto' },
+        },
+        body: soilTest
+          ? [
+              [
+                `Nitrate-N: ${soilTest.valNO3H} ppm`,
+                `Phosphorus: ${soilTest.valP} ppm`,
+                `Potassium: ${soilTest.valK} ppm`,
+                `pH: ${soilTest.valPH}`,
+              ],
+            ]
+          : undefined,
+        foot: [
+          [
+            {
+              content: `Field Comments: ${field.comment || ''}`,
+              styles: { fillColor: [255, 255, 255], fontStyle: 'normal' },
+              colSpan: 4,
+            },
           ],
         ],
       });
+
+      // Third table is the nutrient application plan (a version of Application Schedule)
+      // QUESTION: Should fertigation go in this table?
+      const allApplied = [...field.manures, ...field.fertilizers];
+      autoTable(doc, {
+        ...sharedAutoTableSettings,
+        head: [
+          [
+            {
+              content: `Nutrient Application Plan: ${nmpFileYear.year}`,
+              styles: {
+                fontStyle: 'bold',
+                fillColor: [255, 255, 255],
+                lineWidth: { top: 0, left: 0, bottom: 0.5, right: 0 },
+              },
+              colSpan: 4,
+            },
+          ],
+          ['Nutrient Source', 'Application Timing', 'Method', 'Rate'],
+        ],
+        columnStyles: {
+          0: { cellWidth: pageWidth * 0.26 },
+          1: { cellWidth: pageWidth * 0.26 },
+          2: { cellWidth: pageWidth * 0.26 },
+          3: { cellWidth: 'auto' },
+        },
+        body:
+          allApplied.length > 0
+            ? allApplied.map((nutrientSource) => {
+                let seasonApplication;
+                // Manures, but not fertilizers, have a season and application method
+                if ('applicationId' in nutrientSource) {
+                  seasonApplication = SEASON_APPLICATION.find(
+                    (s) => s.Id === nutrientSource.applicationId,
+                  );
+                  if (!seasonApplication) {
+                    throw new Error(`Season application ${nutrientSource.applicationId} not found`);
+                  }
+                }
+                return [
+                  nutrientSource.name,
+                  seasonApplication?.Season || '',
+                  seasonApplication?.ApplicationMethod || '',
+                  // Example display: 10 L/ac
+                  `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
+                ];
+              })
+            : [['None planned', '', '', '']],
+      });
     }
+
+    // ---------- MANURE AND COMPOST ANALYSIS ---------- //
+    if (nmpFileYear.nutrientAnalyses.length > 0) {
+      doc.addPage();
+      autoTable(doc, {
+        ...sharedAutoTableSettings,
+        // Page Header
+        margin: { top: 45 },
+        willDrawPage(data) {
+          let [nextX, nextY] = drawStandardHeader(data, doc);
+          doc.setFont(doc.getFont().fontName, 'bold');
+          nextY = addText(doc, 'Manure and Compost Analysis', nextX, nextY + 2);
+          doc.setFont(doc.getFont().fontName, 'normal');
+          doc.setFontSize(10);
+          addText(
+            doc,
+            'All results are provided on an as-received (wet weight) basis.',
+            nextX,
+            nextY + 4,
+          );
+        },
+        // Table
+        head: [
+          [
+            'Source of Material',
+            'Material Type',
+            'Moisture (%)',
+            'Total N (%)',
+            'NH4-N (ppm)',
+            'P (%)',
+            'K (%)',
+          ],
+        ],
+        columnStyles: {
+          0: { cellWidth: pageWidth * 0.21 },
+          1: { cellWidth: pageWidth * 0.21 },
+          2: { cellWidth: pageWidth * 0.14 },
+          3: { cellWidth: pageWidth * 0.14 },
+          4: { cellWidth: pageWidth * 0.14 },
+          5: { cellWidth: pageWidth * 0.08 },
+          6: { cellWidth: 'auto' },
+        },
+        body: nmpFileYear.nutrientAnalyses.map((analysis) => [
+          analysis.uniqueMaterialName,
+          analysis.manureName,
+          analysis.moisture,
+          analysis.N,
+          analysis.NH4N,
+          analysis.P,
+          analysis.K,
+        ]),
+      });
+    }
+
+    // ---------- SOIL TEST RESULTS ---------- //
     doc.addPage();
-
-    const field = state.nmpFile.years[0].fields![0];
-    // Field Summary
+    // If any soil test is defined, all fields use the same ST method
+    const soilTests = nmpFileYear.fields.map((f) => f.soilTest).filter((s) => s !== undefined);
     autoTable(doc, {
-      head: [['Crop', 'Yield', 'Previous crop ploughed down (N credit)']],
-      body: field.crops.map((crop) => [
-        `${crop.name}`,
-        `${crop.yield} ${crop.yieldHarvestUnit ? crop.yieldHarvestUnit : 'ton/ac'}`,
-        `${crop.nCredit === 0 ? 'none (no N credit)' : crop.nCredit}`,
-      ]),
-      theme: 'grid',
-      styles: { lineColor: 'black', lineWidth: 0.5, textColor: 'black' },
-      headStyles: { fillColor: [164, 205, 215], lineWidth: 0.5 },
-
-      // Header
+      ...sharedAutoTableSettings,
+      // Page Header
+      margin: { top: 40 },
       willDrawPage(data) {
-        doc.setFontSize(14);
-        // NOTE: Start is 15
-        const start = Math.ceil(data.settings.margin.left);
-        let nextY = Math.ceil(data.settings.margin.left);
-        nextY = addText(doc, `Farm Name: ${state.nmpFile.farmDetails.farmName}`, start, nextY);
-        nextY = addText(doc, `Planning Year: ${state.nmpFile.farmDetails.year}`, start, nextY);
-        const fieldSummaryY = nextY + 2;
-        nextY = addText(doc, 'Field Summary:', start, fieldSummaryY);
+        let [nextX, nextY] = drawStandardHeader(data, doc);
         doc.setFont(doc.getFont().fontName, 'bold');
-        doc.text(`${field.fieldName}`, start + 40, fieldSummaryY);
-        doc.setFontSize(10);
-        addText(doc, `Area: ${field.area} ac`, start + 2, nextY + 4);
+        addText(doc, 'Soil Test Results', nextX, nextY + 2);
         doc.setFont(doc.getFont().fontName, 'normal');
       },
-      margin: { top: 50 },
+      columnStyles: {
+        0: { cellWidth: pageWidth * 0.35 },
+        1: { cellWidth: 'auto' },
+      },
+      // Table
+      body: [
+        [
+          {
+            content: 'Soil Test P and K Method',
+            styles: { fillColor: [164, 205, 215], fontStyle: 'bold' },
+          },
+          soilTests.length > 0
+            ? soilTestMethods.find((m) => m.id === soilTests[0].soilTestId)!.name
+            : 'Not Specified',
+        ],
+      ],
     });
-    const { soilTest } = state.nmpFile.years[0].fields![0];
-    let splitDateStr: string[] | undefined;
-    if (soilTest?.sampleDate) {
-      splitDateStr = new Date(soilTest.sampleDate).toDateString().split(' ');
-    }
-
-    // Uncomment to show on separate pages
-    // doc.addPage();
 
     autoTable(doc, {
+      ...sharedAutoTableSettings,
       head: [
         [
-          {
-            content: `Soil Test Results: ${splitDateStr ? `${splitDateStr[1]} ${splitDateStr[3]}` : ''}`,
-            styles: { lineWidth: { top: 0.5, left: 0.5, bottom: 0.5, right: 0 } },
-            colSpan: 1,
-          },
-          {
-            content: `Soil test P & K Method: ${soilTest?.soilTestId || ''}`,
-            styles: { lineWidth: { top: 0.5, left: 0, bottom: 0.5, right: 0.5 } },
-            colSpan: 3,
-          },
+          'Field',
+          'Sampling Date',
+          `${nmpFileYear.year} Crops`,
+          'pH',
+          'NO3-N (ppm)',
+          'Soil Test P (ppm)',
+          'Soil Test K (ppm)',
         ],
       ],
-      body: soilTest
-        ? [
-            [
-              `Nitrate-N: ${soilTest.valNO3H} ppm`,
-              `Phosphorus: ${soilTest.valP} ppm`,
-              `Potassium: ${soilTest.valK} ppm`,
-              `pH: ${soilTest.valPH}`,
-            ],
-          ]
-        : undefined,
-      foot: [
-        [
-          {
-            content: `Field Comments: ${state.nmpFile.years[0].fields![0].comment || ''}`,
-            styles: { fillColor: [255, 255, 255] },
-            colSpan: 4,
-          },
-        ],
-      ],
-      theme: 'grid',
-      styles: { lineColor: 'black', lineWidth: 0.5, textColor: 'black' },
-      headStyles: { fillColor: [164, 205, 215] },
+      columnStyles: {
+        0: { cellWidth: pageWidth * 0.2 },
+        1: { cellWidth: pageWidth * 0.15 },
+        2: { cellWidth: pageWidth * 0.25 },
+        3: { cellWidth: pageWidth * 0.1 },
+        4: { cellWidth: pageWidth * 0.1 },
+        5: { cellWidth: pageWidth * 0.1 },
+        6: { cellWidth: 'auto' },
+      },
+      body: nmpFileYear.fields.map((field) => {
+        const soilTest = field.soilTest || DEFAULT_SOIL_TEST;
+        let splitDateStr: string[] | undefined;
+        if (soilTest?.sampleDate) {
+          splitDateStr = new Date(soilTest.sampleDate).toDateString().split(' ');
+        }
+        return [
+          field.fieldName,
+          splitDateStr ? `${splitDateStr[1]} ${splitDateStr[3]}` : 'Default Values',
+          `${field.crops.map((c) => `${c.name}`).join('\n')}`,
+          soilTest.valPH!,
+          soilTest.valNO3H!,
+          soilTest.valP!,
+          soilTest.valK!,
+        ];
+      }),
     });
     doc.save('table.pdf');
   };

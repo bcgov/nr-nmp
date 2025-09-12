@@ -89,7 +89,7 @@ export default function RecordKeepingSheets() {
       </FieldContainer>
       <div style={{ fontWeight: 'bold', marginTop: '32px' }}>Application Schedule</div>
       {years.map((yearEle) =>
-        yearEle.fields?.map((fieldEle) => (
+        yearEle.fields.map((fieldEle) => (
           <div
             key={fieldEle.fieldName}
             style={{ marginTop: '16px' }}

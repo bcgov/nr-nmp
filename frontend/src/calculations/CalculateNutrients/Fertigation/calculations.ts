@@ -17,25 +17,6 @@ function getFertilizerUnitImpGallonConversion(unit: FertilizerUnit) {
   }
 }
 
-export function getFertilizerUnitUSGallonPerAcreConversion(unit: FertilizerUnit) {
-  switch (unit.id) {
-    // Litres per acre
-    case 3:
-      return 3.875;
-    // Imperial gallons per acre
-    case 4:
-      return 0.8326;
-    case 5:
-      return 1;
-    // Litres per hectare
-    case 6:
-      return 0.1069;
-    default:
-      console.error(`Unrecognized liquid fertilizer unit: ${unit.id}`);
-      return 0;
-  }
-}
-
 /**
  * Product Volume = Application Rate * Field Area
  * @returns Product volume in imperial gallons

@@ -37,7 +37,7 @@ export interface NMPFileNutrientAnalysis {
 
 export type NMPFileYear = {
   year: string;
-  fields?: NMPFileField[];
+  fields: NMPFileField[];
   farmAnimals?: NMPFileAnimal[];
   generatedManures?: NMPFileGeneratedManure[];
   importedManures?: NMPFileImportedManure[];

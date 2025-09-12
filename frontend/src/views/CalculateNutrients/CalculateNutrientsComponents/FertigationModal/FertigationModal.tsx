@@ -171,7 +171,7 @@ export default function FertigationModal({
 }: FertigationModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const { state } = useAppState();
   const field = useMemo(
-    () => state.nmpFile.years[0].fields![fieldIndex],
+    () => state.nmpFile.years[0].fields[fieldIndex],
     [state.nmpFile, fieldIndex],
   );
   const [fertilizerTypes, setFertilizerTypes] = useState<SelectOption<FertilizerType>[]>([]);

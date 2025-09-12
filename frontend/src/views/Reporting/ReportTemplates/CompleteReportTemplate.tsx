@@ -1,10 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import useAppState from '@/hooks/useAppState';
-import ApplicationReportSection from './ApplicationReportSection';
 import FieldDataSection from './FieldDetailSection';
 import ManureCompostInventory from './ManureCompostInventory';
-import ManureCompostUse from './ManureCompostUse';
-import ManureCompostAnalysis from './ManureCompostAnalysis';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ManureType, Region, SelectOption, Subregion } from '@/types';
 import LiquidStorageCapacitySection from './LiquidStorageCapacitySection';
@@ -44,50 +41,6 @@ export default function CompleteReportTemplate() {
 
   return (
     <div style={{ width: '744px' }}>
-      <FieldContainer>
-        <FieldInfoSection>
-          <FieldInfoItem>
-            <span
-              style={{
-                fontWeight: 'bold',
-                textDecoration: 'underline',
-                fontSize: '32px',
-                marginBottom: '8px',
-              }}
-            >
-              NMP Farm Report
-            </span>
-          </FieldInfoItem>
-          <FieldInfoItem>
-            <span>
-              <strong>Farm name:</strong> {farmName}
-            </span>
-          </FieldInfoItem>
-          <FieldInfoItem>
-            <span>
-              <strong>Farm region:</strong>{' '}
-              {regionOptions.find((ele) => ele.id === farmRegion?.toString())?.label ?? farmRegion}
-            </span>
-          </FieldInfoItem>
-          <FieldInfoItem>
-            <span>
-              <strong>Farm subregion:</strong>{' '}
-              {subregionOptions.find((ele) => ele.id === farmSubregion?.toString())?.label ??
-                farmSubregion}
-            </span>
-          </FieldInfoItem>
-        </FieldInfoSection>
-      </FieldContainer>
-      <div style={{ fontWeight: 'bold', marginTop: '32px' }}>Application Schedule</div>
-      {years.map((yearEle) =>
-        yearEle.fields?.map((fieldEle) => (
-          <ApplicationReportSection
-            field={fieldEle}
-            year={yearEle.year}
-            key={fieldEle.fieldName}
-          />
-        )),
-      )}
       <div style={{ fontWeight: 'bold', marginTop: '64px', marginBottom: '8px' }}>
         Manure / Compost Inventory
       </div>
@@ -97,17 +50,6 @@ export default function CompleteReportTemplate() {
           GeneratedManures={years[0].generatedManures}
           ImportedManures={years[0].importedManures}
           ManureStorageSystems={years[0].manureStorageSystems}
-        />
-      )}
-      <div style={{ fontWeight: 'bold', marginTop: '64px', marginBottom: '8px' }}>
-        Manure and Compost Use
-      </div>
-      {years[0] && (
-        <ManureCompostUse
-          ManureStorageSystems={years[0].manureStorageSystems}
-          NutrientAnalysisData={years[0].nutrientAnalyses}
-          GeneratedManures={years[0].generatedManures}
-          ImportedManures={years[0].importedManures}
         />
       )}
 
@@ -128,7 +70,7 @@ export default function CompleteReportTemplate() {
 
       <div style={{ marginTop: '64px' }}>
         {years.map((yearEle) =>
-          yearEle.fields?.map((fieldEle) => (
+          yearEle.fields.map((fieldEle) => (
             <FieldDataSection
               field={fieldEle}
               year={yearEle.year}
@@ -137,12 +79,6 @@ export default function CompleteReportTemplate() {
           )),
         )}
       </div>
-      {years[0].nutrientAnalyses.length > 0 && (
-        <div>
-          <div style={{ fontWeight: 'bold', marginTop: '64px' }}>Manure and Compost Analysis</div>
-          <ManureCompostAnalysis nutrientAnalyses={years[0].nutrientAnalyses} />
-        </div>
-      )}
     </div>
   );
 }

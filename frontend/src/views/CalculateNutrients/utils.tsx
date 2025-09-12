@@ -29,6 +29,7 @@ export const calcFertBalance = (
 
   // Default unit for calc is lb/ac for dry ferts, imp. gall/ac for liquid
   // this will check for units and adjust accordingly
+  // Liquid fertilizers also get multiplied by their density to convert to lb/ac
   if (fert.dryliquid.includes('liquid')) {
     if (!density || !densityConvFactor)
       throw new Error('Liquid fertilizer missing density or density units');
