@@ -51,7 +51,7 @@ export const DEFAULT_LIQUID_MANURE_SYSTEM: Omit<LiquidManureStorageSystem, 'uuid
   getsRunoff: false,
   runoffAreaSqFt: 0,
   hasSeperation: false,
-  percentLiquidSeperation: 0,
+  percentLiquidSeperation: 10,
   separatedLiquidsUSGallons: 0,
   separatedSolidsTons: 0,
   manureStorages: [DEFAULT_LIQUID_MANURE_STORAGE],
