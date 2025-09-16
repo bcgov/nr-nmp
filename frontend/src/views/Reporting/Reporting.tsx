@@ -28,7 +28,7 @@ import {
   getFertilizerUnitKgPerAcreConversion,
   getFertilizerUnitUSGallonPerAcreConversion,
 } from './utils';
-import { fertigationToFertigationRows } from '../CalculateNutrients/utils';
+import { fertigationToFertigationRows, findBalanceMessage } from '../CalculateNutrients/utils';
 
 type FertilizerRequiredStep = {
   name: string;
@@ -193,7 +193,7 @@ export default function Reporting() {
               },
             },
             {
-              content: `Crops: ${field.crops.map((c) => `${c.name}`).join('\n\t    ')}`, // newline + tab + spaces
+              content: `Crops: ${field.crops.map((c) => `${c.name}`).join('\n             ')}`, // newline + spaces
               styles: {
                 fontStyle: 'normal',
                 fillColor: [255, 255, 255],
@@ -235,16 +235,17 @@ export default function Reporting() {
         ],
       });
     }
-    // No footnotes
 
     // ---------- MANURE/COMPOST INVENTORY ---------- //
     const storageSystems = nmpFileYear.manureStorageSystems || [];
     if (storageSystems.length > 0 || unassignedManures.length > 0) {
       doc.addPage();
+      /* Commenting out for now bc I want to ask Josh about this and the assumptions
       const footnotes: string[] = [
-        `Milking Center Wash Water adjusted to US gallons/day/animal`,
-        `Milk Production adjusted to lb/day/animal`,
+        `Milking Center Wash Water adjusted to _ US gallons/day/animal`,
+        `Milk Production adjusted to _ lb/day/animal`,
       ];
+      */
       autoTable(doc, {
         ...sharedAutoTableSettings,
         // Page Header
@@ -263,20 +264,36 @@ export default function Reporting() {
         },
         body: [
           ...storageSystems.reduce((acc, system) => {
-            // For a storage system, the rows are the system name in bold,
-            // a row for each manure in the system, an extra row if the manure
-            // is a Milking Cow for the wash water, and a final row for
-            // precipitation, if the system contains any
+            // For a storage system, there is a rows with system name in bold,
+            // a row for each manure in the system, an extra row if there is
+            // Milking Center Wash Water and a final row for precipitation,
+            // if the system contains any
             const newRows: CellInput[][] = [
               [{ content: system.name, styles: { fontStyle: 'bold' } }, ''],
             ];
+            let totalWashWater = 0;
             system.manuresInSystem.forEach((m) => {
-              newRows.push([
-                `\t${m.data.uniqueMaterialName}`,
-                `${m.data.annualAmount} ${m.data.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
-              ]);
-              // TODO: Add Milking Centre Wash Water
+              // \t doesn't work in this new font so I used spaces
+              if (
+                m.type === 'Generated' &&
+                m.data.originalAnnualAmount !== undefined &&
+                m.data.originalWashWaterAmount !== undefined
+              ) {
+                newRows.push([
+                  `        ${m.data.uniqueMaterialName}`,
+                  `${m.data.originalAnnualAmount} US gallons`,
+                ]);
+                totalWashWater += m.data.originalWashWaterAmount;
+              } else {
+                newRows.push([
+                  `        ${m.data.uniqueMaterialName}`,
+                  `${m.data.annualAmount} ${m.data.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+                ]);
+              }
             });
+            if (totalWashWater > 0) {
+              newRows.push(['Milking Center Wash Water', `${totalWashWater} US gallons`]);
+            }
             if (system.annualPrecipitation) {
               newRows.push([
                 'Precipitation',
@@ -292,7 +309,7 @@ export default function Reporting() {
                 ? [[{ content: 'Material not Stored', styles: { fontStyle: 'bold' } }, '']]
                 : [];
             newRows.push([
-              `\t${manure.uniqueMaterialName}`,
+              `        ${manure.uniqueMaterialName}`,
               `${manure.annualAmount} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
             ]);
             return acc.concat(newRows);
@@ -322,7 +339,7 @@ export default function Reporting() {
           0: { cellWidth: pageWidth * 0.25 },
           1: { cellWidth: pageWidth * 0.25 },
           2: { cellWidth: pageWidth * 0.17 },
-          3: { cellWidth: pageWidth * 0.14 },
+          3: { cellWidth: pageWidth * 0.17 },
           4: { cellWidth: 'auto' },
         },
         body: nmpFileYear.nutrientAnalyses.map((analysis) => [
@@ -355,17 +372,18 @@ export default function Reporting() {
             0: { cellWidth: pageWidth * 0.6 },
             1: { cellWidth: 'auto' },
           },
+          // \t doesn't work in this new font so I used spaces
           body: [
             [
               { content: 'Material Stored (October to March)', styles: { fontStyle: 'bold' } },
               '',
               '',
             ],
-            ['\tMaterials Generated or Imported', `_ US gallons`],
-            ['\tYard/Roof Runoff', `_ US gallons`],
-            ['\tPrecipitation, Direct into Storage', `_ US gallons`],
+            ['        Materials Generated or Imported', `_ US gallons`],
+            ['        Yard/Roof Runoff', `_ US gallons`],
+            ['        Precipitation, Direct into Storage', `_ US gallons`],
             [
-              { content: '\tTotal Stored', styles: { fontStyle: 'bold' } },
+              { content: '        Total Stored', styles: { fontStyle: 'bold' } },
               `${totalStored} US gallons`,
             ],
             [
@@ -605,6 +623,7 @@ export default function Reporting() {
       }
 
       // Fifth is the nutrient table shown on Calculate Nutrients
+      const tableFootnotes: string[] = [];
       const allRows: CalculateNutrientsRow[] = [
         ...field.crops,
         ...(field.previousYearManureApplicationNCredit
@@ -625,6 +644,14 @@ export default function Reporting() {
         ...fertigationToFertigationRows(field.fertigations),
         ...field.otherNutrients,
       ];
+      const balance = {
+        reqN: sumPropertyInObjectArr(allRows, 'reqN'),
+        reqP2o5: sumPropertyInObjectArr(allRows, 'reqP2o5'),
+        reqK2o: sumPropertyInObjectArr(allRows, 'reqK2o'),
+        remN: sumPropertyInObjectArr(allRows, 'remN'),
+        remP2o5: sumPropertyInObjectArr(allRows, 'remP2o5'),
+        remK2o: sumPropertyInObjectArr(allRows, 'remK2o'),
+      };
       autoTable(doc, {
         theme: 'grid',
         styles: {
@@ -660,28 +687,57 @@ export default function Reporting() {
           5: { cellWidth: pageWidth * 0.125, fillColor: [239, 239, 239] },
           6: { cellWidth: 'auto', fillColor: [239, 239, 239] },
         },
-        body: allRows.map((row) => [
+        body: allRows.map((row) => {
+          let hasFootnote = false;
+          if ('crudeProtein' in row && 'crudeProteinAdjusted' in row && row.crudeProteinAdjusted) {
+            tableFootnotes.push(`Crude protein adjusted to ${row.crudeProtein}%`);
+            hasFootnote = true;
+            // TODO: Change this condition to check if this is a field veg w/ a changed N
+            // eslint-disable-next-line no-constant-condition
+          } else if ('reqN' in row && false) {
+            tableFootnotes.push(`Crop required nitrogen adjusted to ${row.reqN}`);
+            hasFootnote = true;
+          } else if ('nh4Retention' in row && 'nAvailable' in row) {
+            let footnote;
+            if ('nAvailableAdjusted' in row && row.nAvailableAdjusted) {
+              footnote = `1st Yr Organic N Availability adjusted to ${row.nAvailable}%`;
+              hasFootnote = true;
+            }
+            if ('nh4RetentionAdjusted' in row && row.nh4RetentionAdjusted) {
+              footnote = `${footnote ? `${footnote}, ` : ''}Ammonium-N Retention adjusted to ${row.nh4Retention}%`;
+              hasFootnote = true;
+            }
+            if (hasFootnote) {
+              tableFootnotes.push(footnote!);
+            }
+          } else if ('density' in row && 'densityAdjusted' in row && row.densityAdjusted) {
+            tableFootnotes.push(`Liquid density adjusted to ${row.density}`);
+            hasFootnote = true;
+          }
           // Some type shenanigans to accomodate fertigation, which has a date
-          (row as any).date ? `${row.name} on ${(row as any).date}` : row.name,
-          row.reqN,
-          row.reqP2o5,
-          row.reqK2o,
-          row.remN,
-          row.remP2o5,
-          row.remK2o,
-        ]),
+          const rowName = (row as any).date ? `${row.name} on ${(row as any).date}` : row.name;
+          return [
+            hasFootnote ? `${rowName}${numberToSuperscript(tableFootnotes.length)}` : rowName,
+            row.reqN,
+            row.reqP2o5,
+            row.reqK2o,
+            row.remN,
+            row.remP2o5,
+            row.remK2o,
+          ];
+        }),
         foot: [
           [
             {
               content: 'Balance',
               styles: { fillColor: [255, 255, 255], fontStyle: 'bold', halign: 'left' },
             },
-            `${sumPropertyInObjectArr(allRows, 'reqN')}`,
-            `${sumPropertyInObjectArr(allRows, 'reqP2o5')}`,
-            `${sumPropertyInObjectArr(allRows, 'reqK2o')}`,
-            `${sumPropertyInObjectArr(allRows, 'remN')}`,
-            `${sumPropertyInObjectArr(allRows, 'remP2o5')}`,
-            `${sumPropertyInObjectArr(allRows, 'remK2o')}`,
+            `${balance.reqN}`,
+            `${balance.reqP2o5}`,
+            `${balance.reqK2o}`,
+            `${balance.remN}`,
+            `${balance.remP2o5}`,
+            `${balance.remK2o}`,
           ],
         ],
         footStyles: {
@@ -690,6 +746,31 @@ export default function Reporting() {
           fontStyle: 'italic',
         },
       });
+      // Text below table
+      doc.setFontSize(10);
+      let nextY: number = (doc as any).lastAutoTable.finalY + 5; // type shenanigans
+      // First are all of the balance messages, then the table footnotes
+      const balanceFootnotes: string[] = [];
+      Object.entries(balance).forEach(([key, value]) => {
+        if (key !== 'id' && key !== 'name') {
+          let message = findBalanceMessage(key, value);
+          if (message && message.icon !== '/good.svg') {
+            balanceFootnotes.push(message.text.replace('{0}', Math.abs(value ?? 0).toFixed(1)));
+          }
+        }
+      });
+      if (balanceFootnotes.length > 0) {
+        nextY = addText(doc, 'Considerations:', 15, nextY + 2);
+        balanceFootnotes.forEach((footnote) => {
+          nextY = addText(doc, footnote, 15, nextY);
+        });
+      }
+      if (tableFootnotes.length > 0) {
+        nextY = addText(doc, 'Assumptions:', 15, nextY + 2);
+        tableFootnotes.forEach((footnote, j) => {
+          nextY = addText(doc, `${j + 1}   ${footnote}`, 15, nextY);
+        });
+      }
     }
 
     // ---------- MANURE AND COMPOST ANALYSIS ---------- //
@@ -759,7 +840,7 @@ export default function Reporting() {
       doc.setFontSize(10);
       let nextY: number = (doc as any).lastAutoTable.finalY + 5; // type shenanigans
       footnotes.forEach((footnote, i) => {
-        nextY = addText(doc, `${i + 1} ${footnote}`, 15, nextY);
+        nextY = addText(doc, `${i + 1}   ${footnote}`, 15, nextY);
       });
     }
 

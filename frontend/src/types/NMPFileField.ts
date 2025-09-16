@@ -5,6 +5,7 @@ export interface NMPFileCrop extends CalculateNutrientsRow {
   cropTypeId: number;
   yield: number;
   crudeProtein?: number;
+  crudeProteinAdjusted?: boolean;
   prevCropId?: number;
   coverCropHarvested?: boolean;
   yieldHarvestUnit?: string;
@@ -39,7 +40,9 @@ export interface NMPFileAppliedManure extends CalculateNutrientsRow {
   applUnitId: number;
   applicationRate: number;
   nh4Retention: number;
+  nh4RetentionAdjusted: boolean;
   nAvailable: number;
+  nAvailableAdjusted: boolean;
   solidLiquid: 'Solid' | 'Liquid' | '';
   sourceUuid: string;
 }
@@ -52,6 +55,7 @@ export interface NMPFileFertilizer extends CalculateNutrientsRow {
   applDate?: string;
   applicationMethod: string;
   density?: number;
+  densityAdjusted?: boolean;
   densityUnitId?: number;
 }
 

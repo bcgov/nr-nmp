@@ -11,6 +11,9 @@ export type NMPFileGeneratedManure = {
   isMaterialStored?: boolean;
   assignedToStoredSystem?: boolean;
   uuid: string;
+  // Only used for Milking Cows
+  originalAnnualAmount?: number;
+  originalWashWaterAmount?: number;
 };
 
 export type NMPFileImportedManure = {

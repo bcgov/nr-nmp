@@ -3,6 +3,7 @@
  */
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
+import LoopIcon from '@mui/icons-material/Loop';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
@@ -129,6 +130,7 @@ export default function FertilizerModal({
   const [fertilizerUnits, setFertilizerUnits] = useState<SelectOption<FertilizerUnit>[]>([]);
   const [densityUnits, setDensityUnits] = useState<SelectOption<DensityUnit>[]>([]);
   const [liqDensityFactors, setLiqDensityFactors] = useState<any[]>([]);
+  const [defaultDensity, setDefaultDensity] = useState<number | undefined>(undefined);
   const [balanceCalcRow, setBalanceCacRow] = useState<BalanceCalcRow>({
     reqN: Math.min(balanceRow.reqN, 0),
     reqP2o5: Math.min(balanceRow.reqP2o5, 0),
@@ -305,7 +307,9 @@ export default function FertilizerModal({
     }));
   };
 
-  const handleInputChanges = (updates: { [key: string]: string | number | undefined }) => {
+  const handleInputChanges = (updates: {
+    [key: string]: string | number | boolean | undefined;
+  }) => {
     Object.entries(updates).forEach(([name, value]) => {
       let changes = structuredClone(updates);
 
@@ -340,6 +344,7 @@ export default function FertilizerModal({
           // Reset for other values
           setFormCustomFertilizer(EMPTY_CUSTOM_FERTILIZER);
         }
+        setDefaultDensity(undefined);
 
         // Reset other values on changes
         changes = {
@@ -355,7 +360,11 @@ export default function FertilizerModal({
           const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value);
 
           changes.density = densityValue.value;
+          changes.densityAdjusted = false;
           changes.densityUnitId = densityValue.densityunitid;
+          setDefaultDensity(densityValue.value);
+        } else {
+          setDefaultDensity(undefined);
         }
       }
 
@@ -365,7 +374,11 @@ export default function FertilizerModal({
             (ele) => ele.fertilizerid === formState.fertilizerId && ele.densityunitid === value,
           );
           changes.density = densityValue.value;
+          changes.densityAdjusted = false;
           changes.densityUnitId = value;
+          setDefaultDensity(densityValue.value);
+        } else {
+          setDefaultDensity(undefined);
         }
         changes.densityUnitId = value;
       }
@@ -480,7 +493,22 @@ export default function FertilizerModal({
                   isRequired
                   label="Density"
                   value={formState.density}
-                  onChange={(e) => handleInputChanges({ density: e })}
+                  onChange={(e) =>
+                    handleInputChanges({ density: e, densityAdjusted: e !== defaultDensity })
+                  }
+                  iconRight={
+                    defaultDensity !== undefined && formState.density !== defaultDensity ? (
+                      <button
+                        type="button"
+                        css={{ backgroundColor: '#ffa500' }}
+                        onClick={() =>
+                          handleInputChanges({ density: defaultDensity, densityAdjusted: false })
+                        }
+                      >
+                        <LoopIcon />
+                      </button>
+                    ) : undefined
+                  }
                 />
               </Grid>
               <Grid size={{ xs: 6 }}>

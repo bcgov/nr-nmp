@@ -187,11 +187,10 @@ export function cropsModalReducer(
           name: action.crop.cropname,
           manureApplicationHistory: action.crop.manureapplicationhistory,
           crudeProtein:
-            action.crop.nitrogenrecommendationid !== null // NOTE: I don't see anywhere in the data where this is null
-              ? action.crop.cropremovalfactornitrogen *
-                nToProteinConversionFactor *
-                unitConversionFactor
-              : formData.crudeProtein,
+            action.crop.cropremovalfactornitrogen *
+            nToProteinConversionFactor *
+            unitConversionFactor,
+          crudeProteinAdjusted: false,
         },
       };
 

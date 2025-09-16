@@ -154,8 +154,13 @@ export default function ManureModal({
     )?.value;
     const valuePercent = valueDecimal ? valueDecimal * 100 : undefined;
     setDefaultAmmonia(valuePercent);
+    // TODO: DON'T set this if the user just opened the editing modal (resets the saved value)
     if (valuePercent !== undefined) {
-      setManureForm((prev) => ({ ...prev, nh4Retention: valuePercent }));
+      setManureForm((prev) => ({
+        ...prev,
+        nh4Retention: valuePercent,
+        nh4RetentionAdjusted: false,
+      }));
     }
   }, [selectedManure, ammoniaRetentions, manureForm.applicationId]);
 
@@ -168,8 +173,9 @@ export default function ManureModal({
     )?.firstyearvalue;
     const valuePercent = valueDecimal ? valueDecimal * 100 : undefined;
     setDefaultOrganicN(valuePercent);
+    // TODO: DON'T set this if the user just opened the editing modal (resets the saved value)
     if (valuePercent !== undefined) {
-      setManureForm((prev) => ({ ...prev, nAvailable: valuePercent }));
+      setManureForm((prev) => ({ ...prev, nAvailable: valuePercent, nAvailableAdjusted: false }));
     }
   }, [state.nmpFile.farmDetails.regionLocationId, selectedManure, nmineralizations]);
 
@@ -344,14 +350,18 @@ export default function ManureModal({
               <NumberField
                 label="Ammonium-N Retention (%)"
                 value={manureForm.nh4Retention}
-                onChange={(e) => handleChanges({ nh4Retention: e })}
+                onChange={(e) =>
+                  handleChanges({ nh4Retention: e, nh4RetentionAdjusted: e !== defaultAmmonia })
+                }
                 maxValue={100}
                 iconRight={
                   defaultAmmonia !== undefined && manureForm.nh4Retention !== defaultAmmonia ? (
                     <button
                       type="button"
                       css={{ backgroundColor: '#ffa500' }}
-                      onClick={() => handleChanges({ nh4Retention: defaultAmmonia })}
+                      onClick={() =>
+                        handleChanges({ nh4Retention: defaultAmmonia, nh4RetentionAdjusted: false })
+                      }
                     >
                       <LoopIcon />
                     </button>
@@ -363,14 +373,18 @@ export default function ManureModal({
               <NumberField
                 label="Organic N Available (%)"
                 value={manureForm.nAvailable}
-                onChange={(e) => handleChanges({ nAvailable: e })}
+                onChange={(e) =>
+                  handleChanges({ nAvailable: e, nAvailableAdjusted: e !== defaultOrganicN })
+                }
                 maxValue={100}
                 iconRight={
                   defaultOrganicN !== undefined && manureForm.nAvailable !== defaultOrganicN ? (
                     <button
                       type="button"
                       css={{ backgroundColor: '#ffa500' }}
-                      onClick={() => handleChanges({ nAvailable: defaultOrganicN })}
+                      onClick={() =>
+                        handleChanges({ nAvailable: defaultOrganicN, nAvailableAdjusted: false })
+                      }
                     >
                       <LoopIcon />
                     </button>
