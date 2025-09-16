@@ -198,7 +198,7 @@ export async function getNutrientInputs(
       manureWithNutrients.N / tenThousand;
     const nitrogenPerTonFirstYear = totalAvailableNFirstYear * lbPerTonConversion;
     nutrientInputs.N_FirstYear = Math.round(
-      applicationRate * nitrogenPerTonFirstYear * unitConversionFactor,
+      adjustedApplicationRate * nitrogenPerTonFirstYear * unitConversionFactor,
     );
 
     // Long term nitrogen calculations
@@ -209,7 +209,7 @@ export async function getNutrientInputs(
     const totalAvailableNLongTerm = availableAmmoniumNitrogen + mineralizedOrganicNLongTerm;
     const nitrogenPerTonLongTerm = totalAvailableNLongTerm * lbPerTonConversion;
     nutrientInputs.N_LongTerm = Math.round(
-      applicationRate * nitrogenPerTonLongTerm * unitConversionFactor,
+      adjustedApplicationRate * nitrogenPerTonLongTerm * unitConversionFactor,
     );
 
     return nutrientInputs;
