@@ -205,7 +205,7 @@ export async function getNutrientInputs(
     // Calculate mineralized organic nitrogen for long term
     const mineralizedOrganicNLongTerm =
       organicNitrogenContent * organicNMineralizationRates.OrganicN_LongTerm;
-    // Total available nitrogen = ammonium + mineralized organic + total nitrogen baseline 1.98305085
+    // Total available nitrogen = ammonium + mineralized organic + total nitrogen baseline
     const totalAvailableNLongTerm = availableAmmoniumNitrogen + mineralizedOrganicNLongTerm;
     const nitrogenPerTonLongTerm = totalAvailableNLongTerm * lbPerTonConversion;
     nutrientInputs.N_LongTerm = Math.round(
