@@ -39,13 +39,12 @@ export default function DairyCattle({
   const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
 
   // Initial values for milking fields, if "Milking cow" is selected //
-  const washWaterInit = useMemo(() => {
-    if (formData.washWater || formData.washWater === 0) return formData.washWater;
+  const washWaterDefault = useMemo(() => {
     if (subtypes.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     return milkingCow.washwater;
-  }, [formData.washWater, subtypes]);
+  }, [subtypes]);
   const milkProductionDefault = useMemo(() => {
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
@@ -194,11 +193,16 @@ export default function DairyCattle({
       </Grid>
       {formData.subtype === MILKING_COW_ID &&
         milkProductionDefault !== undefined &&
-        washWaterInit !== undefined && (
+        washWaterDefault !== undefined && (
           <MilkingFields
-            milkProductionInit={formData.milkProduction || milkProductionDefault}
+            milkProductionInit={
+              formData.milkProduction !== undefined
+                ? formData.milkProduction
+                : milkProductionDefault
+            }
             milkProductionDefault={milkProductionDefault}
-            washWaterInit={washWaterInit}
+            washWaterInit={formData.washWater !== undefined ? formData.washWater : washWaterDefault}
+            washWaterDefault={washWaterDefault}
             animalsPerFarm={formData.animalsPerFarm || 0}
             washWaterUnit={formData.washWaterUnit}
             handleInputChanges={handleInputChanges}

@@ -9,6 +9,7 @@ interface MilkingFieldsProps {
   milkProductionInit: number;
   milkProductionDefault: number;
   washWaterInit: number;
+  washWaterDefault: number;
   animalsPerFarm: number;
   washWaterUnit?: WashWaterUnit;
   handleInputChanges: (changes: { [name: string]: string | number | boolean | undefined }) => void;
@@ -23,6 +24,7 @@ export default function MilkingFields({
   milkProductionInit,
   milkProductionDefault,
   washWaterInit,
+  washWaterDefault,
   animalsPerFarm,
   washWaterUnit,
   handleInputChanges,
@@ -44,16 +46,19 @@ export default function MilkingFields({
   useEffect(() => {
     handleInputChanges({
       milkProduction: milkProductionInit,
-      milkProductionAdjusted: false,
+      milkProductionAdjusted: milkProductionDefault !== milkProductionInit,
       washWater: washWaterInit,
       // Per day per animal is the default
       washWaterUnit: washWaterUnit || PER_DAY_PER_ANIMAL_UNIT,
+      washWaterAdjusted: washWaterDefault !== washWaterInit,
     });
     return () => {
       handleInputChanges({
         milkProduction: undefined,
         milkProductionAdjusted: undefined,
         washWater: undefined,
+        washWaterUnit: undefined,
+        washWaterAdjusted: undefined,
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,7 +99,7 @@ export default function MilkingFields({
           value={washWater}
           onChange={(e) => {
             setWashWater(e);
-            handleInputChanges({ washWater: e });
+            handleInputChanges({ washWater: e, washWaterAdjusted: washWaterDefault !== e });
           }}
         />
       </Grid>

@@ -137,7 +137,7 @@ const EMPTY_FERTIGATION_FORM_DATA: NMPFileFertigation = {
   fertilizerTypeId: 0,
   fertilizerId: 0,
   applicationRate: 0,
-  applUnitId: undefined,
+  applUnitId: 0,
   density: 0,
   densityUnitId: undefined,
   tankVolume: 0,

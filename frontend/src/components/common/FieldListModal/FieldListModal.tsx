@@ -93,10 +93,10 @@ export default function FieldListModal({
               label="Manure application"
               isRequired
               items={MANURE_APPLICATION_FREQ}
-              selectedKey={formData.previousYearManureApplicationFrequency}
+              selectedKey={formData.previousYearManureApplicationId}
               placeholder="Select"
               onSelectionChange={(e) => {
-                handleFormFieldChange({ previousYearManureApplicationFrequency: e as number });
+                handleFormFieldChange({ previousYearManureApplicationId: e as number });
               }}
               noSort
             />

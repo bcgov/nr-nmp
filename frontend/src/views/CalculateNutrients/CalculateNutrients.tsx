@@ -30,12 +30,13 @@ import FieldListModal from '../../components/common/FieldListModal/FieldListModa
 import CropsModal from '../Crops/CropsModal';
 import {
   BALANCE_COLUMNS,
+  fertigationToFertigationRows,
   findBalanceMessage,
   generateColumns,
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import { CalculateNutrientsRow, NMPFileField, Schedule } from '@/types';
+import { CalculateNutrientsRow, NMPFileField } from '@/types';
 
 function NoRows() {
   return <div />;
@@ -46,7 +47,7 @@ export default function CalculateNutrients() {
   const [openDialog, setOpenDialog] = useState<[string, number | undefined]>(['', undefined]);
   const [showViewError, setShowViewError] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
-  const [balanceMessages, setBalanceMessages] = useState<Array<NutrientMessage>>([]);
+  const [balanceMessages, setBalanceMessages] = useState<NutrientMessage[]>([]);
 
   const navigate = useNavigate();
 
@@ -64,7 +65,12 @@ export default function CalculateNutrients() {
     }
 
     calculatePrevYearManure(currentField)
-      .then(setPrevYearManureData)
+      .then((response: PreviousYearManureData) => {
+        if (!currentField.previousYearManureApplicationNCredit) {
+          currentField.previousYearManureApplicationNCredit = response.nitrogen;
+        }
+        setPrevYearManureData(response);
+      })
       .catch((error) => {
         console.error('Error calculating previous year manure:', error);
         setPrevYearManureData(null);
@@ -110,56 +116,8 @@ export default function CalculateNutrients() {
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertilizers', true);
   }, [activeField]);
 
-  // Instead of making one row per fertigation, there is one row per application
-  // An index attr is added to track its spot in the array
   const fertigationRows = useMemo(
-    () =>
-      fieldList[activeField].fertigations.reduce((accRows, fertigation, index) => {
-        const nutrientColumns: CalculateNutrientsRow = {
-          name: fertigation.name,
-          reqN: fertigation.reqN,
-          reqP2o5: fertigation.remP2o5,
-          reqK2o: fertigation.reqK2o,
-          remN: fertigation.remN,
-          remP2o5: fertigation.remP2o5,
-          remK2o: fertigation.remK2o,
-        };
-
-        // Undefined means to jump by a month
-        let dayJump;
-        switch (fertigation.schedule) {
-          case Schedule.Daily:
-            dayJump = 1;
-            break;
-          case Schedule.Weekly:
-            dayJump = 7;
-            break;
-          case Schedule.Biweekly:
-            dayJump = 14;
-            break;
-          default:
-            dayJump = undefined;
-        }
-        const date = new Date(fertigation.startDate!);
-        // Javascript Date quirk, need to add a day here
-        date.setDate(date.getDate() + 1);
-        for (let i = 0; i < fertigation.eventsPerSeason; i += 1) {
-          const splitDateStr = date.toDateString().split(' ');
-          // Format is like 01 Jan
-          accRows.push({
-            date: `${splitDateStr[2]} ${splitDateStr[1]}`,
-            action: i,
-            index,
-            ...nutrientColumns,
-          });
-          if (dayJump) {
-            date.setDate(date.getDate() + dayJump);
-          } else {
-            date.setMonth(date.getMonth() + 1);
-          }
-        }
-        return accRows;
-      }, [] as any[]),
+    () => fertigationToFertigationRows(fieldList[activeField].fertigations),
     [fieldList, activeField],
   );
 
@@ -215,39 +173,38 @@ export default function CalculateNutrients() {
 
     return {
       name: 'Balance',
-      reqN: allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0) + prevYearNitrogen,
-      reqP2o5: allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0),
-      reqK2o: allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0),
-      remN: allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0),
-      remP2o5: allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0),
-      remK2o: allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0),
+      reqN:
+        Math.round(
+          (allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0) + prevYearNitrogen) * 10,
+        ) / 10,
+      reqP2o5: Math.round(allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0) * 10) / 10,
+      reqK2o: Math.round(allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0) * 10) / 10,
+      remN: Math.round(allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0) * 10) / 10,
+      remP2o5: Math.round(allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0) * 10) / 10,
+      remK2o: Math.round(allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0) * 10) / 10,
     };
   }, [fieldList, activeField, prevYearManureData]);
 
-  const getMessage = useCallback((balanceType: string, balanceValue: number) => {
-    const message = findBalanceMessage(balanceType, balanceValue);
-    if (message && message.Icon !== '/good.svg') {
-      setBalanceMessages((prev) => [
-        ...prev,
-        {
-          ...message,
-          Text: message.Text.replace('{0}', Math.abs(balanceValue ?? 0).toFixed(1)),
-          Icon: message.Icon,
-        },
-      ]);
-    }
-  }, []);
-
   // When balance row changes, clear previous messages and set new messages
   useEffect(() => {
-    setBalanceMessages([]);
-
+    const newMessages: NutrientMessage[] = [];
     Object.entries(balanceRow).forEach(([key, value]) => {
       if (key !== 'id' && key !== 'name') {
-        getMessage(key, value as number);
+        let message = findBalanceMessage(key, value);
+        if (message) {
+          if (message.icon !== '/good.svg') {
+            message = {
+              ...message,
+              text: message.text.replace('{0}', Math.abs(value ?? 0).toFixed(1)),
+              icon: message.icon,
+            };
+          }
+          newMessages.push(message);
+        }
       }
     });
-  }, [balanceRow, getMessage]);
+    setBalanceMessages(newMessages);
+  }, [balanceRow]);
 
   // useCallback prevents unnecessary rerenders
   const handleDialogClose = useCallback(() => setOpenDialog(['', undefined]), []);
@@ -476,10 +433,9 @@ export default function CalculateNutrients() {
           modalStyle={{ width: '600px' }}
           field={fieldList[activeField]}
           initialModalData={{
-            PreviousYearManureApplicationFrequency:
-              fieldList[activeField]?.previousYearManureApplicationFrequency || 0,
-            PreviousYearManureApplicationNitrogenCredit:
-              fieldList[activeField]?.previousYearManureApplicationNitrogenCredit ?? null,
+            previousYearManureApplicationId: fieldList[activeField].previousYearManureApplicationId,
+            previousYearManureApplicationNCredit:
+              fieldList[activeField].previousYearManureApplicationNCredit,
           }}
         />
       )}
@@ -600,13 +556,13 @@ export default function CalculateNutrients() {
       />
       <ErrorText>{showViewError}</ErrorText>
       {balanceMessages.map((msg) => (
-        <Error key={msg.Id}>
+        <Error key={msg.id}>
           {/* based on msg get appropriate icon */}
           <Icon
-            src={msg.Icon}
+            src={msg.icon}
             alt="Nutrient balance icon"
           />
-          <Message>{msg.Text}</Message>
+          <Message>{msg.text}</Message>
         </Error>
       ))}
     </View>

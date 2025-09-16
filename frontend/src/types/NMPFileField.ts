@@ -60,7 +60,7 @@ export interface NMPFileFertigation extends CalculateNutrientsRow {
   fertilizerId: number;
   customNutrients?: CropNutrients;
   applicationRate: number;
-  applUnitId?: number;
+  applUnitId: number;
   applUnitName?: string;
   density: number;
   densityUnitId?: number;
@@ -95,7 +95,7 @@ export type NMPFileOtherNutrient = CalculateNutrientsRow;
 export type NMPFileField = {
   fieldName: string;
   area: number;
-  previousYearManureApplicationFrequency: number;
+  previousYearManureApplicationId: number;
   comment: string;
   crops: NMPFileCrop[];
   soilTest?: NMPFileSoilTest;
@@ -103,5 +103,5 @@ export type NMPFileField = {
   fertilizers: NMPFileFertilizer[];
   fertigations: NMPFileFertigation[];
   otherNutrients: NMPFileOtherNutrient[];
-  previousYearManureApplicationNitrogenCredit?: number | null;
+  previousYearManureApplicationNCredit?: number;
 };
