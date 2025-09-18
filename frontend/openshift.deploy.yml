@@ -87,14 +87,20 @@ objects:
                 - name: container-port
                   containerPort: 5173
               readinessProbe:
-                tcpSocket:
+                httpGet:
+                  path: /
                   port: container-port
+                  scheme: HTTP
               livenessProbe:
-                tcpSocket:
+                httpGet:
+                  path: /
                   port: container-port
+                  scheme: HTTP
               startupProbe:
-                tcpSocket:
+                httpGet:
+                  path: /
                   port: container-port
+                  scheme: HTTP
                 failureThreshold: 5
                 initialDelaySeconds: 90
                 periodSeconds: 15
