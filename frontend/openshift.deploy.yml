@@ -30,10 +30,10 @@ objects:
     spec:
       type: ClusterIP
       ports:
-        - port: 3005
-          targetPort: 3000
+        - port: 5173
+          targetPort: 5173
           protocol: TCP
-          name: http-3000
+          name: http-5173
       selector:
         service: ${REPO}-${TARGET}-${COMPONENT}
   - kind: Deployment
@@ -85,7 +85,7 @@ objects:
                       key: sso-client-secret
               ports:
                 - name: container-port
-                  containerPort: 3000
+                  containerPort: 5173
               readinessProbe:
                 tcpSocket:
                   port: container-port
@@ -112,7 +112,7 @@ objects:
     spec:
       host: ${REPO}-${TARGET}.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: http-3000
+        targetPort: http-5173
       to:
         kind: Service
         name: ${REPO}-${TARGET}-${COMPONENT}
