@@ -90,17 +90,17 @@ objects:
                 httpGet:
                   path: /
                   port: container-port
-                  scheme: HTTP
+                  scheme: HTTPS
               livenessProbe:
                 httpGet:
                   path: /
                   port: container-port
-                  scheme: HTTP
+                  scheme: HTTPS
               startupProbe:
                 httpGet:
                   path: /
                   port: container-port
-                  scheme: HTTP
+                  scheme: HTTPS
                 failureThreshold: 5
                 initialDelaySeconds: 90
                 periodSeconds: 15
