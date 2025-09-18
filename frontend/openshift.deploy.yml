@@ -85,22 +85,16 @@ objects:
                       key: sso-client-secret
               ports:
                 - name: container-port
-                  containerPort: 5173
+                  containerPort: 3000
               readinessProbe:
-                httpGet:
-                  path: /
+                tcpSocket:
                   port: container-port
-                  scheme: TCP
               livenessProbe:
-                httpGet:
-                  path: /
+                tcpSocket:
                   port: container-port
-                  scheme: TCP
               startupProbe:
-                httpGet:
-                  path: /
+                tcpSocket:
                   port: container-port
-                  scheme: TCP
                 failureThreshold: 5
                 initialDelaySeconds: 90
                 periodSeconds: 15
