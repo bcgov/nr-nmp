@@ -24,6 +24,7 @@ import {
 } from '@/types';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
+import { calculateAnnualWashWater } from '@/views/AddAnimals/utils';
 
 type SetShowAnimalsStepAction = {
   type: 'SET_SHOW_ANIMALS_STEP';
@@ -150,10 +151,6 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
   for (let i = 0; i < newAnimals.length; i += 1) {
     const animal = newAnimals[i];
     if (animal.manureData !== undefined) {
-      if (animal.animalId === DAIRY_COW_ID && animal.subtype === MILKING_COW_ID) {
-        // TODO: Add wash water as manure. We're ignoring a lot of dairy cow stuff for now
-      }
-
       let animalStr;
       if (animal.animalId === POULTRY_ID) {
         animalStr = `${animal.flocksPerYear} flock${animal.flocksPerYear === 1 ? '' : 's'}`;
@@ -175,7 +172,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
           uuid: animal.uuid,
         });
       } else {
-        generatedManures.push({
+        const generatedManure = {
           ...DEFAULT_GENERATED_MANURE,
           uniqueMaterialName: animal.manureData.name,
           manureType: ManureType.Liquid,
@@ -184,7 +181,30 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
           annualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
           managedManureName: `${animal.manureData.name}, ${animalStr}, Liquid`,
           uuid: animal.uuid,
-        });
+        };
+        // Milking centre wash water is added into the liquid dairy cow manure
+        // Josh said that milking dairy cow manure should always be liquid, but that's never enforced
+        if (
+          animal.animalId === DAIRY_COW_ID &&
+          animal.subtype === MILKING_COW_ID &&
+          animal.washWater !== undefined &&
+          animal.washWaterUnit !== undefined
+        ) {
+          // Sum the two values and replace the annual amounts
+          generatedManure.originalAnnualAmount = generatedManure.annualAmount;
+          generatedManure.originalWashWaterAmount = calculateAnnualWashWater(
+            animal.washWater,
+            animal.washWaterUnit,
+            animal.animalsPerFarm!,
+          );
+          generatedManure.annualAmount =
+            generatedManure.originalAnnualAmount + generatedManure.originalWashWaterAmount;
+          generatedManure.annualAmountUSGallonsVolume = generatedManure.annualAmount;
+          generatedManure.annualAmountDisplayWeight = getLiquidManureDisplay(
+            generatedManure.annualAmount,
+          );
+        }
+        generatedManures.push(generatedManure);
       }
     }
   }

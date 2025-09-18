@@ -12,7 +12,7 @@ export interface PreviousYearManureApplication {
 export interface PreviousYearManureData {
   fieldName: string;
   display: boolean;
-  nitrogen: number | null;
+  nitrogen?: number;
 }
 
 /**
@@ -38,13 +38,11 @@ export async function getPreviousYearManureApplications(): Promise<
 
 /**
  * Checks if manure was added in the previous year based on frequency
- * @param previousYearManureApplicationFrequency - The frequency ID to check
+ * @param previousYearManureApplicationId - The frequency ID to check
  * @returns boolean True if manure was applied in previous year
  */
-export function wasManureAddedInPreviousYear(
-  previousYearManureApplicationFrequency: number,
-): boolean {
-  return previousYearManureApplicationFrequency > NO_MANURE_FREQUENCY;
+export function wasManureAddedInPreviousYear(previousYearManureApplicationId: number): boolean {
+  return previousYearManureApplicationId > NO_MANURE_FREQUENCY;
 }
 
 /**
@@ -97,8 +95,8 @@ async function prevYearManureDefaultLookup(
 export async function calcPrevYearManureApplDefault(field: NMPFileField): Promise<number> {
   try {
     if (
-      !field.previousYearManureApplicationFrequency ||
-      field.previousYearManureApplicationFrequency === NO_MANURE_FREQUENCY
+      !field.previousYearManureApplicationId ||
+      field.previousYearManureApplicationId === NO_MANURE_FREQUENCY
     ) {
       return 0;
     }
@@ -109,7 +107,7 @@ export async function calcPrevYearManureApplDefault(field: NMPFileField): Promis
     );
 
     return await prevYearManureDefaultLookup(
-      field.previousYearManureApplicationFrequency,
+      field.previousYearManureApplicationId,
       largestManureHistory,
     );
   } catch (error) {
@@ -127,10 +125,10 @@ export async function calculatePrevYearManure(
   field: NMPFileField,
 ): Promise<PreviousYearManureData> {
   try {
-    const frequency = field.previousYearManureApplicationFrequency;
+    const frequency = field.previousYearManureApplicationId;
     const wasAdded = wasManureAddedInPreviousYear(frequency);
     const defaultCredit = await calcPrevYearManureApplDefault(field);
-    const nitrogenCredit = field.previousYearManureApplicationNitrogenCredit ?? defaultCredit;
+    const nitrogenCredit = field.previousYearManureApplicationNCredit ?? defaultCredit;
 
     return {
       fieldName: field.fieldName,

@@ -155,7 +155,9 @@ export const DEFAULT_NMPFILE_APPLIED_MANURE: NMPFileAppliedManure = {
   applUnitId: 0,
   applicationRate: 0,
   nh4Retention: 0,
+  nh4RetentionAdjusted: false,
   nAvailable: 0,
+  nAvailableAdjusted: false,
   solidLiquid: '',
   sourceUuid: '',
 };

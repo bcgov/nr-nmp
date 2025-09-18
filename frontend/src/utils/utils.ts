@@ -87,3 +87,22 @@ export function getStandardizedAnnualManureAmount(
   }
   return total;
 }
+
+/**
+ * Sums a numerical property in an arbitrary object array
+ * @param arr The object array
+ * @param prop Property within ALL objects in array
+ * @returns Sum of the property's value in array
+ */
+export function sumPropertyInObjectArr(arr: any[], prop: string) {
+  return (
+    Math.round(
+      arr.reduce((sum, obj) => {
+        if (!(prop in obj)) {
+          throw new Error(`Property ${prop} not in object: ${JSON.stringify(obj)}`);
+        }
+        return sum + obj[prop];
+      }, 0) * 10,
+    ) / 10
+  );
+}

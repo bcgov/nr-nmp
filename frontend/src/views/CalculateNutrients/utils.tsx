@@ -4,7 +4,15 @@ import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { css } from '@emotion/react';
-import type { CropNutrients, Fertilizer, NMPFileField, FertilizerUnit } from '@/types';
+import {
+  type CropNutrients,
+  type Fertilizer,
+  type NMPFileField,
+  type FertilizerUnit,
+  type NMPFileFertigation,
+  type CalculateNutrientsRow,
+  Schedule,
+} from '@/types';
 import { tableActionButtonCss } from '../../common.styles';
 import { NUTRIENT_MESSAGES } from './nutrientMessages';
 
@@ -29,6 +37,7 @@ export const calcFertBalance = (
 
   // Default unit for calc is lb/ac for dry ferts, imp. gall/ac for liquid
   // this will check for units and adjust accordingly
+  // Liquid fertilizers also get multiplied by their density to convert to lb/ac
   if (fert.dryliquid.includes('liquid')) {
     if (!density || !densityConvFactor)
       throw new Error('Liquid fertilizer missing density or density units');
@@ -226,12 +235,12 @@ export function renderNutrientCell({ value }: any) {
 
 export const findBalanceMessage = (balanceType: string, balanceValue: number) =>
   NUTRIENT_MESSAGES.find((msg) => {
-    if (msg.BalanceType !== balanceType) return false;
+    if (msg.balanceType !== balanceType) return false;
 
     // either compares balance value to req (agronomic) or rem (crop removal) high low range
     const isReq = balanceType.startsWith('req');
-    const low = isReq ? msg.ReqBalanceLow : msg.RemBalanceLow;
-    const high = isReq ? msg.ReqBalanceHigh : msg.RemBalanceHigh;
+    const low = isReq ? msg.reqBalanceLow : msg.remBalanceLow;
+    const high = isReq ? msg.reqBalanceHigh : msg.remBalanceHigh;
 
     return balanceValue >= low && balanceValue <= high;
   });
@@ -243,12 +252,12 @@ export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
     return React.createElement(
       'div',
       { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'center' } },
-      message?.Icon
+      message?.icon
         ? [
             React.createElement('span', { style: { marginLeft: '-1.5em' } }),
             React.createElement('img', {
               key: 'icon',
-              src: message.Icon,
+              src: message.icon,
               alt: 'Balance icon',
               style: { width: '1em', height: '1em', marginRight: '0.5em' },
             }),
@@ -348,3 +357,54 @@ export const BALANCE_COLUMNS = [
     resizable: false,
   },
 ];
+
+export function fertigationToFertigationRows(fertigations: NMPFileFertigation[]) {
+  // Instead of making one row per fertigation, there is one row per application
+  // An index attr is added to track its spot in the array
+  return fertigations.reduce((accRows, fertigation, index) => {
+    const nutrientColumns: CalculateNutrientsRow = {
+      name: fertigation.name,
+      reqN: fertigation.reqN,
+      reqP2o5: fertigation.remP2o5,
+      reqK2o: fertigation.reqK2o,
+      remN: fertigation.remN,
+      remP2o5: fertigation.remP2o5,
+      remK2o: fertigation.remK2o,
+    };
+
+    // Undefined means to jump by a month
+    let dayJump;
+    switch (fertigation.schedule) {
+      case Schedule.Daily:
+        dayJump = 1;
+        break;
+      case Schedule.Weekly:
+        dayJump = 7;
+        break;
+      case Schedule.Biweekly:
+        dayJump = 14;
+        break;
+      default:
+        dayJump = undefined;
+    }
+    const date = new Date(fertigation.startDate!);
+    // Javascript Date quirk, need to add a day here
+    date.setDate(date.getDate() + 1);
+    for (let i = 0; i < fertigation.eventsPerSeason; i += 1) {
+      const splitDateStr = date.toDateString().split(' ');
+      // Format is like 01 Jan
+      accRows.push({
+        date: `${splitDateStr[2]} ${splitDateStr[1]}`,
+        action: i,
+        index,
+        ...nutrientColumns,
+      });
+      if (dayJump) {
+        date.setDate(date.getDate() + dayJump);
+      } else {
+        date.setMonth(date.getMonth() + 1);
+      }
+    }
+    return accRows;
+  }, [] as any[]);
+}

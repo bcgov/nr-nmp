@@ -561,7 +561,15 @@ function CropsModal({
                     isRequired
                     label="Crude Protein (%)"
                     value={formData.crudeProtein}
-                    onChange={(e) => handleFormFieldChange('crudeProtein', e)}
+                    onChange={(e) => {
+                      handleFormFieldChange('crudeProtein', e);
+                      // Technically, this should only be set true if it
+                      // doesn't equal the default, but I don't feel like
+                      // saving the default
+                      if (e !== formData.crudeProtein) {
+                        handleFormFieldChange('crudeProteinAdjusted', true);
+                      }
+                    }}
                     maxValue={100}
                   />
                 </Grid>
@@ -750,6 +758,7 @@ function CropsModal({
                       size={6}
                     >
                       <Grid size="grow">
+                        {/* TODO: record whether the crop N has been altered for a report footnote */}
                         <NumberField
                           isRequired
                           shortenRequired

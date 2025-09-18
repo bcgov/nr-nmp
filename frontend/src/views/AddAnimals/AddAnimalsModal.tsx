@@ -59,7 +59,9 @@ export default function AddAnimalsModal({
     onClose();
   };
 
-  const handleInputChanges = (changes: { [name: string]: string | number | undefined }) => {
+  const handleInputChanges = (changes: {
+    [name: string]: string | number | boolean | undefined;
+  }) => {
     setFormData((prev: NMPFileAnimal | undefined) => {
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {

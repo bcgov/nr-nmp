@@ -24,8 +24,10 @@ export type NMPFileDairyCattle = {
   grazingDaysPerYear?: number;
   animalsPerFarm?: number;
   milkProduction?: number;
+  milkProductionAdjusted?: boolean; // only affects report
   washWater?: number;
   washWaterUnit?: WashWaterUnit;
+  washWaterAdjusted?: boolean; // only affects report
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
     | { name: string; annualSolidManure: undefined; annualLiquidManure: number };

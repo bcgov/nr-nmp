@@ -6,8 +6,8 @@ import { NMPFileField } from '@/types';
 import { calcPrevYearManureApplDefault } from '@/calculations/CalculateNutrients/PreviousManure/calculations';
 
 interface PreviousYearManureFormData {
-  PreviousYearManureApplicationFrequency: number;
-  PreviousYearManureApplicationNitrogenCredit: number | null;
+  previousYearManureApplicationId: number;
+  previousYearManureApplicationNCredit?: number;
 }
 
 interface PreviousYearManureModalProps {
@@ -17,13 +17,8 @@ interface PreviousYearManureModalProps {
   setFields: (value: SetStateAction<NMPFileField[]>) => void;
   modalStyle?: object;
   field: NMPFileField;
-  initialModalData?: PreviousYearManureFormData;
+  initialModalData: PreviousYearManureFormData;
 }
-
-const defaultFormData: PreviousYearManureFormData = {
-  PreviousYearManureApplicationFrequency: 0,
-  PreviousYearManureApplicationNitrogenCredit: null,
-};
 
 const resetButtonStyle = {
   backgroundColor: '#ffa500',
@@ -39,12 +34,6 @@ const helperTextStyle = {
   marginTop: '0.25rem',
 } as const;
 
-const errorTextStyle = {
-  color: 'red',
-  fontSize: '0.875rem',
-  marginTop: '0.25rem',
-} as const;
-
 export default function PreviousYearManureModal({
   fieldIndex,
   isOpen,
@@ -54,68 +43,40 @@ export default function PreviousYearManureModal({
   field,
   initialModalData,
 }: PreviousYearManureModalProps) {
-  const [formData, setFormData] = useState<PreviousYearManureFormData>(
-    initialModalData ?? defaultFormData,
+  const [formData, setFormData] = useState<PreviousYearManureFormData>(initialModalData);
+
+  const [calculatedDefaultCredit, setCalculatedDefaultCredit] = useState<number | undefined>(
+    undefined,
   );
 
-  const [calculatedDefaultCredit, setCalculatedDefaultCredit] = useState<number | null>(null);
-
-  const hasManureApplication = formData.PreviousYearManureApplicationFrequency !== 0;
-
   useEffect(() => {
-    if (!hasManureApplication) {
-      setCalculatedDefaultCredit(0);
-      return;
-    }
-
     calcPrevYearManureApplDefault({
       ...field,
-      previousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
+      previousYearManureApplicationId: formData.previousYearManureApplicationId,
     })
       .then(setCalculatedDefaultCredit)
       .catch((error) => {
         console.error('Error calculating default nitrogen credit:', error);
-        setCalculatedDefaultCredit(null);
+        setCalculatedDefaultCredit(undefined);
       });
-  }, [formData.PreviousYearManureApplicationFrequency, field, hasManureApplication]);
+  }, [formData.previousYearManureApplicationId, field]);
 
   useEffect(() => {
     if (
-      hasManureApplication &&
-      formData.PreviousYearManureApplicationNitrogenCredit === null &&
-      calculatedDefaultCredit !== null
+      formData.previousYearManureApplicationNCredit === undefined &&
+      calculatedDefaultCredit !== undefined
     ) {
       setFormData((prev) => ({
         ...prev,
-        PreviousYearManureApplicationNitrogenCredit: calculatedDefaultCredit,
+        previousYearManureApplicationNCredit: calculatedDefaultCredit,
       }));
     }
-  }, [
-    formData.PreviousYearManureApplicationNitrogenCredit,
-    calculatedDefaultCredit,
-    hasManureApplication,
-  ]);
+  }, [formData.previousYearManureApplicationNCredit, calculatedDefaultCredit]);
 
   const isFormValid = useMemo(() => {
-    if (!hasManureApplication) return true;
-
-    const credit = formData.PreviousYearManureApplicationNitrogenCredit;
-    return credit !== null && credit >= 0;
-  }, [formData.PreviousYearManureApplicationNitrogenCredit, hasManureApplication]);
-
-  const validationErrors = useMemo(() => {
-    const errors: Record<string, string> = {};
-
-    if (hasManureApplication) {
-      const credit = formData.PreviousYearManureApplicationNitrogenCredit;
-      if (credit === null || credit < 0) {
-        errors.PreviousYearManureApplicationNitrogenCredit =
-          'Nitrogen credit must be a positive number when manure application is selected';
-      }
-    }
-
-    return errors;
-  }, [formData.PreviousYearManureApplicationNitrogenCredit, hasManureApplication]);
+    const credit = formData.previousYearManureApplicationNCredit;
+    return credit !== undefined && credit >= 0;
+  }, [formData.previousYearManureApplicationNCredit]);
 
   const handleSubmit = () => {
     if (!isFormValid) return;
@@ -124,10 +85,8 @@ export default function PreviousYearManureModal({
       const updatedFields = [...prevFields];
       updatedFields[fieldIndex] = {
         ...updatedFields[fieldIndex],
-        previousYearManureApplicationFrequency: formData.PreviousYearManureApplicationFrequency,
-        previousYearManureApplicationNitrogenCredit: hasManureApplication
-          ? formData.PreviousYearManureApplicationNitrogenCredit
-          : null,
+        previousYearManureApplicationId: formData.previousYearManureApplicationId,
+        previousYearManureApplicationNCredit: formData.previousYearManureApplicationNCredit,
       };
       return updatedFields;
     });
@@ -141,7 +100,7 @@ export default function PreviousYearManureModal({
 
   const handleResetToCalculated = () => {
     handleFormFieldChange({
-      PreviousYearManureApplicationNitrogenCredit: calculatedDefaultCredit,
+      previousYearManureApplicationNCredit: calculatedDefaultCredit,
     });
   };
 
@@ -162,51 +121,35 @@ export default function PreviousYearManureModal({
           container
           spacing={2}
         >
-          {hasManureApplication ? (
-            <Grid size={12}>
-              <NumberField
-                label="Nitrogen Credit (lb/ac)"
-                value={formData.PreviousYearManureApplicationNitrogenCredit ?? undefined}
-                onChange={(value) => {
-                  handleFormFieldChange({
-                    PreviousYearManureApplicationNitrogenCredit: value,
-                  });
-                }}
-                minValue={0}
-                step={0.1}
-                iconRight={
-                  calculatedDefaultCredit !== null &&
-                  formData.PreviousYearManureApplicationNitrogenCredit !==
-                    calculatedDefaultCredit ? (
-                    <button
-                      type="button"
-                      css={resetButtonStyle}
-                      onClick={handleResetToCalculated}
-                      title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
-                    >
-                      <LoopIcon />
-                    </button>
-                  ) : undefined
-                }
-              />
-              {calculatedDefaultCredit !== null && (
-                <div style={helperTextStyle}>
-                  Calculated default: {calculatedDefaultCredit} lb/ac
-                </div>
-              )}
-              {validationErrors.PreviousYearManureApplicationNitrogenCredit && (
-                <div style={errorTextStyle}>
-                  {validationErrors.PreviousYearManureApplicationNitrogenCredit}
-                </div>
-              )}
-            </Grid>
-          ) : (
-            <Grid size={12}>
-              <p style={{ fontStyle: 'italic', color: '#666' }}>
-                No previous year manure application selected. Nitrogen credit will be set to 0.
-              </p>
-            </Grid>
-          )}
+          <Grid size={12}>
+            <NumberField
+              label="Nitrogen Credit (lb/ac)"
+              value={formData.previousYearManureApplicationNCredit}
+              onChange={(value) => {
+                handleFormFieldChange({
+                  previousYearManureApplicationNCredit: value,
+                });
+              }}
+              minValue={0}
+              step={0.1}
+              iconRight={
+                calculatedDefaultCredit !== undefined &&
+                formData.previousYearManureApplicationNCredit !== calculatedDefaultCredit ? (
+                  <button
+                    type="button"
+                    css={resetButtonStyle}
+                    onClick={handleResetToCalculated}
+                    title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
+                  >
+                    <LoopIcon />
+                  </button>
+                ) : undefined
+              }
+            />
+            {calculatedDefaultCredit !== undefined && (
+              <div style={helperTextStyle}>Calculated default: {calculatedDefaultCredit} lb/ac</div>
+            )}
+          </Grid>
         </Grid>
       </Form>
     </Modal>

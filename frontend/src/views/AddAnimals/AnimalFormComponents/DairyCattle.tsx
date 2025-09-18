@@ -21,7 +21,7 @@ import { DAIRY_COW_ID, MILKING_COW_ID } from '@/constants';
 type DairyCattleProps = {
   formData: NMPFileDairyCattle;
   animals: SelectOption<Animal>[];
-  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
+  handleInputChanges: (changes: { [name: string]: string | number | boolean | undefined }) => void;
   handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
@@ -39,14 +39,13 @@ export default function DairyCattle({
   const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
 
   // Initial values for milking fields, if "Milking cow" is selected //
-  const washWaterInit = useMemo(() => {
-    if (formData.washWater || formData.washWater === 0) return formData.washWater;
+  const washWaterDefault = useMemo(() => {
     if (subtypes.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
     return milkingCow.washwater;
-  }, [formData.washWater, subtypes]);
-  const milkProductionInit = useMemo(() => {
+  }, [subtypes]);
+  const milkProductionDefault = useMemo(() => {
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
     if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
@@ -193,11 +192,17 @@ export default function DairyCattle({
         />
       </Grid>
       {formData.subtype === MILKING_COW_ID &&
-        milkProductionInit !== undefined &&
-        washWaterInit !== undefined && (
+        milkProductionDefault !== undefined &&
+        washWaterDefault !== undefined && (
           <MilkingFields
-            milkProductionInit={milkProductionInit}
-            washWaterInit={washWaterInit}
+            milkProductionInit={
+              formData.milkProduction !== undefined
+                ? formData.milkProduction
+                : milkProductionDefault
+            }
+            milkProductionDefault={milkProductionDefault}
+            washWaterInit={formData.washWater !== undefined ? formData.washWater : washWaterDefault}
+            washWaterDefault={washWaterDefault}
             animalsPerFarm={formData.animalsPerFarm || 0}
             washWaterUnit={formData.washWaterUnit}
             handleInputChanges={handleInputChanges}

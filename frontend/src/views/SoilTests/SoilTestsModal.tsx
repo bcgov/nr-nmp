@@ -115,7 +115,7 @@ export default function SoilTestsModal({
           <Grid size={formGridBreakpoints}>
             <NumberField
               isRequired
-              label="NO3-N (ppm), nitrate-nitrogen"
+              label="NO₃-N (ppm), nitrate-nitrogen"
               value={formData.valNO3H}
               onChange={(e) => handleFormFieldChange({ valNO3H: e })}
               step={1}

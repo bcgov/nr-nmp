@@ -1,51 +1,60 @@
-import { useRef, useMemo } from 'react';
-import { jsPDF } from 'jspdf';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
+import '../../../public/BCSans-normal';
+import '../../../public/BCSans-bold';
+import '../../../public/BCSans-italic';
+import '../../../public/BCSans-bolditalic';
+
 import { SectionHeader } from './reporting.styles';
 import { View } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
-import CompleteReportTemplate from './ReportTemplates/CompleteReportTemplate';
-import RecordKeepingSheets from './ReportTemplates/RecordKeepingSheetsTemplate';
-
 import useAppState from '@/hooks/useAppState';
-import { ManureInSystem } from '@/types';
+import { APICacheContext } from '@/context/APICacheContext';
+import { FertilizerUnit, SoilTestMethods } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
+import makeFullReportPdf from './makeFullReport';
 
-export default function FieldList() {
-  const reportRef = useRef(null);
-  const recordRef = useRef(null);
-
+export default function Reporting() {
   const { state } = useAppState();
   const navigate = useNavigate();
+  const apiCache = useContext(APICacheContext);
+  const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
 
-  const unassignedManures = useMemo(() => {
-    const generatedManures = state.nmpFile?.years[0].generatedManures || [];
-    const importedManures = state.nmpFile?.years[0].importedManures || [];
-    const unassignedM: ManureInSystem[] = [];
-    const assignedM: ManureInSystem[] = [];
-    generatedManures.forEach((manure) => {
-      if (manure.assignedToStoredSystem) {
-        assignedM.push({ type: 'Generated', data: manure });
-      } else {
-        unassignedM.push({ type: 'Generated', data: manure });
-      }
-    });
-    importedManures.forEach((manure) => {
-      if (manure.assignedToStoredSystem) {
-        assignedM.push({ type: 'Imported', data: manure });
-      } else {
-        unassignedM.push({ type: 'Imported', data: manure });
-      }
-    });
-    return unassignedM;
-  }, [state.nmpFile?.years]);
+  const unassignedManures = useMemo(
+    () =>
+      [
+        ...(state.nmpFile.years[0].generatedManures || []),
+        ...(state.nmpFile.years[0].importedManures || []),
+      ].filter((m) => !m.assignedToStoredSystem),
+    [state.nmpFile.years],
+  );
 
   const isDairyCattle = useMemo(() => {
     const animalList = state.nmpFile?.years[0].farmAnimals || [];
     return animalList.some((animal) => animal.animalId === DAIRY_COW_ID);
   }, [state.nmpFile?.years]);
+
+  // Fetch all of the data tables needed to generate the report
+  useEffect(() => {
+    apiCache
+      .callEndpoint('api/fertilizerunits/')
+      .then((response: { status?: any; data: FertilizerUnit[] }) => {
+        if (response.status === 200) {
+          setFertilizerUnits(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/soiltestmethods/')
+      .then((response: { status?: any; data: SoilTestMethods[] }) => {
+        if (response.status === 200) {
+          setSoilTestMethods(response.data);
+        }
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function downloadBlob() {
     const url = URL.createObjectURL(
@@ -63,55 +72,6 @@ export default function FieldList() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
-  const makeFullReportPdf = async () => {
-    // eslint-disable-next-line new-cap
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'px',
-      format: 'a4',
-      putOnlyUsedFonts: true,
-      floatPrecision: 16,
-      hotfixes: ['px_scaling'],
-    });
-    if (reportRef.current) {
-      doc.html(reportRef.current, {
-        callback(output) {
-          const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-          const farmName = state.nmpFile?.farmDetails?.farmName;
-          output.save(`${prependDate}-${farmName}-Full-Report.pdf`);
-        },
-        margin: [24, 24, 24, 24],
-        width: 1024,
-        windowWidth: 1024,
-        autoPaging: 'text',
-      });
-    }
-  };
-
-  const makeRecordPdf = async () => {
-    // eslint-disable-next-line new-cap
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'px',
-      format: 'a4',
-      putOnlyUsedFonts: true,
-      floatPrecision: 16,
-      hotfixes: ['px_scaling'],
-    });
-    if (recordRef.current) {
-      doc.html(recordRef.current, {
-        callback(output) {
-          const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
-          const farmName = state.nmpFile?.farmDetails?.farmName;
-          output.save(`${prependDate}-${farmName}-Record-Keeping.pdf`);
-        },
-        margin: [24, 24, 24, 24],
-        width: 1024,
-        windowWidth: 1024,
-        autoPaging: 'text',
-      });
-    }
-  };
 
   const handlePreviousPage = () => {
     navigate(CALCULATE_NUTRIENTS);
@@ -140,8 +100,8 @@ export default function FieldList() {
             The following materials are not stored:
             <ul>
               {unassignedManures.map((manure) => (
-                <li key={`${manure.data?.managedManureName}`}>
-                  {manure.type} - {manure.data?.managedManureName}
+                <li key={`${manure.managedManureName}`}>
+                  {manure.manureType} - {manure.managedManureName}
                 </li>
               ))}
             </ul>
@@ -167,10 +127,12 @@ export default function FieldList() {
               ariaLabel="A group of buttons"
               orientation="vertical"
             >
-              <Button onPress={() => makeFullReportPdf()}>
+              <Button
+                onPress={() => makeFullReportPdf(state.nmpFile, fertilizerUnits, soilTestMethods)}
+              >
                 <div style={{ width: '100%', textAlign: 'center' }}>Complete report</div>
               </Button>
-              <Button onPress={() => makeRecordPdf()}>Record keeping sheets</Button>
+              <Button onPress={() => {}}>Record keeping sheets</Button>
             </ButtonGroup>
           </div>
         </Grid>
@@ -189,14 +151,6 @@ export default function FieldList() {
           </div>
         </Grid>
       </Grid>
-      <div style={{ height: '0px', overflow: 'hidden' }}>
-        <div ref={reportRef}>
-          <CompleteReportTemplate />
-        </div>
-        <div ref={recordRef}>
-          <RecordKeepingSheets />
-        </div>
-      </div>
     </View>
   );
 }
