@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import React, { useContext, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer, useState, useCallback } from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -257,43 +257,49 @@ function CropsModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleFormFieldChange = (attr: keyof NMPFileCrop, value: string | number | boolean) => {
-    // Reset calculation button
-    if (formData.cropId !== CROP_OTHER_ID) {
-      setCalculationsPerformed(false);
-    }
+  const handleFormFieldChange = useCallback(
+    (attr: keyof NMPFileCrop, value: string | number | boolean) => {
+      // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables (modifynitrogen = true)
+      const isEditingFieldVegN =
+        (attr === 'reqN' || attr === 'reqNAdjusted') && selectedCropType?.modifynitrogen === true;
 
-    switch (attr) {
-      case 'cropTypeId':
-        const cropTypeId = value as number;
-        const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
-        if (cropType === undefined)
-          throw new Error(`Crop type ${cropTypeId} is missing from list.`);
-        dispatch({ type: 'SET_CROP_TYPE_ID', cropTypeId, cropType });
-        return;
-      case 'cropId':
-        const cropId = Number(value);
-        const crop = crops.find((c) => c.id === cropId);
-        if (crop === undefined) throw new Error(`Crop id ${cropId} is not in crop list.`);
-        dispatch({ type: 'SET_CROP_ID', cropId, crop });
-        return;
-      case 'yield':
-        dispatch({ type: 'SET_YIELD', yield: value as number });
-        return;
-      case 'yieldHarvestUnit':
-        dispatch({ type: 'SET_YIELD_HARVEST_UNIT', unit: value as HarvestUnit });
-        return;
-      case 'whereWillPruningsGo':
-        const selectedPruningOption = whereWillPruningsGo.find(
-          (option) => option.id === Number(value),
-        );
-        const pruningLocation = selectedPruningOption ? selectedPruningOption.label : '';
-        dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: pruningLocation });
-        return;
-      default:
-        dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
-    }
-  };
+      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegN) {
+        setCalculationsPerformed(false);
+      }
+
+      switch (attr) {
+        case 'cropTypeId':
+          const cropTypeId = value as number;
+          const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
+          if (cropType === undefined)
+            throw new Error(`Crop type ${cropTypeId} is missing from list.`);
+          dispatch({ type: 'SET_CROP_TYPE_ID', cropTypeId, cropType });
+          return;
+        case 'cropId':
+          const cropId = Number(value);
+          const crop = crops.find((c) => c.id === cropId);
+          if (crop === undefined) throw new Error(`Crop id ${cropId} is not in crop list.`);
+          dispatch({ type: 'SET_CROP_ID', cropId, crop });
+          return;
+        case 'yield':
+          dispatch({ type: 'SET_YIELD', yield: value as number });
+          return;
+        case 'yieldHarvestUnit':
+          dispatch({ type: 'SET_YIELD_HARVEST_UNIT', unit: value as HarvestUnit });
+          return;
+        case 'whereWillPruningsGo':
+          const selectedPruningOption = whereWillPruningsGo.find(
+            (option) => option.id === Number(value),
+          );
+          const pruningLocation = selectedPruningOption ? selectedPruningOption.label : '';
+          dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: pruningLocation });
+          return;
+        default:
+          dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
+      }
+    },
+    [selectedCropType, formData.cropId, cropTypes, crops, whereWillPruningsGo, dispatch],
+  );
 
   /**
    * Helper function to extract nutrient values from calculation results
@@ -468,6 +474,69 @@ function CropsModal({
     const { remN, remP2o5, remK2o } = formData;
     return [{ id: Math.random(), reqN: remN, reqP2o5: remP2o5, reqK2o: remK2o }];
   }, [formData]);
+
+  // Check if N can be edited (Field vegetables with modifynitrogen = true)
+  const isNEditable = selectedCropType?.modifynitrogen === true;
+
+  // Dynamic columns for requirement table - make N editable for Field vegetables
+  const requirementColumns: GridColDef[] = useMemo(
+    () => [
+      {
+        field: 'reqN',
+        headerName: 'N',
+        width: 75,
+        minWidth: 75,
+        maxWidth: 200,
+        sortable: false,
+        resizable: false,
+        flex: 1,
+        ...(isNEditable && {
+          renderCell: (params) => (
+            <NumberField
+              value={params.value}
+              onChange={(newValue) => {
+                handleFormFieldChange('reqN', newValue);
+                handleFormFieldChange('reqNAdjusted', true);
+              }}
+              css={{
+                '& .MuiOutlinedInput-root': {
+                  border: '2px solid #1976d2',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  backgroundColor: '#f8f9fa',
+                },
+                '& .MuiOutlinedInput-input': {
+                  padding: '4px 8px',
+                  textAlign: 'center',
+                },
+              }}
+            />
+          ),
+        }),
+      },
+      {
+        field: 'reqP2o5',
+        headerName: 'P2O5',
+        width: 75,
+        minWidth: 75,
+        maxWidth: 200,
+        sortable: false,
+        resizable: false,
+        flex: 1,
+      },
+      {
+        field: 'reqK2o',
+        headerName: 'K2O',
+        width: 75,
+        minWidth: 75,
+        maxWidth: 200,
+        sortable: false,
+        resizable: false,
+        flex: 1,
+      },
+    ],
+    [isNEditable, handleFormFieldChange],
+  );
 
   return (
     <Modal
@@ -848,7 +917,7 @@ function CropsModal({
                       <span css={{ fontWeight: 'bold' }}>Crop Requirement (lb/ac)</span>
                       <DataGrid
                         sx={{ ...customTableStyle }}
-                        columns={requireAndRemoveColumns}
+                        columns={isNEditable ? requirementColumns : requireAndRemoveColumns}
                         rows={requirementRows}
                         disableRowSelectionOnClick
                         disableColumnMenu

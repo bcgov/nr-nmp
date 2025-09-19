@@ -1,6 +1,7 @@
 // Ids from _CropTypes table
 export const COVER_CROP_ID = 2;
 export const GRAIN_OILSEED_ID = 4;
+export const CROP_TYPE_FIELD_VEGETABLES_ID = 5;
 export const CROP_TYPE_OTHER_ID = 6;
 export const CROP_TYPE_BERRIES_ID = 7;
 

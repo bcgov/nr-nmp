@@ -48,12 +48,12 @@ import {
   CROP_OTHER_ID,
   CROP_BLUEBERRIES_ID,
   CROP_RASPBERRIES_ID,
+  COVER_CROP_ID,
 } from './Crops';
 import DEFAULT_GENERATED_MANURE from './DefaultNMPFileGeneratedManure';
 import DEFAULT_SOIL_TEST from './DefaultNMPFileSoilTest';
 import DEFAULT_IMPORTED_MANURE from './DefaultNMPFileImportedManure';
 import DEFAULT_NMPFILE_FIELD from './DefaultNMPFileField';
-import { COVER_CROP_ID } from './Crops';
 
 export {
   DEFAULT_NMPFILE_YEAR,
