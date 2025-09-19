@@ -30,10 +30,10 @@ objects:
     spec:
       type: ClusterIP
       ports:
-        - port: 3005
-          targetPort: 3000
+        - port: 5173
+          targetPort: 5173
           protocol: TCP
-          name: http-3000
+          name: http-5173
       selector:
         service: ${REPO}-${TARGET}-${COMPONENT}
   - kind: Deployment
@@ -86,19 +86,19 @@ objects:
               ports:
                 - name: container-port
                   containerPort: 5173
-              # readinessProbe:
-              #   tcpSocket:
-              #     port: container-port
-              # livenessProbe:
-              #   tcpSocket:
-              #     port: container-port
-              # startupProbe:
-              #   tcpSocket:
-              #     port: container-port
-              #   failureThreshold: 5
-              #   initialDelaySeconds: 90
-              #   periodSeconds: 15
-              #   timeoutSeconds: 10
+              readinessProbe:
+                tcpSocket:
+                  port: container-port
+              livenessProbe:
+                tcpSocket:
+                  port: container-port
+              startupProbe:
+                tcpSocket:
+                  port: container-port
+                failureThreshold: 5
+                initialDelaySeconds: 90
+                periodSeconds: 15
+                timeoutSeconds: 10
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}
@@ -112,7 +112,7 @@ objects:
     spec:
       host: ${REPO}-${TARGET}.apps.silver.devops.gov.bc.ca
       port:
-        targetPort: http-3000
+        targetPort: http-5173
       to:
         kind: Service
         name: ${REPO}-${TARGET}-${COMPONENT}
