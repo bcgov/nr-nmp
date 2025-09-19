@@ -653,7 +653,7 @@
     "fields": {
       "cropid": 48,
       "locationid": 1,
-      "amount": null
+      "amount": 5.0
     }
   },
   {
@@ -662,7 +662,7 @@
     "fields": {
       "cropid": 48,
       "locationid": 2,
-      "amount": null
+      "amount": 5.0
     }
   },
   {
@@ -815,7 +815,7 @@
     "fields": {
       "cropid": 59,
       "locationid": 1,
-      "amount": null
+      "amount": 7.5
     }
   },
   {
@@ -824,7 +824,7 @@
     "fields": {
       "cropid": 59,
       "locationid": 2,
-      "amount": null
+      "amount": 7.5
     }
   },
   {
