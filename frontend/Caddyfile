@@ -47,7 +47,7 @@
 		Feature-Policy "fullscreen 'self'; camera 'none'; microphone 'none'"
 	}
 }
-:3001 {
+:5174 {
 	handle /health {
 		respond "OK"
 	}
