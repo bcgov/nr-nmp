@@ -259,11 +259,13 @@ function CropsModal({
 
   const handleFormFieldChange = useCallback(
     (attr: keyof NMPFileCrop, value: string | number | boolean) => {
-      // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables (modifynitrogen = true)
-      const isEditingFieldVegN =
-        (attr === 'reqN' || attr === 'reqNAdjusted') && selectedCropType?.modifynitrogen === true;
+      // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables after calculations
+      const isEditingFieldVegNAfterCalc =
+        (attr === 'reqN' || attr === 'reqNAdjusted') &&
+        selectedCropType?.modifynitrogen === true &&
+        calculationsPerformed;
 
-      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegN) {
+      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegNAfterCalc) {
         setCalculationsPerformed(false);
       }
 
@@ -298,7 +300,15 @@ function CropsModal({
           dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
       }
     },
-    [selectedCropType, formData.cropId, cropTypes, crops, whereWillPruningsGo, dispatch],
+    [
+      selectedCropType,
+      formData.cropId,
+      cropTypes,
+      crops,
+      whereWillPruningsGo,
+      calculationsPerformed,
+      dispatch,
+    ],
   );
 
   /**
@@ -475,8 +485,8 @@ function CropsModal({
     return [{ id: Math.random(), reqN: remN, reqP2o5: remP2o5, reqK2o: remK2o }];
   }, [formData]);
 
-  // Check if N can be edited (Field vegetables with modifynitrogen = true)
-  const isNEditable = selectedCropType?.modifynitrogen === true;
+  // Check if N can be edited (Field vegetables with modifynitrogen = true AND calculations have been performed)
+  const isNEditable = selectedCropType?.modifynitrogen === true && calculationsPerformed;
 
   // Dynamic columns for requirement table - make N editable for Field vegetables
   const requirementColumns: GridColDef[] = useMemo(
