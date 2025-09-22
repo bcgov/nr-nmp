@@ -146,13 +146,15 @@ export default function ManureModal({
     return null;
   }, [manureForm.sourceUuid, state.nmpFile.years]);
 
+  const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
+
   const materialRemaining = useMaterialRemaining(
     yearDataWithPendingApplication,
     selectedMaterialType,
+    manureUnits.map((unit) => unit.value),
   );
   const hasMaterialRemainingData = materialRemaining.materialRemainingData !== null;
 
-  const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
   const filteredManureUnits = useMemo(
     () => manureUnits.filter((u) => u.value.solidliquid === manureForm.solidLiquid),
     [manureUnits, manureForm.solidLiquid],

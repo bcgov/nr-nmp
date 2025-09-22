@@ -2,7 +2,7 @@
  * @summary Material Remaining calculations
  * @description Functions for calculating material remaining status
  */
-import { NMPFileYear, NMPFileField, NMPFileAppliedManure, ManureType } from '@/types';
+import { NMPFileYear, NMPFileField, NMPFileAppliedManure, ManureType, Units } from '@/types';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
 
 /**
@@ -45,9 +45,30 @@ export interface MaterialRemainingData {
 /**
  * Calculate total applied amount for a manure application
  */
-function calculateAppliedAmount(manure: NMPFileAppliedManure, fieldArea: number): number {
+function calculateAppliedAmount(
+  manure: NMPFileAppliedManure,
+  fieldArea: number,
+  availableUnits: Units[] = [],
+): number {
   const applicationRate = manure.applicationRate || 0;
-  return Math.round(applicationRate * fieldArea);
+
+  // Find the unit information for this application
+  const unit = availableUnits.find((u) => u.id === manure.applUnitId);
+
+  if (!unit) {
+    // Fallback to simple calculation if unit not found
+    return Math.round(applicationRate * fieldArea);
+  }
+
+  // Calculate the total applied amount using the appropriate conversion
+  // The application rate is per acre, so multiply by field area to get total applied
+  let totalApplied = applicationRate * fieldArea;
+
+  if (unit.conversionlbton && unit.conversionlbton !== 1) {
+    totalApplied *= unit.conversionlbton;
+  }
+
+  return Math.round(totalApplied);
 }
 
 /**
@@ -56,6 +77,7 @@ function calculateAppliedAmount(manure: NMPFileAppliedManure, fieldArea: number)
 function calculateFieldApplicationsForSource(
   fields: NMPFileField[],
   sourceUuid: string,
+  availableUnits: Units[] = [],
 ): FieldApplicationData[] {
   const fieldApplications: FieldApplicationData[] = [];
 
@@ -73,7 +95,7 @@ function calculateFieldApplicationsForSource(
     };
 
     matchingManures.forEach((manure) => {
-      const appliedAmount = calculateAppliedAmount(manure, field.area);
+      const appliedAmount = calculateAppliedAmount(manure, field.area, availableUnits);
 
       if (manure.solidLiquid === 'Liquid') {
         fieldApplication.totalAppliedGallons =
@@ -133,10 +155,15 @@ function formatAmountWithUnit(
 /**
  * Create applied manure data for storage systems
  */
-function createStoredManureData(yearData: NMPFileYear, storageSystem: any): AppliedManureData {
+function createStoredManureData(
+  yearData: NMPFileYear,
+  storageSystem: any,
+  availableUnits: Units[] = [],
+): AppliedManureData {
   const fieldApplications = calculateFieldApplicationsForSource(
     yearData.fields,
     storageSystem.uuid,
+    availableUnits,
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
@@ -165,10 +192,15 @@ function createStoredManureData(yearData: NMPFileYear, storageSystem: any): Appl
 /**
  * Create applied manure data for imported manures
  */
-function createImportedManureData(yearData: NMPFileYear, importedManure: any): AppliedManureData {
+function createImportedManureData(
+  yearData: NMPFileYear,
+  importedManure: any,
+  availableUnits: Units[] = [],
+): AppliedManureData {
   const fieldApplications = calculateFieldApplicationsForSource(
     yearData.fields,
     importedManure.uuid,
+    availableUnits,
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
@@ -219,7 +251,10 @@ function checkAndAddWarnings(appliedManure: AppliedManureData, warnings: string[
 /**
  * Main function to calculate material remaining data for a year
  */
-export function calculateMaterialRemainingData(yearData: NMPFileYear): MaterialRemainingData {
+export function calculateMaterialRemainingData(
+  yearData: NMPFileYear,
+  availableUnits: Units[] = [],
+): MaterialRemainingData {
   const appliedStoredManures: AppliedManureData[] = [];
   const appliedImportedManures: AppliedManureData[] = [];
   const materialsRemainingWarnings: string[] = [];
@@ -227,7 +262,7 @@ export function calculateMaterialRemainingData(yearData: NMPFileYear): MaterialR
   // Process Storage Systems
   if (yearData.manureStorageSystems) {
     yearData.manureStorageSystems.forEach((storageSystem) => {
-      const appliedStoredManure = createStoredManureData(yearData, storageSystem);
+      const appliedStoredManure = createStoredManureData(yearData, storageSystem, availableUnits);
       appliedStoredManures.push(appliedStoredManure);
 
       // Check for warnings
@@ -238,7 +273,11 @@ export function calculateMaterialRemainingData(yearData: NMPFileYear): MaterialR
   // Process Imported Manures
   if (yearData.importedManures) {
     yearData.importedManures.forEach((importedManure) => {
-      const appliedImportedManure = createImportedManureData(yearData, importedManure);
+      const appliedImportedManure = createImportedManureData(
+        yearData,
+        importedManure,
+        availableUnits,
+      );
       appliedImportedManures.push(appliedImportedManure);
 
       // Check for warnings

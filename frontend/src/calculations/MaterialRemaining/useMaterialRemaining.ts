@@ -2,7 +2,7 @@
  * @summary React hook for Material Remaining calculations
  */
 import { useMemo } from 'react';
-import { NMPFileYear, ManureType } from '@/types';
+import { NMPFileYear, ManureType, Units } from '@/types';
 import {
   calculateMaterialRemainingData,
   type MaterialRemainingData,
@@ -15,11 +15,12 @@ import {
 export default function useMaterialRemaining(
   yearData: NMPFileYear | null,
   selectedMaterialType?: ManureType | null,
+  availableUnits: Units[] = [],
 ) {
   const materialRemainingData = useMemo((): MaterialRemainingData | null => {
     if (!yearData) return null;
-    return calculateMaterialRemainingData(yearData);
-  }, [yearData]);
+    return calculateMaterialRemainingData(yearData, availableUnits);
+  }, [yearData, availableUnits]);
 
   const filteredData = useMemo((): AppliedManureData[] => {
     if (!materialRemainingData) return [];
