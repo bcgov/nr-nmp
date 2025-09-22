@@ -613,7 +613,7 @@ const generateFieldSummary = (
         tableFootnotes.push(`Crude protein adjusted to ${row.crudeProtein}%`);
         hasFootnote = true;
       } else if ('reqN' in row && 'reqNAdjusted' in row && row.reqNAdjusted) {
-        tableFootnotes.push(`Crop required nitrogen adjusted to ${row.reqN}`);
+        tableFootnotes.push(`Crop required nitrogen adjusted to ${Math.abs(row.reqN)}`);
         hasFootnote = true;
       } else if ('nh4Retention' in row && 'nAvailable' in row) {
         let footnote;
