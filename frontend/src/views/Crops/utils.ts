@@ -272,6 +272,7 @@ export function cropsModalReducer(
           remN: action.remN,
           remP2o5: action.remP2o5,
           remK2o: action.remK2o,
+          reqNAdjusted: false,
         },
       };
 

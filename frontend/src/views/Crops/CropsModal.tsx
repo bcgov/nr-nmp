@@ -262,7 +262,7 @@ function CropsModal({
       // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables after calculations
       const isEditingFieldVegN =
         (attr === 'reqN' || attr === 'reqNAdjusted') &&
-        selectedCropType?.modifynitrogen === true &&
+        selectedCropType?.modifynitrogen &&
         calculationsPerformed;
 
       if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegN) {
@@ -486,7 +486,7 @@ function CropsModal({
   }, [formData]);
 
   // Check if N can be edited (Field vegetables with modifynitrogen = true AND calculations have been performed)
-  const isNEditable = selectedCropType?.modifynitrogen === true && calculationsPerformed;
+  const isNEditable = selectedCropType?.modifynitrogen && calculationsPerformed;
 
   // Dynamic columns for requirement table - make N editable for Field vegetables
   const requirementColumns: GridColDef[] = useMemo(
