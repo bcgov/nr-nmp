@@ -13,6 +13,7 @@ export type CropsModalState = {
   selectedCropType?: CropType;
   selectedCrop?: Crop;
   defaultYieldInTons?: number;
+  calculatedReqN?: number;
   // isFormYieldEqualToDefault inits to true to hide a button
   isFormYieldEqualToDefault: boolean;
 };
@@ -266,14 +267,18 @@ export function cropsModalReducer(
         ...state,
         formData: {
           ...formData,
-          reqN: action.reqN,
+          // If N value was adjusted by user, preserve it; otherwise use the calculated value
+          reqN: formData.reqNAdjusted ? formData.reqN : action.reqN,
           reqP2o5: action.reqP2o5,
           reqK2o: action.reqK2o,
           remN: action.remN,
           remP2o5: action.remP2o5,
           remK2o: action.remK2o,
-          reqNAdjusted: false,
+          // Keep reqNAdjusted value the same - if it was true, it stays true
+          reqNAdjusted: formData.reqNAdjusted || false,
         },
+        // Always store the calculated value (even if not using it) so refresh button works
+        calculatedReqN: action.reqN,
       };
 
     case 'SET_FORM_DATA_ATTR':

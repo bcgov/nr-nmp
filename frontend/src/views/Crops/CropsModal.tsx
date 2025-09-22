@@ -133,14 +133,17 @@ function CropsModal({
   const { nmpFile } = useAppState().state;
   const apiCache = useContext(APICacheContext);
 
-  const [{ formData, selectedCropType, selectedCrop, isFormYieldEqualToDefault }, dispatch] =
-    useReducer(cropsModalReducer, {
-      formData: initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
-      selectedCropType: undefined,
-      selectedCrop: undefined,
-      defaultYieldInTons: undefined,
-      isFormYieldEqualToDefault: true,
-    });
+  const [
+    { formData, selectedCropType, selectedCrop, isFormYieldEqualToDefault, calculatedReqN },
+    dispatch,
+  ] = useReducer(cropsModalReducer, {
+    formData: initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
+    selectedCropType: undefined,
+    selectedCrop: undefined,
+    defaultYieldInTons: undefined,
+    calculatedReqN: undefined,
+    isFormYieldEqualToDefault: true,
+  });
   const [crops, setCrops] = useState<Crop[]>([]);
 
   // These 4 are related to berries and are stored in the DB in the SelectOption format
@@ -494,8 +497,8 @@ function CropsModal({
       {
         field: 'reqN',
         headerName: 'N',
-        width: 75,
-        minWidth: 75,
+        width: 100,
+        minWidth: 100,
         maxWidth: 200,
         sortable: false,
         resizable: false,
@@ -508,16 +511,66 @@ function CropsModal({
                 handleFormFieldChange('reqN', newValue);
                 handleFormFieldChange('reqNAdjusted', true);
               }}
+              iconRight={
+                formData.reqNAdjusted && calculatedReqN !== undefined ? (
+                  <button
+                    type="button"
+                    title="Reset to calculated value"
+                    css={{
+                      backgroundColor: '#ffa500',
+                      padding: '0px',
+                      width: '24px',
+                      height: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginLeft: '6px',
+                      marginRight: '-6px',
+                      borderRadius: '3px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      position: 'absolute',
+                      right: '7px',
+                    }}
+                    onClick={() => {
+                      dispatch({
+                        type: 'SET_FORM_DATA_ATTR',
+                        attr: 'reqN',
+                        value: calculatedReqN,
+                      });
+                      dispatch({
+                        type: 'SET_FORM_DATA_ATTR',
+                        attr: 'reqNAdjusted',
+                        value: false,
+                      });
+                    }}
+                  >
+                    <LoopIcon style={{ fontSize: '12px', margin: '0', padding: '0' }} />
+                  </button>
+                ) : undefined
+              }
               css={{
+                position: 'relative',
                 '& .MuiOutlinedInput-root': {
                   border: '2px solid #1976d2',
                   borderRadius: '4px',
                   fontSize: '14px',
                   backgroundColor: '#f8f9fa',
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingRight: '18px' /* Make room for the button */,
                 },
                 '& .MuiOutlinedInput-input': {
-                  padding: '4px 8px',
+                  padding: '4px 6px',
                   textAlign: 'center',
+                  flexGrow: 1,
+                  width: '100%',
+                },
+                '& .MuiInputAdornment-root': {
+                  margin: '0',
+                  height: '100%',
+                  position: 'absolute',
+                  right: '0',
                 },
               }}
             />
@@ -545,7 +598,7 @@ function CropsModal({
         flex: 1,
       },
     ],
-    [isNEditable, handleFormFieldChange],
+    [isNEditable, handleFormFieldChange, formData.reqNAdjusted, calculatedReqN, dispatch],
   );
 
   return (
