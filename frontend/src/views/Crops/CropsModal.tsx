@@ -402,30 +402,20 @@ function CropsModal({
     }
   };
 
-  /**
-   * Effect: Update nitrogen credit when previous crop changes
-   * Fetches nitrogen credit value for the selected previous crop
-   */
+  // Effect: Update nitrogen credit when previous crop changes
   useEffect(() => {
-    try {
-      if (formData.prevCropId && formData.prevCropId !== 0) {
-        apiCache
-          .callEndpoint(`api/previouscroptypes/${formData.prevCropId}/`)
-          .then((response: { status?: any; data: PreviousCrop[] }) => {
-            if (response.status === 200) {
-              dispatch({
-                type: 'SET_FORM_DATA_ATTR',
-                attr: 'nCredit',
-                value: response.data[0].nitrogencreditimperial || 0,
-              });
-            }
-          });
+    if (previousCrops.length > 0 && formData.prevCropId) {
+      const previousCrop = previousCrops.find((c) => c.id === formData.prevCropId);
+      if (previousCrop === undefined) {
+        throw new Error(`Previous crop ${formData.prevCropId} not found`);
       }
-    } catch (error) {
-      console.error('Error getting nitrogen credit:', error);
+      dispatch({
+        type: 'SET_FORM_DATA_ATTR',
+        attr: 'nCredit',
+        value: previousCrop.nitrogencreditimperial,
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.prevCropId]);
+  }, [formData.prevCropId, previousCrops]);
 
   /**
    * Effect: Auto-fill yield when crop changes on add crop
@@ -684,15 +674,33 @@ function CropsModal({
                   )}
                 </>
               )}
+              {selectedCropType?.covercrop && (
+                <Grid size={formGridBreakpoints}>
+                  <YesNoRadioButtons
+                    value={formData.coverCropHarvested || false}
+                    text="Cover Crop Harvested"
+                    onChange={(b: boolean) => {
+                      handleFormFieldChange('coverCropHarvested', b);
+                    }}
+                    orientation="horizontal"
+                  />
+                </Grid>
+              )}
               {!selectedCropType?.customcrop && (
                 <>
                   {(() => {
                     const availablePreviousCrops = previousCrops.filter(
-                      (crop) => crop.cropid === formData.cropId,
+                      (crop) => crop.previouscropcode === selectedCrop?.previouscropcode,
                     );
 
-                    return availablePreviousCrops.length > 0 ? (
-                      <>
+                    // There is always a "no credit" option, so if the array
+                    // is only 1 long, this is the only option
+                    return availablePreviousCrops.length > 1 ? (
+                      <Grid
+                        container
+                        spacing={1}
+                        size={12}
+                      >
                         <Grid size={formGridBreakpoints}>
                           <Select
                             isRequired
@@ -717,22 +725,10 @@ function CropsModal({
                             </span>
                           </div>
                         </Grid>
-                      </>
+                      </Grid>
                     ) : null;
                   })()}
                 </>
-              )}
-              {selectedCropType?.covercrop && (
-                <Grid size={formGridBreakpoints}>
-                  <YesNoRadioButtons
-                    value={formData.coverCropHarvested || false}
-                    text="Cover Crop Harvested"
-                    onChange={(b: boolean) => {
-                      handleFormFieldChange('coverCropHarvested', b);
-                    }}
-                    orientation="horizontal"
-                  />
-                </Grid>
               )}
 
               {selectedCropType?.customcrop ? (
