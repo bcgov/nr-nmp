@@ -276,6 +276,8 @@ export function cropsModalReducer(
           remK2o: action.remK2o,
           // Keep reqNAdjusted value the same - if it was true, it stays true
           reqNAdjusted: formData.reqNAdjusted || false,
+          // Store the original calculated N value in the form data
+          calculatedN: action.reqN,
         },
         // Always store the calculated value (even if not using it) so refresh button works
         calculatedReqN: action.reqN,

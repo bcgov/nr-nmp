@@ -89,6 +89,8 @@ function preprocessModalData(data: NMPFileCrop): NMPFileCrop {
     remN: Math.abs(data.remN),
     remP2o5: Math.abs(data.remP2o5),
     remK2o: Math.abs(data.remK2o),
+    // Preserve the calculated N value if it exists (and make it positive)
+    calculatedN: data.calculatedN !== undefined ? Math.abs(data.calculatedN) : undefined,
   };
 }
 
@@ -98,7 +100,7 @@ function preprocessModalData(data: NMPFileCrop): NMPFileCrop {
  * @param data The formData
  * @returns Identical data with all nutrient values negative
  */
-function postprocessModalData(data: NMPFileCrop): NMPFileCrop {
+function postprocessModalData(data: NMPFileCrop, calculatedN?: number): NMPFileCrop {
   return {
     ...data,
     reqN: -1 * data.reqN,
@@ -107,6 +109,9 @@ function postprocessModalData(data: NMPFileCrop): NMPFileCrop {
     remN: -1 * data.remN,
     remP2o5: -1 * data.remP2o5,
     remK2o: -1 * data.remK2o,
+    // Store the calculated N value if N was adjusted
+    // Store as positive value since we'll need it in the UI
+    calculatedN: data.reqNAdjusted ? calculatedN || 0 : undefined,
   };
 }
 
@@ -141,7 +146,13 @@ function CropsModal({
     selectedCropType: undefined,
     selectedCrop: undefined,
     defaultYieldInTons: undefined,
-    calculatedReqN: undefined,
+    // If the N value was adjusted, use the stored calculated value for the refresh button
+    calculatedReqN:
+      initialModalData &&
+      initialModalData.reqNAdjusted &&
+      initialModalData.calculatedN !== undefined
+        ? Math.abs(initialModalData.calculatedN) // Ensure it's positive
+        : undefined,
     isFormYieldEqualToDefault: true,
   });
   const [crops, setCrops] = useState<Crop[]>([]);
@@ -169,9 +180,9 @@ function CropsModal({
           let updatedCrops;
           if (cropIndex !== undefined) {
             updatedCrops = [...prevField.crops];
-            updatedCrops[cropIndex] = postprocessModalData(formData);
+            updatedCrops[cropIndex] = postprocessModalData(formData, calculatedReqN);
           } else {
-            updatedCrops = [...prevField.crops, postprocessModalData(formData)];
+            updatedCrops = [...prevField.crops, postprocessModalData(formData, calculatedReqN)];
           }
           return { ...prevField, crops: updatedCrops };
         }
@@ -185,13 +196,19 @@ function CropsModal({
 
   // When crop is Other calculate button is disabled
   // To enable submit button setCalculationsPerformed to true for Other
+  // Also set calculations performed to true if N has been adjusted before
+  // OR if we're editing an existing crop (since calculations were already done)
   useEffect(() => {
-    if (selectedCropType?.id === CROP_TYPE_OTHER_ID) {
+    if (
+      selectedCropType?.id === CROP_TYPE_OTHER_ID ||
+      (initialModalData?.reqNAdjusted && selectedCropType?.modifynitrogen) ||
+      cropIndex !== undefined // Editing existing crop
+    ) {
       setCalculationsPerformed(true);
     } else {
       setCalculationsPerformed(false);
     }
-  }, [selectedCropType]);
+  }, [selectedCropType, initialModalData, cropIndex]);
 
   // On load, make API calls to initialize reducer state values
   useEffect(() => {
@@ -263,12 +280,15 @@ function CropsModal({
   const handleFormFieldChange = useCallback(
     (attr: keyof NMPFileCrop, value: string | number | boolean) => {
       // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables after calculations
+      // OR when we're editing an existing crop (since calculations were already done)
       const isEditingFieldVegN =
         (attr === 'reqN' || attr === 'reqNAdjusted') &&
         selectedCropType?.modifynitrogen &&
         calculationsPerformed;
 
-      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegN) {
+      const isEditingExistingCrop = cropIndex !== undefined;
+
+      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegN && !isEditingExistingCrop) {
         setCalculationsPerformed(false);
       }
 
@@ -311,6 +331,7 @@ function CropsModal({
       whereWillPruningsGo,
       calculationsPerformed,
       dispatch,
+      cropIndex,
     ],
   );
 
@@ -330,7 +351,7 @@ function CropsModal({
    * Calculates nutrient requirements and removals for the selected crop
    * Updates the formData state with calculated values
    */
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     if (fieldIndex !== null && selectedCrop !== undefined && selectedCropType !== undefined) {
       try {
         let nutrientValues;
@@ -419,7 +440,16 @@ function CropsModal({
         console.error('Error calculating crop data:', error);
       }
     }
-  };
+  }, [
+    fieldIndex,
+    selectedCrop,
+    selectedCropType,
+    formData,
+    field.soilTest,
+    farmRegion,
+    dispatch,
+    setCalculationsPerformed,
+  ]);
 
   /**
    * Effect: Update nitrogen credit when previous crop changes
@@ -489,7 +519,9 @@ function CropsModal({
   }, [formData]);
 
   // Check if N can be edited (Field vegetables with modifynitrogen = true AND calculations have been performed)
-  const isNEditable = selectedCropType?.modifynitrogen && calculationsPerformed;
+  // For editing existing crops, allow editing if modifynitrogen is true (since calculations were already done)
+  const isNEditable =
+    selectedCropType?.modifynitrogen && (calculationsPerformed || cropIndex !== undefined);
 
   // Dynamic columns for requirement table - make N editable for Field vegetables
   const requirementColumns: GridColDef[] = useMemo(
