@@ -260,12 +260,12 @@ function CropsModal({
   const handleFormFieldChange = useCallback(
     (attr: keyof NMPFileCrop, value: string | number | boolean) => {
       // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables after calculations
-      const isEditingFieldVegNAfterCalc =
+      const isEditingFieldVegN =
         (attr === 'reqN' || attr === 'reqNAdjusted') &&
         selectedCropType?.modifynitrogen === true &&
         calculationsPerformed;
 
-      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegNAfterCalc) {
+      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegN) {
         setCalculationsPerformed(false);
       }
 
