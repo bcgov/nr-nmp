@@ -451,6 +451,15 @@ function CropsModal({
     setCalculationsPerformed,
   ]);
 
+  useEffect(() => {
+    if (cropIndex !== undefined && selectedCrop !== undefined && selectedCropType !== undefined) {
+      // Only auto-calculate if we don't already have a calculatedReqN value
+      if (calculatedReqN === undefined) {
+        handleCalculate();
+      }
+    }
+  }, [cropIndex, selectedCrop, selectedCropType, calculatedReqN, handleCalculate]);
+
   /**
    * Effect: Update nitrogen credit when previous crop changes
    * Fetches nitrogen credit value for the selected previous crop
