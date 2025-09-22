@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { env } from '@/env';
 import { Crop, CropsConversionFactors, CropType, NMPFileCrop, NMPFileSoilTest } from '@/types';
-import { PLANT_AGES, DEFAULT_SOIL_TEST, COVER_CROP_ID } from '@/constants';
+import { PLANT_AGES, DEFAULT_SOIL_TEST, COVER_CROP_ID, HarvestUnit } from '@/constants';
 
 /**
  * Fetches crop conversion factors from the API
@@ -175,7 +175,11 @@ export function getCropRemovalK20(
   let k2oRemoval: number = 0;
 
   // Calculate removal differently based on crop harvesting method
-  if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
+  if (
+    crop.harvestbushelsperton &&
+    crop.harvestbushelsperton > 0 &&
+    combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+  ) {
     k2oRemoval = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
   } else {
     k2oRemoval = combinedCropData.yield * crop.cropremovalfactork2o;
@@ -206,7 +210,11 @@ export function getCropRemovalP205(
   let p2o5Removal: number = 0;
 
   // Calculate removal differently based on crop harvesting method
-  if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
+  if (
+    crop.harvestbushelsperton &&
+    crop.harvestbushelsperton > 0 &&
+    combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+  ) {
     p2o5Removal = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
   } else {
     p2o5Removal = combinedCropData.yield * crop.cropremovalfactorp2o5;
@@ -243,7 +251,11 @@ export function getCropRemovalN(
         combinedCropData.crudeProtein / (nToProteinConversionFactor * unitConversionFactor);
       nRemoval = newCropRemovalFactorNitrogen * combinedCropData.yield;
     }
-  } else if (crop.harvestbushelsperton && crop.harvestbushelsperton > 0) {
+  } else if (
+    crop.harvestbushelsperton &&
+    crop.harvestbushelsperton > 0 &&
+    combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+  ) {
     nRemoval =
       (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactornitrogen;
   } else {
