@@ -612,10 +612,8 @@ const generateFieldSummary = (
       if ('crudeProtein' in row && 'crudeProteinAdjusted' in row && row.crudeProteinAdjusted) {
         tableFootnotes.push(`Crude protein adjusted to ${row.crudeProtein}%`);
         hasFootnote = true;
-        // TODO: Change this condition to check if this is a field veg w/ a changed N
-        // eslint-disable-next-line no-constant-condition
-      } else if ('reqN' in row && false) {
-        tableFootnotes.push(`Crop required nitrogen adjusted to ${row.reqN}`);
+      } else if ('reqN' in row && 'reqNAdjusted' in row && row.reqNAdjusted) {
+        tableFootnotes.push(`Crop required nitrogen adjusted to ${Math.abs(row.reqN)}`);
         hasFootnote = true;
       } else if ('nh4Retention' in row && 'nAvailable' in row) {
         let footnote;
