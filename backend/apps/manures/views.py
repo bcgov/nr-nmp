@@ -13,7 +13,8 @@ from .serializers import (
     LiquidMaterialsConversionFactorsSerializer,
     UnitsSerializer, NMineralizationSerializer,
     AmmoniaRetentionSerializer, PreviousYearManureApplicationsSerializer,
-    LiquidMaterialApplicationUsGallonsPerAcreRateConversionsSerializer, SolidMaterialApplicationTonPerAcreRateConversionsSerializer
+    LiquidMaterialApplicationUsGallonsPerAcreRateConversionsSerializer,
+    SolidMaterialApplicationTonPerAcreRateConversionsSerializer
 )
 
 
