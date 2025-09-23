@@ -29,7 +29,10 @@ import {
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS } from '@/constants/routes';
-import useMaterialRemaining from '@/calculations/MaterialRemaining/useMaterialRemaining';
+import {
+  calculateMaterialRemaining,
+  type MaterialRemainingData,
+} from '@/calculations/MaterialRemaining/Calculations';
 import { MaterialRemainingDisplay } from '@/components/MaterialRemaining';
 
 type AddManureModalProps = {
@@ -148,12 +151,11 @@ export default function ManureModal({
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
 
-  const materialRemaining = useMaterialRemaining(
-    yearDataWithPendingApplication,
-    selectedMaterialType,
-    manureUnits.map((unit) => unit.value),
+  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
+    null,
   );
-  const hasMaterialRemainingData = materialRemaining.materialRemainingData !== null;
+
+  const hasMaterialRemainingData = materialRemainingData !== null;
 
   const filteredManureUnits = useMemo(
     () => manureUnits.filter((u) => u.value.solidliquid === manureForm.solidLiquid),
@@ -165,6 +167,45 @@ export default function ManureModal({
     () => manures.find((m) => m.id === manureForm.manureId),
     [manures, manureForm.manureId],
   );
+
+  const manureData = useMemo(() => {
+    const data: { [manureId: number]: { moisture?: number } } = {};
+
+    manures.forEach((manure) => {
+      if (manure.moisture !== undefined && manure.moisture !== null) {
+        const moistureValue = parseFloat(manure.moisture);
+        if (!Number.isNaN(moistureValue)) {
+          data[manure.id] = { moisture: moistureValue };
+        }
+      }
+    });
+
+    return Object.keys(data).length > 0 ? data : undefined;
+  }, [manures]);
+
+  // Calculate material remaining data with conversions
+  useEffect(() => {
+    if (!yearDataWithPendingApplication || !selectedMaterialType || manureUnits.length === 0) {
+      setMaterialRemainingData(null);
+      return;
+    }
+
+    const calculateData = async () => {
+      try {
+        const result = await calculateMaterialRemaining(
+          yearDataWithPendingApplication,
+          manureData,
+          manureUnits.map((unit) => unit.value),
+        );
+        setMaterialRemainingData(result);
+      } catch (err) {
+        console.error('Failed to calculate material remaining data:', err);
+        setMaterialRemainingData(null);
+      }
+    };
+
+    calculateData();
+  }, [yearDataWithPendingApplication, selectedMaterialType, manureUnits, manureData]);
 
   const [ammoniaRetentions, setAmmoniaRetentions] = useState<AmmoniaRetention[]>([]);
   const [defaultAmmonia, setDefaultAmmonia] = useState<number | undefined>(undefined);
@@ -500,7 +541,7 @@ export default function ManureModal({
             {hasMaterialRemainingData && manureForm.sourceUuid && (
               <Grid size={12}>
                 <MaterialRemainingDisplay
-                  materialRemainingData={materialRemaining.materialRemainingData!}
+                  materialRemainingData={materialRemainingData!}
                   selectedSourceUuid={manureForm.sourceUuid}
                 />
               </Grid>
