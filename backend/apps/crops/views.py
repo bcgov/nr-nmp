@@ -116,7 +116,7 @@ class CropsViewset(viewsets.ViewSet):
         soil_test_potassium_kelowna_ranges = SoilTestPotassiumKelownaRanges.objects.all()
         serializer = SoilTestPotassiumKelownaRangesSerializer(soil_test_potassium_kelowna_ranges, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def soilTestPotassiumRanges(self, request):
         soil_test_potassium_ranges = SoilTestPotassiumRanges.objects.all()

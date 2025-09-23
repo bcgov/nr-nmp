@@ -45,6 +45,7 @@ class SoilTestPhosphorousKelownaRangesSerializer(serializers.ModelSerializer):
         model = SoilTestPhosphorousKelownaRanges
         fields = '__all__'
 
+
 class SoilTestPhosphorousRangesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SoilTestPhosphorousRanges
@@ -67,6 +68,7 @@ class SoilTestPotassiumKelownaRangesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SoilTestPotassiumKelownaRanges
         fields = '__all__'
+
 
 class SoilTestPotassiumRangesSerializer(serializers.ModelSerializer):
     class Meta:
