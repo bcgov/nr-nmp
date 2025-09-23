@@ -18,7 +18,13 @@ import {
 } from '../../common.styles';
 import { Select, Tabs, View } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { NMPFileField, SelectOption, SoilTestMethods } from '@/types';
+import {
+  NMPFileField,
+  SelectOption,
+  SoilTestMethods,
+  SoilTestPhosphorousRange,
+  SoilTestPotassiumRange,
+} from '@/types';
 import { InfoBox } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
@@ -35,6 +41,8 @@ export default function SoilTests() {
   );
 
   const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
+  const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
+  const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
   const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -87,6 +95,20 @@ export default function SoilTests() {
           );
         }
       });
+    apiCache
+      .callEndpoint('api/soiltestpotassiumranges/')
+      .then((response: { status?: any; data: SoilTestPotassiumRange[] }) => {
+        if (response.status === 200) {
+          setPotassiumRanges(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/soiltestphosphorousranges/')
+      .then((response: { status?: any; data: SoilTestPhosphorousRange[] }) => {
+        if (response.status === 200) {
+          setPhosphorousRanges(response.data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -111,7 +133,7 @@ export default function SoilTests() {
       {
         field: 'valNO3H',
         headerName: 'NO₃-N (ppm)',
-        valueGetter: (_value, row) => row?.soilTest?.valNO3H,
+        valueGetter: (_value, row) => row.soilTest?.valNO3H,
         width: 120,
         minWidth: 100,
         maxWidth: 300,
@@ -120,7 +142,15 @@ export default function SoilTests() {
       {
         field: 'valP',
         headerName: 'P (ppm)',
-        valueGetter: (_value, row) => row?.soilTest?.valP,
+        valueGetter: (_value, row) => {
+          const ppm: number | undefined = row.soilTest?.valP;
+          if (ppm !== undefined) {
+            const range = phosphorousRanges.find((r) => ppm < r.upperlimit);
+            const label = range?.rating || '';
+            return `${ppm} ${label}`;
+          }
+          return ppm;
+        },
         width: 110,
         minWidth: 110,
         maxWidth: 300,
@@ -129,7 +159,15 @@ export default function SoilTests() {
       {
         field: 'valK',
         headerName: 'K (ppm)',
-        valueGetter: (_value, row) => row?.soilTest?.valK,
+        valueGetter: (_value, row) => {
+          const ppm: number = row.soilTest?.valK;
+          if (ppm !== undefined) {
+            const range = potassiumRanges.find((r) => ppm < r.upperlimit);
+            const label = range?.rating || '';
+            return `${ppm} ${label}`;
+          }
+          return ppm;
+        },
         width: 110,
         minWidth: 110,
         maxWidth: 300,
@@ -182,7 +220,7 @@ export default function SoilTests() {
         resizable: false,
       },
     ],
-    [fields, handleDeleteRow, handleEditRow],
+    [fields, handleDeleteRow, handleEditRow, phosphorousRanges, potassiumRanges],
   );
 
   return (

@@ -75,9 +75,9 @@ export async function getCropSoilTestRegions(
 }
 
 /**
- * Finds the Kelowna range that contains a specific soil test phosphorus value
+ * Finds the Kelowna range that contains a specific soil test phosphorous value
  *
- * @param {number} STP - Soil test phosphorus value in ppm
+ * @param {number} STP - Soil test phosphorous value in ppm
  * @param {string} endpoint - API endpoint to query
  * @returns {Promise<any>} Matching Kelowna range
  */
@@ -189,7 +189,7 @@ export function getCropRemovalK20(
 }
 
 /**
- * Calculates phosphorus (P2O5) removal for a crop
+ * Calculates phosphorous (P2O5) removal for a crop
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
@@ -367,7 +367,7 @@ export async function getCropRequirementK2O(
 }
 
 /**
- * Calculates phosphorus (P2O5) requirement based on soil test and crop needs
+ * Calculates phosphorous (P2O5) requirement based on soil test and crop needs
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field

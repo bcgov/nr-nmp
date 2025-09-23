@@ -1,0 +1,34 @@
+[
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 1,
+    "fields": {
+      "upperlimit": 80.0,
+      "rating": "Low"
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 2,
+    "fields": {
+      "upperlimit": 175.0,
+      "rating": "Med"
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 3,
+    "fields": {
+      "upperlimit": 250.0,
+      "rating": "High"
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 4,
+    "fields": {
+      "upperlimit": 99999.0,
+      "rating": "Very High"
+    }
+  }
+]

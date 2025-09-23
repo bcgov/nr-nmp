@@ -63,6 +63,8 @@ import {
   PreviousCrop,
   Region,
   SoilTestMethods,
+  SoilTestPhosphorousRange,
+  SoilTestPotassiumRange,
   SolidManureConversionFactors,
   Subregion,
   Units,
@@ -130,4 +132,6 @@ export type {
   AnimalSubtype,
   DairyCattleBreed,
   LiquidFertilizerDensity,
+  SoilTestPhosphorousRange,
+  SoilTestPotassiumRange,
 };
