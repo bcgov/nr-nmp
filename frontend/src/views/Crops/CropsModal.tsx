@@ -39,6 +39,8 @@ import { HARVEST_UNIT_OPTIONS } from '../../constants/harvestUnits';
 import useAppState from '@/hooks/useAppState';
 import { cropsModalReducer, showUnitDropdown } from './utils';
 
+type BerryQuantity = { id: number; PlantsPerAcre: number; DistanceBetweenPlants: string };
+
 // Define constants for column headings for Nutrient added/removed tables
 const requireAndRemoveColumns: GridColDef[] = [
   {
@@ -159,8 +161,7 @@ function CropsModal({
 
   // These 4 are related to berries and are stored in the DB in the SelectOption format
   const [plantAges, setPlantAges] = useState<SelectOption<undefined>[]>([]);
-  const [plantsPerAcre, setPlantsPerAcre] = useState<SelectOption<undefined>[]>([]);
-  const [distanceBetweenPlants, setDistanceBetweenPlants] = useState<SelectOption<undefined>[]>([]);
+  const [berryQuantities, setBerryQuantities] = useState<BerryQuantity[]>([]);
   const [whereWillPruningsGo, setWhereWillPruningsGo] = useState<SelectOption<undefined>[]>([]);
 
   const filteredCrops = useMemo<Crop[]>(() => {
@@ -255,18 +256,11 @@ function CropsModal({
         setPlantAges(response.data);
       }
     });
-    apiCache.callEndpoint('api/plantsperacre/').then((response: { status?: any; data: any }) => {
+    apiCache.callEndpoint('api/berryQuantities/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
-        setPlantsPerAcre(response.data);
+        setBerryQuantities(response.data);
       }
     });
-    apiCache
-      .callEndpoint('api/distancebetweenplants/')
-      .then((response: { status?: any; data: any }) => {
-        if (response.status === 200) {
-          setDistanceBetweenPlants(response.data);
-        }
-      });
     apiCache
       .callEndpoint('api/wherewillpruningsgo/')
       .then((response: { status?: any; data: any }) => {
@@ -319,11 +313,27 @@ function CropsModal({
           const pruningLocation = selectedPruningOption ? selectedPruningOption.label : '';
           dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: pruningLocation });
           return;
+        case 'numberOfPlantsPerAcre':
+        case 'distanceBtwnPlantsRows':
+          if (typeof value === 'number') {
+            dispatch({
+              type: 'SET_FORM_DATA_ATTR',
+              attr: 'numberOfPlantsPerAcre',
+              value: berryQuantities[value - 1].PlantsPerAcre,
+            });
+            dispatch({
+              type: 'SET_FORM_DATA_ATTR',
+              attr: 'distanceBtwnPlantsRows',
+              value: berryQuantities[value - 1].DistanceBetweenPlants,
+            });
+          }
+          return;
         default:
           dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
       }
     },
     [
+      berryQuantities,
       selectedCropType,
       formData.cropId,
       cropTypes,
@@ -752,8 +762,15 @@ function CropsModal({
                     <Select
                       isRequired
                       label="# of plants per acre"
-                      items={plantsPerAcre}
-                      selectedKey={formData.numberOfPlantsPerAcre}
+                      items={berryQuantities.map((ele) => ({
+                        id: ele.id,
+                        label: ele.PlantsPerAcre?.toString(),
+                      }))}
+                      selectedKey={
+                        berryQuantities.find(
+                          (ele) => ele.PlantsPerAcre === formData.numberOfPlantsPerAcre,
+                        )?.id || 0
+                      }
                       onSelectionChange={(e) =>
                         handleFormFieldChange('numberOfPlantsPerAcre', e as number)
                       }
@@ -763,8 +780,15 @@ function CropsModal({
                     <Select
                       isRequired
                       label="Distance between plants, distance between rows (inches)"
-                      items={distanceBetweenPlants}
-                      selectedKey={formData.distanceBtwnPlantsRows}
+                      items={berryQuantities.map((ele) => ({
+                        id: ele.id,
+                        label: ele.DistanceBetweenPlants,
+                      }))}
+                      selectedKey={
+                        berryQuantities.find(
+                          (ele) => ele.DistanceBetweenPlants === formData.distanceBtwnPlantsRows,
+                        )?.id || 0
+                      }
                       onSelectionChange={(e) =>
                         handleFormFieldChange('distanceBtwnPlantsRows', e as number)
                       }

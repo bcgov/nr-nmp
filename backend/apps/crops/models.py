@@ -208,6 +208,15 @@ class PlantsPerAcre(models.Model):
         managed = True
         db_table = 'plants_per_acre'
 
+class BerryQuantities(models.Model):
+    id = models.IntegerField(primary_key=True)
+    DistanceBetweenPlants = models.CharField(max_length=100)
+    PlantsPerAcre = models.IntegerField()
+
+    class Meta:
+        managed = True
+        db_table = 'berry_quantities'
+
 
 class DistanceBetweenPlants(models.Model):
     id = models.IntegerField(primary_key=True)
