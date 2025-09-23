@@ -29,6 +29,11 @@ import {
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS } from '@/constants/routes';
+import {
+  calculateMaterialRemaining,
+  type MaterialRemainingData,
+} from '@/calculations/MaterialRemaining/Calculations';
+import { MaterialRemainingDisplay } from '@/components/MaterialRemaining';
 
 type AddManureModalProps = {
   fieldIndex: number;
@@ -95,7 +100,60 @@ export default function ManureModal({
     initialModalData !== undefined,
   );
 
+  // Material remaining calculations with current form data
+  const [pendingApplication, setPendingApplication] = useState<NMPFileAppliedManure | null>(null);
+
+  // Create modified year data that includes the pending application
+  const yearDataWithPendingApplication = useMemo(() => {
+    if (!pendingApplication || !isCalculationCurrent) {
+      return state.nmpFile.years[0];
+    }
+
+    // Create a modified version of the field with the pending application
+    const modifiedFields = [...state.nmpFile.years[0].fields];
+    const targetField = modifiedFields[fieldIndex];
+
+    if (targetField) {
+      const modifiedField = {
+        ...targetField,
+        manures: [...(targetField.manures || []), pendingApplication],
+      };
+      modifiedFields[fieldIndex] = modifiedField;
+    }
+
+    return {
+      ...state.nmpFile.years[0],
+      fields: modifiedFields,
+    };
+  }, [state.nmpFile.years, pendingApplication, isCalculationCurrent, fieldIndex]);
+
+  // Get material type from storage system or imported manure
+  const selectedMaterialType = useMemo(() => {
+    if (!manureForm.sourceUuid) return null;
+
+    // Try to find in storage systems
+    const storageSystem = state.nmpFile.years[0].manureStorageSystems?.find(
+      (system) => system.uuid === manureForm.sourceUuid,
+    );
+    if (storageSystem) return storageSystem.manureType;
+
+    // Try to find in imported manures
+    const importedManure = state.nmpFile.years[0].importedManures?.find(
+      (manure) => manure.uuid === manureForm.sourceUuid,
+    );
+    if (importedManure) return importedManure.manureType;
+
+    return null;
+  }, [manureForm.sourceUuid, state.nmpFile.years]);
+
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
+
+  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
+    null,
+  );
+
+  const hasMaterialRemainingData = materialRemainingData !== null;
+
   const filteredManureUnits = useMemo(
     () => manureUnits.filter((u) => u.value.solidliquid === manureForm.solidLiquid),
     [manureUnits, manureForm.solidLiquid],
@@ -106,6 +164,44 @@ export default function ManureModal({
     () => manures.find((m) => m.id === manureForm.manureId),
     [manures, manureForm.manureId],
   );
+
+  const manureData = useMemo(() => {
+    const data: { [manureId: number]: { moisture?: number } } = {};
+
+    manures.forEach((manure) => {
+      if (manure.moisture !== undefined && manure.moisture !== null) {
+        const moistureValue = parseFloat(manure.moisture);
+        if (!Number.isNaN(moistureValue)) {
+          data[manure.id] = { moisture: moistureValue };
+        }
+      }
+    });
+
+    return Object.keys(data).length > 0 ? data : undefined;
+  }, [manures]);
+
+  useEffect(() => {
+    if (!yearDataWithPendingApplication || !selectedMaterialType || manureUnits.length === 0) {
+      setMaterialRemainingData(null);
+      return;
+    }
+
+    const calculateData = async () => {
+      try {
+        const result = await calculateMaterialRemaining(
+          yearDataWithPendingApplication,
+          manureData,
+          manureUnits.map((unit) => unit.value),
+        );
+        setMaterialRemainingData(result);
+      } catch (err) {
+        console.error('Failed to calculate material remaining data:', err);
+        setMaterialRemainingData(null);
+      }
+    };
+
+    calculateData();
+  }, [yearDataWithPendingApplication, selectedMaterialType, manureUnits, manureData]);
 
   const [ammoniaRetentions, setAmmoniaRetentions] = useState<AmmoniaRetention[]>([]);
   const [defaultAmmonia, setDefaultAmmonia] = useState<number | undefined>(undefined);
@@ -253,15 +349,19 @@ export default function ManureModal({
       manureForm.nh4Retention,
       manureForm.nAvailable,
     );
-    setManureForm((prev) => ({
-      ...prev,
+    const updatedForm = {
+      ...manureForm,
       reqN: nutrientInputs.N_FirstYear,
       reqP2o5: nutrientInputs.P2O5_FirstYear,
       reqK2o: nutrientInputs.K2O_FirstYear,
       remN: nutrientInputs.N_LongTerm,
       remP2o5: nutrientInputs.P2O5_LongTerm,
       remK2o: nutrientInputs.K2O_LongTerm,
-    }));
+    };
+
+    setManureForm(updatedForm);
+    // Store the pending application for material remaining display
+    setPendingApplication(updatedForm);
     // TODO: Calculate the balance column correctly!
     setStillReqTable({
       N: field.crops[0].reqN + (field.crops[1]?.reqN || 0),
@@ -273,6 +373,7 @@ export default function ManureModal({
 
   const handleChanges = (changes: Partial<NMPFileAppliedManure>) => {
     setIsCalculationCurrent(false);
+    setPendingApplication(null); // Clear pending application when form changes
     setManureForm((prev) => ({ ...prev, ...changes }));
   };
 
@@ -431,6 +532,16 @@ export default function ManureModal({
                 hideFooter
               />
             </Grid>
+
+            {/* Material Remaining Information */}
+            {hasMaterialRemainingData && manureForm.sourceUuid && (
+              <Grid size={12}>
+                <MaterialRemainingDisplay
+                  materialRemainingData={materialRemainingData!}
+                  selectedSourceUuid={manureForm.sourceUuid}
+                />
+              </Grid>
+            )}
           </Grid>
         </Form>
       ) : (

@@ -76,11 +76,35 @@ export function getStandardizedAnnualManureAmount(
     manureSource.manureType === ManureType.Liquid
       ? 'annualAmountUSGallonsVolume'
       : 'annualAmountTonsWeight';
+
   if ('manuresInSystem' in manureSource) {
-    // This is a storage system
-    manureSource.manuresInSystem.forEach((manure) => {
-      total += manure.data[amountKey]!;
-    });
+    if (manureSource.manureType === ManureType.Liquid) {
+      // For liquid storage systems
+      if (manureSource.hasSeperation) {
+        // If there's separation, use separated liquids
+        if (manureSource.separatedLiquidsUSGallons > 0) {
+          total = manureSource.separatedLiquidsUSGallons + (manureSource.annualPrecipitation || 0);
+        } else {
+          total = 0;
+        }
+      } else {
+        // No separation - sum all manures in system
+        manureSource.manuresInSystem.forEach((manure) => {
+          total += manure.data[amountKey]!;
+        });
+        if (total > 0) {
+          total += manureSource.annualPrecipitation || 0;
+        }
+      }
+    } else {
+      // For solid storage systems
+      manureSource.manuresInSystem.forEach((manure) => {
+        total += manure.data[amountKey]!;
+      });
+      if (total > 0) {
+        total += manureSource.annualPrecipitation || 0;
+      }
+    }
   } else {
     // This is a single manure
     total = manureSource[amountKey]!;
