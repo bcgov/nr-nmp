@@ -57,7 +57,7 @@ function calculateAppliedAmount(
 
   if (!unit) {
     // Fallback to simple calculation if unit not found
-    return Math.round(applicationRate * fieldArea);
+    return applicationRate * fieldArea;
   }
 
   // Calculate the total applied amount using the appropriate conversion
@@ -68,7 +68,7 @@ function calculateAppliedAmount(
     totalApplied *= unit.conversionlbton;
   }
 
-  return Math.round(totalApplied);
+  return totalApplied;
 }
 
 /**
@@ -123,15 +123,18 @@ function calculateTotalApplied(fieldApplications: FieldApplicationData[]): numbe
 }
 
 /**
- * Calculate whole percent values with rounding
+ * Calculate whole percent values with truncation
  */
 function calculateWholePercentApplied(totalApplied: number, totalToApply: number): number {
   if (totalToApply === 0) return 0;
-  return Math.round((totalApplied / totalToApply) * 100);
+  return Math.floor((totalApplied / totalToApply) * 100);
 }
 
-function calculateWholePercentRemaining(percentApplied: number): number {
-  return Math.max(0, 100 - percentApplied);
+function calculateWholePercentRemaining(totalRemaining: number, totalToApply: number): number {
+  if (totalToApply === 0) return 0;
+
+  const adjustedRemaining = totalRemaining >= 0 ? totalRemaining : 0;
+  return Math.floor((adjustedRemaining / totalToApply) * 100);
 }
 
 /**
@@ -149,6 +152,7 @@ function formatAmountWithUnit(
     return `No material remaining`;
   }
 
+  // Format like old system: string.Format("{0:#,##0}", Math.Round(value))
   return `${roundedAmount.toLocaleString()} ${unit}`;
 }
 
@@ -170,7 +174,10 @@ function createStoredManureData(
   const totalAnnualManureToApply = getStandardizedAnnualManureAmount(storageSystem);
   const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
   const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManureToApply);
-  const wholePercentRemaining = calculateWholePercentRemaining(wholePercentApplied);
+  const wholePercentRemaining = calculateWholePercentRemaining(
+    totalRemaining,
+    totalAnnualManureToApply,
+  );
 
   return {
     sourceName: storageSystem.name,
@@ -181,8 +188,8 @@ function createStoredManureData(
     totalAnnualManureRemainingToApply: totalRemaining,
     wholePercentApplied,
     wholePercentRemaining,
-    appliedMessage: `Applied ${wholePercentApplied}% of total available`,
-    remainingToApplyMessage: `${wholePercentRemaining}% remaining to apply`,
+    appliedMessage: `${storageSystem.name}: ${wholePercentApplied}%`,
+    remainingToApplyMessage: `${storageSystem.name}: ${wholePercentRemaining}%`,
     formattedTotalApplied: formatAmountWithUnit(totalApplied, storageSystem.manureType),
     formattedTotalRemaining: formatAmountWithUnit(totalRemaining, storageSystem.manureType, true),
     formattedTotalToApply: formatAmountWithUnit(totalAnnualManureToApply, storageSystem.manureType),
@@ -207,7 +214,10 @@ function createImportedManureData(
   const totalAnnualManureToApply = getStandardizedAnnualManureAmount(importedManure);
   const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
   const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManureToApply);
-  const wholePercentRemaining = calculateWholePercentRemaining(wholePercentApplied);
+  const wholePercentRemaining = calculateWholePercentRemaining(
+    totalRemaining,
+    totalAnnualManureToApply,
+  );
 
   return {
     sourceName: importedManure.managedManureName,
@@ -218,8 +228,8 @@ function createImportedManureData(
     totalAnnualManureRemainingToApply: totalRemaining,
     wholePercentApplied,
     wholePercentRemaining,
-    appliedMessage: `Applied ${wholePercentApplied}% of total available`,
-    remainingToApplyMessage: `${wholePercentRemaining}% remaining to apply`,
+    appliedMessage: `${importedManure.managedManureName}: ${wholePercentApplied}%`,
+    remainingToApplyMessage: `${importedManure.managedManureName}: ${wholePercentRemaining}%`,
     formattedTotalApplied: formatAmountWithUnit(totalApplied, importedManure.manureType),
     formattedTotalRemaining: formatAmountWithUnit(totalRemaining, importedManure.manureType, true),
     formattedTotalToApply: formatAmountWithUnit(
@@ -233,7 +243,14 @@ function createImportedManureData(
  * Check for warnings and add them to the warnings array
  */
 function checkAndAddWarnings(appliedManure: AppliedManureData, warnings: string[]): void {
-  if (appliedManure.totalAnnualManureRemainingToApply < 0) {
+  const isOverUtilized =
+    appliedManure.wholePercentRemaining === 0 &&
+    appliedManure.totalAnnualManureRemainingToApply < 0 &&
+    (appliedManure.totalAnnualManureRemainingToApply / appliedManure.totalAnnualManureToApply) *
+      100 <=
+      -10;
+
+  if (isOverUtilized) {
     warnings.push(
       `Warning: ${appliedManure.sourceName} has been over-applied by ${Math.abs(
         appliedManure.totalAnnualManureRemainingToApply,
@@ -241,7 +258,7 @@ function checkAndAddWarnings(appliedManure: AppliedManureData, warnings: string[
     );
   }
 
-  if (appliedManure.wholePercentRemaining <= 10 && appliedManure.wholePercentRemaining > 0) {
+  if (appliedManure.wholePercentRemaining < 10 && appliedManure.wholePercentRemaining > 0) {
     warnings.push(
       `Alert: ${appliedManure.sourceName} is running low (${appliedManure.wholePercentRemaining}% remaining)`,
     );
