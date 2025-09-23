@@ -15,6 +15,7 @@ const DEFAULT_NMPFILE_CROPS: NMPFileCrop = {
   hasLeafTest: false,
   leafTissueP: undefined, // Needs to be undefined
   leafTissueK: undefined, // Needs to be undefined
+  reqNAdjusted: false,
 };
 
 export default DEFAULT_NMPFILE_CROPS;
