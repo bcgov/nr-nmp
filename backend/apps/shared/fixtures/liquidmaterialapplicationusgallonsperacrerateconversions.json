@@ -1,0 +1,29 @@
+[
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 1,
+    "fields": {
+      "applicationrateunit": 1.0,
+      "applicationrateunitname": "Imp. gallons/ac",
+      "usgallonsperacreconversion": 1.20095
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 2,
+    "fields": {
+      "applicationrateunit": 2.0,
+      "applicationrateunitname": "m\u00b2/ha",
+      "usgallonsperacreconversion": 106.9067805
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 3,
+    "fields": {
+      "applicationrateunit": 3.0,
+      "applicationrateunitname": "US gallons/ac",
+      "usgallonsperacreconversion": 1.0
+    }
+  }
+]

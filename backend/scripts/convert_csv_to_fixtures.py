@@ -51,6 +51,8 @@ MODEL_MAPPINGS = {
     "_WhereWillPruningsGo": "crops.wherewillpruningsgo",
     "_DistanceBetweenPlants": "crops.distancebetweenplants",
     "_PreviousYearManureApplicationNitrogenDefaults": "manures.previousyearmanureapplications",
+    "_SolidMaterialApplicationTonPerAcreRateConversions": "manures.solidmaterialapplicationtonperacrerateconversions",
+    "_LiquidMaterialApplicationUsGallonsPerAcreRateConversions": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
 }
 
 
