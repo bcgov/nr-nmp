@@ -66,7 +66,7 @@ export interface MaterialRemainingData {
 }
 
 /**
- * Fetch solid material conversion factors from the API
+ * Fetch solid material conversion factors from the database
  */
 export async function fetchSolidMaterialConversions(): Promise<SolidMaterialConversion[]> {
   const response = await axios.get(
@@ -76,7 +76,7 @@ export async function fetchSolidMaterialConversions(): Promise<SolidMaterialConv
 }
 
 /**
- * Fetch liquid material conversion factors from the API
+ * Fetch liquid material conversion factors from the database
  */
 export async function fetchLiquidMaterialConversions(): Promise<LiquidMaterialConversion[]> {
   const response = await axios.get(
@@ -182,7 +182,6 @@ function calculateAppliedAmount(
   }
 
   // Calculate the total applied amount using the appropriate conversion
-  // The application rate is per acre, so multiply by field area to get total applied
   let totalApplied = applicationRate * fieldArea;
 
   // Apply the conversion factor from the conversion tables
@@ -199,9 +198,9 @@ function calculateAppliedAmount(
 }
 
 /**
- * Calculate field applications for a specific source
+ * Calculate field applications
  */
-function calculateFieldApplicationsForSource(
+function calculateFieldApplications(
   fields: NMPFileField[],
   sourceUuid: string,
   manureData: { [manureId: number]: { moisture?: number } } | undefined,
@@ -250,7 +249,7 @@ function calculateFieldApplicationsForSource(
 }
 
 /**
- * Calculate total applied amount across all fields
+ * Calculate total applied amount across fields
  */
 function calculateTotalApplied(fieldApplications: FieldApplicationData[]): number {
   return fieldApplications.reduce((total, field) => {
@@ -304,7 +303,7 @@ function createStoredManureData(
   liquidConversions: LiquidMaterialConversion[],
   availableUnits: Units[] = [],
 ): AppliedManureData {
-  const fieldApplications = calculateFieldApplicationsForSource(
+  const fieldApplications = calculateFieldApplications(
     yearData.fields,
     storageSystem.uuid,
     manureData,
@@ -350,7 +349,7 @@ function createImportedManureData(
   liquidConversions: LiquidMaterialConversion[],
   availableUnits: Units[] = [],
 ): AppliedManureData {
-  const fieldApplications = calculateFieldApplicationsForSource(
+  const fieldApplications = calculateFieldApplications(
     yearData.fields,
     importedManure.uuid,
     manureData,
@@ -516,17 +515,15 @@ export function calculateMaterialRemainingSummary(data: MaterialRemainingData): 
 }
 
 /**
- * Enhanced material remaining calculation with automatic conversion table fetching
+ * Enhanced material remaining calculation
  */
 export async function calculateMaterialRemaining(
   yearData: NMPFileYear,
   manureData?: { [manureId: number]: { moisture?: number } },
   availableUnits: Units[] = [],
 ): Promise<MaterialRemainingData> {
-  // Fetch conversion tables from the database
   const { solidConversions, liquidConversions } = await fetchAllConversionTables();
 
-  // Calculate with database conversions
   return calculateMaterialRemainingData(
     yearData,
     manureData,

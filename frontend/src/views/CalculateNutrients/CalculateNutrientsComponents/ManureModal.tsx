@@ -116,10 +116,7 @@ export default function ManureModal({
     if (targetField) {
       const modifiedField = {
         ...targetField,
-        manures: [
-          ...(targetField.manures || []),
-          pendingApplication, // Add the pending application
-        ],
+        manures: [...(targetField.manures || []), pendingApplication],
       };
       modifiedFields[fieldIndex] = modifiedField;
     }
@@ -183,7 +180,6 @@ export default function ManureModal({
     return Object.keys(data).length > 0 ? data : undefined;
   }, [manures]);
 
-  // Calculate material remaining data with conversions
   useEffect(() => {
     if (!yearDataWithPendingApplication || !selectedMaterialType || manureUnits.length === 0) {
       setMaterialRemainingData(null);
