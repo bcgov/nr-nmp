@@ -82,6 +82,16 @@ class SoilTestPhosphorousKelownaRanges(models.Model):
         db_table = 'soil_test_phosphorous_kelowna_ranges'
 
 
+class SoilTestPhosphorousRanges(models.Model):
+    id = models.IntegerField(primary_key=True)
+    upperlimit = models.IntegerField()
+    rating = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'soil_test_phosphorous_ranges'
+
+
 class SoilTestMethods(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -126,6 +136,16 @@ class SoilTestPotassiumKelownaRanges(models.Model):
     class Meta:
         managed = True
         db_table = 'soil_test_potassium_kelowna_ranges'
+
+
+class SoilTestPotassiumRanges(models.Model):
+    id = models.IntegerField(primary_key=True)
+    upperlimit = models.IntegerField()
+    rating = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'soil_test_potassium_ranges'
 
 
 class SoilTestPotassiumRecommendation(models.Model):

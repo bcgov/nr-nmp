@@ -29,4 +29,6 @@ urlpatterns = [
     path('plantsperacre/', CropsViewset.as_view({'get': 'plantsPerAcre'})),
     path('distancebetweenplants/', CropsViewset.as_view({'get': 'distanceBetweenPlants'})),
     path('wherewillpruningsgo/', CropsViewset.as_view({'get': 'whereWillPruningsGo'})),
+    path('soiltestpotassiumranges/', CropsViewset.as_view({'get': 'soilTestPotassiumRanges'})),
+    path('soiltestphosphorousranges/', CropsViewset.as_view({'get': 'soilTestPhosphorousRanges'})),
 ]

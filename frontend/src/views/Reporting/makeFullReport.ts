@@ -14,6 +14,8 @@ import {
   NMPFileYear,
   Schedule,
   SoilTestMethods,
+  SoilTestPhosphorousRange,
+  SoilTestPotassiumRange,
 } from '@/types';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
 import {
@@ -382,6 +384,8 @@ const generateFieldSummary = (
   field: NMPFileField,
   fertilizerUnits: FertilizerUnit[],
   soilTestMethods: SoilTestMethods[],
+  phosphorousRanges: SoilTestPhosphorousRange[],
+  potassiumRanges: SoilTestPotassiumRange[],
 ) => {
   doc.addPage();
   // First table shows crops
@@ -446,8 +450,8 @@ const generateFieldSummary = (
       ? [
           [
             `Nitrate-N: ${soilTest.valNO3H} ppm`,
-            `Phosphorus: ${soilTest.valP} ppm`,
-            `Potassium: ${soilTest.valK} ppm`,
+            `Phosphorous: ${soilTest.valP} ppm (${phosphorousRanges.find((r) => soilTest.valP! < r.upperlimit)?.rating || ''})`,
+            `Potassium: ${soilTest.valK} ppm (${potassiumRanges.find((r) => soilTest.valK! < r.upperlimit)?.rating || ''})`,
             `pH: ${soilTest.valPH}`,
           ],
         ]
@@ -612,10 +616,8 @@ const generateFieldSummary = (
       if ('crudeProtein' in row && 'crudeProteinAdjusted' in row && row.crudeProteinAdjusted) {
         tableFootnotes.push(`Crude protein adjusted to ${row.crudeProtein}%`);
         hasFootnote = true;
-        // TODO: Change this condition to check if this is a field veg w/ a changed N
-        // eslint-disable-next-line no-constant-condition
-      } else if ('reqN' in row && false) {
-        tableFootnotes.push(`Crop required nitrogen adjusted to ${row.reqN}`);
+      } else if ('reqN' in row && 'reqNAdjusted' in row && row.reqNAdjusted) {
+        tableFootnotes.push(`Crop required nitrogen adjusted to ${Math.abs(row.reqN)}`);
         hasFootnote = true;
       } else if ('nh4Retention' in row && 'nAvailable' in row) {
         let footnote;
@@ -778,6 +780,8 @@ const generateSoilTestResults = (
   year: string,
   nmpFileYear: NMPFileYear,
   soilTestMethods: SoilTestMethods[],
+  phosphorousRanges: SoilTestPhosphorousRange[],
+  potassiumRanges: SoilTestPotassiumRange[],
 ) => {
   doc.addPage();
   // If any soil test is defined, all fields use the same ST method
@@ -846,8 +850,8 @@ const generateSoilTestResults = (
         `${field.crops.map((c) => `${c.name}`).join('\n')}`,
         soilTest.valPH!,
         soilTest.valNO3H!,
-        soilTest.valP!,
-        soilTest.valK!,
+        `${soilTest.valP} ${phosphorousRanges.find((r) => soilTest.valP! < r.upperlimit)?.rating || ''}`,
+        `${soilTest.valK} ${potassiumRanges.find((r) => soilTest.valK! < r.upperlimit)?.rating || ''}`,
       ];
     }),
   });
@@ -857,6 +861,8 @@ export default async function makeFullReportPdf(
   nmpFile: NMPFile,
   fertilizerUnits: FertilizerUnit[],
   soilTestMethods: SoilTestMethods[],
+  phosphorousRanges: SoilTestPhosphorousRange[],
+  potassiumRanges: SoilTestPotassiumRange[],
 ) {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
@@ -895,7 +901,17 @@ export default async function makeFullReportPdf(
   // Per field: Field Summary page
   for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
     const field = nmpFileYear.fields[i];
-    generateFieldSummary(doc, pageWidth, farmName, year, field, fertilizerUnits, soilTestMethods);
+    generateFieldSummary(
+      doc,
+      pageWidth,
+      farmName,
+      year,
+      field,
+      fertilizerUnits,
+      soilTestMethods,
+      phosphorousRanges,
+      potassiumRanges,
+    );
   }
 
   // Optional page: Manure and Compost Analysis
@@ -912,7 +928,16 @@ export default async function makeFullReportPdf(
   }
 
   // Last page: Soil Test Results
-  generateSoilTestResults(doc, pageWidth, farmName, year, nmpFileYear, soilTestMethods);
+  generateSoilTestResults(
+    doc,
+    pageWidth,
+    farmName,
+    year,
+    nmpFileYear,
+    soilTestMethods,
+    phosphorousRanges,
+    potassiumRanges,
+  );
 
   // Download document
   const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });

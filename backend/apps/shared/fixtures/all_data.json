@@ -1937,7 +1937,7 @@
     "fields": {
       "cropid": 48,
       "locationid": 1,
-      "amount": null
+      "amount": 5.0
     }
   },
   {
@@ -1946,7 +1946,7 @@
     "fields": {
       "cropid": 48,
       "locationid": 2,
-      "amount": null
+      "amount": 5.0
     }
   },
   {
@@ -2099,7 +2099,7 @@
     "fields": {
       "cropid": 59,
       "locationid": 1,
-      "amount": null
+      "amount": 7.5
     }
   },
   {
@@ -2108,7 +2108,7 @@
     "fields": {
       "cropid": 59,
       "locationid": 2,
-      "amount": null
+      "amount": 7.5
     }
   },
   {
@@ -15802,6 +15802,67 @@
       "applicationrateunit": 3.0,
       "applicationrateunitname": "US gallons/ac",
       "usgallonsperacreconversion": 1.0
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 1,
+    "fields": {
+      "upperlimit": 20.0,
+      "rating": "Low"
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 2,
+    "fields": {
+      "upperlimit": 50.0,
+      "rating": "Med"
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 3,
+    "fields": {
+      "upperlimit": 100.0,
+      "rating": "High"
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 4,
+    "fields": {
+      "upperlimit": 99999.0,
+      "rating": "Very High"
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 1,
+    "fields": {
+      "upperlimit": 80.0,
+      "rating": "Low"
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 2,
+    "fields": {
+      "upperlimit": 175.0,
+      "rating": "Med"
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 3,
+    "fields": {
+      "upperlimit": 250.0,
+      "rating": "High"
+    }
+  },
+  {
+    "model": "crops.soiltestpotassiumranges",
+    "pk": 4,
+    "fields": {
+      "upperlimit": 99999.0,
+      "rating": "Very High"
     }
   }
 ]

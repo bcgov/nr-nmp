@@ -24,7 +24,7 @@ export enum Schedule {
 
 export interface CropNutrients {
   N: number; // Nitrogen
-  P2O5: number; // Phosphorus pentoxide
+  P2O5: number; // Phosphorous pentoxide
   K2O: number; // Potassium oxide
 }
 

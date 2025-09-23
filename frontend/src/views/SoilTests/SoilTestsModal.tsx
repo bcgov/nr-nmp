@@ -124,10 +124,11 @@ export default function SoilTestsModal({
           <Grid size={formGridBreakpoints}>
             <NumberField
               isRequired
-              label="P (ppm), phosphorus"
+              label="P (ppm), phosphorous"
               value={formData.valP}
               onChange={(e) => handleFormFieldChange({ valP: e })}
               step={1}
+              maxValue={9999}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
@@ -137,6 +138,7 @@ export default function SoilTestsModal({
               value={formData.valK}
               onChange={(e) => handleFormFieldChange({ valK: e })}
               step={1}
+              maxValue={9999}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

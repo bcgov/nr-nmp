@@ -53,6 +53,8 @@ MODEL_MAPPINGS = {
     "_PreviousYearManureApplicationNitrogenDefaults": "manures.previousyearmanureapplications",
     "_SolidMaterialApplicationTonPerAcreRateConversions": "manures.solidmaterialapplicationtonperacrerateconversions",
     "_LiquidMaterialApplicationUsGallonsPerAcreRateConversions": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "_SoilTestPhosphorousRanges": "crops.soiltestphosphorousranges",
+    "_SoilTestPotassiumRanges": "crops.soiltestpotassiumranges",
 }
 
 

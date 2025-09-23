@@ -1,5 +1,5 @@
 # Base image for the container
-FROM node:20.19.4 AS build
+FROM node:20.19.5 AS build
 
 # Set the working directory
 WORKDIR /app/
@@ -25,8 +25,8 @@ COPY Caddyfile /etc/caddy/Caddyfile
 RUN caddy fmt /etc/caddy/Caddyfile
 
 # Boilerplate, not used in OpenShift/Kubernetes
-EXPOSE 3000 3001
-HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:3001/health
+EXPOSE 5173 5174
+HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost:5174/health
 
 # Nonroot user
 USER 1001
