@@ -82,16 +82,15 @@ class ManuresViewset(viewsets.ViewSet):
         applications = PreviousYearManureApplications.objects.all()
         serializer = PreviousYearManureApplicationsSerializer(applications, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def liquidMaterialApplicationUsGallonsPerAcreRateConversions(self, request):
         conversions = LiquidMaterialApplicationUsGallonsPerAcreRateConversions.objects.all()
         serializer = LiquidMaterialApplicationUsGallonsPerAcreRateConversionsSerializer(conversions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def solidMaterialApplicationTonPerAcreRateConversions(self, request):
         conversions = SolidMaterialApplicationTonPerAcreRateConversions.objects.all()
         serializer = SolidMaterialApplicationTonPerAcreRateConversionsSerializer(conversions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-

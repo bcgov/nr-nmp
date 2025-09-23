@@ -103,6 +103,7 @@ class PreviousYearManureApplications(models.Model):
         managed = True
         db_table = 'previous_year_manure_applications'
 
+
 class LiquidMaterialApplicationUsGallonsPerAcreRateConversions(models.Model):
     id = models.IntegerField(primary_key=True)
     applicationrateunit = models.IntegerField()
@@ -112,6 +113,7 @@ class LiquidMaterialApplicationUsGallonsPerAcreRateConversions(models.Model):
     class Meta:
         managed = True
         db_table = 'liquid_material_application_us_gallons_per_acre_rate_conversions'
+
 
 class SolidMaterialApplicationCubicYardsPerAcreConversions(models.Model):
     id = models.IntegerField(primary_key=True)

@@ -18,7 +18,7 @@ urlpatterns = [
          ManuresViewset.as_view({'get': 'ammoniaRetentions'})),
     path('previousyearmanureapplications/', ManuresViewset.as_view({'get': 'previousYearManureApplications'})),
     path('liquidmaterialapplicationusgallonsperacrerateconversions/',
-          ManuresViewset.as_view({'get': 'liquidMaterialApplicationUsGallonsPerAcreRateConversions'})),
+         ManuresViewset.as_view({'get': 'liquidMaterialApplicationUsGallonsPerAcreRateConversions'})),
     path('solidmaterialapplicationtonperacrerateconversions/',
-          ManuresViewset.as_view({'get': 'solidMaterialApplicationTonPerAcreRateConversions'})),
+         ManuresViewset.as_view({'get': 'solidMaterialApplicationTonPerAcreRateConversions'})),
 ]

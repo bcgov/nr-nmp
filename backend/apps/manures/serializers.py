@@ -48,10 +48,12 @@ class PreviousYearManureApplicationsSerializer(serializers.ModelSerializer):
         model = PreviousYearManureApplications
         fields = '__all__'
 
+
 class LiquidMaterialApplicationUsGallonsPerAcreRateConversionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = LiquidMaterialApplicationUsGallonsPerAcreRateConversions
         fields = '__all__'
+
 
 class SolidMaterialApplicationTonPerAcreRateConversionsSerializer(serializers.ModelSerializer):
     class Meta:
