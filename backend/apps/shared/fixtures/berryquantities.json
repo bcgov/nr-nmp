@@ -1,0 +1,50 @@
+[
+  {
+    "model": "crops.berryquantities",
+    "pk": 1,
+    "fields": {
+      "PlantsPerAcre": 2498.0,
+      "DistanceBetweenPlants": "0.6 m x 2.7 m (2 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 2,
+    "fields": {
+      "PlantsPerAcre": 2248.0,
+      "DistanceBetweenPlants": "0.6 m x 3.0 m (2 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 3,
+    "fields": {
+      "PlantsPerAcre": 1999.0,
+      "DistanceBetweenPlants": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 4,
+    "fields": {
+      "PlantsPerAcre": 1799.0,
+      "DistanceBetweenPlants": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 5,
+    "fields": {
+      "PlantsPerAcre": 1665.0,
+      "DistanceBetweenPlants": "0.9 m x 2.7 m (3 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 6,
+    "fields": {
+      "PlantsPerAcre": 1499.0,
+      "DistanceBetweenPlants": "0.9 m x 3.0 m (3 ft x 10 ft)"
+    }
+  }
+]

@@ -53,6 +53,7 @@ MODEL_MAPPINGS = {
     "_PreviousYearManureApplicationNitrogenDefaults": "manures.previousyearmanureapplications",
     "_SoilTestPhosphorousRanges": "crops.soiltestphosphorousranges",
     "_SoilTestPotassiumRanges": "crops.soiltestpotassiumranges",
+    "_BerryQuantities": "crops.berryquantities",
 }
 
 

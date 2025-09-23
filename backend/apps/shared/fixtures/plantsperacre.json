@@ -1,42 +1,42 @@
 [
   {
     "model": "crops.plantsperacre",
-    "pk": 2498,
+    "pk": 1,
     "fields": {
       "label": 2498.0
     }
   },
   {
     "model": "crops.plantsperacre",
-    "pk": 2248,
+    "pk": 2,
     "fields": {
       "label": 2248.0
     }
   },
   {
     "model": "crops.plantsperacre",
-    "pk": 1999,
+    "pk": 3,
     "fields": {
       "label": 1999.0
     }
   },
   {
     "model": "crops.plantsperacre",
-    "pk": 1799,
+    "pk": 4,
     "fields": {
       "label": 1799.0
     }
   },
   {
     "model": "crops.plantsperacre",
-    "pk": 1665,
+    "pk": 5,
     "fields": {
       "label": 1665.0
     }
   },
   {
     "model": "crops.plantsperacre",
-    "pk": 1499,
+    "pk": 6,
     "fields": {
       "label": 1499.0
     }
