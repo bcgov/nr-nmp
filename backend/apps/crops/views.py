@@ -12,12 +12,13 @@ from .models import (
 )
 from .serializers import (
     CropTypesSerializer, CropsSerializer, PreviousCropTypesSerializer,
-    CropSoilTestPhosphorousRegionsSerializer, SoilTestPhosphorousRangesSerializer, SoilTestPhosphorousRecommendationSerializer,
-    SoilTestPhosphorousKelownaRangesSerializer, SoilTestMethodsSerializer,
-    ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer, SoilTestPotassiumRangesSerializer,
-    SoilTestPotassiumRecommendationSerializer, CropSoilPotassiumRegionsSerializer,
-    CropYieldsSerializer, NitrogenRecommendationSerializer, PlantAgeSerializer, PlantsPerAcreSerializer,
-    DistanceBetweenPlantsSerializer, WhereWillPruningsGoSerializer
+    CropSoilTestPhosphorousRegionsSerializer, SoilTestPhosphorousRangesSerializer,
+    SoilTestPhosphorousRecommendationSerializer, SoilTestPhosphorousKelownaRangesSerializer,
+    SoilTestMethodsSerializer, ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer,
+    SoilTestPotassiumRangesSerializer, SoilTestPotassiumRecommendationSerializer,
+    CropSoilPotassiumRegionsSerializer, CropYieldsSerializer, NitrogenRecommendationSerializer,
+    PlantAgeSerializer, PlantsPerAcreSerializer, DistanceBetweenPlantsSerializer,
+    WhereWillPruningsGoSerializer
 )
 
 
