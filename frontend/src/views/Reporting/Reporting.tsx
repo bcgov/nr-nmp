@@ -12,7 +12,12 @@ import { View } from '../../components/common';
 import { CALCULATE_NUTRIENTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
 import { APICacheContext } from '@/context/APICacheContext';
-import { FertilizerUnit, SoilTestMethods } from '@/types';
+import {
+  FertilizerUnit,
+  SoilTestMethods,
+  SoilTestPhosphorousRange,
+  SoilTestPotassiumRange,
+} from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
 
@@ -22,6 +27,8 @@ export default function Reporting() {
   const apiCache = useContext(APICacheContext);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
+  const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
+  const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
 
   const unassignedManures = useMemo(
     () =>
@@ -51,6 +58,20 @@ export default function Reporting() {
       .then((response: { status?: any; data: SoilTestMethods[] }) => {
         if (response.status === 200) {
           setSoilTestMethods(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/soiltestpotassiumranges/')
+      .then((response: { status?: any; data: SoilTestPotassiumRange[] }) => {
+        if (response.status === 200) {
+          setPotassiumRanges(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/soiltestphosphorousranges/')
+      .then((response: { status?: any; data: SoilTestPhosphorousRange[] }) => {
+        if (response.status === 200) {
+          setPhosphorousRanges(response.data);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,7 +149,15 @@ export default function Reporting() {
               orientation="vertical"
             >
               <Button
-                onPress={() => makeFullReportPdf(state.nmpFile, fertilizerUnits, soilTestMethods)}
+                onPress={() =>
+                  makeFullReportPdf(
+                    state.nmpFile,
+                    fertilizerUnits,
+                    soilTestMethods,
+                    phosphorousRanges,
+                    potassiumRanges,
+                  )
+                }
               >
                 <div style={{ width: '100%', textAlign: 'center' }}>Complete report</div>
               </Button>

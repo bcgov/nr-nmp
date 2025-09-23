@@ -195,6 +195,18 @@ export type SoilTestMethods = {
   sortnum: number;
 };
 
+export type SoilTestPhosphorousRange = {
+  id: number;
+  upperlimit: number;
+  rating: string;
+};
+
+export type SoilTestPotassiumRange = {
+  id: number;
+  upperlimit: number;
+  rating: string;
+};
+
 // _SolidMaterialsConversionFactors
 export interface SolidManureConversionFactors {
   id: number;

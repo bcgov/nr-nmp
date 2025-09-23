@@ -1,0 +1,34 @@
+[
+  {
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 1,
+    "fields": {
+      "upperlimit": 20.0,
+      "rating": "Low"
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 2,
+    "fields": {
+      "upperlimit": 50.0,
+      "rating": "Med"
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 3,
+    "fields": {
+      "upperlimit": 100.0,
+      "rating": "High"
+    }
+  },
+  {
+    "model": "crops.soiltestphosphorousranges",
+    "pk": 4,
+    "fields": {
+      "upperlimit": 99999.0,
+      "rating": "Very High"
+    }
+  }
+]

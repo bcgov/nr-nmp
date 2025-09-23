@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from .models import (
-    CropTypes, Crops, PreviousCropTypes, CropSoilTestPhosphorousRegions,
+    CropTypes, Crops, PreviousCropTypes, CropSoilTestPhosphorousRegions, SoilTestPhosphorousRanges,
     SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
-    SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges,
+    SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges, SoilTestPotassiumRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
     CropYields, NitrogenRecommendation, PlantAge, PlantsPerAcre,
     DistanceBetweenPlants, WhereWillPruningsGo
@@ -45,6 +45,11 @@ class SoilTestPhosphorousKelownaRangesSerializer(serializers.ModelSerializer):
         model = SoilTestPhosphorousKelownaRanges
         fields = '__all__'
 
+class SoilTestPhosphorousRangesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SoilTestPhosphorousRanges
+        fields = '__all__'
+
 
 class SoilTestMethodsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,6 +66,11 @@ class ConversionFactorsSerializer(serializers.ModelSerializer):
 class SoilTestPotassiumKelownaRangesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SoilTestPotassiumKelownaRanges
+        fields = '__all__'
+
+class SoilTestPotassiumRangesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SoilTestPotassiumRanges
         fields = '__all__'
 
 

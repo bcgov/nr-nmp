@@ -18,7 +18,7 @@ export type NMPFileFarmDetails = {
 
 export interface NMPFileNutrientAnalysis {
   N: number; // Nitrogen
-  P: number; // Phosphorus
+  P: number; // Phosphorous
   K: number; // Potassium
   manureId: number;
   solidLiquid: 'Solid' | 'Liquid' | '';

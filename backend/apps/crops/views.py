@@ -3,18 +3,18 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import (
-    CropTypes, Crops, PreviousCropTypes, CropSoilTestPhosphorousRegions,
+    CropTypes, Crops, PreviousCropTypes, CropSoilTestPhosphorousRegions, SoilTestPhosphorousRanges,
     SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
-    SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges,
+    SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges, SoilTestPotassiumRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
     CropYields, NitrogenRecommendation, PlantAge, PlantsPerAcre,
     DistanceBetweenPlants, WhereWillPruningsGo
 )
 from .serializers import (
     CropTypesSerializer, CropsSerializer, PreviousCropTypesSerializer,
-    CropSoilTestPhosphorousRegionsSerializer, SoilTestPhosphorousRecommendationSerializer,
+    CropSoilTestPhosphorousRegionsSerializer, SoilTestPhosphorousRangesSerializer, SoilTestPhosphorousRecommendationSerializer,
     SoilTestPhosphorousKelownaRangesSerializer, SoilTestMethodsSerializer,
-    ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer,
+    ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer, SoilTestPotassiumRangesSerializer,
     SoilTestPotassiumRecommendationSerializer, CropSoilPotassiumRegionsSerializer,
     CropYieldsSerializer, NitrogenRecommendationSerializer, PlantAgeSerializer, PlantsPerAcreSerializer,
     DistanceBetweenPlantsSerializer, WhereWillPruningsGoSerializer
@@ -77,6 +77,12 @@ class CropsViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'])
+    def soilTestPhosphorousRanges(self, request):
+        soil_test_phosphorous_ranges = SoilTestPhosphorousRanges.objects.all()
+        serializer = SoilTestPhosphorousRangesSerializer(soil_test_phosphorous_ranges, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
     def soilTestMethods(self, request):
         soil_test_methods = SoilTestMethods.objects.all()
         serializer = SoilTestMethodsSerializer(soil_test_methods, many=True)
@@ -109,6 +115,12 @@ class CropsViewset(viewsets.ViewSet):
     def soilTestPotassiumKelownaRanges(self, request):
         soil_test_potassium_kelowna_ranges = SoilTestPotassiumKelownaRanges.objects.all()
         serializer = SoilTestPotassiumKelownaRangesSerializer(soil_test_potassium_kelowna_ranges, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def soilTestPotassiumRanges(self, request):
+        soil_test_potassium_ranges = SoilTestPotassiumRanges.objects.all()
+        serializer = SoilTestPotassiumRangesSerializer(soil_test_potassium_ranges, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'])
