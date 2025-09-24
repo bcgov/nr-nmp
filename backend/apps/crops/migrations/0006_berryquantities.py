@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crops', '0004_distancebetweenplants_wherewillprunningsgo'),
+        ('crops', '0005_soiltestphosphorousranges_soiltestpotassiumranges'),
     ]
 
     operations = [
