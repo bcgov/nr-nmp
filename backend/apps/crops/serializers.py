@@ -5,7 +5,7 @@ from .models import (
     SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
     SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges, SoilTestPotassiumRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
-    CropYields, NitrogenRecommendation, PlantAge, WhereWillPruningsGo, 
+    CropYields, NitrogenRecommendation, PlantAge, WhereWillPruningsGo,
     BerryQuantities
 )
 

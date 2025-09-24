@@ -199,6 +199,7 @@ class PlantAge(models.Model):
         managed = True
         db_table = 'plant_age'
 
+
 class BerryQuantities(models.Model):
     id = models.IntegerField(primary_key=True)
     DistanceBetweenPlants = models.CharField(max_length=100)
