@@ -200,22 +200,14 @@ class PlantAge(models.Model):
         db_table = 'plant_age'
 
 
-class PlantsPerAcre(models.Model):
+class BerryQuantities(models.Model):
     id = models.IntegerField(primary_key=True)
-    label = models.CharField(max_length=100)
+    DistanceBetweenPlants = models.CharField(max_length=100)
+    PlantsPerAcre = models.IntegerField()
 
     class Meta:
         managed = True
-        db_table = 'plants_per_acre'
-
-
-class DistanceBetweenPlants(models.Model):
-    id = models.IntegerField(primary_key=True)
-    label = models.CharField(max_length=100)
-
-    class Meta:
-        managed = True
-        db_table = 'distance_between_plants'
+        db_table = 'berry_quantities'
 
 
 class WhereWillPruningsGo(models.Model):

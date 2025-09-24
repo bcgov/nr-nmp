@@ -15603,45 +15603,51 @@
     }
   },
   {
-    "model": "crops.plantsperacre",
-    "pk": 2498,
+    "model": "crops.berryquantities",
+    "pk": 1,
     "fields": {
-      "label": 2498.0
+      "PlantsPerAcre": 2498.0,
+      "DistanceBetweenPlants": "0.6 m x 2.7 m (2 ft x 9 ft)"
     }
   },
   {
-    "model": "crops.plantsperacre",
-    "pk": 2248,
+    "model": "crops.berryquantities",
+    "pk": 2,
     "fields": {
-      "label": 2248.0
+      "PlantsPerAcre": 2248.0,
+      "DistanceBetweenPlants": "0.6 m x 3.0 m (2 ft x 10 ft)"
     }
   },
   {
-    "model": "crops.plantsperacre",
-    "pk": 1999,
+    "model": "crops.berryquantities",
+    "pk": 3,
     "fields": {
-      "label": 1999.0
+      "PlantsPerAcre": 1999.0,
+      "DistanceBetweenPlants": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
     }
   },
   {
-    "model": "crops.plantsperacre",
-    "pk": 1799,
+    "model": "crops.berryquantities",
+    "pk": 4,
     "fields": {
-      "label": 1799.0
+      "PlantsPerAcre": 1799.0,
+      "DistanceBetweenPlants": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
     }
   },
   {
-    "model": "crops.plantsperacre",
-    "pk": 1665,
+    "model": "crops.berryquantities",
+    "pk": 5,
     "fields": {
-      "label": 1665.0
+      "PlantsPerAcre": 1665.0,
+      "DistanceBetweenPlants": "0.9 m x 2.7 m (3 ft x 9 ft)"
     }
   },
   {
-    "model": "crops.plantsperacre",
-    "pk": 1499,
+    "model": "crops.berryquantities",
+    "pk": 6,
     "fields": {
-      "label": 1499.0
+      "PlantsPerAcre": 1499.0,
+      "DistanceBetweenPlants": "0.9 m x 3.0 m (3 ft x 10 ft)"
     }
   },
   {
@@ -15670,48 +15676,6 @@
     "pk": 4,
     "fields": {
       "label": "Left between rows"
-    }
-  },
-  {
-    "model": "crops.distancebetweenplants",
-    "pk": 1,
-    "fields": {
-      "label": "0.6 m x 2.7 m (2 ft x 9 ft)"
-    }
-  },
-  {
-    "model": "crops.distancebetweenplants",
-    "pk": 2,
-    "fields": {
-      "label": "0.6 m x 3.0 m (2 ft x 10 ft)"
-    }
-  },
-  {
-    "model": "crops.distancebetweenplants",
-    "pk": 3,
-    "fields": {
-      "label": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
-    }
-  },
-  {
-    "model": "crops.distancebetweenplants",
-    "pk": 4,
-    "fields": {
-      "label": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
-    }
-  },
-  {
-    "model": "crops.distancebetweenplants",
-    "pk": 5,
-    "fields": {
-      "label": "0.9 m x 2.7 m (3 ft x 9 ft)"
-    }
-  },
-  {
-    "model": "crops.distancebetweenplants",
-    "pk": 6,
-    "fields": {
-      "label": "0.9 m x 3.0 m (3 ft x 10 ft)"
     }
   },
   {
