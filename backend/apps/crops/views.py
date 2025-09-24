@@ -7,7 +7,7 @@ from .models import (
     SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
     SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges, SoilTestPotassiumRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
-    CropYields, NitrogenRecommendation, PlantAge, WhereWillPruningsGo, 
+    CropYields, NitrogenRecommendation, PlantAge, WhereWillPruningsGo,
     BerryQuantities
 )
 from .serializers import (
@@ -16,8 +16,9 @@ from .serializers import (
     SoilTestPhosphorousKelownaRangesSerializer, SoilTestMethodsSerializer,
     ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer,
     SoilTestPotassiumRecommendationSerializer, CropSoilPotassiumRegionsSerializer,
-    CropYieldsSerializer, NitrogenRecommendationSerializer, PlantAgeSerializer, 
-    WhereWillPruningsGoSerializer, BerryQuantitiesSerializer
+    CropYieldsSerializer, NitrogenRecommendationSerializer, PlantAgeSerializer,
+    WhereWillPruningsGoSerializer, SoilTestPhosphorousRangesSerializer,
+    SoilTestPotassiumRangesSerializer, BerryQuantitiesSerializer
 )
 
 
