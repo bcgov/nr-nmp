@@ -7,17 +7,16 @@ from .models import (
     SoilTestPhosphorousRecommendation, SoilTestPhosphorousKelownaRanges,
     SoilTestMethods, ConversionFactors, SoilTestPotassiumKelownaRanges, SoilTestPotassiumRanges,
     SoilTestPotassiumRecommendation, CropSoilPotassiumRegions,
-    CropYields, NitrogenRecommendation, PlantAge, PlantsPerAcre,
-    DistanceBetweenPlants, WhereWillPruningsGo, BerryQuantities
+    CropYields, NitrogenRecommendation, PlantAge, WhereWillPruningsGo, 
+    BerryQuantities
 )
 from .serializers import (
     CropTypesSerializer, CropsSerializer, PreviousCropTypesSerializer,
-    CropSoilTestPhosphorousRegionsSerializer, SoilTestPhosphorousRangesSerializer,
-    SoilTestPhosphorousRecommendationSerializer, SoilTestPhosphorousKelownaRangesSerializer,
-    SoilTestMethodsSerializer, ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer,
-    SoilTestPotassiumRangesSerializer, SoilTestPotassiumRecommendationSerializer,
-    CropSoilPotassiumRegionsSerializer, CropYieldsSerializer, NitrogenRecommendationSerializer,
-    PlantAgeSerializer, PlantsPerAcreSerializer, DistanceBetweenPlantsSerializer,
+    CropSoilTestPhosphorousRegionsSerializer, SoilTestPhosphorousRecommendationSerializer,
+    SoilTestPhosphorousKelownaRangesSerializer, SoilTestMethodsSerializer,
+    ConversionFactorsSerializer, SoilTestPotassiumKelownaRangesSerializer,
+    SoilTestPotassiumRecommendationSerializer, CropSoilPotassiumRegionsSerializer,
+    CropYieldsSerializer, NitrogenRecommendationSerializer, PlantAgeSerializer, 
     WhereWillPruningsGoSerializer, BerryQuantitiesSerializer
 )
 
@@ -148,18 +147,6 @@ class CropsViewset(viewsets.ViewSet):
     def plantAge(self, request):
         plant_age = PlantAge.objects.all()
         serializer = PlantAgeSerializer(plant_age, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=True, methods=['get'])
-    def plantsPerAcre(self, request):
-        plants_per_acre = PlantsPerAcre.objects.all()
-        serializer = PlantsPerAcreSerializer(plants_per_acre, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=True, methods=['get'])
-    def distanceBetweenPlants(self, request):
-        distance_between_plants = DistanceBetweenPlants.objects.all()
-        serializer = DistanceBetweenPlantsSerializer(distance_between_plants, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'])
