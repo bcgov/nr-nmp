@@ -15802,6 +15802,9 @@
       "applicationrateunit": 3.0,
       "applicationrateunitname": "US gallons/ac",
       "usgallonsperacreconversion": 1.0
+    }
+  },
+  {
     "model": "crops.soiltestphosphorousranges",
     "pk": 1,
     "fields": {

@@ -29,7 +29,7 @@ Backend (JavaScript/TypeScript)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=quickstart-openshift_backend&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=quickstart-openshift_backend)
 
-# QuickStart for OpenShift 
+# QuickStart for OpenShift
 
 ## Pull Request-Based Workflows with Sample Stack
 
