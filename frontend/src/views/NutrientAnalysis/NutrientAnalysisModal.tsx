@@ -206,7 +206,10 @@ export default function NutrientAnalysisModal({
                 const opt = manureOptions.find((r) => r.id === e)!;
                 handleInputChanges({
                   manureName: e as string,
-                  bookLab: 'book',
+                  bookLab:
+                    (e as string) === '(Other, solid)' || (e as string) === '(Other, liquid)'
+                      ? 'lab'
+                      : 'book',
                   nMineralizationId: opt.value.nmineralizationid,
                 });
               }}
@@ -216,7 +219,11 @@ export default function NutrientAnalysisModal({
           <Grid size={formGridBreakpoints}>
             <Checkbox
               isRequired={!formData.bookLab}
-              isDisabled={!(formData.sourceUuid && formData.manureId)}
+              isDisabled={
+                !(formData.sourceUuid && formData.manureId) ||
+                formData.manureName === '(Other, solid)' ||
+                formData.manureName === '(Other, liquid)'
+              }
               value="book"
               isSelected={formData.bookLab === 'book'}
               onChange={(s: boolean) => handleInputChanges({ bookLab: s ? 'book' : '' })}
