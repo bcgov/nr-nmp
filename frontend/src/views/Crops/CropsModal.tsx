@@ -172,6 +172,24 @@ function CropsModal({
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
 
+  const berryPlantsPerAcreOptions = useMemo(
+    () =>
+      berryQuantities.map((ele) => ({
+        id: ele.id,
+        label: ele.PlantsPerAcre?.toString(),
+      })),
+    [berryQuantities],
+  );
+
+  const berryDistBtwPlantsOptions = useMemo(
+    () =>
+      berryQuantities.map((ele) => ({
+        id: ele.id,
+        label: ele.DistanceBetweenPlants,
+      })),
+    [berryQuantities],
+  );
+
   // Only called after calculations have been performed
   const handleSubmit = () => {
     setFields((prevFields) => {
@@ -762,10 +780,7 @@ function CropsModal({
                     <Select
                       isRequired
                       label="# of plants per acre"
-                      items={berryQuantities.map((ele) => ({
-                        id: ele.id,
-                        label: ele.PlantsPerAcre?.toString(),
-                      }))}
+                      items={berryPlantsPerAcreOptions}
                       selectedKey={
                         berryQuantities.find(
                           (ele) => ele.PlantsPerAcre === formData.numberOfPlantsPerAcre,
@@ -780,10 +795,7 @@ function CropsModal({
                     <Select
                       isRequired
                       label="Distance between plants, distance between rows (inches)"
-                      items={berryQuantities.map((ele) => ({
-                        id: ele.id,
-                        label: ele.DistanceBetweenPlants,
-                      }))}
+                      items={berryDistBtwPlantsOptions}
                       selectedKey={
                         berryQuantities.find(
                           (ele) => ele.DistanceBetweenPlants === formData.distanceBtwnPlantsRows,
