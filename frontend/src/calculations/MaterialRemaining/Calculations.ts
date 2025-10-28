@@ -8,9 +8,6 @@ import { env } from '@/env';
 import { NMPFileYear, NMPFileField, NMPFileAppliedManure, ManureType, Units } from '@/types';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
 
-/**
- * Interface for solid material conversion data
- */
 export interface SolidMaterialConversion {
   id: number;
   applicationrateunit: number;
@@ -18,9 +15,6 @@ export interface SolidMaterialConversion {
   tonsperacreconversion: string;
 }
 
-/**
- * Interface for liquid material conversion data
- */
 export interface LiquidMaterialConversion {
   id: number;
   applicationrateunit: number;
@@ -28,18 +22,12 @@ export interface LiquidMaterialConversion {
   usgallonsperacreconversion: number;
 }
 
-/**
- * Interface for field application data
- */
 export interface FieldApplicationData {
   fieldId: number;
   totalAppliedGallons?: number;
   totalAppliedTons?: number;
 }
 
-/**
- * Interface for individual applied manure data
- */
 export interface AppliedManureData {
   sourceName: string;
   sourceUuid: string;
@@ -56,9 +44,6 @@ export interface AppliedManureData {
   formattedTotalToApply: string;
 }
 
-/**
- * Interface for material remaining data
- */
 export interface MaterialRemainingData {
   appliedStoredManures: AppliedManureData[];
   appliedImportedManures: AppliedManureData[];
