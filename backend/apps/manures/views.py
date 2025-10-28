@@ -5,13 +5,16 @@ from django.shortcuts import get_object_or_404
 
 from .models import (
     Manures, SolidMaterialsConversionFactors, LiquidMaterialsConversionFactors,
-    Units, NitrogenMineralization, AmmoniaRetentions, PreviousYearManureApplications
+    Units, NitrogenMineralization, AmmoniaRetentions, PreviousYearManureApplications,
+    LiquidMaterialApplicationUsGallonsPerAcreRateConversions, SolidMaterialApplicationTonPerAcreRateConversions
 )
 from .serializers import (
     ManuresSerializer, SolidMaterialsConversionFactorsSerializer,
     LiquidMaterialsConversionFactorsSerializer,
     UnitsSerializer, NMineralizationSerializer,
-    AmmoniaRetentionSerializer, PreviousYearManureApplicationsSerializer
+    AmmoniaRetentionSerializer, PreviousYearManureApplicationsSerializer,
+    LiquidMaterialApplicationUsGallonsPerAcreRateConversionsSerializer,
+    SolidMaterialApplicationTonPerAcreRateConversionsSerializer
 )
 
 
@@ -79,4 +82,16 @@ class ManuresViewset(viewsets.ViewSet):
     def previousYearManureApplications(self, request, pk=None):
         applications = PreviousYearManureApplications.objects.all()
         serializer = PreviousYearManureApplicationsSerializer(applications, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def liquidMaterialApplicationUsGallonsPerAcreRateConversions(self, request):
+        conversions = LiquidMaterialApplicationUsGallonsPerAcreRateConversions.objects.all()
+        serializer = LiquidMaterialApplicationUsGallonsPerAcreRateConversionsSerializer(conversions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def solidMaterialApplicationTonPerAcreRateConversions(self, request):
+        conversions = SolidMaterialApplicationTonPerAcreRateConversions.objects.all()
+        serializer = SolidMaterialApplicationTonPerAcreRateConversionsSerializer(conversions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
