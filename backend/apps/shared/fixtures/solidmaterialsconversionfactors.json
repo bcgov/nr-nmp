@@ -7,7 +7,7 @@
       "inputunitname": "cubic meters",
       "cubicyardsoutput": 1.30795,
       "cubicmetersoutput": 1.0,
-      "metrictonsoutput": "1.30795*density"
+      "ustonsoutput": "1.30795*density"
     }
   },
   {
@@ -18,7 +18,7 @@
       "inputunitname": "tons",
       "cubicyardsoutput": "1/density",
       "cubicmetersoutput": "(1/density)*0.764555",
-      "metrictonsoutput": 1.0
+      "ustonsoutput": 1.0
     }
   },
   {
@@ -29,7 +29,7 @@
       "inputunitname": "tonnes",
       "cubicyardsoutput": "1.10231/density",
       "cubicmetersoutput": "(1.10231/density)*0.764555",
-      "metrictonsoutput": 1.10231
+      "ustonsoutput": 1.10231
     }
   },
   {
@@ -40,7 +40,7 @@
       "inputunitname": "cubic yards",
       "cubicyardsoutput": 1.0,
       "cubicmetersoutput": 0.764555,
-      "metrictonsoutput": "1*density"
+      "ustonsoutput": "1*density"
     }
   }
 ]
