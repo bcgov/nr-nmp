@@ -39,7 +39,7 @@ import { HARVEST_UNIT_OPTIONS } from '../../constants/harvestUnits';
 import useAppState from '@/hooks/useAppState';
 import { cropsModalReducer, showUnitDropdown } from './utils';
 
-type BerryQuantity = { id: number; PlantsPerAcre: number; DistanceBetweenPlants: string };
+type BerryQuantity = { id: number; plantsperacre: number; distancebetweenplants: string };
 
 // Define constants for column headings for Nutrient added/removed tables
 const requireAndRemoveColumns: GridColDef[] = [
@@ -176,7 +176,7 @@ function CropsModal({
     () =>
       berryQuantities.map((ele) => ({
         id: ele.id,
-        label: ele.PlantsPerAcre?.toString(),
+        label: ele.plantsperacre?.toString(),
       })),
     [berryQuantities],
   );
@@ -185,7 +185,7 @@ function CropsModal({
     () =>
       berryQuantities.map((ele) => ({
         id: ele.id,
-        label: ele.DistanceBetweenPlants,
+        label: ele.distancebetweenplants,
       })),
     [berryQuantities],
   );
@@ -337,12 +337,12 @@ function CropsModal({
             dispatch({
               type: 'SET_FORM_DATA_ATTR',
               attr: 'numberOfPlantsPerAcre',
-              value: berryQuantities[value - 1].PlantsPerAcre,
+              value: berryQuantities[value - 1].plantsperacre,
             });
             dispatch({
               type: 'SET_FORM_DATA_ATTR',
               attr: 'distanceBtwnPlantsRows',
-              value: berryQuantities[value - 1].DistanceBetweenPlants,
+              value: berryQuantities[value - 1].distancebetweenplants,
             });
           }
           return;
@@ -783,7 +783,7 @@ function CropsModal({
                       items={berryPlantsPerAcreOptions}
                       selectedKey={
                         berryQuantities.find(
-                          (ele) => ele.PlantsPerAcre === formData.numberOfPlantsPerAcre,
+                          (ele) => ele.plantsperacre === formData.numberOfPlantsPerAcre,
                         )?.id || 0
                       }
                       onSelectionChange={(e) =>
@@ -798,7 +798,7 @@ function CropsModal({
                       items={berryDistBtwPlantsOptions}
                       selectedKey={
                         berryQuantities.find(
-                          (ele) => ele.DistanceBetweenPlants === formData.distanceBtwnPlantsRows,
+                          (ele) => ele.distancebetweenplants === formData.distanceBtwnPlantsRows,
                         )?.id || 0
                       }
                       onSelectionChange={(e) =>

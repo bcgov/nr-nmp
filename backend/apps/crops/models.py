@@ -202,8 +202,8 @@ class PlantAge(models.Model):
 
 class BerryQuantities(models.Model):
     id = models.IntegerField(primary_key=True)
-    DistanceBetweenPlants = models.CharField(max_length=100)
-    PlantsPerAcre = models.IntegerField()
+    distancebetweenplants = models.CharField(max_length=100)
+    plantsperacre = models.IntegerField()
 
     class Meta:
         managed = True

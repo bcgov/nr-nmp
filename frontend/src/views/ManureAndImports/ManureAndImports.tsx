@@ -91,7 +91,7 @@ export default function ManureAndImports() {
         (data.annualAmount || 0) *
         getDensityFactoredConversionUsingMoisture(
           data.moisture || 0,
-          solidManureConversionFactor?.metrictonsoutput || '',
+          solidManureConversionFactor?.ustonsoutput || '',
         );
 
       updatedManureFormData = {

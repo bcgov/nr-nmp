@@ -101,7 +101,7 @@ class SolidMaterialsConversionFactorsTests(TestCase):
             inputunitname="Cubic Yard",
             cubicyardsoutput="1.0",
             cubicmetersoutput="0.76455",
-            metrictonsoutput="0.5"
+            ustonsoutput="0.5"
         )
 
     def test_solid_conversion_factor_creation(self):
@@ -110,7 +110,7 @@ class SolidMaterialsConversionFactorsTests(TestCase):
         self.assertEqual(self.conversion_factor.inputunitname, "Cubic Yard")
         self.assertEqual(self.conversion_factor.cubicyardsoutput, "1.0")
         self.assertEqual(self.conversion_factor.cubicmetersoutput, "0.76455")
-        self.assertEqual(self.conversion_factor.metrictonsoutput, "0.5")
+        self.assertEqual(self.conversion_factor.ustonsoutput, "0.5")
 
     def test_string_precision(self):
         """Test that string-based numeric values can store full precision"""
@@ -120,14 +120,14 @@ class SolidMaterialsConversionFactorsTests(TestCase):
             inputunitname="Cubic Foot",
             cubicyardsoutput="0.037037037037037",
             cubicmetersoutput="0.0283168",
-            metrictonsoutput="0.018518518518519"
+            ustonsoutput="0.018518518518519"
         )
 
         # Retrieve from database to verify precision is maintained
         factor_from_db = SolidMaterialsConversionFactors.objects.get(id=2)
         self.assertEqual(factor_from_db.cubicyardsoutput, "0.037037037037037")
         self.assertEqual(factor_from_db.cubicmetersoutput, "0.0283168")
-        self.assertEqual(factor_from_db.metrictonsoutput, "0.018518518518519")
+        self.assertEqual(factor_from_db.ustonsoutput, "0.018518518518519")
 
 
 class LiquidMaterialsConversionFactorsTests(TestCase):

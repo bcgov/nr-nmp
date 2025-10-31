@@ -29,7 +29,7 @@ class SolidMaterialsConversionFactors(models.Model):
     inputunitname = models.CharField(max_length=100)
     cubicyardsoutput = models.CharField(max_length=100)
     cubicmetersoutput = models.CharField(max_length=100)
-    metrictonsoutput = models.CharField(max_length=100)
+    ustonsoutput = models.CharField(max_length=100)
 
     class Meta:
         managed = True
