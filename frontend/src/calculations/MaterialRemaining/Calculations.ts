@@ -35,11 +35,6 @@ export interface AppliedManureData {
   totalAnnualManureRemainingToApply: number;
   wholePercentApplied: number;
   wholePercentRemaining: number;
-  appliedMessage: string;
-  remainingToApplyMessage: string;
-  formattedTotalApplied: string;
-  formattedTotalRemaining: string;
-  formattedTotalToApply: string;
 }
 
 export interface MaterialRemainingData {
@@ -194,24 +189,6 @@ function calculateWholePercentRemaining(totalRemaining: number, totalToApply: nu
 }
 
 /**
- * Format amount with appropriate units
- */
-function formatAmountWithUnit(
-  amount: number,
-  manureType: ManureType | null,
-  isRemaining: boolean = false,
-): string {
-  const unit = manureType === ManureType.Liquid ? 'gallons' : 'tons';
-  const roundedAmount = Math.round(amount);
-
-  if (isRemaining && amount <= 0) {
-    return `No material remaining`;
-  }
-
-  return `${roundedAmount.toLocaleString()} ${unit}`;
-}
-
-/**
  * Create applied manure data for storage systems
  */
 function createStoredManureData(
@@ -249,11 +226,6 @@ function createStoredManureData(
     totalAnnualManureRemainingToApply: totalRemaining,
     wholePercentApplied,
     wholePercentRemaining,
-    appliedMessage: `${storageSystem.name}: ${wholePercentApplied}%`,
-    remainingToApplyMessage: `${storageSystem.name}: ${wholePercentRemaining}%`,
-    formattedTotalApplied: formatAmountWithUnit(totalApplied, storageSystem.manureType),
-    formattedTotalRemaining: formatAmountWithUnit(totalRemaining, storageSystem.manureType, true),
-    formattedTotalToApply: formatAmountWithUnit(totalAnnualManureToApply, storageSystem.manureType),
   };
 }
 
@@ -295,14 +267,6 @@ function createImportedManureData(
     totalAnnualManureRemainingToApply: totalRemaining,
     wholePercentApplied,
     wholePercentRemaining,
-    appliedMessage: `${importedManure.managedManureName}: ${wholePercentApplied}%`,
-    remainingToApplyMessage: `${importedManure.managedManureName}: ${wholePercentRemaining}%`,
-    formattedTotalApplied: formatAmountWithUnit(totalApplied, importedManure.manureType),
-    formattedTotalRemaining: formatAmountWithUnit(totalRemaining, importedManure.manureType, true),
-    formattedTotalToApply: formatAmountWithUnit(
-      totalAnnualManureToApply,
-      importedManure.manureType,
-    ),
   };
 }
 
