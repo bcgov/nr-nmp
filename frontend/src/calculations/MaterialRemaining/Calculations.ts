@@ -91,12 +91,22 @@ export async function fetchAllConversionTables(): Promise<{
 /**
  * Get density factor based on moisture percentage
  */
+// function getDensityFactor(moisturePercentage: number): number {
+//   if (moisturePercentage <= 60) return 0.6;
+//   if (moisturePercentage <= 75) return 0.51;
+//   if (moisturePercentage <= 85) return 0.42;
+//   if (moisturePercentage <= 95) return 0.33;
+//   return 0.24;
+// }
+
 function getDensityFactor(moisturePercentage: number): number {
-  if (moisturePercentage <= 60) return 0.6;
-  if (moisturePercentage <= 75) return 0.51;
-  if (moisturePercentage <= 85) return 0.42;
-  if (moisturePercentage <= 95) return 0.33;
-  return 0.24;
+  if (moisturePercentage < 40) return 0.27;
+  if (moisturePercentage > 82) return 0.837;
+
+  const moistureDecimal = moisturePercentage / 100;
+  return (
+    7.9386 * moistureDecimal ** 3 - 16.43 * moistureDecimal ** 2 + 11.993 * moistureDecimal - 2.3975
+  );
 }
 
 /**
@@ -120,7 +130,7 @@ function getConversionFactor(
   unit: Units,
   solidConversions: SolidMaterialConversion[],
   liquidConversions: LiquidMaterialConversion[],
-  manure?: NMPFileAppliedManure,
+  manure: NMPFileAppliedManure,
   manureData?: { [manureId: number]: { moisture?: number } },
 ): number {
   // Determine density for solid manure calculations
@@ -273,7 +283,6 @@ function formatAmountWithUnit(
     return `No material remaining`;
   }
 
-  // Format like old system: string.Format("{0:#,##0}", Math.Round(value))
   return `${roundedAmount.toLocaleString()} ${unit}`;
 }
 
@@ -373,32 +382,6 @@ function createImportedManureData(
 }
 
 /**
- * Check for warnings and add them to the warnings array
- */
-function checkAndAddWarnings(appliedManure: AppliedManureData, warnings: string[]): void {
-  const isOverUtilized =
-    appliedManure.wholePercentRemaining === 0 &&
-    appliedManure.totalAnnualManureRemainingToApply < 0 &&
-    (appliedManure.totalAnnualManureRemainingToApply / appliedManure.totalAnnualManureToApply) *
-      100 <=
-      -10;
-
-  if (isOverUtilized) {
-    warnings.push(
-      `Warning: ${appliedManure.sourceName} has been over-applied by ${Math.abs(
-        appliedManure.totalAnnualManureRemainingToApply,
-      )} units`,
-    );
-  }
-
-  if (appliedManure.wholePercentRemaining < 10 && appliedManure.wholePercentRemaining > 0) {
-    warnings.push(
-      `Alert: ${appliedManure.sourceName} is running low (${appliedManure.wholePercentRemaining}% remaining)`,
-    );
-  }
-}
-
-/**
  * Main function to calculate material remaining data for a year
  */
 export function calculateMaterialRemainingData(
@@ -424,9 +407,6 @@ export function calculateMaterialRemainingData(
         availableUnits,
       );
       appliedStoredManures.push(appliedStoredManure);
-
-      // Check for warnings
-      checkAndAddWarnings(appliedStoredManure, materialsRemainingWarnings);
     });
   }
 
@@ -442,9 +422,6 @@ export function calculateMaterialRemainingData(
         availableUnits,
       );
       appliedImportedManures.push(appliedImportedManure);
-
-      // Check for warnings
-      checkAndAddWarnings(appliedImportedManure, materialsRemainingWarnings);
     });
   }
 
