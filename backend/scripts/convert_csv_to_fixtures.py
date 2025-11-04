@@ -47,14 +47,13 @@ MODEL_MAPPINGS = {
     "_NitrogenMineralizations": "manures.nitrogenmineralization",
     "_PlantAge": "crops.plantage",
     "_AmmoniaRetentions": "manures.ammoniaretentions",
-    "_PlantsPerAcre": "crops.plantsperacre",
     "_WhereWillPruningsGo": "crops.wherewillpruningsgo",
-    "_DistanceBetweenPlants": "crops.distancebetweenplants",
     "_PreviousYearManureApplicationNitrogenDefaults": "manures.previousyearmanureapplications",
     "_SolidMaterialApplicationTonPerAcreRateConversions": "manures.solidmaterialapplicationtonperacrerateconversions",
     "_LiquidMaterialApplicationUsGallonsPerAcreRateConversions": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
     "_SoilTestPhosphorousRanges": "crops.soiltestphosphorousranges",
     "_SoilTestPotassiumRanges": "crops.soiltestpotassiumranges",
+    "_BerryQuantities": "crops.berryquantities",
 }
 
 
