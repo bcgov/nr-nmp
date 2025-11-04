@@ -2,9 +2,9 @@
  * @summary Material Remaining calculations
  * @description Functions for calculating material remaining status
  */
-import { evaluate } from 'mathjs';
 import { NMPFileYear, NMPFileField, NMPFileAppliedManure, ManureType, Units } from '@/types';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
+import { getDensityFactor, evaluateConversionFormula } from '@/utils/densityCalculations';
 
 export interface SolidMaterialConversion {
   id: number;
@@ -46,41 +46,6 @@ export interface MaterialRemainingData {
   appliedStoredManures: AppliedManureData[];
   appliedImportedManures: AppliedManureData[];
   materialsRemainingWarnings: string[];
-}
-
-/**
- * Get density factor based on moisture percentage
- */
-// function getDensityFactor(moisturePercentage: number): number {
-//   if (moisturePercentage <= 60) return 0.6;
-//   if (moisturePercentage <= 75) return 0.51;
-//   if (moisturePercentage <= 85) return 0.42;
-//   if (moisturePercentage <= 95) return 0.33;
-//   return 0.24;
-// }
-
-function getDensityFactor(moisturePercentage: number): number {
-  if (moisturePercentage < 40) return 0.27;
-  if (moisturePercentage > 82) return 0.837;
-
-  const moistureDecimal = moisturePercentage / 100;
-  return (
-    7.9386 * moistureDecimal ** 3 - 16.43 * moistureDecimal ** 2 + 11.993 * moistureDecimal - 2.3975
-  );
-}
-
-/**
- * Evaluate conversion formula with dynamic values
- */
-function evaluateConversionFormula(formula: string, density: number): number {
-  try {
-    // Replace 'density' in the formula with the actual density value
-    const formulaWithDensity = formula.replace(/density/g, density.toString());
-    return evaluate(formulaWithDensity);
-  } catch (error) {
-    console.error('Error evaluating conversion formula:', formula, error);
-    return 1.0; // Fallback to no conversion
-  }
 }
 
 /**
