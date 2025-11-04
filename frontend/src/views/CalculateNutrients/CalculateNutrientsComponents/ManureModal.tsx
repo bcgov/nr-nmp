@@ -131,22 +131,11 @@ export default function ManureModal({
 
   // Get material type from storage system or imported manure
   const selectedMaterialType = useMemo(() => {
-    if (!manureForm.sourceUuid) return null;
+    if (!manureForm.solidLiquid) return null;
 
-    // Try to find in storage systems
-    const storageSystem = state.nmpFile.years[0].manureStorageSystems?.find(
-      (system) => system.uuid === manureForm.sourceUuid,
-    );
-    if (storageSystem) return storageSystem.manureType;
-
-    // Try to find in imported manures
-    const importedManure = state.nmpFile.years[0].importedManures?.find(
-      (manure) => manure.uuid === manureForm.sourceUuid,
-    );
-    if (importedManure) return importedManure.manureType;
-
-    return null;
-  }, [manureForm.sourceUuid, state.nmpFile.years]);
+    // Convert string to ManureType enum
+    return manureForm.solidLiquid === 'Liquid' ? ManureType.Liquid : ManureType.Solid;
+  }, [manureForm.solidLiquid]);
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
 
