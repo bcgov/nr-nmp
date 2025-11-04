@@ -7,7 +7,7 @@ import {
   MaterialRemainingTitle,
   EmptyState,
 } from './materialRemaining.styles';
-import { MaterialRemainingItem } from './index';
+import MaterialRemainingItem from './MaterialRemainingItem';
 
 interface MaterialRemainingDisplayProps {
   materialRemainingData: MaterialRemainingData;

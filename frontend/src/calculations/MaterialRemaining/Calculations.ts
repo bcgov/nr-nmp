@@ -209,7 +209,8 @@ function createStoredManureData(
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
-  const totalAnnualManureToApply = getStandardizedAnnualManureAmount(storageSystem);
+  const totalAnnualManureToApply =
+    storageSystem.totalAnnualManureAmount ?? getStandardizedAnnualManureAmount(storageSystem);
   const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
   const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManureToApply);
   const wholePercentRemaining = calculateWholePercentRemaining(
@@ -250,7 +251,8 @@ function createImportedManureData(
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
-  const totalAnnualManureToApply = getStandardizedAnnualManureAmount(importedManure);
+  const totalAnnualManureToApply =
+    importedManure.totalAnnualManureAmount ?? getStandardizedAnnualManureAmount(importedManure);
   const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
   const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManureToApply);
   const wholePercentRemaining = calculateWholePercentRemaining(
