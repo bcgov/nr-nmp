@@ -32,6 +32,8 @@ import { MANURE_IMPORTS } from '@/constants/routes';
 import {
   calculateMaterialRemaining,
   type MaterialRemainingData,
+  type SolidMaterialConversion,
+  type LiquidMaterialConversion,
 } from '@/calculations/MaterialRemaining/Calculations';
 import { MaterialRemainingDisplay } from '@/components/MaterialRemaining';
 
@@ -152,6 +154,9 @@ export default function ManureModal({
     null,
   );
 
+  const [solidConversions, setSolidConversions] = useState<SolidMaterialConversion[]>([]);
+  const [liquidConversions, setLiquidConversions] = useState<LiquidMaterialConversion[]>([]);
+
   const hasMaterialRemainingData = materialRemainingData !== null;
 
   const filteredManureUnits = useMemo(
@@ -181,27 +186,38 @@ export default function ManureModal({
   }, [manures]);
 
   useEffect(() => {
-    if (!yearDataWithPendingApplication || !selectedMaterialType || manureUnits.length === 0) {
+    if (
+      !yearDataWithPendingApplication ||
+      !selectedMaterialType ||
+      manureUnits.length === 0 ||
+      solidConversions.length === 0 ||
+      liquidConversions.length === 0
+    ) {
       setMaterialRemainingData(null);
       return;
     }
 
-    const calculateData = async () => {
-      try {
-        const result = await calculateMaterialRemaining(
-          yearDataWithPendingApplication,
-          manureData,
-          manureUnits.map((unit) => unit.value),
-        );
-        setMaterialRemainingData(result);
-      } catch (err) {
-        console.error('Failed to calculate material remaining data:', err);
-        setMaterialRemainingData(null);
-      }
-    };
-
-    calculateData();
-  }, [yearDataWithPendingApplication, selectedMaterialType, manureUnits, manureData]);
+    try {
+      const result = calculateMaterialRemaining(
+        yearDataWithPendingApplication,
+        solidConversions,
+        liquidConversions,
+        manureData,
+        manureUnits.map((unit) => unit.value),
+      );
+      setMaterialRemainingData(result);
+    } catch (err) {
+      console.error('Failed to calculate material remaining data:', err);
+      setMaterialRemainingData(null);
+    }
+  }, [
+    yearDataWithPendingApplication,
+    selectedMaterialType,
+    manureUnits,
+    solidConversions,
+    liquidConversions,
+    manureData,
+  ]);
 
   const [ammoniaRetentions, setAmmoniaRetentions] = useState<AmmoniaRetention[]>([]);
   const [defaultAmmonia, setDefaultAmmonia] = useState<number | undefined>(undefined);
@@ -308,6 +324,22 @@ export default function ManureModal({
       .then((response: { status?: any; data: NitrogenMineralization[] }) => {
         if (response.status === 200) {
           setNMineralizations(response.data);
+        }
+      });
+
+    apiCache
+      .callEndpoint('api/solidmaterialapplicationtonperacrerateconversions/')
+      .then((response: { status?: any; data: SolidMaterialConversion[] }) => {
+        if (response.status === 200) {
+          setSolidConversions(response.data);
+        }
+      });
+
+    apiCache
+      .callEndpoint('api/liquidmaterialapplicationusgallonsperacrerateconversions/')
+      .then((response: { status?: any; data: LiquidMaterialConversion[] }) => {
+        if (response.status === 200) {
+          setLiquidConversions(response.data);
         }
       });
   }, [apiCache]);

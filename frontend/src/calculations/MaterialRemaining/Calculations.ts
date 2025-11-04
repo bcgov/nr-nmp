@@ -3,8 +3,6 @@
  * @description Functions for calculating material remaining status
  */
 import { evaluate } from 'mathjs';
-import axios from 'axios';
-import { env } from '@/env';
 import { NMPFileYear, NMPFileField, NMPFileAppliedManure, ManureType, Units } from '@/types';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
 
@@ -48,44 +46,6 @@ export interface MaterialRemainingData {
   appliedStoredManures: AppliedManureData[];
   appliedImportedManures: AppliedManureData[];
   materialsRemainingWarnings: string[];
-}
-
-/**
- * Fetch solid material conversion factors from the database
- */
-export async function fetchSolidMaterialConversions(): Promise<SolidMaterialConversion[]> {
-  const response = await axios.get(
-    `${env.VITE_BACKEND_URL}/api/solidmaterialapplicationtonperacrerateconversions/`,
-  );
-  return response.data;
-}
-
-/**
- * Fetch liquid material conversion factors from the database
- */
-export async function fetchLiquidMaterialConversions(): Promise<LiquidMaterialConversion[]> {
-  const response = await axios.get(
-    `${env.VITE_BACKEND_URL}/api/liquidmaterialapplicationusgallonsperacrerateconversions/`,
-  );
-  return response.data;
-}
-
-/**
- * Fetch both solid and liquid conversion tables
- */
-export async function fetchAllConversionTables(): Promise<{
-  solidConversions: SolidMaterialConversion[];
-  liquidConversions: LiquidMaterialConversion[];
-}> {
-  const [solidConversions, liquidConversions] = await Promise.all([
-    fetchSolidMaterialConversions(),
-    fetchLiquidMaterialConversions(),
-  ]);
-
-  return {
-    solidConversions,
-    liquidConversions,
-  };
 }
 
 /**
@@ -479,13 +439,13 @@ export function calculateMaterialRemainingSummary(data: MaterialRemainingData): 
 /**
  * Enhanced material remaining calculation
  */
-export async function calculateMaterialRemaining(
+export function calculateMaterialRemaining(
   yearData: NMPFileYear,
+  solidConversions: SolidMaterialConversion[],
+  liquidConversions: LiquidMaterialConversion[],
   manureData?: { [manureId: number]: { moisture?: number } },
   availableUnits: Units[] = [],
-): Promise<MaterialRemainingData> {
-  const { solidConversions, liquidConversions } = await fetchAllConversionTables();
-
+): MaterialRemainingData {
   return calculateMaterialRemainingData(
     yearData,
     manureData,
