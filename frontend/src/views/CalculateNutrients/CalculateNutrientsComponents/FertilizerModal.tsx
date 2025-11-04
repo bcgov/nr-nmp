@@ -145,7 +145,7 @@ export default function FertilizerModal({
 
   const apiCache = useContext(APICacheContext);
 
-  const [calculatedData, setCalculateData] = useState<CropNutrients | null>(
+  const [calculatedData, setCalculatedData] = useState<CropNutrients | null>(
     initialModalData
       ? { N: initialModalData.reqN, P2O5: initialModalData.reqP2o5, K2O: initialModalData.reqK2o }
       : null,
@@ -290,7 +290,8 @@ export default function FertilizerModal({
       formState.density,
       densityConvFactor,
     );
-    setCalculateData(cropNutrients);
+    setCalculatedData(cropNutrients);
+    console.log(calculatedData);
     setBalanceCacRow({
       reqN: Math.min(0, balanceRow.reqN + cropNutrients.N),
       reqP2o5: Math.min(0, balanceRow.reqP2o5 + cropNutrients.P2O5),

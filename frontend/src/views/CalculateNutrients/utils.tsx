@@ -45,7 +45,16 @@ export const calcFertBalance = (
   }
 
   if (fert.dryliquid.includes('dry')) {
-    convertedApplRate *= applUnit.farmrequirednutrientsstdunitsareaconversion;
+    switch (applUnit.name) {
+      case 'kg/ha':
+        convertedApplRate *= applRate * 0.008922;
+        break;
+      case 'lb/1000ft²':
+        convertedApplRate *= applRate * 0.4356;
+        break;
+      default:
+        convertedApplRate = 1;
+    }
   }
 
   newFertBalance = {
