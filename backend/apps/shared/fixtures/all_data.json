@@ -15707,15 +15707,6 @@
   },
   {
     "model": "manures.solidmaterialapplicationtonperacrerateconversions",
-    "pk": 1,
-    "fields": {
-      "applicationrateunit": 2.0,
-      "applicationrateunitname": "m\u00b2/ha",
-      "tonsperacreconversion": "1*1.30795*density/2.47105"
-    }
-  },
-  {
-    "model": "manures.solidmaterialapplicationtonperacrerateconversions",
     "pk": 2,
     "fields": {
       "applicationrateunit": 4.0,
