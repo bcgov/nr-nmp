@@ -14,7 +14,7 @@ import {
   ManureType,
   Animal,
 } from '@/types';
-import { getDensityFactoredConversionUsingMoisture } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
+import { getDensityFactoredConversionUsingMoisture } from '@/utils/densityCalculations';
 import useAppState from '@/hooks/useAppState';
 import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/routes';
 

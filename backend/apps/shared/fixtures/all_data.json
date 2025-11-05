@@ -15706,6 +15706,60 @@
     }
   },
   {
+    "model": "manures.solidmaterialapplicationtonperacrerateconversions",
+    "pk": 2,
+    "fields": {
+      "applicationrateunit": 4.0,
+      "applicationrateunitname": "tons/ac",
+      "tonsperacreconversion": 1.0
+    }
+  },
+  {
+    "model": "manures.solidmaterialapplicationtonperacrerateconversions",
+    "pk": 3,
+    "fields": {
+      "applicationrateunit": 5.0,
+      "applicationrateunitname": "tonnes/ha",
+      "tonsperacreconversion": "1*1.10231/2.47105"
+    }
+  },
+  {
+    "model": "manures.solidmaterialapplicationtonperacrerateconversions",
+    "pk": 4,
+    "fields": {
+      "applicationrateunit": 6.0,
+      "applicationrateunitname": "yards3/ac",
+      "tonsperacreconversion": "1*density"
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 1,
+    "fields": {
+      "applicationrateunit": 1.0,
+      "applicationrateunitname": "Imp. gallons/ac",
+      "usgallonsperacreconversion": 1.20095
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 2,
+    "fields": {
+      "applicationrateunit": 2.0,
+      "applicationrateunitname": "m\u00b2/ha",
+      "usgallonsperacreconversion": 106.9067805
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 3,
+    "fields": {
+      "applicationrateunit": 3.0,
+      "applicationrateunitname": "US gallons/ac",
+      "usgallonsperacreconversion": 1.0
+    }
+  },
+  {
     "model": "crops.soiltestphosphorousranges",
     "pk": 1,
     "fields": {

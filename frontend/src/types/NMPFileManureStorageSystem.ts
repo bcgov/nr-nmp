@@ -10,6 +10,7 @@ export type NMPFileGeneratedManure = {
   managedManureName: string;
   isMaterialStored?: boolean;
   assignedToStoredSystem?: boolean;
+  totalAnnualManureAmount?: number;
   uuid: string;
   // Only used for Milking Cows
   originalAnnualAmount?: number;
@@ -31,6 +32,7 @@ export type NMPFileImportedManure = {
   isMaterialStored?: boolean;
   managedManureName: string;
   assignedToStoredSystem?: boolean;
+  totalAnnualManureAmount?: number;
   uuid: string;
 };
 
@@ -98,6 +100,7 @@ export type SolidManureStorageSystem = {
   manuresInSystem: ManureInSystem[];
   manureStorage: SolidManureStorage;
   annualPrecipitation?: number;
+  totalAnnualManureAmount?: number;
   uuid: string;
 };
 
@@ -113,6 +116,7 @@ export type LiquidManureStorageSystem = {
   separatedSolidsTons: number;
   manureStorages: LiquidManureStorage[];
   annualPrecipitation?: number;
+  totalAnnualManureAmount?: number;
   uuid: string;
 };
 
