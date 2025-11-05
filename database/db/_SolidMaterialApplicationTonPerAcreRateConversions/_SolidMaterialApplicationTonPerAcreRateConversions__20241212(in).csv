@@ -1,0 +1,4 @@
+Id,ApplicationRateUnit,ApplicationRateUnitName,TonsPerAcreConversion
+2,4,tons/ac,1
+3,5,tonnes/ha,1*1.10231/2.47105
+4,6,yards3/ac,1*density
