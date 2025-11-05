@@ -20,7 +20,7 @@ import {
   DEFAULT_SOLID_MANURE_SYSTEM,
   MANURE_TYPE_OPTIONS,
 } from '@/constants';
-import { getDensity } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
+import { getDensityFactor } from '@/utils/densityCalculations';
 
 /**
  *
@@ -40,13 +40,10 @@ function calculateSeparatedSolidAndLiquid(
 
   // Converting from cubic meters to tons requires a density calculation
   // For some reason, this is hard-coded
-  const moistureWholePercent = 70;
-  const density = getDensity(moistureWholePercent);
+  const moisturePercentage = 70;
+  const density = getDensityFactor(moisturePercentage);
   const separatedSolidsTons = 1.30795 * density * separatedSolidsCubicMeters;
-  return [
-    Math.round(separatedLiquidsUSGallons * 100) / 100,
-    Math.round(separatedSolidsTons * 100) / 100,
-  ];
+  return [Math.round(separatedLiquidsUSGallons), Math.round(separatedSolidsTons)];
 }
 
 type StorageSystemDetailsEditProps = {
