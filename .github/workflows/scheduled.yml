@@ -89,7 +89,7 @@ jobs:
       - name: Run Schemaspy
         run: docker run --network host -v "$PWD/output:/output" schemaspy/schemaspy:6.2.4 -t pgsql11 -db default -host 127.0.0.1 -port 5432 -u postgres -p default -schemas users
       - name: Deploy to Pages
-        uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8 # v4
+        uses: JamesIves/github-pages-deploy-action@4a3abc783e1a24aeb44c16e869ad83caf6b4cc23 # v4
         with:
           folder: output
           target-folder: schemaspy
@@ -109,7 +109,7 @@ jobs:
       PREFIX: ${{ github.event.repository.name }}-test
     steps:
       - name: ZAP Scan
-        uses: zaproxy/action-full-scan@75ee1686750ab1511a73b26b77a2aedd295053ed # v0.12.0
+        uses: zaproxy/action-full-scan@3c58388149901b9a03b7718852c5ba889646c27c # v0.13.0
         with:
           allow_issue_writing: true
           artifact_name: "zap_backend"
@@ -118,7 +118,7 @@ jobs:
           target: https://${{ env.PREFIX }}-frontend.${{ env.DOMAIN }}/api
 
       - name: ZAP Scan - Frontend
-        uses: zaproxy/action-full-scan@75ee1686750ab1511a73b26b77a2aedd295053ed # v0.12.0
+        uses: zaproxy/action-full-scan@3c58388149901b9a03b7718852c5ba889646c27c # v0.13.0
         with:
           allow_issue_writing: true
           artifact_name: "zap_frontend"
