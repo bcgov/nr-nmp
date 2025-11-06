@@ -580,3 +580,23 @@ export async function getBlueberryNutrients(
 
   return nutrientInputs;
 }
+
+/**
+ * Gets the pound per 1000 ft² to pound per acre conversion factor
+ */
+export async function getPoundPer1000Ft2ToPoundPerAcre(): Promise<number> {
+  const conversionFactors: CropsConversionFactors | null = await getConversionFactors();
+  if (!conversionFactors) throw new Error('Failed to get conversion factors.');
+
+  return conversionFactors.poundper1000ftsquaredtopoundperacreconversion;
+}
+
+/**
+ * Gets the kilogram per hectare to pound per acre conversion factor
+ */
+export async function getKgPerHaToLbPerAcre(): Promise<number> {
+  const conversionFactors: CropsConversionFactors | null = await getConversionFactors();
+  if (!conversionFactors) throw new Error('Failed to get conversion factors.');
+
+  return conversionFactors.kilogramperhectaretopoundperacreconversion;
+}

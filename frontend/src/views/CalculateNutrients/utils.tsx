@@ -27,6 +27,7 @@ export const calcFertBalance = (
   fert: Fertilizer,
   applRate: number,
   applUnit: FertilizerUnit,
+  conversionFactors: { kgToLb: number; lbPer1000ToAcre: number },
   density?: number,
   densityConvFactor?: number,
 ): CropNutrients => {
@@ -47,13 +48,13 @@ export const calcFertBalance = (
   if (fert.dryliquid.includes('dry')) {
     switch (applUnit.name) {
       case 'kg/ha':
-        convertedApplRate *= applRate * 0.008922;
+        convertedApplRate = applRate * conversionFactors.kgToLb;
         break;
       case 'lb/1000ft²':
-        convertedApplRate *= applRate * 0.4356;
+        convertedApplRate = applRate * conversionFactors.lbPer1000ToAcre;
         break;
       default:
-        convertedApplRate = 1;
+        convertedApplRate = applRate * 1;
     }
   }
 

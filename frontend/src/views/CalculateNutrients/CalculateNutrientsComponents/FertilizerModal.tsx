@@ -23,6 +23,10 @@ import {
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
 import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
+import {
+  getKgPerHaToLbPerAcre,
+  getPoundPer1000Ft2ToPoundPerAcre,
+} from '@/calculations/FieldAndSoil/Crops/Calculations';
 
 type FertilizerModalProps = {
   fieldIndex: number;
@@ -199,6 +203,14 @@ export default function FertilizerModal({
     onClose();
   };
 
+  const [kgToLb, setKgToLb] = useState<number>(0);
+  const [lbPer1000ToAcre, setLbPer1000ToAcre] = useState<number>(0);
+
+  useEffect(() => {
+    getKgPerHaToLbPerAcre().then(setKgToLb);
+    getPoundPer1000Ft2ToPoundPerAcre().then(setLbPer1000ToAcre);
+  }, []);
+
   useEffect(() => {
     apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
       if (response.status === 200) {
@@ -283,15 +295,17 @@ export default function FertilizerModal({
     if (fertilizerUnit === undefined)
       throw new Error(`Fertilizer unit ${formState.applUnitId} is missing from list.`);
 
+    const conversionFactors = { kgToLb, lbPer1000ToAcre };
+
     const cropNutrients = calcFertBalance(
       fertilizer,
       formState.applicationRate,
       fertilizerUnit.value,
+      conversionFactors,
       formState.density,
       densityConvFactor,
     );
     setCalculatedData(cropNutrients);
-    console.log(calculatedData);
     setBalanceCacRow({
       reqN: Math.min(0, balanceRow.reqN + cropNutrients.N),
       reqP2o5: Math.min(0, balanceRow.reqP2o5 + cropNutrients.P2O5),
