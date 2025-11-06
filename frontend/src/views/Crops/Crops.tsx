@@ -198,7 +198,6 @@ function Crops() {
         activeTab={2}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />
-      <pre>{JSON.stringify(fields, null, 2)}</pre>
       {editingFieldIndex !== null && isDialogOpen && (
         // affter editing in modal changes not showing on reopen
         <CropsModal
