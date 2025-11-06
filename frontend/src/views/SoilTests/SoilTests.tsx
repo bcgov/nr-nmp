@@ -19,6 +19,8 @@ import {
 import { Select, Tabs, View } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
+  Crop,
+  CropType,
   NMPFileField,
   SelectOption,
   SoilTestMethods,
@@ -29,30 +31,43 @@ import { InfoBox } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import SoilTestsModal from './SoilTestsModal';
+import {
+  sharedCalcCropReq,
+  postprocessModalData,
+} from '@/calculations/FieldAndSoil/Crops/Calculations';
 
 export default function SoilTests() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [fields, setFields] = useState<NMPFileField[]>(state.nmpFile.years[0].fields || []);
+  const [fields, setFields] = useState<NMPFileField[]>(
+    structuredClone(state.nmpFile.years[0].fields) || [],
+  );
   const [soilTestId, setSoilTestId] = useState<number>(
     fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
+
+  const [crops, setCrops] = useState<Crop[]>([]);
+  const [cropTypes, setCropTypes] = useState<CropType[]>([]);
 
   const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
   const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
   const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
+  const [fieldsEdited, setFieldsEdited] = useState<number[]>([]);
+
   const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+    setFieldsEdited((prevFieldIndices) => [...prevFieldIndices, index]);
     setCurrentFieldIndex(index);
   }, []);
 
   const handleDeleteRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     setFields((prev) => {
       const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+      setFieldsEdited((prevFieldIndices) => [...prevFieldIndices, index]);
       if (prev[index].soilTest === undefined) return prev;
 
       const newList = [...prev];
@@ -70,8 +85,51 @@ export default function SoilTests() {
     setSoilTestId(value);
   };
 
-  const handleNextPage = () => {
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
+  const handleNextPage = async () => {
+    // Determine which fields were edited, filter for unique
+    const uniqueFieldsEdited = [...new Set(fieldsEdited)];
+
+    // Iterate through edited fields, then recalc crop reqs
+    const updatedFields = await Promise.all(
+      fields.map(async (fieldEle, index) => {
+        if (uniqueFieldsEdited.includes(index)) {
+          const cropArray = await Promise.all(
+            fieldEle.crops.map(async (cropEle) => {
+              const matchedCrop = crops.find((ele) => ele.id === cropEle.cropId);
+              const matchedCropType = cropTypes.find((ele) => ele.id === cropEle.cropTypeId);
+
+              const cropEntry = await sharedCalcCropReq(
+                matchedCrop!,
+                cropEle,
+                fieldEle,
+                state.nmpFile.farmDetails.farmRegion,
+                matchedCropType!,
+              );
+              if (cropEntry) {
+                return postprocessModalData({
+                  ...cropEle,
+                  reqN: cropEntry.cropRequirementN,
+                  reqP2o5: cropEntry.cropRequirementP205,
+                  reqK2o: cropEntry.cropRequirementK2O,
+                  remN: cropEntry.cropRemovalN,
+                  remP2o5: cropEntry.cropRemovalP205,
+                  remK2o: cropEntry.cropRemovalK20,
+                });
+              }
+              return null;
+            }),
+          );
+          return { ...fieldEle, crops: cropArray.filter((ele) => !!ele) };
+        }
+        return fieldEle;
+      }),
+    );
+
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.year,
+      newFields: updatedFields,
+    });
     navigate(CROPS);
   };
 
@@ -109,6 +167,16 @@ export default function SoilTests() {
           setPhosphorousRanges(response.data);
         }
       });
+    apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: Crop[] }) => {
+      if (response.status === 200) {
+        setCrops(response.data);
+      }
+    });
+    apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: CropType[] }) => {
+      if (response.status === 200) {
+        setCropTypes(response.data);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

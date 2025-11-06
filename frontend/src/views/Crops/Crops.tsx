@@ -22,7 +22,9 @@ import CropsModal from './CropsModal';
 function Crops() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
-  const [fields, setFields] = useState<NMPFileField[]>(state.nmpFile.years[0].fields || []);
+  const [fields, setFields] = useState<NMPFileField[]>(
+    structuredClone(state.nmpFile.years[0].fields) || [],
+  );
   const farmRegion = useMemo(() => {
     // The region should be set before reaching this page and cannot be changed on this page
     const region = state.nmpFile.farmDetails.farmRegion;
@@ -196,6 +198,7 @@ function Crops() {
         activeTab={2}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />
+      <pre>{JSON.stringify(fields, null, 2)}</pre>
       {editingFieldIndex !== null && isDialogOpen && (
         // affter editing in modal changes not showing on reopen
         <CropsModal
