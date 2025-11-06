@@ -29,7 +29,7 @@ class SolidMaterialsConversionFactors(models.Model):
     inputunitname = models.CharField(max_length=100)
     cubicyardsoutput = models.CharField(max_length=100)
     cubicmetersoutput = models.CharField(max_length=100)
-    metrictonsoutput = models.CharField(max_length=100)
+    ustonsoutput = models.CharField(max_length=100)
 
     class Meta:
         managed = True
@@ -102,3 +102,36 @@ class PreviousYearManureApplications(models.Model):
     class Meta:
         managed = True
         db_table = 'previous_year_manure_applications'
+
+
+class LiquidMaterialApplicationUsGallonsPerAcreRateConversions(models.Model):
+    id = models.IntegerField(primary_key=True)
+    applicationrateunit = models.IntegerField()
+    applicationrateunitname = models.CharField(max_length=100)
+    usgallonsperacreconversion = models.FloatField()
+
+    class Meta:
+        managed = True
+        db_table = 'liquid_material_application_us_gallons_per_acre_rate_conversions'
+
+
+class SolidMaterialApplicationCubicYardsPerAcreConversions(models.Model):
+    id = models.IntegerField(primary_key=True)
+    applicationrateunit = models.IntegerField()
+    applicationrateunitname = models.CharField(max_length=100)
+    cubicyardsperacreconversion = models.FloatField()
+
+    class Meta:
+        managed = True
+        db_table = 'solid_material_application_cubic_yards_per_acre_conversions'
+
+
+class SolidMaterialApplicationTonPerAcreRateConversions(models.Model):
+    id = models.IntegerField(primary_key=True)
+    applicationrateunit = models.FloatField()
+    applicationrateunitname = models.CharField(max_length=100)
+    tonsperacreconversion = models.CharField(max_length=100)
+
+    class Meta:
+        managed = True
+        db_table = 'solid_material_application_ton_per_acre_rate_conversions'
