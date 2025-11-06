@@ -214,7 +214,7 @@ export interface SolidManureConversionFactors {
   inputunitname: string;
   cubicyardsoutput: string;
   cubicmetersoutput: string;
-  metrictonsoutput: string;
+  ustonsoutput: string;
 }
 
 // _SubRegion

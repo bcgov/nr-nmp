@@ -8429,7 +8429,7 @@
       "inputunitname": "cubic meters",
       "cubicyardsoutput": 1.30795,
       "cubicmetersoutput": 1.0,
-      "metrictonsoutput": "1.30795*density"
+      "ustonsoutput": "1.30795*density"
     }
   },
   {
@@ -8440,7 +8440,7 @@
       "inputunitname": "tons",
       "cubicyardsoutput": "1/density",
       "cubicmetersoutput": "(1/density)*0.764555",
-      "metrictonsoutput": 1.0
+      "ustonsoutput": 1.0
     }
   },
   {
@@ -8451,7 +8451,7 @@
       "inputunitname": "tonnes",
       "cubicyardsoutput": "1.10231/density",
       "cubicmetersoutput": "(1.10231/density)*0.764555",
-      "metrictonsoutput": 1.10231
+      "ustonsoutput": 1.10231
     }
   },
   {
@@ -8462,7 +8462,7 @@
       "inputunitname": "cubic yards",
       "cubicyardsoutput": 1.0,
       "cubicmetersoutput": 0.764555,
-      "metrictonsoutput": "1*density"
+      "ustonsoutput": "1*density"
     }
   },
   {
@@ -15603,54 +15603,6 @@
     }
   },
   {
-    "model": "crops.berryquantities",
-    "pk": 1,
-    "fields": {
-      "PlantsPerAcre": 2498.0,
-      "DistanceBetweenPlants": "0.6 m x 2.7 m (2 ft x 9 ft)"
-    }
-  },
-  {
-    "model": "crops.berryquantities",
-    "pk": 2,
-    "fields": {
-      "PlantsPerAcre": 2248.0,
-      "DistanceBetweenPlants": "0.6 m x 3.0 m (2 ft x 10 ft)"
-    }
-  },
-  {
-    "model": "crops.berryquantities",
-    "pk": 3,
-    "fields": {
-      "PlantsPerAcre": 1999.0,
-      "DistanceBetweenPlants": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
-    }
-  },
-  {
-    "model": "crops.berryquantities",
-    "pk": 4,
-    "fields": {
-      "PlantsPerAcre": 1799.0,
-      "DistanceBetweenPlants": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
-    }
-  },
-  {
-    "model": "crops.berryquantities",
-    "pk": 5,
-    "fields": {
-      "PlantsPerAcre": 1665.0,
-      "DistanceBetweenPlants": "0.9 m x 2.7 m (3 ft x 9 ft)"
-    }
-  },
-  {
-    "model": "crops.berryquantities",
-    "pk": 6,
-    "fields": {
-      "PlantsPerAcre": 1499.0,
-      "DistanceBetweenPlants": "0.9 m x 3.0 m (3 ft x 10 ft)"
-    }
-  },
-  {
     "model": "crops.wherewillpruningsgo",
     "pk": 1,
     "fields": {
@@ -15703,6 +15655,60 @@
       "fieldmanureapplicationhistory": 2.0,
       "defaultnitrogencredit": "{45,60,90}",
       "previousyearmanureaplicationfrequency": 2.0
+    }
+  },
+  {
+    "model": "manures.solidmaterialapplicationtonperacrerateconversions",
+    "pk": 2,
+    "fields": {
+      "applicationrateunit": 4.0,
+      "applicationrateunitname": "tons/ac",
+      "tonsperacreconversion": 1.0
+    }
+  },
+  {
+    "model": "manures.solidmaterialapplicationtonperacrerateconversions",
+    "pk": 3,
+    "fields": {
+      "applicationrateunit": 5.0,
+      "applicationrateunitname": "tonnes/ha",
+      "tonsperacreconversion": "1*1.10231/2.47105"
+    }
+  },
+  {
+    "model": "manures.solidmaterialapplicationtonperacrerateconversions",
+    "pk": 4,
+    "fields": {
+      "applicationrateunit": 6.0,
+      "applicationrateunitname": "yards3/ac",
+      "tonsperacreconversion": "1*density"
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 1,
+    "fields": {
+      "applicationrateunit": 1.0,
+      "applicationrateunitname": "Imp. gallons/ac",
+      "usgallonsperacreconversion": 1.20095
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 2,
+    "fields": {
+      "applicationrateunit": 2.0,
+      "applicationrateunitname": "m\u00b2/ha",
+      "usgallonsperacreconversion": 106.9067805
+    }
+  },
+  {
+    "model": "manures.liquidmaterialapplicationusgallonsperacrerateconversions",
+    "pk": 3,
+    "fields": {
+      "applicationrateunit": 3.0,
+      "applicationrateunitname": "US gallons/ac",
+      "usgallonsperacreconversion": 1.0
     }
   },
   {
@@ -15767,6 +15773,54 @@
     "fields": {
       "upperlimit": 99999.0,
       "rating": "Very High"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 1,
+    "fields": {
+      "plantsperacre": 2498.0,
+      "distancebetweenplants": "0.6 m x 2.7 m (2 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 2,
+    "fields": {
+      "plantsperacre": 2248.0,
+      "distancebetweenplants": "0.6 m x 3.0 m (2 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 3,
+    "fields": {
+      "plantsperacre": 1999.0,
+      "distancebetweenplants": "0.75 m x 2.7 m (2.5 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 4,
+    "fields": {
+      "plantsperacre": 1799.0,
+      "distancebetweenplants": "0.75 m x 3.0 m (2.5 ft x 10 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 5,
+    "fields": {
+      "plantsperacre": 1665.0,
+      "distancebetweenplants": "0.9 m x 2.7 m (3 ft x 9 ft)"
+    }
+  },
+  {
+    "model": "crops.berryquantities",
+    "pk": 6,
+    "fields": {
+      "plantsperacre": 1499.0,
+      "distancebetweenplants": "0.9 m x 3.0 m (3 ft x 10 ft)"
     }
   }
 ]
