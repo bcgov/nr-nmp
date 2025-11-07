@@ -221,7 +221,7 @@ export function calculateSolidFertigation(
     injectionRateUnits,
   );
 
-  const fertigationTime = Math.round(tankVolumeInImpGal / convertedInjectionRate);
+  const fertigationTime = tankVolumeInImpGal / convertedInjectionRate;
 
   // Check if the amount to dissolve is soluble
   // Convert amountToDissolve from lbs to kgs and tankVolume from imp gal to litres

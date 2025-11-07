@@ -66,7 +66,7 @@ export default function StorageSystemDetailsDisplay({
                 size={6}
               >
                 <Text className="bcds-react-aria-Text disabled small">
-                  Yard and Roof Area (ft2)
+                  Yard and Roof Area (ft²)
                 </Text>
                 <Text className="bcds-react-aria-Text disabled small">
                   {formData.runoffAreaSqFt}

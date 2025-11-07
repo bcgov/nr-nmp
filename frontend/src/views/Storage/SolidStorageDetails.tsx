@@ -50,7 +50,7 @@ export default function SolidStorageDetails({ formData, setFormData }: SolidStor
         {!formData.manureStorage.isStructureCovered && (
           <NumberField
             isRequired
-            label="Uncovered Area of Storage (ft2)"
+            label="Uncovered Area of Storage (ft²)"
             value={formData.manureStorage.uncoveredAreaSqFt}
             onChange={(e: number) => {
               handleStorageChange({ uncoveredAreaSqFt: e });

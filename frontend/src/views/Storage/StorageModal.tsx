@@ -57,6 +57,7 @@ export default function StorageModal({
     if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
 
     // Add precipitation data to the form
+    // TODO: Factor this logic out to use in octtomar calc
     const withRainData = { ...formData };
     if (withRainData.manureType === ManureType.Liquid) {
       let totalUncoveredArea = withRainData.runoffAreaSqFt || 0;
