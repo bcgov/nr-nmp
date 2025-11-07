@@ -35,6 +35,7 @@ export default function Reporting() {
       [
         ...(state.nmpFile.years[0].generatedManures || []),
         ...(state.nmpFile.years[0].importedManures || []),
+        ...(state.nmpFile.years[0].derivedManures || []),
       ].filter((m) => !m.assignedToStoredSystem),
     [state.nmpFile.years],
   );

@@ -8,8 +8,7 @@ import {
   ManureType,
   NMPFile,
   NMPFileField,
-  NMPFileGeneratedManure,
-  NMPFileImportedManure,
+  NMPFileManure,
   NMPFileManureStorageSystem,
   NMPFileYear,
   Schedule,
@@ -142,11 +141,12 @@ const generateManureCompostInventory = (
   farmName: string,
   year: string,
   nmpFileYear: NMPFileYear,
-  unassignedManures: (NMPFileGeneratedManure | NMPFileImportedManure)[],
+  unassignedManures: NMPFileManure[],
 ) => {
   const storageSystems = nmpFileYear.manureStorageSystems || [];
   if (storageSystems.length > 0 || unassignedManures.length > 0) {
     doc.addPage();
+    // TODO: Check on this
     /* Commenting out for now bc I want to ask Josh about this and the assumptions
       const footnotes: string[] = [
         `Milking Center Wash Water adjusted to _ US gallons/day/animal`,
@@ -701,7 +701,7 @@ const generateManureAndCompostAnalysis = (
   farmName: string,
   year: string,
   nmpFileYear: NMPFileYear,
-  unassignedManures: (NMPFileGeneratedManure | NMPFileImportedManure)[],
+  unassignedManures: NMPFileManure[],
   hasDairyCattle: boolean,
 ) => {
   const footnotes: string[] = [];
@@ -874,6 +874,7 @@ export default async function makeFullReportPdf(
   const unassignedManures = [
     ...(nmpFileYear.generatedManures || []),
     ...(nmpFileYear.importedManures || []),
+    ...(nmpFileYear.derivedManures || []),
   ].filter((m) => !m.assignedToStoredSystem);
   const hasDairyCattle = (nmpFileYear.farmAnimals || []).some(
     (animal) => animal.animalId === DAIRY_COW_ID,

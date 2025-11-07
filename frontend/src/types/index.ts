@@ -43,6 +43,8 @@ import {
   Shape,
   NMPFileGeneratedManure,
   NMPFileImportedManure,
+  NMPFileDerivedManure,
+  NMPFileManure,
 } from './NMPFileManureStorageSystem';
 import {
   AmmoniaRetention,
@@ -83,6 +85,8 @@ export type {
   NMPFileField,
   NMPFileImportedManure,
   NMPFileGeneratedManure,
+  NMPFileDerivedManure,
+  NMPFileManure,
   ManureInSystem,
   NMPFileManureStorageSystem,
   LiquidManureStorageSystem,

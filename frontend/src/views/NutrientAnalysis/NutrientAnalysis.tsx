@@ -11,10 +11,9 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { Tabs, View } from '../../components/common';
 import {
   NMPFileAnimal,
-  NMPFileImportedManure,
   NMPFileManureStorageSystem,
   NMPFileNutrientAnalysis,
-  NMPFileGeneratedManure,
+  NMPFileManure,
 } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
@@ -25,10 +24,11 @@ import { DAIRY_COW_ID } from '@/constants';
 export default function NutrientAnalysis() {
   const { state, dispatch } = useAppState();
 
-  const manures: (NMPFileImportedManure | NMPFileGeneratedManure)[] = useMemo(
+  const manures: NMPFileManure[] = useMemo(
     () =>
       (state.nmpFile.years[0]?.importedManures || []).concat(
         state.nmpFile.years[0]?.generatedManures || [],
+        state.nmpFile.years[0]?.derivedManures || [],
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],

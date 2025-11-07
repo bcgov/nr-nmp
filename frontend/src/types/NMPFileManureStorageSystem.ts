@@ -8,7 +8,6 @@ export type NMPFileGeneratedManure = {
   annualAmountTonsWeight?: number;
   annualAmountDisplayWeight?: string;
   managedManureName: string;
-  isMaterialStored?: boolean;
   assignedToStoredSystem?: boolean;
   totalAnnualManureAmount?: number;
   uuid: string;
@@ -29,12 +28,27 @@ export type NMPFileImportedManure = {
   annualAmountDisplayWeight?: string;
   units?: number;
   moisture?: number;
-  isMaterialStored?: boolean;
-  managedManureName: string;
   assignedToStoredSystem?: boolean;
+  managedManureName: string;
   totalAnnualManureAmount?: number;
   uuid: string;
 };
+
+// At the moment, derived manure is only used for
+// the separated solids from a liquid storage system
+export type NMPFileDerivedManure = {
+  uniqueMaterialName: string;
+  managedManureName: string;
+  manureType: ManureType.Solid;
+  annualAmount: number;
+  annualAmountUSGallonsVolume: undefined;
+  annualAmountTonsWeight: number;
+  assignedToStoredSystem: boolean;
+  uuid: string;
+  originUuid: string; // uuid of the storage system it derives from
+};
+
+export type NMPFileManure = NMPFileGeneratedManure | NMPFileImportedManure | NMPFileDerivedManure;
 
 export type ManureInSystem =
   | {
@@ -44,6 +58,10 @@ export type ManureInSystem =
   | {
       type: 'Imported';
       data: NMPFileImportedManure;
+    }
+  | {
+      type: 'Derived';
+      data: NMPFileDerivedManure;
     };
 
 export type SolidManureStorage = {
@@ -115,7 +133,7 @@ export type LiquidManureStorageSystem = {
   separatedLiquidsUSGallons: number;
   separatedSolidsTons: number;
   manureStorages: LiquidManureStorage[];
-  annualPrecipitation?: number;
+  annualPrecipitation?: number; // includes precipitation and yard/roof runoff
   totalAnnualManureAmount?: number;
   uuid: string;
 };

@@ -21,7 +21,9 @@ import {
   ManureType,
   NMPFileNutrientAnalysis,
   ManureInSystem,
+  NMPFileDerivedManure,
 } from '@/types';
+import { calculateSeparatedSolidAndLiquid } from '@/utils/densityCalculations';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
 import { calculateAnnualWashWater } from '@/views/AddAnimals/utils';
@@ -113,8 +115,10 @@ function updateManureStorageSystems(
         const matchingManure = newManures.find(
           (m) => m.managedManureName === manure.data.managedManureName,
         );
-        // Add included manures to system array and set assigned to true
         if (matchingManure) {
+          // Add included manures to system array and set assigned to true
+          // NOTE: it is VERY important to take the manure from the new array
+          // instead of re-adding the old one as its values may have changed
           matchingManure.assignedToStoredSystem = true; // Edits object in place
           newSystem.push(manure);
         }
@@ -123,7 +127,95 @@ function updateManureStorageSystems(
 
     // Add non-empty systems back to the array
     if (newSystem.length > 0) {
-      acc.push({ ...system, manuresInSystem: newSystem });
+      // Solid manure or non-separated liquid don't require other updates
+      if (system.manureType !== ManureType.Liquid || !system.percentLiquidSeperation) {
+        acc.push({ ...system, manuresInSystem: newSystem });
+      } else {
+        // The separated amounts need to be recalculated
+        const totalAmount = newSystem.reduce((sum, m) => sum + m.data.annualAmount, 0);
+        const [separatedLiquidsUSGallons, separatedSolidsTons] = calculateSeparatedSolidAndLiquid(
+          totalAmount,
+          system.percentLiquidSeperation,
+        );
+        acc.push({
+          ...system,
+          manuresInSystem: newSystem,
+          separatedLiquidsUSGallons,
+          separatedSolidsTons,
+        });
+      }
+    }
+    return acc;
+  }, [] as NMPFileManureStorageSystem[]);
+}
+
+/**
+ * Updates derived manures to reflect the latest changes to manure storage systems.
+ * If a solid storage system contains a derived manure, that system is also updates.
+ * Edits year object in-place.
+ * @param newFileYear The NMPFileYear with manure systems up-to-date
+ */
+function updateDerivedManures(newFileYear: NMPFileYear) {
+  const systems = newFileYear.manureStorageSystems;
+  if (!systems) {
+    newFileYear.derivedManures = undefined;
+    return;
+  }
+
+  const prevDerivedManures = newFileYear.derivedManures || [];
+  const newDerivedManures: NMPFileDerivedManure[] = [];
+  for (let i = 0; i < systems.length; i += 1) {
+    const system = systems[i];
+    // Derived manures can only come from liquid systems
+    if (system.manureType !== ManureType.Liquid) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    // Any system with separated liquid produces a derived manure
+    if (system.separatedLiquidsUSGallons > 0) {
+      const prevManure = prevDerivedManures.find((m) => m.originUuid === system.uuid);
+      let newManure: NMPFileDerivedManure;
+      if (prevManure) {
+        // Update the amount
+        newManure = {
+          ...prevManure,
+          annualAmount: system.separatedSolidsTons,
+          annualAmountTonsWeight: system.separatedSolidsTons,
+        };
+      } else {
+        // Make a new derived manure
+        const name = `Separated solids${newDerivedManures.length > 1 ? ` ${newDerivedManures.length + 1}` : ''}`;
+        newManure = {
+          uniqueMaterialName: name,
+          managedManureName: name,
+          manureType: ManureType.Solid,
+          annualAmount: system.separatedSolidsTons,
+          annualAmountTonsWeight: system.separatedSolidsTons,
+          annualAmountUSGallonsVolume: undefined,
+          assignedToStoredSystem: false,
+          uuid: crypto.randomUUID(),
+          originUuid: system.uuid,
+        };
+      }
+      newDerivedManures.push(newManure);
+    }
+  }
+  newFileYear.derivedManures = newDerivedManures;
+
+  // Do a second pass through manure systems to remove deleted manures from storage
+  newFileYear.manureStorageSystems = systems.reduce((acc, system) => {
+    // The below is a condensed version of the code from updateManureStorageSystems
+    const manuresInSystem = system.manuresInSystem.reduce((innerAcc, manure) => {
+      if (manure.type !== 'Derived') {
+        innerAcc.push(manure);
+      } else if (newDerivedManures.some((m) => m.uuid === manure.data.uuid)) {
+        innerAcc.push(manure);
+      }
+      return innerAcc;
+    }, [] as ManureInSystem[]);
+    if (manuresInSystem.length > 0) {
+      acc.push({ ...system, manuresInSystem });
     }
     return acc;
   }, [] as NMPFileManureStorageSystem[]);
@@ -134,11 +226,13 @@ function updateNutrientAnalyses(
   systems: NMPFileManureStorageSystem[],
   generatedManures: NMPFileGeneratedManure[],
   importedManures: NMPFileImportedManure[],
+  derivedManures: NMPFileDerivedManure[],
 ) {
   const allUuids = [
     ...systems.map((s) => s.uuid),
-    ...generatedManures.filter((m) => !m.isMaterialStored).map((m) => m.uuid),
-    ...importedManures.filter((m) => !m.isMaterialStored).map((m) => m.uuid),
+    ...generatedManures.filter((m) => !m.assignedToStoredSystem).map((m) => m.uuid),
+    ...importedManures.filter((m) => !m.assignedToStoredSystem).map((m) => m.uuid),
+    ...derivedManures.filter((m) => !m.assignedToStoredSystem).map((m) => m.uuid),
   ];
   return nutrients.filter((n) => allUuids.some((uuid) => n.sourceUuid === uuid));
 }
@@ -147,6 +241,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
   newFileYear.farmAnimals = structuredClone(newAnimals);
 
   // Update GeneratedManures
+  // Each generated manure corresponds to an animal in the list
   const generatedManures: NMPFileGeneratedManure[] = [];
   for (let i = 0; i < newAnimals.length; i += 1) {
     const animal = newAnimals[i];
@@ -182,6 +277,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
           managedManureName: `${animal.manureData.name}, ${animalStr}, Liquid`,
           uuid: animal.uuid,
         };
+
         // Milking centre wash water is added into the liquid dairy cow manure
         // Josh said that milking dairy cow manure should always be liquid, but that's never enforced
         if (
@@ -204,6 +300,7 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
             generatedManure.annualAmount,
           );
         }
+
         generatedManures.push(generatedManure);
       }
     }
@@ -218,12 +315,15 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
       generatedManures,
     );
   }
-  // Update nutrient analyses with new generated manures
+  // Update the derived manures with the new storage systems
+  updateDerivedManures(newFileYear);
+  // Update nutrient analyses with all updated manure/systems
   newFileYear.nutrientAnalyses = updateNutrientAnalyses(
     newFileYear.nutrientAnalyses,
     newFileYear.manureStorageSystems || [],
     generatedManures,
     newFileYear.importedManures || [],
+    newFileYear.derivedManures || [],
   );
 }
 
@@ -295,11 +395,15 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       year.manureStorageSystems || [],
       year.generatedManures || [],
       action.newManures,
+      year.derivedManures || [],
     );
   } else if (action.type === 'SAVE_MANURE_STORAGE_SYSTEMS') {
     year.manureStorageSystems = structuredClone(action.newManureStorageSystems);
 
-    // Update the generated and imported manure lists
+    // Update the derived manures to reflect the new storage systems
+    updateDerivedManures(year);
+
+    // Update the 'assignedToStoredSystem' attr of all manures
     // First, unassign all manures from a system
     const newImportedManures = (year.importedManures || []).map((m) => ({
       ...m,
@@ -309,9 +413,14 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       ...m,
       assignedToStoredSystem: false,
     }));
-    // Next, go through each system and alter the corresponding manures
+    const newDerivedManures = (year.derivedManures || []).map((m) => ({
+      ...m,
+      assignedToStoredSystem: false,
+    }));
+    // Next, go through each system and set corresponding manures to assigned
     year.manureStorageSystems.forEach((system) => {
       system.manuresInSystem.forEach((manure) => {
+        // TODO: Maybe use uuid instead here? Don't think that existed when first implemented
         if (manure.type === 'Imported') {
           const matchingManure = newImportedManures.find(
             (m) => m.managedManureName === manure.data.managedManureName,
@@ -320,7 +429,7 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
             throw new Error(`No imported manure found with name ${manure.data.managedManureName}`);
           }
           matchingManure.assignedToStoredSystem = true;
-        } else {
+        } else if (manure.type === 'Generated') {
           const matchingManure = newGeneratedManures.find(
             (m) => m.managedManureName === manure.data.managedManureName,
           );
@@ -328,17 +437,25 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
             throw new Error(`No generated manure found with name ${manure.data.managedManureName}`);
           }
           matchingManure.assignedToStoredSystem = true;
+        } else {
+          const matchingManure = newDerivedManures.find((m) => m.uuid === manure.data.uuid);
+          if (!matchingManure) {
+            throw new Error(`No derived manure found with uuid ${manure.data.uuid}`);
+          }
+          matchingManure.assignedToStoredSystem = true;
         }
       });
     });
     year.generatedManures = newGeneratedManures;
     year.importedManures = newImportedManures;
+    year.derivedManures = newDerivedManures;
 
     year.nutrientAnalyses = updateNutrientAnalyses(
       year.nutrientAnalyses,
       year.manureStorageSystems,
       newGeneratedManures,
       newImportedManures,
+      newDerivedManures,
     );
   } else if (action.type === 'SAVE_ANIMALS') {
     saveAnimals(year, action.newAnimals);
@@ -353,12 +470,15 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
         [],
       );
     }
+    // Update derived manures with new systems
+    updateDerivedManures(year);
     // Update nutrient analyses to remove generated manures
     year.nutrientAnalyses = updateNutrientAnalyses(
       year.nutrientAnalyses,
       year.manureStorageSystems || [],
       [],
       year.importedManures || [],
+      year.derivedManures || [],
     );
   }
   // Save the file to local storage

@@ -11,8 +11,7 @@ import {
   NMPFileNutrientAnalysis,
   NMPFileManureStorageSystem,
   ManureType,
-  NMPFileImportedManure,
-  NMPFileGeneratedManure,
+  NMPFileManure,
 } from '@/types';
 import { formGridBreakpoints } from '@/common.styles';
 import { Form, Select, Modal, TextField, NumberField } from '@/components/common';
@@ -21,7 +20,7 @@ import { getStandardizedAnnualManureAmount } from '@/utils/utils';
 
 type NutrientAnalysisModalProps = {
   initialModalData?: NMPFileNutrientAnalysis;
-  manures: (NMPFileImportedManure | NMPFileGeneratedManure)[];
+  manures: NMPFileManure[];
   storageSystems: NMPFileManureStorageSystem[];
   // Passed in to filter manures and storageSystems
   currentNutrientAnalyses: NMPFileNutrientAnalysis[];
@@ -89,7 +88,7 @@ export default function NutrientAnalysisModal({
             // Filter out ids that already have a nutrient analysis
             !currentNutrientAnalyses.some((n) => n.sourceUuid === ele.uuid)),
       )
-      .map((ele: NMPFileImportedManure | NMPFileGeneratedManure) => ({
+      .map((ele: NMPFileManure) => ({
         id: ele.uuid,
         label: ele.uniqueMaterialName,
         value: ele,

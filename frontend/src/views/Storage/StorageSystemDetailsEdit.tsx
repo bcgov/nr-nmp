@@ -20,31 +20,7 @@ import {
   DEFAULT_SOLID_MANURE_SYSTEM,
   MANURE_TYPE_OPTIONS,
 } from '@/constants';
-import { getDensityFactor } from '@/utils/densityCalculations';
-
-/**
- *
- * @param manureAmount Total manure in US gallons
- * @param percentSeparation
- * @returns A tuple containing the separated liquids in US gallons followed by the separated solids in US tons
- */
-function calculateSeparatedSolidAndLiquid(
-  manureAmount: number,
-  percentSeparation: number | undefined,
-): [number, number] {
-  if (percentSeparation === undefined) return [0, 0];
-
-  const solidsSeparatedGallons = manureAmount * (percentSeparation / 100);
-  const separatedLiquidsUSGallons = manureAmount - solidsSeparatedGallons;
-  const separatedSolidsCubicMeters = solidsSeparatedGallons / 264.172;
-
-  // Converting from cubic meters to tons requires a density calculation
-  // For some reason, this is hard-coded
-  const moisturePercentage = 70;
-  const density = getDensityFactor(moisturePercentage);
-  const separatedSolidsTons = 1.30795 * density * separatedSolidsCubicMeters;
-  return [Math.round(separatedLiquidsUSGallons), Math.round(separatedSolidsTons)];
-}
+import { calculateSeparatedSolidAndLiquid } from '@/utils/densityCalculations';
 
 type StorageSystemDetailsEditProps = {
   mode: 'create' | 'system_edit';
@@ -283,7 +259,7 @@ export default function StorageSystemDetailsEdit({
                 >
                   <NumberField
                     isRequired
-                    label="Yard and Roof Area (ft2)"
+                    label="Yard and Roof Area (ft²)"
                     value={formData.runoffAreaSqFt}
                     onChange={(e: number) => {
                       handleInputChange({ runoffAreaSqFt: e });

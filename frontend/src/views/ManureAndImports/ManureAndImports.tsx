@@ -256,7 +256,7 @@ export default function ManureAndImports() {
         sortable: false,
       },
       {
-        field: 'isMaterialStored',
+        field: 'assignedToStoredSystem',
         headerName: 'Stored',
         width: 75,
         minWidth: 75,
