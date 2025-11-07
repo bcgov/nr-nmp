@@ -35,14 +35,27 @@ export const liquidSolidManureDisplay = (manureObj: { [key: string]: number | st
   return '0';
 };
 
+/**
+ * @param num Number to format
+ * @param digits Decimal places to round to (defaults to 0)
+ * @returns Formatted number string
+ */
+export function printNum(num: number, digits: number = 0): string {
+  const factor = 10 * digits;
+  if (factor > 0) {
+    return (Math.round(num * factor) / factor).toLocaleString();
+  }
+  return Math.round(num).toLocaleString();
+}
+
 export function getSolidManureDisplay(amount: number) {
-  const roundedAmount = Math.round(amount);
-  return `${roundedAmount} ton${roundedAmount === 1 ? '' : 's'}`;
+  const rounded = printNum(amount);
+  return `${rounded} ton${rounded === '1' ? '' : 's'}`;
 }
 
 export function getLiquidManureDisplay(amount: number) {
-  const roundedAmount = Math.round(amount);
-  return `${roundedAmount} U.S. gallon${roundedAmount === 1 ? '' : 's'}`;
+  const rounded = printNum(amount);
+  return `${rounded} U.S. gallon${rounded === '1' ? '' : 's'}`;
 }
 
 export const isDairyAndMilkingCattle = (animalId: string, subType: string) =>

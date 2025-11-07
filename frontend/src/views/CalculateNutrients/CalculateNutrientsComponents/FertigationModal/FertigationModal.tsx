@@ -64,6 +64,7 @@ import {
   nutrientTableItemStyles,
   nutrientTableHeaderStyles,
 } from './fertigationModal.styles';
+import { printNum } from '@/utils/utils';
 
 type FertigationModalProps = {
   fieldIndex: number;
@@ -830,7 +831,7 @@ export default function FertigationModal({
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div css={calculationValueStyles}>{formData.volume.toFixed(2)}</div>
+                <div css={calculationValueStyles}>{printNum(formData.volume, 2)}</div>
               </div>
               <div css={calculationItemStyles}>
                 <span css={calculationLabelStyles}>
@@ -839,18 +840,18 @@ export default function FertigationModal({
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div css={calculationValueStyles}>{formData.volumeForSeason.toFixed(2)}</div>
+                <div css={calculationValueStyles}>{printNum(formData.volumeForSeason, 2)}</div>
               </div>
               <div css={calculationItemStyles}>
                 <span css={calculationLabelStyles}>Time per Application (minutes)</span>
-                <div css={calculationValueStyles}>{formData.applicationTime.toFixed(2)}</div>
+                <div css={calculationValueStyles}>{printNum(formData.applicationTime, 2)}</div>
               </div>
             </div>
           )}
           {isDryFertilizer && (
             <div css={dryApplicationTimeStyles}>
               <span css={calculationLabelStyles}>Time per Application (minutes)</span>
-              <div css={calculationValueStyles}>{formData.applicationTime.toFixed(2)}</div>
+              <div css={calculationValueStyles}>{printNum(formData.applicationTime, 2)}</div>
             </div>
           )}
           <div css={nutrientTablesContainerStyles}>

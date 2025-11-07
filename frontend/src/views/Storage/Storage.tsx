@@ -24,6 +24,7 @@ export default function Storage() {
 
   const { generatedManures } = state.nmpFile.years[0];
   const { importedManures } = state.nmpFile.years[0];
+  const { derivedManures } = state.nmpFile.years[0];
   const unassignedManures = useMemo(() => {
     const unassignedM: ManureInSystem[] = [];
     (generatedManures || []).forEach((manure) => {
@@ -36,8 +37,13 @@ export default function Storage() {
         unassignedM.push({ type: 'Imported', data: manure });
       }
     });
+    (derivedManures || []).forEach((manure) => {
+      if (!manure.assignedToStoredSystem) {
+        unassignedM.push({ type: 'Derived', data: manure });
+      }
+    });
     return unassignedM;
-  }, [generatedManures, importedManures]);
+  }, [generatedManures, importedManures, derivedManures]);
 
   // Get subregion precipitation data
   useEffect(() => {

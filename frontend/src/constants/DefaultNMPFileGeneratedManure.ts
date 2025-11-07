@@ -7,7 +7,6 @@ const DEFAULT_GENERATED_MANURE: Omit<NMPFileGeneratedManure, 'uuid'> = {
   annualAmountTonsWeight: 0,
   annualAmountDisplayWeight: '',
   managedManureName: '',
-  isMaterialStored: false,
   assignedToStoredSystem: false,
 };
 

@@ -1,6 +1,7 @@
 import { NMPFileAnimal } from './NMPFileAnimal';
 import { NMPFileField } from './NMPFileField';
 import {
+  NMPFileDerivedManure,
   NMPFileGeneratedManure,
   NMPFileImportedManure,
   NMPFileManureStorageSystem,
@@ -41,6 +42,7 @@ export type NMPFileYear = {
   farmAnimals?: NMPFileAnimal[];
   generatedManures?: NMPFileGeneratedManure[];
   importedManures?: NMPFileImportedManure[];
+  derivedManures?: NMPFileDerivedManure[];
   manureStorageSystems?: NMPFileManureStorageSystem[];
   nutrientAnalyses: NMPFileNutrientAnalysis[];
 };

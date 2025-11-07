@@ -11,7 +11,6 @@ const DEFAULT_IMPORTED_MANURE: Omit<NMPFileImportedManure, 'uuid'> = {
   annualAmountDisplayWeight: '',
   units: 0,
   moisture: 50,
-  isMaterialStored: false,
   managedManureName: '',
   assignedToStoredSystem: false,
 };
