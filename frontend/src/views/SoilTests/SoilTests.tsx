@@ -56,18 +56,14 @@ export default function SoilTests() {
   const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
-  const [fieldsEdited, setFieldsEdited] = useState<number[]>([]);
-
   const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-    setFieldsEdited((prevFieldIndices) => [...prevFieldIndices, index]);
     setCurrentFieldIndex(index);
   }, []);
 
   const handleDeleteRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
     setFields((prev) => {
       const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-      setFieldsEdited((prevFieldIndices) => [...prevFieldIndices, index]);
       if (prev[index].soilTest === undefined) return prev;
 
       const newList = [...prev];
@@ -86,42 +82,36 @@ export default function SoilTests() {
   };
 
   const handleNextPage = async () => {
-    // Determine which fields were edited, filter for unique
-    const uniqueFieldsEdited = [...new Set(fieldsEdited)];
-
     // Iterate through edited fields, then recalc crop reqs
     const updatedFields = await Promise.all(
-      fields.map(async (fieldEle, index) => {
-        if (uniqueFieldsEdited.includes(index)) {
-          const cropArray = await Promise.all(
-            fieldEle.crops.map(async (cropEle) => {
-              const matchedCrop = crops.find((ele) => ele.id === cropEle.cropId);
-              const matchedCropType = cropTypes.find((ele) => ele.id === cropEle.cropTypeId);
+      fields.map(async (fieldEle) => {
+        const cropArray = await Promise.all(
+          fieldEle.crops.map(async (cropEle) => {
+            const matchedCrop = crops.find((ele) => ele.id === cropEle.cropId);
+            const matchedCropType = cropTypes.find((ele) => ele.id === cropEle.cropTypeId);
 
-              const cropEntry = await sharedCalcCropReq(
-                matchedCrop!,
-                cropEle,
-                fieldEle,
-                state.nmpFile.farmDetails.farmRegion,
-                matchedCropType!,
-              );
-              if (cropEntry) {
-                return postprocessModalData({
-                  ...cropEle,
-                  reqN: cropEntry.cropRequirementN,
-                  reqP2o5: cropEntry.cropRequirementP205,
-                  reqK2o: cropEntry.cropRequirementK2O,
-                  remN: cropEntry.cropRemovalN,
-                  remP2o5: cropEntry.cropRemovalP205,
-                  remK2o: cropEntry.cropRemovalK20,
-                });
-              }
-              return null;
-            }),
-          );
-          return { ...fieldEle, crops: cropArray.filter((ele) => !!ele) };
-        }
-        return fieldEle;
+            const cropEntry = await sharedCalcCropReq(
+              matchedCrop!,
+              cropEle,
+              fieldEle,
+              state.nmpFile.farmDetails.farmRegion,
+              matchedCropType!,
+            );
+            if (cropEntry) {
+              return postprocessModalData({
+                ...cropEle,
+                reqN: cropEntry.cropRequirementN,
+                reqP2o5: cropEntry.cropRequirementP205,
+                reqK2o: cropEntry.cropRequirementK2O,
+                remN: cropEntry.cropRemovalN,
+                remP2o5: cropEntry.cropRemovalP205,
+                remK2o: cropEntry.cropRemovalK20,
+              });
+            }
+            return null;
+          }),
+        );
+        return { ...fieldEle, crops: cropArray.filter((ele) => !!ele) };
       }),
     );
 

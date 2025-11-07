@@ -340,7 +340,6 @@ function CropsModal({
    */
   const handleCalculate = useCallback(async () => {
     if (fieldIndex !== null && selectedCrop !== undefined && selectedCropType !== undefined) {
-      // selectedCrop, formData, field, farmRegion, selectedCropType
       const dispatchResult = await sharedCalcCropReq(
         selectedCrop,
         formData,
@@ -359,6 +358,8 @@ function CropsModal({
           remP2o5: dispatchResult.cropRemovalP205,
           remK2o: dispatchResult.cropRemovalK20,
         });
+
+        // Mark calculations as performed
         setCalculationsPerformed(true);
       }
     }
