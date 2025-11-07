@@ -638,82 +638,77 @@ export async function sharedCalcCropReq(
   farmRegion: number,
   selectedCropType: CropType,
 ) {
-  try {
-    const cropDataForCalc = formData || selectedCrop;
+  const cropDataForCalc = formData || selectedCrop;
 
-    let nutrientValues;
-    if (selectedCrop.id === CROP_RASPBERRIES_ID) {
-      const nutrients = await getRaspberryNutrients(
-        cropDataForCalc.yield,
-        cropDataForCalc.willSawdustBeApplied!,
-        cropDataForCalc.willPlantsBePruned!,
-        cropDataForCalc.whereWillPruningsGo!,
-        field.soilTest?.valP !== undefined
-          ? field.soilTest.valP
-          : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestP,
-        field.soilTest?.valK !== undefined
-          ? field.soilTest.valK
-          : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestK,
-        cropDataForCalc.leafTissueP !== undefined
-          ? cropDataForCalc.leafTissueP
-          : DEFAULT_BERRY_DATA.defaultRaspberryLeafTestP,
-        cropDataForCalc.leafTissueK !== undefined
-          ? cropDataForCalc.leafTissueK
-          : DEFAULT_BERRY_DATA.defaultRaspberryLeafTestK,
-      );
-      nutrientValues = extractNutrientValues(nutrients);
-    } else if (selectedCrop.id === CROP_BLUEBERRIES_ID) {
-      const nutrients = await getBlueberryNutrients(
-        cropDataForCalc.yield,
-        cropDataForCalc.willSawdustBeApplied!,
-        cropDataForCalc.willPlantsBePruned!,
-        cropDataForCalc.whereWillPruningsGo!,
-        cropDataForCalc.plantAgeYears!,
-        cropDataForCalc.numberOfPlantsPerAcre!,
-        field.soilTest?.valP !== undefined
-          ? field.soilTest.valP
-          : DEFAULT_BERRY_DATA.defaultBlueberrySoilTestP,
-        cropDataForCalc.leafTissueP !== undefined
-          ? cropDataForCalc.leafTissueP
-          : DEFAULT_BERRY_DATA.defaultBlueberryLeafTestP,
-        cropDataForCalc.leafTissueK !== undefined
-          ? cropDataForCalc.leafTissueK
-          : DEFAULT_BERRY_DATA.defaultBlueberryLeafTestK,
-      );
-      nutrientValues = extractNutrientValues(nutrients);
-    } else {
-      // Calculate crop requirements (P2O5, K2O, N)
-      const cropRequirementN = getCropRequirementN(cropDataForCalc, selectedCrop, selectedCropType);
-      const cropRequirementP205 = await getCropRequirementP205(
-        cropDataForCalc,
-        field.soilTest,
-        farmRegion,
-      );
-      const cropRequirementK2O = await getCropRequirementK2O(
-        cropDataForCalc,
-        field.soilTest,
-        farmRegion,
-      );
+  let nutrientValues;
+  if (selectedCrop.id === CROP_RASPBERRIES_ID) {
+    const nutrients = await getRaspberryNutrients(
+      cropDataForCalc.yield,
+      cropDataForCalc.willSawdustBeApplied!,
+      cropDataForCalc.willPlantsBePruned!,
+      cropDataForCalc.whereWillPruningsGo!,
+      field.soilTest?.valP !== undefined
+        ? field.soilTest.valP
+        : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestP,
+      field.soilTest?.valK !== undefined
+        ? field.soilTest.valK
+        : DEFAULT_BERRY_DATA.defaultRaspberrySoilTestK,
+      cropDataForCalc.leafTissueP !== undefined
+        ? cropDataForCalc.leafTissueP
+        : DEFAULT_BERRY_DATA.defaultRaspberryLeafTestP,
+      cropDataForCalc.leafTissueK !== undefined
+        ? cropDataForCalc.leafTissueK
+        : DEFAULT_BERRY_DATA.defaultRaspberryLeafTestK,
+    );
+    nutrientValues = extractNutrientValues(nutrients);
+  } else if (selectedCrop.id === CROP_BLUEBERRIES_ID) {
+    const nutrients = await getBlueberryNutrients(
+      cropDataForCalc.yield,
+      cropDataForCalc.willSawdustBeApplied!,
+      cropDataForCalc.willPlantsBePruned!,
+      cropDataForCalc.whereWillPruningsGo!,
+      cropDataForCalc.plantAgeYears!,
+      cropDataForCalc.numberOfPlantsPerAcre!,
+      field.soilTest?.valP !== undefined
+        ? field.soilTest.valP
+        : DEFAULT_BERRY_DATA.defaultBlueberrySoilTestP,
+      cropDataForCalc.leafTissueP !== undefined
+        ? cropDataForCalc.leafTissueP
+        : DEFAULT_BERRY_DATA.defaultBlueberryLeafTestP,
+      cropDataForCalc.leafTissueK !== undefined
+        ? cropDataForCalc.leafTissueK
+        : DEFAULT_BERRY_DATA.defaultBlueberryLeafTestK,
+    );
+    nutrientValues = extractNutrientValues(nutrients);
+  } else {
+    // Calculate crop requirements (P2O5, K2O, N)
+    const cropRequirementN = getCropRequirementN(cropDataForCalc, selectedCrop, selectedCropType);
+    const cropRequirementP205 = await getCropRequirementP205(
+      cropDataForCalc,
+      field.soilTest,
+      farmRegion,
+    );
+    const cropRequirementK2O = await getCropRequirementK2O(
+      cropDataForCalc,
+      field.soilTest,
+      farmRegion,
+    );
 
-      // Calculate crop removals (N, P2O5, K2O)
-      const cropRemovalN = getCropRemovalN(cropDataForCalc, selectedCrop, selectedCropType);
-      const cropRemovalP205 = getCropRemovalP205(cropDataForCalc, selectedCrop, selectedCropType);
-      const cropRemovalK20 = getCropRemovalK20(cropDataForCalc, selectedCrop, selectedCropType);
+    // Calculate crop removals (N, P2O5, K2O)
+    const cropRemovalN = getCropRemovalN(cropDataForCalc, selectedCrop, selectedCropType);
+    const cropRemovalP205 = getCropRemovalP205(cropDataForCalc, selectedCrop, selectedCropType);
+    const cropRemovalK20 = getCropRemovalK20(cropDataForCalc, selectedCrop, selectedCropType);
 
-      nutrientValues = {
-        cropRequirementN,
-        cropRequirementP205,
-        cropRequirementK2O,
-        cropRemovalN,
-        cropRemovalP205,
-        cropRemovalK20,
-      };
-    }
-
-    // Mark calculations as performed
-    return nutrientValues;
-  } catch (error) {
-    console.error('Error calculating crop data:', error);
+    nutrientValues = {
+      cropRequirementN,
+      cropRequirementP205,
+      cropRequirementK2O,
+      cropRemovalN,
+      cropRemovalP205,
+      cropRemovalK20,
+    };
   }
-  return false;
+
+  // Mark calculations as performed
+  return nutrientValues;
 }
