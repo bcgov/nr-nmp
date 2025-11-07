@@ -107,11 +107,15 @@ export default function SoilTests() {
                 remP2o5: cropEntry.cropRemovalP205,
                 remK2o: cropEntry.cropRemovalK20,
               });
+              // eslint-disable-next-line no-else-return
+            } else {
+              throw new Error(
+                `Crop calculations error, unable to calculate required nutrients for field ${fieldEle.fieldName}`,
+              );
             }
-            return null;
           }),
         );
-        return { ...fieldEle, crops: cropArray.filter((ele) => !!ele) };
+        return { ...fieldEle, crops: cropArray };
       }),
     );
 
