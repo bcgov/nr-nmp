@@ -361,6 +361,10 @@ function CropsModal({
 
         // Mark calculations as performed
         setCalculationsPerformed(true);
+      } else {
+        throw new Error(
+          `Crop calculations error, unable to calculate required nutrients for field ${field.fieldName}`,
+        );
       }
     }
   }, [fieldIndex, selectedCrop, selectedCropType, formData, field, farmRegion, dispatch]);
