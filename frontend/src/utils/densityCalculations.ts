@@ -77,5 +77,5 @@ export function calculateSeparatedSolidAndLiquid(
   const moisturePercentage = 70;
   const density = getDensityFactor(moisturePercentage);
   const separatedSolidsTons = 1.30795 * density * separatedSolidsCubicMeters;
-  return [Math.round(separatedLiquidsUSGallons), Math.round(separatedSolidsTons)];
+  return [separatedLiquidsUSGallons, separatedSolidsTons];
 }

@@ -24,7 +24,7 @@ import {
   numberToSuperscript,
 } from './utils';
 import { fertigationToFertigationRows, findBalanceMessage } from '../CalculateNutrients/utils';
-import { sumPropertyInObjectArr } from '@/utils/utils';
+import { printNum, sumPropertyInObjectArr } from '@/utils/utils';
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
@@ -175,38 +175,57 @@ const generateManureCompostInventory = (
           // a row for each manure in the system, an extra row if there is
           // Milking Center Wash Water and a final row for precipitation,
           // if the system contains any
-          const newRows: CellInput[][] = [
-            [{ content: system.name, styles: { fontStyle: 'bold' } }, ''],
-          ];
+          const newRows: CellInput[][] = [];
+          let storageSum = 0;
           let totalWashWater = 0;
           system.manuresInSystem.forEach((m) => {
-            // \t doesn't work in this new font so I used spaces
+            // The *actual* annual amount needs to remove wash water and
+            // take into account solid-liquid separation
+            let { annualAmount } = m.data;
             if (
               m.type === 'Generated' &&
               m.data.originalAnnualAmount !== undefined &&
               m.data.originalWashWaterAmount !== undefined
             ) {
-              newRows.push([
-                `        ${m.data.uniqueMaterialName}`,
-                `${m.data.originalAnnualAmount} US gallons`,
-              ]);
+              annualAmount = m.data.originalAnnualAmount;
               totalWashWater += m.data.originalWashWaterAmount;
-            } else {
-              newRows.push([
-                `        ${m.data.uniqueMaterialName}`,
-                `${m.data.annualAmount} ${m.data.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
-              ]);
             }
+            if (system.manureType === ManureType.Liquid && system.percentLiquidSeperation > 0) {
+              annualAmount *= (100 - system.percentLiquidSeperation) / 100;
+            }
+            storageSum += annualAmount;
+            // \t doesn't work in this new font so I used spaces
+            newRows.push([
+              `        ${m.data.uniqueMaterialName}`,
+              `${printNum(annualAmount)} ${m.data.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+            ]);
           });
           if (totalWashWater > 0) {
-            newRows.push(['Milking Center Wash Water', `${totalWashWater} US gallons`]);
+            // Wash water is also affected by solid-liquid separation
+            if (system.manureType === ManureType.Liquid && system.percentLiquidSeperation > 0) {
+              totalWashWater *= (100 - system.percentLiquidSeperation) / 100;
+            }
+            storageSum += totalWashWater;
+            newRows.push(['Milking Center Wash Water', `${printNum(totalWashWater)} US gallons`]);
           }
           if (system.annualPrecipitation) {
+            const { annualPrecipitation } = system;
+            storageSum += annualPrecipitation;
             newRows.push([
               'Precipitation',
-              `${system.annualPrecipitation} ${system.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+              `${printNum(annualPrecipitation)} ${system.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
             ]);
           }
+
+          // The title is prepended to the array with the sum
+          newRows.unshift([
+            { content: system.name, styles: { fontStyle: 'bold' } },
+            {
+              content: `${printNum(storageSum)} ${system.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+              styles: { fontStyle: 'bold' },
+            },
+          ]);
+
           return acc.concat(newRows);
         }, [] as RowInput[]),
         ...unassignedManures.reduce((acc, manure, idx) => {
@@ -217,7 +236,7 @@ const generateManureCompostInventory = (
               : [];
           newRows.push([
             `        ${manure.uniqueMaterialName}`,
-            `${manure.annualAmount} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+            `${printNum(manure.annualAmount)} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
           ]);
           return acc.concat(newRows);
         }, [] as RowInput[]),
@@ -256,7 +275,7 @@ const generateManureAndCompostUse = (
     body: nmpFileYear.nutrientAnalyses.map((analysis) => [
       analysis.manureName,
       analysis.uniqueMaterialName,
-      `${Math.round(analysis.annualAmount)} ${analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons'}`,
+      `${printNum(analysis.annualAmount)} ${analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons'}`,
       'TBC',
       // TODO: Add logic for this footnote:
       // "If the amount remaining is less than 10% of the annual amount, then the amount remaining is insignificant (i.e. within the margin of error of the calculations)"
@@ -371,7 +390,7 @@ const generateFertilizerRequired = (
         0: { cellWidth: pageWidth * 0.6 },
         1: { cellWidth: 'auto' },
       },
-      body: fertilizers.map((f) => [f.name, `${Math.round(f.totalAmount)} ${f.unit}`]),
+      body: fertilizers.map((f) => [f.name, `${printNum(f.totalAmount)} ${f.unit}`]),
     });
   }
 };

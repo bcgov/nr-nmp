@@ -21,6 +21,7 @@ import {
   MANURE_TYPE_OPTIONS,
 } from '@/constants';
 import { calculateSeparatedSolidAndLiquid } from '@/utils/densityCalculations';
+import { printNum } from '@/utils/utils';
 
 type StorageSystemDetailsEditProps = {
   mode: 'create' | 'system_edit';
@@ -324,11 +325,11 @@ export default function StorageSystemDetailsEdit({
                   <>
                     <p>
                       Separated liquids
-                      <p>{formData.separatedLiquidsUSGallons} U.S. Gallons</p>
+                      <p>{printNum(formData.separatedLiquidsUSGallons)} U.S. Gallons</p>
                     </p>
                     <p>
                       Separated solids
-                      <p>{formData.separatedSolidsTons} tons</p>
+                      <p>{printNum(formData.separatedSolidsTons)} tons</p>
                     </p>
                   </>
                 )}
