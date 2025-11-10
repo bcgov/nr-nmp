@@ -23,10 +23,7 @@ import {
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
 import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
-import {
-  getKgPerHaToLbPerAcre,
-  getPoundPer1000Ft2ToPoundPerAcre,
-} from '@/calculations/FieldAndSoil/Crops/Calculations';
+import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
 
 type FertilizerModalProps = {
   fieldIndex: number;
@@ -207,8 +204,12 @@ export default function FertilizerModal({
   const [lbPer1000ToAcre, setLbPer1000ToAcre] = useState<number>(0);
 
   useEffect(() => {
-    getKgPerHaToLbPerAcre().then(setKgToLb);
-    getPoundPer1000Ft2ToPoundPerAcre().then(setLbPer1000ToAcre);
+    getConversionFactors().then((conversionFactors) => {
+      if (conversionFactors) {
+        setKgToLb(conversionFactors.kilogramperhectaretopoundperacreconversion);
+        setLbPer1000ToAcre(conversionFactors.poundper1000ftsquaredtopoundperacreconversion);
+      }
+    });
   }, []);
 
   useEffect(() => {
