@@ -42,6 +42,7 @@ type AddManureModalProps = {
   initialModalData?: NMPFileAppliedManure;
   rowEditIndex?: number;
   field: NMPFileField;
+  fields: NMPFileField[];
   setFields: Dispatch<SetStateAction<NMPFileField[]>>;
   onCancel: () => void;
   navigateAway: (navigateTo: string) => void;
@@ -83,6 +84,7 @@ export default function ManureModal({
   rowEditIndex,
   onCancel,
   field,
+  fields,
   setFields,
   navigateAway,
   ...props
@@ -107,12 +109,17 @@ export default function ManureModal({
 
   // Create modified year data that includes the pending application
   const yearDataWithPendingApplication = useMemo(() => {
+    const currentYearData = {
+      ...state.nmpFile.years[0],
+      fields,
+    };
+
     if (!pendingApplication || !isCalculationCurrent) {
-      return state.nmpFile.years[0];
+      return currentYearData;
     }
 
     // Create a modified version of the field with the pending application
-    const modifiedFields = [...state.nmpFile.years[0].fields];
+    const modifiedFields = [...fields];
     const targetField = modifiedFields[fieldIndex];
 
     if (targetField) {
@@ -124,10 +131,10 @@ export default function ManureModal({
     }
 
     return {
-      ...state.nmpFile.years[0],
+      ...currentYearData,
       fields: modifiedFields,
     };
-  }, [state.nmpFile.years, pendingApplication, isCalculationCurrent, fieldIndex]);
+  }, [state.nmpFile.years, fields, pendingApplication, isCalculationCurrent, fieldIndex]);
 
   // Get material type from storage system or imported manure
   const selectedMaterialType = useMemo(() => {
