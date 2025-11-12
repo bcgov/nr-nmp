@@ -1,4 +1,5 @@
 import { CalculateNutrientsRow, CropNutrients, Schedule } from './CalculateNutrients';
+import { Fertilizer } from './database';
 
 export interface NMPFileCrop extends CalculateNutrientsRow {
   cropId: number;
@@ -59,6 +60,7 @@ export interface NMPFileFertilizer extends CalculateNutrientsRow {
   density?: number;
   densityAdjusted?: boolean;
   densityUnitId?: number;
+  customFertilizer?: Fertilizer;
 }
 
 export interface NMPFileFertigation extends CalculateNutrientsRow {

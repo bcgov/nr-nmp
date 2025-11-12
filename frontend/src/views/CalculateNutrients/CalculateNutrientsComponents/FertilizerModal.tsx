@@ -104,6 +104,7 @@ const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
   remN: 0,
   remP2o5: 0,
   remK2o: 0,
+  customFertilizer: undefined,
 };
 
 const FERTILIZER_METHODS: { id: string; label: string }[] = [
@@ -141,8 +142,9 @@ export default function FertilizerModal({
   const [formState, setFormState] = useState<NMPFileFertilizer>(
     initialModalData || EMPTY_FERTILIZER_FORM_DATA,
   );
-  const [formCustomFertilizer, setFormCustomFertilizer] =
-    useState<Fertilizer>(EMPTY_CUSTOM_FERTILIZER);
+  const [formCustomFertilizer, setFormCustomFertilizer] = useState<Fertilizer>(
+    initialModalData?.customFertilizer || EMPTY_CUSTOM_FERTILIZER,
+  );
 
   const apiCache = useContext(APICacheContext);
 
@@ -178,19 +180,24 @@ export default function FertilizerModal({
 
         if (rowEditIndex !== undefined) {
           const newFertilizers = [...prev.fertilizers];
-          newFertilizers[rowEditIndex] = { ...formState };
+          if (isCustomFertilizer) {
+            newFertilizers[rowEditIndex] = { ...formState, customFertilizer: formCustomFertilizer };
+          } else {
+            newFertilizers[rowEditIndex] = { ...formState };
+          }
           return { ...prev, fertilizers: newFertilizers };
         }
 
         // For case where this is a new fertilizer
+        const newFertilizerEntry = {
+          ...formState,
+        };
+        if (isCustomFertilizer) {
+          newFertilizerEntry.customFertilizer = formCustomFertilizer;
+        }
         return {
           ...prev,
-          fertilizers: [
-            ...prev.fertilizers,
-            {
-              ...formState,
-            },
-          ],
+          fertilizers: [...prev.fertilizers, newFertilizerEntry],
         };
       });
 
@@ -324,7 +331,7 @@ export default function FertilizerModal({
   };
 
   const handleInputChanges = (updates: {
-    [key: string]: string | number | boolean | undefined;
+    [key: string]: string | number | boolean | Fertilizer | undefined;
   }) => {
     Object.entries(updates).forEach(([name, value]) => {
       let changes = structuredClone(updates);
