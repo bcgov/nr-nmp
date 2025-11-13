@@ -137,7 +137,11 @@ export default function NutrientAnalysis() {
         sortable: false,
       },
       {
-        headerName: 'NH4-N (ppm)',
+        renderHeader: () => (
+          <strong>
+            <span>NH₄-N (ppm)</span>
+          </strong>
+        ),
         field: 'NH4N',
         width: 100,
         minWidth: 100,

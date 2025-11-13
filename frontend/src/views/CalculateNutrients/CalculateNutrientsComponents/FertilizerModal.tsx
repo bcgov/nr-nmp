@@ -44,21 +44,26 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   {
     field: 'N',
     headerName: 'N',
-
     sortable: false,
     resizable: false,
   },
   {
     field: 'P2O5',
-    headerName: 'P2O5',
-
+    renderHeader: () => (
+      <strong>
+        <span>P₂O₅</span>
+      </strong>
+    ),
     sortable: false,
     resizable: false,
   },
   {
     field: 'K2O',
-    headerName: 'K2O',
-
+    renderHeader: () => (
+      <strong>
+        <span>K₂O</span>
+      </strong>
+    ),
     sortable: false,
     resizable: false,
   },
@@ -74,14 +79,22 @@ const BALANCE_COLUMNS: GridColDef[] = [
   },
   {
     field: 'reqP2o5',
-    headerName: 'P2O5',
+    renderHeader: () => (
+      <strong>
+        <span>P₂O₅</span>
+      </strong>
+    ),
     renderCell: renderBalanceCell('reqP2o5', true),
     sortable: false,
     resizable: false,
   },
   {
     field: 'reqK2o',
-    headerName: 'K2O',
+    renderHeader: () => (
+      <strong>
+        <span>K₂O</span>
+      </strong>
+    ),
     renderCell: renderBalanceCell('reqK2o', true),
     sortable: false,
     resizable: false,
@@ -447,11 +460,7 @@ export default function FertilizerModal({
                 <Grid size={{ xs: 4 }}>
                   <NumberField
                     isRequired
-                    label={
-                      <span>
-                        P<sub>2</sub>O<sub>5</sub> (%)
-                      </span>
-                    }
+                    label="P₂O₅ (%)"
                     value={formCustomFertilizer.phosphorous}
                     onChange={(e) => handleInputChanges({ phosphorous: e })}
                     maxValue={100}
@@ -460,11 +469,7 @@ export default function FertilizerModal({
                 <Grid size={{ xs: 4 }}>
                   <NumberField
                     isRequired
-                    label={
-                      <span>
-                        K<sub>2</sub>O (%)
-                      </span>
-                    }
+                    label="K₂O (%)"
                     value={formCustomFertilizer.potassium}
                     onChange={(e) => handleInputChanges({ potassium: e })}
                     maxValue={100}

@@ -283,7 +283,7 @@ export default function NutrientAnalysisModal({
             <NumberField
               isDisabled={formData.bookLab !== 'lab'}
               isRequired={formData.bookLab === 'lab'}
-              label="NH4-N (ppm)"
+              label="NH₄-N (ppm)"
               value={formData.NH4N}
               onChange={(e) => handleInputChanges({ NH4N: e })}
             />

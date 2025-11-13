@@ -112,11 +112,7 @@ export default function OtherModal({
               <Grid size="grow">
                 <NumberField
                   isRequired
-                  label={
-                    <span>
-                      P<sub>2</sub>O<sub>5</sub>
-                    </span>
-                  }
+                  label="P₂O₅"
                   value={formData.reqP2o5}
                   onChange={(v) => handleNutrientChange('reqP2o5', v)}
                 />
@@ -124,11 +120,7 @@ export default function OtherModal({
               <Grid size="grow">
                 <NumberField
                   isRequired
-                  label={
-                    <span>
-                      K<sub>2</sub>O
-                    </span>
-                  }
+                  label="K₂O"
                   value={formData.reqK2o}
                   onChange={(v) => handleNutrientChange('reqK2o', v)}
                 />
@@ -147,11 +139,7 @@ export default function OtherModal({
               <Grid size="grow">
                 <NumberField
                   isRequired
-                  label={
-                    <span>
-                      P<sub>2</sub>O<sub>5</sub>
-                    </span>
-                  }
+                  label="P₂O₅"
                   value={formData.remP2o5}
                   onChange={(v) => handleNutrientChange('remP2o5', v)}
                 />
@@ -159,11 +147,7 @@ export default function OtherModal({
               <Grid size="grow">
                 <NumberField
                   isRequired
-                  label={
-                    <span>
-                      K<sub>2</sub>O
-                    </span>
-                  }
+                  label="K₂O"
                   value={formData.remK2o}
                   onChange={(v) => handleNutrientChange('remK2o', v)}
                 />
