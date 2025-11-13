@@ -19,15 +19,13 @@ import {
   SoilTestPotassiumRange,
   Units,
   Manure,
+  SolidMaterialApplicationTonPerAcreRateConversions,
+  LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
+  MaterialRemainingData,
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
-import {
-  calculateMaterialRemaining,
-  type SolidMaterialConversion,
-  type LiquidMaterialConversion,
-  type MaterialRemainingData,
-} from '@/calculations/MaterialRemaining/Calculations';
+import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
 
 export default function Reporting() {
   const { state } = useAppState();
@@ -38,8 +36,12 @@ export default function Reporting() {
   const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
   const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
   const [manureUnits, setManureUnits] = useState<Units[]>([]);
-  const [solidConversions, setSolidConversions] = useState<SolidMaterialConversion[]>([]);
-  const [liquidConversions, setLiquidConversions] = useState<LiquidMaterialConversion[]>([]);
+  const [solidConversions, setSolidConversions] = useState<
+    SolidMaterialApplicationTonPerAcreRateConversions[]
+  >([]);
+  const [liquidConversions, setLiquidConversions] = useState<
+    LiquidMaterialApplicationUsGallonsPerAcreRateConversions[]
+  >([]);
   const [manures, setManures] = useState<Manure[]>([]);
   const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
     null,
@@ -97,18 +99,25 @@ export default function Reporting() {
     });
     apiCache
       .callEndpoint('api/solidmaterialapplicationtonperacrerateconversions/')
-      .then((response: { status?: any; data: SolidMaterialConversion[] }) => {
-        if (response.status === 200) {
-          setSolidConversions(response.data);
-        }
-      });
+      .then(
+        (response: { status?: any; data: SolidMaterialApplicationTonPerAcreRateConversions[] }) => {
+          if (response.status === 200) {
+            setSolidConversions(response.data);
+          }
+        },
+      );
     apiCache
       .callEndpoint('api/liquidmaterialapplicationusgallonsperacrerateconversions/')
-      .then((response: { status?: any; data: LiquidMaterialConversion[] }) => {
-        if (response.status === 200) {
-          setLiquidConversions(response.data);
-        }
-      });
+      .then(
+        (response: {
+          status?: any;
+          data: LiquidMaterialApplicationUsGallonsPerAcreRateConversions[];
+        }) => {
+          if (response.status === 200) {
+            setLiquidConversions(response.data);
+          }
+        },
+      );
     apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: Manure[] }) => {
       if (response.status === 200) {
         setManures(response.data);

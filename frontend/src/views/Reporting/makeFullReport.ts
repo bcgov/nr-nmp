@@ -15,6 +15,7 @@ import {
   SoilTestMethods,
   SoilTestPhosphorousRange,
   SoilTestPotassiumRange,
+  MaterialRemainingData,
 } from '@/types';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
 import {
@@ -25,7 +26,6 @@ import {
 } from './utils';
 import { fertigationToFertigationRows, findBalanceMessage } from '../CalculateNutrients/utils';
 import { printNum, sumPropertyInObjectArr } from '@/utils/utils';
-import { MaterialRemainingData } from '@/calculations/MaterialRemaining/Calculations';
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
