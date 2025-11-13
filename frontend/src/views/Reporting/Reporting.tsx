@@ -137,30 +137,25 @@ export default function Reporting() {
       return;
     }
 
-    try {
-      // Build manure data with moisture values
-      const manureData: { [manureId: number]: { moisture?: number } } = {};
-      manures.forEach((manure) => {
-        if (manure.moisture) {
-          const moistureValue = parseFloat(manure.moisture.toString());
-          if (!Number.isNaN(moistureValue)) {
-            manureData[manure.id] = { moisture: moistureValue };
-          }
+    // Build manure data with moisture values
+    const manureData: { [manureId: number]: { moisture?: number } } = {};
+    manures.forEach((manure) => {
+      if (manure.moisture) {
+        const moistureValue = parseFloat(manure.moisture.toString());
+        if (!Number.isNaN(moistureValue)) {
+          manureData[manure.id] = { moisture: moistureValue };
         }
-      });
+      }
+    });
 
-      const result = calculateMaterialRemaining(
-        state.nmpFile.years[0],
-        solidConversions,
-        liquidConversions,
-        Object.keys(manureData).length > 0 ? manureData : undefined,
-        manureUnits,
-      );
-      setMaterialRemainingData(result);
-    } catch (err) {
-      console.error('Failed to calculate material remaining data:', err);
-      setMaterialRemainingData(null);
-    }
+    const result = calculateMaterialRemaining(
+      state.nmpFile.years[0],
+      solidConversions,
+      liquidConversions,
+      Object.keys(manureData).length > 0 ? manureData : undefined,
+      manureUnits,
+    );
+    setMaterialRemainingData(result);
   }, [manureUnits, solidConversions, liquidConversions, manures, state.nmpFile.years]);
 
   async function downloadBlob() {
