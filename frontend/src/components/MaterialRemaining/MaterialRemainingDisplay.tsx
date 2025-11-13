@@ -1,7 +1,7 @@
 /**
  * @summary React component for displaying material remaining status
  */
-import { MaterialRemainingData } from '@/calculations/MaterialRemaining/Calculations';
+import { MaterialRemainingData } from '@/types';
 import {
   MaterialRemainingContainer,
   MaterialRemainingTitle,
