@@ -289,12 +289,15 @@ const generateManureAndCompostUse = (
 
         if (matchingMaterial) {
           const unit = analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons';
-          landApplied = `${printNum(matchingMaterial.totalApplied)} ${unit}`;
-          amountRemaining = `${printNum(matchingMaterial.totalAnnualManureRemainingToApply)} ${unit}`;
 
-          // Add footnote if amount remaining is insignificant (less than 10%)
+          // Format land-applied with percentage
+          landApplied = `${printNum(matchingMaterial.totalApplied)} ${unit} (${matchingMaterial.wholePercentApplied}%)`;
+
+          // Format amount remaining - show "None" if less than 10%, otherwise show amount with percentage
           if (matchingMaterial.wholePercentRemaining < 10) {
-            amountRemaining += '*';
+            amountRemaining = 'None';
+          } else {
+            amountRemaining = `${printNum(matchingMaterial.totalAnnualManureRemainingToApply)} (${matchingMaterial.wholePercentRemaining}%)`;
           }
         }
       }
@@ -308,27 +311,6 @@ const generateManureAndCompostUse = (
       ];
     }),
   });
-
-  if (materialRemainingData) {
-    const allMaterials = [
-      ...materialRemainingData.appliedStoredManures,
-      ...materialRemainingData.appliedImportedManures,
-    ];
-    const hasInsignificantRemaining = allMaterials.some(
-      (material) => material.wholePercentRemaining < 10,
-    );
-
-    if (hasInsignificantRemaining) {
-      doc.setFontSize(10);
-      const nextY: number = (doc as any).lastAutoTable.finalY + 5;
-      addText(
-        doc,
-        '* If the amount remaining is less than 10% of the annual amount, then the amount remaining is insignificant (i.e. within the margin of error of the calculations)',
-        15,
-        nextY,
-      );
-    }
-  }
 };
 
 const generateLiquidStorageCapacity = (
