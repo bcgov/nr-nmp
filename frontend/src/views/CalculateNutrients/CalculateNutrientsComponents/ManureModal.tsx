@@ -123,9 +123,17 @@ export default function ManureModal({
     const targetField = modifiedFields[fieldIndex];
 
     if (targetField) {
+      let updatedManures;
+      if (rowEditIndex !== undefined) {
+        updatedManures = [...(targetField.manures || [])];
+        updatedManures[rowEditIndex] = pendingApplication;
+      } else {
+        updatedManures = [...(targetField.manures || []), pendingApplication];
+      }
+
       const modifiedField = {
         ...targetField,
-        manures: [...(targetField.manures || []), pendingApplication],
+        manures: updatedManures,
       };
       modifiedFields[fieldIndex] = modifiedField;
     }
@@ -134,7 +142,14 @@ export default function ManureModal({
       ...currentYearData,
       fields: modifiedFields,
     };
-  }, [state.nmpFile.years, fields, pendingApplication, isCalculationCurrent, fieldIndex]);
+  }, [
+    state.nmpFile.years,
+    fields,
+    pendingApplication,
+    isCalculationCurrent,
+    fieldIndex,
+    rowEditIndex,
+  ]);
 
   // Get material type from storage system or imported manure
   const selectedMaterialType = useMemo(() => {
