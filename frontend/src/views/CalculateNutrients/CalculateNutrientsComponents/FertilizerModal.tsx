@@ -338,6 +338,10 @@ export default function FertilizerModal({
 
       if (['potassium', 'phosphorous', 'nitrogen'].includes(name)) {
         setFormCustomFertilizer((prev) => ({ ...prev, ...changes }));
+        // Remove fields not in NMPFileField
+        delete changes.potassium;
+        delete changes.phosphorous;
+        delete changes.nitrogen;
       }
 
       if (name === 'fertilizerTypeId') {
@@ -447,7 +451,11 @@ export default function FertilizerModal({
                     isRequired
                     label="N (%)"
                     value={formCustomFertilizer.nitrogen}
-                    onChange={(e) => handleInputChanges({ nitrogen: e })}
+                    onChange={(e) =>
+                      handleInputChanges({
+                        nitrogen: e,
+                      })
+                    }
                     maxValue={100}
                   />
                 </Grid>
