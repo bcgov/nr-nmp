@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
+import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 import { formGridBreakpoints } from '../../common.styles';
 import { Form, Modal, NumberField } from '../../components/common';
 import { NMPFileField, NMPFileSoilTest, SelectOption, SoilTestMethods } from '@/types';
@@ -38,27 +39,11 @@ export default function SoilTestsModal({
   };
 
   const handleFormFieldSubmit = () => {
-    // Calculate convertedKelownaP directly
-    const lessThan72 = soilTestMethods.find((method) => method.id === soilTestId)?.value
-      .converttokelownaphlessthan72;
-    const greaterThan72 = soilTestMethods.find((method) => method.id === soilTestId)?.value
-      .converttokelownaphgreaterthan72;
-
-    let convertedKelownaP = formData.valP!;
-
-    if (formData.valPH! < 7.2 && lessThan72 !== undefined) {
-      convertedKelownaP = formData.valP! * lessThan72;
-    } else if (formData.valPH! >= 7.2 && greaterThan72 !== undefined) {
-      convertedKelownaP = formData.valP! * greaterThan72;
-    }
-
-    // Calculate converted Kelowna K value (if you need it)
-    const convertedKelownaK =
-      soilTestMethods.find((method) => method.id === soilTestId)?.value.converttokelownak !==
-      undefined
-        ? formData.valK! *
-          soilTestMethods.find((method) => method.id === soilTestId)!.value.converttokelownak
-        : formData.valK!;
+    const { convertedKelownaP, convertedKelownaK } = soilTestCalculation(
+      soilTestMethods.map((ele) => ele.value),
+      soilTestId,
+      formData,
+    );
 
     setFormData((prevFormData) => {
       const newFormData = {
@@ -100,7 +85,7 @@ export default function SoilTestsModal({
               <StyledDatePicker>
                 <ReactDatePicker
                   selected={formDataDate}
-                  onChange={(e) => {
+                  onChange={(e: Date) => {
                     handleFormFieldChange({ sampleDate: e ? e.toISOString() : undefined });
                   }}
                   dateFormat="MM/yyyy"

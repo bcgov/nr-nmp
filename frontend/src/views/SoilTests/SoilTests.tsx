@@ -35,6 +35,7 @@ import {
   sharedCalcCropReq,
   postprocessModalData,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
+import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 
 export default function SoilTests() {
   const { state, dispatch } = useAppState();
@@ -76,15 +77,33 @@ export default function SoilTests() {
     setCurrentFieldIndex(null);
   };
 
-  // IMPORTANT QUESTION: when the user changes the soil test method do we update the existing field.soilTest values?
   const soilTestMethodSelect = (value: number) => {
+    const updatedFields = fields.map((fieldEle) => {
+      const newFieldEle = structuredClone(fieldEle);
+      // Recalculate soil tests if method changed changed.
+      if (newFieldEle?.soilTest && newFieldEle.soilTest.soilTestId !== soilTestId) {
+        const { convertedKelownaP, convertedKelownaK } = soilTestCalculation(
+          soilTestMethods.map((ele) => ele.value),
+          soilTestId,
+          newFieldEle.soilTest,
+        );
+        newFieldEle.soilTest.convertedKelownaK = convertedKelownaK;
+        newFieldEle.soilTest.convertedKelownaP = convertedKelownaP;
+        newFieldEle.soilTest.soilTestId = soilTestId;
+
+        return newFieldEle;
+      }
+      return fieldEle;
+    });
+    setFields(updatedFields);
     setSoilTestId(value);
   };
 
   const handleNextPage = async () => {
-    // Iterate through edited fields, then recalc crop reqs
+    // Iterate through edited fields for soil test changes and crop req updates
     const updatedFields = await Promise.all(
       fields.map(async (fieldEle) => {
+        // Recalculate crop requirements
         const cropArray = await Promise.all(
           fieldEle.crops.map(async (cropEle) => {
             const matchedCrop = crops.find((ele) => ele.id === cropEle.cropId);
