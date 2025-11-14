@@ -68,10 +68,17 @@ import {
   SoilTestPhosphorousRange,
   SoilTestPotassiumRange,
   SolidManureConversionFactors,
+  SolidMaterialApplicationTonPerAcreRateConversions,
+  LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   Subregion,
   Units,
 } from './database';
 import PrecipitationConversionFactor from './PrecipitationConversionFactor';
+import {
+  FieldApplicationData,
+  AppliedManureData,
+  MaterialRemainingData,
+} from './MaterialRemaining';
 
 export { OTHER_ANIMAL_IDS, ManureType, Shape, Schedule, PrecipitationConversionFactor };
 
@@ -138,4 +145,9 @@ export type {
   LiquidFertilizerDensity,
   SoilTestPhosphorousRange,
   SoilTestPotassiumRange,
+  SolidMaterialApplicationTonPerAcreRateConversions,
+  LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
+  FieldApplicationData,
+  AppliedManureData,
+  MaterialRemainingData,
 };

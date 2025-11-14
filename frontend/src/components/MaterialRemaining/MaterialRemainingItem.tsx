@@ -1,7 +1,7 @@
 /**
  * @summary Individual material remaining item component
  */
-import { AppliedManureData } from '@/calculations/MaterialRemaining/Calculations';
+import { AppliedManureData } from '@/types';
 import {
   MaterialRemainingItem as StyledMaterialRemainingItem,
   SourceName,

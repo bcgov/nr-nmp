@@ -384,6 +384,7 @@ export default function CalculateNutrients() {
             openDialog[1] !== undefined ? fieldList[activeField].manures[openDialog[1]] : undefined
           }
           field={fieldList[activeField]}
+          fields={fieldList}
           rowEditIndex={openDialog[1]}
           setFields={setFieldList}
           isOpen={openDialog[0] === 'manure'}
