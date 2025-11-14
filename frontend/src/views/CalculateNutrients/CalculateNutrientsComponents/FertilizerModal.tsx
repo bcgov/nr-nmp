@@ -330,19 +330,38 @@ export default function FertilizerModal({
     }));
   };
 
+  const handleCustomFertilizerChanges = (updates: {
+    [key: string]: string | number | boolean | Fertilizer | undefined;
+  }) => {
+    Object.entries(updates).forEach(([name, value]) => {
+      setFormCustomFertilizer((prev) => {
+        let changes = structuredClone(updates);
+
+        if (name === 'fertilizerTypeId') {
+          if (value === DRY_CUSTOM_ID || value === LIQUID_CUSTOM_ID) {
+            if (formState.fertilizerTypeId !== value) {
+              changes = {
+                ...EMPTY_CUSTOM_FERTILIZER,
+                dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
+              };
+            } else {
+              changes.dryliquid = value === DRY_CUSTOM_ID ? 'dry' : 'liquid';
+            }
+          } else {
+            changes = { ...EMPTY_CUSTOM_FERTILIZER };
+          }
+        }
+
+        return { ...prev, ...changes };
+      });
+    });
+  };
+
   const handleInputChanges = (updates: {
     [key: string]: string | number | boolean | Fertilizer | undefined;
   }) => {
     Object.entries(updates).forEach(([name, value]) => {
       let changes = structuredClone(updates);
-
-      if (['potassium', 'phosphorous', 'nitrogen'].includes(name)) {
-        setFormCustomFertilizer((prev) => ({ ...prev, ...changes }));
-        // Remove fields not in NMPFileField
-        delete changes.potassium;
-        delete changes.phosphorous;
-        delete changes.nitrogen;
-      }
 
       if (name === 'fertilizerTypeId') {
         setFilteredFertilizers(
@@ -352,25 +371,6 @@ export default function FertilizerModal({
               fertilizerTypes.find((fertType) => fertType.id === value)?.value.dryliquid,
           ),
         );
-
-        if (value === DRY_CUSTOM_ID || value === LIQUID_CUSTOM_ID) {
-          setFormCustomFertilizer((prev) => {
-            // Reset if we're switching type
-            if (formState.fertilizerTypeId !== value) {
-              return {
-                ...EMPTY_CUSTOM_FERTILIZER,
-                dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
-              };
-            }
-            return {
-              ...prev,
-              dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
-            };
-          });
-        } else {
-          // Reset for other values
-          setFormCustomFertilizer(EMPTY_CUSTOM_FERTILIZER);
-        }
         setDefaultDensity(undefined);
 
         // Reset other values on changes
@@ -437,7 +437,11 @@ export default function FertilizerModal({
               label="Fertilizer Type"
               placeholder="Select Fertilizer Type"
               selectedKey={formState.fertilizerTypeId}
-              onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
+              onSelectionChange={(e) => {
+                const changes = { fertilizerTypeId: e as number };
+                handleCustomFertilizerChanges(changes);
+                handleInputChanges(changes);
+              }}
             />
           </Grid>
           {isCustomFertilizer ? (
@@ -452,7 +456,7 @@ export default function FertilizerModal({
                     label="N (%)"
                     value={formCustomFertilizer.nitrogen}
                     onChange={(e) =>
-                      handleInputChanges({
+                      handleCustomFertilizerChanges({
                         nitrogen: e,
                       })
                     }
@@ -468,7 +472,7 @@ export default function FertilizerModal({
                       </span>
                     }
                     value={formCustomFertilizer.phosphorous}
-                    onChange={(e) => handleInputChanges({ phosphorous: e })}
+                    onChange={(e) => handleCustomFertilizerChanges({ phosphorous: e })}
                     maxValue={100}
                   />
                 </Grid>
@@ -481,7 +485,7 @@ export default function FertilizerModal({
                       </span>
                     }
                     value={formCustomFertilizer.potassium}
-                    onChange={(e) => handleInputChanges({ potassium: e })}
+                    onChange={(e) => handleCustomFertilizerChanges({ potassium: e })}
                     maxValue={100}
                   />
                 </Grid>
