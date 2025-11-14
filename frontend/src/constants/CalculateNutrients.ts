@@ -1,11 +1,11 @@
 import {
   CropNutrients,
-  Fertilizer,
   DryFertilizerSolubilities,
   Schedule,
   InjectionUnit,
   SelectOption,
   NMPFileAppliedManure,
+  CustomFertilizer,
 } from '@/types';
 
 export const DRY_CUSTOM_ID = 2;
@@ -17,15 +17,10 @@ export const EMPTY_CROP_NUTRIENTS: CropNutrients = {
   K2O: 0,
 };
 
-export const EMPTY_CUSTOM_FERTILIZER: Fertilizer = {
-  id: 0,
-  name: 'Custom fertilizer',
-  dryliquid: 'dry',
-  fertigation: false,
+export const EMPTY_CUSTOM_FERTILIZER: Omit<CustomFertilizer, 'dryliquid'> = {
   nitrogen: 0,
   phosphorous: 0,
   potassium: 0,
-  sortnum: 0,
 };
 
 // Taken from https://github.com/bcgov/agri-nmp/blob/ce60d005a1990fe441ee347a9bfac700dd092bd3/app/Agri.Data/SeedData/FertigationData.json#L232
