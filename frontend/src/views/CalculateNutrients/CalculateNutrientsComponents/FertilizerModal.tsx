@@ -183,12 +183,14 @@ export default function FertilizerModal({
         }
 
         // For case where this is a new fertilizer
-        const newFertilizerEntry = {
-          ...formState,
-        };
         return {
           ...prev,
-          fertilizers: [...prev.fertilizers, newFertilizerEntry],
+          fertilizers: [
+            ...prev.fertilizers,
+            {
+              ...formState,
+            },
+          ],
         };
       });
 
@@ -414,10 +416,7 @@ export default function FertilizerModal({
               label="Fertilizer Type"
               placeholder="Select Fertilizer Type"
               selectedKey={formState.fertilizerTypeId}
-              onSelectionChange={(e) => {
-                const changes = { fertilizerTypeId: e as number };
-                handleInputChanges(changes);
-              }}
+              onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
             />
           </Grid>
           {formState.customFertilizer ? (
@@ -431,11 +430,7 @@ export default function FertilizerModal({
                     isRequired
                     label="N (%)"
                     value={formState.customFertilizer.nitrogen}
-                    onChange={(e) =>
-                      handleCustomFertilizerChanges({
-                        nitrogen: e,
-                      })
-                    }
+                    onChange={(e) => handleCustomFertilizerChanges({ nitrogen: e })}
                     maxValue={100}
                   />
                 </Grid>
