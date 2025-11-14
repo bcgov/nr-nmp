@@ -9,6 +9,7 @@ import {
   Schedule,
 } from './CalculateNutrients';
 import {
+  CustomFertilizer,
   NMPFileAppliedManure,
   NMPFileCrop,
   NMPFileFertigation,
@@ -150,4 +151,5 @@ export type {
   FieldApplicationData,
   AppliedManureData,
   MaterialRemainingData,
+  CustomFertilizer,
 };

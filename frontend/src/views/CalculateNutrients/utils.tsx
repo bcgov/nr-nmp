@@ -24,7 +24,7 @@ const COLUMN_STYLE = css({
 });
 
 export const calcFertBalance = (
-  fert: Fertilizer,
+  fert: Pick<Fertilizer, 'dryliquid' | 'nitrogen' | 'phosphorous' | 'potassium'>,
   applRate: number,
   applUnit: FertilizerUnit,
   conversionFactors: { kgToLb: number; lbPer1000ToAcre: number },
