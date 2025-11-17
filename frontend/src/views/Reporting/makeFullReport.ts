@@ -778,7 +778,7 @@ const generateManureAndCompostAnalysis = (
         'Material Type',
         'Moisture (%)',
         'Total N (%)',
-        'NH4-N (ppm)',
+        'NH₄-N (ppm)',
         'P (%)',
         'K (%)',
       ],

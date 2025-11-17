@@ -214,7 +214,11 @@ export default function SoilTests() {
       },
       {
         field: 'valNO3H',
-        headerName: 'NO₃-N (ppm)',
+        renderHeader: () => (
+          <strong>
+            <span>NO₃-N (ppm)</span>
+          </strong>
+        ),
         valueGetter: (_value, row) => row.soilTest?.valNO3H,
         width: 120,
         minWidth: 100,

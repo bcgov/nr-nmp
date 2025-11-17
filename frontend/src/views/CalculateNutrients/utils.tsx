@@ -108,14 +108,7 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
-    renderHeader: () =>
-      hideColumnHeaders ? (
-        <div />
-      ) : (
-        <span css={COLUMN_STYLE}>
-          P<sub>2</sub>O<sub>5</sub>
-        </span>
-      ),
+    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>P₂O₅</span>),
     renderCell,
     sortable: false,
   },
@@ -125,14 +118,7 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Potassium',
-    renderHeader: () =>
-      hideColumnHeaders ? (
-        <div />
-      ) : (
-        <span css={COLUMN_STYLE}>
-          K<sub>2</sub>O
-        </span>
-      ),
+    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>K₂O</span>),
     renderCell,
     sortable: false,
   },
@@ -152,14 +138,7 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
-    renderHeader: () =>
-      hideColumnHeaders ? (
-        <div />
-      ) : (
-        <span css={COLUMN_STYLE}>
-          P<sub>2</sub>O<sub>5</sub>
-        </span>
-      ),
+    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>P₂O₅</span>),
     renderCell,
     sortable: false,
   },
@@ -169,14 +148,7 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 130,
     description: 'Potassium',
-    renderHeader: () =>
-      hideColumnHeaders ? (
-        <div />
-      ) : (
-        <span css={COLUMN_STYLE}>
-          K<sub>2</sub>O
-        </span>
-      ),
+    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>K₂O</span>),
     renderCell,
     sortable: false,
   },
@@ -316,11 +288,7 @@ export const BALANCE_COLUMNS = [
     maxWidth: 100,
     description: 'Phosphorous',
     renderCell: renderBalanceCell('reqP2o5'),
-    renderHeader: () => (
-      <span css={COLUMN_STYLE}>
-        P<sub>2</sub>O<sub>5</sub>
-      </span>
-    ),
+    renderHeader: () => <span css={COLUMN_STYLE}>P₂O₅</span>,
     sortable: false,
   },
   {

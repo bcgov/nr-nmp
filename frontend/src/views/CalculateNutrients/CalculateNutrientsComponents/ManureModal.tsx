@@ -58,7 +58,11 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   },
   {
     field: 'P2O5',
-    headerName: 'P2O5',
+    renderHeader: () => (
+      <strong>
+        <span>P₂O₅</span>
+      </strong>
+    ),
     width: 80,
     minWidth: 75,
     maxWidth: 200,
@@ -67,7 +71,11 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   },
   {
     field: 'K2O',
-    headerName: 'K2O',
+    renderHeader: () => (
+      <strong>
+        <span>K₂O</span>
+      </strong>
+    ),
     width: 80,
     minWidth: 75,
     maxWidth: 200,
@@ -269,7 +277,7 @@ export default function ManureModal({
   // TODO: Replace this with a calculation based on the balance row
   const [stillReqTable, setStillReqTable] = useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
 
-  // Set the default values for NH4 and organic N //
+  // Set the default values for NH₄ and organic N //
   useEffect(() => {
     if (!selectedManure) return;
     const valueDecimal = ammoniaRetentions.find(

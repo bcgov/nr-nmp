@@ -42,7 +42,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   },
   {
     id: 4,
-    text: 'Crop requirement for P2O5 is met; {0} lb/ac adds no benefit to the crop',
+    text: 'Crop requirement for P₂O₅ is met; {0} lb/ac adds no benefit to the crop',
     icon: '/dollar warning.svg',
     balanceType: 'reqP2o5',
     reqBalanceLow: 15,
@@ -52,7 +52,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   },
   {
     id: 5,
-    text: 'Crop requirement for P2O5 is met',
+    text: 'Crop requirement for P₂O₅ is met',
     icon: '/good.svg',
     balanceType: 'reqP2o5',
     reqBalanceLow: -5,
@@ -62,7 +62,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   },
   {
     id: 6,
-    text: 'Add {0} lb P2O5/ac to meet crop requirements',
+    text: 'Add {0} lb P₂O₅/ac to meet crop requirements',
     icon: '/dollar warning.svg',
     balanceType: 'reqP2o5',
     reqBalanceLow: -99999,
@@ -72,7 +72,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   },
   {
     id: 7,
-    text: 'Crop requirement for K2O is met, {0} lb/ac adds no benefit to the crop',
+    text: 'Crop requirement for K₂O is met, {0} lb/ac adds no benefit to the crop',
     icon: '/dollar warning.svg',
     balanceType: 'reqK2o',
     reqBalanceLow: 15,
@@ -82,7 +82,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   },
   {
     id: 8,
-    text: 'Crop requirement for K2O is met',
+    text: 'Crop requirement for K₂O is met',
     icon: '/good.svg',
     balanceType: 'reqK2o',
     reqBalanceLow: -5,
@@ -92,7 +92,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   },
   {
     id: 9,
-    text: 'Add {0} lb K2O/ac to meet crop requirements',
+    text: 'Add {0} lb K₂O/ac to meet crop requirements',
     icon: '/dollar warning.svg',
     balanceType: 'reqK2o',
     reqBalanceLow: -99999,
@@ -102,7 +102,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
   },
   {
     id: 10,
-    text: 'Reduce crop P2O5 removal balance below 80 lb/ac per year in the long term.',
+    text: 'Reduce crop P₂O₅ removal balance below 80 lb/ac per year in the long term.',
     icon: '/stop triangle.svg',
     balanceType: 'remP2O5',
     reqBalanceLow: 15,

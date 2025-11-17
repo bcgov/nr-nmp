@@ -169,12 +169,12 @@ function validateIds(combinedCropData: NMPFileCrop, crop: Crop, cropType: CropTy
 }
 
 /**
- * Calculates potassium (K2O) removal for a crop
+ * Calculates potassium (K₂O) removal for a crop
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
  * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
- * @returns {number} Amount of K2O removed in lbs/acre, rounded to nearest integer
+ * @returns {number} Amount of K₂O removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalK20(
   combinedCropData: NMPFileCrop,
@@ -204,12 +204,12 @@ export function getCropRemovalK20(
 }
 
 /**
- * Calculates phosphorous (P2O5) removal for a crop
+ * Calculates phosphorous (P₂O₅) removal for a crop
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
  * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
- * @returns {number} Amount of P2O5 removed in lbs/acre, rounded to nearest integer
+ * @returns {number} Amount of P₂O₅ removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalP205(
   combinedCropData: NMPFileCrop,
@@ -335,12 +335,12 @@ export function getCropRequirementN(
 }
 
 /**
- * Calculates potassium (K2O) requirement based on soil test and crop needs
+ * Calculates potassium (K₂O) requirement based on soil test and crop needs
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field
  * @param {number} regionId - ID of the region
- * @returns {Promise<number>} Required K2O application in lbs/acre, rounded to nearest integer
+ * @returns {Promise<number>} Required K₂O application in lbs/acre, rounded to nearest integer
  */
 export async function getCropRequirementK2O(
   combinedCropData: NMPFileCrop,
@@ -382,12 +382,12 @@ export async function getCropRequirementK2O(
 }
 
 /**
- * Calculates phosphorous (P2O5) requirement based on soil test and crop needs
+ * Calculates phosphorous (P₂O₅) requirement based on soil test and crop needs
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field
  * @param {number} regionId - ID of the region
- * @returns {Promise<number>} Required P2O5 application in lbs/acre, rounded to nearest integer
+ * @returns {Promise<number>} Required P₂O₅ application in lbs/acre, rounded to nearest integer
  */
 export async function getCropRequirementP205(
   combinedCropData: NMPFileCrop,
@@ -461,7 +461,7 @@ export async function getRaspberryNutrients(
 
   nutrientInputs.reqN = Math.round(tempN + (willSawdustBeApplied ? 25 : 0));
 
-  // Calculate P2O5 requirement based on leaf tissue P and soil test P
+  // Calculate P₂O₅ requirement based on leaf tissue P and soil test P
   let tempReqP2O5 = 0;
   if (leafTissueP < 0.16) {
     if (soilTestValP < 15) {
@@ -490,7 +490,7 @@ export async function getRaspberryNutrients(
   }
   nutrientInputs.reqP2o5 = Math.round(tempReqP2O5);
 
-  // Calculate K2O requirement based on leaf tissue K and soil test K
+  // Calculate K₂O requirement based on leaf tissue K and soil test K
   let tempReqK2O = 0;
   if (leafTissueK < 1.0) {
     if (soilTestValK < 120) {
@@ -519,13 +519,13 @@ export async function getRaspberryNutrients(
   }
   nutrientInputs.reqK2o = Math.round(tempReqK2O);
 
-  // Calculate P2O5 removal
+  // Calculate P₂O₅ removal
   let tempRemP2O5 = cropYield;
   const isPrunedAndRemoved = willPlantsBePruned && whereWillPruningsGo === 'Removed from field';
   tempRemP2O5 = tempRemP2O5 * 1.145 + (isPrunedAndRemoved ? 2.748 : 0);
   nutrientInputs.remP2o5 = Math.round(tempRemP2O5);
 
-  // Calculate K2O removal
+  // Calculate K₂O removal
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.63 + (isPrunedAndRemoved ? 11.374 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
@@ -559,7 +559,7 @@ export async function getBlueberryNutrients(
     (numberOfPlantsPerAcre * tempN) / 1000 / 1.12 + (willSawdustBeApplied ? 25 : 0),
   );
 
-  // P2O5 requirement calculation
+  // P₂O₅ requirement calculation
   let tempReqP2O5 = 0;
   const soilTestP = soilTestValP;
   if (leafTissueP < 0.08) {
@@ -571,7 +571,7 @@ export async function getBlueberryNutrients(
   }
   nutrientInputs.reqP2o5 = Math.round(tempReqP2O5);
 
-  // K2O requirement calculation
+  // K₂O requirement calculation
   let tempReqK2O = 0;
   if (leafTissueK < 0.2) {
     tempReqK2O = 103;
@@ -582,13 +582,13 @@ export async function getBlueberryNutrients(
   }
   nutrientInputs.reqK2o = Math.round(tempReqK2O);
 
-  // P2O5 removal calculation
+  // P₂O₅ removal calculation
   let tempRemP2O5 = cropYield;
   const isPrunedAndRemoved = willPlantsBePruned && whereWillPruningsGo === 'Removed from field';
   tempRemP2O5 = tempRemP2O5 * 0.687 + (isPrunedAndRemoved ? 3.435 : 0);
   nutrientInputs.remP2o5 = Math.round(tempRemP2O5);
 
-  // K2O removal calculation
+  // K₂O removal calculation
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.509 + (isPrunedAndRemoved ? 7.865 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
@@ -681,7 +681,7 @@ export async function sharedCalcCropReq(
     );
     nutrientValues = extractNutrientValues(nutrients);
   } else {
-    // Calculate crop requirements (P2O5, K2O, N)
+    // Calculate crop requirements (P₂O₅, K₂O, N)
     const cropRequirementN = getCropRequirementN(cropDataForCalc, selectedCrop, selectedCropType);
     const cropRequirementP205 = await getCropRequirementP205(
       cropDataForCalc,
@@ -694,7 +694,7 @@ export async function sharedCalcCropReq(
       farmRegion,
     );
 
-    // Calculate crop removals (N, P2O5, K2O)
+    // Calculate crop removals (N, P₂O₅, K₂O)
     const cropRemovalN = getCropRemovalN(cropDataForCalc, selectedCrop, selectedCropType);
     const cropRemovalP205 = getCropRemovalP205(cropDataForCalc, selectedCrop, selectedCropType);
     const cropRemovalK20 = getCropRemovalK20(cropDataForCalc, selectedCrop, selectedCropType);
