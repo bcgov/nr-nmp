@@ -22,6 +22,7 @@ import {
   SolidMaterialApplicationTonPerAcreRateConversions,
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   MaterialRemainingData,
+  Subregion,
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
@@ -31,6 +32,7 @@ export default function Reporting() {
   const { state } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+  const [subregion, setSubregion] = useState<Subregion | null>(null);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
   const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
@@ -65,32 +67,31 @@ export default function Reporting() {
   // Fetch all of the data tables needed to generate the report
   useEffect(() => {
     apiCache
-      .callEndpoint('api/fertilizerunits/')
+      .callEndpointNoCatch('api/fertilizerunits/')
       .then((response: { status?: any; data: FertilizerUnit[] }) => {
-        if (response.status === 200) {
-          setFertilizerUnits(response.data);
-        }
+        setFertilizerUnits(response.data);
       });
     apiCache
-      .callEndpoint('api/soiltestmethods/')
+      .callEndpointNoCatch('api/soiltestmethods/')
       .then((response: { status?: any; data: SoilTestMethods[] }) => {
-        if (response.status === 200) {
-          setSoilTestMethods(response.data);
-        }
+        setSoilTestMethods(response.data);
       });
     apiCache
-      .callEndpoint('api/soiltestpotassiumranges/')
+      .callEndpointNoCatch('api/soiltestpotassiumranges/')
       .then((response: { status?: any; data: SoilTestPotassiumRange[] }) => {
-        if (response.status === 200) {
-          setPotassiumRanges(response.data);
-        }
+        setPotassiumRanges(response.data);
       });
     apiCache
-      .callEndpoint('api/soiltestphosphorousranges/')
+      .callEndpointNoCatch('api/soiltestphosphorousranges/')
       .then((response: { status?: any; data: SoilTestPhosphorousRange[] }) => {
-        if (response.status === 200) {
-          setPhosphorousRanges(response.data);
-        }
+        setPhosphorousRanges(response.data);
+      });
+    apiCache
+      .callEndpointNoCatch(
+        `api/subregions/${state.nmpFile.farmDetails.farmRegion}/${state.nmpFile.farmDetails.farmSubregion!}/`,
+      )
+      .then((response) => {
+        setSubregion(response.data.length > 0 ? response.data[0] : null);
       });
     apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
       if (response.status === 200) {
@@ -233,6 +234,7 @@ export default function Reporting() {
                 onPress={() =>
                   makeFullReportPdf(
                     state.nmpFile,
+                    subregion,
                     fertilizerUnits,
                     soilTestMethods,
                     phosphorousRanges,

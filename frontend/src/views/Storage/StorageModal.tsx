@@ -10,7 +10,6 @@ import {
   ManureInSystem,
   ManureType,
   NMPFileManureStorageSystem,
-  PrecipitationConversionFactor,
   SolidManureStorageSystem,
 } from '@/types';
 import { Form, Modal } from '@/components/common';
@@ -21,7 +20,7 @@ import LiquidStorageDetails from './LiquidStorageDetails';
 import SolidStorageDetails from './SolidStorageDetails';
 import { DEFAULT_FORM_DATA, StorageModalFormData, StorageModalMode } from './types';
 import { DEFAULT_LIQUID_MANURE_STORAGE } from '@/constants';
-import { calcStorageSurfaceAreaSqFt } from '@/utils/manureStorageSystems';
+import { getPrecipitationInSystem } from '@/utils/manureStorageSystems';
 
 type ModalComponentProps = {
   mode: StorageModalMode;
@@ -57,28 +56,8 @@ export default function StorageModal({
     if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
 
     // Add precipitation data to the form
-    // TODO: Factor this logic out to use in octtomar calc
     const withRainData = { ...formData };
-    if (withRainData.manureType === ManureType.Liquid) {
-      let totalUncoveredArea = withRainData.runoffAreaSqFt || 0;
-      withRainData.manureStorages.forEach((storage) => {
-        if (!storage.isStructureCovered) {
-          if (!storage.structure) throw new Error('Form validation failed.');
-          totalUncoveredArea += calcStorageSurfaceAreaSqFt(storage.structure);
-        }
-      });
-      withRainData.annualPrecipitation =
-        totalUncoveredArea > 0
-          ? totalUncoveredArea * annualPrecipitation * PrecipitationConversionFactor.Liquid
-          : undefined;
-    } else {
-      // For solid manure
-      withRainData.annualPrecipitation = withRainData.manureStorage.uncoveredAreaSqFt
-        ? withRainData.manureStorage.uncoveredAreaSqFt *
-          annualPrecipitation *
-          PrecipitationConversionFactor.Solid
-        : undefined;
-    }
+    withRainData.annualPrecipitation = getPrecipitationInSystem(withRainData, annualPrecipitation);
 
     const newList = [...(state.nmpFile.years[0].manureStorageSystems || [])];
     if (mode.mode !== 'create') {

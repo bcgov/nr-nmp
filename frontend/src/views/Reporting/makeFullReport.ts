@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { jsPDF } from 'jspdf';
-import { autoTable, CellInput, HookData, RowInput, UserOptions } from 'jspdf-autotable';
+import { autoTable, CellInput, FontStyle, HookData, RowInput, UserOptions } from 'jspdf-autotable';
 import { DAIRY_COW_ID, DEFAULT_SOIL_TEST } from '@/constants';
 import {
   CalculateNutrientsRow,
@@ -16,6 +16,7 @@ import {
   SoilTestPhosphorousRange,
   SoilTestPotassiumRange,
   MaterialRemainingData,
+  Subregion,
 } from '@/types';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
 import {
@@ -26,6 +27,7 @@ import {
 } from './utils';
 import { fertigationToFertigationRows, findBalanceMessage } from '../CalculateNutrients/utils';
 import { printNum, sumPropertyInObjectArr } from '@/utils/utils';
+import { getPrecipitationInSystem, getRunoffInSystem } from '@/utils/manureStorageSystems';
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
@@ -317,13 +319,24 @@ const generateLiquidStorageCapacity = (
   doc: jsPDF,
   pageWidth: number,
   storageSystems: NMPFileManureStorageSystem[],
+  subregion: Subregion,
 ) => {
   // This is on the same page as the previous table (Manure and Compost Use)
   for (let i = 0; i < storageSystems.length; i += 1) {
     const system = storageSystems[i];
     // eslint-disable-next-line no-continue
     if (system.manureType === ManureType.Solid) continue;
-    const totalStored = 9999;
+    const annualManure = system.manuresInSystem.reduce((sum, m) => sum + m.data.annualAmount, 0);
+    // October to March is six months, so half of a year
+    const materialGenerated = annualManure / 2;
+    const materialStored = system.separatedLiquidsUSGallons / 2;
+    // Oct to Mar is the rainy season and has its own precipitation rate
+    const precipitation =
+      getPrecipitationInSystem(system, subregion.annualprecipitationocttomar) || 0;
+    const runoff = getRunoffInSystem(system, subregion.annualprecipitationocttomar);
+    const directPrecipitation = precipitation - runoff;
+    const totalStored = (materialStored || materialGenerated) + precipitation;
+
     const totalStorageVolume = system.manureStorages.reduce((acc, m) => acc + m.volumeUSGallons, 0);
     autoTable(doc, {
       ...sharedAutoTableSettings,
@@ -335,10 +348,34 @@ const generateLiquidStorageCapacity = (
       },
       // \t doesn't work in this new font so I used spaces
       body: [
-        [{ content: 'Material Stored (October to March)', styles: { fontStyle: 'bold' } }, '', ''],
-        ['        Materials Generated or Imported', `_ US gallons`],
-        ['        Yard/Roof Runoff', `_ US gallons`],
-        ['        Precipitation, Direct into Storage', `_ US gallons`],
+        ...(materialStored
+          ? [
+              ['        Materials Generated or Imported', `_ US gallons`],
+              [
+                {
+                  content: 'Material Stored (October to March)',
+                  styles: { fontStyle: 'bold' as FontStyle },
+                },
+                '',
+                '',
+              ],
+            ]
+          : [
+              [
+                {
+                  content: 'Material Stored (October to March)',
+                  styles: { fontStyle: 'bold' as FontStyle },
+                },
+                '',
+                '',
+              ],
+              ['        Materials Generated or Imported', `${materialGenerated} US gallons`],
+            ]),
+        ['        Yard/Roof Runoff', `${printNum(runoff)} US gallons`],
+        [
+          '        Precipitation, Direct into Storage',
+          `${printNum(directPrecipitation)} US gallons`,
+        ],
         [
           { content: '        Total Stored', styles: { fontStyle: 'bold' } },
           `${totalStored} US gallons`,
@@ -907,6 +944,7 @@ const generateSoilTestResults = (
 
 export default async function makeFullReportPdf(
   nmpFile: NMPFile,
+  subregion: Subregion | null,
   fertilizerUnits: FertilizerUnit[],
   soilTestMethods: SoilTestMethods[],
   phosphorousRanges: SoilTestPhosphorousRange[],
@@ -942,7 +980,9 @@ export default async function makeFullReportPdf(
   // Optional page: Manure and Compost Use
   if (nmpFileYear.nutrientAnalyses.length > 0) {
     generateManureAndCompostUse(doc, pageWidth, farmName, year, nmpFileYear, materialRemainingData);
-    generateLiquidStorageCapacity(doc, pageWidth, storageSystems);
+    if (subregion) {
+      generateLiquidStorageCapacity(doc, pageWidth, storageSystems, subregion);
+    }
   }
 
   // Fourth page: Fertilizer Required
