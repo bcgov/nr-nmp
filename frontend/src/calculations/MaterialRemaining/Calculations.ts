@@ -2,46 +2,26 @@
  * @summary Material Remaining calculations
  * @description Functions for calculating material remaining status
  */
-import { NMPFileYear, NMPFileField, NMPFileAppliedManure, ManureType, Units } from '@/types';
+import {
+  NMPFileYear,
+  NMPFileField,
+  NMPFileAppliedManure,
+  Units,
+  SolidMaterialApplicationTonPerAcreRateConversions,
+  LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
+  FieldApplicationData,
+  AppliedManureData,
+  MaterialRemainingData,
+} from '@/types';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
 import { getDensityFactor, evaluateConversionFormula } from '@/utils/densityCalculations';
 
-export interface SolidMaterialConversion {
-  id: number;
-  applicationrateunit: number;
-  applicationrateunitname: string;
-  tonsperacreconversion: string;
-}
+// Type aliases for convenience
+export type SolidMaterialConversion = SolidMaterialApplicationTonPerAcreRateConversions;
+export type LiquidMaterialConversion = LiquidMaterialApplicationUsGallonsPerAcreRateConversions;
 
-export interface LiquidMaterialConversion {
-  id: number;
-  applicationrateunit: number;
-  applicationrateunitname: string;
-  usgallonsperacreconversion: number;
-}
-
-export interface FieldApplicationData {
-  fieldId: number;
-  totalAppliedGallons?: number;
-  totalAppliedTons?: number;
-}
-
-export interface AppliedManureData {
-  sourceName: string;
-  sourceUuid: string;
-  manureMaterialType: ManureType | null;
-  totalAnnualManureToApply: number;
-  totalApplied: number;
-  totalAnnualManureRemainingToApply: number;
-  wholePercentApplied: number;
-  wholePercentRemaining: number;
-}
-
-export interface MaterialRemainingData {
-  appliedStoredManures: AppliedManureData[];
-  appliedImportedManures: AppliedManureData[];
-  materialsRemainingWarnings: string[];
-}
+// Re-export types for external use
+export type { FieldApplicationData, AppliedManureData, MaterialRemainingData };
 
 /**
  * Get conversion factor using conversion tables

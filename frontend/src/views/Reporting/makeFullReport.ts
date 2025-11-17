@@ -15,6 +15,7 @@ import {
   SoilTestMethods,
   SoilTestPhosphorousRange,
   SoilTestPotassiumRange,
+  MaterialRemainingData,
 } from '@/types';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
 import {
@@ -251,6 +252,7 @@ const generateManureAndCompostUse = (
   farmName: string,
   year: string,
   nmpFileYear: NMPFileYear,
+  materialRemainingData: MaterialRemainingData | null,
 ) => {
   doc.addPage();
   autoTable(doc, {
@@ -272,15 +274,42 @@ const generateManureAndCompostUse = (
       3: { cellWidth: pageWidth * 0.17 },
       4: { cellWidth: 'auto' },
     },
-    body: nmpFileYear.nutrientAnalyses.map((analysis) => [
-      analysis.manureName,
-      analysis.uniqueMaterialName,
-      `${printNum(analysis.annualAmount)} ${analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons'}`,
-      'TBC',
-      // TODO: Add logic for this footnote:
-      // "If the amount remaining is less than 10% of the annual amount, then the amount remaining is insignificant (i.e. within the margin of error of the calculations)"
-      'TBC',
-    ]),
+    body: nmpFileYear.nutrientAnalyses.map((analysis) => {
+      let landApplied = 'N/A';
+      let amountRemaining = 'N/A';
+
+      if (materialRemainingData) {
+        const allMaterials = [
+          ...materialRemainingData.appliedStoredManures,
+          ...materialRemainingData.appliedImportedManures,
+        ];
+        const matchingMaterial = allMaterials.find(
+          (material) => material.sourceUuid === analysis.sourceUuid,
+        );
+
+        if (matchingMaterial) {
+          const unit = analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons';
+
+          // Format land-applied with percentage
+          landApplied = `${printNum(matchingMaterial.totalApplied)} ${unit} (${matchingMaterial.wholePercentApplied}%)`;
+
+          // Format amount remaining - show "None" if less than 10%, otherwise show amount with percentage
+          if (matchingMaterial.wholePercentRemaining < 10) {
+            amountRemaining = 'None';
+          } else {
+            amountRemaining = `${printNum(matchingMaterial.totalAnnualManureRemainingToApply)} (${matchingMaterial.wholePercentRemaining}%)`;
+          }
+        }
+      }
+
+      return [
+        analysis.manureName,
+        analysis.uniqueMaterialName,
+        `${printNum(analysis.annualAmount)} ${analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons'}`,
+        landApplied,
+        amountRemaining,
+      ];
+    }),
   });
 };
 
@@ -882,6 +911,7 @@ export default async function makeFullReportPdf(
   soilTestMethods: SoilTestMethods[],
   phosphorousRanges: SoilTestPhosphorousRange[],
   potassiumRanges: SoilTestPotassiumRange[],
+  materialRemainingData: MaterialRemainingData | null,
 ) {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF();
@@ -911,7 +941,7 @@ export default async function makeFullReportPdf(
 
   // Optional page: Manure and Compost Use
   if (nmpFileYear.nutrientAnalyses.length > 0) {
-    generateManureAndCompostUse(doc, pageWidth, farmName, year, nmpFileYear);
+    generateManureAndCompostUse(doc, pageWidth, farmName, year, nmpFileYear, materialRemainingData);
     generateLiquidStorageCapacity(doc, pageWidth, storageSystems);
   }
 

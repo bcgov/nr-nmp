@@ -49,6 +49,13 @@ export interface NMPFileAppliedManure extends CalculateNutrientsRow {
   sourceUuid: string;
 }
 
+export type CustomFertilizer = {
+  dryliquid: 'dry' | 'liquid';
+  nitrogen: number;
+  phosphorous: number;
+  potassium: number;
+};
+
 export interface NMPFileFertilizer extends CalculateNutrientsRow {
   fertilizerTypeId: number;
   fertilizerId: number;
@@ -59,6 +66,7 @@ export interface NMPFileFertilizer extends CalculateNutrientsRow {
   density?: number;
   densityAdjusted?: boolean;
   densityUnitId?: number;
+  customFertilizer?: CustomFertilizer;
 }
 
 export interface NMPFileFertigation extends CalculateNutrientsRow {

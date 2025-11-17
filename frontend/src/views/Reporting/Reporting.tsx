@@ -17,9 +17,15 @@ import {
   SoilTestMethods,
   SoilTestPhosphorousRange,
   SoilTestPotassiumRange,
+  Units,
+  Manure,
+  SolidMaterialApplicationTonPerAcreRateConversions,
+  LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
+  MaterialRemainingData,
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
+import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
 
 export default function Reporting() {
   const { state } = useAppState();
@@ -29,6 +35,17 @@ export default function Reporting() {
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
   const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
   const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
+  const [manureUnits, setManureUnits] = useState<Units[]>([]);
+  const [solidConversions, setSolidConversions] = useState<
+    SolidMaterialApplicationTonPerAcreRateConversions[]
+  >([]);
+  const [liquidConversions, setLiquidConversions] = useState<
+    LiquidMaterialApplicationUsGallonsPerAcreRateConversions[]
+  >([]);
+  const [manures, setManures] = useState<Manure[]>([]);
+  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
+    null,
+  );
 
   const unassignedManures = useMemo(
     () =>
@@ -75,8 +92,71 @@ export default function Reporting() {
           setPhosphorousRanges(response.data);
         }
       });
+    apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
+      if (response.status === 200) {
+        setManureUnits(response.data);
+      }
+    });
+    apiCache
+      .callEndpoint('api/solidmaterialapplicationtonperacrerateconversions/')
+      .then(
+        (response: { status?: any; data: SolidMaterialApplicationTonPerAcreRateConversions[] }) => {
+          if (response.status === 200) {
+            setSolidConversions(response.data);
+          }
+        },
+      );
+    apiCache
+      .callEndpoint('api/liquidmaterialapplicationusgallonsperacrerateconversions/')
+      .then(
+        (response: {
+          status?: any;
+          data: LiquidMaterialApplicationUsGallonsPerAcreRateConversions[];
+        }) => {
+          if (response.status === 200) {
+            setLiquidConversions(response.data);
+          }
+        },
+      );
+    apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: Manure[] }) => {
+      if (response.status === 200) {
+        setManures(response.data);
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Calculate material remaining data
+  useEffect(() => {
+    if (
+      manureUnits.length === 0 ||
+      solidConversions.length === 0 ||
+      liquidConversions.length === 0 ||
+      manures.length === 0
+    ) {
+      return;
+    }
+
+    // Build manure data with moisture values
+    const manureData: { [manureId: number]: { moisture?: number } } = {};
+    manures.forEach((manure) => {
+      if (manure.moisture) {
+        const moistureValue = parseFloat(manure.moisture.toString());
+        if (!Number.isNaN(moistureValue)) {
+          manureData[manure.id] = { moisture: moistureValue };
+        }
+      }
+    });
+
+    const result = calculateMaterialRemaining(
+      state.nmpFile.years[0],
+      solidConversions,
+      liquidConversions,
+      Object.keys(manureData).length > 0 ? manureData : undefined,
+      manureUnits,
+    );
+    setMaterialRemainingData(result);
+  }, [manureUnits, solidConversions, liquidConversions, manures, state.nmpFile.years]);
 
   async function downloadBlob() {
     const url = URL.createObjectURL(
@@ -157,6 +237,7 @@ export default function Reporting() {
                     soilTestMethods,
                     phosphorousRanges,
                     potassiumRanges,
+                    materialRemainingData,
                   )
                 }
               >

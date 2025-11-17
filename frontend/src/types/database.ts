@@ -217,6 +217,22 @@ export interface SolidManureConversionFactors {
   ustonsoutput: string;
 }
 
+// _SolidMaterialApplicationTonPerAcreRateConversions
+export interface SolidMaterialApplicationTonPerAcreRateConversions {
+  id: number;
+  applicationrateunit: number;
+  applicationrateunitname: string;
+  tonsperacreconversion: string;
+}
+
+// _LiquidMaterialApplicationUsGallonsPerAcreRateConversions
+export interface LiquidMaterialApplicationUsGallonsPerAcreRateConversions {
+  id: number;
+  applicationrateunit: number;
+  applicationrateunitname: string;
+  usgallonsperacreconversion: number;
+}
+
 // _SubRegion
 export interface Subregion {
   id: number;

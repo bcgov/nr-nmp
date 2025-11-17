@@ -20,6 +20,7 @@ import {
   DensityUnit,
   SelectOption,
   NMPFileFertilizer,
+  CustomFertilizer,
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
 import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
@@ -117,6 +118,7 @@ const EMPTY_FERTILIZER_FORM_DATA: NMPFileFertilizer = {
   remN: 0,
   remP2o5: 0,
   remK2o: 0,
+  customFertilizer: undefined,
 };
 
 const FERTILIZER_METHODS: { id: string; label: string }[] = [
@@ -154,8 +156,6 @@ export default function FertilizerModal({
   const [formState, setFormState] = useState<NMPFileFertilizer>(
     initialModalData || EMPTY_FERTILIZER_FORM_DATA,
   );
-  const [formCustomFertilizer, setFormCustomFertilizer] =
-    useState<Fertilizer>(EMPTY_CUSTOM_FERTILIZER);
 
   const apiCache = useContext(APICacheContext);
 
@@ -294,9 +294,8 @@ export default function FertilizerModal({
         .convfactor;
     }
 
-    // Regular fertilizer and custom fertilizer have different logic
-    if (isCustomFertilizer) {
-      fertilizer = formCustomFertilizer;
+    if (formState.customFertilizer) {
+      fertilizer = formState.customFertilizer;
     } else {
       fertilizer = fertilizers.find((ele) => ele.id === formState.fertilizerId)?.value;
       if (fertilizer === undefined)
@@ -336,83 +335,74 @@ export default function FertilizerModal({
     }));
   };
 
-  const handleInputChanges = (updates: {
-    [key: string]: string | number | boolean | undefined;
-  }) => {
-    Object.entries(updates).forEach(([name, value]) => {
-      let changes = structuredClone(updates);
+  const handleCustomFertilizerChanges = (updates: Partial<CustomFertilizer>) => {
+    setFormState((prev) => ({
+      ...prev,
+      customFertilizer: { ...prev.customFertilizer!, ...updates },
+    }));
+  };
 
-      if (['potassium', 'phosphorous', 'nitrogen'].includes(name)) {
-        setFormCustomFertilizer((prev) => ({ ...prev, ...changes }));
-      }
+  const handleInputChanges = (updates: Partial<NMPFileFertilizer>) => {
+    setFormState((prev) => {
+      let next = { ...prev };
 
-      if (name === 'fertilizerTypeId') {
-        setFilteredFertilizers(
-          fertilizers.filter(
-            (ele) =>
-              ele.value.dryliquid ===
-              fertilizerTypes.find((fertType) => fertType.id === value)?.value.dryliquid,
-          ),
-        );
-
-        if (value === DRY_CUSTOM_ID || value === LIQUID_CUSTOM_ID) {
-          setFormCustomFertilizer((prev) => {
-            // Reset if we're switching type
-            if (formState.fertilizerTypeId !== value) {
-              return {
-                ...EMPTY_CUSTOM_FERTILIZER,
-                dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
-              };
-            }
-            return {
-              ...prev,
-              dryliquid: value === DRY_CUSTOM_ID ? 'dry' : 'liquid',
-            };
-          });
-        } else {
-          // Reset for other values
-          setFormCustomFertilizer(EMPTY_CUSTOM_FERTILIZER);
-        }
-        setDefaultDensity(undefined);
-
-        // Reset other values on changes
-        changes = {
-          ...EMPTY_FERTILIZER_FORM_DATA,
-          fertilizerTypeId: value,
-        };
-      }
-
-      if (name === 'fertilizerId') {
-        changes.name = filteredFertilizers.find((f) => f.id === value)!.label;
-        // Load liquid densities.
-        if (isLiquidFertilizer && !isCustomFertilizer) {
-          const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value);
-
-          changes.density = densityValue.value;
-          changes.densityAdjusted = false;
-          changes.densityUnitId = densityValue.densityunitid;
-          setDefaultDensity(densityValue.value);
-        } else {
-          setDefaultDensity(undefined);
-        }
-      }
-
-      if (name === 'densityUnitId') {
-        if (isLiquidFertilizer && !isCustomFertilizer) {
-          const densityValue = liqDensityFactors.find(
-            (ele) => ele.fertilizerid === formState.fertilizerId && ele.densityunitid === value,
+      // Make additional changes depending on the updates
+      Object.entries(updates).forEach(([name, value]) => {
+        if (name === 'fertilizerTypeId') {
+          setFilteredFertilizers(
+            fertilizers.filter(
+              (ele) =>
+                ele.value.dryliquid ===
+                fertilizerTypes.find((fertType) => fertType.id === value)?.value.dryliquid,
+            ),
           );
-          changes.density = densityValue.value;
-          changes.densityAdjusted = false;
-          changes.densityUnitId = value;
-          setDefaultDensity(densityValue.value);
-        } else {
           setDefaultDensity(undefined);
-        }
-        changes.densityUnitId = value;
-      }
 
-      setFormState((prev) => ({ ...prev, ...changes }));
+          // Reset values on changes
+          next = { ...EMPTY_FERTILIZER_FORM_DATA };
+          if (value === DRY_CUSTOM_ID) {
+            next.customFertilizer = { ...EMPTY_CUSTOM_FERTILIZER, dryliquid: 'dry' };
+            next.name = 'Custom fertilizer';
+          } else if (value === LIQUID_CUSTOM_ID) {
+            next.customFertilizer = { ...EMPTY_CUSTOM_FERTILIZER, dryliquid: 'liquid' };
+            next.name = 'Custom fertilizer';
+          }
+        }
+
+        if (name === 'fertilizerId') {
+          next.name = filteredFertilizers.find((f) => f.id === value)!.label;
+          // Load liquid densities.
+          if (isLiquidFertilizer && !isCustomFertilizer) {
+            const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value);
+
+            next.density = densityValue.value;
+            next.densityAdjusted = false;
+            next.densityUnitId = densityValue.densityunitid;
+            setDefaultDensity(densityValue.value);
+          } else {
+            setDefaultDensity(undefined);
+          }
+        }
+
+        if (name === 'densityUnitId') {
+          if (isLiquidFertilizer && !isCustomFertilizer) {
+            const densityValue = liqDensityFactors.find(
+              (ele) => ele.fertilizerid === formState.fertilizerId && ele.densityunitid === value,
+            );
+            // densityValue is undef when a fertilizer is unselected
+            if (densityValue) {
+              next.density = densityValue.value;
+              setDefaultDensity(densityValue.value);
+            }
+            next.densityAdjusted = false;
+          } else {
+            setDefaultDensity(undefined);
+          }
+        }
+      });
+
+      // Apply the updates
+      return { ...next, ...updates };
     });
   };
 
@@ -442,7 +432,7 @@ export default function FertilizerModal({
               onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
             />
           </Grid>
-          {isCustomFertilizer ? (
+          {formState.customFertilizer ? (
             <Grid size={{ xs: 12 }}>
               <Grid
                 container
@@ -452,8 +442,8 @@ export default function FertilizerModal({
                   <NumberField
                     isRequired
                     label="N (%)"
-                    value={formCustomFertilizer.nitrogen}
-                    onChange={(e) => handleInputChanges({ nitrogen: e })}
+                    value={formState.customFertilizer.nitrogen}
+                    onChange={(e) => handleCustomFertilizerChanges({ nitrogen: e })}
                     maxValue={100}
                   />
                 </Grid>
@@ -461,8 +451,8 @@ export default function FertilizerModal({
                   <NumberField
                     isRequired
                     label="P₂O₅ (%)"
-                    value={formCustomFertilizer.phosphorous}
-                    onChange={(e) => handleInputChanges({ phosphorous: e })}
+                    value={formState.customFertilizer.phosphorous}
+                    onChange={(e) => handleCustomFertilizerChanges({ phosphorous: e })}
                     maxValue={100}
                   />
                 </Grid>
@@ -470,8 +460,8 @@ export default function FertilizerModal({
                   <NumberField
                     isRequired
                     label="K₂O (%)"
-                    value={formCustomFertilizer.potassium}
-                    onChange={(e) => handleInputChanges({ potassium: e })}
+                    value={formState.customFertilizer.potassium}
+                    onChange={(e) => handleCustomFertilizerChanges({ potassium: e })}
                     maxValue={100}
                   />
                 </Grid>
@@ -505,6 +495,7 @@ export default function FertilizerModal({
               placeholder="Select Units"
               selectedKey={formState.applUnitId}
               onSelectionChange={(e) => handleInputChanges({ applUnitId: e as number })}
+              autoselectFirst
             />
           </Grid>
           {isLiquidFertilizer && (
@@ -540,6 +531,7 @@ export default function FertilizerModal({
                   placeholder="Select Units"
                   selectedKey={formState.densityUnitId}
                   onSelectionChange={(e) => handleInputChanges({ densityUnitId: e as number })}
+                  autoselectFirst
                 />
               </Grid>
             </>
@@ -549,7 +541,7 @@ export default function FertilizerModal({
               items={FERTILIZER_METHODS}
               label="Method"
               selectedKey={formState.applicationMethod}
-              onSelectionChange={(e) => handleInputChanges({ applicationMethod: e as number })}
+              onSelectionChange={(e) => handleInputChanges({ applicationMethod: e as string })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

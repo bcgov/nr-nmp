@@ -25,16 +25,14 @@ import {
   Manure,
   AmmoniaRetention,
   NitrogenMineralization,
+  MaterialRemainingData,
+  SolidMaterialApplicationTonPerAcreRateConversions,
+  LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
 } from '@/types';
 import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS } from '@/constants/routes';
-import {
-  calculateMaterialRemaining,
-  type MaterialRemainingData,
-  type SolidMaterialConversion,
-  type LiquidMaterialConversion,
-} from '@/calculations/MaterialRemaining/Calculations';
+import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
 import { MaterialRemainingDisplay } from '@/components/MaterialRemaining';
 
 type AddManureModalProps = {
@@ -42,6 +40,7 @@ type AddManureModalProps = {
   initialModalData?: NMPFileAppliedManure;
   rowEditIndex?: number;
   field: NMPFileField;
+  fields: NMPFileField[];
   setFields: Dispatch<SetStateAction<NMPFileField[]>>;
   onCancel: () => void;
   navigateAway: (navigateTo: string) => void;
@@ -91,6 +90,7 @@ export default function ManureModal({
   rowEditIndex,
   onCancel,
   field,
+  fields,
   setFields,
   navigateAway,
   ...props
@@ -115,27 +115,47 @@ export default function ManureModal({
 
   // Create modified year data that includes the pending application
   const yearDataWithPendingApplication = useMemo(() => {
+    const currentYearData = {
+      ...state.nmpFile.years[0],
+      fields,
+    };
+
     if (!pendingApplication || !isCalculationCurrent) {
-      return state.nmpFile.years[0];
+      return currentYearData;
     }
 
     // Create a modified version of the field with the pending application
-    const modifiedFields = [...state.nmpFile.years[0].fields];
+    const modifiedFields = [...fields];
     const targetField = modifiedFields[fieldIndex];
 
     if (targetField) {
+      let updatedManures;
+      if (rowEditIndex !== undefined) {
+        updatedManures = [...(targetField.manures || [])];
+        updatedManures[rowEditIndex] = pendingApplication;
+      } else {
+        updatedManures = [...(targetField.manures || []), pendingApplication];
+      }
+
       const modifiedField = {
         ...targetField,
-        manures: [...(targetField.manures || []), pendingApplication],
+        manures: updatedManures,
       };
       modifiedFields[fieldIndex] = modifiedField;
     }
 
     return {
-      ...state.nmpFile.years[0],
+      ...currentYearData,
       fields: modifiedFields,
     };
-  }, [state.nmpFile.years, pendingApplication, isCalculationCurrent, fieldIndex]);
+  }, [
+    state.nmpFile.years,
+    fields,
+    pendingApplication,
+    isCalculationCurrent,
+    fieldIndex,
+    rowEditIndex,
+  ]);
 
   // Get material type from storage system or imported manure
   const selectedMaterialType = useMemo(() => {
@@ -151,8 +171,12 @@ export default function ManureModal({
     null,
   );
 
-  const [solidConversions, setSolidConversions] = useState<SolidMaterialConversion[]>([]);
-  const [liquidConversions, setLiquidConversions] = useState<LiquidMaterialConversion[]>([]);
+  const [solidConversions, setSolidConversions] = useState<
+    SolidMaterialApplicationTonPerAcreRateConversions[]
+  >([]);
+  const [liquidConversions, setLiquidConversions] = useState<
+    LiquidMaterialApplicationUsGallonsPerAcreRateConversions[]
+  >([]);
 
   const hasMaterialRemainingData = materialRemainingData !== null;
 
@@ -326,19 +350,26 @@ export default function ManureModal({
 
     apiCache
       .callEndpoint('api/solidmaterialapplicationtonperacrerateconversions/')
-      .then((response: { status?: any; data: SolidMaterialConversion[] }) => {
-        if (response.status === 200) {
-          setSolidConversions(response.data);
-        }
-      });
+      .then(
+        (response: { status?: any; data: SolidMaterialApplicationTonPerAcreRateConversions[] }) => {
+          if (response.status === 200) {
+            setSolidConversions(response.data);
+          }
+        },
+      );
 
     apiCache
       .callEndpoint('api/liquidmaterialapplicationusgallonsperacrerateconversions/')
-      .then((response: { status?: any; data: LiquidMaterialConversion[] }) => {
-        if (response.status === 200) {
-          setLiquidConversions(response.data);
-        }
-      });
+      .then(
+        (response: {
+          status?: any;
+          data: LiquidMaterialApplicationUsGallonsPerAcreRateConversions[];
+        }) => {
+          if (response.status === 200) {
+            setLiquidConversions(response.data);
+          }
+        },
+      );
   }, [apiCache]);
 
   const handleModalClose = () => {
