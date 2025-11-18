@@ -18,23 +18,6 @@ export const booleanChecker = (value: any): boolean => {
   return true;
 };
 
-// Used in AddAnimals.tsx and ManureAndImports.tsx
-export const liquidSolidManureDisplay = (manureObj: { [key: string]: number | string }) => {
-  const solid = manureObj?.annualSolidManure ?? 0;
-  const liquid = manureObj?.annualLiquidManure ?? 0;
-  // for displaying solid and or liquid
-  if (solid && liquid) {
-    return `${solid} tons/ ${liquid} gal`;
-  }
-  if (solid) {
-    return `${solid} tons`;
-  }
-  if (liquid) {
-    return `${liquid} gal`;
-  }
-  return '0';
-};
-
 /**
  * @param num Number to format
  * @param digits Decimal places to round to (defaults to 0)
@@ -47,6 +30,23 @@ export function printNum(num: number, digits: number = 0): string {
   }
   return Math.round(num).toLocaleString();
 }
+
+// Used in AddAnimals.tsx and ManureAndImports.tsx
+export const liquidSolidManureDisplay = (manureObj?: { [key: string]: number }) => {
+  const solid = manureObj?.annualSolidManure || 0;
+  const liquid = manureObj?.annualLiquidManure || 0;
+  // for displaying solid and or liquid
+  if (solid && liquid) {
+    return `${printNum(solid)} tons/ ${printNum(liquid)} gal`;
+  }
+  if (solid) {
+    return `${printNum(solid)} tons`;
+  }
+  if (liquid) {
+    return `${printNum(liquid)} gal`;
+  }
+  return '0';
+};
 
 export function getSolidManureDisplay(amount: number) {
   const rounded = printNum(amount);

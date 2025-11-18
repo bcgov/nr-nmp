@@ -334,6 +334,7 @@ const generateLiquidStorageCapacity = (
     const precipitation =
       getPrecipitationInSystem(system, subregion.annualprecipitationocttomar) || 0;
     const runoff = getRunoffInSystem(system, subregion.annualprecipitationocttomar);
+    // NOTE: Run-off is currently omitted. See: https://teams.microsoft.com/l/message/19:8bcf7a4ea1b542d8b91aec33374a5b42@thread.tacv2/1763420706800?tenantId=6fdb5200-3d0d-4a8a-b036-d3685e359adc&groupId=f7f32209-f2e2-4a93-8a2f-c049baa8220f&parentMessageId=1762541236175&teamName=External%3A%20Sustainment%20Team&channelName=NMP&createdTime=1763420706800&ngc=true
     const directPrecipitation = precipitation - runoff;
     const totalStored = (materialStored || materialGenerated) + precipitation;
 
@@ -341,7 +342,21 @@ const generateLiquidStorageCapacity = (
     autoTable(doc, {
       ...sharedAutoTableSettings,
       // Table
-      head: [[system.name, 'October to March volume']],
+      head: [
+        [
+          {
+            content: 'Liquid Storage Capacity: October to March',
+            styles: {
+              fillColor: [255, 255, 255],
+              lineWidth: { top: 0, left: 0, bottom: 0.5, right: 0 },
+              fontSize: 14,
+              cellPadding: { top: 5, bottom: 5 },
+            },
+            colSpan: 2,
+          },
+        ],
+        [system.name, 'October to March volume'],
+      ],
       columnStyles: {
         0: { cellWidth: pageWidth * 0.6 },
         1: { cellWidth: 'auto' },
@@ -350,7 +365,10 @@ const generateLiquidStorageCapacity = (
       body: [
         ...(materialStored
           ? [
-              ['        Materials Generated or Imported', `_ US gallons`],
+              [
+                '        Materials Generated or Imported',
+                `${printNum(materialGenerated)} US gallons`,
+              ],
               [
                 {
                   content: 'Material Stored (October to March)',
@@ -369,20 +387,22 @@ const generateLiquidStorageCapacity = (
                 '',
                 '',
               ],
-              ['        Materials Generated or Imported', `${materialGenerated} US gallons`],
+              [
+                '        Materials Generated or Imported',
+                `${printNum(materialGenerated)} US gallons`,
+              ],
             ]),
-        ['        Yard/Roof Runoff', `${printNum(runoff)} US gallons`],
         [
           '        Precipitation, Direct into Storage',
           `${printNum(directPrecipitation)} US gallons`,
         ],
         [
           { content: '        Total Stored', styles: { fontStyle: 'bold' } },
-          `${totalStored} US gallons`,
+          `${printNum(totalStored)} US gallons`,
         ],
         [
           { content: 'Storage Volume', styles: { fontStyle: 'bold' } },
-          `${totalStorageVolume} US gallons`,
+          `${printNum(totalStorageVolume)} US gallons`,
         ],
       ],
     });
@@ -980,9 +1000,12 @@ export default async function makeFullReportPdf(
   // Optional page: Manure and Compost Use
   if (nmpFileYear.nutrientAnalyses.length > 0) {
     generateManureAndCompostUse(doc, pageWidth, farmName, year, nmpFileYear, materialRemainingData);
-    if (subregion) {
-      generateLiquidStorageCapacity(doc, pageWidth, storageSystems, subregion);
-    }
+  }
+
+  // This graph goes on the Manure and Compost Use page if one exists,
+  // otherwise it goes on the Manure/Compost Inventory page
+  if (subregion) {
+    generateLiquidStorageCapacity(doc, pageWidth, storageSystems, subregion);
   }
 
   // Fourth page: Fertilizer Required
