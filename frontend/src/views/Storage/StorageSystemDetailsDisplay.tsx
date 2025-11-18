@@ -2,6 +2,7 @@ import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import { ManureType, NMPFileManureStorageSystem } from '@/types';
 import { Text } from './StorageModal.styles';
+import { printNum } from '@/utils/utils';
 
 type StorageSystemDetailsDisplayProps = {
   formData: NMPFileManureStorageSystem;
@@ -117,11 +118,11 @@ export default function StorageSystemDetailsDisplay({
           >
             <Text className="bcds-react-aria-Text disabled small">Separated liquids</Text>
             <Text className="bcds-react-aria-Text disabled small">
-              {formData.separatedLiquidsUSGallons} U.S. Gallons
+              {printNum(formData.separatedLiquidsUSGallons)} U.S. Gallons
             </Text>
             <Text className="bcds-react-aria-Text disabled small">Separated solids</Text>
             <Text className="bcds-react-aria-Text disabled small">
-              {formData.separatedSolidsTons} tons
+              {printNum(formData.separatedSolidsTons)} tons
             </Text>
           </Grid>
         </Grid>

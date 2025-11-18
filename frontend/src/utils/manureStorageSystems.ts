@@ -4,6 +4,10 @@ import {
   SlopedWallStorage,
   StorageStructure,
   Shape,
+  NMPFileManureStorageSystem,
+  ManureType,
+  PrecipitationConversionFactor,
+  LiquidManureStorageSystem,
 } from '@/types';
 
 const ft3ToGallons = 7.48052;
@@ -89,4 +93,33 @@ export function calcStorageVolumeGallons(structure: StorageStructure) {
     default:
       return calcSlopedWallVolumeGallons(structure);
   }
+}
+
+export function getPrecipitationInSystem(
+  system: NMPFileManureStorageSystem,
+  precipitationRate: number,
+) {
+  if (system.manureType === ManureType.Liquid) {
+    let totalUncoveredArea = system.runoffAreaSqFt || 0;
+    system.manureStorages.forEach((storage) => {
+      if (!storage.isStructureCovered) {
+        if (!storage.structure) throw new Error('Form validation failed.');
+        totalUncoveredArea += calcStorageSurfaceAreaSqFt(storage.structure);
+      }
+    });
+    return totalUncoveredArea > 0
+      ? totalUncoveredArea * precipitationRate * PrecipitationConversionFactor.Liquid
+      : undefined;
+  }
+  // For solid manure
+  return system.manureStorage.uncoveredAreaSqFt
+    ? system.manureStorage.uncoveredAreaSqFt *
+        precipitationRate *
+        PrecipitationConversionFactor.Solid
+    : undefined;
+}
+
+export function getRunoffInSystem(system: LiquidManureStorageSystem, precipitationRate: number) {
+  const runoffArea = system.runoffAreaSqFt || 0;
+  return runoffArea * precipitationRate * PrecipitationConversionFactor.Liquid;
 }

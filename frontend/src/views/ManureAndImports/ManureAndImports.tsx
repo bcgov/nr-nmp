@@ -21,7 +21,7 @@ import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/rout
 import { Tabs, View } from '@/components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
-import { booleanChecker, liquidSolidManureDisplay } from '@/utils/utils';
+import { booleanChecker, liquidSolidManureDisplay, printNum } from '@/utils/utils';
 import { DAIRY_COW_ID } from '@/constants';
 
 // Create a new component for crops manure and imports for now
@@ -66,7 +66,7 @@ export default function ManureAndImports() {
       updatedManureFormData = {
         ...data,
         annualAmountUSGallonsVolume,
-        annualAmountDisplayVolume: `${Math.round((annualAmountUSGallonsVolume * 10) / 10)} U.S. gallons`,
+        annualAmountDisplayVolume: `${printNum(annualAmountUSGallonsVolume)} U.S. gallons`,
       };
     } else if (data.manureType === ManureType.Solid) {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
@@ -99,8 +99,8 @@ export default function ManureAndImports() {
         annualAmountCubicYardsVolume,
         annualAmountCubicMetersVolume,
         annualAmountTonsWeight,
-        annualAmountDisplayVolume: `${Math.round((annualAmountCubicYardsVolume * 10) / 10)} yards³ (${Math.round((annualAmountCubicMetersVolume * 10) / 10)} m³)`,
-        annualAmountDisplayWeight: `${Math.round((annualAmountTonsWeight * 10) / 10)} tons`,
+        annualAmountDisplayVolume: `${printNum(annualAmountCubicYardsVolume)} yards³ (${printNum(annualAmountCubicMetersVolume)} m³)`,
+        annualAmountDisplayWeight: `${printNum(annualAmountTonsWeight)} tons`,
       };
     } else {
       throw new Error("Manure type isn't set.");

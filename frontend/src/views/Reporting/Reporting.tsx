@@ -22,6 +22,7 @@ import {
   SolidMaterialApplicationTonPerAcreRateConversions,
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   MaterialRemainingData,
+  Subregion,
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
@@ -31,6 +32,7 @@ export default function Reporting() {
   const { state } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
+  const [subregion, setSubregion] = useState<Subregion | null>(null);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
   const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
@@ -90,6 +92,15 @@ export default function Reporting() {
       .then((response: { status?: any; data: SoilTestPhosphorousRange[] }) => {
         if (response.status === 200) {
           setPhosphorousRanges(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint(
+        `api/subregions/${state.nmpFile.farmDetails.farmRegion}/${state.nmpFile.farmDetails.farmSubregion!}/`,
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setSubregion(response.data.length > 0 ? response.data[0] : null);
         }
       });
     apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
@@ -233,6 +244,7 @@ export default function Reporting() {
                 onPress={() =>
                   makeFullReportPdf(
                     state.nmpFile,
+                    subregion,
                     fertilizerUnits,
                     soilTestMethods,
                     phosphorousRanges,

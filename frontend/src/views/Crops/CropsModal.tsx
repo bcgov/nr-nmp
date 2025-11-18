@@ -869,7 +869,6 @@ function CropsModal({
                       size={6}
                     >
                       <Grid size="grow">
-                        {/* TODO: record whether the crop N has been altered for a report footnote */}
                         <NumberField
                           isRequired
                           shortenRequired

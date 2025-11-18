@@ -7,4 +7,5 @@ urlpatterns = [
     path('regions/<int:regionId>/', SharedViewset.as_view({'get': 'regions'})),
     path('subregions/', SharedViewset.as_view({'get': 'subregions'})),
     path('subregions/<int:regionId>/', SharedViewset.as_view({'get': 'subregions'})),
+    path('subregions/<int:regionId>/<int:subregionId>/', SharedViewset.as_view({'get': 'subregions'})),
 ]

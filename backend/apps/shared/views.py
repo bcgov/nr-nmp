@@ -19,11 +19,13 @@ class SharedViewset(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['get'])
-    def subregions(self, request, regionId=None):
+    def subregions(self, request, regionId=None, subregionId=None):
         subregions = None
         if regionId is None:
             subregions = Subregion.objects.all()
-        else:
+        elif subregionId is None:
             subregions = Subregion.objects.filter(regionid=regionId)
+        else:
+            subregions = Subregion.objects.filter(regionid=regionId, id=subregionId)
         serializer = SubregionSerializer(subregions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
