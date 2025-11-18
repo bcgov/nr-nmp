@@ -67,31 +67,41 @@ export default function Reporting() {
   // Fetch all of the data tables needed to generate the report
   useEffect(() => {
     apiCache
-      .callEndpointNoCatch('api/fertilizerunits/')
+      .callEndpoint('api/fertilizerunits/')
       .then((response: { status?: any; data: FertilizerUnit[] }) => {
-        setFertilizerUnits(response.data);
+        if (response.status === 200) {
+          setFertilizerUnits(response.data);
+        }
       });
     apiCache
-      .callEndpointNoCatch('api/soiltestmethods/')
+      .callEndpoint('api/soiltestmethods/')
       .then((response: { status?: any; data: SoilTestMethods[] }) => {
-        setSoilTestMethods(response.data);
+        if (response.status === 200) {
+          setSoilTestMethods(response.data);
+        }
       });
     apiCache
-      .callEndpointNoCatch('api/soiltestpotassiumranges/')
+      .callEndpoint('api/soiltestpotassiumranges/')
       .then((response: { status?: any; data: SoilTestPotassiumRange[] }) => {
-        setPotassiumRanges(response.data);
+        if (response.status === 200) {
+          setPotassiumRanges(response.data);
+        }
       });
     apiCache
-      .callEndpointNoCatch('api/soiltestphosphorousranges/')
+      .callEndpoint('api/soiltestphosphorousranges/')
       .then((response: { status?: any; data: SoilTestPhosphorousRange[] }) => {
-        setPhosphorousRanges(response.data);
+        if (response.status === 200) {
+          setPhosphorousRanges(response.data);
+        }
       });
     apiCache
-      .callEndpointNoCatch(
+      .callEndpoint(
         `api/subregions/${state.nmpFile.farmDetails.farmRegion}/${state.nmpFile.farmDetails.farmSubregion!}/`,
       )
       .then((response) => {
-        setSubregion(response.data.length > 0 ? response.data[0] : null);
+        if (response.status === 200) {
+          setSubregion(response.data.length > 0 ? response.data[0] : null);
+        }
       });
     apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
       if (response.status === 200) {

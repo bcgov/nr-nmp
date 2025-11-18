@@ -23,15 +23,6 @@ class APICache {
       return error.response || { status: 500 };
     }
   }
-
-  async callEndpointNoCatch(endpoint: string) {
-    const cachedValue = this.endpointCache[endpoint];
-    if (cachedValue !== undefined) {
-      return cachedValue;
-    }
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/${endpoint}`);
-    return response;
-  }
 }
 
 export default APICache;
