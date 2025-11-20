@@ -261,3 +261,10 @@ export interface Units {
   farmreqdnutrientsstdunitsareaconversion: number;
   solidliquid: 'Solid' | 'Liquid' | '';
 }
+
+export type NitrateCreditData = {
+  id: number;
+  fromdatemonth: number;
+  todatemonth: number;
+  location: string;
+};

@@ -22,6 +22,8 @@ import {
   NMPFileNutrientAnalysis,
   ManureInSystem,
   NMPFileDerivedManure,
+  NitrateCreditData,
+  NMPFileSoilNitrateCredit,
 } from '@/types';
 import { calculateSeparatedSolidAndLiquid } from '@/utils/densityCalculations';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
@@ -82,6 +84,12 @@ type ResetNMPFileAction = {
   type: 'RESET_NMPFILE';
 };
 
+type UpdateSoilNitrateCredit = {
+  type: 'UPDATE_SOIL_NITRATE_CREDIT';
+  year: string;
+  nitrateCreditData: NitrateCreditData[];
+};
+
 export type AppStateAction =
   | SetShowAnimalsStepAction
   | SaveFarmDetailsAction
@@ -92,7 +100,8 @@ export type AppStateAction =
   | SaveAnimalsAction
   | ClearAnimalsAction
   | OverwriteNMPFileAction
-  | ResetNMPFileAction;
+  | ResetNMPFileAction
+  | UpdateSoilNitrateCredit;
 
 function updateManureStorageSystems(
   systems: NMPFileManureStorageSystem[],
@@ -480,6 +489,71 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       year.importedManures || [],
       year.derivedManures || [],
     );
+  } else if (action.type === 'UPDATE_SOIL_NITRATE_CREDIT') {
+    if (!action.nitrateCreditData) {
+      throw new Error('No nitrate credit data available');
+    }
+
+    const interiorOrExterior = action.nitrateCreditData.find(
+      (creditEle) => creditEle.id === newAppState.nmpFile.farmDetails.regionLocationId,
+    );
+    if (!interiorOrExterior) {
+      throw new Error('Cannot match farmRegion id to nitrate credit data');
+    }
+    year.fields = year.fields.map((fieldEle) => {
+      if (fieldEle.soilTest?.valNO3H) {
+        const soilTestDate = new Date(fieldEle.soilTest.sampleDate!);
+        const soilTestMonth = soilTestDate.getMonth() + 1;
+        const isCurrentYear = soilTestDate.getFullYear().toString() === year.year;
+        const isPreviousYear = (soilTestDate.getFullYear() + 1).toString() === year.year;
+
+        const newSoilCredit: NMPFileSoilNitrateCredit[] = [
+          {
+            name: 'Soil nitrate',
+            reqN: Math.round((fieldEle.soilTest.valNO3H * 1.95) / 1.12),
+            reqP2o5: 0,
+            reqK2o: 0,
+            remN: 0,
+            remP2o5: 0,
+            remK2o: 0,
+            isCustomValue: false,
+          },
+        ];
+
+        if (interiorOrExterior.location === 'CoastalBC') {
+          // Apply credit if applicable
+          if (
+            isCurrentYear &&
+            interiorOrExterior.fromdatemonth >= soilTestMonth &&
+            soilTestMonth <= interiorOrExterior.todatemonth
+          ) {
+            if (!fieldEle.soilNitrateCredit[0]?.isCustomValue) {
+              // Replace with updated value only if value is still applicable but is not custom
+              return { ...fieldEle, soilNitrateCredit: newSoilCredit };
+            }
+            return { ...fieldEle };
+          }
+          // Delete prior credit if no longer applicable
+          return { ...fieldEle, soilNitrateCredit: [] };
+        }
+        if (interiorOrExterior.location === 'InteriorBC') {
+          // Apply credit if applicable
+          if (
+            (isPreviousYear && interiorOrExterior.fromdatemonth >= soilTestMonth) ||
+            (isCurrentYear && soilTestMonth <= interiorOrExterior.todatemonth)
+          ) {
+            if (!fieldEle.soilNitrateCredit[0]?.isCustomValue) {
+              // Replace with updated value only if value is still applicable but is not custom
+              return { ...fieldEle, soilNitrateCredit: newSoilCredit };
+            }
+            return { ...fieldEle };
+          }
+          // Delete prior credit if no longer applicable
+          return { ...fieldEle, soilNitrateCredit: [] };
+        }
+      }
+      return { ...fieldEle };
+    });
   }
   // Save the file to local storage
   saveDataToLocalStorage(APP_STATE_KEY, newAppState);

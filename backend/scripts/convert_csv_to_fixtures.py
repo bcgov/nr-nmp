@@ -54,6 +54,7 @@ MODEL_MAPPINGS = {
     "_SoilTestPhosphorousRanges": "crops.soiltestphosphorousranges",
     "_SoilTestPotassiumRanges": "crops.soiltestpotassiumranges",
     "_BerryQuantities": "crops.berryquantities",
+    "_NitrateCredit": "shared.nitratecredit",
 }
 
 

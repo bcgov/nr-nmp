@@ -1,0 +1,20 @@
+[
+  {
+    "model": "shared.nitratecredit",
+    "pk": 1,
+    "fields": {
+      "location": "CoastalBC",
+      "fromdatemonth": 3.0,
+      "todatemonth": 6.0
+    }
+  },
+  {
+    "model": "shared.nitratecredit",
+    "pk": 2,
+    "fields": {
+      "location": "InteriorBC",
+      "fromdatemonth": 8.0,
+      "todatemonth": 5.0
+    }
+  }
+]
