@@ -21,6 +21,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import {
   Crop,
   CropType,
+  NitrateCreditData,
   NMPFileField,
   SelectOption,
   SoilTestMethods,
@@ -55,6 +56,7 @@ export default function SoilTests() {
   const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
   const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
   const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
+  const [nitrateCredit, setNitrateCredit] = useState<NitrateCreditData[]>([]);
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
   const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -137,11 +139,15 @@ export default function SoilTests() {
         return { ...fieldEle, crops: cropArray };
       }),
     );
-
     dispatch({
       type: 'SAVE_FIELDS',
       year: state.nmpFile.farmDetails.year,
       newFields: updatedFields,
+    });
+    dispatch({
+      type: 'UPDATE_SOIL_NITRATE_CREDIT',
+      year: state.nmpFile.farmDetails.year,
+      nitrateCreditData: nitrateCredit,
     });
     navigate(CROPS);
   };
@@ -190,6 +196,13 @@ export default function SoilTests() {
         setCropTypes(response.data);
       }
     });
+    apiCache
+      .callEndpoint('api/nitratecredit/')
+      .then((response: { status?: any; data: NitrateCreditData[] }) => {
+        if (response.status === 200) {
+          setNitrateCredit(response.data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

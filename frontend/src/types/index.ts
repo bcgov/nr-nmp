@@ -17,6 +17,7 @@ import {
   NMPFileField,
   NMPFileOtherNutrient,
   NMPFileSoilTest,
+  NMPFileSoilNitrateCredit,
 } from './NMPFileField';
 import {
   OTHER_ANIMAL_IDS,
@@ -73,6 +74,7 @@ import {
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   Subregion,
   Units,
+  NitrateCreditData,
 } from './database';
 import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 import {
@@ -152,4 +154,6 @@ export type {
   AppliedManureData,
   MaterialRemainingData,
   CustomFertilizer,
+  NitrateCreditData,
+  NMPFileSoilNitrateCredit,
 };
