@@ -698,7 +698,7 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
           // Apply credit if applicable
           if (
             isCurrentYear &&
-            interiorOrExterior.fromdatemonth >= soilTestMonth &&
+            interiorOrExterior.fromdatemonth <= soilTestMonth &&
             soilTestMonth <= interiorOrExterior.todatemonth
           ) {
             if (!fieldEle.soilNitrateCredit[0]?.isCustomValue) {
@@ -713,7 +713,7 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
         if (interiorOrExterior.location === 'InteriorBC') {
           // Apply credit if applicable
           if (
-            (isPreviousYear && interiorOrExterior.fromdatemonth >= soilTestMonth) ||
+            (isPreviousYear && interiorOrExterior.fromdatemonth <= soilTestMonth) ||
             (isCurrentYear && soilTestMonth <= interiorOrExterior.todatemonth)
           ) {
             if (!fieldEle.soilNitrateCredit[0]?.isCustomValue) {
