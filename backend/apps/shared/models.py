@@ -24,3 +24,13 @@ class Subregion(models.Model):
     class Meta:
         managed = True
         db_table = 'subregion'
+
+class NitrateCredit(models.Model):
+    id = models.IntegerField(primary_key=True)
+    location = models.CharField(max_length=100)
+    fromdatemonth = models.IntegerField()
+    todatemonth = models.IntegerField()
+
+    class Meta:
+        managed = True
+        db_table = 'nitratecredit'

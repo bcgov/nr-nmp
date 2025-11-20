@@ -94,6 +94,11 @@ export default function SoilTests() {
       newFields: fields,
       soilTestsUpdated: true,
     });
+    dispatch({
+      type: 'UPDATE_SOIL_NITRATE_CREDIT',
+      year: state.nmpFile.farmDetails.year,
+      nitrateCreditData: nitrateCredit,
+    });
     navigate(CROPS);
   };
 

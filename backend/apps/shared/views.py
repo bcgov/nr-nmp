@@ -2,8 +2,8 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Regions, Subregion
-from .serializers import RegionsSerializer, SubregionSerializer
+from .models import Regions, Subregion, NitrateCredit
+from .serializers import RegionsSerializer, SubregionSerializer, NitrateCreditSerializer
 
 
 class SharedViewset(viewsets.ViewSet):
@@ -28,4 +28,9 @@ class SharedViewset(viewsets.ViewSet):
         else:
             subregions = Subregion.objects.filter(regionid=regionId, id=subregionId)
         serializer = SubregionSerializer(subregions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['get'])
+    def nitratecredit(self, request):
+        serializer = NitrateCreditSerializer(NitrateCredit.objects.all(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

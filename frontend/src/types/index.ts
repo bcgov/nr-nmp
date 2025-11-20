@@ -17,6 +17,7 @@ import {
   NMPFileField,
   NMPFileOtherNutrient,
   NMPFileSoilTest,
+  NMPFileSoilNitrateCredit,
 } from './NMPFileField';
 import {
   OTHER_ANIMAL_IDS,
@@ -73,11 +74,15 @@ import {
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   Subregion,
   Units,
+<<<<<<< HEAD
   PreviousYearManureApplication,
   SoilTestPhosphorousRegion,
   SoilTestPotassiumRegion,
   SoilTestPhosphorousRecommendation,
   SoilTestPotassiumRecommendation,
+=======
+  NitrateCreditData,
+>>>>>>> d2127c8 (Add logic to calculate soil nitrate credit, feature to enter custome nitrate, api calls to retrieve nitrate data, db migration and data)
 } from './database';
 import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 import {
@@ -162,4 +167,6 @@ export type {
   SoilTestPotassiumRegion,
   SoilTestPhosphorousRecommendation,
   SoilTestPotassiumRecommendation,
+  NitrateCreditData,
+  NMPFileSoilNitrateCredit,
 };

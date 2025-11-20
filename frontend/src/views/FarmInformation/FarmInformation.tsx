@@ -22,13 +22,14 @@ import {
 import Subheader from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ADD_ANIMALS, FIELD_LIST, LANDING_PAGE } from '@/constants/routes';
-import { NMPFileFarmDetails, Region, SelectOption, Subregion } from '@/types';
+import { NitrateCreditData, NMPFileFarmDetails, Region, SelectOption, Subregion } from '@/types';
 
 export default function FarmInformation() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
   const formRef = useRef<null | HTMLFormElement>(null);
+  const [nitrateCredit, setNitrateCredit] = useState<NitrateCreditData[]>([]);
 
   // Initialize non-bool values to prevent errors on first render
   const [formData, setFormData] = useState<NMPFileFarmDetails>({
@@ -92,6 +93,14 @@ export default function FarmInformation() {
       }));
       setRegionOptions(regions);
     });
+
+    apiCache
+      .callEndpoint('api/nitratecredit/')
+      .then((response: { status?: any; data: NitrateCreditData[] }) => {
+        if (response.status === 200) {
+          setNitrateCredit(response.data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -166,6 +175,11 @@ export default function FarmInformation() {
       dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
       navigate(ADD_ANIMALS);
     }
+    dispatch({
+      type: 'UPDATE_SOIL_NITRATE_CREDIT',
+      year: state.nmpFile.farmDetails.year,
+      nitrateCreditData: nitrateCredit,
+    });
   };
 
   const handlePreviousPage = () => {

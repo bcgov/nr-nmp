@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Regions, Subregion
+from .models import Regions, Subregion, NitrateCredit
 
 
 class RegionsSerializer(serializers.ModelSerializer):
@@ -12,4 +12,10 @@ class RegionsSerializer(serializers.ModelSerializer):
 class SubregionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subregion
+        fields = '__all__'
+
+
+class NitrateCreditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NitrateCredit
         fields = '__all__'
