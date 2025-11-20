@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { env } from '@/env';
 import {
   Crop,
   CropsConversionFactors,
@@ -7,6 +5,7 @@ import {
   NMPFileCrop,
   NMPFileField,
   NMPFileSoilTest,
+  Region,
 } from '@/types';
 import {
   PLANT_AGES,
@@ -18,27 +17,7 @@ import {
   CROP_BLUEBERRIES_ID,
 } from '@/constants';
 
-/**
- * Fetches crop conversion factors from the API
- *
- * @returns {Promise<CropsConversionFactors | null>} Conversion factors for calculations
- */
-export async function getConversionFactors(): Promise<CropsConversionFactors | null> {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropsconversionfactors/`);
-    return response.data[0];
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-/**
- * Retrieves region data by region ID
- *
- * @param {number} regionId - The ID of the region to fetch
- * @returns {Promise<any>} Region data
- */
+/*
 export async function getRegion(regionId: number) {
   try {
     const response = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${regionId}/`);
@@ -49,12 +28,6 @@ export async function getRegion(regionId: number) {
   }
 }
 
-/**
- * Fetches crop type data by crop type ID
- *
- * @param {number} cropTypeId - ID of the crop type to fetch
- * @returns {Promise<any>} Crop type data
- */
 export async function getCropType(cropTypeId: number) {
   try {
     const response = await axios.get(`${env.VITE_BACKEND_URL}/api/croptypes/${cropTypeId}/`);
@@ -65,14 +38,6 @@ export async function getCropType(cropTypeId: number) {
   }
 }
 
-/**
- * Gets soil test regions for a specific crop
- *
- * @param {number} cropId - ID of the crop
- * @param {number} soilTestPotassiumRegionCode - Region code for potassium soil test
- * @param {string} endpoint - API endpoint to query
- * @returns {Promise<any>} Soil test region data for the specified crop
- */
 export async function getCropSoilTestRegions(
   cropId: number,
   soilTestPotassiumRegionCode: number,
@@ -89,13 +54,6 @@ export async function getCropSoilTestRegions(
   }
 }
 
-/**
- * Finds the Kelowna range that contains a specific soil test phosphorous value
- *
- * @param {number} STP - Soil test phosphorous value in ppm
- * @param {string} endpoint - API endpoint to query
- * @returns {Promise<any>} Matching Kelowna range
- */
 export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
   try {
     const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
@@ -113,15 +71,6 @@ export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
   }
 }
 
-/**
- * Retrieves recommendations based on soil test values, regions, and crop group
- *
- * @param {number} kelownaRangeId - ID of the Kelowna range
- * @param {number} soilTestRegionCd - Soil test region code
- * @param {number} cropGroupRegionCd - Crop group region code
- * @param {string} endpoint - API endpoint for recommendations
- * @returns {Promise<any>} Recommendations for nutrient application
- */
 export async function getRecommendations(
   kelownaRangeId: number,
   soilTestRegionCd: number,
@@ -154,6 +103,7 @@ export async function getRecommendations(
     return null;
   }
 }
+*/
 
 function validateIds(combinedCropData: NMPFileCrop, crop: Crop, cropType: CropType) {
   if (crop.id !== combinedCropData.cropId) {
@@ -340,16 +290,14 @@ export function getCropRequirementN(
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field
  * @param {number} regionId - ID of the region
- * @returns {Promise<number>} Required K₂O application in lbs/acre, rounded to nearest integer
+ * @returns {number} Required K₂O application in lbs/acre, rounded to nearest integer
  */
-export async function getCropRequirementK2O(
+export function getCropRequirementK2O(
   combinedCropData: NMPFileCrop,
   soilTest: NMPFileSoilTest | undefined,
-  regionId: number,
-): Promise<number> {
-  const conversionFactors = await getConversionFactors();
-  if (conversionFactors === null) throw new Error('Failed to get conversion factors.');
-  const region = await getRegion(regionId);
+  region: Region,
+  conversionFactors: CropsConversionFactors,
+): number {
   // Use default if soil test data is missing
   let STK = soilTest?.convertedKelownaK || DEFAULT_SOIL_TEST.convertedKelownaK;
   if (!STK) STK = conversionFactors.defaultsoiltestkelownapotassium;

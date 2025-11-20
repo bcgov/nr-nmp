@@ -28,8 +28,9 @@ import {
   MaterialRemainingData,
   SolidMaterialApplicationTonPerAcreRateConversions,
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
+  Region,
 } from '@/types';
-import { getNutrientInputs } from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
+import getNutrientInputs from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS } from '@/constants/routes';
 import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
@@ -185,7 +186,23 @@ export default function ManureModal({
     [manureUnits, manureForm.solidLiquid],
   );
 
-  const [manures, setManures] = useState<Manure[]>([]);
+  const regions: Region[] = apiCache.getInitializedResponse('regions').data;
+  const nMineralizations: NitrogenMineralization[] =
+    apiCache.getInitializedResponse('nmineralizations').data;
+  const applicableNMineralization = useMemo(() => {
+    const region = regions.find((r) => r.id === state.nmpFile.farmDetails.farmRegion);
+    if (!region) {
+      throw new Error(`No region found with id ${state.nmpFile.farmDetails.farmRegion}`);
+    }
+    const locationId = region.locationid;
+    return nMineralizations.find(
+      (n) =>
+        n.locationid === locationId &&
+        n.nmineralizationid === selectedNutrientAnalysis?.nMineralizationId,
+    );
+  }, [regions, nMineralizations, selectedNutrientAnalysis, state.nmpFile.farmDetails.farmRegion]);
+
+  const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
   const selectedManure = useMemo(
     () => manures.find((m) => m.id === manureForm.manureId),
     [manures, manureForm.manureId],
@@ -326,12 +343,6 @@ export default function ManureModal({
       }
     });
 
-    apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: Manure[] }) => {
-      if (response.status === 200) {
-        setManures(response.data);
-      }
-    });
-
     apiCache
       .callEndpoint('api/ammoniaretentions/')
       .then((response: { status?: any; data: any }) => {
@@ -396,16 +407,22 @@ export default function ManureModal({
     handleModalClose();
   };
 
-  const handleCalculate = async () => {
+  const handleCalculate = () => {
     if (!selectedNutrientAnalysis) {
       console.error('No nutrient analysis available for calculation.');
       return;
     }
-    const nutrientInputs = await getNutrientInputs(
+    if (!selectedManure) {
+      return;
+    }
+
+    const nutrientInputs = getNutrientInputs(
+      selectedManure,
       selectedNutrientAnalysis,
-      state.nmpFile.farmDetails.farmRegion,
+      applicableNMineralization,
       manureForm.applicationRate,
       manureUnits.find((opt) => opt.id === manureForm.applUnitId)!.value,
+      apiCache.getInitializedResponse('cropsconversionfactors').data,
       manureForm.nh4Retention,
       manureForm.nAvailable,
     );

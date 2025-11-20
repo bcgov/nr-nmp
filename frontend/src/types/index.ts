@@ -73,6 +73,7 @@ import {
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   Subregion,
   Units,
+  PreviousYearManureApplication,
 } from './database';
 import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 import {
@@ -152,4 +153,5 @@ export type {
   AppliedManureData,
   MaterialRemainingData,
   CustomFertilizer,
+  PreviousYearManureApplication,
 };

@@ -49,7 +49,7 @@ export default function SoilTests() {
     fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
 
-  const [crops, setCrops] = useState<Crop[]>([]);
+  const crops: Crop[] = apiCache.getInitializedResponse('crops').data;
   const [cropTypes, setCropTypes] = useState<CropType[]>([]);
 
   const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
@@ -180,11 +180,6 @@ export default function SoilTests() {
           setPhosphorousRanges(response.data);
         }
       });
-    apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: Crop[] }) => {
-      if (response.status === 200) {
-        setCrops(response.data);
-      }
-    });
     apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: CropType[] }) => {
       if (response.status === 200) {
         setCropTypes(response.data);

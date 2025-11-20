@@ -175,6 +175,13 @@ export type PreviousCrop = {
   croptypeid: number;
 };
 
+export interface PreviousYearManureApplication {
+  id: number;
+  fieldmanureapplicationhistory: number;
+  defaultnitrogencredit: string;
+  previousyearmanureaplicationfrequency: number;
+}
+
 // _Region
 export interface Region {
   id: number;

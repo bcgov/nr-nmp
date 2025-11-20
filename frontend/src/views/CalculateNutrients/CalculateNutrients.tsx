@@ -2,7 +2,7 @@
  * @summary The calculate nutrients page for the application
  * calculates the field nutrients based on the crops and manure
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -36,7 +36,8 @@ import {
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import { CalculateNutrientsRow, NMPFileField } from '@/types';
+import { CalculateNutrientsRow, NMPFileField, PreviousYearManureApplication } from '@/types';
+import { APICacheContext } from '@/context/APICacheContext.tsx';
 
 function NoRows() {
   return <div />;
@@ -54,27 +55,20 @@ export default function CalculateNutrients() {
   const [fieldList, setFieldList] = useState<Array<NMPFileField>>(
     state.nmpFile.years[0].fields || [],
   );
-  const [prevYearManureData, setPrevYearManureData] = useState<PreviousYearManureData | null>(null);
-
-  // Calculate previous year manure data when active field changes
-  useEffect(() => {
+  const apiCache = useContext(APICacheContext);
+  const previousManureApplications: PreviousYearManureApplication[] =
+    apiCache.getInitializedResponse('previousyearmanureapplications').data;
+  const prevYearManureData = useMemo(() => {
+    // Calculate previous year manure data when active field changes
     const currentField = fieldList[activeField];
     if (!currentField) {
-      setPrevYearManureData(null);
-      return;
+      return null;
     }
-
-    calculatePrevYearManure(currentField)
-      .then((response: PreviousYearManureData) => {
-        if (!currentField.previousYearManureApplicationNCredit) {
-          currentField.previousYearManureApplicationNCredit = response.nitrogen;
-        }
-        setPrevYearManureData(response);
-      })
-      .catch((error) => {
-        console.error('Error calculating previous year manure:', error);
-        setPrevYearManureData(null);
-      });
+    const prevData = calculatePrevYearManure(currentField, previousManureApplications);
+    if (!currentField.previousYearManureApplicationNCredit) {
+      currentField.previousYearManureApplicationNCredit = prevData.nitrogen;
+    }
+    return prevData;
   }, [activeField, fieldList]);
 
   const cropColumns: GridColDef[] = useMemo(() => {
