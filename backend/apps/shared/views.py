@@ -29,7 +29,7 @@ class SharedViewset(viewsets.ViewSet):
             subregions = Subregion.objects.filter(regionid=regionId, id=subregionId)
         serializer = SubregionSerializer(subregions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     @action(detail=True, methods=['get'])
     def nitratecredit(self, request):
         serializer = NitrateCreditSerializer(NitrateCredit.objects.all(), many=True)
