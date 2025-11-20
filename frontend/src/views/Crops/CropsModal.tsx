@@ -13,8 +13,8 @@ import {
 } from '@/components/common';
 import { CropType, Crop, PreviousCrop, NMPFileCrop, NMPFileField, SelectOption } from '@/types';
 import {
-  sharedCalcCropReq,
   postprocessModalData,
+  calculateCropRequirementsUsingCache,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '../../common.styles';
@@ -103,7 +103,6 @@ type CropsModalProps = {
   initialModalData?: NMPFileCrop;
   setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   onClose: () => void;
-  farmRegion: number;
 };
 
 function CropsModal({
@@ -113,7 +112,6 @@ function CropsModal({
   initialModalData,
   setFields,
   onClose,
-  farmRegion,
   ...props
 }: CropsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const { nmpFile } = useAppState().state;
@@ -136,7 +134,7 @@ function CropsModal({
         : undefined,
     isFormYieldEqualToDefault: true,
   });
-  const [crops, setCrops] = useState<Crop[]>([]);
+  const crops: Crop[] = apiCache.getInitializedResponse('crops').data;
 
   // These 4 are related to berries and are stored in the DB in the SelectOption format
   const [plantAges, setPlantAges] = useState<SelectOption<undefined>[]>([]);
@@ -147,7 +145,7 @@ function CropsModal({
     if (formData.cropTypeId === 0) return [];
     return crops.filter((type) => type.croptypeid === formData.cropTypeId);
   }, [crops, formData.cropTypeId]);
-  const [cropTypes, setCropTypes] = useState<CropType[]>([]);
+  const cropTypes: CropType[] = apiCache.getInitializedResponse('croptypes').data;
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
 
@@ -231,16 +229,6 @@ function CropsModal({
 
   // Populate dropdowns on load
   useEffect(() => {
-    apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: CropType[] }) => {
-      if (response.status === 200) {
-        setCropTypes(response.data);
-      }
-    });
-    apiCache.callEndpoint('api/crops/').then((response: { status?: any; data: Crop[] }) => {
-      if (response.status === 200) {
-        setCrops(response.data);
-      }
-    });
     apiCache
       .callEndpoint('api/previouscroptypes/')
       .then((response: { status?: any; data: PreviousCrop[] }) => {
@@ -346,36 +334,27 @@ function CropsModal({
    * Calculates nutrient requirements and removals for the selected crop
    * Updates the formData state with calculated values
    */
-  const handleCalculate = useCallback(async () => {
-    if (fieldIndex !== null && selectedCrop !== undefined && selectedCropType !== undefined) {
-      const dispatchResult = await sharedCalcCropReq(
-        selectedCrop,
-        formData,
-        field,
-        farmRegion,
-        selectedCropType,
-      );
-      if (dispatchResult) {
-        // Update the crops data with calculated values
-        dispatch({
-          type: 'SET_CALCULATED_VALUES',
-          reqN: dispatchResult.cropRequirementN,
-          reqP2o5: dispatchResult.cropRequirementP205,
-          reqK2o: dispatchResult.cropRequirementK2O,
-          remN: dispatchResult.cropRemovalN,
-          remP2o5: dispatchResult.cropRemovalP205,
-          remK2o: dispatchResult.cropRemovalK20,
-        });
+  const handleCalculate = useCallback(() => {
+    const dispatchResult = calculateCropRequirementsUsingCache(
+      nmpFile.farmDetails.farmRegion,
+      field,
+      formData,
+      apiCache,
+    );
+    // Update the crops data with calculated values
+    dispatch({
+      type: 'SET_CALCULATED_VALUES',
+      reqN: dispatchResult.cropRequirementN,
+      reqP2o5: dispatchResult.cropRequirementP205,
+      reqK2o: dispatchResult.cropRequirementK2O,
+      remN: dispatchResult.cropRemovalN,
+      remP2o5: dispatchResult.cropRemovalP205,
+      remK2o: dispatchResult.cropRemovalK20,
+    });
 
-        // Mark calculations as performed
-        setCalculationsPerformed(true);
-      } else {
-        throw new Error(
-          `Crop calculations error, unable to calculate required nutrients for field ${field.fieldName}`,
-        );
-      }
-    }
-  }, [fieldIndex, selectedCrop, selectedCropType, formData, field, farmRegion, dispatch]);
+    // Mark calculations as performed
+    setCalculationsPerformed(true);
+  }, [apiCache, formData, field, nmpFile.farmDetails.farmRegion]);
 
   useEffect(() => {
     if (cropIndex !== undefined && selectedCrop !== undefined && selectedCropType !== undefined) {

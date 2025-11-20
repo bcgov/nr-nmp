@@ -18,21 +18,13 @@ import {
 } from '../../common.styles';
 import { Select, Tabs, View } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import {
-  Crop,
-  CropType,
-  NMPFileField,
-  SelectOption,
-  SoilTestMethods,
-  SoilTestPhosphorousRange,
-  SoilTestPotassiumRange,
-} from '@/types';
+import { NMPFileField, SelectOption, SoilTestMethods, SoilTestNutrientRange } from '@/types';
 import { InfoBox } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import SoilTestsModal from './SoilTestsModal';
 import {
-  sharedCalcCropReq,
+  calculateCropRequirementsUsingCache,
   postprocessModalData,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
@@ -49,12 +41,12 @@ export default function SoilTests() {
     fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
 
-  const crops: Crop[] = apiCache.getInitializedResponse('crops').data;
-  const [cropTypes, setCropTypes] = useState<CropType[]>([]);
-
   const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
-  const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
-  const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
+  const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
+    'soiltestphosphorousranges',
+  ).data;
+  const potassiumRanges: SoilTestNutrientRange[] =
+    apiCache.getInitializedResponse('soiltestpotassiumranges').data;
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
   const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -99,44 +91,29 @@ export default function SoilTests() {
     setSoilTestId(value);
   };
 
-  const handleNextPage = async () => {
+  const handleNextPage = () => {
     // Iterate through edited fields for soil test changes and crop req updates
-    const updatedFields = await Promise.all(
-      fields.map(async (fieldEle) => {
-        // Recalculate crop requirements
-        const cropArray = await Promise.all(
-          fieldEle.crops.map(async (cropEle) => {
-            const matchedCrop = crops.find((ele) => ele.id === cropEle.cropId);
-            const matchedCropType = cropTypes.find((ele) => ele.id === cropEle.cropTypeId);
-
-            const cropEntry = await sharedCalcCropReq(
-              matchedCrop!,
-              cropEle,
-              fieldEle,
-              state.nmpFile.farmDetails.farmRegion,
-              matchedCropType!,
-            );
-            if (cropEntry) {
-              return postprocessModalData({
-                ...cropEle,
-                reqN: cropEntry.cropRequirementN,
-                reqP2o5: cropEntry.cropRequirementP205,
-                reqK2o: cropEntry.cropRequirementK2O,
-                remN: cropEntry.cropRemovalN,
-                remP2o5: cropEntry.cropRemovalP205,
-                remK2o: cropEntry.cropRemovalK20,
-              });
-              // eslint-disable-next-line no-else-return
-            } else {
-              throw new Error(
-                `Crop calculations error, unable to calculate required nutrients for field ${fieldEle.fieldName}`,
-              );
-            }
-          }),
+    const updatedFields = fields.map((fieldEle) => {
+      // Recalculate crop requirements
+      const cropArray = fieldEle.crops.map((cropEle) => {
+        const cropEntry = calculateCropRequirementsUsingCache(
+          state.nmpFile.farmDetails.farmRegion,
+          fieldEle,
+          cropEle,
+          apiCache,
         );
-        return { ...fieldEle, crops: cropArray };
-      }),
-    );
+        return postprocessModalData({
+          ...cropEle,
+          reqN: cropEntry.cropRequirementN,
+          reqP2o5: cropEntry.cropRequirementP205,
+          reqK2o: cropEntry.cropRequirementK2O,
+          remN: cropEntry.cropRemovalN,
+          remP2o5: cropEntry.cropRemovalP205,
+          remK2o: cropEntry.cropRemovalK20,
+        });
+      });
+      return { ...fieldEle, crops: cropArray };
+    });
 
     dispatch({
       type: 'SAVE_FIELDS',
@@ -166,25 +143,6 @@ export default function SoilTests() {
           );
         }
       });
-    apiCache
-      .callEndpoint('api/soiltestpotassiumranges/')
-      .then((response: { status?: any; data: SoilTestPotassiumRange[] }) => {
-        if (response.status === 200) {
-          setPotassiumRanges(response.data);
-        }
-      });
-    apiCache
-      .callEndpoint('api/soiltestphosphorousranges/')
-      .then((response: { status?: any; data: SoilTestPhosphorousRange[] }) => {
-        if (response.status === 200) {
-          setPhosphorousRanges(response.data);
-        }
-      });
-    apiCache.callEndpoint('api/croptypes/').then((response: { status?: any; data: CropType[] }) => {
-      if (response.status === 200) {
-        setCropTypes(response.data);
-      }
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

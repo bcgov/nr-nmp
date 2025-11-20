@@ -13,8 +13,7 @@ import {
   NMPFileYear,
   Schedule,
   SoilTestMethods,
-  SoilTestPhosphorousRange,
-  SoilTestPotassiumRange,
+  SoilTestNutrientRange,
   MaterialRemainingData,
 } from '@/types';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
@@ -432,8 +431,8 @@ const generateFieldSummary = (
   field: NMPFileField,
   fertilizerUnits: FertilizerUnit[],
   soilTestMethods: SoilTestMethods[],
-  phosphorousRanges: SoilTestPhosphorousRange[],
-  potassiumRanges: SoilTestPotassiumRange[],
+  phosphorousRanges: SoilTestNutrientRange[],
+  potassiumRanges: SoilTestNutrientRange[],
 ) => {
   doc.addPage();
   // First table shows crops
@@ -828,8 +827,8 @@ const generateSoilTestResults = (
   year: string,
   nmpFileYear: NMPFileYear,
   soilTestMethods: SoilTestMethods[],
-  phosphorousRanges: SoilTestPhosphorousRange[],
-  potassiumRanges: SoilTestPotassiumRange[],
+  phosphorousRanges: SoilTestNutrientRange[],
+  potassiumRanges: SoilTestNutrientRange[],
 ) => {
   doc.addPage();
   // If any soil test is defined, all fields use the same ST method
@@ -909,8 +908,8 @@ export default async function makeFullReportPdf(
   nmpFile: NMPFile,
   fertilizerUnits: FertilizerUnit[],
   soilTestMethods: SoilTestMethods[],
-  phosphorousRanges: SoilTestPhosphorousRange[],
-  potassiumRanges: SoilTestPotassiumRange[],
+  phosphorousRanges: SoilTestNutrientRange[],
+  potassiumRanges: SoilTestNutrientRange[],
   materialRemainingData: MaterialRemainingData | null,
 ) {
   // eslint-disable-next-line new-cap

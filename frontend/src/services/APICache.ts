@@ -17,7 +17,7 @@ export const InitialEndpoints = [
   'soiltestphosphorouskelonwaranges',
   'soiltestphosphorousranges',
   'soiltestphosphorousrecommendation',
-  'soiltestpotassiumkelonwaranges',
+  'soiltestpotassiumkelownaranges',
   'soiltestpotassiumranges',
   'soiltestpotassiumrecommendation',
 ] as const;

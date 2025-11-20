@@ -19,15 +19,18 @@ import {
  * - Application rates are converted from tons, cubic yards, or gallons as appropriate
  * - Final values are rounded to whole numbers for practical field application
  *
+ * @param {Manure} manure - Database object for the chosen manure
  * @param {NMPFileNutrientAnalysis} manureWithNutrients - Lab or book values for manure composition
  *        including N, P, K, NH4-N, moisture content, and solid/liquid designation
- * @param {number | undefined} regionId - Geographic region affecting mineralization rates
+ * @param {NitrogenMineralization | undefined} nMineralization - Database object for the region and
+ *        manure's nitrogen mineralization
  * @param {number} applicationRate - Amount of manure to apply (value only)
  * @param {Units} applicationRateUnit - Unit definition with conversion factors
+ * @param {CropsConversionFactors} conversionFactors - Set of unit conversion factors
  * @param {number} ammoniaNRetentionPct - Percentage of NH4-N retained after application (0-100)
  * @param {number} organicNAvailable - User override for first-year organic N mineralization (0-100)
  *        Allows adjustment from default regional values based on field conditions
- * @returns {N_FirstYear, P2O5_FirstYear, K2O_FirstYear, N_LongTerm, P2O5_LongTerm, K2O_LongTerm}
+ * @returns {{N_FirstYear, P2O5_FirstYear, K2O_FirstYear, N_LongTerm, P2O5_LongTerm, K2O_LongTerm}}
  *          All values in lbs/acre, rounded to nearest whole number
  */
 export default function getNutrientInputs(

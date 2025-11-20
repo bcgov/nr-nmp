@@ -15,8 +15,7 @@ import { APICacheContext } from '@/context/APICacheContext';
 import {
   FertilizerUnit,
   SoilTestMethods,
-  SoilTestPhosphorousRange,
-  SoilTestPotassiumRange,
+  SoilTestNutrientRange,
   Units,
   Manure,
   SolidMaterialApplicationTonPerAcreRateConversions,
@@ -33,8 +32,11 @@ export default function Reporting() {
   const apiCache = useContext(APICacheContext);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
   const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
-  const [phosphorousRanges, setPhosphorousRanges] = useState<SoilTestPhosphorousRange[]>([]);
-  const [potassiumRanges, setPotassiumRanges] = useState<SoilTestPotassiumRange[]>([]);
+  const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
+    'soiltestphosphorousranges',
+  ).data;
+  const potassiumRanges: SoilTestNutrientRange[] =
+    apiCache.getInitializedResponse('soiltestpotassiumranges').data;
   const [manureUnits, setManureUnits] = useState<Units[]>([]);
   const [solidConversions, setSolidConversions] = useState<
     SolidMaterialApplicationTonPerAcreRateConversions[]
@@ -42,7 +44,7 @@ export default function Reporting() {
   const [liquidConversions, setLiquidConversions] = useState<
     LiquidMaterialApplicationUsGallonsPerAcreRateConversions[]
   >([]);
-  const [manures, setManures] = useState<Manure[]>([]);
+  const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
   const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
     null,
   );
@@ -78,20 +80,6 @@ export default function Reporting() {
           setSoilTestMethods(response.data);
         }
       });
-    apiCache
-      .callEndpoint('api/soiltestpotassiumranges/')
-      .then((response: { status?: any; data: SoilTestPotassiumRange[] }) => {
-        if (response.status === 200) {
-          setPotassiumRanges(response.data);
-        }
-      });
-    apiCache
-      .callEndpoint('api/soiltestphosphorousranges/')
-      .then((response: { status?: any; data: SoilTestPhosphorousRange[] }) => {
-        if (response.status === 200) {
-          setPhosphorousRanges(response.data);
-        }
-      });
     apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
       if (response.status === 200) {
         setManureUnits(response.data);
@@ -118,11 +106,6 @@ export default function Reporting() {
           }
         },
       );
-    apiCache.callEndpoint('api/manures/').then((response: { status?: any; data: Manure[] }) => {
-      if (response.status === 200) {
-        setManures(response.data);
-      }
-    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

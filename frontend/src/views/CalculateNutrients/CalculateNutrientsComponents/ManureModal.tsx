@@ -422,7 +422,7 @@ export default function ManureModal({
       applicableNMineralization,
       manureForm.applicationRate,
       manureUnits.find((opt) => opt.id === manureForm.applUnitId)!.value,
-      apiCache.getInitializedResponse('cropsconversionfactors').data,
+      apiCache.getInitializedResponse('cropsconversionfactors').data[0],
       manureForm.nh4Retention,
       manureForm.nAvailable,
     );
