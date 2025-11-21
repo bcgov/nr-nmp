@@ -10,10 +10,7 @@ import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import {
-  calculatePrevYearManure,
-  PreviousYearManureData,
-} from '@/calculations/CalculateNutrients/PreviousManure';
+import { calculatePrevYearManure } from '@/calculations/CalculateNutrients/PreviousManure';
 import { Tabs, View } from '../../components/common';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
@@ -69,7 +66,7 @@ export default function CalculateNutrients() {
       currentField.previousYearManureApplicationNCredit = prevData.nitrogen;
     }
     return prevData;
-  }, [activeField, fieldList]);
+  }, [activeField, fieldList, previousManureApplications]);
 
   const cropColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -349,7 +346,6 @@ export default function CalculateNutrients() {
           cropIndex={openDialog[1]}
           initialModalData={fieldList[activeField].crops[openDialog[1]!]}
           setFields={setFieldList}
-          farmRegion={state.nmpFile.farmDetails.farmRegion}
           isOpen={openDialog[0] === 'crop'}
           onClose={handleDialogClose}
         />

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { env } from '@/env';
 import axiosGet from '@/utils/networkUtils';
+import { AppStateTables } from '@/types/AppState';
 
 // Type shenanigans from: https://www.reddit.com/r/typescript/comments/nv0icn/is_it_possible_to_create_an_array_union_types_as/
 export const InitialEndpoints = [
@@ -71,6 +72,24 @@ class APICache {
       // If no response was received, return arbitrary error code
       return error.response || { status: 500 };
     }
+  }
+
+  getAppStateTables(): AppStateTables {
+    if (!this.initialized) {
+      throw new Error('getAppStateTables was called before initialization completed.');
+    }
+    return {
+      crops: this.endpointCache.crops.data,
+      cropTypes: this.endpointCache.croptypes.data,
+      cropConversionFactors: this.endpointCache.cropsconversionfactors.data[0],
+      regions: this.endpointCache.regions.data,
+      soilTestPhosphorousKelownaRanges: this.endpointCache.soiltestphosphorouskelonwaranges.data,
+      soilTestPotassiumKelownaRanges: this.endpointCache.soiltestpotassiumkelownaranges.data,
+      soilTestPhosphorousRecommendations: this.endpointCache.soiltestphosphorousrecommendation.data,
+      soilTestPhosphorousRegions: this.endpointCache.cropsoiltestphosphorousregions.data,
+      soilTestPotassiumRecommendation: this.endpointCache.soiltestpotassiumrecommendation.data,
+      soilTestPotassiumRegions: this.endpointCache.cropsoilpotassiumregions.data,
+    };
   }
 
   getInitializedResponse(endpoint: InitialEndpoint) {

@@ -21,7 +21,7 @@ import {
   DEFAULT_BERRY_DATA,
   CROP_BLUEBERRIES_ID,
 } from '@/constants';
-import APICache from '@/services/APICache';
+import { AppStateTables } from '@/types/AppState';
 
 export function getPhosphorousRegionFromList(
   list: SoilTestPhosphorousRegion[],
@@ -507,7 +507,7 @@ export function extractNutrientValues(_nutrients: any) {
   };
 }
 
-export function calculateCropRequirements(
+function oldCalcCropRequirements(
   selectedCrop: Crop,
   selectedCropType: CropType,
   nmpFileCrop: NMPFileCrop,
@@ -599,52 +599,46 @@ export function calculateCropRequirements(
   return nutrientValues;
 }
 
-export function calculateCropRequirementsUsingCache(
+export function calculateCropRequirements(
   nmpFileRegionId: number,
   nmpFileField: NMPFileField,
   nmpFileCrop: NMPFileCrop,
-  apiCache: APICache,
+  tables: AppStateTables,
 ) {
   // Get all the data from the database needed to perform these calculations
-  const region = (apiCache.getInitializedResponse('regions').data as Region[]).find(
-    (r) => r.id === nmpFileRegionId,
-  );
+  const region = tables.regions.find((r) => r.id === nmpFileRegionId);
   if (!region) {
     throw new Error(`No region found with id ${nmpFileRegionId}`);
   }
   const phosphorousRegion = getPhosphorousRegionFromList(
-    apiCache.getInitializedResponse('cropsoiltestphosphorousregions').data,
+    tables.soilTestPhosphorousRegions,
     nmpFileCrop.cropId,
     region,
   );
   const potassiumRegion = getPotassiumRegionFromList(
-    apiCache.getInitializedResponse('cropsoilpotassiumregions').data,
+    tables.soilTestPotassiumRegions,
     nmpFileCrop.cropId,
     region,
   );
-  const crop = (apiCache.getInitializedResponse('crops').data as Crop[]).find(
-    (c) => c.id === nmpFileCrop.cropId,
-  );
-  const cropType = (apiCache.getInitializedResponse('croptypes').data as CropType[]).find(
-    (c) => c.id === nmpFileCrop.cropTypeId,
-  );
+  const crop = tables.crops.find((c) => c.id === nmpFileCrop.cropId);
+  const cropType = tables.cropTypes.find((c) => c.id === nmpFileCrop.cropTypeId);
   if (!phosphorousRegion || !potassiumRegion || !crop || !cropType) {
     throw new Error(
-      `calculateCropRequirementsUsingCache failed to fetch necessary data. Region id: ${nmpFileRegionId}. Crop id: ${nmpFileCrop.cropId}. Crop type id: ${nmpFileCrop.cropTypeId}.`,
+      `calculateCropRequirements failed to fetch necessary data. Region id: ${nmpFileRegionId}. Crop id: ${nmpFileCrop.cropId}. Crop type id: ${nmpFileCrop.cropTypeId}.`,
     );
   }
 
-  return calculateCropRequirements(
+  return oldCalcCropRequirements(
     crop,
     cropType,
     nmpFileCrop,
     nmpFileField,
     phosphorousRegion,
-    apiCache.getInitializedResponse('soiltestphosphorouskelonwaranges').data,
-    apiCache.getInitializedResponse('soiltestphosphorousrecommendation').data,
+    tables.soilTestPhosphorousKelownaRanges,
+    tables.soilTestPhosphorousRecommendations,
     potassiumRegion,
-    apiCache.getInitializedResponse('soiltestpotassiumkelownaranges').data,
-    apiCache.getInitializedResponse('soiltestpotassiumrecommendation').data,
-    apiCache.getInitializedResponse('cropsconversionfactors').data[0],
+    tables.soilTestPotassiumKelownaRanges,
+    tables.soilTestPotassiumRecommendation,
+    tables.cropConversionFactors,
   );
 }

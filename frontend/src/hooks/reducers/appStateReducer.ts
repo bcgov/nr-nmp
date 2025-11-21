@@ -23,10 +23,16 @@ import {
   ManureInSystem,
   NMPFileDerivedManure,
 } from '@/types';
+import { AppStateTables } from '@/types/AppState';
 import { calculateSeparatedSolidAndLiquid } from '@/utils/densityCalculations';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
 import { calculateAnnualWashWater } from '@/views/AddAnimals/utils';
+
+type CacheTablesAction = {
+  type: 'CACHE_TABLES';
+  tables: AppStateTables;
+};
 
 type SetShowAnimalsStepAction = {
   type: 'SET_SHOW_ANIMALS_STEP';
@@ -83,6 +89,7 @@ type ResetNMPFileAction = {
 };
 
 export type AppStateAction =
+  | CacheTablesAction
   | SetShowAnimalsStepAction
   | SaveFarmDetailsAction
   | SaveFieldsAction
@@ -331,6 +338,12 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   // In this reducer, we take advantage of JavaScript storing/passing objects as addresses
   // This allows us to clone the state and then edit it in-place
   const newAppState = structuredClone(state);
+
+  // This should only be called once, during the page load
+  if (action.type === 'CACHE_TABLES') {
+    newAppState.tables = action.tables;
+    return newAppState;
+  }
 
   // These actions alter more than the NMPFile years array
   if (action.type === 'SET_SHOW_ANIMALS_STEP') {

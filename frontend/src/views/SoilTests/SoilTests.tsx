@@ -24,7 +24,7 @@ import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import SoilTestsModal from './SoilTestsModal';
 import {
-  calculateCropRequirementsUsingCache,
+  calculateCropRequirements,
   postprocessModalData,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
@@ -96,11 +96,11 @@ export default function SoilTests() {
     const updatedFields = fields.map((fieldEle) => {
       // Recalculate crop requirements
       const cropArray = fieldEle.crops.map((cropEle) => {
-        const cropEntry = calculateCropRequirementsUsingCache(
+        const cropEntry = calculateCropRequirements(
           state.nmpFile.farmDetails.farmRegion,
           fieldEle,
           cropEle,
-          apiCache,
+          state.tables!,
         );
         return postprocessModalData({
           ...cropEle,

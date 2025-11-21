@@ -14,7 +14,7 @@ import {
 import { CropType, Crop, PreviousCrop, NMPFileCrop, NMPFileField, SelectOption } from '@/types';
 import {
   postprocessModalData,
-  calculateCropRequirementsUsingCache,
+  calculateCropRequirements,
 } from '@/calculations/FieldAndSoil/Crops/Calculations';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '../../common.styles';
@@ -114,7 +114,7 @@ function CropsModal({
   onClose,
   ...props
 }: CropsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const { nmpFile } = useAppState().state;
+  const { nmpFile, tables } = useAppState().state;
   const apiCache = useContext(APICacheContext);
 
   const [
@@ -335,11 +335,14 @@ function CropsModal({
    * Updates the formData state with calculated values
    */
   const handleCalculate = useCallback(() => {
-    const dispatchResult = calculateCropRequirementsUsingCache(
+    if (!tables) {
+      throw new Error('Cache tables not set.');
+    }
+    const dispatchResult = calculateCropRequirements(
       nmpFile.farmDetails.farmRegion,
       field,
       formData,
-      apiCache,
+      tables,
     );
     // Update the crops data with calculated values
     dispatch({
@@ -354,7 +357,7 @@ function CropsModal({
 
     // Mark calculations as performed
     setCalculationsPerformed(true);
-  }, [apiCache, formData, field, nmpFile.farmDetails.farmRegion]);
+  }, [tables, nmpFile.farmDetails.farmRegion, field, formData]);
 
   useEffect(() => {
     if (cropIndex !== undefined && selectedCrop !== undefined && selectedCropType !== undefined) {
