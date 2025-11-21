@@ -13,6 +13,7 @@ jest.mock('../../services/APICache', () =>
   })),
 );
 
+// Snapshot test for FarmInformation view
 it('renders correctly', async () => {
   mockUseAppService.mockImplementation(() => ({
     state: {
