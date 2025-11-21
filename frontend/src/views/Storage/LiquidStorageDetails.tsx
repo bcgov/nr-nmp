@@ -18,6 +18,7 @@ import {
 } from '@/constants';
 import { calcStorageVolumeGallons } from '@/utils/manureStorageSystems';
 import { Text } from './StorageModal.styles';
+import { printNum } from '@/utils/utils';
 
 const storageShapeOptions = [
   { id: Shape.Rectangular, label: Shape[Shape.Rectangular] },
@@ -245,8 +246,8 @@ export default function LiquidStorageDetails({
         {selectedStorage.volumeUSGallons > 0 && selectedStorage.name !== '' && (
           <>
             <Text className="bcds-react-aria-Text primary small">Storage Volume</Text>
-            <Text className="bcds-react-aria-Text primary small">{`${selectedStorage.volumeUSGallons} U.S. Gallons (${selectedStorage.name})`}</Text>
-            <Text className="bcds-react-aria-Text primary small">{`${totalVolume} U.S. Gallons (${formData.name})`}</Text>
+            <Text className="bcds-react-aria-Text primary small">{`${printNum(selectedStorage.volumeUSGallons)} U.S. Gallons (${selectedStorage.name})`}</Text>
+            <Text className="bcds-react-aria-Text primary small">{`${printNum(totalVolume)} U.S. Gallons (${formData.name})`}</Text>
           </>
         )}
       </Grid>

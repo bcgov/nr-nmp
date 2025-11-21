@@ -7,6 +7,7 @@ import {
   ManureType,
   PrecipitationConversionFactor,
   NMPFileManureStorageSystem,
+  LiquidManureStorageSystem,
 } from '@/types';
 
 const ft3ToGallons = 7.48052;
@@ -96,7 +97,7 @@ export function calcStorageVolumeGallons(structure: StorageStructure) {
 
 export function calculatePrecipitationInStorage(
   system: NMPFileManureStorageSystem,
-  regionAnnualPrecipitation: number,
+  precipitationRate: number,
 ) {
   let annualPrecipitation;
   if (system.manureType === ManureType.Liquid) {
@@ -109,15 +110,20 @@ export function calculatePrecipitationInStorage(
     });
     annualPrecipitation =
       totalUncoveredArea > 0
-        ? totalUncoveredArea * regionAnnualPrecipitation * PrecipitationConversionFactor.Liquid
+        ? totalUncoveredArea * precipitationRate * PrecipitationConversionFactor.Liquid
         : undefined;
   } else {
     // For solid manure
     annualPrecipitation = system.manureStorage.uncoveredAreaSqFt
       ? system.manureStorage.uncoveredAreaSqFt *
-        regionAnnualPrecipitation *
+        precipitationRate *
         PrecipitationConversionFactor.Solid
       : undefined;
   }
   return annualPrecipitation;
+}
+
+export function getRunoffInSystem(system: LiquidManureStorageSystem, precipitationRate: number) {
+  const runoffArea = system.runoffAreaSqFt || 0;
+  return runoffArea * precipitationRate * PrecipitationConversionFactor.Liquid;
 }
