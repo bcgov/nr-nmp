@@ -23,10 +23,6 @@ import { InfoBox } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import SoilTestsModal from './SoilTestsModal';
-import {
-  calculateCropRequirements,
-  postprocessModalData,
-} from '@/calculations/FieldAndSoil/Crops/Calculations';
 import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 
 export default function SoilTests() {
@@ -92,39 +88,22 @@ export default function SoilTests() {
   };
 
   const handleNextPage = () => {
-    // Iterate through edited fields for soil test changes and crop req updates
-    const updatedFields = fields.map((fieldEle) => {
-      // Recalculate crop requirements
-      const cropArray = fieldEle.crops.map((cropEle) => {
-        const cropEntry = calculateCropRequirements(
-          state.nmpFile.farmDetails.farmRegion,
-          fieldEle,
-          cropEle,
-          state.tables!,
-        );
-        return postprocessModalData({
-          ...cropEle,
-          reqN: cropEntry.cropRequirementN,
-          reqP2o5: cropEntry.cropRequirementP205,
-          reqK2o: cropEntry.cropRequirementK2O,
-          remN: cropEntry.cropRemovalN,
-          remP2o5: cropEntry.cropRemovalP205,
-          remK2o: cropEntry.cropRemovalK20,
-        });
-      });
-      return { ...fieldEle, crops: cropArray };
-    });
-
     dispatch({
       type: 'SAVE_FIELDS',
       year: state.nmpFile.farmDetails.year,
-      newFields: updatedFields,
+      newFields: fields,
+      soilTestsUpdated: true,
     });
     navigate(CROPS);
   };
 
   const handlePreviousPage = () => {
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.year,
+      newFields: fields,
+      soilTestsUpdated: true,
+    });
     navigate(FIELD_LIST);
   };
 

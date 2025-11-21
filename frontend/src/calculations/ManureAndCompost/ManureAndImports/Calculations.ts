@@ -33,7 +33,7 @@ import {
  * @returns {{N_FirstYear, P2O5_FirstYear, K2O_FirstYear, N_LongTerm, P2O5_LongTerm, K2O_LongTerm}}
  *          All values in lbs/acre, rounded to nearest whole number
  */
-export default function getNutrientInputs(
+export default function calculateManureNutrientInputs(
   manure: Manure,
   manureWithNutrients: NMPFileNutrientAnalysis,
   nMineralization: NitrogenMineralization | undefined,

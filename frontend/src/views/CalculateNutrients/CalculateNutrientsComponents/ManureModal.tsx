@@ -30,7 +30,7 @@ import {
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   Region,
 } from '@/types';
-import getNutrientInputs from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
+import calculateManureNutrientInputs from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS } from '@/constants/routes';
 import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
@@ -416,7 +416,7 @@ export default function ManureModal({
       return;
     }
 
-    const nutrientInputs = getNutrientInputs(
+    const nutrientInputs = calculateManureNutrientInputs(
       selectedManure,
       selectedNutrientAnalysis,
       applicableNMineralization,

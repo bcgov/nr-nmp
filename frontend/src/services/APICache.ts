@@ -21,6 +21,8 @@ export const InitialEndpoints = [
   'soiltestpotassiumkelownaranges',
   'soiltestpotassiumranges',
   'soiltestpotassiumrecommendation',
+  'subregions',
+  'units',
 ] as const;
 
 export type InitialEndpoint = (typeof InitialEndpoints)[number];
@@ -82,6 +84,8 @@ class APICache {
       crops: this.endpointCache.crops.data,
       cropTypes: this.endpointCache.croptypes.data,
       cropConversionFactors: this.endpointCache.cropsconversionfactors.data[0],
+      manures: this.endpointCache.manures.data,
+      nMineralizations: this.endpointCache.nmineralizations.data,
       regions: this.endpointCache.regions.data,
       soilTestPhosphorousKelownaRanges: this.endpointCache.soiltestphosphorouskelonwaranges.data,
       soilTestPotassiumKelownaRanges: this.endpointCache.soiltestpotassiumkelownaranges.data,
@@ -89,6 +93,8 @@ class APICache {
       soilTestPhosphorousRegions: this.endpointCache.cropsoiltestphosphorousregions.data,
       soilTestPotassiumRecommendation: this.endpointCache.soiltestpotassiumrecommendation.data,
       soilTestPotassiumRegions: this.endpointCache.cropsoilpotassiumregions.data,
+      subregions: this.endpointCache.subregions.data,
+      manureUnits: this.endpointCache.units.data,
     };
   }
 
