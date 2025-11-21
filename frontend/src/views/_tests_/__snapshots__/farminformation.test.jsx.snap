@@ -1,0 +1,572 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="css-1pwhsub"
+  >
+    <div
+      class="MuiBox-root css-a57597"
+    >
+      <div
+        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-149z4i0-MuiStepper-root"
+      >
+        <div
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        >
+          <span
+            class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          >
+            <span
+              class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="12"
+                />
+                <text
+                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                  dominant-baseline="central"
+                  text-anchor="middle"
+                  x="12"
+                  y="12"
+                >
+                  1
+                </text>
+              </svg>
+            </span>
+            <span
+              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+            >
+              <span
+                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+              >
+                Home
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        >
+          <div
+            class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-1k81fv-MuiStepConnector-root"
+          >
+            <span
+              class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
+            />
+          </div>
+          <span
+            class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          >
+            <span
+              class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="12"
+                />
+                <text
+                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                  dominant-baseline="central"
+                  text-anchor="middle"
+                  x="12"
+                  y="12"
+                >
+                  2
+                </text>
+              </svg>
+            </span>
+            <span
+              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+            >
+              <span
+                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+              >
+                Farm Information
+              </span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1xllnsb"
+    >
+      Nutrient Management Calculator
+    </div>
+    <div
+      class="css-114zsuk"
+    >
+      Farm Information
+    </div>
+    <form
+      class="css-omuth8"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-zjhuaj-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+        >
+          <div
+            class="bcds-react-aria-TextField"
+            data-rac=""
+            data-required="true"
+          >
+            <label
+              class="bcds-react-aria-TextField--Label"
+              for="farmName"
+              id="react-aria-«r1»"
+            >
+              Farm Name
+              <span
+                class="bcds-react-aria-TextField--Label"
+              >
+                 (required)
+              </span>
+            </label>
+            <div
+              class="bcds-react-aria-TextField--container medium"
+            >
+              <input
+                aria-labelledby="react-aria-«r1»"
+                class="bcds-react-aria-TextField--Input"
+                data-rac=""
+                id="farmName"
+                name="farmName"
+                required=""
+                tabindex="0"
+                title=""
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+        >
+          <div
+            class="bcds-react-aria-Select"
+            data-rac=""
+            data-required="true"
+          >
+            <span
+              class="bcds-react-aria-Select--Label"
+              id="react-aria-«r8»"
+            >
+              Year (required)
+            </span>
+            <button
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="react-aria-«rc» react-aria-«r8»"
+              class="bcds-react-aria-Select--Button medium false"
+              data-rac=""
+              id="react-aria-«r7»"
+              type="button"
+            >
+              <span
+                class="bcds-react-aria-SelectValue"
+                data-placeholder="true"
+                data-rac=""
+                id="react-aria-«rc»"
+              >
+                Select an item
+              </span>
+              <svg
+                fill="none"
+                height="20"
+                id="chevron-down-icon"
+                viewBox="0 0 20 20"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.7882 9.15569L10.4858 14.236C10.3192 14.3748 10.1527 14.4303 10.0139 14.4303C9.84731 14.4303 9.68074 14.3748 9.54194 14.2637L4.21182 9.15569C3.9342 8.90584 3.9342 8.46167 4.18405 8.21182C4.4339 7.9342 4.87808 7.9342 5.12793 8.18405L10.0139 12.8479L14.872 8.18405C15.1219 7.9342 15.5661 7.9342 15.8159 8.21182C16.0658 8.46167 16.0658 8.90584 15.7882 9.15569Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            data-a11y-ignore="aria-hidden-focus"
+            data-react-aria-prevent-focus="true"
+            data-testid="hidden-select-container"
+            style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+          >
+            <label>
+              <select
+                required=""
+                tabindex="-1"
+                title=""
+              >
+                <option />
+                <option
+                  value="2026"
+                >
+                  2026
+                </option>
+                <option
+                  value="2025"
+                >
+                  2025
+                </option>
+                <option
+                  value="2024"
+                >
+                  2024
+                </option>
+                <option
+                  value="2023"
+                >
+                  2023
+                </option>
+                <option
+                  value="2022"
+                >
+                  2022
+                </option>
+                <option
+                  value="2021"
+                >
+                  2021
+                </option>
+                <option
+                  value="2020"
+                >
+                  2020
+                </option>
+                <option
+                  value="2019"
+                >
+                  2019
+                </option>
+                <option
+                  value="2018"
+                >
+                  2018
+                </option>
+                <option
+                  value="2017"
+                >
+                  2017
+                </option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+        >
+          <div
+            class="bcds-react-aria-Select"
+            data-rac=""
+            data-required="true"
+          >
+            <span
+              class="bcds-react-aria-Select--Label"
+              id="react-aria-«ri»"
+            >
+              Region (required)
+            </span>
+            <button
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="react-aria-«rm» react-aria-«ri»"
+              class="bcds-react-aria-Select--Button medium false"
+              data-rac=""
+              id="react-aria-«rh»"
+              type="button"
+            >
+              <span
+                class="bcds-react-aria-SelectValue"
+                data-placeholder="true"
+                data-rac=""
+                id="react-aria-«rm»"
+              >
+                Select an item
+              </span>
+              <svg
+                fill="none"
+                height="20"
+                id="chevron-down-icon"
+                viewBox="0 0 20 20"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.7882 9.15569L10.4858 14.236C10.3192 14.3748 10.1527 14.4303 10.0139 14.4303C9.84731 14.4303 9.68074 14.3748 9.54194 14.2637L4.21182 9.15569C3.9342 8.90584 3.9342 8.46167 4.18405 8.21182C4.4339 7.9342 4.87808 7.9342 5.12793 8.18405L10.0139 12.8479L14.872 8.18405C15.1219 7.9342 15.5661 7.9342 15.8159 8.21182C16.0658 8.46167 16.0658 8.90584 15.7882 9.15569Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            data-a11y-ignore="aria-hidden-focus"
+            data-react-aria-prevent-focus="true"
+            data-testid="hidden-select-container"
+            style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+          >
+            <label>
+              <select
+                required=""
+                tabindex="-1"
+                title=""
+              >
+                <option />
+              </select>
+            </label>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+        >
+          <div
+            class="bcds-react-aria-Select"
+            data-disabled="true"
+            data-rac=""
+            data-required="true"
+          >
+            <span
+              class="bcds-react-aria-Select--Label"
+              id="react-aria-«rs»"
+            >
+              Subregion (required)
+            </span>
+            <button
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              aria-labelledby="react-aria-«r10» react-aria-«rs»"
+              class="bcds-react-aria-Select--Button medium false"
+              data-disabled="true"
+              data-rac=""
+              disabled=""
+              id="react-aria-«rr»"
+              type="button"
+            >
+              <span
+                class="bcds-react-aria-SelectValue"
+                data-placeholder="true"
+                data-rac=""
+                id="react-aria-«r10»"
+              >
+                Select an item
+              </span>
+              <svg
+                fill="none"
+                height="20"
+                id="chevron-down-icon"
+                viewBox="0 0 20 20"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.7882 9.15569L10.4858 14.236C10.3192 14.3748 10.1527 14.4303 10.0139 14.4303C9.84731 14.4303 9.68074 14.3748 9.54194 14.2637L4.21182 9.15569C3.9342 8.90584 3.9342 8.46167 4.18405 8.21182C4.4339 7.9342 4.87808 7.9342 5.12793 8.18405L10.0139 12.8479L14.872 8.18405C15.1219 7.9342 15.5661 7.9342 15.8159 8.21182C16.0658 8.46167 16.0658 8.90584 15.7882 9.15569Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            aria-hidden="true"
+            data-a11y-ignore="aria-hidden-focus"
+            data-react-aria-prevent-focus="true"
+            data-testid="hidden-select-container"
+            style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+          >
+            <label>
+              <select
+                disabled=""
+                required=""
+                tabindex="-1"
+              >
+                <option />
+              </select>
+            </label>
+          </div>
+        </div>
+        <div
+          class="css-9h2lbb"
+        >
+          Select all agriculture that occupy your farm (check all that apply)
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
+        >
+          <div
+            aria-labelledby="react-aria-«r14»"
+            aria-orientation="vertical"
+            class="bcds-react-aria-RadioGroup"
+            data-orientation="vertical"
+            data-rac=""
+            id="react-aria-«r13»"
+            role="radiogroup"
+          >
+            <span
+              class="bcds-react-aria-RadioGroup--label"
+              id="react-aria-«r14»"
+            >
+              I have crops 
+            </span>
+            <div
+              class="bcds-react-aria-RadioGroup--options horizontal flex-wrap-nowrap"
+            >
+              <label
+                class="bcds-react-aria-Radio"
+                data-rac=""
+              >
+                <span
+                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                >
+                  <input
+                    name="react-aria-«r18»"
+                    tabindex="-1"
+                    title=""
+                    type="radio"
+                    value="true"
+                  />
+                </span>
+                Yes
+              </label>
+              <label
+                class="bcds-react-aria-Radio"
+                data-rac=""
+                data-selected="true"
+              >
+                <span
+                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                >
+                  <input
+                    checked=""
+                    name="react-aria-«r18»"
+                    tabindex="0"
+                    title=""
+                    type="radio"
+                    value="false"
+                  />
+                </span>
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
+        >
+          <div
+            aria-labelledby="react-aria-«r1a»"
+            aria-orientation="vertical"
+            class="bcds-react-aria-RadioGroup"
+            data-orientation="vertical"
+            data-rac=""
+            id="react-aria-«r19»"
+            role="radiogroup"
+          >
+            <span
+              class="bcds-react-aria-RadioGroup--label"
+              id="react-aria-«r1a»"
+            >
+              I have Livestock 
+            </span>
+            <div
+              class="bcds-react-aria-RadioGroup--options horizontal flex-wrap-nowrap"
+            >
+              <label
+                class="bcds-react-aria-Radio"
+                data-rac=""
+              >
+                <span
+                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                >
+                  <input
+                    name="react-aria-«r1e»"
+                    tabindex="-1"
+                    title=""
+                    type="radio"
+                    value="true"
+                  />
+                </span>
+                Yes
+              </label>
+              <label
+                class="bcds-react-aria-Radio"
+                data-rac=""
+                data-selected="true"
+              >
+                <span
+                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                >
+                  <input
+                    checked=""
+                    name="react-aria-«r1e»"
+                    tabindex="0"
+                    title=""
+                    type="radio"
+                    value="false"
+                  />
+                </span>
+                No
+              </label>
+            </div>
+          </div>
+          <div
+            aria-label="Farm Animals"
+            class="css-1hyfx7x"
+            data-rac=""
+            id="react-aria-«r1f»"
+            role="group"
+          >
+            <div
+              class="bcds-react-aria-CheckboxGroup--options vertical flex-wrap-nowrap"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+    <div
+      class="css-6ef4m3"
+    >
+      <div
+        aria-label="A group of buttons"
+        class="bcds-ButtonGroup horizontal start"
+        role="group"
+      >
+        <button
+          class="bcds-react-aria-Button medium secondary  "
+          data-rac=""
+          id="react-aria-«r1k»"
+          type="button"
+        >
+          Back
+        </button>
+        <button
+          class="bcds-react-aria-Button medium primary  "
+          data-rac=""
+          id="react-aria-«r1m»"
+          type="button"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
