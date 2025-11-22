@@ -1,13 +1,4 @@
-import axios from 'axios';
-import { env } from '@/env';
-import { NMPFileField } from '@/types';
-
-export interface PreviousYearManureApplication {
-  id: number;
-  fieldmanureapplicationhistory: number;
-  defaultnitrogencredit: string;
-  previousyearmanureaplicationfrequency: number;
-}
+import { NMPFileField, PreviousYearManureApplication } from '@/types';
 
 export interface PreviousYearManureData {
   fieldName: string;
@@ -19,22 +10,6 @@ export interface PreviousYearManureData {
  * Constant for no manure application frequency
  */
 const NO_MANURE_FREQUENCY = 0;
-
-/**
- * Fetches previous year manure applications from the API
- * @returns Promise<PreviousYearManureApplication[]> Array of manure applications
- */
-export async function getPreviousYearManureApplications(): Promise<
-  PreviousYearManureApplication[]
-> {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/previousyearmanureapplications/`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching previous year manure applications:', error);
-    throw error;
-  }
-}
 
 /**
  * Checks if manure was added in the previous year based on frequency
@@ -61,15 +36,16 @@ function parseNitrogenCreditArray(creditString: string): number[] {
  * Helper function to get the default nitrogen credit based on frequency and volume category
  * @param prevYearManureApplicationFrequency - The frequency ID
  * @param manureApplicationHistory - The volume category (ManureApplicationHistory)
- * @returns Promise<number> Default nitrogen credit value
+ * @param previousManureApplications - The database table of previous manure applications
+ * @returns number Default nitrogen credit value
  */
-async function prevYearManureDefaultLookup(
+function prevYearManureDefaultLookup(
   prevYearManureApplicationFrequency: number,
   manureApplicationHistory: number,
-): Promise<number> {
+  previousManureApplications: PreviousYearManureApplication[],
+): number {
   try {
-    const applications = await getPreviousYearManureApplications();
-    const matchingApplication = applications.find(
+    const matchingApplication = previousManureApplications.find(
       (app) => app.previousyearmanureaplicationfrequency === prevYearManureApplicationFrequency,
     );
 
@@ -90,9 +66,13 @@ async function prevYearManureDefaultLookup(
 /**
  * Calculates default previous year manure application nitrogen credit
  * @param field - Field object with manure application history
- * @returns Promise<number> Default nitrogen credit value
+ * @param previousManureApplications - The database table of previous manure applications
+ * @returns number Default nitrogen credit value
  */
-export async function calcPrevYearManureApplDefault(field: NMPFileField): Promise<number> {
+export function calcPrevYearManureApplDefault(
+  field: NMPFileField,
+  previousManureApplications: PreviousYearManureApplication[],
+): number {
   try {
     if (
       !field.previousYearManureApplicationId ||
@@ -106,9 +86,10 @@ export async function calcPrevYearManureApplDefault(field: NMPFileField): Promis
       ...field.crops.map((crop) => crop.manureApplicationHistory || 0),
     );
 
-    return await prevYearManureDefaultLookup(
+    return prevYearManureDefaultLookup(
       field.previousYearManureApplicationId,
       largestManureHistory,
+      previousManureApplications,
     );
   } catch (error) {
     console.error('Error calculating previous year manure application default:', error);
@@ -119,24 +100,21 @@ export async function calcPrevYearManureApplDefault(field: NMPFileField): Promis
 /**
  * Calculates previous year manure data for a field
  * @param field - Field data object
- * @returns Promise<PreviousYearManureData> Complete previous year manure data
+ * @param previousManureApplications - The database table of previous manure applications
+ * @returns PreviousYearManureData Complete previous year manure data
  */
-export async function calculatePrevYearManure(
+export function calculatePrevYearManure(
   field: NMPFileField,
-): Promise<PreviousYearManureData> {
-  try {
-    const frequency = field.previousYearManureApplicationId;
-    const wasAdded = wasManureAddedInPreviousYear(frequency);
-    const defaultCredit = await calcPrevYearManureApplDefault(field);
-    const nitrogenCredit = field.previousYearManureApplicationNCredit ?? defaultCredit;
+  previousManureApplications: PreviousYearManureApplication[],
+): PreviousYearManureData {
+  const frequency = field.previousYearManureApplicationId;
+  const wasAdded = wasManureAddedInPreviousYear(frequency);
+  const defaultCredit = calcPrevYearManureApplDefault(field, previousManureApplications);
+  const nitrogenCredit = field.previousYearManureApplicationNCredit ?? defaultCredit;
 
-    return {
-      fieldName: field.fieldName,
-      display: wasAdded,
-      nitrogen: nitrogenCredit,
-    };
-  } catch (error) {
-    console.error('Error calculating previous year manure:', error);
-    throw error;
-  }
+  return {
+    fieldName: field.fieldName,
+    display: wasAdded,
+    nitrogen: nitrogenCredit,
+  };
 }

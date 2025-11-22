@@ -5,7 +5,7 @@
  * @description Allows users to view, add, edit and delete crops associated with fields
  * Provides functionality to calculate nutrient requirements and removals
  */
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -25,12 +25,7 @@ function Crops() {
   const [fields, setFields] = useState<NMPFileField[]>(
     structuredClone(state.nmpFile.years[0].fields) || [],
   );
-  const farmRegion = useMemo(() => {
-    // The region should be set before reaching this page and cannot be changed on this page
-    const region = state.nmpFile.farmDetails.farmRegion;
-    if (region === undefined) throw new Error('Region is not set in NMP file.');
-    return region;
-  }, []);
+
   const [editingFieldIndex, setEditingFieldIndex] = useState<number>(0);
   const [editingCropIndex, setEditingCropIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -201,7 +196,6 @@ function Crops() {
       {editingFieldIndex !== null && isDialogOpen && (
         // affter editing in modal changes not showing on reopen
         <CropsModal
-          farmRegion={farmRegion}
           field={fields[editingFieldIndex]}
           fieldIndex={editingFieldIndex}
           cropIndex={editingCropIndex}

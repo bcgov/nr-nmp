@@ -20,7 +20,7 @@ import LiquidStorageDetails from './LiquidStorageDetails';
 import SolidStorageDetails from './SolidStorageDetails';
 import { DEFAULT_FORM_DATA, StorageModalFormData, StorageModalMode } from './types';
 import { DEFAULT_LIQUID_MANURE_STORAGE } from '@/constants';
-import { getPrecipitationInSystem } from '@/utils/manureStorageSystems';
+import { calculatePrecipitationInStorage } from '@/utils/manureStorageSystems';
 
 type ModalComponentProps = {
   mode: StorageModalMode;
@@ -56,9 +56,10 @@ export default function StorageModal({
     if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
 
     // Add precipitation data to the form
-    const withRainData = { ...formData };
-    withRainData.annualPrecipitation = getPrecipitationInSystem(withRainData, annualPrecipitation);
-
+    const withRainData = {
+      ...formData,
+      annualPrecipitation: calculatePrecipitationInStorage(formData, annualPrecipitation),
+    };
     const newList = [...(state.nmpFile.years[0].manureStorageSystems || [])];
     if (mode.mode !== 'create') {
       newList[mode.systemIndex] = withRainData;
