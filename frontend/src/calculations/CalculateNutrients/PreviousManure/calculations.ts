@@ -44,23 +44,18 @@ function prevYearManureDefaultLookup(
   manureApplicationHistory: number,
   previousManureApplications: PreviousYearManureApplication[],
 ): number {
-  try {
-    const matchingApplication = previousManureApplications.find(
-      (app) => app.previousyearmanureaplicationfrequency === prevYearManureApplicationFrequency,
-    );
+  const matchingApplication = previousManureApplications.find(
+    (app) => app.previousyearmanureaplicationfrequency === prevYearManureApplicationFrequency,
+  );
 
-    if (!matchingApplication) {
-      return 0;
-    }
-
-    const creditArray = parseNitrogenCreditArray(matchingApplication.defaultnitrogencredit);
-    const index = Math.min(manureApplicationHistory, creditArray.length - 1);
-
-    return creditArray[index] || 0;
-  } catch (error) {
-    console.error('Error in prevYearManureDefaultLookup:', error);
+  if (!matchingApplication) {
     return 0;
   }
+
+  const creditArray = parseNitrogenCreditArray(matchingApplication.defaultnitrogencredit);
+  const index = Math.min(manureApplicationHistory, creditArray.length - 1);
+
+  return creditArray[index] || 0;
 }
 
 /**

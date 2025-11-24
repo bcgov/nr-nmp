@@ -32,11 +32,6 @@ export function getPhosphorousRegionFromList(
     (p) =>
       p.cropid === cropId && p.soiltestphosphorousregioncode === region.soiltestphosphorousregioncd,
   );
-  if (!phosphorousRegion) {
-    throw new Error(
-      `No soil test phosphorous region found with crop id ${cropId} and soil test phosphorous region code ${region.soiltestphosphorousregioncd}.`,
-    );
-  }
   return phosphorousRegion;
 }
 
@@ -49,11 +44,6 @@ export function getPotassiumRegionFromList(
     (p) =>
       p.cropid === cropId && p.soiltestpotassiumregioncode === region.soiltestpotassiumregioncd,
   );
-  if (!potassiumRegion) {
-    throw new Error(
-      `No soil test potassium region found with crop id ${cropId} and soil test potassium region code ${region.soiltestpotassiumregioncd}.`,
-    );
-  }
   return potassiumRegion;
 }
 
@@ -101,7 +91,6 @@ export function getCropRemovalK20(
   } else {
     k2oRemoval = combinedCropData.yield * crop.cropremovalfactork2o;
   }
-
   return Math.round(k2oRemoval) || 0;
 }
 
@@ -136,7 +125,6 @@ export function getCropRemovalP205(
   } else {
     p2o5Removal = combinedCropData.yield * crop.cropremovalfactorp2o5;
   }
-
   return Math.round(p2o5Removal) || 0;
 }
 
@@ -232,7 +220,6 @@ export function getCropRequirementN(
   // Subtract N credit from previous crop and ensure value isn't negative
   nRequirement -= combinedCropData.nCredit;
   nRequirement = nRequirement < 0 ? 0 : nRequirement;
-
   return Math.round(nRequirement);
 }
 
@@ -405,7 +392,7 @@ export function getRaspberryNutrients(
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.63 + (isPrunedAndRemoved ? 11.374 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
-
+  debugger;
   return nutrientInputs;
 }
 
@@ -468,7 +455,7 @@ export function getBlueberryNutrients(
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.509 + (isPrunedAndRemoved ? 7.865 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
-
+  debugger;
   return nutrientInputs;
 }
 
@@ -512,10 +499,10 @@ function oldCalcCropRequirements(
   selectedCropType: CropType,
   nmpFileCrop: NMPFileCrop,
   field: NMPFileField,
-  phosphorousRegion: SoilTestPhosphorousRegion,
+  phosphorousRegion: SoilTestPhosphorousRegion | undefined,
   phosphorousRanges: SoilTestNutrientKelownaRange[],
   phosphorousRecommendations: SoilTestPhosphorousRecommendation[],
-  potassiumRegion: SoilTestPotassiumRegion,
+  potassiumRegion: SoilTestPotassiumRegion | undefined,
   potassiumRanges: SoilTestNutrientKelownaRange[],
   potassiumRecommendations: SoilTestPotassiumRecommendation[],
   conversionFactors: CropsConversionFactors,
@@ -563,6 +550,9 @@ function oldCalcCropRequirements(
     );
     nutrientValues = extractNutrientValues(nutrients);
   } else {
+    if (!phosphorousRegion || !potassiumRegion) {
+      throw new Error(`calculateCropRequirements failed to fetch necessary data.`);
+    }
     // Calculate crop requirements (P₂O₅, K₂O, N)
     const cropRequirementN = getCropRequirementN(cropDataForCalc, selectedCrop, selectedCropType);
     const cropRequirementP205 = getCropRequirementP205(
@@ -622,9 +612,9 @@ export function calculateCropRequirements(
   );
   const crop = tables.crops.find((c) => c.id === nmpFileCrop.cropId);
   const cropType = tables.cropTypes.find((c) => c.id === nmpFileCrop.cropTypeId);
-  if (!phosphorousRegion || !potassiumRegion || !crop || !cropType) {
+  if (!crop || !cropType) {
     throw new Error(
-      `calculateCropRequirements failed to fetch necessary data. Region id: ${nmpFileRegionId}. Crop id: ${nmpFileCrop.cropId}. Crop type id: ${nmpFileCrop.cropTypeId}.`,
+      `calculateCropRequirements failed to fetch necessary data. Crop id: ${nmpFileCrop.cropId}. Crop type id: ${nmpFileCrop.cropTypeId}.`,
     );
   }
 

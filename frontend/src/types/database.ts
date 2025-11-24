@@ -61,7 +61,7 @@ export type Crop = {
   cropremovalfactornitrogen: number;
   cropremovalfactorp2o5: number;
   croptypeid: number;
-  harvestbushelsperton: number;
+  harvestbushelsperton: number | null;
   id: number;
   manureapplicationhistory: number;
   nitrogenrecommendationid: number;
