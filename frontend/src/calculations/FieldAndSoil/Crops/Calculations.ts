@@ -392,7 +392,6 @@ export function getRaspberryNutrients(
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.63 + (isPrunedAndRemoved ? 11.374 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
-  debugger;
   return nutrientInputs;
 }
 
@@ -455,7 +454,6 @@ export function getBlueberryNutrients(
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.509 + (isPrunedAndRemoved ? 7.865 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
-  debugger;
   return nutrientInputs;
 }
 
