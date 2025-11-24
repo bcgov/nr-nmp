@@ -166,7 +166,7 @@ export default function CalculateNutrients() {
       ...fieldList[activeField].fertigations,
       ...fieldList[activeField].otherNutrients,
       ...fieldList[activeField].manures,
-      ...fieldList[activeField].soilNitrateCredit,
+      fieldList[activeField].soilNitrateCredit,
     ];
 
     // Add previous year manure nitrogen credit to the balance
@@ -176,13 +176,13 @@ export default function CalculateNutrients() {
       name: 'Balance',
       reqN:
         Math.round(
-          (allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0) + prevYearNitrogen) * 10,
+          (allRows.reduce((sum, row) => sum + (row?.reqN ?? 0), 0) + prevYearNitrogen) * 10,
         ) / 10,
-      reqP2o5: Math.round(allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0) * 10) / 10,
-      reqK2o: Math.round(allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0) * 10) / 10,
-      remN: Math.round(allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0) * 10) / 10,
-      remP2o5: Math.round(allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0) * 10) / 10,
-      remK2o: Math.round(allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0) * 10) / 10,
+      reqP2o5: Math.round(allRows.reduce((sum, row) => sum + (row?.reqP2o5 ?? 0), 0) * 10) / 10,
+      reqK2o: Math.round(allRows.reduce((sum, row) => sum + (row?.reqK2o ?? 0), 0) * 10) / 10,
+      remN: Math.round(allRows.reduce((sum, row) => sum + (row?.remN ?? 0), 0) * 10) / 10,
+      remP2o5: Math.round(allRows.reduce((sum, row) => sum + (row?.remP2o5 ?? 0), 0) * 10) / 10,
+      remK2o: Math.round(allRows.reduce((sum, row) => sum + (row?.remK2o ?? 0), 0) * 10) / 10,
     };
   }, [fieldList, activeField, prevYearManureData]);
 
@@ -429,9 +429,7 @@ export default function CalculateNutrients() {
         <SoilNitrateCreditModal
           fieldIndex={activeField}
           initialModalData={
-            openDialog[1] !== undefined
-              ? fieldList[activeField].soilNitrateCredit[openDialog[1]]
-              : undefined
+            openDialog[1] !== undefined ? fieldList[activeField].soilNitrateCredit : undefined
           }
           rowEditIndex={openDialog[1]}
           setFields={setFieldList}
@@ -556,10 +554,11 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].soilNitrateCredit?.length > 0 && (
+      <pre>Test: {JSON.stringify(fieldList[activeField]?.soilNitrateCredit, null, 2)}</pre>
+      {fieldList[activeField].soilNitrateCredit && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={fieldList[activeField].soilNitrateCredit}
+          rows={[fieldList[activeField].soilNitrateCredit]}
           columns={soilNitrateColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick

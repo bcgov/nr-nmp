@@ -3,20 +3,20 @@
  */
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { NMPFileField, NMPFileOtherNutrient, NMPFileSoilNitrateCredit } from '@/types';
-import { ModalContent, SectionTitle } from './modal.styles';
+import { NMPFileField, NMPFileSoilNitrateCredit } from '@/types';
+import { ModalContent } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NumberField, Form } from '@/components/common';
 
-type OtherModalProps = {
+type SoilNitrateCreditModalProps = {
   fieldIndex: number;
-  initialModalData?: NMPFileOtherNutrient;
+  initialModalData?: NMPFileSoilNitrateCredit;
   rowEditIndex?: number;
   setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   onClose: () => void;
 };
 
-const defaultFormData: NMPFileOtherNutrient = {
+const defaultFormData: NMPFileSoilNitrateCredit = {
   name: '',
   reqN: 0,
   reqP2o5: 0,
@@ -24,6 +24,7 @@ const defaultFormData: NMPFileOtherNutrient = {
   remN: 0,
   remP2o5: 0,
   remK2o: 0,
+  isCustomValue: false,
 };
 
 export default function SoilNitrateCreditModal({
@@ -33,7 +34,7 @@ export default function SoilNitrateCreditModal({
   setFields,
   onClose,
   ...props
-}: OtherModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+}: SoilNitrateCreditModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState(initialModalData || defaultFormData);
 
   const handleSubmit = () => {
@@ -42,20 +43,13 @@ export default function SoilNitrateCreditModal({
         if (index !== fieldIndex) return prev;
 
         if (rowEditIndex !== undefined) {
-          const newSoilNitrateCredit = [...prev.soilNitrateCredit];
-          newSoilNitrateCredit[rowEditIndex] = { ...formData };
-          return { ...prev, soilNitrateCredit: newSoilNitrateCredit };
+          return { ...prev, soilNitrateCredit: formData };
         }
 
         // For case where this is a new nutrient source
         return {
           ...prev,
-          soilNitrateCredit: [
-            ...prev.soilNitrateCredit,
-            {
-              ...formData,
-            },
-          ],
+          soilNitrateCredit: formData,
         };
       });
 
@@ -79,38 +73,24 @@ export default function SoilNitrateCreditModal({
         <Form
           onCancel={onClose}
           onConfirm={handleSubmit}
-          confirmButtonText="Add to calculations"
+          confirmButtonText="Save changes"
         >
           <Grid
             container
             spacing={2}
           >
-            <SectionTitle>Custom Nitrate Credit (lb/ac)</SectionTitle>
+            <Grid size={12}>
+              <div style={{ textAlign: 'center' }}>
+                Available nitrogen at the start of the growing season
+              </div>
+            </Grid>
             <Grid container>
               <Grid size="grow">
                 <NumberField
                   isRequired
-                  label="N"
+                  label="N (lb/ac)"
                   value={formData.reqN}
                   onChange={(v) => handleNutrientChange('reqN', v)}
-                />
-              </Grid>
-              <Grid size="grow">
-                <NumberField
-                  isRequired
-                  label="P₂O₅"
-                  isDisabled
-                  value={formData.reqP2o5}
-                  onChange={(v) => handleNutrientChange('reqP2o5', v)}
-                />
-              </Grid>
-              <Grid size="grow">
-                <NumberField
-                  isRequired
-                  label="K₂O"
-                  isDisabled
-                  value={formData.reqK2o}
-                  onChange={(v) => handleNutrientChange('reqK2o', v)}
                 />
               </Grid>
             </Grid>

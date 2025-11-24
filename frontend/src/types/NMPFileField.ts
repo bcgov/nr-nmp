@@ -122,5 +122,5 @@ export type NMPFileField = {
   fertigations: NMPFileFertigation[];
   otherNutrients: NMPFileOtherNutrient[];
   previousYearManureApplicationNCredit?: number;
-  soilNitrateCredit: NMPFileSoilNitrateCredit[];
+  soilNitrateCredit?: NMPFileSoilNitrateCredit;
 };

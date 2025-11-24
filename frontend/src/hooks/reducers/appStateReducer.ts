@@ -681,18 +681,16 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
         const isCurrentYear = soilTestDate.getFullYear().toString() === year.year;
         const isPreviousYear = (soilTestDate.getFullYear() + 1).toString() === year.year;
 
-        const newSoilCredit: NMPFileSoilNitrateCredit[] = [
-          {
-            name: 'Soil nitrate',
-            reqN: Math.round((fieldEle.soilTest.valNO3H * 1.95) / 1.12),
-            reqP2o5: 0,
-            reqK2o: 0,
-            remN: 0,
-            remP2o5: 0,
-            remK2o: 0,
-            isCustomValue: false,
-          },
-        ];
+        const newSoilCredit: NMPFileSoilNitrateCredit = {
+          name: 'Soil nitrate',
+          reqN: Math.round((fieldEle.soilTest.valNO3H * 1.95) / 1.12),
+          reqP2o5: 0,
+          reqK2o: 0,
+          remN: 0,
+          remP2o5: 0,
+          remK2o: 0,
+          isCustomValue: false,
+        };
 
         if (interiorOrExterior.location === 'CoastalBC') {
           // Apply credit if applicable
@@ -701,14 +699,14 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
             interiorOrExterior.fromdatemonth <= soilTestMonth &&
             soilTestMonth <= interiorOrExterior.todatemonth
           ) {
-            if (!fieldEle.soilNitrateCredit[0]?.isCustomValue) {
+            if (!fieldEle.soilNitrateCredit?.isCustomValue) {
               // Replace with updated value only if value is still applicable but is not custom
               return { ...fieldEle, soilNitrateCredit: newSoilCredit };
             }
             return { ...fieldEle };
           }
           // Delete prior credit if no longer applicable
-          return { ...fieldEle, soilNitrateCredit: [] };
+          return { ...fieldEle, soilNitrateCredit: undefined };
         }
         if (interiorOrExterior.location === 'InteriorBC') {
           // Apply credit if applicable
@@ -716,17 +714,17 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
             (isPreviousYear && interiorOrExterior.fromdatemonth <= soilTestMonth) ||
             (isCurrentYear && soilTestMonth <= interiorOrExterior.todatemonth)
           ) {
-            if (!fieldEle.soilNitrateCredit[0]?.isCustomValue) {
+            if (!fieldEle.soilNitrateCredit?.isCustomValue) {
               // Replace with updated value only if value is still applicable but is not custom
               return { ...fieldEle, soilNitrateCredit: newSoilCredit };
             }
             return { ...fieldEle };
           }
           // Delete prior credit if no longer applicable
-          return { ...fieldEle, soilNitrateCredit: [] };
+          return { ...fieldEle, soilNitrateCredit: undefined };
         }
       }
-      return { ...fieldEle };
+      return { ...fieldEle, soilNitrateCredit: undefined };
     });
   }
   // Save the file to local storage

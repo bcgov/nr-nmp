@@ -12,7 +12,7 @@ const DEFAULT_NMPFILE_FIELD: NMPFileField = {
   otherNutrients: [],
   manures: [],
   previousYearManureApplicationNCredit: undefined,
-  soilNitrateCredit: [],
+  soilNitrateCredit: undefined,
 };
 
 export default DEFAULT_NMPFILE_FIELD;
