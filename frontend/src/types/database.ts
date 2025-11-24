@@ -61,7 +61,7 @@ export type Crop = {
   cropremovalfactornitrogen: number;
   cropremovalfactorp2o5: number;
   croptypeid: number;
-  harvestbushelsperton: number;
+  harvestbushelsperton: number | null;
   id: number;
   manureapplicationhistory: number;
   nitrogenrecommendationid: number;
@@ -70,6 +70,22 @@ export type Crop = {
   previouscropcode: number;
   sortnumber: number;
   yieldcd: number;
+};
+
+// _CropSoilTestPhosphorousRegions
+export type SoilTestPhosphorousRegion = {
+  id: number;
+  cropid: number;
+  soiltestphosphorousregioncode: number;
+  phosphorouscropgroupregioncode: number;
+};
+
+// _CropSoilTestPotassiumRegions
+export type SoilTestPotassiumRegion = {
+  id: number;
+  cropid: number;
+  soiltestpotassiumregioncode: number;
+  potassiumcropgroupregioncode: number;
 };
 
 // _CropTypes
@@ -175,6 +191,13 @@ export type PreviousCrop = {
   croptypeid: number;
 };
 
+export interface PreviousYearManureApplication {
+  id: number;
+  fieldmanureapplicationhistory: number;
+  defaultnitrogencredit: string;
+  previousyearmanureaplicationfrequency: number;
+}
+
 // _Region
 export interface Region {
   id: number;
@@ -195,17 +218,37 @@ export type SoilTestMethods = {
   sortnum: number;
 };
 
-export type SoilTestPhosphorousRange = {
+// _SoilTestPhosphorousRanges
+// _SoilTestPotassiumRanges
+export type SoilTestNutrientRange = {
   id: number;
   upperlimit: number;
   rating: string;
 };
 
-export type SoilTestPotassiumRange = {
+// _SoilTestPhosphorousKelownaRanges
+// _SoilTestPotassiumKelownaRanges
+export type SoilTestNutrientKelownaRange = {
   id: number;
-  upperlimit: number;
-  rating: string;
+  rangelow: number;
+  rangehigh: number;
 };
+
+// _SoilTestPhosphorousRecommendation
+export type SoilTestPhosphorousRecommendation = {
+  soiltestphosphorouskelownarangeid: number;
+  soiltestphosphorousregioncode: number;
+  phosphorouscropgroupregioncode: number;
+  p2o5recommendationkilogramperhectare: number;
+};
+
+// _SoilTestPotassiumRecommendation
+export interface SoilTestPotassiumRecommendation {
+  soiltestpotassiumkelownarangeid: number;
+  soiltestpotassiumregioncode: number;
+  potassiumcropgroupregioncode: number;
+  k2orecommendationkilogramperhectare: number;
+}
 
 // _SolidMaterialsConversionFactors
 export interface SolidManureConversionFactors {

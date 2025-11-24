@@ -1,5 +1,10 @@
 /* eslint-disable no-param-reassign */
 import {
+  calculateCropRequirements,
+  postprocessModalData,
+} from '@/calculations/FieldAndSoil/Crops/Calculations';
+import calculateManureNutrientInputs from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
+import {
   DEFAULT_NMPFILE,
   DEFAULT_NMPFILE_YEAR,
   APP_STATE_KEY,
@@ -23,10 +28,17 @@ import {
   ManureInSystem,
   NMPFileDerivedManure,
 } from '@/types';
+import { AppStateTables } from '@/types/AppState';
 import { calculateSeparatedSolidAndLiquid } from '@/utils/densityCalculations';
 import { saveDataToLocalStorage } from '@/utils/localStorage';
+import { calculatePrecipitationInStorage } from '@/utils/manureStorageSystems';
 import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
 import { calculateAnnualWashWater } from '@/views/AddAnimals/utils';
+
+type CacheTablesAction = {
+  type: 'CACHE_TABLES';
+  tables: AppStateTables;
+};
 
 type SetShowAnimalsStepAction = {
   type: 'SET_SHOW_ANIMALS_STEP';
@@ -42,6 +54,7 @@ type SaveFieldsAction = {
   type: 'SAVE_FIELDS';
   year: string;
   newFields: NMPFileField[];
+  soilTestsUpdated?: boolean;
 };
 
 type SaveNutrientAnalysisAction = {
@@ -83,6 +96,7 @@ type ResetNMPFileAction = {
 };
 
 export type AppStateAction =
+  | CacheTablesAction
   | SetShowAnimalsStepAction
   | SaveFarmDetailsAction
   | SaveFieldsAction
@@ -93,6 +107,108 @@ export type AppStateAction =
   | ClearAnimalsAction
   | OverwriteNMPFileAction
   | ResetNMPFileAction;
+
+/**
+ * @param fields The current list of fields containing crops with out-of-sync calculated values
+ * @param regionId The value of nmpFile.farmDetails.farmRegion
+ * @returns A new, updated list of fields with up-to-date calculated values
+ */
+function updateFieldCropCalculations(
+  fields: NMPFileField[],
+  regionId: number,
+  tables: AppStateTables,
+) {
+  return fields.map((field) => {
+    const updatedCrops = field.crops.map((crop) => {
+      const updatedCropRequirements = calculateCropRequirements(regionId, field, crop, tables);
+      // If the crop has a custom N value, it shouldn't be overwritten. The default is still stored separately
+      const calculatedN: number = crop.reqNAdjusted
+        ? updatedCropRequirements.cropRequirementN
+        : undefined;
+      return postprocessModalData(
+        {
+          ...crop,
+          reqN: crop.reqNAdjusted ? crop.reqN : updatedCropRequirements.cropRequirementN,
+          reqP2o5: updatedCropRequirements.cropRequirementP205,
+          reqK2o: updatedCropRequirements.cropRequirementK2O,
+          remN: updatedCropRequirements.cropRemovalN,
+          remP2o5: updatedCropRequirements.cropRemovalP205,
+          remK2o: updatedCropRequirements.cropRemovalK20,
+        },
+        calculatedN,
+      );
+    });
+    return { ...field, crops: updatedCrops };
+  });
+}
+
+function updateFieldAppliedManure(
+  fields: NMPFileField[],
+  nutrientAnalyses: NMPFileNutrientAnalysis[],
+  regionId: number,
+  tables: AppStateTables,
+) {
+  const region = tables.regions.find((r) => r.id === regionId);
+  if (!region) {
+    throw new Error(`No region found with id ${regionId}`);
+  }
+  const locationId = region.locationid;
+  return fields.map((field) => {
+    const updatedManures = field.manures.map((manure) => {
+      const nutrientAnalysis = nutrientAnalyses.find((n) => n.sourceUuid === manure.sourceUuid);
+      const nMineralization = tables.nMineralizations.find(
+        (n) =>
+          n.locationid === locationId &&
+          n.nmineralizationid === nutrientAnalysis?.nMineralizationId,
+      );
+      const manureTableData = tables.manures.find((m) => m.id === manure.manureId);
+      const unitTableData = tables.manureUnits.find((u) => u.id === manure.applUnitId);
+      if (!manureTableData || !unitTableData || !nMineralization) {
+        throw new Error(
+          `updateFieldAppliedManure failed to find necessary data: Region id: ${regionId}. Manure id: ${manure.manureId}. Unit id: ${manure.applUnitId}.`,
+        );
+      }
+      if (!nutrientAnalysis) {
+        throw new Error('Applied manure has no corresponding nutrient analysis.');
+      }
+      const updatedManureNutrients = calculateManureNutrientInputs(
+        manureTableData,
+        nutrientAnalysis,
+        nMineralization,
+        manure.applicationRate,
+        unitTableData,
+        tables.cropConversionFactors,
+        manure.nh4Retention,
+        manure.nAvailable,
+      );
+      return {
+        ...manure,
+        reqN: updatedManureNutrients.N_FirstYear,
+        reqP2o5: updatedManureNutrients.P2O5_FirstYear,
+        reqK2o: updatedManureNutrients.K2O_FirstYear,
+        remN: updatedManureNutrients.N_LongTerm,
+        remP2o5: updatedManureNutrients.P2O5_LongTerm,
+        remK2o: updatedManureNutrients.K2O_LongTerm,
+      };
+    });
+    return { ...field, manures: updatedManures };
+  });
+}
+
+function updateStorageSystemPrecipitation(
+  storageSystems: NMPFileManureStorageSystem[],
+  subregionId: number,
+  tables: AppStateTables,
+) {
+  const subregion = tables.subregions.find((s) => s.id === subregionId);
+  if (!subregion) {
+    throw new Error(`No region found with id ${subregionId}`);
+  }
+  return storageSystems.map((system) => ({
+    ...system,
+    annualPrecipitation: calculatePrecipitationInStorage(system, subregion.annualprecipitation),
+  }));
+}
 
 function updateManureStorageSystems(
   systems: NMPFileManureStorageSystem[],
@@ -328,9 +444,23 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
 }
 
 export function appStateReducer(state: AppState, action: AppStateAction): AppState {
+  // This should only be called once, during the page load
+  if (action.type === 'CACHE_TABLES') {
+    const newAppState = {
+      nmpFile: structuredClone(state.nmpFile),
+      showAnimalsStep: state.showAnimalsStep,
+      tables: structuredClone(action.tables),
+    };
+    return newAppState;
+  }
+
   // In this reducer, we take advantage of JavaScript storing/passing objects as addresses
   // This allows us to clone the state and then edit it in-place
-  const newAppState = structuredClone(state);
+  const newAppState = {
+    nmpFile: structuredClone(state.nmpFile),
+    showAnimalsStep: state.showAnimalsStep,
+    tables: state.tables,
+  };
 
   // These actions alter more than the NMPFile years array
   if (action.type === 'SET_SHOW_ANIMALS_STEP') {
@@ -350,6 +480,10 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     return newAppState;
   }
 
+  if (!state.tables) {
+    throw new Error('Action to edit an NMP file was dispatched before caching tables.');
+  }
+
   if (action.type === 'SAVE_FARM_DETAILS') {
     // Years *is* an array, but we don't like that and cheat to make it a single-value array
     // Make new blank year if no year exists or if we have a different year saved
@@ -366,17 +500,57 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       // Clear the animals array if animals have been removed
       saveAnimals(newAppState.nmpFile.years[0], []);
     }
+
+    // When the region or subregion change, any calculations that use the values need to be updated
+    if (newAppState.nmpFile.farmDetails.farmRegion !== action.newFarmDetails.farmRegion) {
+      const year = newAppState.nmpFile.years[0];
+      // First, crop requirement values need to be updated
+      year.fields = updateFieldCropCalculations(
+        year.fields,
+        action.newFarmDetails.farmRegion,
+        state.tables,
+      );
+      // Next, applied manure (from Calculate Nutrients page) need to be updated
+      year.fields = updateFieldAppliedManure(
+        year.fields,
+        year.nutrientAnalyses,
+        action.newFarmDetails.farmRegion,
+        state.tables,
+      );
+    }
+    if (
+      newAppState.nmpFile.farmDetails.farmSubregion !== action.newFarmDetails.farmSubregion &&
+      action.newFarmDetails.farmSubregion &&
+      newAppState.nmpFile.years[0].manureStorageSystems
+    ) {
+      // Update precipitation-related values
+      const year = newAppState.nmpFile.years[0];
+      year.manureStorageSystems = updateStorageSystemPrecipitation(
+        year.manureStorageSystems!,
+        action.newFarmDetails.farmSubregion,
+        state.tables,
+      );
+    }
+
     newAppState.nmpFile.farmDetails = structuredClone(action.newFarmDetails);
     saveDataToLocalStorage(APP_STATE_KEY, newAppState);
     return newAppState;
   }
 
   // These actions alter one index of the NMPFile years array
-  // Remember: all the below steps edit the NMPFile in-place! So functions don't return anything
+  // Remember: some functions below edit the NMPFile in-place and don't return anything
   const year = newAppState.nmpFile.years.find((y) => y.year === action.year);
   if (year === undefined) throw new Error(`Reducer received nonexistent year: ${action.year}`);
   if (action.type === 'SAVE_FIELDS') {
-    year.fields = structuredClone(action.newFields);
+    if (action.soilTestsUpdated) {
+      year.fields = updateFieldCropCalculations(
+        action.newFields,
+        state.nmpFile.farmDetails.farmRegion,
+        state.tables,
+      );
+    } else {
+      year.fields = structuredClone(action.newFields);
+    }
   } else if (action.type === 'SAVE_NUTRIENT_ANALYSIS') {
     year.nutrientAnalyses = structuredClone(action.newNutrientAnalyses);
   } else if (action.type === 'SAVE_IMPORTED_MANURE') {

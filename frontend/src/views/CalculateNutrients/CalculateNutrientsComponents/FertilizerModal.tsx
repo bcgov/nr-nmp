@@ -21,10 +21,10 @@ import {
   SelectOption,
   NMPFileFertilizer,
   CustomFertilizer,
+  CropsConversionFactors,
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
 import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
-import { getConversionFactors } from '@/calculations/FieldAndSoil/Crops/Calculations';
 
 type FertilizerModalProps = {
   fieldIndex: number;
@@ -213,17 +213,10 @@ export default function FertilizerModal({
     onClose();
   };
 
-  const [kgToLb, setKgToLb] = useState<number>(0);
-  const [lbPer1000ToAcre, setLbPer1000ToAcre] = useState<number>(0);
-
-  useEffect(() => {
-    getConversionFactors().then((conversionFactors) => {
-      if (conversionFactors) {
-        setKgToLb(conversionFactors.kilogramperhectaretopoundperacreconversion);
-        setLbPer1000ToAcre(conversionFactors.poundper1000ftsquaredtopoundperacreconversion);
-      }
-    });
-  }, []);
+  const conversionFactors: CropsConversionFactors =
+    apiCache.getInitializedResponse('cropsconversionfactors').data[0];
+  const kgToLb = conversionFactors.kilogramperhectaretopoundperacreconversion;
+  const lbPer1000ToAcre = conversionFactors.poundper1000ftsquaredtopoundperacreconversion;
 
   useEffect(() => {
     apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
@@ -308,13 +301,11 @@ export default function FertilizerModal({
     if (fertilizerUnit === undefined)
       throw new Error(`Fertilizer unit ${formState.applUnitId} is missing from list.`);
 
-    const conversionFactors = { kgToLb, lbPer1000ToAcre };
-
     const cropNutrients = calcFertBalance(
       fertilizer,
       formState.applicationRate,
       fertilizerUnit.value,
-      conversionFactors,
+      { kgToLb, lbPer1000ToAcre },
       formState.density,
       densityConvFactor,
     );

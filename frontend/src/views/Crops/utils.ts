@@ -126,7 +126,7 @@ function compareYieldToDefaultYield(
 
   if (yieldHarvestUnit !== undefined) {
     validateBushelConversion(selectedCrop);
-    return yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+    return yieldHarvestUnit === HarvestUnit.BushelsPerAcre && selectedCrop!.harvestbushelsperton
       ? Yield === defaultYieldInTons * selectedCrop!.harvestbushelsperton
       : Yield === defaultYieldInTons;
   }
@@ -216,7 +216,8 @@ export function cropsModalReducer(
           formData: {
             ...formData,
             yield:
-              formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+              formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre &&
+              selectedCrop!.harvestbushelsperton
                 ? action.yield * selectedCrop!.harvestbushelsperton
                 : action.yield,
           },
@@ -248,6 +249,9 @@ export function cropsModalReducer(
       }
 
       validateBushelConversion(selectedCrop);
+      if (!selectedCrop!.harvestbushelsperton) {
+        throw new Error('Grain bushels to ton conversion is null');
+      }
       return {
         ...state,
         formData: {
@@ -317,6 +321,9 @@ export function cropsModalReducer(
       }
       if (formData.yieldHarvestUnit !== undefined) {
         validateBushelConversion(selectedCrop);
+        if (!selectedCrop!.harvestbushelsperton) {
+          throw new Error('Grain bushels to ton conversion is null');
+        }
         return {
           ...state,
           isFormYieldEqualToDefault: true,

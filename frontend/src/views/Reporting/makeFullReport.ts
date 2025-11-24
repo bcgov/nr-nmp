@@ -13,8 +13,7 @@ import {
   NMPFileYear,
   Schedule,
   SoilTestMethods,
-  SoilTestPhosphorousRange,
-  SoilTestPotassiumRange,
+  SoilTestNutrientRange,
   MaterialRemainingData,
   Subregion,
 } from '@/types';
@@ -27,7 +26,7 @@ import {
 } from './utils';
 import { fertigationToFertigationRows, findBalanceMessage } from '../CalculateNutrients/utils';
 import { printNum, sumPropertyInObjectArr } from '@/utils/utils';
-import { getPrecipitationInSystem, getRunoffInSystem } from '@/utils/manureStorageSystems';
+import { calculatePrecipitationInStorage, getRunoffInSystem } from '@/utils/manureStorageSystems';
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
@@ -332,7 +331,7 @@ const generateLiquidStorageCapacity = (
     const materialStored = system.separatedLiquidsUSGallons / 2;
     // Oct to Mar is the rainy season and has its own precipitation rate
     const precipitation =
-      getPrecipitationInSystem(system, subregion.annualprecipitationocttomar) || 0;
+      calculatePrecipitationInStorage(system, subregion.annualprecipitationocttomar) || 0;
     const runoff = getRunoffInSystem(system, subregion.annualprecipitationocttomar);
     // NOTE: Run-off is currently omitted. See: https://teams.microsoft.com/l/message/19:8bcf7a4ea1b542d8b91aec33374a5b42@thread.tacv2/1763420706800?tenantId=6fdb5200-3d0d-4a8a-b036-d3685e359adc&groupId=f7f32209-f2e2-4a93-8a2f-c049baa8220f&parentMessageId=1762541236175&teamName=External%3A%20Sustainment%20Team&channelName=NMP&createdTime=1763420706800&ngc=true
     const directPrecipitation = precipitation - runoff;
@@ -489,8 +488,8 @@ const generateFieldSummary = (
   field: NMPFileField,
   fertilizerUnits: FertilizerUnit[],
   soilTestMethods: SoilTestMethods[],
-  phosphorousRanges: SoilTestPhosphorousRange[],
-  potassiumRanges: SoilTestPotassiumRange[],
+  phosphorousRanges: SoilTestNutrientRange[],
+  potassiumRanges: SoilTestNutrientRange[],
 ) => {
   doc.addPage();
   // First table shows crops
@@ -885,8 +884,8 @@ const generateSoilTestResults = (
   year: string,
   nmpFileYear: NMPFileYear,
   soilTestMethods: SoilTestMethods[],
-  phosphorousRanges: SoilTestPhosphorousRange[],
-  potassiumRanges: SoilTestPotassiumRange[],
+  phosphorousRanges: SoilTestNutrientRange[],
+  potassiumRanges: SoilTestNutrientRange[],
 ) => {
   doc.addPage();
   // If any soil test is defined, all fields use the same ST method
@@ -967,8 +966,8 @@ export default async function makeFullReportPdf(
   subregion: Subregion | null,
   fertilizerUnits: FertilizerUnit[],
   soilTestMethods: SoilTestMethods[],
-  phosphorousRanges: SoilTestPhosphorousRange[],
-  potassiumRanges: SoilTestPotassiumRange[],
+  phosphorousRanges: SoilTestNutrientRange[],
+  potassiumRanges: SoilTestNutrientRange[],
   materialRemainingData: MaterialRemainingData | null,
 ) {
   // eslint-disable-next-line new-cap

@@ -16,7 +16,7 @@ urlpatterns = [
     path('soiltestphosphorouskelonwaranges/', CropsViewset.as_view({'get': 'soilTestPhosphorousKelownaRanges'})),
     path('soiltestmethods/', CropsViewset.as_view({'get': 'soilTestMethods'})),
     path('cropsconversionfactors/', CropsViewset.as_view({'get': 'conversionFactors'})),
-    path('soiltestpotassiumkelonwaranges/', CropsViewset.as_view({'get': 'soilTestPotassiumKelownaRanges'})),
+    path('soiltestpotassiumkelownaranges/', CropsViewset.as_view({'get': 'soilTestPotassiumKelownaRanges'})),
     path('soiltestpotassiumrecommendation/', CropsViewset.as_view({'get': 'soilTestPotassiumRecommendation'})),
     path('cropsoilpotassiumregions/', CropsViewset.as_view({'get': 'cropSoilPotassiumRegions'})),
     path('cropsoilpotassiumregions/<int:cropid>/<int:soiltestpotassiumregioncode>/',

@@ -4,9 +4,9 @@ import {
   SlopedWallStorage,
   StorageStructure,
   Shape,
-  NMPFileManureStorageSystem,
   ManureType,
   PrecipitationConversionFactor,
+  NMPFileManureStorageSystem,
   LiquidManureStorageSystem,
 } from '@/types';
 
@@ -95,10 +95,11 @@ export function calcStorageVolumeGallons(structure: StorageStructure) {
   }
 }
 
-export function getPrecipitationInSystem(
+export function calculatePrecipitationInStorage(
   system: NMPFileManureStorageSystem,
   precipitationRate: number,
 ) {
+  let annualPrecipitation;
   if (system.manureType === ManureType.Liquid) {
     let totalUncoveredArea = system.runoffAreaSqFt || 0;
     system.manureStorages.forEach((storage) => {
@@ -107,16 +108,19 @@ export function getPrecipitationInSystem(
         totalUncoveredArea += calcStorageSurfaceAreaSqFt(storage.structure);
       }
     });
-    return totalUncoveredArea > 0
-      ? totalUncoveredArea * precipitationRate * PrecipitationConversionFactor.Liquid
-      : undefined;
-  }
-  // For solid manure
-  return system.manureStorage.uncoveredAreaSqFt
-    ? system.manureStorage.uncoveredAreaSqFt *
+    annualPrecipitation =
+      totalUncoveredArea > 0
+        ? totalUncoveredArea * precipitationRate * PrecipitationConversionFactor.Liquid
+        : undefined;
+  } else {
+    // For solid manure
+    annualPrecipitation = system.manureStorage.uncoveredAreaSqFt
+      ? system.manureStorage.uncoveredAreaSqFt *
         precipitationRate *
         PrecipitationConversionFactor.Solid
-    : undefined;
+      : undefined;
+  }
+  return annualPrecipitation;
 }
 
 export function getRunoffInSystem(system: LiquidManureStorageSystem, precipitationRate: number) {
