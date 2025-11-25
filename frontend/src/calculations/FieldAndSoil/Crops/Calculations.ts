@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { env } from '@/env';
 import {
   Crop,
   CropsConversionFactors,
@@ -7,6 +5,12 @@ import {
   NMPFileCrop,
   NMPFileField,
   NMPFileSoilTest,
+  Region,
+  SoilTestNutrientKelownaRange,
+  SoilTestPhosphorousRegion,
+  SoilTestPotassiumRegion,
+  SoilTestPhosphorousRecommendation,
+  SoilTestPotassiumRecommendation,
 } from '@/types';
 import {
   PLANT_AGES,
@@ -17,142 +21,30 @@ import {
   DEFAULT_BERRY_DATA,
   CROP_BLUEBERRIES_ID,
 } from '@/constants';
+import { AppStateTables } from '@/types/AppState';
 
-/**
- * Fetches crop conversion factors from the API
- *
- * @returns {Promise<CropsConversionFactors | null>} Conversion factors for calculations
- */
-export async function getConversionFactors(): Promise<CropsConversionFactors | null> {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/cropsconversionfactors/`);
-    return response.data[0];
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-/**
- * Retrieves region data by region ID
- *
- * @param {number} regionId - The ID of the region to fetch
- * @returns {Promise<any>} Region data
- */
-export async function getRegion(regionId: number) {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/regions/${regionId}/`);
-    return response.data[0];
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-/**
- * Fetches crop type data by crop type ID
- *
- * @param {number} cropTypeId - ID of the crop type to fetch
- * @returns {Promise<any>} Crop type data
- */
-export async function getCropType(cropTypeId: number) {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/croptypes/${cropTypeId}/`);
-    return response.data[0];
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-/**
- * Gets soil test regions for a specific crop
- *
- * @param {number} cropId - ID of the crop
- * @param {number} soilTestPotassiumRegionCode - Region code for potassium soil test
- * @param {string} endpoint - API endpoint to query
- * @returns {Promise<any>} Soil test region data for the specified crop
- */
-export async function getCropSoilTestRegions(
+export function getPhosphorousRegionFromList(
+  list: SoilTestPhosphorousRegion[],
   cropId: number,
-  soilTestPotassiumRegionCode: number,
-  endpoint: string,
+  region: Region,
 ) {
-  try {
-    const response = await axios.get(
-      `${env.VITE_BACKEND_URL}/api/${endpoint}/${cropId}/${soilTestPotassiumRegionCode}/`,
-    );
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  const phosphorousRegion = list.find(
+    (p) =>
+      p.cropid === cropId && p.soiltestphosphorousregioncode === region.soiltestphosphorousregioncd,
+  );
+  return phosphorousRegion;
 }
 
-/**
- * Finds the Kelowna range that contains a specific soil test phosphorous value
- *
- * @param {number} STP - Soil test phosphorous value in ppm
- * @param {string} endpoint - API endpoint to query
- * @returns {Promise<any>} Matching Kelowna range
- */
-export async function getKelownaRangeByPpm(STP: number, endpoint: string) {
-  try {
-    const ranges = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
-    // Kelowna ranges have a 1 integer gap between.
-    // Just the right soil test may fail to fall into a range.
-    const roundedSTP = Math.round(STP);
-    const response = ranges.data.find(
-      (range: any) => range.rangelow <= roundedSTP && range.rangehigh >= roundedSTP,
-    );
-
-    return response;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-/**
- * Retrieves recommendations based on soil test values, regions, and crop group
- *
- * @param {number} kelownaRangeId - ID of the Kelowna range
- * @param {number} soilTestRegionCd - Soil test region code
- * @param {number} cropGroupRegionCd - Crop group region code
- * @param {string} endpoint - API endpoint for recommendations
- * @returns {Promise<any>} Recommendations for nutrient application
- */
-export async function getRecommendations(
-  kelownaRangeId: number,
-  soilTestRegionCd: number,
-  cropGroupRegionCd: number,
-  endpoint: string,
+export function getPotassiumRegionFromList(
+  list: SoilTestPotassiumRegion[],
+  cropId: number,
+  region: Region,
 ) {
-  try {
-    const response = await axios.get(`${env.VITE_BACKEND_URL}/api/${endpoint}/`);
-    let recommendations;
-
-    if (endpoint.includes('phosphorous')) {
-      recommendations = response.data.find(
-        (stp: any) =>
-          stp.soiltestphosphorouskelownarangeid === kelownaRangeId &&
-          stp.soiltestphosphorousregioncode === soilTestRegionCd &&
-          stp.phosphorouscropgroupregioncode === cropGroupRegionCd,
-      );
-    } else if (endpoint.includes('potassium')) {
-      recommendations = response.data.find(
-        (stk: any) =>
-          stk.soiltestpotassiumkelownarangeid === kelownaRangeId &&
-          stk.soiltestpotassiumregioncode === soilTestRegionCd &&
-          stk.potassiumcropgroupregioncode === cropGroupRegionCd,
-      );
-    }
-
-    return recommendations;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+  const potassiumRegion = list.find(
+    (p) =>
+      p.cropid === cropId && p.soiltestpotassiumregioncode === region.soiltestpotassiumregioncd,
+  );
+  return potassiumRegion;
 }
 
 function validateIds(combinedCropData: NMPFileCrop, crop: Crop, cropType: CropType) {
@@ -199,7 +91,6 @@ export function getCropRemovalK20(
   } else {
     k2oRemoval = combinedCropData.yield * crop.cropremovalfactork2o;
   }
-
   return Math.round(k2oRemoval) || 0;
 }
 
@@ -234,7 +125,6 @@ export function getCropRemovalP205(
   } else {
     p2o5Removal = combinedCropData.yield * crop.cropremovalfactorp2o5;
   }
-
   return Math.round(p2o5Removal) || 0;
 }
 
@@ -330,53 +220,40 @@ export function getCropRequirementN(
   // Subtract N credit from previous crop and ensure value isn't negative
   nRequirement -= combinedCropData.nCredit;
   nRequirement = nRequirement < 0 ? 0 : nRequirement;
-
   return Math.round(nRequirement);
 }
 
 /**
  * Calculates potassium (K₂O) requirement based on soil test and crop needs
  *
- * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
- * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field
- * @param {number} regionId - ID of the region
- * @returns {Promise<number>} Required K₂O application in lbs/acre, rounded to nearest integer
+ * @returns {number} Required K₂O application in lbs/acre, rounded to nearest integer
  */
-export async function getCropRequirementK2O(
-  combinedCropData: NMPFileCrop,
+export function getCropRequirementK2O(
   soilTest: NMPFileSoilTest | undefined,
-  regionId: number,
-): Promise<number> {
-  const conversionFactors = await getConversionFactors();
-  if (conversionFactors === null) throw new Error('Failed to get conversion factors.');
-  const region = await getRegion(regionId);
-  // Use default if soil test data is missing
-  let STK = soilTest?.convertedKelownaK || DEFAULT_SOIL_TEST.convertedKelownaK;
-  if (!STK) STK = conversionFactors.defaultsoiltestkelownapotassium;
+  cropSTKRegion: SoilTestPotassiumRegion,
+  potassiumRanges: SoilTestNutrientKelownaRange[],
+  potassiumRecommendations: SoilTestPotassiumRecommendation[],
+  conversionFactors: CropsConversionFactors,
+): number {
+  // Use default K if soil test data is missing
+  // Kelowna ranges require integers, so this number is rounded
+  const soilTestK = Math.round(soilTest?.convertedKelownaK || DEFAULT_SOIL_TEST.convertedKelownaK!);
 
-  const cropSTKRegionCd = await getCropSoilTestRegions(
-    combinedCropData.cropId,
-    region?.soiltestpotassiumregioncd,
-    'cropsoilpotassiumregions',
-  );
+  // Find the range this number falls into. If it exceeds the max, use the highest (last) range
+  const kelownaRange =
+    potassiumRanges.find((r) => r.rangelow <= soilTestK && r.rangehigh >= soilTestK) ||
+    potassiumRanges[potassiumRanges.length - 1];
 
-  const potassiumCropGroupRegionCd = cropSTKRegionCd[0].potassiumcropgroupregioncode;
-
-  const sTKKelownaRange = await getKelownaRangeByPpm(STK, 'soiltestpotassiumkelonwaranges');
-  const stkKelownaRangeId = sTKKelownaRange.id;
-  if (potassiumCropGroupRegionCd == null) {
-    return 0;
-  }
-  const sTKRecommended = await getRecommendations(
-    stkKelownaRangeId,
-    region.soiltestpotassiumregioncd,
-    potassiumCropGroupRegionCd,
-    'soiltestpotassiumrecommendation',
+  const potassiumRecommendation = potassiumRecommendations.find(
+    (r) =>
+      r.soiltestpotassiumkelownarangeid === kelownaRange.id &&
+      r.soiltestpotassiumregioncode === cropSTKRegion.soiltestpotassiumregioncode &&
+      r.potassiumcropgroupregioncode === cropSTKRegion.potassiumcropgroupregioncode,
   );
 
   // Convert from kg/ha to lbs/acre
   return Math.round(
-    Number(sTKRecommended.k2orecommendationkilogramperhectare) *
+    potassiumRecommendation!.k2orecommendationkilogramperhectare *
       conversionFactors.kilogramperhectaretopoundperacreconversion,
   );
 }
@@ -384,53 +261,39 @@ export async function getCropRequirementK2O(
 /**
  * Calculates phosphorous (P₂O₅) requirement based on soil test and crop needs
  *
- * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
- * @param {NMPFileSoilTest | undefined} soilTest - Soil test of field
- * @param {number} regionId - ID of the region
- * @returns {Promise<number>} Required P₂O₅ application in lbs/acre, rounded to nearest integer
+ * @returns {number} Required P₂O₅ application in lbs/acre, rounded to nearest integer
  */
-export async function getCropRequirementP205(
-  combinedCropData: NMPFileCrop,
+export function getCropRequirementP205(
   soilTest: NMPFileSoilTest | undefined,
-  regionId: number,
-): Promise<number> {
-  const conversionFactors = await getConversionFactors();
-  if (conversionFactors === null) throw new Error('Failed to get conversion factors.');
-  const region = await getRegion(regionId);
+  cropSTPRegion: SoilTestPhosphorousRegion,
+  phosphorousRanges: SoilTestNutrientKelownaRange[],
+  phosphorousRecommendations: SoilTestPhosphorousRecommendation[],
+  conversionFactors: CropsConversionFactors,
+): number {
+  // Use default P if soil test data is missing
+  // Kelowna ranges require integers, so this number is rounded
+  const soilTestP = Math.round(soilTest?.convertedKelownaP || DEFAULT_SOIL_TEST.convertedKelownaP!);
 
-  // Use default if soil test data is missing
-  let STP = soilTest?.convertedKelownaP || DEFAULT_SOIL_TEST.convertedKelownaP;
-  if (!STP) STP = conversionFactors.defaultsoiltestkelownaphosphorous;
+  // Find the range this number falls into. If it exceeds the max, use the highest (last) range
+  const kelownaRange =
+    phosphorousRanges.find((r) => r.rangelow <= soilTestP && r.rangehigh >= soilTestP) ||
+    phosphorousRanges[phosphorousRanges.length - 1];
 
-  const cropSTPRegionCd = await getCropSoilTestRegions(
-    combinedCropData.cropId,
-    region?.soiltestphosphorousregioncd,
-    'cropsoiltestphosphorousregions',
-  );
-
-  const phosphorousCropGroupRegionCd = cropSTPRegionCd[0].phosphorouscropgroupregioncode;
-
-  const sTPKelownaRange = await getKelownaRangeByPpm(STP, 'soiltestphosphorouskelonwaranges');
-
-  const stpKelownaRangeId = sTPKelownaRange.id;
-  if (phosphorousCropGroupRegionCd == null) {
-    return 0;
-  }
-  const sTPRecommended = await getRecommendations(
-    stpKelownaRangeId,
-    region.soiltestphosphorousregioncd,
-    phosphorousCropGroupRegionCd,
-    'soiltestphosphorousrecommendation',
+  const phosphorousRecommendation = phosphorousRecommendations.find(
+    (r) =>
+      r.soiltestphosphorouskelownarangeid === kelownaRange.id &&
+      r.soiltestphosphorousregioncode === cropSTPRegion.soiltestphosphorousregioncode &&
+      r.phosphorouscropgroupregioncode === cropSTPRegion.phosphorouscropgroupregioncode,
   );
 
   // Convert from kg/ha to lbs/acre
   return Math.round(
-    Number(sTPRecommended.p2o5recommendationkilogramperhectare) *
+    phosphorousRecommendation!.p2o5recommendationkilogramperhectare *
       conversionFactors.kilogramperhectaretopoundperacreconversion,
   );
 }
 
-export async function getRaspberryNutrients(
+export function getRaspberryNutrients(
   cropYield: number,
   willSawdustBeApplied: boolean,
   willPlantsBePruned: boolean,
@@ -529,11 +392,10 @@ export async function getRaspberryNutrients(
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.63 + (isPrunedAndRemoved ? 11.374 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
-
   return nutrientInputs;
 }
 
-export async function getBlueberryNutrients(
+export function getBlueberryNutrients(
   cropYield: number,
   willSawdustBeApplied: boolean,
   willPlantsBePruned: boolean,
@@ -592,7 +454,6 @@ export async function getBlueberryNutrients(
   let tempRemK2O = cropYield;
   tempRemK2O = tempRemK2O * 3.509 + (isPrunedAndRemoved ? 7.865 : 0);
   nutrientInputs.remK2o = Math.round(tempRemK2O);
-
   return nutrientInputs;
 }
 
@@ -631,18 +492,24 @@ export function extractNutrientValues(_nutrients: any) {
   };
 }
 
-export async function sharedCalcCropReq(
+function oldCalcCropRequirements(
   selectedCrop: Crop,
-  formData: NMPFileCrop,
-  field: NMPFileField,
-  farmRegion: number,
   selectedCropType: CropType,
+  nmpFileCrop: NMPFileCrop,
+  field: NMPFileField,
+  phosphorousRegion: SoilTestPhosphorousRegion | undefined,
+  phosphorousRanges: SoilTestNutrientKelownaRange[],
+  phosphorousRecommendations: SoilTestPhosphorousRecommendation[],
+  potassiumRegion: SoilTestPotassiumRegion | undefined,
+  potassiumRanges: SoilTestNutrientKelownaRange[],
+  potassiumRecommendations: SoilTestPotassiumRecommendation[],
+  conversionFactors: CropsConversionFactors,
 ) {
-  const cropDataForCalc = formData || selectedCrop;
+  const cropDataForCalc = nmpFileCrop;
 
   let nutrientValues;
   if (selectedCrop.id === CROP_RASPBERRIES_ID) {
-    const nutrients = await getRaspberryNutrients(
+    const nutrients = getRaspberryNutrients(
       cropDataForCalc.yield,
       cropDataForCalc.willSawdustBeApplied!,
       cropDataForCalc.willPlantsBePruned!,
@@ -662,7 +529,7 @@ export async function sharedCalcCropReq(
     );
     nutrientValues = extractNutrientValues(nutrients);
   } else if (selectedCrop.id === CROP_BLUEBERRIES_ID) {
-    const nutrients = await getBlueberryNutrients(
+    const nutrients = getBlueberryNutrients(
       cropDataForCalc.yield,
       cropDataForCalc.willSawdustBeApplied!,
       cropDataForCalc.willPlantsBePruned!,
@@ -681,17 +548,24 @@ export async function sharedCalcCropReq(
     );
     nutrientValues = extractNutrientValues(nutrients);
   } else {
+    if (!phosphorousRegion || !potassiumRegion) {
+      throw new Error(`calculateCropRequirements failed to fetch necessary data.`);
+    }
     // Calculate crop requirements (P₂O₅, K₂O, N)
     const cropRequirementN = getCropRequirementN(cropDataForCalc, selectedCrop, selectedCropType);
-    const cropRequirementP205 = await getCropRequirementP205(
-      cropDataForCalc,
+    const cropRequirementP205 = getCropRequirementP205(
       field.soilTest,
-      farmRegion,
+      phosphorousRegion,
+      phosphorousRanges,
+      phosphorousRecommendations,
+      conversionFactors,
     );
-    const cropRequirementK2O = await getCropRequirementK2O(
-      cropDataForCalc,
+    const cropRequirementK2O = getCropRequirementK2O(
       field.soilTest,
-      farmRegion,
+      potassiumRegion,
+      potassiumRanges,
+      potassiumRecommendations,
+      conversionFactors,
     );
 
     // Calculate crop removals (N, P₂O₅, K₂O)
@@ -711,4 +585,48 @@ export async function sharedCalcCropReq(
 
   // Mark calculations as performed
   return nutrientValues;
+}
+
+export function calculateCropRequirements(
+  nmpFileRegionId: number,
+  nmpFileField: NMPFileField,
+  nmpFileCrop: NMPFileCrop,
+  tables: AppStateTables,
+) {
+  // Get all the data from the database needed to perform these calculations
+  const region = tables.regions.find((r) => r.id === nmpFileRegionId);
+  if (!region) {
+    throw new Error(`No region found with id ${nmpFileRegionId}`);
+  }
+  const phosphorousRegion = getPhosphorousRegionFromList(
+    tables.soilTestPhosphorousRegions,
+    nmpFileCrop.cropId,
+    region,
+  );
+  const potassiumRegion = getPotassiumRegionFromList(
+    tables.soilTestPotassiumRegions,
+    nmpFileCrop.cropId,
+    region,
+  );
+  const crop = tables.crops.find((c) => c.id === nmpFileCrop.cropId);
+  const cropType = tables.cropTypes.find((c) => c.id === nmpFileCrop.cropTypeId);
+  if (!crop || !cropType) {
+    throw new Error(
+      `calculateCropRequirements failed to fetch necessary data. Crop id: ${nmpFileCrop.cropId}. Crop type id: ${nmpFileCrop.cropTypeId}.`,
+    );
+  }
+
+  return oldCalcCropRequirements(
+    crop,
+    cropType,
+    nmpFileCrop,
+    nmpFileField,
+    phosphorousRegion,
+    tables.soilTestPhosphorousKelownaRanges,
+    tables.soilTestPhosphorousRecommendations,
+    potassiumRegion,
+    tables.soilTestPotassiumKelownaRanges,
+    tables.soilTestPotassiumRecommendation,
+    tables.cropConversionFactors,
+  );
 }

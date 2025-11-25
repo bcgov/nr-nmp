@@ -8,7 +8,7 @@ function initAppContext(): AppState {
   let appState: AppState = getDataFromLocalStorage(APP_STATE_KEY);
   if (appState === null) {
     // No cached file, need to start from scratch
-    appState = { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: false };
+    appState = { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: false, tables: undefined };
   }
   return appState;
 }
