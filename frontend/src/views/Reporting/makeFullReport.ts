@@ -672,6 +672,9 @@ const generateFieldSummary = (
     ...fertigationToFertigationRows(field.fertigations),
     ...field.otherNutrients,
   ];
+  if (field.soilNitrateCredit) {
+    allRows.push(field.soilNitrateCredit);
+  }
   const balance = {
     reqN: sumPropertyInObjectArr(allRows, 'reqN'),
     reqP2o5: sumPropertyInObjectArr(allRows, 'reqP2o5'),

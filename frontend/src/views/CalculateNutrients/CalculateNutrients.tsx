@@ -35,6 +35,7 @@ import {
 } from './utils.tsx';
 import { CalculateNutrientsRow, NMPFileField, PreviousYearManureApplication } from '@/types';
 import { APICacheContext } from '@/context/APICacheContext.tsx';
+import SoilNitrateCreditModal from './CalculateNutrientsComponents/SoilNitrateCreditModal.tsx';
 
 function NoRows() {
   return <div />;
@@ -137,6 +138,14 @@ export default function CalculateNutrients() {
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
   }, [activeField]);
 
+  const soilNitrateColumns: GridColDef[] = useMemo(() => {
+    const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setOpenDialog(['soilNitrate', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
+    };
+    const handleDeleteRow = genHandleDeleteRow(activeField, 'soilNitrateCredit', setFieldList);
+    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, '', true, false);
+  }, [activeField]);
+
   const previousYearManureColumns: GridColDef[] = useMemo(
     () =>
       generateColumns(
@@ -157,6 +166,7 @@ export default function CalculateNutrients() {
       ...fieldList[activeField].fertigations,
       ...fieldList[activeField].otherNutrients,
       ...fieldList[activeField].manures,
+      fieldList[activeField].soilNitrateCredit,
     ];
 
     // Add previous year manure nitrogen credit to the balance
@@ -166,13 +176,13 @@ export default function CalculateNutrients() {
       name: 'Balance',
       reqN:
         Math.round(
-          (allRows.reduce((sum, row) => sum + (row.reqN ?? 0), 0) + prevYearNitrogen) * 10,
+          (allRows.reduce((sum, row) => sum + (row?.reqN ?? 0), 0) + prevYearNitrogen) * 10,
         ) / 10,
-      reqP2o5: Math.round(allRows.reduce((sum, row) => sum + (row.reqP2o5 ?? 0), 0) * 10) / 10,
-      reqK2o: Math.round(allRows.reduce((sum, row) => sum + (row.reqK2o ?? 0), 0) * 10) / 10,
-      remN: Math.round(allRows.reduce((sum, row) => sum + (row.remN ?? 0), 0) * 10) / 10,
-      remP2o5: Math.round(allRows.reduce((sum, row) => sum + (row.remP2o5 ?? 0), 0) * 10) / 10,
-      remK2o: Math.round(allRows.reduce((sum, row) => sum + (row.remK2o ?? 0), 0) * 10) / 10,
+      reqP2o5: Math.round(allRows.reduce((sum, row) => sum + (row?.reqP2o5 ?? 0), 0) * 10) / 10,
+      reqK2o: Math.round(allRows.reduce((sum, row) => sum + (row?.reqK2o ?? 0), 0) * 10) / 10,
+      remN: Math.round(allRows.reduce((sum, row) => sum + (row?.remN ?? 0), 0) * 10) / 10,
+      remP2o5: Math.round(allRows.reduce((sum, row) => sum + (row?.remP2o5 ?? 0), 0) * 10) / 10,
+      remK2o: Math.round(allRows.reduce((sum, row) => sum + (row?.remK2o ?? 0), 0) * 10) / 10,
     };
   }, [fieldList, activeField, prevYearManureData]);
 
@@ -415,6 +425,19 @@ export default function CalculateNutrients() {
           modalStyle={{ width: '700px' }}
         />
       )}
+      {openDialog[0] === 'soilNitrate' && (
+        <SoilNitrateCreditModal
+          fieldIndex={activeField}
+          initialModalData={
+            openDialog[1] !== undefined ? fieldList[activeField].soilNitrateCredit : undefined
+          }
+          rowEditIndex={openDialog[1]}
+          setFields={setFieldList}
+          isOpen={openDialog[0] === 'soilNitrate'}
+          onClose={handleDialogClose}
+          modalStyle={{ width: '700px' }}
+        />
+      )}
       {openDialog[0] === 'previousYearManure' && (
         <PreviousYearManureModal
           fieldIndex={activeField}
@@ -437,7 +460,6 @@ export default function CalculateNutrients() {
         <div style={{ width: 360 }}>Agronomic (lb/ac)</div>
         <div style={{ width: 190 }}>Crop Removal (lb/ac)</div>
       </div>
-
       <DataGrid
         sx={{
           ...customTableStyle,
@@ -456,7 +478,6 @@ export default function CalculateNutrients() {
         hideFooter
         slots={{ noRowsOverlay: NoRows }}
       />
-
       {/* Previous Year Manure Row */}
       {prevYearManureData?.display && (
         <DataGrid
@@ -481,7 +502,6 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-
       {fieldList[activeField].fertilizers.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
@@ -526,6 +546,19 @@ export default function CalculateNutrients() {
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
           rows={fieldList[activeField].otherNutrients}
           columns={otherColumns}
+          getRowId={() => crypto.randomUUID()}
+          disableRowSelectionOnClick
+          disableColumnMenu
+          columnHeaderHeight={16}
+          hideFooterPagination
+          hideFooter
+        />
+      )}
+      {fieldList[activeField].soilNitrateCredit && (
+        <DataGrid
+          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          rows={[fieldList[activeField].soilNitrateCredit]}
+          columns={soilNitrateColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
           disableColumnMenu

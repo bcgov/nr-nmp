@@ -3,6 +3,7 @@ import {
   CropsConversionFactors,
   CropType,
   Manure,
+  NitrateCredit,
   NitrogenMineralization,
   Region,
   SoilTestNutrientKelownaRange,
@@ -20,6 +21,7 @@ export type AppStateTables = {
   cropTypes: CropType[];
   cropConversionFactors: CropsConversionFactors;
   manures: Manure[];
+  nitrateCredit: NitrateCredit[];
   nMineralizations: NitrogenMineralization[];
   regions: Region[];
   soilTestPhosphorousKelownaRanges: SoilTestNutrientKelownaRange[];

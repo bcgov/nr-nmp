@@ -17,6 +17,7 @@ import {
   NMPFileField,
   NMPFileOtherNutrient,
   NMPFileSoilTest,
+  NMPFileSoilNitrateCredit,
 } from './NMPFileField';
 import {
   OTHER_ANIMAL_IDS,
@@ -78,6 +79,7 @@ import {
   SoilTestPotassiumRegion,
   SoilTestPhosphorousRecommendation,
   SoilTestPotassiumRecommendation,
+  NitrateCredit,
 } from './database';
 import PrecipitationConversionFactor from './PrecipitationConversionFactor';
 import {
@@ -162,4 +164,6 @@ export type {
   SoilTestPotassiumRegion,
   SoilTestPhosphorousRecommendation,
   SoilTestPotassiumRecommendation,
+  NitrateCredit,
+  NMPFileSoilNitrateCredit,
 };

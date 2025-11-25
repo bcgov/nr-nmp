@@ -106,6 +106,10 @@ export interface NMPFileFertigation extends CalculateNutrientsRow {
 
 export type NMPFileOtherNutrient = CalculateNutrientsRow;
 
+export interface NMPFileSoilNitrateCredit extends CalculateNutrientsRow {
+  isCustomValue?: boolean;
+}
+
 export type NMPFileField = {
   fieldName: string;
   area: number;
@@ -118,4 +122,5 @@ export type NMPFileField = {
   fertigations: NMPFileFertigation[];
   otherNutrients: NMPFileOtherNutrient[];
   previousYearManureApplicationNCredit?: number;
+  soilNitrateCredit?: NMPFileSoilNitrateCredit;
 };

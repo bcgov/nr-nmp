@@ -11,7 +11,8 @@ const DEFAULT_NMPFILE_FIELD: NMPFileField = {
   fertigations: [],
   otherNutrients: [],
   manures: [],
-  previousYearManureApplicationNCredit: null,
+  previousYearManureApplicationNCredit: undefined,
+  soilNitrateCredit: undefined,
 };
 
 export default DEFAULT_NMPFILE_FIELD;
