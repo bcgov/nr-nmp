@@ -305,7 +305,7 @@ export interface Units {
   solidliquid: 'Solid' | 'Liquid' | '';
 }
 
-export type NitrateCreditData = {
+export type NitrateCredit = {
   id: number;
   fromdatemonth: number;
   todatemonth: number;

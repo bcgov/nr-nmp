@@ -69,15 +69,15 @@ export default function SoilTests() {
     const updatedFields = fields.map((fieldEle) => {
       const newFieldEle = structuredClone(fieldEle);
       // Recalculate soil tests if method changed changed.
-      if (newFieldEle?.soilTest && newFieldEle.soilTest.soilTestId !== soilTestId) {
+      if (newFieldEle?.soilTest && newFieldEle.soilTest.soilTestId !== value) {
         const { convertedKelownaP, convertedKelownaK } = soilTestCalculation(
           soilTestMethods.map((ele) => ele.value),
-          soilTestId,
+          value,
           newFieldEle.soilTest,
         );
         newFieldEle.soilTest.convertedKelownaK = convertedKelownaK;
         newFieldEle.soilTest.convertedKelownaP = convertedKelownaP;
-        newFieldEle.soilTest.soilTestId = soilTestId;
+        newFieldEle.soilTest.soilTestId = value;
 
         return newFieldEle;
       }
@@ -94,11 +94,6 @@ export default function SoilTests() {
       newFields: fields,
       soilTestsUpdated: true,
     });
-    dispatch({
-      type: 'UPDATE_SOIL_NITRATE_CREDIT',
-      year: state.nmpFile.farmDetails.year,
-      nitrateCreditData: nitrateCredit,
-    });
     navigate(CROPS);
   };
 
@@ -114,7 +109,7 @@ export default function SoilTests() {
 
   useEffect(() => {
     apiCache
-      .callEndpoint('api/soiltestmethods/')
+      .callEndpoint('soiltestmethods')
       .then((response: { status?: any; data: SoilTestMethods[] }) => {
         if (response.status === 200) {
           const { data } = response;

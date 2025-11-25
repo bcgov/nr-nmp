@@ -554,7 +554,6 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      <pre>Test: {JSON.stringify(fieldList[activeField]?.soilNitrateCredit, null, 2)}</pre>
       {fieldList[activeField].soilNitrateCredit && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
