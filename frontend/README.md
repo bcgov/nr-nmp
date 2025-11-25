@@ -52,5 +52,8 @@ export default tseslint.config({
 ### Running Tests
 
 Both Jest and Cypress tests are used to test the code.
+For Jest both unit and snapshot tests are used.
 
-To run all tests, run `npm run test`. You can run just the Jest or Cypress tests with `npm run test:jest` or `npm run test:cypress` respectively. 
+To run all tests, run `npm run test`. You can run just the Jest or Cypress tests with `npm run test:jest` or `npm run test:cypress` respectively.
+
+After creating a snapshot test run `npm run test:jest` to automatically create a snapshot (ex. Component.test.jsx.snap). To update snapshots run `npm run test:jest -- -u` which will run all tests and update snapshots.
