@@ -313,6 +313,13 @@ function CropsModal({
             });
           }
           return;
+        case 'hasLeafTest':
+          if (!value) {
+            dispatch({ type: 'REMOVE_LEAF_TEST' });
+          } else {
+            dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
+          }
+          return;
         default:
           dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value });
       }
