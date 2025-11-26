@@ -376,6 +376,10 @@ const generateLiquidStorageCapacity = (
                 '',
                 '',
               ],
+              [
+                '        Materials Stored (after Solid/Liquid Separation)',
+                `${printNum(materialStored)} US gallons`,
+              ],
             ]
           : [
               [
