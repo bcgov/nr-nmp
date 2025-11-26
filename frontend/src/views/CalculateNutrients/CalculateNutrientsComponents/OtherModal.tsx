@@ -100,6 +100,8 @@ export default function OtherModal({
               />
             </Grid>
             <SectionTitle>Available This Year (lb/ac)</SectionTitle>
+            <br />
+            <span css={{ fontWeight: 'bold' }}>Added to Agronomic</span>
             <Grid container>
               <Grid size="grow">
                 <NumberField
@@ -127,6 +129,8 @@ export default function OtherModal({
               </Grid>
             </Grid>
             <SectionTitle>Available Long Term (lb/ac)</SectionTitle>
+            <br />
+            <span css={{ fontWeight: 'bold' }}>Added to Crop Removal</span>
             <Grid container>
               <Grid size="grow">
                 <NumberField

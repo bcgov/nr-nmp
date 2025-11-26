@@ -16,6 +16,11 @@ export const InfoBox = styled.div`
   li {
     margin-bottom: 2px;
   }
+  span {
+    color: red;
+    display: inline-block;
+    padding-bottom: 5px;
+  }
 `;
 
 export const StyledDatePicker = styled.div`

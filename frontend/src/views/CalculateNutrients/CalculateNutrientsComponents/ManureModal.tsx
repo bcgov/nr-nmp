@@ -572,6 +572,8 @@ export default function ManureModal({
             </Grid>
             <Grid size={{ ...formGridBreakpoints, md: 4 }}>
               <span css={{ fontWeight: 'bold' }}>Available This Year (lb/ac) </span>
+              <br />
+              <span css={{ fontWeight: 'bold' }}>Added to Agronomic</span>
               <DataGrid
                 sx={{ ...customTableStyle }}
                 columns={NUTRIENT_COLUMNS}
@@ -585,6 +587,8 @@ export default function ManureModal({
             </Grid>
             <Grid size={{ ...formGridBreakpoints, md: 4 }}>
               <span css={{ fontWeight: 'bold' }}>Available Long Term (lb/ac) </span>
+              <br />
+              <span css={{ fontWeight: 'bold' }}>Added to Crop Removal</span>
               <DataGrid
                 sx={{ ...customTableStyle }}
                 columns={NUTRIENT_COLUMNS}
@@ -614,7 +618,7 @@ export default function ManureModal({
             {hasMaterialRemainingData && manureForm.sourceUuid && (
               <Grid size={12}>
                 <MaterialRemainingDisplay
-                  materialRemainingData={materialRemainingData!}
+                  materialRemainingData={materialRemainingData}
                   selectedSourceUuid={manureForm.sourceUuid}
                 />
               </Grid>

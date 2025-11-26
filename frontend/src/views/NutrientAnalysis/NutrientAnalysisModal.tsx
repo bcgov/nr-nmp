@@ -162,6 +162,7 @@ export default function NutrientAnalysisModal({
       onOpenChange={onCancel}
       {...props}
     >
+      <span>All values should be calculated from the material as-received.</span>
       <Form
         onConfirm={() => {
           handleSubmit(formData);
