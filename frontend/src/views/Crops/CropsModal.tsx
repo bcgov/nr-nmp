@@ -731,6 +731,7 @@ function CropsModal({
                         handleFormFieldChange('willSawdustBeApplied', b);
                       }}
                       orientation="horizontal"
+                      tooltip="Sawdust and other materials with a high carbon to nitrogen ratio (C:N) will immobilize plant-available nitrogen in the soil. Selecting 'Yes' to this question will increase the amount of nitrogen that needs to be applied to ensure the crop receives enough nitrogen for optimal growth and yield."
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
