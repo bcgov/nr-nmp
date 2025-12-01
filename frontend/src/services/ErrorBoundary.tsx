@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo } from 'react';
+import React, { Component } from 'react';
 import type { NavigateFunction } from 'react-router-dom';
 import { FARM_INFORMATION } from '@/constants/routes';
 
@@ -26,11 +26,6 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     return { hasError: true, error };
   }
 
-  // logs error information
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
-  }
-
   // send user to homepage, reset npm file, and clear error
   handleReset = () => {
     const { dispatch, navigate } = this.props;
@@ -46,8 +41,8 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     // inform user of error and give button to home
     if (hasError) {
       return (
-        <div>
-          <h2 style={{ textAlign: 'center', margin: 0 }}>Something went wrong</h2>
+        <div style={{ textAlign: 'center', paddingTop: '5em' }}>
+          <h2>Something went wrong</h2>
           {error && <p>{error.message}</p>}
           <button
             onClick={() => this.handleReset()}
