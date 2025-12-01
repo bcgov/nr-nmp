@@ -1,4 +1,4 @@
-import { Suspense, use, useEffect } from 'react';
+import { use, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StyledApp, ViewContainer } from './App.styles';
 import { Header, Footer } from './components/common';
@@ -27,15 +27,13 @@ function App() {
     <StyledApp>
       <Header />
       <ViewContainer>
-        <Suspense fallback={<div>Loading...</div>}>
-          <ErrorBoundary
-            dispatch={dispatch}
-            navigate={navigate}
-          >
-            {wait}
-            <ViewRouter />
-          </ErrorBoundary>
-        </Suspense>
+        <ErrorBoundary
+          dispatch={dispatch}
+          navigate={navigate}
+        >
+          {wait}
+          <ViewRouter />
+        </ErrorBoundary>
       </ViewContainer>
       <Footer />
     </StyledApp>
