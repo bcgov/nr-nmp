@@ -11,6 +11,7 @@ import NumberField from './NumberField/NumberField';
 import TextField from './TextField/TextField';
 import View from './View/View';
 import FieldListModal from './FieldListModal/FieldListModal';
+import AlertDialog from './AlertDialog/AlertDialog';
 
 export {
   Header,
@@ -26,4 +27,5 @@ export {
   TextField,
   View,
   FieldListModal,
+  AlertDialog,
 };

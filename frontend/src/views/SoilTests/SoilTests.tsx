@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
-import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { Button } from '@bcgov/design-system-react-components';
 import {
@@ -16,7 +16,7 @@ import {
   formGridBreakpoints,
   tableActionButtonCss,
 } from '../../common.styles';
-import { Select, Tabs, View } from '../../components/common';
+import { AlertDialog, Select, Tabs, View } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { NMPFileField, SelectOption, SoilTestMethods, SoilTestNutrientRange } from '@/types';
 import { InfoBox } from './soilTests.styles';
@@ -36,6 +36,12 @@ export default function SoilTests() {
   const [soilTestId, setSoilTestId] = useState<number>(
     fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
+  const [showAlertDialog, setShowAlertDialog] = useState<boolean>(false);
+  const [alertDialogHandler, setAlertDialogHandler] = useState<(...args: any[]) => any>(() => {});
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
 
   const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
@@ -87,7 +93,7 @@ export default function SoilTests() {
     setSoilTestId(value);
   };
 
-  const handleNextPage = () => {
+  const goToNextPage = () => {
     dispatch({
       type: 'SAVE_FIELDS',
       year: state.nmpFile.farmDetails.year,
@@ -97,7 +103,7 @@ export default function SoilTests() {
     navigate(CROPS);
   };
 
-  const handlePreviousPage = () => {
+  const goToPreviousPage = () => {
     dispatch({
       type: 'SAVE_FIELDS',
       year: state.nmpFile.farmDetails.year,
@@ -105,6 +111,24 @@ export default function SoilTests() {
       soilTestsUpdated: true,
     });
     navigate(FIELD_LIST);
+  };
+
+  const handlePreviousPage = () => {
+    if (!fields.some((fieldEle) => !!fieldEle.soilTest)) {
+      goToPreviousPage();
+    } else {
+      setAlertDialogHandler(() => goToPreviousPage);
+      setShowAlertDialog(true);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (!fields.some((fieldEle) => !!fieldEle.soilTest)) {
+      goToNextPage();
+    } else {
+      setAlertDialogHandler(() => goToNextPage);
+      setShowAlertDialog(true);
+    }
   };
 
   useEffect(() => {
@@ -204,7 +228,7 @@ export default function SoilTests() {
         field: '',
         headerName: 'Actions',
         width: 150,
-        renderCell: (e: { id: GridRowId; api: GridApiCommunity }) => {
+        renderCell: (e: GridRenderCellParams) => {
           const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
           const isRowHasSoilTest = fields[index].soilTest !== undefined;
           return (
@@ -218,7 +242,19 @@ export default function SoilTests() {
                   />
                   <FontAwesomeIcon
                     css={tableActionButtonCss}
-                    onClick={() => handleDeleteRow(e)}
+                    onClick={() => {
+                      setDialogText(
+                        `Are you sure you want to delete soil test for field ${e.row.fieldName}?`,
+                      );
+                      setDeleteBtnConfig({
+                        btnText: 'Delete',
+                        handleClick: () => {
+                          handleDeleteRow(e);
+                          setShowDeleteDialog(false);
+                        },
+                      });
+                      setShowDeleteDialog(true);
+                    }}
                     icon={faTrash}
                   />
                 </div>
@@ -240,13 +276,39 @@ export default function SoilTests() {
     ],
     [fields, handleDeleteRow, handleEditRow, phosphorousRanges, potassiumRanges],
   );
-
   return (
     <View
       title="Field Information"
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
+      <AlertDialog
+        isOpen={showDeleteDialog}
+        title="Soil tests - Delete"
+        onOpenChange={() => setShowDeleteDialog(false)}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{dialogText}</div>
+      </AlertDialog>
+      <AlertDialog
+        isOpen={showAlertDialog}
+        title="Warning"
+        onOpenChange={() => setShowAlertDialog(false)}
+        continueBtn={{ handleClick: alertDialogHandler }}
+      >
+        <ul style={{ color: 'red' }}>
+          <li>
+            For fields without a soil test, very high soil P and K fertility and a pH of 4.0 will be
+            assumed.
+          </li>
+          <li>Crop P and K requirements will be 0 on fields without a soil test.</li>
+          <br />
+          <li>
+            For fields without a leaf test, &apos;High&apos; leaf P and K content will be assumed.
+          </li>
+          <li>Crop P and K requirements will be 0 on fields without a leaf test.</li>
+        </ul>
+      </AlertDialog>
       {currentFieldIndex !== null && (
         <SoilTestsModal
           currentFieldIndex={currentFieldIndex}

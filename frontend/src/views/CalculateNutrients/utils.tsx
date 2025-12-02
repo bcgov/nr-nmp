@@ -188,23 +188,18 @@ export const generateColumns = (
     resizable: false,
   },
 ];
-
 export function genHandleDeleteRow(
+  e: { id: GridRowId; api: GridApiCommunity },
+  prev: NMPFileField[],
   activeField: number,
   editProp: keyof NMPFileField,
-  setFieldList: (value: React.SetStateAction<NMPFileField[]>) => void,
 ) {
-  const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
-    setFieldList((prev) => {
-      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-      const propArray = [...(prev[activeField][editProp] as any[])]; // typecast antics
-      propArray.splice(index, 1);
-      const nextFieldArray = [...prev];
-      nextFieldArray[activeField][editProp] = propArray as never; // typecast antics pt 2
-      return nextFieldArray;
-    });
-  };
-  return handleDeleteRow;
+  const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+  const propArray = [...(prev[activeField][editProp] as any[])]; // typecast antics
+  propArray.splice(index, 1);
+  const nextFieldArray = [...prev];
+  nextFieldArray[activeField][editProp] = propArray as never; // typecast antics pt 2
+  return nextFieldArray;
 }
 
 export function renderNutrientCell({ value }: any) {
