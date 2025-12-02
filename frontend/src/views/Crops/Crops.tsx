@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import { Tabs, View } from '../../components/common';
+import { AlertDialog, Tabs, View } from '../../components/common';
 import { NMPFileField } from '@/types';
 import { CALCULATE_NUTRIENTS, SOIL_TESTS, MANURE_IMPORTS } from '@/constants/routes';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
@@ -29,6 +29,10 @@ function Crops() {
   const [editingFieldIndex, setEditingFieldIndex] = useState<number>(0);
   const [editingCropIndex, setEditingCropIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
 
   const handleEditCrop = (e: { id: GridRowId; api: GridApiCommunity }, cropIndex: number) => {
     setEditingFieldIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
@@ -102,7 +106,20 @@ function Crops() {
                 />
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={() => handleDeleteCrop(e, 0)}
+                  onClick={() => {
+                    const cropsIndex = 0;
+                    setDialogText(
+                      `Are you sure you want to delete ${e.row.crops[cropsIndex].name}?`,
+                    );
+                    setDeleteBtnConfig({
+                      btnText: 'Delete',
+                      handleClick: () => {
+                        handleDeleteCrop(e, cropsIndex);
+                        setShowDeleteDialog(false);
+                      },
+                    });
+                    setShowDeleteDialog(true);
+                  }}
                   icon={faTrash}
                 />
               </>
@@ -139,7 +156,7 @@ function Crops() {
       field: 'ActionsCrop2',
       headerName: 'Actions',
       width: 200,
-      renderCell: (e) => {
+      renderCell: (e: GridRenderCellParams) => {
         const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
         const rowHasCrop = !!fields[fieldIndex].crops[0];
         const crop = fields[fieldIndex].crops[1];
@@ -157,7 +174,20 @@ function Crops() {
                 />
                 <FontAwesomeIcon
                   css={tableActionButtonCss}
-                  onClick={() => handleDeleteCrop(e, 1)}
+                  onClick={() => {
+                    const cropsIndex = 1;
+                    setDialogText(
+                      `Are you sure you want to delete ${e.row.crops[cropsIndex].name}?`,
+                    );
+                    setDeleteBtnConfig({
+                      btnText: 'Delete',
+                      handleClick: () => {
+                        handleDeleteCrop(e, cropsIndex);
+                        setShowDeleteDialog(false);
+                      },
+                    });
+                    setShowDeleteDialog(true);
+                  }}
                   icon={faTrash}
                 />
               </>
@@ -189,6 +219,14 @@ function Crops() {
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
+      <AlertDialog
+        isOpen={showDeleteDialog}
+        title="Crops - Delete"
+        onOpenChange={() => setShowDeleteDialog(false)}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{dialogText}</div>
+      </AlertDialog>
       <Tabs
         activeTab={2}
         tabLabel={['Field List', 'Soil Tests', 'Crops']}

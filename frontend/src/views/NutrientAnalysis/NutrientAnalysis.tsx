@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { Tabs, View } from '../../components/common';
+import { AlertDialog, Tabs, View } from '../../components/common';
 import {
   NMPFileAnimal,
   NMPFileManureStorageSystem,
@@ -44,6 +44,10 @@ export default function NutrientAnalysis() {
   );
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysis | undefined>(undefined);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
 
   const hasDairyCattle = useMemo(
     () =>
@@ -178,7 +182,17 @@ export default function NutrientAnalysis() {
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDelete(row.row.sourceUuid)}
+              onClick={() => {
+                setDialogText(`Are you sure you want to delete ${row.row.sourceName}?`);
+                setDeleteBtnConfig({
+                  btnText: 'Delete',
+                  handleClick: () => {
+                    handleDelete(row.row.sourceUuid);
+                    setShowDeleteDialog(false);
+                  },
+                });
+                setShowDeleteDialog(true);
+              }}
               icon={faTrash}
               aria-label="Delete"
             />
@@ -198,6 +212,14 @@ export default function NutrientAnalysis() {
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
+      <AlertDialog
+        isOpen={showDeleteDialog}
+        title="Nutrient Analysis - Delete"
+        onOpenChange={() => setShowDeleteDialog(false)}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{dialogText}</div>
+      </AlertDialog>
       <div css={addRecordGroupStyle}>
         <ButtonGroup
           alignment="end"

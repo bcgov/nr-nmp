@@ -18,7 +18,7 @@ import { getDensityFactoredConversionUsingMoisture } from '@/utils/densityCalcul
 import useAppState from '@/hooks/useAppState';
 import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/routes';
 
-import { Tabs, View } from '@/components/common';
+import { AlertDialog, Tabs, View } from '@/components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay, printNum } from '@/utils/utils';
@@ -43,6 +43,10 @@ export default function ManureAndImports() {
   const [liquidManureDropdownOptions, setLiquidManureDropdownOptions] = useState<
     LiquidManureConversionFactors[]
   >([]);
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
 
   const hasDairyCattle = useMemo(
     () => animalList.some((animal) => animal.animalId === DAIRY_COW_ID),
@@ -278,7 +282,17 @@ export default function ManureAndImports() {
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDeleteRow(row)}
+              onClick={() => {
+                setDialogText(`Are you sure you want to delete ${row.row.managedManureName}?`);
+                setDeleteBtnConfig({
+                  btnText: 'Delete',
+                  handleClick: () => {
+                    handleDeleteRow(row);
+                    setShowDeleteDialog(false);
+                  },
+                });
+                setShowDeleteDialog(true);
+              }}
               icon={faTrash}
               aria-label="Delete"
             />
@@ -297,6 +311,14 @@ export default function ManureAndImports() {
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
+      <AlertDialog
+        isOpen={showDeleteDialog}
+        title="Manure and Imports - Delete"
+        onOpenChange={() => setShowDeleteDialog(false)}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{dialogText}</div>
+      </AlertDialog>
       <div css={addRecordGroupStyle}>
         <ButtonGroup
           alignment="end"
