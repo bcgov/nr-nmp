@@ -8,9 +8,13 @@ export const ModalContent = styled.div`
   max-width: 100%;
 `;
 
-export const SectionTitle = styled.span`
-  margin: auto;
+export const SectionTitleText = styled.span`
   font: var(--typography-regular-small-body);
   color: var(--typography-color-primary);
   padding: var(--layout-padding-xsmall) var(--layout-padding-none);
+`;
+
+export const SectionTitle = styled.div`
+  width: 100%;
+  text-align: center;
 `;
