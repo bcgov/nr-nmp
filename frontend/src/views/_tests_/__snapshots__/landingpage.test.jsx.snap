@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="css-1pwhsub"
+  >
+    <div
+      class="MuiBox-root css-a57597"
+    >
+      <div
+        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-149z4i0-MuiStepper-root"
+      >
+        <div
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        >
+          <span
+            class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          >
+            <span
+              class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="12"
+                />
+                <text
+                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                  dominant-baseline="central"
+                  text-anchor="middle"
+                  x="12"
+                  y="12"
+                >
+                  1
+                </text>
+              </svg>
+            </span>
+            <span
+              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+            >
+              <span
+                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+              >
+                Home
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        >
+          <div
+            class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-1k81fv-MuiStepConnector-root"
+          >
+            <span
+              class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
+            />
+          </div>
+          <span
+            class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          >
+            <span
+              class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="12"
+                />
+                <text
+                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                  dominant-baseline="central"
+                  text-anchor="middle"
+                  x="12"
+                  y="12"
+                >
+                  2
+                </text>
+              </svg>
+            </span>
+            <span
+              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+            >
+              <span
+                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+              >
+                Farm Information
+              </span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1xllnsb"
+    >
+      Nutrient Management Calculator
+    </div>
+    <div
+      class="css-114zsuk"
+    >
+      Nutrient Management Calculator
+    </div>
+    <p>
+      The Nutrient Management Calculator provides a starting point for the efficient use of fertilizer and manure on farms. This tool assists in you choosing the right rate and nutrient source for your crops. You can start a new calculation or pick up where you left off by uploading an existing .nmp file.
+    </p>
+    <div
+      aria-label="A group of buttons"
+      class="bcds-ButtonGroup horizontal start"
+      role="group"
+    >
+      <button
+        class="bcds-react-aria-Button medium primary  "
+        data-rac=""
+        id="react-aria-«r0»"
+        type="button"
+      >
+        Get Started
+      </button>
+      <button
+        class="bcds-react-aria-Button medium secondary  "
+        data-rac=""
+        id="react-aria-«r2»"
+        type="button"
+      >
+        Upload File
+      </button>
+      <input
+        accept=".nmp, application/json"
+        aria-label="Upload an existing .nmp file"
+        hidden=""
+        id="fileUp"
+        type="file"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;
