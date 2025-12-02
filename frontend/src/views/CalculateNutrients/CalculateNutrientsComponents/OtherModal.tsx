@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { NMPFileField, NMPFileOtherNutrient } from '@/types';
-import { ModalContent, SectionTitle } from './modal.styles';
+import { ModalContent, SectionTitle, SectionTitleText } from './modal.styles';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { NumberField, TextField, Form } from '@/components/common';
 
@@ -99,7 +99,11 @@ export default function OtherModal({
                 onChange={(v) => handleNameChange(v)}
               />
             </Grid>
-            <SectionTitle>Available This Year (lb/ac)</SectionTitle>
+            <SectionTitle>
+              <SectionTitleText>Available This Year (lb/ac)</SectionTitleText>
+              <br />
+              <SectionTitleText>Added to Agronomic</SectionTitleText>
+            </SectionTitle>
             <Grid container>
               <Grid size="grow">
                 <NumberField
@@ -126,7 +130,11 @@ export default function OtherModal({
                 />
               </Grid>
             </Grid>
-            <SectionTitle>Available Long Term (lb/ac)</SectionTitle>
+            <SectionTitle>
+              <SectionTitleText>Available Long Term (lb/ac)</SectionTitleText>
+              <br />
+              <SectionTitleText>Added to Crop Removal</SectionTitleText>
+            </SectionTitle>
             <Grid container>
               <Grid size="grow">
                 <NumberField

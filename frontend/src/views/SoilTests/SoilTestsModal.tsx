@@ -3,7 +3,7 @@ import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
 import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
-import { formGridBreakpoints } from '../../common.styles';
+import { formGridBreakpoints, ModalInstructions } from '../../common.styles';
 import { Form, Modal, NumberField } from '../../components/common';
 import { NMPFileField, NMPFileSoilTest, SelectOption, SoilTestMethods } from '@/types';
 import { StyledDatePicker } from './soilTests.styles';
@@ -75,6 +75,10 @@ export default function SoilTestsModal({
         onConfirm={handleFormFieldSubmit}
         id="modal-form"
       >
+        <ModalInstructions>
+          Enter values expressed in ppm or mg/kg. Do not enter results from soil samples taken
+          deeper than 6 inches (15cm).
+        </ModalInstructions>
         <Grid
           container
           spacing={1}
@@ -85,7 +89,7 @@ export default function SoilTestsModal({
               <StyledDatePicker>
                 <ReactDatePicker
                   selected={formDataDate}
-                  onChange={(e: Date) => {
+                  onChange={(e) => {
                     handleFormFieldChange({ sampleDate: e ? e.toISOString() : undefined });
                   }}
                   dateFormat="MM/yyyy"

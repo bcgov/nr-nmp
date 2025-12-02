@@ -268,6 +268,12 @@ export default function SoilTests() {
             <li>Yes - Select the lab used (soil test methods)</li>
             <li>No - Click Next</li>
           </ul>
+          <span>
+            For fields without a soil test, very high soil P and K fertility and a pH of 6.0 will be
+            assumed. Crop P and K requirements will be 0 on fields.
+          </span>
+          <br />
+          <span>Results will not be accurate without a soil test.</span>
         </InfoBox>
       )}
       <Grid

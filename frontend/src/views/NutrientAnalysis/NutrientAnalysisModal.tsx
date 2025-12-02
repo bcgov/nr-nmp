@@ -13,7 +13,7 @@ import {
   ManureType,
   NMPFileManure,
 } from '@/types';
-import { formGridBreakpoints } from '@/common.styles';
+import { formGridBreakpoints, ModalInstructions } from '@/common.styles';
 import { Form, Select, Modal, TextField, NumberField } from '@/components/common';
 import { APICacheContext } from '@/context/APICacheContext';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
@@ -168,6 +168,9 @@ export default function NutrientAnalysisModal({
         }}
         onCancel={onCancel}
       >
+        <ModalInstructions>
+          All values should be calculated from the material as-received.
+        </ModalInstructions>
         <Grid
           container
           spacing={2}
