@@ -17,6 +17,11 @@ export interface ModalProps {
     handleClick?: () => void;
     variant?: 'link' | 'secondary' | 'primary' | 'tertiary' | undefined;
   };
+  extraBtn?: {
+    btnText: string;
+    handleClick: () => void;
+    variant: 'link' | 'secondary' | 'primary' | 'tertiary' | undefined;
+  };
   continueBtn?: {
     btnText?: string;
     handleClick: () => void;
@@ -32,6 +37,7 @@ function AlertDialog({
   children,
   closeBtn,
   continueBtn,
+  extraBtn,
   modalStyle,
 }: ModalProps) {
   const handleClose = (modalState: boolean = false) => {
@@ -87,6 +93,14 @@ function AlertDialog({
               >
                 {closeBtn?.btnText || 'Cancel'}
               </Button>
+              {extraBtn && (
+                <Button
+                  variant={extraBtn.variant}
+                  onPress={() => extraBtn.handleClick()}
+                >
+                  {extraBtn.btnText}
+                </Button>
+              )}
               {continueBtn && (
                 <Button
                   variant={continueBtn?.variant ?? 'primary'}
