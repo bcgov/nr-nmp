@@ -80,6 +80,10 @@ type RestoreDefaultYieldAction = {
   type: 'RESTORE_DEFAULT_YIELD';
 };
 
+type RemoveLeafTestAction = {
+  type: 'REMOVE_LEAF_TEST';
+};
+
 export type CropsModalReducerAction =
   | SetCropTypeIdAction
   | SetCropIdAction
@@ -91,7 +95,8 @@ export type CropsModalReducerAction =
   | SetSelectedCropTypeAction
   | SetSelectedCropAction
   | SetDefaultYieldAction
-  | RestoreDefaultYieldAction;
+  | RestoreDefaultYieldAction
+  | RemoveLeafTestAction;
 
 function isCropSet(cropId: number, selectedCrop?: Crop) {
   if (cropId === 0) return false;
@@ -293,6 +298,17 @@ export function cropsModalReducer(
         formData: {
           ...formData,
           [action.attr]: action.value,
+        },
+      };
+
+    case 'REMOVE_LEAF_TEST':
+      return {
+        ...state,
+        formData: {
+          ...formData,
+          hasLeafTest: false,
+          leafTissueK: undefined,
+          leafTissueP: undefined,
         },
       };
 

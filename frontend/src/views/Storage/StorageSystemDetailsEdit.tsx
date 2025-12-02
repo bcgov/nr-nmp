@@ -109,23 +109,6 @@ export default function StorageSystemDetailsEdit({
     changes: Partial<SolidManureStorageSystem> | Partial<LiquidManureStorageSystem>,
   ) => {
     let updatedChanges = changes;
-    if (Object.prototype.hasOwnProperty.call(changes, 'hasSeperation')) {
-      updatedChanges = changes as Partial<LiquidManureStorageSystem>;
-      if (updatedChanges.hasSeperation === false) {
-        updatedChanges.percentLiquidSeperation =
-          DEFAULT_LIQUID_MANURE_SYSTEM.percentLiquidSeperation;
-        updatedChanges.separatedLiquidsUSGallons =
-          DEFAULT_LIQUID_MANURE_SYSTEM.separatedLiquidsUSGallons;
-        updatedChanges.separatedSolidsTons = DEFAULT_LIQUID_MANURE_SYSTEM.separatedSolidsTons;
-      } else {
-        const [separatedLiquids, separatedSolids] = calculateSeparatedSolidAndLiquid(
-          totalManureGallons,
-          (formData as LiquidManureStorageSystem).percentLiquidSeperation,
-        );
-        updatedChanges.separatedLiquidsUSGallons = separatedLiquids;
-        updatedChanges.separatedSolidsTons = separatedSolids;
-      }
-    }
     if (Object.prototype.hasOwnProperty.call(changes, 'percentLiquidSeperation')) {
       updatedChanges = changes as Partial<LiquidManureStorageSystem>;
       const [separatedLiquids, separatedSolids] = calculateSeparatedSolidAndLiquid(
@@ -134,6 +117,23 @@ export default function StorageSystemDetailsEdit({
       );
       updatedChanges.separatedLiquidsUSGallons = separatedLiquids;
       updatedChanges.separatedSolidsTons = separatedSolids;
+    }
+    // Do not move before previous conditional
+    if (Object.prototype.hasOwnProperty.call(changes, 'hasSeperation')) {
+      updatedChanges = changes as Partial<LiquidManureStorageSystem>;
+      if (updatedChanges.hasSeperation === false) {
+        updatedChanges.percentLiquidSeperation =
+          DEFAULT_LIQUID_MANURE_SYSTEM.percentLiquidSeperation;
+        updatedChanges.separatedLiquidsUSGallons = undefined;
+        updatedChanges.separatedSolidsTons = undefined;
+      } else {
+        const [separatedLiquids, separatedSolids] = calculateSeparatedSolidAndLiquid(
+          totalManureGallons,
+          (formData as LiquidManureStorageSystem).percentLiquidSeperation,
+        );
+        updatedChanges.separatedLiquidsUSGallons = separatedLiquids;
+        updatedChanges.separatedSolidsTons = separatedSolids;
+      }
     }
     setFormData((prev) => ({ ...prev, ...updatedChanges }) as NMPFileManureStorageSystem);
   };
