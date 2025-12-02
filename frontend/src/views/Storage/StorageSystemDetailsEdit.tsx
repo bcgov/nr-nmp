@@ -218,21 +218,28 @@ export default function StorageSystemDetailsEdit({
           container
           size={6}
         >
-          <CheckboxGroup
-            aria-label="Manures in System"
-            isRequired
-            value={selectedManureNames}
-            onChange={handleSelectedChange}
-          >
-            {availableManures.map((manure) => (
-              <Checkbox
-                key={manure.data.managedManureName}
-                value={manure.data.managedManureName}
-              >
-                {manure.data.managedManureName}
-              </Checkbox>
-            ))}
-          </CheckboxGroup>
+          {availableManures.length > 0 ? (
+            <CheckboxGroup
+              aria-label="Manures in System"
+              isRequired
+              value={selectedManureNames}
+              onChange={handleSelectedChange}
+            >
+              {availableManures.map((manure) => (
+                <Checkbox
+                  key={manure.data.managedManureName}
+                  value={manure.data.managedManureName}
+                >
+                  {manure.data.managedManureName}
+                </Checkbox>
+              ))}
+            </CheckboxGroup>
+          ) : (
+            <span>
+              There are no unstored materials of this type. To add materials, please return to Add
+              Animals or Manure and Imports.
+            </span>
+          )}
         </Grid>
         <Grid
           container

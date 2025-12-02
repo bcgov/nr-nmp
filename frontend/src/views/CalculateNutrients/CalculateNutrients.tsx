@@ -457,8 +457,8 @@ export default function CalculateNutrients() {
         style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
       >
         <div style={{ width: 220 }} />
-        <div style={{ width: 360 }}>Agronomic (lb/ac)</div>
-        <div style={{ width: 190 }}>Crop Removal (lb/ac)</div>
+        <div style={{ width: 360 }}>Agronomic (lb/ac)*</div>
+        <div style={{ width: 190 }}>Crop Removal (lb/ac)**</div>
       </div>
       <DataGrid
         sx={{
@@ -589,6 +589,11 @@ export default function CalculateNutrients() {
           <Message>{msg.text}</Message>
         </Error>
       ))}
+      <Message>* Agronomic balances indicate if crop nutrient requirements are met.</Message>
+      <Message>
+        ** Crop removal balances indicate how soil phosphorus (P) or potassium (K) levels will
+        change.
+      </Message>
     </View>
   );
 }

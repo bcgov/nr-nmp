@@ -412,7 +412,6 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
         >
           <div
-            aria-labelledby="react-aria-«r14»"
             aria-orientation="vertical"
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
@@ -420,12 +419,6 @@ exports[`renders correctly 1`] = `
             id="react-aria-«r13»"
             role="radiogroup"
           >
-            <span
-              class="bcds-react-aria-RadioGroup--label"
-              id="react-aria-«r14»"
-            >
-              I have crops 
-            </span>
             <div
               class="bcds-react-aria-RadioGroup--options horizontal flex-wrap-nowrap"
             >
@@ -465,6 +458,12 @@ exports[`renders correctly 1`] = `
                 </span>
                 No
               </label>
+              <div
+                class="bcds-react-aria-RadioGroup--label"
+                style="flex-basis: 100%;"
+              >
+                I have crops
+              </div>
             </div>
           </div>
         </div>
@@ -472,7 +471,6 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
         >
           <div
-            aria-labelledby="react-aria-«r1a»"
             aria-orientation="vertical"
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
@@ -480,12 +478,6 @@ exports[`renders correctly 1`] = `
             id="react-aria-«r19»"
             role="radiogroup"
           >
-            <span
-              class="bcds-react-aria-RadioGroup--label"
-              id="react-aria-«r1a»"
-            >
-              I have Livestock 
-            </span>
             <div
               class="bcds-react-aria-RadioGroup--options horizontal flex-wrap-nowrap"
             >
@@ -525,6 +517,12 @@ exports[`renders correctly 1`] = `
                 </span>
                 No
               </label>
+              <div
+                class="bcds-react-aria-RadioGroup--label"
+                style="flex-basis: 100%;"
+              >
+                I have Livestock
+              </div>
             </div>
           </div>
           <div

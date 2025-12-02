@@ -116,3 +116,8 @@ export const addRecordGroupStyle = css({
 export const ErrorText = styled.div`
   color: red;
 `;
+
+export const ModalInstructions = styled.div`
+  font: var(--typography-regular-body);
+  margin-bottom: 4px;
+`;
