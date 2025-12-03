@@ -576,6 +576,12 @@ function CropsModal({
         <Grid
           container
           spacing={1}
+          // Hacky way to align inputs with long labels
+          css={{
+            alignItems: 'flex-end',
+            '.bcds-react-aria-RadioGroup--options': { height: '35px' },
+            '.bcds-react-aria-Radio:before': { alignSelf: 'initial' },
+          }}
         >
           <Grid size={formGridBreakpoints}>
             <Select
