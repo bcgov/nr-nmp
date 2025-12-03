@@ -11,9 +11,9 @@ export default async function axiosGet(
       // eslint-disable-next-line no-await-in-loop
       const response = await axios.get(url, config);
       return response;
-    } catch (e) {
+    } catch (e: any) {
       err = e;
     }
   }
-  throw err;
+  throw new Error(`Failed to fetch ${url}, ${err.message}`);
 }
