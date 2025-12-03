@@ -69,25 +69,22 @@ export default function CalculateNutrients() {
     return prevData;
   }, [activeField, fieldList, previousManureApplications]);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<string>('');
+  const [warningText, setWarningText] = useState<string>('');
   const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
 
   const cropColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['crop', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = (evt: GridRenderCellParams) => {
-      setDialogText(`Are you sure you want to delete ${evt.row.name}?`);
-      setDeleteBtnConfig({
-        btnText: 'Delete',
-        handleClick: () => {
-          setFieldList((prev) => genHandleDeleteRow(evt, prev, activeField, 'crops'));
-          setShowDeleteDialog(false);
-        },
-      });
-      setShowDeleteDialog(true);
-    };
+    const handleDeleteRow = (evt: GridRenderCellParams) =>
+      genHandleDeleteRow(
+        evt,
+        activeField,
+        'crops',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     return generateColumns(
       handleEditRow,
       handleDeleteRow,
@@ -102,22 +99,14 @@ export default function CalculateNutrients() {
       setOpenDialog(['manure', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = (e: GridRenderCellParams) => {
-      setDialogText(`Are you sure you want to delete ${e.row.name}?`);
-      setDeleteBtnConfig({
-        btnText: 'Delete',
-        handleClick: () => {
-          setFieldList((prev) => {
-            const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-            const nextFieldArray = [...prev];
-            const manures = [...nextFieldArray[activeField].manures];
-            manures.splice(index, 1);
-            nextFieldArray[activeField].manures = manures;
-            return nextFieldArray;
-          });
-          setShowDeleteDialog(false);
-        },
-      });
-      setShowDeleteDialog(true);
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'manures',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Manures', true);
   }, [activeField]);
@@ -127,15 +116,14 @@ export default function CalculateNutrients() {
       setOpenDialog(['fertilizer', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = (e: GridRenderCellParams) => {
-      setDialogText(`Are you sure you want to delete ${e.row.name}?`);
-      setDeleteBtnConfig({
-        btnText: 'Delete',
-        handleClick: () => {
-          setFieldList((prev) => genHandleDeleteRow(e, prev, activeField, 'fertilizers'));
-          setShowDeleteDialog(false);
-        },
-      });
-      setShowDeleteDialog(true);
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'fertilizers',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertilizers', true);
   }, [activeField]);
@@ -151,21 +139,14 @@ export default function CalculateNutrients() {
       setOpenDialog(['fertigation', e.row.index]);
     };
     const handleDeleteRow = (e: GridRenderCellParams) => {
-      setDialogText(`Are you sure you want to delete ${e.row.name}?`);
-      setDeleteBtnConfig({
-        btnText: 'Delete',
-        handleClick: () => {
-          setFieldList((prev) => {
-            const fertigations = [...prev[activeField].fertigations];
-            fertigations.splice(e.row.index, 1);
-            const nextFieldArray = [...prev];
-            nextFieldArray[activeField].fertigations = fertigations;
-            return nextFieldArray;
-          });
-          setShowDeleteDialog(false);
-        },
-      });
-      setShowDeleteDialog(true);
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'fertigations',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertigation', true);
   }, [activeField]);
@@ -175,15 +156,14 @@ export default function CalculateNutrients() {
       setOpenDialog(['other', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     const handleDeleteRow = (e: GridRenderCellParams) => {
-      setDialogText(`Are you sure you want to delete ${e.row.name}?`);
-      setDeleteBtnConfig({
-        btnText: 'Delete',
-        handleClick: () => {
-          setFieldList((prev) => genHandleDeleteRow(e, prev, activeField, 'otherNutrients'));
-          setShowDeleteDialog(false);
-        },
-      });
-      setShowDeleteDialog(true);
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'otherNutrients',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
   }, [activeField]);
@@ -322,12 +302,12 @@ export default function CalculateNutrients() {
       }}
     >
       <AlertDialog
-        isOpen={showDeleteDialog}
+        isOpen={!!warningText}
         title="Calculate Nutrients - Delete"
-        onOpenChange={() => setShowDeleteDialog(false)}
+        onOpenChange={() => setWarningText('')}
         continueBtn={deleteBtnConfig}
       >
-        <div>{dialogText}</div>
+        <div>{warningText}</div>
       </AlertDialog>
       <ButtonGroup>
         <Button
