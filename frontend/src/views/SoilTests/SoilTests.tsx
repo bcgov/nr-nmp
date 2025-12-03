@@ -36,8 +36,6 @@ export default function SoilTests() {
   const [soilTestId, setSoilTestId] = useState<number>(
     fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
-  const [showAlertDialog, setShowAlertDialog] = useState<boolean>(false);
-  const [alertDialogHandler, setAlertDialogHandler] = useState<(...args: any[]) => any>(() => {});
 
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<string>('');
@@ -93,17 +91,7 @@ export default function SoilTests() {
     setSoilTestId(value);
   };
 
-  const goToNextPage = () => {
-    dispatch({
-      type: 'SAVE_FIELDS',
-      year: state.nmpFile.farmDetails.year,
-      newFields: fields,
-      soilTestsUpdated: true,
-    });
-    navigate(CROPS);
-  };
-
-  const goToPreviousPage = () => {
+  const handlePreviousPage = () => {
     dispatch({
       type: 'SAVE_FIELDS',
       year: state.nmpFile.farmDetails.year,
@@ -113,22 +101,14 @@ export default function SoilTests() {
     navigate(FIELD_LIST);
   };
 
-  const handlePreviousPage = () => {
-    if (!fields.some((fieldEle) => !!fieldEle.soilTest)) {
-      goToPreviousPage();
-    } else {
-      setAlertDialogHandler(() => goToPreviousPage);
-      setShowAlertDialog(true);
-    }
-  };
-
   const handleNextPage = () => {
-    if (!fields.some((fieldEle) => !!fieldEle.soilTest)) {
-      goToNextPage();
-    } else {
-      setAlertDialogHandler(() => goToNextPage);
-      setShowAlertDialog(true);
-    }
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.year,
+      newFields: fields,
+      soilTestsUpdated: true,
+    });
+    navigate(CROPS);
   };
 
   useEffect(() => {
@@ -289,25 +269,6 @@ export default function SoilTests() {
         continueBtn={deleteBtnConfig}
       >
         <div>{dialogText}</div>
-      </AlertDialog>
-      <AlertDialog
-        isOpen={showAlertDialog}
-        title="Warning"
-        onOpenChange={() => setShowAlertDialog(false)}
-        continueBtn={{ handleClick: alertDialogHandler }}
-      >
-        <ul style={{ color: 'red' }}>
-          <li>
-            For fields without a soil test, very high soil P and K fertility and a pH of 4.0 will be
-            assumed.
-          </li>
-          <li>Crop P and K requirements will be 0 on fields without a soil test.</li>
-          <br />
-          <li>
-            For fields without a leaf test, &apos;High&apos; leaf P and K content will be assumed.
-          </li>
-          <li>Crop P and K requirements will be 0 on fields without a leaf test.</li>
-        </ul>
       </AlertDialog>
       {currentFieldIndex !== null && (
         <SoilTestsModal
