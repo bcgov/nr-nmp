@@ -1,9 +1,11 @@
 import { Suspense, use, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StyledApp, ViewContainer } from './App.styles';
 import { Header, Footer } from './components/common';
 import { APICacheContext } from './context/APICacheContext';
 import ViewRouter from './routes/ViewRouter';
 import useAppState from './hooks/useAppState';
+import ErrorBoundary from './services/ErrorBoundary.tsx';
 
 /**
  * @summary The root component of the application.
@@ -11,6 +13,7 @@ import useAppState from './hooks/useAppState';
 function App() {
   const apiCache = use(APICacheContext);
   const wait = use(apiCache.promise);
+  const navigate = useNavigate();
 
   const { dispatch } = useAppState();
   useEffect(() => {
@@ -24,11 +27,15 @@ function App() {
     <StyledApp>
       <Header />
       <ViewContainer>
-        {/* TODO: Add better fallback component */}
-        <Suspense fallback={<div>Loading...</div>}>
-          {wait}
-          <ViewRouter />
-        </Suspense>
+        <ErrorBoundary
+          dispatch={dispatch}
+          navigate={navigate}
+        >
+          <Suspense fallback={<div>Loading...</div>}>
+            {wait}
+            <ViewRouter />
+          </Suspense>
+        </ErrorBoundary>
       </ViewContainer>
       <Footer />
     </StyledApp>
