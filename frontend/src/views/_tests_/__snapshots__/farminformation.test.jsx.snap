@@ -412,6 +412,7 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
         >
           <div
+            aria-label="I have crops"
             aria-orientation="vertical"
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
@@ -471,6 +472,7 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
         >
           <div
+            aria-label="I have livestock"
             aria-orientation="vertical"
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
@@ -521,7 +523,7 @@ exports[`renders correctly 1`] = `
                 class="bcds-react-aria-RadioGroup--label"
                 style="flex-basis: 100%;"
               >
-                I have Livestock
+                I have livestock
               </div>
             </div>
           </div>
