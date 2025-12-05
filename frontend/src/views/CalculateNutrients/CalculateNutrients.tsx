@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { calculatePrevYearManure } from '@/calculations/CalculateNutrients/PreviousManure';
-import { Tabs, View } from '../../components/common';
+import { AlertDialog, Tabs, View } from '../../components/common';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
 import { customTableStyle, ErrorText } from '../../common.styles';
@@ -69,11 +69,22 @@ export default function CalculateNutrients() {
     return prevData;
   }, [activeField, fieldList, previousManureApplications]);
 
+  const [warningText, setWarningText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
+
   const cropColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['crop', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = genHandleDeleteRow(activeField, 'crops', setFieldList);
+    const handleDeleteRow = (evt: GridRenderCellParams) =>
+      genHandleDeleteRow(
+        evt,
+        activeField,
+        'crops',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     return generateColumns(
       handleEditRow,
       handleDeleteRow,
@@ -87,15 +98,15 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['manure', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
-      setFieldList((prev) => {
-        const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-        const nextFieldArray = [...prev];
-        const manures = [...nextFieldArray[activeField].manures];
-        manures.splice(index, 1);
-        nextFieldArray[activeField].manures = manures;
-        return nextFieldArray;
-      });
+    const handleDeleteRow = (e: GridRenderCellParams) => {
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'manures',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Manures', true);
   }, [activeField]);
@@ -104,7 +115,16 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['fertilizer', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = genHandleDeleteRow(activeField, 'fertilizers', setFieldList);
+    const handleDeleteRow = (e: GridRenderCellParams) => {
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'fertilizers',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
+    };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertilizers', true);
   }, [activeField]);
 
@@ -118,14 +138,15 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { row: { index: number } }) => {
       setOpenDialog(['fertigation', e.row.index]);
     };
-    const handleDeleteRow = (e: { row: { index: number } }) => {
-      setFieldList((prev) => {
-        const fertigations = [...prev[activeField].fertigations];
-        fertigations.splice(e.row.index, 1);
-        const nextFieldArray = [...prev];
-        nextFieldArray[activeField].fertigations = fertigations;
-        return nextFieldArray;
-      });
+    const handleDeleteRow = (e: GridRenderCellParams) => {
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'fertigations',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertigation', true);
   }, [activeField]);
@@ -134,7 +155,16 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['other', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = genHandleDeleteRow(activeField, 'otherNutrients', setFieldList);
+    const handleDeleteRow = (e: GridRenderCellParams) => {
+      genHandleDeleteRow(
+        e,
+        activeField,
+        'otherNutrients',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
+    };
     return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
   }, [activeField]);
 
@@ -142,9 +172,9 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['soilNitrate', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = genHandleDeleteRow(activeField, 'soilNitrateCredit', setFieldList);
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, '', true, false);
-  }, [activeField]);
+    // Soil nitrates have different logic, no delete here
+    return generateColumns(handleEditRow, () => {}, renderNutrientCell, '', true, false);
+  }, []);
 
   const previousYearManureColumns: GridColDef[] = useMemo(
     () =>
@@ -271,6 +301,14 @@ export default function CalculateNutrients() {
         }
       }}
     >
+      <AlertDialog
+        isOpen={!!warningText}
+        title="Calculate Nutrients - Delete"
+        onOpenChange={() => setWarningText('')}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{warningText}</div>
+      </AlertDialog>
       <ButtonGroup>
         <Button
           size="medium"
