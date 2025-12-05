@@ -7,7 +7,8 @@ export const componentContainer = css({
   flexDirection: 'column',
   marginLeft: '3rem',
   marginRight: '3rem',
-  maxWidth: '900px',
+  maxWidth: '1025px',
+  minWidth: '800px',
   width: '100%',
   minHeight: 'calc(100vh - 160px)',
 });
@@ -94,6 +95,8 @@ export const customTableStyle = {
     fontWeight: '700',
     whiteSpace: 'break-spaces',
   },
+  '& .MuiDataGrid-virtualScroller::-webkit-scrollbar': { display: 'none' },
+  '& .MuiDataGrid-virtualScroller': { overflow: 'hidden' },
 };
 
 export const tableActionButtonCss = css({

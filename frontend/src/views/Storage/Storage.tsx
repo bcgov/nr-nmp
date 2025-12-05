@@ -234,10 +234,12 @@ export default function Storage() {
           container
           size={4}
         >
-          <div>Materials Needing Storage</div>
-          {unassignedManures.map((m) => (
-            <div key={m.data.managedManureName}>{m.data.managedManureName}</div>
-          ))}
+          <div>
+            <div>Materials Needing Storage</div>
+            {unassignedManures.map((m) => (
+              <div key={m.data.managedManureName}>- {m.data.managedManureName}</div>
+            ))}
+          </div>
         </Grid>
       </Grid>
     </View>

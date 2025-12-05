@@ -242,7 +242,7 @@ export default function FarmInformation() {
           </Grid>
           <Grid size={12}>
             <YesNoRadioButtons
-              text="I have Livestock"
+              text="I have livestock"
               value={hasAnimals}
               onChange={(b) => {
                 setHasAnimals(b);
