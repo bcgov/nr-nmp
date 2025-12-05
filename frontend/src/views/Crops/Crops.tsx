@@ -207,6 +207,7 @@ function Crops() {
           }
           onClose={handleDialogClose}
           isOpen={isDialogOpen}
+          modalStyle={{ width: '700px' }}
         />
       )}
       <DataGrid

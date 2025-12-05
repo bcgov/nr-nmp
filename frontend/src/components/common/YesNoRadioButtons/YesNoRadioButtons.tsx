@@ -23,6 +23,7 @@ function YesNoRadioButtons({
       onChange={(val) => {
         onChange(val === 'true');
       }}
+      aria-label={text}
     >
       {orientation === 'vertical' && (
         <div className="bcds-react-aria-RadioGroup--label">
