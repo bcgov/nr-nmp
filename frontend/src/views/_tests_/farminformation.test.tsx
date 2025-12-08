@@ -1,12 +1,12 @@
 import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
-import useAppState from '../../hooks/useAppState';
+import useAppState from '@/hooks/useAppState';
 import DEFAULT_NMPFILE from '../../constants/DefaultNMPFile';
 import FarmInformation from '../FarmInformation/FarmInformation';
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
+
 jest.mock('../../services/APICache', () =>
   jest.fn().mockImplementation(() => ({
     callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
@@ -15,13 +15,14 @@ jest.mock('../../services/APICache', () =>
 
 // Snapshot test for FarmInformation view
 it('renders correctly', async () => {
-  mockUseAppService.mockImplementation(() => ({
+  mockUseAppService.mockReturnValue({
     state: {
       nmpFile: DEFAULT_NMPFILE,
-      showAnimalsStep: false,
+      showAnimalsStep: true,
+      tables: undefined,
     },
     dispatch: jest.fn(),
-  }));
+  });
 
   const { asFragment } = render(
     <MemoryRouter>
