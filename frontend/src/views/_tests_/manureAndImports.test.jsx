@@ -62,6 +62,7 @@ it('ManureImportModal is correct', async () => {
 
   // IMPORTANT: For modals, you need to check the baseElement, not the container or fragment
   let baseElement;
+  // If you see an error about wrapping in an act(), use waitFor()
   await waitFor(() => {
     const r = render(
       <ManureImportModal
