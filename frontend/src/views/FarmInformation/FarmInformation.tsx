@@ -281,9 +281,9 @@ export default function FarmInformation() {
               onChange={(b) => {
                 setHasAnimals(b);
                 if (!b && animalCheckboxes?.length)
-                  setFormData((prevData) => ({
+                  setFormData((prevData: NMPFileFarmDetails) => ({
                     ...prevData,
-                    FarmAnimals: [],
+                    farmAnimals: [],
                   }));
               }}
               orientation="horizontal"
