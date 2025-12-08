@@ -13,12 +13,13 @@ import {
   NMPFileAnimal,
   ManureType,
   Animal,
+  AlertDialogContinueBtn,
 } from '@/types';
 import { getDensityFactoredConversionUsingMoisture } from '@/utils/densityCalculations';
 import useAppState from '@/hooks/useAppState';
 import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/routes';
 
-import { Tabs, View } from '@/components/common';
+import { AlertDialog, Tabs, View } from '@/components/common';
 import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay, printNum } from '@/utils/utils';
@@ -43,6 +44,11 @@ export default function ManureAndImports() {
   const [liquidManureDropdownOptions, setLiquidManureDropdownOptions] = useState<
     LiquidManureConversionFactors[]
   >([]);
+
+  const [dialogText, setDialogText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
 
   const hasDairyCattle = useMemo(
     () => animalList.some((animal) => animal.animalId === DAIRY_COW_ID),
@@ -278,7 +284,16 @@ export default function ManureAndImports() {
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDeleteRow(row)}
+              onClick={() => {
+                setDialogText(`Are you sure you want to delete ${row.row.managedManureName}?`);
+                setDeleteBtnConfig({
+                  btnText: 'Delete',
+                  handleClick: () => {
+                    handleDeleteRow(row);
+                    setDialogText('');
+                  },
+                });
+              }}
               icon={faTrash}
               aria-label="Delete"
             />
@@ -297,6 +312,14 @@ export default function ManureAndImports() {
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
+      <AlertDialog
+        isOpen={!!dialogText}
+        title="Manure and Imports - Delete"
+        onOpenChange={() => setDialogText('')}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{dialogText}</div>
+      </AlertDialog>
       <div css={addRecordGroupStyle}>
         <ButtonGroup
           alignment="end"
