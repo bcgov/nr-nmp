@@ -18,7 +18,13 @@ import {
 } from '../../common.styles';
 import { AlertDialog, Select, Tabs, View } from '../../components/common';
 import { APICacheContext } from '@/context/APICacheContext';
-import { NMPFileField, SelectOption, SoilTestMethods, SoilTestNutrientRange } from '@/types';
+import {
+  AlertDialogContinueBtn,
+  NMPFileField,
+  SelectOption,
+  SoilTestMethods,
+  SoilTestNutrientRange,
+} from '@/types';
 import { InfoBox } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
@@ -37,9 +43,10 @@ export default function SoilTests() {
     fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
 
   const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
@@ -230,10 +237,9 @@ export default function SoilTests() {
                         btnText: 'Delete',
                         handleClick: () => {
                           handleDeleteRow(e);
-                          setShowDeleteDialog(false);
+                          setDialogText('');
                         },
                       });
-                      setShowDeleteDialog(true);
                     }}
                     icon={faTrash}
                   />
@@ -263,9 +269,9 @@ export default function SoilTests() {
       handleNext={handleNextPage}
     >
       <AlertDialog
-        isOpen={showDeleteDialog}
+        isOpen={!!dialogText}
         title="Soil tests - Delete"
-        onOpenChange={() => setShowDeleteDialog(false)}
+        onOpenChange={() => setDialogText('')}
         continueBtn={deleteBtnConfig}
       >
         <div>{dialogText}</div>

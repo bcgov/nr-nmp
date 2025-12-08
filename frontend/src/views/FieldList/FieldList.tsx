@@ -18,6 +18,7 @@ import {
 import { NMPFileField } from '@/types/NMPFileField';
 import { FARM_INFORMATION, NUTRIENT_ANALYSIS, SOIL_TESTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
+import { AlertDialogContinueBtn } from '@/types';
 
 export default function FieldList() {
   const { state, dispatch } = useAppState();
@@ -25,9 +26,10 @@ export default function FieldList() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
 
   const navigate = useNavigate();
 
@@ -137,10 +139,9 @@ export default function FieldList() {
                   btnText: 'Delete',
                   handleClick: () => {
                     handleDeleteRow(e);
-                    setShowDeleteDialog(false);
+                    setDialogText('');
                   },
                 });
-                setShowDeleteDialog(true);
               }}
               icon={faTrash}
             />
@@ -160,9 +161,9 @@ export default function FieldList() {
       handleNext={handleNextPage}
     >
       <AlertDialog
-        isOpen={showDeleteDialog}
+        isOpen={!!dialogText}
         title="Fields - Delete"
-        onOpenChange={() => setShowDeleteDialog(false)}
+        onOpenChange={() => setDialogText('')}
         continueBtn={deleteBtnConfig}
       >
         <div>{dialogText}</div>

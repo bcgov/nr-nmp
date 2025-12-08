@@ -14,6 +14,7 @@ import {
   NMPFileManureStorageSystem,
   NMPFileNutrientAnalysis,
   NMPFileManure,
+  AlertDialogContinueBtn,
 } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
@@ -45,10 +46,10 @@ export default function NutrientAnalysis() {
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysis | undefined>(undefined);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
-
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
   const hasDairyCattle = useMemo(
     () =>
       state.nmpFile.years[0]?.farmAnimals?.some(
@@ -188,10 +189,9 @@ export default function NutrientAnalysis() {
                   btnText: 'Delete',
                   handleClick: () => {
                     handleDelete(row.row.sourceUuid);
-                    setShowDeleteDialog(false);
+                    setDialogText('');
                   },
                 });
-                setShowDeleteDialog(true);
               }}
               icon={faTrash}
               aria-label="Delete"
@@ -213,9 +213,9 @@ export default function NutrientAnalysis() {
       handleNext={handleNextPage}
     >
       <AlertDialog
-        isOpen={showDeleteDialog}
+        isOpen={!!dialogText}
         title="Nutrient Analysis - Delete"
-        onOpenChange={() => setShowDeleteDialog(false)}
+        onOpenChange={() => setDialogText('')}
         continueBtn={deleteBtnConfig}
       >
         <div>{dialogText}</div>

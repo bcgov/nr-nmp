@@ -14,7 +14,7 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-da
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { AlertDialog, Tabs, View } from '../../components/common';
-import { NMPFileField } from '@/types';
+import { AlertDialogContinueBtn, NMPFileField } from '@/types';
 import { CALCULATE_NUTRIENTS, SOIL_TESTS, MANURE_IMPORTS } from '@/constants/routes';
 import { customTableStyle, tableActionButtonCss } from '../../common.styles';
 import CropsModal from './CropsModal';
@@ -30,9 +30,10 @@ function Crops() {
   const [editingCropIndex, setEditingCropIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
 
   const handleEditCrop = (e: { id: GridRowId; api: GridApiCommunity }, cropIndex: number) => {
     setEditingFieldIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
@@ -115,10 +116,9 @@ function Crops() {
                       btnText: 'Delete',
                       handleClick: () => {
                         handleDeleteCrop(e, cropsIndex);
-                        setShowDeleteDialog(false);
+                        setDialogText('');
                       },
                     });
-                    setShowDeleteDialog(true);
                   }}
                   icon={faTrash}
                 />
@@ -183,10 +183,9 @@ function Crops() {
                       btnText: 'Delete',
                       handleClick: () => {
                         handleDeleteCrop(e, cropsIndex);
-                        setShowDeleteDialog(false);
+                        setDialogText('');
                       },
                     });
-                    setShowDeleteDialog(true);
                   }}
                   icon={faTrash}
                 />
@@ -220,9 +219,9 @@ function Crops() {
       handleNext={handleNextPage}
     >
       <AlertDialog
-        isOpen={showDeleteDialog}
+        isOpen={!!dialogText}
         title="Crops - Delete"
-        onOpenChange={() => setShowDeleteDialog(false)}
+        onOpenChange={() => setDialogText('')}
         continueBtn={deleteBtnConfig}
       >
         <div>{dialogText}</div>

@@ -33,7 +33,12 @@ import {
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import { CalculateNutrientsRow, NMPFileField, PreviousYearManureApplication } from '@/types';
+import {
+  AlertDialogContinueBtn,
+  CalculateNutrientsRow,
+  NMPFileField,
+  PreviousYearManureApplication,
+} from '@/types';
 import { APICacheContext } from '@/context/APICacheContext.tsx';
 import SoilNitrateCreditModal from './CalculateNutrientsComponents/SoilNitrateCreditModal.tsx';
 
@@ -70,7 +75,9 @@ export default function CalculateNutrients() {
   }, [activeField, fieldList, previousManureApplications]);
 
   const [warningText, setWarningText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
 
   const cropColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {

@@ -6,27 +6,16 @@ import {
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
 import Divider from '@mui/material/Divider';
+import { AlertDialogCloseBtn, AlertDialogContinueBtn, AlertDialogExtraConfig } from '@/types';
 
 export interface ModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   title: string;
   children?: React.ReactNode;
-  closeBtn?: {
-    btnText?: string;
-    handleClick?: () => void;
-    variant?: 'link' | 'secondary' | 'primary' | 'tertiary' | undefined;
-  };
-  extraBtn?: {
-    btnText: string;
-    handleClick: () => void;
-    variant: 'link' | 'secondary' | 'primary' | 'tertiary' | undefined;
-  };
-  continueBtn?: {
-    btnText?: string;
-    handleClick: () => void;
-    variant?: 'link' | 'secondary' | 'primary' | 'tertiary' | undefined;
-  };
+  closeBtn?: AlertDialogCloseBtn;
+  extraBtn?: AlertDialogExtraConfig;
+  continueBtn?: AlertDialogContinueBtn;
   modalStyle?: React.CSSProperties;
 }
 

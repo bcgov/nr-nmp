@@ -13,6 +13,7 @@ import {
   NMPFileAnimal,
   ManureType,
   Animal,
+  AlertDialogContinueBtn,
 } from '@/types';
 import { getDensityFactoredConversionUsingMoisture } from '@/utils/densityCalculations';
 import useAppState from '@/hooks/useAppState';
@@ -44,9 +45,10 @@ export default function ManureAndImports() {
     LiquidManureConversionFactors[]
   >([]);
 
-  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<any>({});
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
 
   const hasDairyCattle = useMemo(
     () => animalList.some((animal) => animal.animalId === DAIRY_COW_ID),
@@ -288,10 +290,9 @@ export default function ManureAndImports() {
                   btnText: 'Delete',
                   handleClick: () => {
                     handleDeleteRow(row);
-                    setShowDeleteDialog(false);
+                    setDialogText('');
                   },
                 });
-                setShowDeleteDialog(true);
               }}
               icon={faTrash}
               aria-label="Delete"
@@ -312,9 +313,9 @@ export default function ManureAndImports() {
       handleNext={handleNextPage}
     >
       <AlertDialog
-        isOpen={showDeleteDialog}
+        isOpen={!!dialogText}
         title="Manure and Imports - Delete"
-        onOpenChange={() => setShowDeleteDialog(false)}
+        onOpenChange={() => setDialogText('')}
         continueBtn={deleteBtnConfig}
       >
         <div>{dialogText}</div>
