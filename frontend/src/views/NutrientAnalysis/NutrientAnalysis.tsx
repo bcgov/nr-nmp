@@ -8,12 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { Tabs, View } from '../../components/common';
+import { AlertDialog, Tabs, View } from '../../components/common';
 import {
   NMPFileAnimal,
   NMPFileManureStorageSystem,
   NMPFileNutrientAnalysis,
   NMPFileManure,
+  AlertDialogContinueBtn,
 } from '@/types';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
@@ -45,6 +46,10 @@ export default function NutrientAnalysis() {
   // for each manuresource user can create nutrient analysis' objects
   const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysis | undefined>(undefined);
 
+  const [dialogText, setDialogText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
   const hasDairyCattle = useMemo(
     () =>
       state.nmpFile.years[0]?.farmAnimals?.some(
@@ -178,7 +183,16 @@ export default function NutrientAnalysis() {
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDelete(row.row.sourceUuid)}
+              onClick={() => {
+                setDialogText(`Are you sure you want to delete ${row.row.sourceName}?`);
+                setDeleteBtnConfig({
+                  btnText: 'Delete',
+                  handleClick: () => {
+                    handleDelete(row.row.sourceUuid);
+                    setDialogText('');
+                  },
+                });
+              }}
               icon={faTrash}
               aria-label="Delete"
             />
@@ -198,6 +212,14 @@ export default function NutrientAnalysis() {
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
+      <AlertDialog
+        isOpen={!!dialogText}
+        title="Nutrient Analysis - Delete"
+        onOpenChange={() => setDialogText('')}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{dialogText}</div>
+      </AlertDialog>
       <div css={addRecordGroupStyle}>
         <ButtonGroup
           alignment="end"

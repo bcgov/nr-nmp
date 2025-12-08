@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { FieldListModal, Tabs, View } from '@/components/common';
+import { AlertDialog, FieldListModal, Tabs, View } from '@/components/common';
 import {
   addRecordGroupStyle,
   customTableStyle,
@@ -18,12 +18,18 @@ import {
 import { NMPFileField } from '@/types/NMPFileField';
 import { FARM_INFORMATION, NUTRIENT_ANALYSIS, SOIL_TESTS } from '@/constants/routes';
 import useAppState from '@/hooks/useAppState';
+import { AlertDialogContinueBtn } from '@/types';
 
 export default function FieldList() {
   const { state, dispatch } = useAppState();
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [showViewError, setShowViewError] = useState<string>('');
+
+  const [dialogText, setDialogText] = useState<string>('');
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
+    undefined,
+  );
 
   const navigate = useNavigate();
 
@@ -118,16 +124,25 @@ export default function FieldList() {
         field: '',
         headerName: 'Actions',
         width: 120,
-        renderCell: (row: any) => (
+        renderCell: (e: GridRenderCellParams) => (
           <>
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleEditRow(row)}
+              onClick={() => handleEditRow(e)}
               icon={faEdit}
             />
             <FontAwesomeIcon
               css={tableActionButtonCss}
-              onClick={() => handleDeleteRow(row)}
+              onClick={() => {
+                setDialogText(`Are you sure you want to delete field ${e.row.fieldName}?`);
+                setDeleteBtnConfig({
+                  btnText: 'Delete',
+                  handleClick: () => {
+                    handleDeleteRow(e);
+                    setDialogText('');
+                  },
+                });
+              }}
               icon={faTrash}
             />
           </>
@@ -145,6 +160,14 @@ export default function FieldList() {
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
+      <AlertDialog
+        isOpen={!!dialogText}
+        title="Fields - Delete"
+        onOpenChange={() => setDialogText('')}
+        continueBtn={deleteBtnConfig}
+      >
+        <div>{dialogText}</div>
+      </AlertDialog>
       <div css={addRecordGroupStyle}>
         <ButtonGroup
           alignment="end"
