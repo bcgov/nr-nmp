@@ -1,8 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
-import { GridApiCommunity } from '@mui/x-data-grid/internals';
+import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { css } from '@emotion/react';
 import {
   type CropNutrients,
@@ -188,23 +187,29 @@ export const generateColumns = (
     resizable: false,
   },
 ];
-
 export function genHandleDeleteRow(
+  e: GridRenderCellParams,
   activeField: number,
   editProp: keyof NMPFileField,
   setFieldList: (value: React.SetStateAction<NMPFileField[]>) => void,
+  setWarningText: (txt: string) => void,
+  setDeleteBtnConfig: (obj: { btnText: string; handleClick: () => void }) => void,
 ) {
-  const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
-    setFieldList((prev) => {
-      const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-      const propArray = [...(prev[activeField][editProp] as any[])]; // typecast antics
-      propArray.splice(index, 1);
-      const nextFieldArray = [...prev];
-      nextFieldArray[activeField][editProp] = propArray as never; // typecast antics pt 2
-      return nextFieldArray;
-    });
-  };
-  return handleDeleteRow;
+  setWarningText(`Are you sure you want to delete ${e.row.name}?`);
+  setDeleteBtnConfig({
+    btnText: 'Delete',
+    handleClick: () => {
+      setFieldList((prev: any) => {
+        const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+        const propArray = [...(prev[activeField][editProp] as any[])]; // typecast antics
+        propArray.splice(index, 1);
+        const nextFieldArray = [...prev];
+        nextFieldArray[activeField][editProp] = propArray as never; // typecast antics pt 2
+        return nextFieldArray;
+      });
+      setWarningText('');
+    },
+  });
 }
 
 export function renderNutrientCell({ value }: any) {

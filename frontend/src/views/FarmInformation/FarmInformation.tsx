@@ -12,7 +12,7 @@ import {
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
-import { Select, TextField, View, YesNoRadioButtons } from '@/components/common';
+import { AlertDialog, Select, TextField, View, YesNoRadioButtons } from '@/components/common';
 import {
   formCss,
   formGridBreakpoints,
@@ -61,6 +61,8 @@ export default function FarmInformation() {
 
     return yearArray;
   }, []);
+
+  const [showWarningDialog, setShowWarningDialog] = useState<boolean>(false);
 
   useEffect(() => {
     // No error handling yet as I'm unsure how NMP is supposed to handle errors
@@ -169,8 +171,29 @@ export default function FarmInformation() {
   };
 
   const handlePreviousPage = () => {
-    navigate(LANDING_PAGE);
+    if (formData.farmName) {
+      setShowWarningDialog(true);
+    } else {
+      navigate(LANDING_PAGE);
+    }
   };
+
+  async function downloadBlob() {
+    const url = URL.createObjectURL(
+      new Blob([JSON.stringify(state.nmpFile)], { type: 'application/json' }),
+    );
+    const a = document.createElement('a');
+    a.href = url;
+
+    const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
+    const farmName = formData?.farmName;
+
+    a.download = `${prependDate}-${farmName}.nmp`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <View
@@ -179,6 +202,17 @@ export default function FarmInformation() {
       // Trigger submit event to use <Form>'s validation
       handleNext={() => formRef.current?.requestSubmit()}
     >
+      <AlertDialog
+        isOpen={showWarningDialog}
+        title="Warning - Unsaved data"
+        onOpenChange={() => setShowWarningDialog(false)}
+        continueBtn={{ handleClick: () => navigate(LANDING_PAGE) }}
+        extraBtn={{ btnText: 'Download', variant: 'primary', handleClick: () => downloadBlob() }}
+      >
+        <div style={{ color: 'red' }}>
+          Download file to save the changes you made, or Continue without saving.
+        </div>
+      </AlertDialog>
       <Form
         css={formCss}
         onSubmit={onSubmit}
