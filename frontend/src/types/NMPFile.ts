@@ -13,8 +13,9 @@ export type NMPFileFarmDetails = {
   farmRegion: number;
   regionLocationId: number;
   farmSubregion?: number;
-  farmAnimals?: string[];
-  hasHorticulturalCrops?: boolean;
+  hasAnimals: boolean;
+  checkedAnimals?: string[];
+  hasHorticulturalCrops: boolean;
 };
 
 export interface NMPFileNutrientAnalysis {

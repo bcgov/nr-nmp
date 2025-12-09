@@ -30,20 +30,9 @@ export default function FarmInformation() {
   const apiCache = useContext(APICacheContext);
   const formRef = useRef<null | HTMLFormElement>(null);
 
-  // Initialize non-bool values to prevent errors on first render
-  const [formData, setFormData] = useState<NMPFileFarmDetails>({
-    // These are default values if the NMPFile doesn't have values
-    farmAnimals: [],
-    hasHorticulturalCrops: false,
-    // Overwrite with existing file values
-    ...state.nmpFile.farmDetails,
-  });
+  const [formData, setFormData] = useState<NMPFileFarmDetails>({ ...state.nmpFile.farmDetails });
 
   // Props for animal selections
-  const [hasAnimals, setHasAnimals] = useState<boolean>(
-    state.nmpFile.farmDetails.farmAnimals !== undefined &&
-      state.nmpFile.farmDetails.farmAnimals.length > 0,
-  );
   const [rawAnimalNames, setRawAnimalNames] = useState<{ [id: string]: string }>({});
 
   // Props for region selections
@@ -161,7 +150,7 @@ export default function FarmInformation() {
     e.preventDefault();
     dispatch({ type: 'SAVE_FARM_DETAILS', newFarmDetails: formData });
 
-    if (formData.farmAnimals === undefined || formData.farmAnimals.length === 0) {
+    if (!formData.hasAnimals) {
       dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: false });
       navigate(FIELD_LIST);
     } else {
@@ -268,7 +257,7 @@ export default function FarmInformation() {
           <Subheader>Select all agriculture that occupy your farm (check all that apply)</Subheader>
           <Grid size={12}>
             <YesNoRadioButtons
-              value={formData.hasHorticulturalCrops || false}
+              value={formData.hasHorticulturalCrops}
               text="I have crops"
               onChange={(b) => handleChange({ hasHorticulturalCrops: b })}
               orientation="horizontal"
@@ -277,29 +266,28 @@ export default function FarmInformation() {
           <Grid size={12}>
             <YesNoRadioButtons
               text="I have livestock"
-              value={hasAnimals}
-              onChange={(b) => {
-                setHasAnimals(b);
-                if (!b && animalCheckboxes?.length)
-                  setFormData((prevData: NMPFileFarmDetails) => ({
-                    ...prevData,
-                    farmAnimals: [],
-                  }));
+              value={formData.hasAnimals}
+              onChange={(hasA) => {
+                if (!hasA) {
+                  handleChange({ hasAnimals: false, checkedAnimals: [] });
+                } else {
+                  handleChange({ hasAnimals: hasA });
+                }
               }}
               orientation="horizontal"
             />
             <CheckboxGroup
               aria-label="Farm Animals"
               css={
-                hasAnimals
+                formData.hasAnimals
                   ? {
                       '> div': [showCheckboxGroup, { gap: '0 !important' }],
                     }
                   : hideCheckboxGroup
               }
               orientation="vertical"
-              value={formData.farmAnimals}
-              onChange={(val) => handleChange({ farmAnimals: val })}
+              value={formData.checkedAnimals}
+              onChange={(val) => handleChange({ checkedAnimals: val })}
             >
               {animalCheckboxes}
             </CheckboxGroup>
