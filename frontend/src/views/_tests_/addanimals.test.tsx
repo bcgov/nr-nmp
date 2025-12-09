@@ -31,8 +31,8 @@ const farmTestFile: NMPFile = {
   ],
 };
 
-// Snapshot test for Add Animals view with add animals modal open
-it('renders correctly when add animals modal is closed', async () => {
+// Snapshot test for Add Animals view
+it('renders add animals view correctly', async () => {
   mockUseAppService.mockReturnValue({
     state: {
       nmpFile: farmTestFile,
@@ -56,6 +56,7 @@ it('renders correctly when add animals modal is closed', async () => {
   expect(asFragment()).toMatchSnapshot();
 });
 
+// Snapshot test for Add Animals view with add animals modal open
 it('renders correctly when add animals modal is open', async () => {
   mockUseAppService.mockReturnValue({
     state: {
@@ -65,79 +66,24 @@ it('renders correctly when add animals modal is open', async () => {
     },
     dispatch: jest.fn(),
   });
+  const mockHandleDialogClose = jest.fn();
 
-  const { asFragment } = render(
-    <MemoryRouter>
+  // IMPORTANT: For modals, you need to check the baseElement, not the container or fragment
+  let baseElement;
+  // If you see an error about wrapping in an act(), use waitFor()
+  await waitFor(() => {
+    const r = render(
       <AddAnimalsModal
         isOpen
         initialModalData={undefined}
         rowEditIndex={undefined}
         setAnimalList={jest.fn()}
-        onClose={() => {}}
-      />
-    </MemoryRouter>,
-  );
-
-  await waitFor(() => {
-    expect(asFragment()).toBeDefined();
+        onClose={mockHandleDialogClose}
+      />,
+    );
+    baseElement = r.baseElement;
   });
 
   // match snapshot
-  expect(asFragment()).toMatchSnapshot();
-});
-
-// Snapshot test for Add Animals view with add animals modal open and closed
-it('renders correctly when add animals modal is closed', async () => {
-  mockUseAppService.mockReturnValue({
-    state: {
-      nmpFile: farmTestFile,
-      showAnimalsStep: true,
-      tables: undefined,
-    },
-    dispatch: jest.fn(),
-  });
-
-  const { asFragment } = render(
-    <MemoryRouter>
-      <AddAnimals />
-    </MemoryRouter>,
-  );
-
-  await waitFor(() => {
-    expect(asFragment()).toBeDefined();
-  });
-
-  // match snapshot
-  expect(asFragment()).toMatchSnapshot();
-});
-
-// Snapshot test for Add Animals view with add animals modal closed
-it('renders correctly when add animals modal is open', async () => {
-  mockUseAppService.mockReturnValue({
-    state: {
-      nmpFile: farmTestFile,
-      showAnimalsStep: true,
-      tables: undefined,
-    },
-    dispatch: jest.fn(),
-  });
-
-  const { asFragment } = render(
-    <MemoryRouter>
-      <AddAnimalsModal
-        isOpen={false}
-        initialModalData={undefined}
-        rowEditIndex={undefined}
-        setAnimalList={jest.fn()}
-        onClose={() => {}}
-      />
-    </MemoryRouter>,
-  );
-
-  await waitFor(() => {
-    expect(asFragment()).toBeDefined();
-  });
-
-  // match snapshot
-  expect(asFragment()).toMatchSnapshot();
+  expect(baseElement).toMatchSnapshot();
 });
