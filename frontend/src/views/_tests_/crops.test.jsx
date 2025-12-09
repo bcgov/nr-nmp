@@ -4,8 +4,8 @@ import useAppState from '../../hooks/useAppState';
 import DEFAULT_NMPFILE from '../../constants/DefaultNMPFile';
 import DEFAULT_NMPFILE_YEAR from '../../constants/DefaultNMPFileYear';
 import { DEFAULT_NMPFILE_FIELD } from '../../constants/DefaultNMPFileField';
-import SoilTests from '../SoilTests/SoilTests';
-import SoilTestsModal from '../SoilTests/SoilTestsModal';
+import Crops from '../Crops/Crops';
+import CropsModal from '../Crops/CropsModal';
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
@@ -20,7 +20,7 @@ jest.mock('../../services/APICache', () =>
 const mockStructuredClone = jest.fn((x) => x);
 global.structuredClone = () => mockStructuredClone();
 
-it('SoilTests is correct', async () => {
+it('Crops is correct', async () => {
   mockUseAppService.mockImplementation(() => ({
     state: {
       nmpFile: {
@@ -34,7 +34,7 @@ it('SoilTests is correct', async () => {
 
   const { asFragment } = render(
     <MemoryRouter>
-      <SoilTests />
+      <Crops />
     </MemoryRouter>,
   );
 
@@ -46,7 +46,7 @@ it('SoilTests is correct', async () => {
   expect(asFragment()).toMatchSnapshot();
 });
 
-it('SoilTestsModal is correct', async () => {
+it('CropsModal is correct', async () => {
   mockUseAppService.mockImplementation(() => ({
     state: {
       nmpFile: {
@@ -58,19 +58,24 @@ it('SoilTestsModal is correct', async () => {
     dispatch: jest.fn(),
   }));
   const mockSetFields = jest.fn();
-  const mockHandleDialogClose = jest.fn();
+  const mockOnClose = jest.fn();
 
   // IMPORTANT: For modals, you need to check the baseElement, not the container or fragment
-  const { baseElement } = render(
-    <SoilTestsModal
-      initialFormData={undefined}
-      currentFieldIndex={0}
-      soilTestId={0}
-      soilTestMethods={[]}
-      setFields={mockSetFields}
-      handleDialogClose={mockHandleDialogClose}
-    />,
-  );
+  let baseElement;
+  // If you see an error about wrapping in an act(), use waitFor()
+  await waitFor(() => {
+    const r = render(
+      <CropsModal
+        field={DEFAULT_NMPFILE_FIELD}
+        fieldIndex={0}
+        setFields={mockSetFields}
+        onClose={mockOnClose}
+        isOpen
+        modalStyle={{ width: '700px' }}
+      />,
+    );
+    baseElement = r.baseElement;
+  });
 
   // match snapshot
   expect(baseElement).toMatchSnapshot();
