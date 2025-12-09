@@ -4,8 +4,8 @@ import useAppState from '../../hooks/useAppState';
 import DEFAULT_NMPFILE from '../../constants/DefaultNMPFile';
 import DEFAULT_NMPFILE_YEAR from '../../constants/DefaultNMPFileYear';
 import { DEFAULT_NMPFILE_FIELD } from '../../constants/DefaultNMPFileField';
-import SoilTests from '../SoilTests/SoilTests';
-import SoilTestsModal from '../SoilTests/SoilTestsModal';
+import NutrientAnalysis from '../NutrientAnalysis/NutrientAnalysis';
+import NutrientAnalysisModal from '../NutrientAnalysis/NutrientAnalysisModal';
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
@@ -16,11 +16,7 @@ jest.mock('../../services/APICache', () =>
   })),
 );
 
-// Copy in for tests that use structuredClone
-const mockStructuredClone = jest.fn((x) => x);
-global.structuredClone = () => mockStructuredClone();
-
-it('SoilTests is correct', async () => {
+it('NutrientAnalysis is correct', async () => {
   mockUseAppService.mockImplementation(() => ({
     state: {
       nmpFile: {
@@ -34,7 +30,7 @@ it('SoilTests is correct', async () => {
 
   const { asFragment } = render(
     <MemoryRouter>
-      <SoilTests />
+      <NutrientAnalysis />
     </MemoryRouter>,
   );
 
@@ -46,7 +42,7 @@ it('SoilTests is correct', async () => {
   expect(asFragment()).toMatchSnapshot();
 });
 
-it('SoilTestsModal is correct', async () => {
+it('NutrientAnalysisModal is correct', async () => {
   mockUseAppService.mockImplementation(() => ({
     state: {
       nmpFile: {
@@ -57,20 +53,26 @@ it('SoilTestsModal is correct', async () => {
     },
     dispatch: jest.fn(),
   }));
-  const mockSetFields = jest.fn();
+  const mockHandleSubmit = jest.fn();
   const mockHandleDialogClose = jest.fn();
 
   // IMPORTANT: For modals, you need to check the baseElement, not the container or fragment
-  const { baseElement } = render(
-    <SoilTestsModal
-      initialFormData={undefined}
-      currentFieldIndex={0}
-      soilTestId={0}
-      soilTestMethods={[]}
-      setFields={mockSetFields}
-      handleDialogClose={mockHandleDialogClose}
-    />,
-  );
+  let baseElement;
+  // If you see an error about wrapping in an act(), use waitFor()
+  await waitFor(() => {
+    const r = render(
+      <NutrientAnalysisModal
+        manures={[]}
+        storageSystems={[]}
+        currentNutrientAnalyses={[]}
+        handleSubmit={mockHandleSubmit}
+        isOpen
+        onCancel={mockHandleDialogClose}
+        modalStyle={{ width: '700px' }}
+      />,
+    );
+    baseElement = r.baseElement;
+  });
 
   // match snapshot
   expect(baseElement).toMatchSnapshot();
