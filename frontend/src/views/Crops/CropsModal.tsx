@@ -579,8 +579,9 @@ function CropsModal({
           // Hacky way to align inputs with long labels
           css={{
             alignItems: 'flex-end',
-            '.bcds-react-aria-RadioGroup--options': { height: '35px' },
-            '.bcds-react-aria-Radio:before': { alignSelf: 'initial' },
+            '.bcds-react-aria-RadioGroup--options': { rowGap: '0' },
+            '.bcds-react-aria-Radio::before': { alignSelf: 'inherit' },
+            '.bcds-react-aria-Radio': { height: '40px' },
           }}
         >
           <Grid size={formGridBreakpoints}>
