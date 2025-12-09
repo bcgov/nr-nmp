@@ -125,7 +125,9 @@ exports[`renders correctly 1`] = `
       <button
         class="bcds-react-aria-Button medium primary  "
         data-rac=""
+        data-react-aria-pressable="true"
         id="react-aria-«r0»"
+        tabindex="0"
         type="button"
       >
         Get Started
@@ -133,7 +135,9 @@ exports[`renders correctly 1`] = `
       <button
         class="bcds-react-aria-Button medium secondary  "
         data-rac=""
+        data-react-aria-pressable="true"
         id="react-aria-«r2»"
+        tabindex="0"
         type="button"
       >
         Upload File
