@@ -560,10 +560,7 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     ) {
       newAppState.nmpFile.years = [{ ...DEFAULT_NMPFILE_YEAR, year: action.newFarmDetails.year }];
       // Otherwise, keep the existing year and edit as necessary
-    } else if (
-      action.newFarmDetails.farmAnimals === undefined ||
-      action.newFarmDetails.farmAnimals.length === 0
-    ) {
+    } else if (!action.newFarmDetails.hasAnimals) {
       // Clear the animals array if animals have been removed
       saveAnimals(newAppState.nmpFile.years[0], []);
     }
