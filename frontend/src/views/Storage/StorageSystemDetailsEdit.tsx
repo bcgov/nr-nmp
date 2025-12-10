@@ -218,7 +218,7 @@ export default function StorageSystemDetailsEdit({
           container
           size={6}
         >
-          {availableManures.length > 0 ? (
+          {formData.manureType === undefined || availableManures.length > 0 ? (
             <CheckboxGroup
               aria-label="Manures in System"
               isRequired
@@ -235,7 +235,7 @@ export default function StorageSystemDetailsEdit({
               ))}
             </CheckboxGroup>
           ) : (
-            <span>
+            <span style={{ font: 'var(--typography-regular-small-body)' }}>
               There are no unstored materials of this type. To add materials, please return to Add
               Animals or Manure and Imports.
             </span>
