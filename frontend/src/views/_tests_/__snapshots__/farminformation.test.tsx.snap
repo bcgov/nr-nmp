@@ -161,6 +161,9 @@ exports[`renders correctly 1`] = `
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
+          <template
+            data-react-aria-hidden="true"
+          />
           <div
             class="bcds-react-aria-Select"
             data-rac=""
@@ -178,7 +181,9 @@ exports[`renders correctly 1`] = `
               aria-labelledby="react-aria-«rc» react-aria-«r8»"
               class="bcds-react-aria-Select--Button medium false"
               data-rac=""
+              data-react-aria-pressable="true"
               id="react-aria-«r7»"
+              tabindex="0"
               type="button"
             >
               <span
@@ -203,78 +208,81 @@ exports[`renders correctly 1`] = `
                 />
               </svg>
             </button>
-          </div>
-          <div
-            aria-hidden="true"
-            data-a11y-ignore="aria-hidden-focus"
-            data-react-aria-prevent-focus="true"
-            data-testid="hidden-select-container"
-            style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
-          >
-            <label>
-              <select
-                required=""
-                tabindex="-1"
-                title=""
-              >
-                <option />
-                <option
-                  value="2026"
+            <div
+              aria-hidden="true"
+              data-a11y-ignore="aria-hidden-focus"
+              data-react-aria-prevent-focus="true"
+              data-testid="hidden-select-container"
+              style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+            >
+              <label>
+                <select
+                  required=""
+                  tabindex="-1"
+                  title=""
                 >
-                  2026
-                </option>
-                <option
-                  value="2025"
-                >
-                  2025
-                </option>
-                <option
-                  value="2024"
-                >
-                  2024
-                </option>
-                <option
-                  value="2023"
-                >
-                  2023
-                </option>
-                <option
-                  value="2022"
-                >
-                  2022
-                </option>
-                <option
-                  value="2021"
-                >
-                  2021
-                </option>
-                <option
-                  value="2020"
-                >
-                  2020
-                </option>
-                <option
-                  value="2019"
-                >
-                  2019
-                </option>
-                <option
-                  value="2018"
-                >
-                  2018
-                </option>
-                <option
-                  value="2017"
-                >
-                  2017
-                </option>
-              </select>
-            </label>
+                  <option />
+                  <option
+                    value="2026"
+                  >
+                    2026
+                  </option>
+                  <option
+                    value="2025"
+                  >
+                    2025
+                  </option>
+                  <option
+                    value="2024"
+                  >
+                    2024
+                  </option>
+                  <option
+                    value="2023"
+                  >
+                    2023
+                  </option>
+                  <option
+                    value="2022"
+                  >
+                    2022
+                  </option>
+                  <option
+                    value="2021"
+                  >
+                    2021
+                  </option>
+                  <option
+                    value="2020"
+                  >
+                    2020
+                  </option>
+                  <option
+                    value="2019"
+                  >
+                    2019
+                  </option>
+                  <option
+                    value="2018"
+                  >
+                    2018
+                  </option>
+                  <option
+                    value="2017"
+                  >
+                    2017
+                  </option>
+                </select>
+              </label>
+            </div>
           </div>
         </div>
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
+          <template
+            data-react-aria-hidden="true"
+          />
           <div
             class="bcds-react-aria-Select"
             data-rac=""
@@ -292,7 +300,9 @@ exports[`renders correctly 1`] = `
               aria-labelledby="react-aria-«rm» react-aria-«ri»"
               class="bcds-react-aria-Select--Button medium false"
               data-rac=""
+              data-react-aria-pressable="true"
               id="react-aria-«rh»"
+              tabindex="0"
               type="button"
             >
               <span
@@ -317,28 +327,31 @@ exports[`renders correctly 1`] = `
                 />
               </svg>
             </button>
-          </div>
-          <div
-            aria-hidden="true"
-            data-a11y-ignore="aria-hidden-focus"
-            data-react-aria-prevent-focus="true"
-            data-testid="hidden-select-container"
-            style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
-          >
-            <label>
-              <select
-                required=""
-                tabindex="-1"
-                title=""
-              >
-                <option />
-              </select>
-            </label>
+            <div
+              aria-hidden="true"
+              data-a11y-ignore="aria-hidden-focus"
+              data-react-aria-prevent-focus="true"
+              data-testid="hidden-select-container"
+              style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+            >
+              <label>
+                <select
+                  required=""
+                  tabindex="-1"
+                  title=""
+                >
+                  <option />
+                </select>
+              </label>
+            </div>
           </div>
         </div>
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
+          <template
+            data-react-aria-hidden="true"
+          />
           <div
             class="bcds-react-aria-Select"
             data-disabled="true"
@@ -358,6 +371,7 @@ exports[`renders correctly 1`] = `
               class="bcds-react-aria-Select--Button medium false"
               data-disabled="true"
               data-rac=""
+              data-react-aria-pressable="true"
               disabled=""
               id="react-aria-«rr»"
               type="button"
@@ -384,23 +398,23 @@ exports[`renders correctly 1`] = `
                 />
               </svg>
             </button>
-          </div>
-          <div
-            aria-hidden="true"
-            data-a11y-ignore="aria-hidden-focus"
-            data-react-aria-prevent-focus="true"
-            data-testid="hidden-select-container"
-            style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
-          >
-            <label>
-              <select
-                disabled=""
-                required=""
-                tabindex="-1"
-              >
-                <option />
-              </select>
-            </label>
+            <div
+              aria-hidden="true"
+              data-a11y-ignore="aria-hidden-focus"
+              data-react-aria-prevent-focus="true"
+              data-testid="hidden-select-container"
+              style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+            >
+              <label>
+                <select
+                  disabled=""
+                  required=""
+                  tabindex="-1"
+                >
+                  <option />
+                </select>
+              </label>
+            </div>
           </div>
         </div>
         <div
@@ -426,11 +440,13 @@ exports[`renders correctly 1`] = `
               <label
                 class="bcds-react-aria-Radio"
                 data-rac=""
+                data-react-aria-pressable="true"
               >
                 <span
                   style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
                 >
                   <input
+                    data-react-aria-pressable="true"
                     name="react-aria-«r18»"
                     tabindex="-1"
                     title=""
@@ -443,6 +459,7 @@ exports[`renders correctly 1`] = `
               <label
                 class="bcds-react-aria-Radio"
                 data-rac=""
+                data-react-aria-pressable="true"
                 data-selected="true"
               >
                 <span
@@ -450,6 +467,7 @@ exports[`renders correctly 1`] = `
                 >
                   <input
                     checked=""
+                    data-react-aria-pressable="true"
                     name="react-aria-«r18»"
                     tabindex="0"
                     title=""
@@ -486,11 +504,13 @@ exports[`renders correctly 1`] = `
               <label
                 class="bcds-react-aria-Radio"
                 data-rac=""
+                data-react-aria-pressable="true"
               >
                 <span
                   style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
                 >
                   <input
+                    data-react-aria-pressable="true"
                     name="react-aria-«r1e»"
                     tabindex="-1"
                     title=""
@@ -503,6 +523,7 @@ exports[`renders correctly 1`] = `
               <label
                 class="bcds-react-aria-Radio"
                 data-rac=""
+                data-react-aria-pressable="true"
                 data-selected="true"
               >
                 <span
@@ -510,6 +531,7 @@ exports[`renders correctly 1`] = `
                 >
                   <input
                     checked=""
+                    data-react-aria-pressable="true"
                     name="react-aria-«r1e»"
                     tabindex="0"
                     title=""
@@ -552,7 +574,9 @@ exports[`renders correctly 1`] = `
         <button
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
+          data-react-aria-pressable="true"
           id="react-aria-«r1k»"
+          tabindex="0"
           type="button"
         >
           Back
@@ -560,7 +584,9 @@ exports[`renders correctly 1`] = `
         <button
           class="bcds-react-aria-Button medium primary  "
           data-rac=""
+          data-react-aria-pressable="true"
           id="react-aria-«r1m»"
+          tabindex="0"
           type="button"
         >
           Next

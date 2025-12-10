@@ -531,7 +531,9 @@ exports[`Crops is correct 1`] = `
         <button
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
+          data-react-aria-pressable="true"
           id="react-aria-«r0»"
+          tabindex="0"
           type="button"
         >
           Back
@@ -539,7 +541,9 @@ exports[`Crops is correct 1`] = `
         <button
           class="bcds-react-aria-Button medium primary  "
           data-rac=""
+          data-react-aria-pressable="true"
           id="react-aria-«r2»"
+          tabindex="0"
           type="button"
         >
           Next
@@ -563,7 +567,7 @@ exports[`CropsModal is correct 1`] = `
   <div
     class="react-aria-ModalOverlay"
     data-rac=""
-    style="--visual-viewport-height: 768px;"
+    style="--visual-viewport-height: 768px; --page-height: 0px;"
   >
     <div
       class="bcds-react-aria-Modal"
@@ -597,7 +601,9 @@ exports[`CropsModal is correct 1`] = `
               aria-label="Close"
               class="bcds-react-aria-Button small tertiary  icon"
               data-rac=""
+              data-react-aria-pressable="true"
               id="react-aria-«rl»"
+              tabindex="0"
               type="button"
             >
               <svg
@@ -639,6 +645,9 @@ exports[`CropsModal is correct 1`] = `
                 <div
                   class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
                 >
+                  <template
+                    data-react-aria-hidden="true"
+                  />
                   <div
                     class="bcds-react-aria-Select"
                     data-rac=""
@@ -656,7 +665,9 @@ exports[`CropsModal is correct 1`] = `
                       aria-labelledby="react-aria-«ru» react-aria-«rq»"
                       class="bcds-react-aria-Select--Button medium false"
                       data-rac=""
+                      data-react-aria-pressable="true"
                       id="react-aria-«rp»"
+                      tabindex="0"
                       type="button"
                     >
                       <span
@@ -681,23 +692,23 @@ exports[`CropsModal is correct 1`] = `
                         />
                       </svg>
                     </button>
-                  </div>
-                  <div
-                    aria-hidden="true"
-                    data-a11y-ignore="aria-hidden-focus"
-                    data-react-aria-prevent-focus="true"
-                    data-testid="hidden-select-container"
-                    style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
-                  >
-                    <label>
-                      <select
-                        required=""
-                        tabindex="-1"
-                        title=""
-                      >
-                        <option />
-                      </select>
-                    </label>
+                    <div
+                      aria-hidden="true"
+                      data-a11y-ignore="aria-hidden-focus"
+                      data-react-aria-prevent-focus="true"
+                      data-testid="hidden-select-container"
+                      style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+                    >
+                      <label>
+                        <select
+                          required=""
+                          tabindex="-1"
+                          title=""
+                        >
+                          <option />
+                        </select>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -714,7 +725,9 @@ exports[`CropsModal is correct 1`] = `
                 <button
                   class="bcds-react-aria-Button medium secondary  "
                   data-rac=""
+                  data-react-aria-pressable="true"
                   id="react-aria-«r11»"
+                  tabindex="0"
                   type="button"
                 >
                   Cancel
@@ -723,6 +736,7 @@ exports[`CropsModal is correct 1`] = `
                   class="bcds-react-aria-Button medium primary  "
                   data-disabled="true"
                   data-rac=""
+                  data-react-aria-pressable="true"
                   disabled=""
                   id="react-aria-«r13»"
                   type="submit"
@@ -733,6 +747,7 @@ exports[`CropsModal is correct 1`] = `
                   class="bcds-react-aria-Button medium primary  "
                   data-disabled="true"
                   data-rac=""
+                  data-react-aria-pressable="true"
                   disabled=""
                   id="react-aria-«r15»"
                   type="submit"
