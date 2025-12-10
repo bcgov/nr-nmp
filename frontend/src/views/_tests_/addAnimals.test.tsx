@@ -22,7 +22,7 @@ const farmTestFile: NMPFile = {
     farmRegion: 1,
     regionLocationId: 1,
     hasHorticulturalCrops: false,
-    hasAnimals: false,
+    hasAnimals: true,
   },
   years: [
     {

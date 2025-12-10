@@ -18,7 +18,7 @@ it('renders correctly', async () => {
   mockUseAppService.mockReturnValue({
     state: {
       nmpFile: DEFAULT_NMPFILE,
-      showAnimalsStep: true,
+      showAnimalsStep: false,
       tables: undefined,
     },
     dispatch: jest.fn(),
