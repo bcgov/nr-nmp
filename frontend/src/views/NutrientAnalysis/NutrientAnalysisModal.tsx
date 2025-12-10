@@ -169,7 +169,7 @@ export default function NutrientAnalysisModal({
         onCancel={onCancel}
       >
         <ModalInstructions>
-          All values should be calculated from the material as-received.
+          Enter all values for materials on an “as-received” basis.
         </ModalInstructions>
         <Grid
           container
