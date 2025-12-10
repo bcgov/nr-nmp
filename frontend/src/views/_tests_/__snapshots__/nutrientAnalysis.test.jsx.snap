@@ -752,7 +752,7 @@ exports[`NutrientAnalysisModal is correct 1`] = `
               <div
                 class="css-f9r2q6"
               >
-                All values should be calculated from the material as-received.
+                Enter all values for materials on an “as-received” basis.
               </div>
               <div
                 class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-zjhuaj-MuiGrid-root"
