@@ -640,7 +640,7 @@ exports[`CropsModal is correct 1`] = `
               class="css-omuth8"
             >
               <div
-                class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-1 css-18n7kbf-MuiGrid-root"
+                class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-1 css-1a8jeev-MuiGrid-root"
               >
                 <div
                   class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
