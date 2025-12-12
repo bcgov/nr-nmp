@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import useAppState from '../../hooks/useAppState';
 import DEFAULT_NMPFILE from '../../constants/DefaultNMPFile';
 import DEFAULT_NMPFILE_YEAR from '../../constants/DefaultNMPFileYear';
-import { DEFAULT_NMPFILE_FIELD } from '../../constants/DefaultNMPFileField';
+import DEFAULT_NMPFILE_FIELD from '../../constants/DefaultNMPFileField';
 import NutrientAnalysis from '../NutrientAnalysis/NutrientAnalysis';
 import NutrientAnalysisModal from '../NutrientAnalysis/NutrientAnalysisModal';
 

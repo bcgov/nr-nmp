@@ -96,7 +96,7 @@ export default function CalculateNutrients() {
       handleEditRow,
       handleDeleteRow,
       renderNutrientCell,
-      fieldList[activeField].crops?.length ? 'Crops' : undefined,
+      fieldList[activeField].crops.length ? 'Crops' : undefined,
       false,
     );
   }, [activeField, fieldList]);
