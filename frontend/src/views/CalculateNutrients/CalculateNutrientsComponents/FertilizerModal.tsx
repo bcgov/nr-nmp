@@ -21,7 +21,6 @@ import {
   SelectOption,
   NMPFileFertilizer,
   CustomFertilizer,
-  CropsConversionFactors,
 } from '@/types';
 import { calcFertBalance, renderBalanceCell } from '../utils';
 import { DRY_CUSTOM_ID, EMPTY_CUSTOM_FERTILIZER, LIQUID_CUSTOM_ID } from '@/constants';
@@ -213,10 +212,12 @@ export default function FertilizerModal({
     onClose();
   };
 
-  const conversionFactors: CropsConversionFactors =
-    apiCache.getInitializedResponse('cropsconversionfactors').data[0];
-  const kgToLb = conversionFactors.kilogramperhectaretopoundperacreconversion;
-  const lbPer1000ToAcre = conversionFactors.poundper1000ftsquaredtopoundperacreconversion;
+  const conversionFactors = apiCache.getInitializedResponse('cropsconversionfactors');
+  if (conversionFactors.data.length === 0) {
+    throw new Error('Conversion factors are not defined.');
+  }
+  const kgToLb = conversionFactors.data[0].kilogramperhectaretopoundperacreconversion;
+  const lbPer1000ToAcre = conversionFactors.data[0].poundper1000ftsquaredtopoundperacreconversion;
 
   useEffect(() => {
     apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
