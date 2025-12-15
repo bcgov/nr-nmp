@@ -1859,7 +1859,7 @@ exports[`Fertigation modal is correct 1`] = `
       >
         <button
           aria-label="Dismiss"
-          id="react-aria-«r2r»"
+          id="react-aria-«r53»"
           style="width: 1px; height: 1px;"
           tabindex="-1"
         />
@@ -1882,7 +1882,7 @@ exports[`Fertigation modal is correct 1`] = `
               class="bcds-react-aria-Button small tertiary  icon"
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«r2t»"
+              id="react-aria-«r55»"
               tabindex="0"
               type="button"
             >
@@ -1938,18 +1938,18 @@ exports[`Fertigation modal is correct 1`] = `
                     >
                       <span
                         class="bcds-react-aria-Select--Label"
-                        id="react-aria-«r32»"
+                        id="react-aria-«r5a»"
                       >
                         Fertilizer Type (required)
                       </span>
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="react-aria-«r36» react-aria-«r32»"
+                        aria-labelledby="react-aria-«r5e» react-aria-«r5a»"
                         class="bcds-react-aria-Select--Button medium false"
                         data-rac=""
                         data-react-aria-pressable="true"
-                        id="react-aria-«r31»"
+                        id="react-aria-«r59»"
                         tabindex="0"
                         type="button"
                       >
@@ -1957,7 +1957,7 @@ exports[`Fertigation modal is correct 1`] = `
                           class="bcds-react-aria-SelectValue"
                           data-placeholder="true"
                           data-rac=""
-                          id="react-aria-«r36»"
+                          id="react-aria-«r5e»"
                         >
                           Select Fertilizer Type
                         </span>
@@ -2007,18 +2007,18 @@ exports[`Fertigation modal is correct 1`] = `
                     >
                       <span
                         class="bcds-react-aria-Select--Label"
-                        id="react-aria-«r3c»"
+                        id="react-aria-«r5k»"
                       >
                         Fertilizer (required)
                       </span>
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="react-aria-«r3g» react-aria-«r3c»"
+                        aria-labelledby="react-aria-«r5o» react-aria-«r5k»"
                         class="bcds-react-aria-Select--Button medium false"
                         data-rac=""
                         data-react-aria-pressable="true"
-                        id="react-aria-«r3b»"
+                        id="react-aria-«r5j»"
                         tabindex="0"
                         type="button"
                       >
@@ -2026,7 +2026,7 @@ exports[`Fertigation modal is correct 1`] = `
                           class="bcds-react-aria-SelectValue"
                           data-placeholder="true"
                           data-rac=""
-                          id="react-aria-«r3g»"
+                          id="react-aria-«r5o»"
                         >
                           Select Fertilizer
                         </span>
@@ -2073,8 +2073,8 @@ exports[`Fertigation modal is correct 1`] = `
                     >
                       <label
                         class="bcds-react-aria-NumberField--Label"
-                        for="react-aria-«r3j»"
-                        id="react-aria-«r3l»"
+                        for="react-aria-«r5r»"
+                        id="react-aria-«r5t»"
                       >
                         Injection Rate
                         <span
@@ -2087,13 +2087,13 @@ exports[`Fertigation modal is correct 1`] = `
                         class="bcds-react-aria-NumberField--container medium"
                       >
                         <input
-                          aria-labelledby="react-aria-«r3l»"
+                          aria-labelledby="react-aria-«r5t»"
                           aria-roledescription="Number field"
                           autocomplete="off"
                           autocorrect="off"
                           class="bcds-react-aria-NumberField--Input css-8atqhb"
                           data-rac=""
-                          id="react-aria-«r3j»"
+                          id="react-aria-«r5r»"
                           inputmode="numeric"
                           required=""
                           spellcheck="false"
@@ -2118,25 +2118,25 @@ exports[`Fertigation modal is correct 1`] = `
                     >
                       <span
                         class="bcds-react-aria-Select--Label"
-                        id="react-aria-«r3u»"
+                        id="react-aria-«r66»"
                       >
                         Units (required)
                       </span>
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="react-aria-«r42» react-aria-«r3u»"
+                        aria-labelledby="react-aria-«r6a» react-aria-«r66»"
                         class="bcds-react-aria-Select--Button medium false"
                         data-rac=""
                         data-react-aria-pressable="true"
-                        id="react-aria-«r3t»"
+                        id="react-aria-«r65»"
                         tabindex="0"
                         type="button"
                       >
                         <span
                           class="bcds-react-aria-SelectValue"
                           data-rac=""
-                          id="react-aria-«r42»"
+                          id="react-aria-«r6a»"
                         >
                           US gallon/min
                         </span>
@@ -2198,8 +2198,8 @@ exports[`Fertigation modal is correct 1`] = `
                     >
                       <label
                         class="bcds-react-aria-NumberField--Label"
-                        for="react-aria-«r45»"
-                        id="react-aria-«r47»"
+                        for="react-aria-«r6d»"
+                        id="react-aria-«r6f»"
                       >
                         Fertigation Applications Per Season
                         <span
@@ -2212,13 +2212,13 @@ exports[`Fertigation modal is correct 1`] = `
                         class="bcds-react-aria-NumberField--container medium"
                       >
                         <input
-                          aria-labelledby="react-aria-«r47»"
+                          aria-labelledby="react-aria-«r6f»"
                           aria-roledescription="Number field"
                           autocomplete="off"
                           autocorrect="off"
                           class="bcds-react-aria-NumberField--Input css-8atqhb"
                           data-rac=""
-                          id="react-aria-«r45»"
+                          id="react-aria-«r6d»"
                           inputmode="numeric"
                           required=""
                           spellcheck="false"
@@ -2243,25 +2243,25 @@ exports[`Fertigation modal is correct 1`] = `
                     >
                       <span
                         class="bcds-react-aria-Select--Label"
-                        id="react-aria-«r4g»"
+                        id="react-aria-«r6o»"
                       >
                         Application Frequency (required)
                       </span>
                       <button
                         aria-expanded="false"
                         aria-haspopup="listbox"
-                        aria-labelledby="react-aria-«r4k» react-aria-«r4g»"
+                        aria-labelledby="react-aria-«r6s» react-aria-«r6o»"
                         class="bcds-react-aria-Select--Button medium false"
                         data-rac=""
                         data-react-aria-pressable="true"
-                        id="react-aria-«r4f»"
+                        id="react-aria-«r6n»"
                         tabindex="0"
                         type="button"
                       >
                         <span
                           class="bcds-react-aria-SelectValue"
                           data-rac=""
-                          id="react-aria-«r4k»"
+                          id="react-aria-«r6s»"
                         >
                           Monthly
                         </span>
@@ -3338,7 +3338,7 @@ exports[`Fertigation modal is correct 1`] = `
                     class="bcds-react-aria-Button medium secondary  "
                     data-rac=""
                     data-react-aria-pressable="true"
-                    id="react-aria-«r4n»"
+                    id="react-aria-«r6v»"
                     tabindex="0"
                     type="button"
                   >
@@ -3348,7 +3348,7 @@ exports[`Fertigation modal is correct 1`] = `
                     class="bcds-react-aria-Button medium primary  "
                     data-rac=""
                     data-react-aria-pressable="true"
-                    id="react-aria-«r4p»"
+                    id="react-aria-«r71»"
                     tabindex="0"
                     type="submit"
                   >
@@ -3360,7 +3360,7 @@ exports[`Fertigation modal is correct 1`] = `
                     data-rac=""
                     data-react-aria-pressable="true"
                     disabled=""
-                    id="react-aria-«r4r»"
+                    id="react-aria-«r73»"
                     type="submit"
                   >
                     Confirm
@@ -3368,6 +3368,1203 @@ exports[`Fertigation modal is correct 1`] = `
                 </div>
               </form>
             </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <span
+    aria-hidden="true"
+    data-focus-scope-end="true"
+    hidden=""
+  />
+</body>
+`;
+
+exports[`Fertilizer modal is correct 1`] = `
+<body>
+  <div
+    aria-hidden="true"
+  />
+  <span
+    aria-hidden="true"
+    data-focus-scope-start="true"
+    hidden=""
+  />
+  <div
+    class="react-aria-ModalOverlay"
+    data-rac=""
+    style="--visual-viewport-height: 768px; --page-height: 0px;"
+  >
+    <div
+      class="bcds-react-aria-Modal"
+      data-rac=""
+      style="width: 800px; overflow: scroll;"
+    >
+      <div
+        style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+      >
+        <button
+          aria-label="Dismiss"
+          id="react-aria-«r2r»"
+          style="width: 1px; height: 1px;"
+          tabindex="-1"
+        />
+      </div>
+      <section
+        aria-label="Add fertilizer"
+        class="bcds-react-aria-Dialog"
+        data-rac=""
+        role="dialog"
+        tabindex="-1"
+      >
+        <div
+          class="bcds-react-aria-Dialog--Container"
+        >
+          <span
+            class="bcds-react-aria-Dialog--closeIcon"
+          >
+            <button
+              aria-label="Close"
+              class="bcds-react-aria-Button small tertiary  icon"
+              data-rac=""
+              data-react-aria-pressable="true"
+              id="react-aria-«r2t»"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                height="20"
+                id="close-icon"
+                viewBox="0 0 20 20"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g>
+                  <path
+                    d="M16 5.21286L14.7871 4L10 8.78714L5.21286 4L4 5.21286L8.78714 10L4 14.7871L5.21286 16L10 11.2129L14.7871 16L16 14.7871L11.2129 10L16 5.21286Z"
+                    fill="currentColor"
+                  />
+                </g>
+              </svg>
+            </button>
+          </span>
+          <div
+            style="padding: 1rem;"
+          >
+            <span
+              style="font-weight: 700; font-size: 1.25rem;"
+            >
+              Add fertilizer
+            </span>
+            <div
+              aria-hidden="true"
+              aria-orientation="horizontal"
+              class="MuiDivider-root MuiDivider-fullWidth css-1unhl2k-MuiDivider-root"
+              role="separator"
+            />
+            <form
+              class="css-omuth8"
+            >
+              <div
+                class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-zjhuaj-MuiGrid-root"
+              >
+                <div
+                  class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+                >
+                  <template
+                    data-react-aria-hidden="true"
+                  />
+                  <div
+                    class="bcds-react-aria-Select"
+                    data-rac=""
+                    data-required="true"
+                  >
+                    <span
+                      class="bcds-react-aria-Select--Label"
+                      id="react-aria-«r32»"
+                    >
+                      Fertilizer Type (required)
+                    </span>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-labelledby="react-aria-«r36» react-aria-«r32»"
+                      class="bcds-react-aria-Select--Button medium false"
+                      data-rac=""
+                      data-react-aria-pressable="true"
+                      id="react-aria-«r31»"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <span
+                        class="bcds-react-aria-SelectValue"
+                        data-placeholder="true"
+                        data-rac=""
+                        id="react-aria-«r36»"
+                      >
+                        Select Fertilizer Type
+                      </span>
+                      <svg
+                        fill="none"
+                        height="20"
+                        id="chevron-down-icon"
+                        viewBox="0 0 20 20"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15.7882 9.15569L10.4858 14.236C10.3192 14.3748 10.1527 14.4303 10.0139 14.4303C9.84731 14.4303 9.68074 14.3748 9.54194 14.2637L4.21182 9.15569C3.9342 8.90584 3.9342 8.46167 4.18405 8.21182C4.4339 7.9342 4.87808 7.9342 5.12793 8.18405L10.0139 12.8479L14.872 8.18405C15.1219 7.9342 15.5661 7.9342 15.8159 8.21182C16.0658 8.46167 16.0658 8.90584 15.7882 9.15569Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      aria-hidden="true"
+                      data-a11y-ignore="aria-hidden-focus"
+                      data-react-aria-prevent-focus="true"
+                      data-testid="hidden-select-container"
+                      style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+                    >
+                      <label>
+                        <select
+                          required=""
+                          tabindex="-1"
+                          title=""
+                        >
+                          <option />
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+                >
+                  <template
+                    data-react-aria-hidden="true"
+                  />
+                  <div
+                    class="bcds-react-aria-Select"
+                    data-rac=""
+                    data-required="true"
+                  >
+                    <span
+                      class="bcds-react-aria-Select--Label"
+                      id="react-aria-«r3c»"
+                    >
+                      Fertilizer (required)
+                    </span>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-labelledby="react-aria-«r3g» react-aria-«r3c»"
+                      class="bcds-react-aria-Select--Button medium false"
+                      data-rac=""
+                      data-react-aria-pressable="true"
+                      id="react-aria-«r3b»"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <span
+                        class="bcds-react-aria-SelectValue"
+                        data-placeholder="true"
+                        data-rac=""
+                        id="react-aria-«r3g»"
+                      >
+                        Select Fertilizer
+                      </span>
+                      <svg
+                        fill="none"
+                        height="20"
+                        id="chevron-down-icon"
+                        viewBox="0 0 20 20"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15.7882 9.15569L10.4858 14.236C10.3192 14.3748 10.1527 14.4303 10.0139 14.4303C9.84731 14.4303 9.68074 14.3748 9.54194 14.2637L4.21182 9.15569C3.9342 8.90584 3.9342 8.46167 4.18405 8.21182C4.4339 7.9342 4.87808 7.9342 5.12793 8.18405L10.0139 12.8479L14.872 8.18405C15.1219 7.9342 15.5661 7.9342 15.8159 8.21182C16.0658 8.46167 16.0658 8.90584 15.7882 9.15569Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      aria-hidden="true"
+                      data-a11y-ignore="aria-hidden-focus"
+                      data-react-aria-prevent-focus="true"
+                      data-testid="hidden-select-container"
+                      style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+                    >
+                      <label>
+                        <select
+                          required=""
+                          tabindex="-1"
+                          title=""
+                        >
+                          <option />
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-6 css-1ml5fja-MuiGrid-root"
+                >
+                  <div
+                    class="bcds-react-aria-NumberField"
+                    data-rac=""
+                    data-required="true"
+                  >
+                    <label
+                      class="bcds-react-aria-NumberField--Label"
+                      for="react-aria-«r3j»"
+                      id="react-aria-«r3l»"
+                    >
+                      Application Rate
+                      <span
+                        class="bcds-react-aria-NumberField--Label"
+                      >
+                         (required)
+                      </span>
+                    </label>
+                    <div
+                      class="bcds-react-aria-NumberField--container medium"
+                    >
+                      <input
+                        aria-labelledby="react-aria-«r3l»"
+                        aria-roledescription="Number field"
+                        autocomplete="off"
+                        autocorrect="off"
+                        class="bcds-react-aria-NumberField--Input css-8atqhb"
+                        data-rac=""
+                        id="react-aria-«r3j»"
+                        inputmode="numeric"
+                        required=""
+                        spellcheck="false"
+                        tabindex="0"
+                        title=""
+                        type="text"
+                        value="1"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-6 css-1ml5fja-MuiGrid-root"
+                >
+                  <template
+                    data-react-aria-hidden="true"
+                  />
+                  <div
+                    class="bcds-react-aria-Select"
+                    data-rac=""
+                    data-required="true"
+                  >
+                    <span
+                      class="bcds-react-aria-Select--Label"
+                      id="react-aria-«r3u»"
+                    >
+                      Application Units (required)
+                    </span>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-labelledby="react-aria-«r42» react-aria-«r3u»"
+                      class="bcds-react-aria-Select--Button medium false"
+                      data-rac=""
+                      data-react-aria-pressable="true"
+                      id="react-aria-«r3t»"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <span
+                        class="bcds-react-aria-SelectValue"
+                        data-placeholder="true"
+                        data-rac=""
+                        id="react-aria-«r42»"
+                      >
+                        Select Units
+                      </span>
+                      <svg
+                        fill="none"
+                        height="20"
+                        id="chevron-down-icon"
+                        viewBox="0 0 20 20"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15.7882 9.15569L10.4858 14.236C10.3192 14.3748 10.1527 14.4303 10.0139 14.4303C9.84731 14.4303 9.68074 14.3748 9.54194 14.2637L4.21182 9.15569C3.9342 8.90584 3.9342 8.46167 4.18405 8.21182C4.4339 7.9342 4.87808 7.9342 5.12793 8.18405L10.0139 12.8479L14.872 8.18405C15.1219 7.9342 15.5661 7.9342 15.8159 8.21182C16.0658 8.46167 16.0658 8.90584 15.7882 9.15569Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      aria-hidden="true"
+                      data-a11y-ignore="aria-hidden-focus"
+                      data-react-aria-prevent-focus="true"
+                      data-testid="hidden-select-container"
+                      style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+                    >
+                      <label>
+                        <select
+                          required=""
+                          tabindex="-1"
+                          title=""
+                        >
+                          <option />
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+                >
+                  <template
+                    data-react-aria-hidden="true"
+                  />
+                  <div
+                    class="bcds-react-aria-Select"
+                    data-rac=""
+                  >
+                    <span
+                      class="bcds-react-aria-Select--Label"
+                      id="react-aria-«r48»"
+                    >
+                      Method
+                    </span>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-labelledby="react-aria-«r4c» react-aria-«r48»"
+                      class="bcds-react-aria-Select--Button medium false"
+                      data-rac=""
+                      data-react-aria-pressable="true"
+                      id="react-aria-«r47»"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <span
+                        class="bcds-react-aria-SelectValue"
+                        data-placeholder="true"
+                        data-rac=""
+                        id="react-aria-«r4c»"
+                      >
+                        Select an item
+                      </span>
+                      <svg
+                        fill="none"
+                        height="20"
+                        id="chevron-down-icon"
+                        viewBox="0 0 20 20"
+                        width="20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M15.7882 9.15569L10.4858 14.236C10.3192 14.3748 10.1527 14.4303 10.0139 14.4303C9.84731 14.4303 9.68074 14.3748 9.54194 14.2637L4.21182 9.15569C3.9342 8.90584 3.9342 8.46167 4.18405 8.21182C4.4339 7.9342 4.87808 7.9342 5.12793 8.18405L10.0139 12.8479L14.872 8.18405C15.1219 7.9342 15.5661 7.9342 15.8159 8.21182C16.0658 8.46167 16.0658 8.90584 15.7882 9.15569Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      aria-hidden="true"
+                      data-a11y-ignore="aria-hidden-focus"
+                      data-react-aria-prevent-focus="true"
+                      data-testid="hidden-select-container"
+                      style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; width: 1px; white-space: nowrap; top: 0px; left: 0px;"
+                    >
+                      <label>
+                        <select
+                          tabindex="-1"
+                          title=""
+                        >
+                          <option />
+                          <option
+                            value="Banded"
+                          >
+                            Banded
+                          </option>
+                          <option
+                            value="Broadcast"
+                          >
+                            Broadcast
+                          </option>
+                          <option
+                            value="Fertigation"
+                          >
+                            Fertigation
+                          </option>
+                          <option
+                            value="Follar"
+                          >
+                            Follar
+                          </option>
+                          <option
+                            value="None"
+                          >
+                            None
+                          </option>
+                          <option
+                            value="Sidedress"
+                          >
+                            Sidedress
+                          </option>
+                          <option
+                            value="With planter"
+                          >
+                            With planter
+                          </option>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
+                >
+                  <div
+                    class="css-dz5g05"
+                  >
+                    <label
+                      class="css-1d33s63"
+                      for="applDate"
+                    >
+                      Date
+                    </label>
+                    <input
+                      class="css-wepaho"
+                      name="applDate"
+                      type="date"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
+              >
+                <div>
+                  <div
+                    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-1 css-1jgid6s-MuiGrid-root"
+                  >
+                    <div
+                      class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-92z3i-MuiGrid-root"
+                    >
+                      <div
+                        class="css-18qofsu"
+                      >
+                        Available This Year (lb/ac)
+                        <div
+                          class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1a7rzds-MuiDataGrid-root"
+                          style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 300px; --DataGrid-columnsTotalWidth: 300px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+                        >
+                          <div
+                            class="MuiDataGrid-mainContent"
+                            role="presentation"
+                          >
+                            <div
+                              aria-colcount="3"
+                              aria-multiselectable="false"
+                              aria-rowcount="2"
+                              class="MuiDataGrid-main css-1bgckiu-MuiDataGrid-main"
+                              role="grid"
+                              tabindex="-1"
+                            >
+                              <div
+                                class="css-18l11qw"
+                                data-id="gridPanelAnchor"
+                                role="presentation"
+                              />
+                              <div
+                                class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+                                role="presentation"
+                                style="overflow-x: hidden;"
+                              >
+                                <div
+                                  class="MuiDataGrid-topContainer MuiDataGrid-container--top css-b1wygl"
+                                  role="presentation"
+                                >
+                                  <div
+                                    class="MuiDataGrid-columnHeaders css-1gtv474-MuiDataGrid-columnHeaders"
+                                    role="presentation"
+                                  >
+                                    <div
+                                      aria-rowindex="1"
+                                      class="MuiDataGrid-row--borderBottom css-yseucu-MuiDataGrid-columnHeaderRow"
+                                      role="row"
+                                      style="height: 56px;"
+                                    >
+                                      <div
+                                        role="presentation"
+                                        style="width: 0px;"
+                                      />
+                                      <div
+                                        aria-colindex="1"
+                                        aria-sort="none"
+                                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                                        data-field="N"
+                                        role="columnheader"
+                                        style="width: 100px;"
+                                        tabindex="0"
+                                      >
+                                        <div
+                                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                                          draggable="false"
+                                          role="presentation"
+                                        >
+                                          <div
+                                            class="MuiDataGrid-columnHeaderTitleContainer"
+                                            role="presentation"
+                                          >
+                                            <div
+                                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                                            >
+                                              <div
+                                                class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
+                                                data-mui-internal-clone-element="true"
+                                              >
+                                                N
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                                          style="min-height: 56px;"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                                            data-testid="SeparatorIcon"
+                                            focusable="false"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <rect
+                                              height="24"
+                                              rx="0.5"
+                                              width="1"
+                                              x="11.5"
+                                            />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div
+                                        aria-colindex="2"
+                                        aria-sort="none"
+                                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                                        data-field="P2O5"
+                                        role="columnheader"
+                                        style="width: 100px;"
+                                        tabindex="-1"
+                                      >
+                                        <div
+                                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                                          draggable="false"
+                                          role="presentation"
+                                        >
+                                          <div
+                                            class="MuiDataGrid-columnHeaderTitleContainer"
+                                            role="presentation"
+                                          >
+                                            <div
+                                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                                            >
+                                              <strong>
+                                                <span>
+                                                  P₂O₅
+                                                </span>
+                                              </strong>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                                          style="min-height: 56px;"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                                            data-testid="SeparatorIcon"
+                                            focusable="false"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <rect
+                                              height="24"
+                                              rx="0.5"
+                                              width="1"
+                                              x="11.5"
+                                            />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div
+                                        aria-colindex="3"
+                                        aria-sort="none"
+                                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
+                                        data-field="K2O"
+                                        role="columnheader"
+                                        style="width: 100px;"
+                                        tabindex="-1"
+                                      >
+                                        <div
+                                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                                          draggable="false"
+                                          role="presentation"
+                                        >
+                                          <div
+                                            class="MuiDataGrid-columnHeaderTitleContainer"
+                                            role="presentation"
+                                          >
+                                            <div
+                                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                                            >
+                                              <strong>
+                                                <span>
+                                                  K₂O
+                                                </span>
+                                              </strong>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                                          style="min-height: 56px;"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                                            data-testid="SeparatorIcon"
+                                            focusable="false"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <rect
+                                              height="24"
+                                              rx="0.5"
+                                              width="1"
+                                              x="11.5"
+                                            />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="MuiDataGrid-filler"
+                                        role="presentation"
+                                      />
+                                      <div
+                                        class="MuiDataGrid-scrollbarFiller MuiDataGrid-scrollbarFiller--header"
+                                        role="presentation"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="MuiDataGrid-virtualScrollerContent css-aymtem-MuiDataGrid-virtualScrollerContent"
+                                  role="presentation"
+                                  style="width: auto; flex-shrink: 0; flex-basis: 52px;"
+                                >
+                                  <div
+                                    class="MuiDataGrid-virtualScrollerRenderZone css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone"
+                                    role="rowgroup"
+                                    style="transform: translate3d(0, 0px, 0);"
+                                  >
+                                    <div
+                                      aria-rowindex="2"
+                                      aria-selected="false"
+                                      class="MuiDataGrid-row MuiDataGrid-row--firstVisible MuiDataGrid-row--lastVisible"
+                                      data-id="916859ed-1272-4863-a935-803debaa2d08"
+                                      data-rowindex="0"
+                                      role="row"
+                                      style="max-height: 52px; min-height: 52px; --height: 52px;"
+                                    >
+                                      <div
+                                        class="MuiDataGrid-cellOffsetLeft"
+                                        role="presentation"
+                                        style="width: 0px;"
+                                      />
+                                      <div
+                                        aria-colindex="1"
+                                        aria-colspan="1"
+                                        aria-rowspan="1"
+                                        class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                                        data-colindex="0"
+                                        data-field="N"
+                                        role="gridcell"
+                                        style="--width: 100px;"
+                                        tabindex="-1"
+                                        title="0"
+                                      >
+                                        0
+                                      </div>
+                                      <div
+                                        aria-colindex="2"
+                                        aria-colspan="1"
+                                        aria-rowspan="1"
+                                        class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                                        data-colindex="1"
+                                        data-field="P2O5"
+                                        role="gridcell"
+                                        style="--width: 100px;"
+                                        tabindex="-1"
+                                        title="0"
+                                      >
+                                        0
+                                      </div>
+                                      <div
+                                        aria-colindex="3"
+                                        aria-colspan="1"
+                                        aria-rowspan="1"
+                                        class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                                        data-colindex="2"
+                                        data-field="K2O"
+                                        role="gridcell"
+                                        style="--width: 100px;"
+                                        tabindex="-1"
+                                        title="0"
+                                      >
+                                        0
+                                      </div>
+                                      <div
+                                        class="MuiDataGrid-cell MuiDataGrid-cellEmpty"
+                                        role="presentation"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
+                                  role="presentation"
+                                />
+                              </div>
+                              <div
+                                aria-hidden="true"
+                                class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
+                                tabindex="-1"
+                              >
+                                <div
+                                  class="MuiDataGrid-scrollbarContent"
+                                />
+                              </div>
+                              <div
+                                aria-hidden="true"
+                                class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--vertical css-1ir2opr"
+                                tabindex="-1"
+                              >
+                                <div
+                                  class="MuiDataGrid-scrollbarContent"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <style
+                            href="/MuiDataGridVariables-3851315942"
+                          >
+                            .MuiDataGridVariables-3851315942{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:rgba(0, 0, 0, 0.04);--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#1976d2;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;}
+                          </style>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-6 css-1x4alx8-MuiGrid-root"
+                    >
+                      <div
+                        class="css-18qofsu"
+                      >
+                        Still Required This Year (lb/ac)
+                        <div
+                          class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1a7rzds-MuiDataGrid-root"
+                          style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 300px; --DataGrid-columnsTotalWidth: 300px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+                        >
+                          <div
+                            class="MuiDataGrid-mainContent"
+                            role="presentation"
+                          >
+                            <div
+                              aria-colcount="3"
+                              aria-multiselectable="false"
+                              aria-rowcount="2"
+                              class="MuiDataGrid-main css-1bgckiu-MuiDataGrid-main"
+                              role="grid"
+                              tabindex="-1"
+                            >
+                              <div
+                                class="css-18l11qw"
+                                data-id="gridPanelAnchor"
+                                role="presentation"
+                              />
+                              <div
+                                class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+                                role="presentation"
+                                style="overflow-x: hidden;"
+                              >
+                                <div
+                                  class="MuiDataGrid-topContainer MuiDataGrid-container--top css-b1wygl"
+                                  role="presentation"
+                                >
+                                  <div
+                                    class="MuiDataGrid-columnHeaders css-1gtv474-MuiDataGrid-columnHeaders"
+                                    role="presentation"
+                                  >
+                                    <div
+                                      aria-rowindex="1"
+                                      class="MuiDataGrid-row--borderBottom css-yseucu-MuiDataGrid-columnHeaderRow"
+                                      role="row"
+                                      style="height: 56px;"
+                                    >
+                                      <div
+                                        role="presentation"
+                                        style="width: 0px;"
+                                      />
+                                      <div
+                                        aria-colindex="1"
+                                        aria-sort="none"
+                                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                                        data-field="reqN"
+                                        role="columnheader"
+                                        style="width: 100px;"
+                                        tabindex="0"
+                                      >
+                                        <div
+                                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                                          draggable="false"
+                                          role="presentation"
+                                        >
+                                          <div
+                                            class="MuiDataGrid-columnHeaderTitleContainer"
+                                            role="presentation"
+                                          >
+                                            <div
+                                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                                            >
+                                              <div
+                                                class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
+                                                data-mui-internal-clone-element="true"
+                                              >
+                                                N
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                                          style="min-height: 56px;"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                                            data-testid="SeparatorIcon"
+                                            focusable="false"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <rect
+                                              height="24"
+                                              rx="0.5"
+                                              width="1"
+                                              x="11.5"
+                                            />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div
+                                        aria-colindex="2"
+                                        aria-sort="none"
+                                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                                        data-field="reqP2o5"
+                                        role="columnheader"
+                                        style="width: 100px;"
+                                        tabindex="-1"
+                                      >
+                                        <div
+                                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                                          draggable="false"
+                                          role="presentation"
+                                        >
+                                          <div
+                                            class="MuiDataGrid-columnHeaderTitleContainer"
+                                            role="presentation"
+                                          >
+                                            <div
+                                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                                            >
+                                              <strong>
+                                                <span>
+                                                  P₂O₅
+                                                </span>
+                                              </strong>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                                          style="min-height: 56px;"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                                            data-testid="SeparatorIcon"
+                                            focusable="false"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <rect
+                                              height="24"
+                                              rx="0.5"
+                                              width="1"
+                                              x="11.5"
+                                            />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div
+                                        aria-colindex="3"
+                                        aria-sort="none"
+                                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
+                                        data-field="reqK2o"
+                                        role="columnheader"
+                                        style="width: 100px;"
+                                        tabindex="-1"
+                                      >
+                                        <div
+                                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                                          draggable="false"
+                                          role="presentation"
+                                        >
+                                          <div
+                                            class="MuiDataGrid-columnHeaderTitleContainer"
+                                            role="presentation"
+                                          >
+                                            <div
+                                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                                            >
+                                              <strong>
+                                                <span>
+                                                  K₂O
+                                                </span>
+                                              </strong>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div
+                                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                                          style="min-height: 56px;"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                                            data-testid="SeparatorIcon"
+                                            focusable="false"
+                                            viewBox="0 0 24 24"
+                                          >
+                                            <rect
+                                              height="24"
+                                              rx="0.5"
+                                              width="1"
+                                              x="11.5"
+                                            />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="MuiDataGrid-filler"
+                                        role="presentation"
+                                      />
+                                      <div
+                                        class="MuiDataGrid-scrollbarFiller MuiDataGrid-scrollbarFiller--header"
+                                        role="presentation"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="MuiDataGrid-virtualScrollerContent css-aymtem-MuiDataGrid-virtualScrollerContent"
+                                  role="presentation"
+                                  style="width: auto; flex-shrink: 0; flex-basis: 52px;"
+                                >
+                                  <div
+                                    class="MuiDataGrid-virtualScrollerRenderZone css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone"
+                                    role="rowgroup"
+                                    style="transform: translate3d(0, 0px, 0);"
+                                  >
+                                    <div
+                                      aria-rowindex="2"
+                                      aria-selected="false"
+                                      class="MuiDataGrid-row MuiDataGrid-row--firstVisible MuiDataGrid-row--lastVisible"
+                                      data-id="916859ed-1272-4863-a935-803debaa2d08"
+                                      data-rowindex="0"
+                                      role="row"
+                                      style="max-height: 52px; min-height: 52px; --height: 52px;"
+                                    >
+                                      <div
+                                        class="MuiDataGrid-cellOffsetLeft"
+                                        role="presentation"
+                                        style="width: 0px;"
+                                      />
+                                      <div
+                                        aria-colindex="1"
+                                        aria-colspan="1"
+                                        aria-rowspan="1"
+                                        class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                                        data-colindex="0"
+                                        data-field="reqN"
+                                        role="gridcell"
+                                        style="--width: 100px;"
+                                        tabindex="-1"
+                                      >
+                                        <div
+                                          style="display: flex; align-items: baseline; justify-content: center;"
+                                        >
+                                          <span
+                                            style="margin-left: -1.5em;"
+                                          />
+                                          <img
+                                            alt="Balance icon"
+                                            src="/good.svg"
+                                            style="width: 1em; height: 1em; margin-right: 0.5em;"
+                                          />
+                                          <span>
+                                            0
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div
+                                        aria-colindex="2"
+                                        aria-colspan="1"
+                                        aria-rowspan="1"
+                                        class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                                        data-colindex="1"
+                                        data-field="reqP2o5"
+                                        role="gridcell"
+                                        style="--width: 100px;"
+                                        tabindex="-1"
+                                      >
+                                        <div
+                                          style="display: flex; align-items: baseline; justify-content: center;"
+                                        >
+                                          <span
+                                            style="margin-left: -1.5em;"
+                                          />
+                                          <img
+                                            alt="Balance icon"
+                                            src="/good.svg"
+                                            style="width: 1em; height: 1em; margin-right: 0.5em;"
+                                          />
+                                          <span>
+                                            0
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div
+                                        aria-colindex="3"
+                                        aria-colspan="1"
+                                        aria-rowspan="1"
+                                        class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                                        data-colindex="2"
+                                        data-field="reqK2o"
+                                        role="gridcell"
+                                        style="--width: 100px;"
+                                        tabindex="-1"
+                                      >
+                                        <div
+                                          style="display: flex; align-items: baseline; justify-content: center;"
+                                        >
+                                          <span
+                                            style="margin-left: -1.5em;"
+                                          />
+                                          <img
+                                            alt="Balance icon"
+                                            src="/good.svg"
+                                            style="width: 1em; height: 1em; margin-right: 0.5em;"
+                                          />
+                                          <span>
+                                            0
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="MuiDataGrid-cell MuiDataGrid-cellEmpty"
+                                        role="presentation"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
+                                  role="presentation"
+                                />
+                              </div>
+                              <div
+                                aria-hidden="true"
+                                class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
+                                tabindex="-1"
+                              >
+                                <div
+                                  class="MuiDataGrid-scrollbarContent"
+                                />
+                              </div>
+                              <div
+                                aria-hidden="true"
+                                class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--vertical css-1ir2opr"
+                                tabindex="-1"
+                              >
+                                <div
+                                  class="MuiDataGrid-scrollbarContent"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <style
+                            href="/MuiDataGridVariables-3851315942"
+                          >
+                            .MuiDataGridVariables-3851315942{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:rgba(0, 0, 0, 0.04);--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#1976d2;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;}
+                          </style>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                aria-hidden="true"
+                aria-orientation="horizontal"
+                class="MuiDivider-root MuiDivider-fullWidth css-hwu4zo-MuiDivider-root"
+                role="separator"
+              />
+              <div
+                class="bcds-ButtonGroup horizontal end"
+                role="group"
+              >
+                <button
+                  class="bcds-react-aria-Button medium secondary  "
+                  data-rac=""
+                  data-react-aria-pressable="true"
+                  id="react-aria-«r4f»"
+                  tabindex="0"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="bcds-react-aria-Button medium primary  "
+                  data-rac=""
+                  data-react-aria-pressable="true"
+                  id="react-aria-«r4h»"
+                  tabindex="0"
+                  type="submit"
+                >
+                  Calculate
+                </button>
+                <button
+                  class="bcds-react-aria-Button medium primary  "
+                  data-disabled="true"
+                  data-rac=""
+                  data-react-aria-pressable="true"
+                  disabled=""
+                  id="react-aria-«r4j»"
+                  type="submit"
+                >
+                  Confirm
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </section>
@@ -3733,7 +4930,7 @@ exports[`Other modal is correct 1`] = `
       >
         <button
           aria-label="Dismiss"
-          id="react-aria-«r5i»"
+          id="react-aria-«r7q»"
           style="width: 1px; height: 1px;"
           tabindex="-1"
         />
@@ -3756,7 +4953,7 @@ exports[`Other modal is correct 1`] = `
               class="bcds-react-aria-Button small tertiary  icon"
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«r5k»"
+              id="react-aria-«r7s»"
               tabindex="0"
               type="button"
             >
@@ -3809,8 +5006,8 @@ exports[`Other modal is correct 1`] = `
                     >
                       <label
                         class="bcds-react-aria-TextField--Label"
-                        for="react-aria-«r5m»"
-                        id="react-aria-«r5n»"
+                        for="react-aria-«r7u»"
+                        id="react-aria-«r7v»"
                       >
                         Nutrient Source
                         <span
@@ -3823,10 +5020,10 @@ exports[`Other modal is correct 1`] = `
                         class="bcds-react-aria-TextField--container medium"
                       >
                         <input
-                          aria-labelledby="react-aria-«r5n»"
+                          aria-labelledby="react-aria-«r7v»"
                           class="bcds-react-aria-TextField--Input"
                           data-rac=""
-                          id="react-aria-«r5m»"
+                          id="react-aria-«r7u»"
                           required=""
                           tabindex="0"
                           title=""
@@ -3864,8 +5061,8 @@ exports[`Other modal is correct 1`] = `
                       >
                         <label
                           class="bcds-react-aria-NumberField--Label"
-                          for="react-aria-«r5r»"
-                          id="react-aria-«r5t»"
+                          for="react-aria-«r83»"
+                          id="react-aria-«r85»"
                         >
                           N
                           <span
@@ -3878,13 +5075,13 @@ exports[`Other modal is correct 1`] = `
                           class="bcds-react-aria-NumberField--container medium"
                         >
                           <input
-                            aria-labelledby="react-aria-«r5t»"
+                            aria-labelledby="react-aria-«r85»"
                             aria-roledescription="Number field"
                             autocomplete="off"
                             autocorrect="off"
                             class="bcds-react-aria-NumberField--Input css-8atqhb"
                             data-rac=""
-                            id="react-aria-«r5r»"
+                            id="react-aria-«r83»"
                             inputmode="numeric"
                             required=""
                             spellcheck="false"
@@ -3906,8 +5103,8 @@ exports[`Other modal is correct 1`] = `
                       >
                         <label
                           class="bcds-react-aria-NumberField--Label"
-                          for="react-aria-«r63»"
-                          id="react-aria-«r65»"
+                          for="react-aria-«r8b»"
+                          id="react-aria-«r8d»"
                         >
                           P₂O₅
                           <span
@@ -3920,13 +5117,13 @@ exports[`Other modal is correct 1`] = `
                           class="bcds-react-aria-NumberField--container medium"
                         >
                           <input
-                            aria-labelledby="react-aria-«r65»"
+                            aria-labelledby="react-aria-«r8d»"
                             aria-roledescription="Number field"
                             autocomplete="off"
                             autocorrect="off"
                             class="bcds-react-aria-NumberField--Input css-8atqhb"
                             data-rac=""
-                            id="react-aria-«r63»"
+                            id="react-aria-«r8b»"
                             inputmode="numeric"
                             required=""
                             spellcheck="false"
@@ -3948,8 +5145,8 @@ exports[`Other modal is correct 1`] = `
                       >
                         <label
                           class="bcds-react-aria-NumberField--Label"
-                          for="react-aria-«r6b»"
-                          id="react-aria-«r6d»"
+                          for="react-aria-«r8j»"
+                          id="react-aria-«r8l»"
                         >
                           K₂O
                           <span
@@ -3962,13 +5159,13 @@ exports[`Other modal is correct 1`] = `
                           class="bcds-react-aria-NumberField--container medium"
                         >
                           <input
-                            aria-labelledby="react-aria-«r6d»"
+                            aria-labelledby="react-aria-«r8l»"
                             aria-roledescription="Number field"
                             autocomplete="off"
                             autocorrect="off"
                             class="bcds-react-aria-NumberField--Input css-8atqhb"
                             data-rac=""
-                            id="react-aria-«r6b»"
+                            id="react-aria-«r8j»"
                             inputmode="numeric"
                             required=""
                             spellcheck="false"
@@ -4009,8 +5206,8 @@ exports[`Other modal is correct 1`] = `
                       >
                         <label
                           class="bcds-react-aria-NumberField--Label"
-                          for="react-aria-«r6j»"
-                          id="react-aria-«r6l»"
+                          for="react-aria-«r8r»"
+                          id="react-aria-«r8t»"
                         >
                           N
                           <span
@@ -4023,13 +5220,13 @@ exports[`Other modal is correct 1`] = `
                           class="bcds-react-aria-NumberField--container medium"
                         >
                           <input
-                            aria-labelledby="react-aria-«r6l»"
+                            aria-labelledby="react-aria-«r8t»"
                             aria-roledescription="Number field"
                             autocomplete="off"
                             autocorrect="off"
                             class="bcds-react-aria-NumberField--Input css-8atqhb"
                             data-rac=""
-                            id="react-aria-«r6j»"
+                            id="react-aria-«r8r»"
                             inputmode="numeric"
                             required=""
                             spellcheck="false"
@@ -4051,8 +5248,8 @@ exports[`Other modal is correct 1`] = `
                       >
                         <label
                           class="bcds-react-aria-NumberField--Label"
-                          for="react-aria-«r6r»"
-                          id="react-aria-«r6t»"
+                          for="react-aria-«r93»"
+                          id="react-aria-«r95»"
                         >
                           P₂O₅
                           <span
@@ -4065,13 +5262,13 @@ exports[`Other modal is correct 1`] = `
                           class="bcds-react-aria-NumberField--container medium"
                         >
                           <input
-                            aria-labelledby="react-aria-«r6t»"
+                            aria-labelledby="react-aria-«r95»"
                             aria-roledescription="Number field"
                             autocomplete="off"
                             autocorrect="off"
                             class="bcds-react-aria-NumberField--Input css-8atqhb"
                             data-rac=""
-                            id="react-aria-«r6r»"
+                            id="react-aria-«r93»"
                             inputmode="numeric"
                             required=""
                             spellcheck="false"
@@ -4093,8 +5290,8 @@ exports[`Other modal is correct 1`] = `
                       >
                         <label
                           class="bcds-react-aria-NumberField--Label"
-                          for="react-aria-«r73»"
-                          id="react-aria-«r75»"
+                          for="react-aria-«r9b»"
+                          id="react-aria-«r9d»"
                         >
                           K₂O
                           <span
@@ -4107,13 +5304,13 @@ exports[`Other modal is correct 1`] = `
                           class="bcds-react-aria-NumberField--container medium"
                         >
                           <input
-                            aria-labelledby="react-aria-«r75»"
+                            aria-labelledby="react-aria-«r9d»"
                             aria-roledescription="Number field"
                             autocomplete="off"
                             autocorrect="off"
                             class="bcds-react-aria-NumberField--Input css-8atqhb"
                             data-rac=""
-                            id="react-aria-«r73»"
+                            id="react-aria-«r9b»"
                             inputmode="numeric"
                             required=""
                             spellcheck="false"
@@ -4141,7 +5338,7 @@ exports[`Other modal is correct 1`] = `
                     class="bcds-react-aria-Button medium secondary  "
                     data-rac=""
                     data-react-aria-pressable="true"
-                    id="react-aria-«r7b»"
+                    id="react-aria-«r9j»"
                     tabindex="0"
                     type="button"
                   >
@@ -4151,7 +5348,7 @@ exports[`Other modal is correct 1`] = `
                     class="bcds-react-aria-Button medium primary  "
                     data-rac=""
                     data-react-aria-pressable="true"
-                    id="react-aria-«r7d»"
+                    id="react-aria-«r9l»"
                     tabindex="0"
                     type="submit"
                   >

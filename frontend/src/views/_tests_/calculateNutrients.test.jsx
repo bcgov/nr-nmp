@@ -12,13 +12,24 @@ import FertigationModal from '../CalculateNutrients/CalculateNutrientsComponents
 import OtherModal from '../CalculateNutrients/CalculateNutrientsComponents/OtherModal';
 
 const res = { status: 200, data: [] };
+const conversionFactors = {
+  status: 200,
+  data: [
+    {
+      kilogramperhectaretopoundperacreconversion: 0.892176122,
+      poundper1000ftsquaredtopoundperacreconversion: 43.56000216,
+    },
+  ],
+};
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
 jest.mock('../../services/APICache', () =>
   jest.fn().mockImplementation(() => ({
     callEndpoint: jest.fn(() => Promise.resolve(res)),
     // Returning different objects was causing infinite recursions
-    getInitializedResponse: jest.fn(() => res),
+    getInitializedResponse: jest.fn((s) =>
+      s === 'cropsconversionfactors' ? conversionFactors : res,
+    ),
   })),
 );
 
@@ -111,7 +122,6 @@ const balanceRow = {
 };
 
 // TODO: Figure out why this modal is causing infinite recursion
-/*
 it('Fertilizer modal is correct', async () => {
   mockUseAppService.mockImplementation(() => ({
     state: {
@@ -126,7 +136,7 @@ it('Fertilizer modal is correct', async () => {
   // IMPORTANT: For modals, you need to check the baseElement, not the container or fragment
   let baseElement;
   // If you see an error about wrapping in an act(), use waitFor()
-  await waitFor(() => {
+  waitFor(() => {
     const r = render(
       <FertilizerModal
         fieldIndex={0}
@@ -143,7 +153,6 @@ it('Fertilizer modal is correct', async () => {
   // match snapshot
   expect(baseElement).toMatchSnapshot();
 });
-*/
 
 it('Fertigation modal is correct', async () => {
   mockUseAppService.mockImplementation(() => ({
