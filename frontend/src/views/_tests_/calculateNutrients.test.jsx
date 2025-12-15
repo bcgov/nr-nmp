@@ -121,7 +121,6 @@ const balanceRow = {
   remK2o: 5,
 };
 
-// TODO: Figure out why this modal is causing infinite recursion
 it('Fertilizer modal is correct', async () => {
   mockUseAppService.mockImplementation(() => ({
     state: {
