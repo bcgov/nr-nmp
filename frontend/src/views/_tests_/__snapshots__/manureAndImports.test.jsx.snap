@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ManureAndImports is correct 1`] = `
 <DocumentFragment>
@@ -539,7 +539,7 @@ exports[`ManureAndImports is correct 1`] = `
             >
               <div
                 class="MuiDataGrid-overlayWrapperInner css-1mbsuzk-MuiDataGrid-overlayWrapperInner"
-                style="width: 0px;"
+                style="height: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); width: 0px;"
               >
                 <div
                   class="MuiDataGrid-overlay css-w16tsr-MuiDataGrid-overlay"
@@ -551,7 +551,7 @@ exports[`ManureAndImports is correct 1`] = `
             <div
               class="MuiDataGrid-virtualScrollerContent css-aymtem-MuiDataGrid-virtualScrollerContent"
               role="presentation"
-              style="width: auto; flex-shrink: 0;"
+              style="width: auto; flex-basis: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); flex-shrink: 0;"
             >
               <div
                 class="MuiDataGrid-virtualScrollerRenderZone css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone"
