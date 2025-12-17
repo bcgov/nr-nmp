@@ -79,7 +79,7 @@ it('Field modal on Field List is correct', async () => {
   await waitFor(() => {
     const r = render(
       <FieldListModal
-        mode="Duplicate Field"
+        mode="Add Field"
         setFieldList={mockSetFieldList}
         isFieldNameUnique={mockSetNameIsUnique}
         isOpen

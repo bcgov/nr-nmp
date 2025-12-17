@@ -31,7 +31,7 @@ exports[`Field modal on Field List is correct 1`] = `
         />
       </div>
       <section
-        aria-label="Duplicate Field"
+        aria-label="Add Field"
         class="bcds-react-aria-Dialog"
         data-rac=""
         role="dialog"
@@ -74,7 +74,7 @@ exports[`Field modal on Field List is correct 1`] = `
             <span
               style="font-weight: 700; font-size: 1.25rem;"
             >
-              Duplicate Field
+              Add Field
             </span>
             <div
               aria-hidden="true"
