@@ -1,0 +1,425 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Storage renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="css-1lqntaz"
+  >
+    <div
+      class="MuiBox-root css-a57597"
+    >
+      <div
+        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-149z4i0-MuiStepper-root"
+      >
+        <div
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        >
+          <span
+            class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          >
+            <span
+              class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="12"
+                />
+                <text
+                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                  dominant-baseline="central"
+                  text-anchor="middle"
+                  x="12"
+                  y="12"
+                >
+                  1
+                </text>
+              </svg>
+            </span>
+            <span
+              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+            >
+              <span
+                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+              >
+                Home
+              </span>
+            </span>
+          </span>
+        </div>
+        <div
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        >
+          <div
+            class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-1k81fv-MuiStepConnector-root"
+          >
+            <span
+              class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
+            />
+          </div>
+          <span
+            class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          >
+            <span
+              class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="12"
+                />
+                <text
+                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                  dominant-baseline="central"
+                  text-anchor="middle"
+                  x="12"
+                  y="12"
+                >
+                  2
+                </text>
+              </svg>
+            </span>
+            <span
+              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+            >
+              <span
+                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+              >
+                Farm Information
+              </span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1xllnsb"
+    >
+      Nutrient Management Calculator
+    </div>
+    <div
+      class="css-114zsuk"
+    >
+      Storage
+    </div>
+    <div
+      class="css-zk99es"
+    >
+      <div
+        aria-label="A group of buttons"
+        class="bcds-ButtonGroup horizontal end"
+        role="group"
+      >
+        <button
+          class="bcds-react-aria-Button medium secondary  "
+          data-rac=""
+          data-react-aria-pressable="true"
+          id="react-aria-«r0»"
+          tabindex="0"
+          type="button"
+        >
+          Add Storage System
+        </button>
+      </div>
+    </div>
+    <div
+      class="MuiBox-root css-8atqhb"
+    >
+      <div
+        class="MuiBox-root css-0"
+      >
+        <div
+          class="MuiTabs-root css-jhczcq-MuiTabs-root"
+        >
+          <div
+            class="MuiTabs-scroller MuiTabs-fixed css-s2t35c-MuiTabs-scroller"
+            style="overflow: hidden; margin-bottom: 0px;"
+          >
+            <div
+              aria-label="tab"
+              class="MuiTabs-list MuiTabs-flexContainer css-hzcega-MuiTabs-list"
+              role="tablist"
+            >
+              <button
+                aria-selected="false"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1usuzwp-MuiButtonBase-root-MuiTab-root"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                Add Animals
+              </button>
+              <button
+                aria-selected="false"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1usuzwp-MuiButtonBase-root-MuiTab-root"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                Manure & Imports
+              </button>
+              <button
+                aria-selected="true"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-1usuzwp-MuiButtonBase-root-MuiTab-root"
+                role="tab"
+                tabindex="0"
+                type="button"
+              >
+                Storage
+              </button>
+              <button
+                aria-selected="false"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1usuzwp-MuiButtonBase-root-MuiTab-root"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                Nutrient Analysis
+              </button>
+            </div>
+            <span
+              class="MuiTabs-indicator css-1qltlow-MuiTabs-indicator"
+              style="left: 0px; width: 0px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-1kl4kyl-MuiGrid-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-8 css-1v0usj8-MuiGrid-root"
+      />
+      <div
+        class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-4 css-jzkec7-MuiGrid-root"
+      >
+        <div>
+          <div>
+            Materials Needing Storage
+          </div>
+          <div>
+            - Manure
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-6ef4m3"
+    >
+      <div
+        aria-label="A group of buttons"
+        class="bcds-ButtonGroup horizontal start"
+        role="group"
+      >
+        <button
+          class="bcds-react-aria-Button medium secondary  "
+          data-rac=""
+          data-react-aria-pressable="true"
+          id="react-aria-«r2»"
+          tabindex="0"
+          type="button"
+        >
+          Back
+        </button>
+        <button
+          class="bcds-react-aria-Button medium primary  "
+          data-rac=""
+          data-react-aria-pressable="true"
+          id="react-aria-«r4»"
+          tabindex="0"
+          type="button"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`StorageModal is correct 1`] = `
+<body>
+  <div
+    aria-hidden="true"
+  />
+  <span
+    aria-hidden="true"
+    data-focus-scope-start="true"
+    hidden=""
+  />
+  <div
+    class="react-aria-ModalOverlay"
+    data-rac=""
+    style="--visual-viewport-height: 768px; --page-height: 0px;"
+  >
+    <div
+      class="bcds-react-aria-Modal"
+      data-rac=""
+      style="width: 700px; overflow: scroll;"
+    >
+      <div
+        style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+      >
+        <button
+          aria-label="Dismiss"
+          id="react-aria-«r6»"
+          style="width: 1px; height: 1px;"
+          tabindex="-1"
+        />
+      </div>
+      <section
+        aria-label="Storage System Details"
+        class="bcds-react-aria-Dialog"
+        data-rac=""
+        role="dialog"
+        tabindex="-1"
+      >
+        <div
+          class="bcds-react-aria-Dialog--Container"
+        >
+          <span
+            class="bcds-react-aria-Dialog--closeIcon"
+          >
+            <button
+              aria-label="Close"
+              class="bcds-react-aria-Button small tertiary  icon"
+              data-rac=""
+              data-react-aria-pressable="true"
+              id="react-aria-«r8»"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                height="20"
+                id="close-icon"
+                viewBox="0 0 20 20"
+                width="20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g>
+                  <path
+                    d="M16 5.21286L14.7871 4L10 8.78714L5.21286 4L4 5.21286L8.78714 10L4 14.7871L5.21286 16L10 11.2129L14.7871 16L16 14.7871L11.2129 10L16 5.21286Z"
+                    fill="currentColor"
+                  />
+                </g>
+              </svg>
+            </button>
+          </span>
+          <div
+            style="padding: 1rem;"
+          >
+            <span
+              style="font-weight: 700; font-size: 1.25rem;"
+            >
+              Storage System Details
+            </span>
+            <div
+              aria-hidden="true"
+              aria-orientation="horizontal"
+              class="MuiDivider-root MuiDivider-fullWidth css-1unhl2k-MuiDivider-root"
+              role="separator"
+            />
+            <form
+              class="css-m6if6t"
+            >
+              <div
+                class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-spacing-xs-1 css-gz7kd0-MuiGrid-root"
+              >
+                <div
+                  class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-6 css-m5vr90-MuiGrid-root"
+                >
+                  <span
+                    class="bcds-react-aria-Text disabled small css-1ago99h"
+                  >
+                    Manure Type
+                  </span>
+                  <span
+                    class="bcds-react-aria-Text disabled small css-1ago99h"
+                  />
+                  <span
+                    class="bcds-react-aria-Text disabled small css-1ago99h"
+                  >
+                    System Name
+                  </span>
+                  <span
+                    class="bcds-react-aria-Text disabled small css-1ago99h"
+                  />
+                </div>
+                <div
+                  class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-grid-xs-6 css-mjvhr8-MuiGrid-root"
+                >
+                  <span
+                    class="bcds-react-aria-Text disabled small css-1ago99h"
+                  >
+                    Materials selected to include
+                  </span>
+                  <div>
+                    <ul
+                      class="css-cet0rr"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                aria-hidden="true"
+                aria-orientation="horizontal"
+                class="MuiDivider-root MuiDivider-fullWidth css-hwu4zo-MuiDivider-root"
+                role="separator"
+              />
+              <div
+                aria-hidden="true"
+                aria-orientation="horizontal"
+                class="MuiDivider-root MuiDivider-fullWidth css-hwu4zo-MuiDivider-root"
+                role="separator"
+              />
+              <div
+                class="bcds-ButtonGroup horizontal end"
+                role="group"
+              >
+                <button
+                  class="bcds-react-aria-Button medium secondary  "
+                  data-rac=""
+                  data-react-aria-pressable="true"
+                  id="react-aria-«ra»"
+                  tabindex="0"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="bcds-react-aria-Button medium primary  "
+                  data-rac=""
+                  data-react-aria-pressable="true"
+                  id="react-aria-«rc»"
+                  tabindex="0"
+                  type="submit"
+                >
+                  Confirm
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <span
+    aria-hidden="true"
+    data-focus-scope-end="true"
+    hidden=""
+  />
+</body>
+`;

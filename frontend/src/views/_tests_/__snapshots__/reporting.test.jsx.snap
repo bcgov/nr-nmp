@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`renders correctly 1`] = `
+exports[`Reporting renders correctly 1`] = `
 <DocumentFragment>
   <div
     class="css-1lqntaz"
@@ -112,43 +112,125 @@ exports[`renders correctly 1`] = `
     <div
       class="css-114zsuk"
     >
-      Nutrient Management Calculator
+      Reporting
     </div>
-    <p>
-      The Nutrient Management Calculator provides a starting point for the efficient use of fertilizer and manure on farms. This tool assists in you choosing the right rate and nutrient source for your crops. You can start a new calculation or pick up where you left off by uploading an existing .nmp file.
-    </p>
     <div
-      aria-label="A group of buttons"
-      class="bcds-ButtonGroup horizontal start"
-      role="group"
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row css-12w8ukd-MuiGrid-root"
     >
-      <button
-        class="bcds-react-aria-Button medium primary  "
-        data-rac=""
-        data-react-aria-pressable="true"
-        id="react-aria-«r0»"
-        tabindex="0"
-        type="button"
+      <div
+        style="border: 1px solid rgb(200, 18, 18); width: 100%;"
       >
-        Get Started
-      </button>
-      <button
-        class="bcds-react-aria-Button medium secondary  "
-        data-rac=""
-        data-react-aria-pressable="true"
-        id="react-aria-«r2»"
-        tabindex="0"
-        type="button"
+        The following materials are not stored:
+        <ul>
+          <li>
+             - Manure
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-2 css-k3sf5e-MuiGrid-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-4 css-1mv03i7-MuiGrid-root"
       >
-        Upload File
-      </button>
-      <input
-        accept=".nmp, application/json"
-        aria-label="Upload an existing .nmp file"
-        hidden=""
-        id="fileUp"
-        type="file"
-      />
+        <div
+          class="css-1cajglm"
+        >
+          PDFs (Opens a new file)
+        </div>
+        <div
+          class="css-1kch9dj"
+        >
+          <div
+            aria-label="A group of buttons"
+            class="bcds-ButtonGroup vertical center"
+            role="group"
+          >
+            <button
+              class="bcds-react-aria-Button medium primary  "
+              data-rac=""
+              data-react-aria-pressable="true"
+              id="react-aria-«r0»"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                style="width: 100%; text-align: center;"
+              >
+                Complete report
+              </div>
+            </button>
+            <button
+              class="bcds-react-aria-Button medium primary  "
+              data-rac=""
+              data-react-aria-pressable="true"
+              id="react-aria-«r2»"
+              tabindex="0"
+              type="button"
+            >
+              Record keeping sheets
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-8 css-4b690w-MuiGrid-root"
+      >
+        <div
+          class="css-1cajglm"
+        >
+          NMP data file
+        </div>
+        <div>
+          To continue later, Download file to your computer
+        </div>
+        <div>
+          Load a file on the Home page when you want to continue
+        </div>
+        <div>
+          <button
+            class="bcds-react-aria-Button medium primary  "
+            data-rac=""
+            data-react-aria-pressable="true"
+            id="react-aria-«r4»"
+            tabindex="0"
+            type="button"
+          >
+            Download file
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-6ef4m3"
+    >
+      <div
+        aria-label="A group of buttons"
+        class="bcds-ButtonGroup horizontal start"
+        role="group"
+      >
+        <button
+          class="bcds-react-aria-Button medium secondary  "
+          data-rac=""
+          data-react-aria-pressable="true"
+          id="react-aria-«r6»"
+          tabindex="0"
+          type="button"
+        >
+          Back
+        </button>
+        <button
+          class="bcds-react-aria-Button medium primary  "
+          data-rac=""
+          data-react-aria-pressable="true"
+          id="react-aria-«r8»"
+          tabindex="0"
+          type="button"
+        >
+          Finish
+        </button>
+      </div>
     </div>
   </div>
 </DocumentFragment>

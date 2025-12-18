@@ -1,6 +1,7 @@
-import { TextEncoder } from 'util';
+import { TextEncoder, TextDecoder } from 'util';
 
 global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 jest.mock('@/env', () => ({
   env: {
