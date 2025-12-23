@@ -67,7 +67,7 @@ export default function SoilTestsModal({
   return (
     <Modal
       onOpenChange={handleDialogClose}
-      title="Add Field"
+      title="Soil Test Details"
       isOpen
     >
       <Form
