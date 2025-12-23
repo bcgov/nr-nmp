@@ -15,8 +15,7 @@ export default function LandingPage() {
     if (upload) upload.click();
   };
 
-  const isValidFile = (file: File): boolean =>
-    file.type === 'application/json' || file.name.endsWith('.nmp');
+  const isValidFile = (file: File): boolean => file.name.endsWith('.nmp');
 
   const saveFile = (e: any) => {
     const file = e.target.files[0];
@@ -71,7 +70,7 @@ export default function LandingPage() {
         <input
           id="fileUp"
           type="file"
-          accept=".nmp, application/json"
+          accept=".nmp"
           onChange={saveFile}
           aria-label="Upload an existing .nmp file"
           hidden

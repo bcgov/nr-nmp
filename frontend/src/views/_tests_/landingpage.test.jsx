@@ -79,10 +79,30 @@ describe('Buttons perform correct functions', () => {
     const fileInput = container.querySelector('#fileUp');
     const str = JSON.stringify({ year: '2025' });
     const blob = new Blob([str]);
-    const file = new File([blob], 'file.nmp', {
-      type: 'application/JSON',
-    });
+    const file = new File([blob], 'file.nmp');
     fireEvent.change(fileInput, { target: { files: [file] } });
     expect(readAsTextSpy).toHaveBeenCalled();
+  });
+
+  it('Uploading non-nmp file does not prompt upload', () => {
+    jest.clearAllMocks();
+    const mockDispatch = jest.fn();
+    mockUseAppService.mockImplementation(() => ({
+      state: {},
+      dispatch: mockDispatch,
+    }));
+    const readAsTextSpy = jest.spyOn(FileReader.prototype, 'readAsText');
+
+    const { container } = render(
+      <MemoryRouter>
+        <LandingPage />
+      </MemoryRouter>,
+    );
+    const fileInput = container.querySelector('#fileUp');
+    const str = JSON.stringify({ year: '2025' });
+    const blob = new Blob([str]);
+    const file = new File([blob], 'file.json');
+    fireEvent.change(fileInput, { target: { files: [file] } });
+    expect(readAsTextSpy).not.toHaveBeenCalled();
   });
 });
