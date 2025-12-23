@@ -143,7 +143,7 @@ exports[`renders correctly 1`] = `
         Upload File
       </button>
       <input
-        accept=".nmp, application/json"
+        accept=".nmp"
         aria-label="Upload an existing .nmp file"
         hidden=""
         id="fileUp"

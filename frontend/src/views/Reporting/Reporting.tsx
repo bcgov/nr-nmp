@@ -153,9 +153,7 @@ export default function Reporting() {
   }, [manureUnits, solidConversions, liquidConversions, manures, state.nmpFile.years]);
 
   async function downloadBlob() {
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(state.nmpFile)], { type: 'application/json' }),
-    );
+    const url = URL.createObjectURL(new Blob([JSON.stringify(state.nmpFile)]));
     const a = document.createElement('a');
     a.href = url;
 

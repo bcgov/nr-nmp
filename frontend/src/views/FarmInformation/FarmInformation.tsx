@@ -168,9 +168,7 @@ export default function FarmInformation() {
   };
 
   async function downloadBlob() {
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(state.nmpFile)], { type: 'application/json' }),
-    );
+    const url = URL.createObjectURL(new Blob([JSON.stringify(state.nmpFile)]));
     const a = document.createElement('a');
     a.href = url;
 
