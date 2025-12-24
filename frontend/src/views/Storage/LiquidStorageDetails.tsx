@@ -120,9 +120,9 @@ export default function LiquidStorageDetails({
         <Select
           isRequired={!selectedStorage.isStructureCovered}
           label="Storage shape"
-          selectedKey={selectedStorage.structure?.shape}
+          value={selectedStorage.structure?.shape}
           items={storageShapeOptions}
-          onSelectionChange={(e) => {
+          onChange={(e) => {
             handleShapeChange(e as Shape);
           }}
         />

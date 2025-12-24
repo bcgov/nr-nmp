@@ -552,8 +552,8 @@ export default function FertigationModal({
                 items={fertilizerTypes}
                 label="Fertilizer Type"
                 placeholder="Select Fertilizer Type"
-                selectedKey={formData.fertilizerTypeId}
-                onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
+                value={formData.fertilizerTypeId}
+                onChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
               />
             </Grid>
             {formData.customNutrients ? (
@@ -598,8 +598,8 @@ export default function FertigationModal({
                   items={filteredFertilizers}
                   label="Fertilizer"
                   placeholder="Select Fertilizer"
-                  selectedKey={formData.fertilizerId}
-                  onSelectionChange={(e) => handleInputChanges({ fertilizerId: e as number })}
+                  value={formData.fertilizerId}
+                  onChange={(e) => handleInputChanges({ fertilizerId: e as number })}
                 />
               </Grid>
             )}
@@ -619,8 +619,8 @@ export default function FertigationModal({
                     items={TANK_VOLUME_UNITS}
                     label="Units"
                     placeholder="Select Units"
-                    selectedKey={formData.tankUnitId}
-                    onSelectionChange={(e) => handleInputChanges({ tankUnitId: e as number })}
+                    value={formData.tankUnitId}
+                    onChange={(e) => handleInputChanges({ tankUnitId: e as number })}
                     noSort
                     autoselectFirst
                   />
@@ -640,8 +640,8 @@ export default function FertigationModal({
                     items={SOLUBILITY_RATE_UNITS}
                     label="Units"
                     placeholder="Select Units"
-                    selectedKey={formData.solubilityUnitId}
-                    onSelectionChange={(e) => handleInputChanges({ solubilityUnitId: e as number })}
+                    value={formData.solubilityUnitId}
+                    onChange={(e) => handleInputChanges({ solubilityUnitId: e as number })}
                     noSort
                     autoselectFirst
                   />
@@ -661,8 +661,8 @@ export default function FertigationModal({
                     items={AMOUNT_TO_DISSOLVE_UNITS}
                     label="Units"
                     placeholder="Select Units"
-                    selectedKey={formData.amountToDissolveUnitId}
-                    onSelectionChange={(e) =>
+                    value={formData.amountToDissolveUnitId}
+                    onChange={(e) =>
                       handleInputChanges({ amountToDissolveUnitId: e as number })
                     }
                     noSort
@@ -747,8 +747,8 @@ export default function FertigationModal({
                     items={liquidUnits}
                     label="Units"
                     placeholder="Select Units"
-                    selectedKey={formData.applUnitId}
-                    onSelectionChange={(e) =>
+                    value={formData.applUnitId}
+                    onChange={(e) =>
                       handleInputChanges({
                         applUnitId: e as number,
                         applUnitName: liquidUnits.find((u) => u.id === e)!.label,
@@ -772,8 +772,8 @@ export default function FertigationModal({
                     items={densityUnits}
                     label="Units"
                     placeholder="Select Units"
-                    selectedKey={formData.densityUnitId}
-                    onSelectionChange={(e) => handleInputChanges({ densityUnitId: e as number })}
+                    value={formData.densityUnitId}
+                    onChange={(e) => handleInputChanges({ densityUnitId: e as number })}
                     noSort
                     autoselectFirst
                   />
@@ -794,8 +794,8 @@ export default function FertigationModal({
                 items={INJECTION_UNIT_OPTIONS}
                 label="Units"
                 placeholder="Select Units"
-                selectedKey={formData.injectionUnitId}
-                onSelectionChange={(e) => handleInputChanges({ injectionUnitId: e as number })}
+                value={formData.injectionUnitId}
+                onChange={(e) => handleInputChanges({ injectionUnitId: e as number })}
                 noSort
                 autoselectFirst
               />
@@ -815,8 +815,8 @@ export default function FertigationModal({
                 isRequired
                 items={SCHEDULE_OPTIONS}
                 label="Application Frequency"
-                selectedKey={formData.schedule}
-                onSelectionChange={(e) => handleInputChanges({ schedule: e as Schedule })}
+                value={formData.schedule}
+                onChange={(e) => handleInputChanges({ schedule: e as Schedule })}
                 noSort
                 autoselectFirst
               />

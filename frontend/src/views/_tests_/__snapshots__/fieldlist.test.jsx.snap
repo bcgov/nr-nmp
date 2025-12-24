@@ -177,6 +177,7 @@ exports[`Field modal on Field List is correct 1`] = `
                     class="bcds-react-aria-Select"
                     data-rac=""
                     data-required="true"
+                    data-testid="manure-application"
                   >
                     <span
                       class="bcds-react-aria-Select--Label"
