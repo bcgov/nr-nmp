@@ -105,9 +105,9 @@ export default function OtherAnimals({
           <Select
             label="Sub Type"
             name="subtype"
-            selectedKey={formData.subtype}
+            value={formData.subtype}
             items={subtypes}
-            onSelectionChange={(e) => {
+            onChange={(e) => {
               handleInputChanges({ subtype: String(e) });
             }}
             isRequired
@@ -119,9 +119,9 @@ export default function OtherAnimals({
             <Select
               label="Manure Type"
               name="manureType"
-              selectedKey={formData.manureType}
+              value={formData.manureType}
               items={MANURE_TYPE_OPTIONS}
-              onSelectionChange={(e) => {
+              onChange={(e) => {
                 handleInputChanges({ manureType: e as number });
               }}
               isRequired

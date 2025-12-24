@@ -181,8 +181,8 @@ export default function NutrientAnalysisModal({
               items={sourceUuidOptions}
               label="Source of Material"
               placeholder="Select Source of Material"
-              selectedKey={formData.sourceUuid}
-              onSelectionChange={(e) => {
+              value={formData.sourceUuid}
+              onChange={(e) => {
                 const selectedSource = sourceUuidOptions.find((ele) => ele.id === e);
                 if (!selectedSource) {
                   throw new Error(`Source manure or storage "${e}" not found.`);
@@ -203,8 +203,8 @@ export default function NutrientAnalysisModal({
               items={filteredManureOptions}
               label="Material Type"
               placeholder="Select Material Type"
-              selectedKey={formData.manureName}
-              onSelectionChange={(e) => {
+              value={formData.manureName}
+              onChange={(e) => {
                 const opt = manureOptions.find((r) => r.id === e)!;
                 handleInputChanges({
                   manureName: e as string,

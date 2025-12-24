@@ -589,8 +589,8 @@ function CropsModal({
               isRequired
               label="Crop Type"
               items={cropTypes.map((ele) => ({ id: ele.id, label: ele.name }))}
-              selectedKey={formData.cropTypeId}
-              onSelectionChange={(e) => handleFormFieldChange('cropTypeId', e as number)}
+              value={formData.cropTypeId}
+              onChange={(e) => handleFormFieldChange('cropTypeId', e as number)}
             />
           </Grid>
           {cropTypes.length === 0 ? null : (
@@ -611,8 +611,8 @@ function CropsModal({
                     label="Crop"
                     items={filteredCrops.map((ele) => ({ id: ele.id, label: ele.cropname }))}
                     isDisabled={filteredCrops.length === 0}
-                    selectedKey={formData.cropId}
-                    onSelectionChange={(e) => handleFormFieldChange('cropId', e as number)}
+                    value={formData.cropId}
+                    onChange={(e) => handleFormFieldChange('cropId', e as number)}
                   />
                 </Grid>
               )}
@@ -641,8 +641,8 @@ function CropsModal({
                     label="Units"
                     isRequired
                     items={HARVEST_UNIT_OPTIONS}
-                    selectedKey={formData.yieldHarvestUnit}
-                    onSelectionChange={(e) => {
+                    value={formData.yieldHarvestUnit}
+                    onChange={(e) => {
                       handleFormFieldChange('yieldHarvestUnit', e as string);
                     }}
                   />
@@ -674,8 +674,8 @@ function CropsModal({
                       isRequired
                       label="Plant Age (Years)"
                       items={plantAges}
-                      selectedKey={formData.plantAgeYears}
-                      onSelectionChange={(e) => handleFormFieldChange('plantAgeYears', e as number)}
+                      value={formData.plantAgeYears}
+                      onChange={(e) => handleFormFieldChange('plantAgeYears', e as number)}
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
@@ -683,12 +683,12 @@ function CropsModal({
                       isRequired
                       label="# of plants per acre"
                       items={berryPlantsPerAcreOptions}
-                      selectedKey={
+                      value={
                         berryQuantities.find(
                           (ele) => ele.plantsperacre === formData.numberOfPlantsPerAcre,
                         )?.id || 0
                       }
-                      onSelectionChange={(e) =>
+                      onChange={(e) =>
                         handleFormFieldChange('numberOfPlantsPerAcre', e as number)
                       }
                     />
@@ -698,12 +698,12 @@ function CropsModal({
                       isRequired
                       label="Distance between plants, distance between rows (inches)"
                       items={berryDistBtwPlantsOptions}
-                      selectedKey={
+                      value={
                         berryQuantities.find(
                           (ele) => ele.distancebetweenplants === formData.distanceBtwnPlantsRows,
                         )?.id || 0
                       }
-                      onSelectionChange={(e) =>
+                      onChange={(e) =>
                         handleFormFieldChange('distanceBtwnPlantsRows', e as number)
                       }
                     />
@@ -727,12 +727,12 @@ function CropsModal({
                       isRequired
                       label="Where will prunings go?"
                       items={whereWillPruningsGo}
-                      selectedKey={
+                      value={
                         whereWillPruningsGo.find(
                           (option) => option.label === formData.whereWillPruningsGo,
                         )?.id || 0
                       }
-                      onSelectionChange={(e) =>
+                      onChange={(e) =>
                         handleFormFieldChange('whereWillPruningsGo', e as number)
                       }
                     />
@@ -821,8 +821,8 @@ function CropsModal({
                               id: ele.id,
                               label: ele.name,
                             }))}
-                            selectedKey={formData.prevCropId}
-                            onSelectionChange={(e) => {
+                            value={formData.prevCropId}
+                            onChange={(e) => {
                               handleFormFieldChange('prevCropId', e as number);
                             }}
                           />

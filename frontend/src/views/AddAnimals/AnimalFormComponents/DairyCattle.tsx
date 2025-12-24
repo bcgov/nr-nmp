@@ -149,18 +149,18 @@ export default function DairyCattle({
       <Grid size={formGridBreakpoints}>
         <Select
           label="Sub Type"
-          selectedKey={formData.subtype}
+          value={formData.subtype}
           items={subtypeOptions}
-          onSelectionChange={(e) => handleInputChanges({ subtype: e as string })}
+          onChange={(e) => handleInputChanges({ subtype: e as string })}
           isRequired
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
         <Select
           label="Breed"
-          selectedKey={formData.breed}
+          value={formData.breed}
           items={breedOptions}
-          onSelectionChange={(e) => handleInputChanges({ breed: e as string })}
+          onChange={(e) => handleInputChanges({ breed: e as string })}
           isRequired
         />
       </Grid>
@@ -175,9 +175,9 @@ export default function DairyCattle({
       <Grid size={formGridBreakpoints}>
         <Select
           label="Manure Type"
-          selectedKey={formData.manureType}
+          value={formData.manureType}
           items={MANURE_TYPE_OPTIONS}
-          onSelectionChange={(e) => handleInputChanges({ manureType: e as number })}
+          onChange={(e) => handleInputChanges({ manureType: e as number })}
           isRequired
         />
       </Grid>

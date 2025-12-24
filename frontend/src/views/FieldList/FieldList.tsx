@@ -70,22 +70,17 @@ export default function FieldList() {
   };
 
   const handlePreviousPage = () => {
-    try {
-      if (fieldList.length) {
-        dispatch({
-          type: 'SAVE_FIELDS',
-          year: state.nmpFile.farmDetails.year,
-          newFields: fieldList,
-        });
-      }
-      if (!state.showAnimalsStep) {
-        navigate(FARM_INFORMATION);
-      } else {
-        navigate(NUTRIENT_ANALYSIS);
-      }
-    } catch {
-      console.log("Couldn't parse");
+    if (fieldList.length) {
+      dispatch({
+        type: 'SAVE_FIELDS',
+        year: state.nmpFile.farmDetails.year,
+        newFields: fieldList,
+      });
+    }
+    if (!state.showAnimalsStep) {
       navigate(FARM_INFORMATION);
+    } else {
+      navigate(NUTRIENT_ANALYSIS);
     }
   };
 

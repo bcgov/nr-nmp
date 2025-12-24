@@ -420,8 +420,8 @@ export default function FertilizerModal({
               items={fertilizerTypes}
               label="Fertilizer Type"
               placeholder="Select Fertilizer Type"
-              selectedKey={formState.fertilizerTypeId}
-              onSelectionChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
+              value={formState.fertilizerTypeId}
+              onChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
             />
           </Grid>
           {formState.customFertilizer ? (
@@ -466,8 +466,8 @@ export default function FertilizerModal({
                 items={filteredFertilizers}
                 label="Fertilizer"
                 placeholder="Select Fertilizer"
-                selectedKey={formState.fertilizerId}
-                onSelectionChange={(e) => handleInputChanges({ fertilizerId: e as number })}
+                value={formState.fertilizerId}
+                onChange={(e) => handleInputChanges({ fertilizerId: e as number })}
               />
             </Grid>
           )}
@@ -485,8 +485,8 @@ export default function FertilizerModal({
               items={dryOrLiquidUnitOptions}
               label="Application Units"
               placeholder="Select Units"
-              selectedKey={formState.applUnitId}
-              onSelectionChange={(e) => handleInputChanges({ applUnitId: e as number })}
+              value={formState.applUnitId}
+              onChange={(e) => handleInputChanges({ applUnitId: e as number })}
               autoselectFirst
             />
           </Grid>
@@ -521,8 +521,8 @@ export default function FertilizerModal({
                   items={densityUnits}
                   label="Density Units"
                   placeholder="Select Units"
-                  selectedKey={formState.densityUnitId}
-                  onSelectionChange={(e) => handleInputChanges({ densityUnitId: e as number })}
+                  value={formState.densityUnitId}
+                  onChange={(e) => handleInputChanges({ densityUnitId: e as number })}
                   autoselectFirst
                 />
               </Grid>
@@ -532,8 +532,8 @@ export default function FertilizerModal({
             <Select
               items={FERTILIZER_METHODS}
               label="Method"
-              selectedKey={formState.applicationMethod}
-              onSelectionChange={(e) => handleInputChanges({ applicationMethod: e as string })}
+              value={formState.applicationMethod}
+              onChange={(e) => handleInputChanges({ applicationMethod: e as string })}
             />
           </Grid>
           <Grid size={formGridBreakpoints}>
