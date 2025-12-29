@@ -31,8 +31,8 @@ function Select({
   sortFunction,
   noSort,
   autoselectFirst,
-  selectedKey,
-  onSelectionChange,
+  value,
+  onChange,
   items,
   ...props
 }: ThisComponentProps & ComponentProps<typeof BcGovSelect>) {
@@ -47,21 +47,21 @@ function Select({
   const sortedItems = useMemo(() => items?.sort(selectedSortFcn), [items, selectedSortFcn]);
 
   useEffect(() => {
-    if (autoselectFirst && onSelectionChange && sortedItems && sortedItems.length > 0) {
-      if (selectedKey === null || selectedKey === undefined) {
-        onSelectionChange(sortedItems[0].id!);
-      } else if (!sortedItems.some((elem) => elem.id === selectedKey)) {
-        onSelectionChange(sortedItems[0].id!);
+    if (autoselectFirst && onChange && sortedItems && sortedItems.length > 0) {
+      if (value === null || value === undefined) {
+        onChange(sortedItems[0].id!);
+      } else if (!sortedItems.some((elem) => elem.id === value)) {
+        onChange(sortedItems[0].id!);
       }
     }
-  }, [autoselectFirst, selectedKey, sortedItems, onSelectionChange]);
+  }, [autoselectFirst, value, sortedItems, onChange]);
 
   return (
     <BcGovSelect
       {...props}
       items={sortedItems}
-      selectedKey={selectedKey}
-      onSelectionChange={onSelectionChange}
+      value={value}
+      onChange={onChange}
     />
   );
 }

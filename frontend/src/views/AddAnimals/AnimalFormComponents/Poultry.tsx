@@ -97,9 +97,9 @@ export default function Poultry({
       <Grid size={formGridBreakpoints}>
         <Select
           label="Sub Type"
-          selectedKey={formData.subtype}
+          value={formData.subtype}
           items={subtypeOptions}
-          onSelectionChange={(e) => {
+          onChange={(e) => {
             e === DUCK_ID
               ? handleInputChanges({ subtype: e as string, manureType: ManureType.Solid })
               : handleInputChanges({ subtype: e as string });
@@ -112,9 +112,9 @@ export default function Poultry({
         <Grid size={formGridBreakpoints}>
           <Select
             label="Manure Type"
-            selectedKey={formData.manureType}
+            value={formData.manureType}
             items={MANURE_TYPE_OPTIONS}
-            onSelectionChange={(e) => handleInputChanges({ manureType: e as number })}
+            onChange={(e) => handleInputChanges({ manureType: e as number })}
             isRequired
           />
         </Grid>

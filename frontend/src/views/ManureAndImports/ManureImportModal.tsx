@@ -114,9 +114,9 @@ export default function ManureImportModal({
               isRequired
               label="Manure Type"
               placeholder="Select manure type"
-              selectedKey={formData.manureType}
+              value={formData.manureType}
               items={MANURE_TYPE_OPTIONS}
-              onSelectionChange={(e) => {
+              onChange={(e) => {
                 handleInputChange({
                   manureType: e as number,
                   managedManureName: `${formData.uniqueMaterialName}, ${ManureType[e as number]}`,
@@ -146,12 +146,12 @@ export default function ManureImportModal({
                   isRequired
                   label="Units"
                   placeholder="Select a unit"
-                  selectedKey={formData.units}
+                  value={formData.units}
                   items={solidManureDropdownOptions.map((ele) => ({
                     id: ele.inputunit,
                     label: ele.inputunitname ?? '',
                   }))}
-                  onSelectionChange={(e) => {
+                  onChange={(e) => {
                     handleInputChange({ units: e as number });
                   }}
                   autoselectFirst
@@ -176,12 +176,12 @@ export default function ManureImportModal({
                 isRequired
                 label="Units"
                 placeholder="Select a unit"
-                selectedKey={formData.units}
+                value={formData.units}
                 items={liquidManureDropdownOptions.map((ele) => ({
                   id: ele.inputunit,
                   label: ele.inputunitname ?? '',
                 }))}
-                onSelectionChange={(e) => {
+                onChange={(e) => {
                   handleInputChange({ units: e as number });
                 }}
                 autoselectFirst

@@ -106,9 +106,9 @@ export default function MilkingFields({
       <Grid size={formGridBreakpoints}>
         <Select
           label="(Units)"
-          selectedKey={washWaterUnit || PER_DAY_PER_ANIMAL_UNIT}
+          value={washWaterUnit || PER_DAY_PER_ANIMAL_UNIT}
           items={washWaterOptions}
-          onSelectionChange={(e) => handleUnitChange(e as WashWaterUnit)}
+          onChange={(e) => handleUnitChange(e as WashWaterUnit)}
           isRequired
           noSort
         />

@@ -225,8 +225,8 @@ export default function FarmInformation() {
               label="Year"
               isRequired
               items={yearOptions}
-              selectedKey={formData.year}
-              onSelectionChange={(e) => handleChange({ year: e as string })}
+              value={formData.year}
+              onChange={(e) => handleChange({ year: e as string })}
               noSort
             />
           </Grid>
@@ -235,8 +235,8 @@ export default function FarmInformation() {
               label="Region"
               isRequired
               items={regionOptions}
-              selectedKey={formData.farmRegion}
-              onSelectionChange={(e) => {
+              value={formData.farmRegion}
+              onChange={(e) => {
                 const opt = regionOptions.find((r) => r.id === e)!;
                 handleChange({ farmRegion: e as number, regionLocationId: opt.value.locationid });
               }}
@@ -247,8 +247,8 @@ export default function FarmInformation() {
               label="Subregion"
               isRequired
               items={subregionOptions}
-              selectedKey={formData.farmSubregion}
-              onSelectionChange={(e) => handleChange({ farmSubregion: e as number })}
+              value={formData.farmSubregion}
+              onChange={(e) => handleChange({ farmSubregion: e as number })}
               isDisabled={!(subregionOptions && subregionOptions.length)}
             />
           </Grid>

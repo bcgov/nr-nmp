@@ -189,9 +189,9 @@ export default function StorageSystemDetailsEdit({
           <Select
             isRequired
             label="Manure Type"
-            selectedKey={formData.manureType}
+            value={formData.manureType}
             items={MANURE_TYPE_OPTIONS}
-            onSelectionChange={(e) => {
+            onChange={(e) => {
               handleManureTypeChange(e as number);
               setFullManureList((prev) =>
                 prev.map(

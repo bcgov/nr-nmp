@@ -316,8 +316,8 @@ export default function SoilTests() {
           <Select
             aria-label="Select the lab used (soil test methods)"
             items={soilTestMethods}
-            selectedKey={soilTestId}
-            onSelectionChange={(id) => soilTestMethodSelect(id as number)}
+            value={soilTestId}
+            onChange={(id) => soilTestMethodSelect(id as number)}
           />
         </Grid>
       </Grid>

@@ -92,11 +92,12 @@ export default function FieldListModal({
           <Grid size={6}>
             <Select
               label="Manure application"
+              data-testid="manure-application"
               isRequired
               items={MANURE_APPLICATION_FREQ}
-              selectedKey={formData.previousYearManureApplicationId}
+              value={formData.previousYearManureApplicationId}
               placeholder="Select"
-              onSelectionChange={(e) => {
+              onChange={(e) => {
                 handleFormFieldChange({ previousYearManureApplicationId: e as number });
               }}
               noSort

@@ -83,9 +83,9 @@ export default function BeefCattle({
           isRequired
           label="Cattle Type"
           placeholder="Select a cattle type"
-          selectedKey={formData.subtype}
+          value={formData.subtype}
           items={subtypeOptions}
-          onSelectionChange={(e) => handleInputChanges({ subtype: e as string })}
+          onChange={(e) => handleInputChanges({ subtype: e as string })}
         />
       </Grid>
       <Grid size={formGridBreakpoints}>

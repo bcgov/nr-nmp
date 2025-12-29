@@ -477,12 +477,12 @@ export default function ManureModal({
                 isRequired
                 label="Material Type"
                 placeholder="Select a material type"
-                selectedKey={manureForm.manureId}
+                value={manureForm.manureId}
                 items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
                   id: ele.manureId,
                   label: ele.manureName,
                 }))}
-                onSelectionChange={(e) => {
+                onChange={(e) => {
                   const manureWNutrients = manuresWithNutrients.find((m) => m.manureId === e)!;
                   handleChanges({
                     manureId: e as number,
@@ -499,9 +499,9 @@ export default function ManureModal({
                 isRequired
                 label="Application Season/Method"
                 placeholder="Select an application method"
-                selectedKey={manureForm.applicationId}
+                value={manureForm.applicationId}
                 items={filteredApplicationMethods}
-                onSelectionChange={(e) => handleChanges({ applicationId: e as number })}
+                onChange={(e) => handleChanges({ applicationId: e as number })}
               />
             </Grid>
             <Grid size={formGridBreakpoints}>
@@ -517,9 +517,9 @@ export default function ManureModal({
                 isRequired
                 label="Units"
                 placeholder="Select a unit"
-                selectedKey={manureForm.applUnitId}
+                value={manureForm.applUnitId}
                 items={filteredManureUnits}
-                onSelectionChange={(e) => handleChanges({ applUnitId: e as number })}
+                onChange={(e) => handleChanges({ applUnitId: e as number })}
                 autoselectFirst
                 noSort
               />
