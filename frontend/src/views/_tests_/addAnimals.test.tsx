@@ -283,4 +283,37 @@ describe('AddAnimalsModal component unit tests', () => {
     act(() => fireEvent.click(confirm));
     expect(mockSetAnimalList).toHaveBeenCalled();
   });
+
+  it('onConfirm not called when value is missing', async () => {
+    mockUseAppService.mockReturnValue({
+      state: {
+        nmpFile: farmTestFile,
+        showAnimalsStep: true,
+        tables: undefined,
+      },
+      dispatch: jest.fn(),
+    });
+    const mockSetAnimalList = jest.fn();
+
+    await waitFor(() => {
+      render(
+        <AddAnimalsModal
+          isOpen
+          initialModalData={{
+            ...INITIAL_BEEF_FORM_DATA,
+            uuid: 'blah',
+            subtype: '0',
+            daysCollected: undefined,
+          }}
+          rowEditIndex={undefined}
+          setAnimalList={mockSetAnimalList}
+          onClose={jest.fn()}
+        />,
+      );
+    });
+
+    const confirm = screen.getByText('Confirm');
+    act(() => fireEvent.click(confirm));
+    expect(mockSetAnimalList).not.toHaveBeenCalled();
+  });
 });
