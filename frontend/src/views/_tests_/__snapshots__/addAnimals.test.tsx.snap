@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`renders add animals view correctly 1`] = `
+exports[`AddAnimals component snapshot test 1`] = `
 <DocumentFragment>
   <div
     class="css-1lqntaz"
@@ -477,7 +477,7 @@ exports[`renders add animals view correctly 1`] = `
 </DocumentFragment>
 `;
 
-exports[`renders correctly when add animals modal is open 1`] = `
+exports[`AddAnimalsModal component snapshot test 1`] = `
 <body>
   <div
     aria-hidden="true"
@@ -629,6 +629,11 @@ exports[`renders correctly when add animals modal is open 1`] = `
                           title=""
                         >
                           <option />
+                          <option
+                            value="1"
+                          >
+                            Beef Cattle
+                          </option>
                         </select>
                       </label>
                     </div>
