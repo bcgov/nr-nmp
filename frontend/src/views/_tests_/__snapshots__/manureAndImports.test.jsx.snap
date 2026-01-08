@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`ManureAndImports is correct 1`] = `
+exports[`manureAndImports navigation tests ManureAndImports is correct 1`] = `
 <DocumentFragment>
   <div
     class="css-1lqntaz"
@@ -1369,7 +1369,7 @@ exports[`ManureAndImports is correct 1`] = `
 </DocumentFragment>
 `;
 
-exports[`ManureImportModal is correct 1`] = `
+exports[`manureAndImports navigation tests ManureImportModal is correct 1`] = `
 <body>
   <div
     aria-hidden="true"

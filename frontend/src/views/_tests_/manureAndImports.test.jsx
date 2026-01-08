@@ -246,7 +246,7 @@ describe('manureAndImports navigation tests', () => {
     );
   });
 
-  it.only('manureAndImports can navigate to next page (/storage)', async () => {
+  it('manureAndImports can navigate to next page (/storage)', async () => {
     const mockDispatch = jest.fn();
     mockUseAppService.mockImplementation(() => ({
       state: {
