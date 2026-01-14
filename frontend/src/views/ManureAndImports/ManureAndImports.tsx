@@ -365,7 +365,7 @@ export default function ManureAndImports() {
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
           rows={animalList}
           columns={columnsAnimalManure}
-          getRowId={() => crypto.randomUUID()}
+          getRowId={(row: NMPFileAnimal) => `${row.animalId}_${row.subtype}_${row.manureType}`}
           disableRowSelectionOnClick
           disableColumnMenu
           hideFooterPagination
@@ -376,7 +376,7 @@ export default function ManureAndImports() {
         sx={{ ...customTableStyle, marginTop: '1.25rem' }}
         rows={manures}
         columns={columnsImportedManure}
-        getRowId={() => crypto.randomUUID()}
+        getRowId={(row: NMPFileImportedManure) => row.uniqueMaterialName}
         disableRowSelectionOnClick
         disableColumnMenu
         hideFooterPagination
