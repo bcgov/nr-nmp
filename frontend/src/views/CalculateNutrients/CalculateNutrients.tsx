@@ -197,10 +197,10 @@ export default function CalculateNutrients() {
   );
 
   const balanceRow: CalculateNutrientsRow = useMemo(() => {
-    const allRows = [
+    const allRows: (CalculateNutrientsRow | undefined)[] = [
       ...fieldList[activeField].crops,
       ...fieldList[activeField].fertilizers,
-      ...fieldList[activeField].fertigations,
+      ...fertigationToFertigationRows(fieldList[activeField].fertigations),
       ...fieldList[activeField].otherNutrients,
       ...fieldList[activeField].manures,
       fieldList[activeField].soilNitrateCredit,
