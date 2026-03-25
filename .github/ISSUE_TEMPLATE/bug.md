@@ -31,5 +31,9 @@ If applicable, add screenshots to help explain your problem.
  - Browser [e.g. chrome, safari]
  - Version [e.g. 22]
 
-**Additional context**
-Add any other context about the problem here.
+** Additional context**
+Add any other context about the task here.
+
+Confirm this task meets our team [**Definition of Ready (DoR)**](https://www.figma.com/board/XmNkN600aAVWFCBmSDdt10/Team-Documents?node-id=1-2&t=Xjd6nHZZ7YlnoOrD-4) before moving to the **Next Sprint** column.
+
+Confirm this task meets our team [**Definition of Done (DoD)**](https://www.figma.com/board/XmNkN600aAVWFCBmSDdt10/Team-Documents?node-id=3-21&t=Xjd6nHZZ7YlnoOrD-4) before moving to the **Done** column.
