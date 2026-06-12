@@ -31,7 +31,7 @@ jobs:
       # Get PR number for squash merges to main
       - name: PR Number
         id: pr
-        uses: bcgov-nr/action-get-pr@21f9351425cd55a98e869ee28919a512aa30647d # v0.0.1
+        uses: bcgov-nr/action-get-pr@3931962bf13b3f4702d0013ec7c836f752ff1a3b # v0.3.0
 
   # https://github.com/bcgov/quickstart-openshift-helpers
   deploys-test:
