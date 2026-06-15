@@ -264,7 +264,7 @@ export default function SoilTests() {
   );
   return (
     <View
-      title="Field Information"
+      title="Soil Tests"
       handleBack={handlePreviousPage}
       handleNext={handleNextPage}
     >
