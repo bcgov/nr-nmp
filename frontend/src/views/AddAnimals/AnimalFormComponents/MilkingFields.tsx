@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
+import LoopIcon from '@mui/icons-material/Loop';
 import { WashWaterUnit } from '@/types';
 import { NumberField, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
@@ -34,12 +35,20 @@ export default function MilkingFields({
   const [milkProduction, setMilkProduction] = useState<number>(milkProductionInit);
   const [washWater, setWashWater] = useState<number>(washWaterInit);
 
+  const washWaterDefaultCorrected = useMemo(
+    () =>
+      washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
+        ? washWaterDefault
+        : washWaterDefault * animalsPerFarm,
+    [washWaterUnit, animalsPerFarm, washWaterDefault],
+  );
+
   // When the breed changes, change the milk production value
   useEffect(() => {
-    setMilkProduction(milkProductionInit);
-    handleInputChanges({ milkProduction: milkProductionInit });
+    setMilkProduction(milkProductionDefault);
+    handleInputChanges({ milkProduction: milkProductionDefault, milkProductionAdjusted: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [milkProductionInit]);
+  }, [milkProductionDefault]);
 
   // On mount, set milking fields to init values
   // On unmount, clear milking fields
@@ -50,7 +59,7 @@ export default function MilkingFields({
       washWater: washWaterInit,
       // Per day per animal is the default
       washWaterUnit: washWaterUnit || PER_DAY_PER_ANIMAL_UNIT,
-      washWaterAdjusted: washWaterDefault !== washWaterInit,
+      washWaterAdjusted: washWaterDefaultCorrected !== washWaterInit,
     });
     return () => {
       handleInputChanges({
@@ -66,11 +75,19 @@ export default function MilkingFields({
 
   const handleUnitChange = (newUnit: WashWaterUnit) => {
     if (newUnit === PER_DAY_PER_ANIMAL_UNIT && washWaterUnit === PER_DAY_UNIT) {
-      setWashWater(washWaterInit);
-      handleInputChanges({ washWater: washWaterInit, washWaterUnit: newUnit });
+      setWashWater(washWaterDefault);
+      handleInputChanges({
+        washWater: washWaterDefault,
+        washWaterUnit: newUnit,
+        washWaterAdjusted: false,
+      });
     } else if (newUnit === PER_DAY_UNIT && washWaterUnit === PER_DAY_PER_ANIMAL_UNIT) {
-      setWashWater(washWaterInit * animalsPerFarm);
-      handleInputChanges({ washWater: washWaterInit * animalsPerFarm, washWaterUnit: newUnit });
+      setWashWater(washWaterDefault * animalsPerFarm);
+      handleInputChanges({
+        washWater: washWaterDefault * animalsPerFarm,
+        washWaterUnit: newUnit,
+        washWaterAdjusted: false,
+      });
     } else {
       handleInputChanges({ washWaterUnit: newUnit });
     }
@@ -90,6 +107,23 @@ export default function MilkingFields({
               milkProductionAdjusted: milkProductionDefault !== e,
             });
           }}
+          iconRight={
+            milkProduction !== milkProductionDefault ? (
+              <button
+                type="button"
+                css={{ backgroundColor: '#ffa500' }}
+                onClick={() => {
+                  setMilkProduction(milkProductionDefault);
+                  handleInputChanges({
+                    milkProduction: milkProductionDefault,
+                    milkProductionAdjusted: false,
+                  });
+                }}
+              >
+                <LoopIcon />
+              </button>
+            ) : undefined
+          }
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
@@ -99,8 +133,28 @@ export default function MilkingFields({
           value={washWater}
           onChange={(e) => {
             setWashWater(e);
-            handleInputChanges({ washWater: e, washWaterAdjusted: washWaterDefault !== e });
+            handleInputChanges({
+              washWater: e,
+              washWaterAdjusted: washWaterDefaultCorrected !== e,
+            });
           }}
+          iconRight={
+            washWater !== washWaterDefaultCorrected ? (
+              <button
+                type="button"
+                css={{ backgroundColor: '#ffa500' }}
+                onClick={() => {
+                  setWashWater(washWaterDefaultCorrected);
+                  handleInputChanges({
+                    washWater: washWaterDefaultCorrected,
+                    washWaterAdjusted: false,
+                  });
+                }}
+              >
+                <LoopIcon />
+              </button>
+            ) : undefined
+          }
         />
       </Grid>
       <Grid size={formGridBreakpoints}>
