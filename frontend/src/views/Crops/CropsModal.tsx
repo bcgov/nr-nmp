@@ -688,9 +688,7 @@ function CropsModal({
                           (ele) => ele.plantsperacre === formData.numberOfPlantsPerAcre,
                         )?.id || 0
                       }
-                      onChange={(e) =>
-                        handleFormFieldChange('numberOfPlantsPerAcre', e as number)
-                      }
+                      onChange={(e) => handleFormFieldChange('numberOfPlantsPerAcre', e as number)}
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
@@ -703,9 +701,7 @@ function CropsModal({
                           (ele) => ele.distancebetweenplants === formData.distanceBtwnPlantsRows,
                         )?.id || 0
                       }
-                      onChange={(e) =>
-                        handleFormFieldChange('distanceBtwnPlantsRows', e as number)
-                      }
+                      onChange={(e) => handleFormFieldChange('distanceBtwnPlantsRows', e as number)}
                     />
                   </Grid>
                 </>
@@ -732,9 +728,7 @@ function CropsModal({
                           (option) => option.label === formData.whereWillPruningsGo,
                         )?.id || 0
                       }
-                      onChange={(e) =>
-                        handleFormFieldChange('whereWillPruningsGo', e as number)
-                      }
+                      onChange={(e) => handleFormFieldChange('whereWillPruningsGo', e as number)}
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
