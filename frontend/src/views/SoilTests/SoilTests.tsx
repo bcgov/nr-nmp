@@ -25,7 +25,7 @@ import {
   SoilTestMethods,
   SoilTestNutrientRange,
 } from '@/types';
-import { InfoBox } from './soilTests.styles';
+import { InfoBox, WarningMessage } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import SoilTestsModal from './SoilTestsModal';
@@ -42,6 +42,8 @@ export default function SoilTests() {
   const [soilTestId, setSoilTestId] = useState<number>(
     fields.find((field) => field.soilTest !== undefined)?.soilTest?.soilTestId || 0,
   );
+
+  const [showWarning, setShowWarning] = useState<boolean>(false);
 
   const [dialogText, setDialogText] = useState<string>('');
   const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
@@ -116,6 +118,14 @@ export default function SoilTests() {
       soilTestsUpdated: true,
     });
     navigate(CROPS);
+  };
+
+  const handleClickNext = () => {
+    if (fields.some((field) => field.soilTest === undefined)) {
+      setShowWarning(true);
+    } else {
+      handleNextPage();
+    }
   };
 
   useEffect(() => {
@@ -266,7 +276,7 @@ export default function SoilTests() {
     <View
       title="Field Information"
       handleBack={handlePreviousPage}
-      handleNext={handleNextPage}
+      handleNext={handleClickNext}
     >
       <AlertDialog
         isOpen={!!dialogText}
@@ -275,6 +285,17 @@ export default function SoilTests() {
         continueBtn={deleteBtnConfig}
       >
         <div>{dialogText}</div>
+      </AlertDialog>
+      <AlertDialog
+        isOpen={showWarning}
+        title="Warning"
+        onOpenChange={(b) => setShowWarning(b)}
+        continueBtn={{ handleClick: () => handleNextPage() }}
+      >
+        <WarningMessage>
+          For fields without a soil test, very high soil P and K fertility and a pH of 6.0 will be
+          assumed. Crop P and K requirements will be 0 on fields.
+        </WarningMessage>
       </AlertDialog>
       {currentFieldIndex !== null && (
         <SoilTestsModal
@@ -297,12 +318,12 @@ export default function SoilTests() {
             <li>Yes - Select the lab used (soil test methods)</li>
             <li>No - Click Next</li>
           </ul>
-          <span>
+          <WarningMessage>
             For fields without a soil test, very high soil P and K fertility and a pH of 6.0 will be
             assumed. Crop P and K requirements will be 0 on fields.
-          </span>
+          </WarningMessage>
           <br />
-          <span>Results will not be accurate without a soil test.</span>
+          <WarningMessage>Results will not be accurate without a soil test.</WarningMessage>
         </InfoBox>
       )}
       <Grid
