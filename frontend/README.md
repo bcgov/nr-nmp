@@ -49,6 +49,10 @@ export default tseslint.config({
 });
 ```
 
+### Scripts to Run Before Check-In
+
+Before checking in code, run `npm run format` and then immediately `npm run lint`.
+
 ### Running Tests
 
 Both Jest and Cypress tests are used to test the code.
