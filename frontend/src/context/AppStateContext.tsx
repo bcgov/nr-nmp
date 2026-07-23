@@ -8,7 +8,11 @@ function initAppContext(): AppState {
   let appState: AppState = getDataFromLocalStorage(APP_STATE_KEY);
   if (appState === null) {
     // No cached file, need to start from scratch
-    appState = { nmpFile: DEFAULT_NMPFILE, showAnimalsStep: false, tables: undefined };
+    appState = {
+      nmpFile: DEFAULT_NMPFILE,
+      showAnimalsStep: false,
+      tables: undefined,
+    };
   }
   return appState;
 }
@@ -24,7 +28,9 @@ function AppStateProvider(props: { children: React.ReactNode }) {
 
   return (
     <AppStateContext.Provider value={state}>
-      <AppDispatchContext.Provider value={dispatch}>{children}</AppDispatchContext.Provider>
+      <AppDispatchContext.Provider value={dispatch}>
+        {children}
+      </AppDispatchContext.Provider>
     </AppStateContext.Provider>
   );
 }

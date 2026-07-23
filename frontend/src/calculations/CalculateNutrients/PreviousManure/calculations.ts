@@ -16,7 +16,9 @@ const NO_MANURE_FREQUENCY = 0;
  * @param previousYearManureApplicationId - The frequency ID to check
  * @returns boolean True if manure was applied in previous year
  */
-export function wasManureAddedInPreviousYear(previousYearManureApplicationId: number): boolean {
+export function wasManureAddedInPreviousYear(
+  previousYearManureApplicationId: number,
+): boolean {
   return previousYearManureApplicationId > NO_MANURE_FREQUENCY;
 }
 
@@ -45,14 +47,17 @@ function prevYearManureDefaultLookup(
   previousManureApplications: PreviousYearManureApplication[],
 ): number {
   const matchingApplication = previousManureApplications.find(
-    (app) => app.previousyearmanureaplicationfrequency === prevYearManureApplicationFrequency,
+    (app) => app.previousyearmanureaplicationfrequency
+      === prevYearManureApplicationFrequency,
   );
 
   if (!matchingApplication) {
     return 0;
   }
 
-  const creditArray = parseNitrogenCreditArray(matchingApplication.defaultnitrogencredit);
+  const creditArray = parseNitrogenCreditArray(
+    matchingApplication.defaultnitrogencredit,
+  );
   const index = Math.min(manureApplicationHistory, creditArray.length - 1);
 
   return creditArray[index] || 0;
@@ -70,8 +75,8 @@ export function calcPrevYearManureApplDefault(
 ): number {
   try {
     if (
-      !field.previousYearManureApplicationId ||
-      field.previousYearManureApplicationId === NO_MANURE_FREQUENCY
+      !field.previousYearManureApplicationId
+      || field.previousYearManureApplicationId === NO_MANURE_FREQUENCY
     ) {
       return 0;
     }
@@ -87,7 +92,10 @@ export function calcPrevYearManureApplDefault(
       previousManureApplications,
     );
   } catch (error) {
-    console.error('Error calculating previous year manure application default:', error);
+    console.error(
+      'Error calculating previous year manure application default:',
+      error,
+    );
     return 0;
   }
 }
@@ -104,7 +112,10 @@ export function calculatePrevYearManure(
 ): PreviousYearManureData {
   const frequency = field.previousYearManureApplicationId;
   const wasAdded = wasManureAddedInPreviousYear(frequency);
-  const defaultCredit = calcPrevYearManureApplDefault(field, previousManureApplications);
+  const defaultCredit = calcPrevYearManureApplDefault(
+    field,
+    previousManureApplications,
+  );
   const nitrogenCredit = field.previousYearManureApplicationNCredit ?? defaultCredit;
 
   return {

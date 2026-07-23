@@ -29,8 +29,8 @@ export function getPhosphorousRegionFromList(
   region: Region,
 ) {
   const phosphorousRegion = list.find(
-    (p) =>
-      p.cropid === cropId && p.soiltestphosphorousregioncode === region.soiltestphosphorousregioncd,
+    (p) => p.cropid === cropId
+      && p.soiltestphosphorousregioncode === region.soiltestphosphorousregioncd,
   );
   return phosphorousRegion;
 }
@@ -41,8 +41,8 @@ export function getPotassiumRegionFromList(
   region: Region,
 ) {
   const potassiumRegion = list.find(
-    (p) =>
-      p.cropid === cropId && p.soiltestpotassiumregioncode === region.soiltestpotassiumregioncd,
+    (p) => p.cropid === cropId
+      && p.soiltestpotassiumregioncode === region.soiltestpotassiumregioncd,
   );
   return potassiumRegion;
 }
@@ -83,11 +83,12 @@ export function getCropRemovalK20(
 
   // Calculate removal differently based on crop harvesting method
   if (
-    crop.harvestbushelsperton &&
-    crop.harvestbushelsperton > 0 &&
-    combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+    crop.harvestbushelsperton
+    && crop.harvestbushelsperton > 0
+    && combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
   ) {
-    k2oRemoval = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactork2o;
+    k2oRemoval = (combinedCropData.yield / crop.harvestbushelsperton)
+      * crop.cropremovalfactork2o;
   } else {
     k2oRemoval = combinedCropData.yield * crop.cropremovalfactork2o;
   }
@@ -117,11 +118,12 @@ export function getCropRemovalP205(
 
   // Calculate removal differently based on crop harvesting method
   if (
-    crop.harvestbushelsperton &&
-    crop.harvestbushelsperton > 0 &&
-    combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+    crop.harvestbushelsperton
+    && crop.harvestbushelsperton > 0
+    && combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
   ) {
-    p2o5Removal = (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactorp2o5;
+    p2o5Removal = (combinedCropData.yield / crop.harvestbushelsperton)
+      * crop.cropremovalfactorp2o5;
   } else {
     p2o5Removal = combinedCropData.yield * crop.cropremovalfactorp2o5;
   }
@@ -152,17 +154,17 @@ export function getCropRemovalN(
       const nToProteinConversionFactor = 0.625;
       const unitConversionFactor = 0.5;
 
-      const newCropRemovalFactorNitrogen =
-        combinedCropData.crudeProtein / (nToProteinConversionFactor * unitConversionFactor);
+      const newCropRemovalFactorNitrogen = combinedCropData.crudeProtein
+        / (nToProteinConversionFactor * unitConversionFactor);
       nRemoval = newCropRemovalFactorNitrogen * combinedCropData.yield;
     }
   } else if (
-    crop.harvestbushelsperton &&
-    crop.harvestbushelsperton > 0 &&
-    combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+    crop.harvestbushelsperton
+    && crop.harvestbushelsperton > 0
+    && combinedCropData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
   ) {
-    nRemoval =
-      (combinedCropData.yield / crop.harvestbushelsperton) * crop.cropremovalfactornitrogen;
+    nRemoval = (combinedCropData.yield / crop.harvestbushelsperton)
+      * crop.cropremovalfactornitrogen;
   } else {
     nRemoval = combinedCropData.yield * crop.cropremovalfactornitrogen;
   }
@@ -208,8 +210,8 @@ export function getCropRequirementN(
       if (combinedCropData.yield !== 0) {
         // Wait wtf, why do we calculate 1????
         nRequirement = Math.round(
-          (combinedCropData.yield / combinedCropData.yield) *
-            crop.nitrogenrecommendationpoundperacre,
+          (combinedCropData.yield / combinedCropData.yield)
+            * crop.nitrogenrecommendationpoundperacre,
         );
       }
       break;
@@ -237,24 +239,25 @@ export function getCropRequirementK2O(
 ): number {
   // Use default K if soil test data is missing
   // Kelowna ranges require integers, so this number is rounded
-  const soilTestK = Math.round(soilTest?.convertedKelownaK || DEFAULT_SOIL_TEST.convertedKelownaK!);
+  const soilTestK = Math.round(
+    soilTest?.convertedKelownaK || DEFAULT_SOIL_TEST.convertedKelownaK!,
+  );
 
   // Find the range this number falls into. If it exceeds the max, use the highest (last) range
-  const kelownaRange =
-    potassiumRanges.find((r) => r.rangelow <= soilTestK && r.rangehigh >= soilTestK) ||
-    potassiumRanges[potassiumRanges.length - 1];
+  const kelownaRange = potassiumRanges.find(
+    (r) => r.rangelow <= soilTestK && r.rangehigh >= soilTestK,
+  ) || potassiumRanges[potassiumRanges.length - 1];
 
   const potassiumRecommendation = potassiumRecommendations.find(
-    (r) =>
-      r.soiltestpotassiumkelownarangeid === kelownaRange.id &&
-      r.soiltestpotassiumregioncode === cropSTKRegion.soiltestpotassiumregioncode &&
-      r.potassiumcropgroupregioncode === cropSTKRegion.potassiumcropgroupregioncode,
+    (r) => r.soiltestpotassiumkelownarangeid === kelownaRange.id
+      && r.soiltestpotassiumregioncode === cropSTKRegion.soiltestpotassiumregioncode
+      && r.potassiumcropgroupregioncode === cropSTKRegion.potassiumcropgroupregioncode,
   );
 
   // Convert from kg/ha to lbs/acre
   return Math.round(
-    potassiumRecommendation!.k2orecommendationkilogramperhectare *
-      conversionFactors.kilogramperhectaretopoundperacreconversion,
+    potassiumRecommendation!.k2orecommendationkilogramperhectare
+      * conversionFactors.kilogramperhectaretopoundperacreconversion,
   );
 }
 
@@ -272,24 +275,27 @@ export function getCropRequirementP205(
 ): number {
   // Use default P if soil test data is missing
   // Kelowna ranges require integers, so this number is rounded
-  const soilTestP = Math.round(soilTest?.convertedKelownaP || DEFAULT_SOIL_TEST.convertedKelownaP!);
+  const soilTestP = Math.round(
+    soilTest?.convertedKelownaP || DEFAULT_SOIL_TEST.convertedKelownaP!,
+  );
 
   // Find the range this number falls into. If it exceeds the max, use the highest (last) range
-  const kelownaRange =
-    phosphorousRanges.find((r) => r.rangelow <= soilTestP && r.rangehigh >= soilTestP) ||
-    phosphorousRanges[phosphorousRanges.length - 1];
+  const kelownaRange = phosphorousRanges.find(
+    (r) => r.rangelow <= soilTestP && r.rangehigh >= soilTestP,
+  ) || phosphorousRanges[phosphorousRanges.length - 1];
 
   const phosphorousRecommendation = phosphorousRecommendations.find(
-    (r) =>
-      r.soiltestphosphorouskelownarangeid === kelownaRange.id &&
-      r.soiltestphosphorousregioncode === cropSTPRegion.soiltestphosphorousregioncode &&
-      r.phosphorouscropgroupregioncode === cropSTPRegion.phosphorouscropgroupregioncode,
+    (r) => r.soiltestphosphorouskelownarangeid === kelownaRange.id
+      && r.soiltestphosphorousregioncode
+        === cropSTPRegion.soiltestphosphorousregioncode
+      && r.phosphorouscropgroupregioncode
+        === cropSTPRegion.phosphorouscropgroupregioncode,
   );
 
   // Convert from kg/ha to lbs/acre
   return Math.round(
-    phosphorousRecommendation!.p2o5recommendationkilogramperhectare *
-      conversionFactors.kilogramperhectaretopoundperacreconversion,
+    phosphorousRecommendation!.p2o5recommendationkilogramperhectare
+      * conversionFactors.kilogramperhectaretopoundperacreconversion,
   );
 }
 
@@ -463,7 +469,10 @@ export function getBlueberryNutrients(
  * @param data The formData
  * @returns Identical data with all nutrient values negative
  */
-export function postprocessModalData(data: NMPFileCrop, calculatedN?: number): NMPFileCrop {
+export function postprocessModalData(
+  data: NMPFileCrop,
+  calculatedN?: number,
+): NMPFileCrop {
   return {
     ...data,
     reqN: -1 * data.reqN,
@@ -549,10 +558,14 @@ function oldCalcCropRequirements(
     nutrientValues = extractNutrientValues(nutrients);
   } else {
     if (!phosphorousRegion || !potassiumRegion) {
-      throw new Error(`calculateCropRequirements failed to fetch necessary data.`);
+      throw new Error('calculateCropRequirements failed to fetch necessary data.');
     }
     // Calculate crop requirements (P₂O₅, K₂O, N)
-    const cropRequirementN = getCropRequirementN(cropDataForCalc, selectedCrop, selectedCropType);
+    const cropRequirementN = getCropRequirementN(
+      cropDataForCalc,
+      selectedCrop,
+      selectedCropType,
+    );
     const cropRequirementP205 = getCropRequirementP205(
       field.soilTest,
       phosphorousRegion,
@@ -569,9 +582,21 @@ function oldCalcCropRequirements(
     );
 
     // Calculate crop removals (N, P₂O₅, K₂O)
-    const cropRemovalN = getCropRemovalN(cropDataForCalc, selectedCrop, selectedCropType);
-    const cropRemovalP205 = getCropRemovalP205(cropDataForCalc, selectedCrop, selectedCropType);
-    const cropRemovalK20 = getCropRemovalK20(cropDataForCalc, selectedCrop, selectedCropType);
+    const cropRemovalN = getCropRemovalN(
+      cropDataForCalc,
+      selectedCrop,
+      selectedCropType,
+    );
+    const cropRemovalP205 = getCropRemovalP205(
+      cropDataForCalc,
+      selectedCrop,
+      selectedCropType,
+    );
+    const cropRemovalK20 = getCropRemovalK20(
+      cropDataForCalc,
+      selectedCrop,
+      selectedCropType,
+    );
 
     nutrientValues = {
       cropRequirementN,

@@ -1,7 +1,11 @@
 /* eslint-disable no-case-declarations */
 import { HarvestUnit } from '@/constants';
 import { Crop, CropType, NMPFileCrop } from '@/types';
-import { CROP_OTHER_ID, CROP_TYPE_OTHER_ID, GRAIN_OILSEED_ID } from '@/constants/Crops';
+import {
+  CROP_OTHER_ID,
+  CROP_TYPE_OTHER_ID,
+  GRAIN_OILSEED_ID,
+} from '@/constants/Crops';
 import { CROP_TYPE_BERRIES_ID } from '../../constants/Crops';
 
 export function showUnitDropdown(cropTypeId: number) {
@@ -101,7 +105,10 @@ export type CropsModalReducerAction =
 function isCropSet(cropId: number, selectedCrop?: Crop) {
   if (cropId === 0) return false;
   // If cropId is non-zero, selectedCrop should match it
-  if (cropId !== CROP_OTHER_ID && (selectedCrop === undefined || cropId !== selectedCrop.id)) {
+  if (
+    cropId !== CROP_OTHER_ID
+    && (selectedCrop === undefined || cropId !== selectedCrop.id)
+  ) {
     throw new Error('Crops modal entered bad state');
   }
   return true;
@@ -122,16 +129,17 @@ function compareYieldToDefaultYield(
 ) {
   // Default to true to hide reset button
   if (
-    defaultYieldInTons === undefined ||
-    cropId === CROP_OTHER_ID ||
-    !isCropSet(cropId, selectedCrop)
+    defaultYieldInTons === undefined
+    || cropId === CROP_OTHER_ID
+    || !isCropSet(cropId, selectedCrop)
   ) {
     return true;
   }
 
   if (yieldHarvestUnit !== undefined) {
     validateBushelConversion(selectedCrop);
-    return yieldHarvestUnit === HarvestUnit.BushelsPerAcre && selectedCrop!.harvestbushelsperton
+    return yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+      && selectedCrop!.harvestbushelsperton
       ? Yield === defaultYieldInTons * selectedCrop!.harvestbushelsperton
       : Yield === defaultYieldInTons;
   }
@@ -164,9 +172,12 @@ export function cropsModalReducer(
             ? HarvestUnit.BushelsPerAcre
             : undefined,
           // Special case #4: if this is Berry, set berry fields to default, otherwise set to undefined
-          willSawdustBeApplied: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
-          willPlantsBePruned: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
-          hasLeafTest: action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          willSawdustBeApplied:
+            action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          willPlantsBePruned:
+            action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
+          hasLeafTest:
+            action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
           // These berry fields have a default value of undefined
           plantAgeYears: undefined,
           numberOfPlantsPerAcre: undefined,
@@ -193,9 +204,9 @@ export function cropsModalReducer(
           name: action.crop.cropname,
           manureApplicationHistory: action.crop.manureapplicationhistory,
           crudeProtein:
-            action.crop.cropremovalfactornitrogen *
-            nToProteinConversionFactor *
-            unitConversionFactor,
+            action.crop.cropremovalfactornitrogen
+            * nToProteinConversionFactor
+            * unitConversionFactor,
           crudeProteinAdjusted: false,
         },
       };
@@ -214,15 +225,18 @@ export function cropsModalReducer(
       };
 
     case 'SET_YIELD_IN_TONS':
-      if (isCropSet(formData.cropId, selectedCrop) && formData.yieldHarvestUnit !== undefined) {
+      if (
+        isCropSet(formData.cropId, selectedCrop)
+        && formData.yieldHarvestUnit !== undefined
+      ) {
         validateBushelConversion(selectedCrop);
         return {
           ...state,
           formData: {
             ...formData,
             yield:
-              formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre &&
-              selectedCrop!.harvestbushelsperton
+              formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
+              && selectedCrop!.harvestbushelsperton
                 ? action.yield * selectedCrop!.harvestbushelsperton
                 : action.yield,
           },
@@ -234,7 +248,9 @@ export function cropsModalReducer(
         formData: { ...formData, yield: action.yield },
         // Default to true to hide button
         isFormYieldEqualToDefault:
-          defaultYieldInTons !== undefined ? action.yield === defaultYieldInTons : true,
+          defaultYieldInTons !== undefined
+            ? action.yield === defaultYieldInTons
+            : true,
       };
 
     case 'SET_YIELD_HARVEST_UNIT':
@@ -264,10 +280,8 @@ export function cropsModalReducer(
           yieldHarvestUnit: action.unit,
           yield:
             action.unit === HarvestUnit.TonsPerAcre
-              ? // Going from bu/ac to tons/ac
-                formData.yield / selectedCrop!.harvestbushelsperton
-              : // Going from tons/ac to bu/ac
-                formData.yield * selectedCrop!.harvestbushelsperton,
+              ? formData.yield / selectedCrop!.harvestbushelsperton // Going from bu/ac to tons/ac
+              : formData.yield * selectedCrop!.harvestbushelsperton, // Going from tons/ac to bu/ac
         },
       };
 
@@ -332,7 +346,10 @@ export function cropsModalReducer(
       };
 
     case 'RESTORE_DEFAULT_YIELD':
-      if (defaultYieldInTons === undefined || !isCropSet(formData.cropId, selectedCrop)) {
+      if (
+        defaultYieldInTons === undefined
+        || !isCropSet(formData.cropId, selectedCrop)
+      ) {
         throw new Error('Crops modal entered bad state');
       }
       if (formData.yieldHarvestUnit !== undefined) {

@@ -27,14 +27,18 @@ export default function StorageSystemDetailsDisplay({
             {ManureType[formData.manureType]}
           </Text>
           <Text className="bcds-react-aria-Text disabled small">System Name</Text>
-          <Text className="bcds-react-aria-Text disabled small">{formData.name}</Text>
+          <Text className="bcds-react-aria-Text disabled small">
+            {formData.name}
+          </Text>
         </Grid>
         <Grid
           container
           size={6}
           spacing={0}
         >
-          <Text className="bcds-react-aria-Text disabled small">Materials selected to include</Text>
+          <Text className="bcds-react-aria-Text disabled small">
+            Materials selected to include
+          </Text>
           <div>
             <ul css={{ marginBottom: '0.5rem' }}>
               {formData.manuresInSystem.map((m) => (
@@ -116,13 +120,21 @@ export default function StorageSystemDetailsDisplay({
             size={6}
             direction="row"
           >
-            <Text className="bcds-react-aria-Text disabled small">Separated liquids</Text>
             <Text className="bcds-react-aria-Text disabled small">
-              {printNum(formData.separatedLiquidsUSGallons)} U.S. Gallons
+              Separated liquids
             </Text>
-            <Text className="bcds-react-aria-Text disabled small">Separated solids</Text>
             <Text className="bcds-react-aria-Text disabled small">
-              {printNum(formData.separatedSolidsTons)} tons
+              {printNum(formData.separatedLiquidsUSGallons)}
+              {' '}
+              U.S. Gallons
+            </Text>
+            <Text className="bcds-react-aria-Text disabled small">
+              Separated solids
+            </Text>
+            <Text className="bcds-react-aria-Text disabled small">
+              {printNum(formData.separatedSolidsTons)}
+              {' '}
+              tons
             </Text>
           </Grid>
         </Grid>

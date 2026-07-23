@@ -134,7 +134,9 @@ describe('Non-berry crop calculations tests', () => {
     yield: 2.9,
   };
   test('Correct calculated value for non-berry crop without soil test, prev manure, or n credit', () => {
-    expect(getCropRequirementN(nmpFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(36);
+    expect(
+      getCropRequirementN(nmpFileCrop as NMPFileCrop, beansGreen, veggies),
+    ).toBe(36);
     expect(
       getCropRequirementP205(
         undefined,
@@ -153,13 +155,23 @@ describe('Non-berry crop calculations tests', () => {
         conversionFactors,
       ),
     ).toBe(0);
-    expect(getCropRemovalN(nmpFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(21);
-    expect(getCropRemovalP205(nmpFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(8);
-    expect(getCropRemovalK20(nmpFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(20);
+    expect(getCropRemovalN(nmpFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(
+      21,
+    );
+    expect(getCropRemovalP205(nmpFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(
+      8,
+    );
+    expect(getCropRemovalK20(nmpFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(
+      20,
+    );
   });
 
   test('Correct calculated value for non-berry crop with soil test, prev manure, and n credit', () => {
-    const updatedFileCrop: Partial<NMPFileCrop> = { ...nmpFileCrop, nCredit: 40, prevCropId: 10 };
+    const updatedFileCrop: Partial<NMPFileCrop> = {
+      ...nmpFileCrop,
+      nCredit: 40,
+      prevCropId: 10,
+    };
     const soilTest = {
       convertedKelownaK: 35.2,
       convertedKelownaP: 32.56,
@@ -170,7 +182,9 @@ describe('Non-berry crop calculations tests', () => {
       valP: 44,
       valPH: 7,
     };
-    expect(getCropRequirementN(updatedFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(0);
+    expect(
+      getCropRequirementN(updatedFileCrop as NMPFileCrop, beansGreen, veggies),
+    ).toBe(0);
     expect(
       getCropRequirementP205(
         soilTest,
@@ -189,9 +203,15 @@ describe('Non-berry crop calculations tests', () => {
         conversionFactors,
       ),
     ).toBe(134);
-    expect(getCropRemovalN(updatedFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(21);
-    expect(getCropRemovalP205(updatedFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(8);
-    expect(getCropRemovalK20(updatedFileCrop as NMPFileCrop, beansGreen, veggies)).toBe(20);
+    expect(
+      getCropRemovalN(updatedFileCrop as NMPFileCrop, beansGreen, veggies),
+    ).toBe(21);
+    expect(
+      getCropRemovalP205(updatedFileCrop as NMPFileCrop, beansGreen, veggies),
+    ).toBe(8);
+    expect(
+      getCropRemovalK20(updatedFileCrop as NMPFileCrop, beansGreen, veggies),
+    ).toBe(20);
   });
 });
 
@@ -209,12 +229,26 @@ describe('Berry crop calculation tests', () => {
         DEFAULT_BERRY_DATA.defaultBlueberryLeafTestP,
         DEFAULT_BERRY_DATA.defaultBlueberryLeafTestK,
       ),
-    ).toMatchObject({ remK2o: 18, remN: 0, remP2o5: 3, reqK2o: 0, reqN: 11, reqP2o5: 0 });
+    ).toMatchObject({
+      remK2o: 18,
+      remN: 0,
+      remP2o5: 3,
+      reqK2o: 0,
+      reqN: 11,
+      reqP2o5: 0,
+    });
   });
   test('Blueberries with leaf test, sawdust, and pruning', () => {
     expect(
       getBlueberryNutrients(5, true, true, 'Left between rows', 2, 1499, 44, 1, 1),
-    ).toMatchObject({ remK2o: 18, remN: 0, remP2o5: 3, reqK2o: 0, reqN: 36, reqP2o5: 0 });
+    ).toMatchObject({
+      remK2o: 18,
+      remN: 0,
+      remP2o5: 3,
+      reqK2o: 0,
+      reqN: 36,
+      reqP2o5: 0,
+    });
   });
   test('Raspberries without leaf test or pruning', () => {
     expect(
@@ -228,10 +262,19 @@ describe('Berry crop calculation tests', () => {
         DEFAULT_BERRY_DATA.defaultRaspberryLeafTestP,
         DEFAULT_BERRY_DATA.defaultRaspberryLeafTestK,
       ),
-    ).toMatchObject({ remK2o: 18, remN: 0, remP2o5: 6, reqK2o: 50, reqN: 71, reqP2o5: 0 });
+    ).toMatchObject({
+      remK2o: 18,
+      remN: 0,
+      remP2o5: 6,
+      reqK2o: 50,
+      reqN: 71,
+      reqP2o5: 0,
+    });
   });
   test('Raspberries with leaf test, pruning, sawdust', () => {
-    expect(getRaspberryNutrients(5, true, true, 'Left between rows', 44, 44, 1, 1)).toMatchObject({
+    expect(
+      getRaspberryNutrients(5, true, true, 'Left between rows', 44, 44, 1, 1),
+    ).toMatchObject({
       remK2o: 18,
       remN: 0,
       remP2o5: 6,

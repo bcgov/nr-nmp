@@ -7,7 +7,12 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowId,
+} from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { calculatePrevYearManure } from '@/calculations/CalculateNutrients/PreviousManure';
@@ -48,7 +53,10 @@ function NoRows() {
 
 export default function CalculateNutrients() {
   const { state, dispatch } = useAppState();
-  const [openDialog, setOpenDialog] = useState<[string, number | undefined]>(['', undefined]);
+  const [openDialog, setOpenDialog] = useState<[string, number | undefined]>([
+    '',
+    undefined,
+  ]);
   const [showViewError, setShowViewError] = useState<string>('');
   const [activeField, setActiveField] = useState<number>(0);
   const [balanceMessages, setBalanceMessages] = useState<NutrientMessage[]>([]);
@@ -59,15 +67,17 @@ export default function CalculateNutrients() {
     state.nmpFile.years[0].fields || [],
   );
   const apiCache = useContext(APICacheContext);
-  const previousManureApplications: PreviousYearManureApplication[] =
-    apiCache.getInitializedResponse('previousyearmanureapplications').data;
+  const previousManureApplications: PreviousYearManureApplication[] = apiCache.getInitializedResponse('previousyearmanureapplications').data;
   const prevYearManureData = useMemo(() => {
     // Calculate previous year manure data when active field changes
     const currentField = fieldList[activeField];
     if (!currentField) {
       return null;
     }
-    const prevData = calculatePrevYearManure(currentField, previousManureApplications);
+    const prevData = calculatePrevYearManure(
+      currentField,
+      previousManureApplications,
+    );
     if (!currentField.previousYearManureApplicationNCredit) {
       currentField.previousYearManureApplicationNCredit = prevData.nitrogen;
     }
@@ -75,23 +85,22 @@ export default function CalculateNutrients() {
   }, [activeField, fieldList, previousManureApplications]);
 
   const [warningText, setWarningText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
-    undefined,
-  );
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<
+    AlertDialogContinueBtn | undefined
+  >(undefined);
 
   const cropColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['crop', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = (evt: GridRenderCellParams) =>
-      genHandleDeleteRow(
-        evt,
-        activeField,
-        'crops',
-        setFieldList,
-        setWarningText,
-        setDeleteBtnConfig,
-      );
+    const handleDeleteRow = (evt: GridRenderCellParams) => genHandleDeleteRow(
+      evt,
+      activeField,
+      'crops',
+      setFieldList,
+      setWarningText,
+      setDeleteBtnConfig,
+    );
     return generateColumns(
       handleEditRow,
       handleDeleteRow,
@@ -115,7 +124,13 @@ export default function CalculateNutrients() {
         setDeleteBtnConfig,
       );
     };
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Manures', true);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      'Manures',
+      true,
+    );
   }, [activeField]);
 
   const fertilizerColumns: GridColDef[] = useMemo(() => {
@@ -132,7 +147,13 @@ export default function CalculateNutrients() {
         setDeleteBtnConfig,
       );
     };
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertilizers', true);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      'Fertilizers',
+      true,
+    );
   }, [activeField]);
 
   const fertigationRows = useMemo(
@@ -155,7 +176,13 @@ export default function CalculateNutrients() {
         setDeleteBtnConfig,
       );
     };
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Fertigation', true);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      'Fertigation',
+      true,
+    );
   }, [activeField]);
 
   const otherColumns: GridColDef[] = useMemo(() => {
@@ -172,7 +199,13 @@ export default function CalculateNutrients() {
         setDeleteBtnConfig,
       );
     };
-    return generateColumns(handleEditRow, handleDeleteRow, renderNutrientCell, 'Other', true);
+    return generateColumns(
+      handleEditRow,
+      handleDeleteRow,
+      renderNutrientCell,
+      'Other',
+      true,
+    );
   }, [activeField]);
 
   const soilNitrateColumns: GridColDef[] = useMemo(() => {
@@ -180,19 +213,25 @@ export default function CalculateNutrients() {
       setOpenDialog(['soilNitrate', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
     // Soil nitrates have different logic, no delete here
-    return generateColumns(handleEditRow, () => {}, renderNutrientCell, '', true, false);
+    return generateColumns(
+      handleEditRow,
+      () => {},
+      renderNutrientCell,
+      '',
+      true,
+      false,
+    );
   }, []);
 
   const previousYearManureColumns: GridColDef[] = useMemo(
-    () =>
-      generateColumns(
-        () => setOpenDialog(['previousYearManure', 0]),
-        () => {},
-        renderNutrientCell,
-        'Previous Year Manure',
-        true,
-        false,
-      ),
+    () => generateColumns(
+      () => setOpenDialog(['previousYearManure', 0]),
+      () => {},
+      renderNutrientCell,
+      'Previous Year Manure',
+      true,
+      false,
+    ),
     [],
   );
 
@@ -207,19 +246,33 @@ export default function CalculateNutrients() {
     ];
 
     // Add previous year manure nitrogen credit to the balance
-    const prevYearNitrogen = prevYearManureData?.display ? prevYearManureData.nitrogen || 0 : 0;
+    const prevYearNitrogen = prevYearManureData?.display
+      ? prevYearManureData.nitrogen || 0
+      : 0;
 
     return {
       name: 'Balance',
       reqN:
         Math.round(
-          (allRows.reduce((sum, row) => sum + (row?.reqN ?? 0), 0) + prevYearNitrogen) * 10,
+          (allRows.reduce((sum, row) => sum + (row?.reqN ?? 0), 0)
+            + prevYearNitrogen)
+            * 10,
         ) / 10,
-      reqP2o5: Math.round(allRows.reduce((sum, row) => sum + (row?.reqP2o5 ?? 0), 0) * 10) / 10,
-      reqK2o: Math.round(allRows.reduce((sum, row) => sum + (row?.reqK2o ?? 0), 0) * 10) / 10,
-      remN: Math.round(allRows.reduce((sum, row) => sum + (row?.remN ?? 0), 0) * 10) / 10,
-      remP2o5: Math.round(allRows.reduce((sum, row) => sum + (row?.remP2o5 ?? 0), 0) * 10) / 10,
-      remK2o: Math.round(allRows.reduce((sum, row) => sum + (row?.remK2o ?? 0), 0) * 10) / 10,
+      reqP2o5:
+        Math.round(allRows.reduce((sum, row) => sum + (row?.reqP2o5 ?? 0), 0) * 10)
+        / 10,
+      reqK2o:
+        Math.round(allRows.reduce((sum, row) => sum + (row?.reqK2o ?? 0), 0) * 10)
+        / 10,
+      remN:
+        Math.round(allRows.reduce((sum, row) => sum + (row?.remN ?? 0), 0) * 10)
+        / 10,
+      remP2o5:
+        Math.round(allRows.reduce((sum, row) => sum + (row?.remP2o5 ?? 0), 0) * 10)
+        / 10,
+      remK2o:
+        Math.round(allRows.reduce((sum, row) => sum + (row?.remK2o ?? 0), 0) * 10)
+        / 10,
     };
   }, [fieldList, activeField, prevYearManureData]);
 
@@ -248,8 +301,9 @@ export default function CalculateNutrients() {
   const handleDialogClose = useCallback(() => setOpenDialog(['', undefined]), []);
 
   const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileField>, index: number) =>
-      !fieldList.some((fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx),
+    (data: Partial<NMPFileField>, index: number) => !fieldList.some(
+      (fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx,
+    ),
     [fieldList],
   );
 
@@ -331,7 +385,11 @@ export default function CalculateNutrients() {
       {/* tabs = the fields the user has entered */}
       <Tabs
         activeTab={activeField}
-        tabLabel={fieldList.length > 0 ? fieldList.map((field) => field.fieldName) : ['Field 1']}
+        tabLabel={
+          fieldList.length > 0
+            ? fieldList.map((field) => field.fieldName)
+            : ['Field 1']
+        }
       />
       <ButtonGroup
         alignment="end"
@@ -426,7 +484,9 @@ export default function CalculateNutrients() {
         <ManureModal
           fieldIndex={activeField}
           initialModalData={
-            openDialog[1] !== undefined ? fieldList[activeField].manures[openDialog[1]] : undefined
+            openDialog[1] !== undefined
+              ? fieldList[activeField].manures[openDialog[1]]
+              : undefined
           }
           field={fieldList[activeField]}
           fields={fieldList}
@@ -474,7 +534,9 @@ export default function CalculateNutrients() {
         <SoilNitrateCreditModal
           fieldIndex={activeField}
           initialModalData={
-            openDialog[1] !== undefined ? fieldList[activeField].soilNitrateCredit : undefined
+            openDialog[1] !== undefined
+              ? fieldList[activeField].soilNitrateCredit
+              : undefined
           }
           rowEditIndex={openDialog[1]}
           setFields={setFieldList}
@@ -492,14 +554,20 @@ export default function CalculateNutrients() {
           modalStyle={{ width: '600px' }}
           field={fieldList[activeField]}
           initialModalData={{
-            previousYearManureApplicationId: fieldList[activeField].previousYearManureApplicationId,
+            previousYearManureApplicationId:
+              fieldList[activeField].previousYearManureApplicationId,
             previousYearManureApplicationNCredit:
               fieldList[activeField].previousYearManureApplicationNCredit,
           }}
         />
       )}
       <div
-        style={{ display: 'flex', fontWeight: 'bold', textAlign: 'center', marginTop: '1.25rem' }}
+        style={{
+          display: 'flex',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginTop: '1.25rem',
+        }}
       >
         <div style={{ width: 220 }} />
         <div style={{ width: 360 }}>Agronomic (lb/ac)*</div>
@@ -634,10 +702,12 @@ export default function CalculateNutrients() {
           <Message>{msg.text}</Message>
         </Error>
       ))}
-      <Message>* Agronomic balances indicate if crop nutrient requirements are met.</Message>
       <Message>
-        ** Crop removal balances indicate how soil phosphorus (P) or potassium (K) levels will
-        change.
+        * Agronomic balances indicate if crop nutrient requirements are met.
+      </Message>
+      <Message>
+        ** Crop removal balances indicate how soil phosphorus (P) or potassium (K)
+        levels will change.
       </Message>
     </View>
   );

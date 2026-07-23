@@ -39,9 +39,9 @@ export const calcFertBalance = (
   // this will check for units and adjust accordingly
   // Liquid fertilizers also get multiplied by their density to convert to lb/ac
   if (fert.dryliquid.includes('liquid')) {
-    if (!density || !densityConvFactor)
-      throw new Error('Liquid fertilizer missing density or density units');
-    convertedApplRate *= applUnit.conversiontoimperialgallonsperacre * density * densityConvFactor;
+    if (!density || !densityConvFactor) throw new Error('Liquid fertilizer missing density or density units');
+    convertedApplRate
+      *= applUnit.conversiontoimperialgallonsperacre * density * densityConvFactor;
   }
 
   if (fert.dryliquid.includes('dry')) {
@@ -159,7 +159,7 @@ export const generateColumns = (
       // If 'action' isn't defined or is 0 (indicating
       // that this is the first row) then show buttons
       // 'action' is only defined for fertigation rows
-      !row.value ? (
+      (!row.value ? (
         <>
           <FontAwesomeIcon
             css={tableActionButtonCss}
@@ -182,7 +182,7 @@ export const generateColumns = (
         </>
       ) : (
         <div />
-      ),
+      )),
     sortable: false,
     resizable: false,
   },
@@ -215,48 +215,58 @@ export function genHandleDeleteRow(
 export function renderNutrientCell({ value }: any) {
   return React.createElement(
     'div',
-    { style: { display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+    {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+    },
     React.createElement('span', { style: {} }, value),
   );
 }
 
-export const findBalanceMessage = (balanceType: string, balanceValue: number) =>
-  NUTRIENT_MESSAGES.find((msg) => {
-    if (msg.balanceType !== balanceType) return false;
+export const findBalanceMessage = (balanceType: string, balanceValue: number) => NUTRIENT_MESSAGES.find((msg) => {
+  if (msg.balanceType !== balanceType) return false;
 
-    // either compares balance value to req (agronomic) or rem (crop removal) high low range
-    const isReq = balanceType.startsWith('req');
-    const low = isReq ? msg.reqBalanceLow : msg.remBalanceLow;
-    const high = isReq ? msg.reqBalanceHigh : msg.remBalanceHigh;
+  // either compares balance value to req (agronomic) or rem (crop removal) high low range
+  const isReq = balanceType.startsWith('req');
+  const low = isReq ? msg.reqBalanceLow : msg.remBalanceLow;
+  const high = isReq ? msg.reqBalanceHigh : msg.remBalanceHigh;
 
-    return balanceValue >= low && balanceValue <= high;
-  });
+  return balanceValue >= low && balanceValue <= high;
+});
 
-export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
-  function renderBalanceCellInner({ value }: any) {
-    const message = findBalanceMessage(balanceType, value);
+export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) => function renderBalanceCellInner({ value }: any) {
+  const message = findBalanceMessage(balanceType, value);
 
-    return React.createElement(
-      'div',
-      { style: { display: 'flex', alignItems: 'baseline', justifyContent: 'center' } },
-      message?.icon
-        ? [
-            React.createElement('span', { style: { marginLeft: '-1.5em' } }),
-            React.createElement('img', {
-              key: 'icon',
-              src: message.icon,
-              alt: 'Balance icon',
-              style: { width: '1em', height: '1em', marginRight: '0.5em' },
-            }),
-            React.createElement(
-              'span',
-              { key: 'value' },
-              showAsAbs ? Math.abs(value as number) : value,
-            ),
-          ]
-        : React.createElement('span', { style: {} }, value),
-    );
-  };
+  return React.createElement(
+    'div',
+    {
+      style: {
+        display: 'flex',
+        alignItems: 'baseline',
+        justifyContent: 'center',
+      },
+    },
+    message?.icon
+      ? [
+        React.createElement('span', { style: { marginLeft: '-1.5em' } }),
+        React.createElement('img', {
+          key: 'icon',
+          src: message.icon,
+          alt: 'Balance icon',
+          style: { width: '1em', height: '1em', marginRight: '0.5em' },
+        }),
+        React.createElement(
+          'span',
+          { key: 'value' },
+          showAsAbs ? Math.abs(value as number) : value,
+        ),
+      ]
+      : React.createElement('span', { style: {} }, value),
+  );
+};
 
 export const BALANCE_COLUMNS = [
   {

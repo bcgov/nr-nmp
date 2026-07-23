@@ -107,9 +107,11 @@ export const INJECTION_RATE_UNITS: InjectionUnit[] = [
   { id: 3, name: 'Imp. gallon/min', conversionToImpGallonsPerMinute: 1 },
 ];
 
-export const INJECTION_UNIT_OPTIONS: SelectOption<InjectionUnit>[] = INJECTION_RATE_UNITS.map(
-  (value) => ({ id: value.id, label: value.name, value }),
-);
+export const INJECTION_UNIT_OPTIONS: SelectOption<InjectionUnit>[] = INJECTION_RATE_UNITS.map((value) => ({
+  id: value.id,
+  label: value.name,
+  value,
+}));
 
 export const SOLUBILITY_RATE_UNITS: { id: number; label: string }[] = [
   { id: 1, label: 'g/L' },

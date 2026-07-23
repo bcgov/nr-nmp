@@ -21,7 +21,13 @@ it('NutrientAnalysis is correct', async () => {
     state: {
       nmpFile: {
         ...DEFAULT_NMPFILE,
-        years: [{ ...DEFAULT_NMPFILE_YEAR, year: '2025', fields: [DEFAULT_NMPFILE_FIELD] }],
+        years: [
+          {
+            ...DEFAULT_NMPFILE_YEAR,
+            year: '2025',
+            fields: [DEFAULT_NMPFILE_FIELD],
+          },
+        ],
       },
       showAnimalsStep: false,
     },
@@ -47,7 +53,13 @@ it('NutrientAnalysisModal is correct', async () => {
     state: {
       nmpFile: {
         ...DEFAULT_NMPFILE,
-        years: [{ ...DEFAULT_NMPFILE_YEAR, year: '2025', fields: [DEFAULT_NMPFILE_FIELD] }],
+        years: [
+          {
+            ...DEFAULT_NMPFILE_YEAR,
+            year: '2025',
+            fields: [DEFAULT_NMPFILE_FIELD],
+          },
+        ],
       },
       showAnimalsStep: false,
     },

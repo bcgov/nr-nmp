@@ -121,7 +121,12 @@ function updateFieldCropCalculations(
 ) {
   return fields.map((field) => {
     const updatedCrops = field.crops.map((crop) => {
-      const updatedCropRequirements = calculateCropRequirements(regionId, field, crop, tables);
+      const updatedCropRequirements = calculateCropRequirements(
+        regionId,
+        field,
+        crop,
+        tables,
+      );
       // If the crop has a custom N value, it shouldn't be overwritten. The default is still stored separately
       const calculatedN: number = crop.reqNAdjusted
         ? updatedCropRequirements.cropRequirementN
@@ -129,7 +134,9 @@ function updateFieldCropCalculations(
       return postprocessModalData(
         {
           ...crop,
-          reqN: crop.reqNAdjusted ? crop.reqN : updatedCropRequirements.cropRequirementN,
+          reqN: crop.reqNAdjusted
+            ? crop.reqN
+            : updatedCropRequirements.cropRequirementN,
           reqP2o5: updatedCropRequirements.cropRequirementP205,
           reqK2o: updatedCropRequirements.cropRequirementK2O,
           remN: updatedCropRequirements.cropRemovalN,
@@ -156,14 +163,17 @@ function updateFieldAppliedManure(
   const locationId = region.locationid;
   return fields.map((field) => {
     const updatedManures = field.manures.map((manure) => {
-      const nutrientAnalysis = nutrientAnalyses.find((n) => n.sourceUuid === manure.sourceUuid);
+      const nutrientAnalysis = nutrientAnalyses.find(
+        (n) => n.sourceUuid === manure.sourceUuid,
+      );
       const nMineralization = tables.nMineralizations.find(
-        (n) =>
-          n.locationid === locationId &&
-          n.nmineralizationid === nutrientAnalysis?.nMineralizationId,
+        (n) => n.locationid === locationId
+          && n.nmineralizationid === nutrientAnalysis?.nMineralizationId,
       );
       const manureTableData = tables.manures.find((m) => m.id === manure.manureId);
-      const unitTableData = tables.manureUnits.find((u) => u.id === manure.applUnitId);
+      const unitTableData = tables.manureUnits.find(
+        (u) => u.id === manure.applUnitId,
+      );
       if (!manureTableData || !unitTableData || !nMineralization) {
         throw new Error(
           `updateFieldAppliedManure failed to find necessary data: Region id: ${regionId}. Manure id: ${manure.manureId}. Unit id: ${manure.applUnitId}.`,
@@ -207,7 +217,10 @@ function updateStorageSystemPrecipitation(
   }
   return storageSystems.map((system) => ({
     ...system,
-    annualPrecipitation: calculatePrecipitationInStorage(system, subregion.annualprecipitation),
+    annualPrecipitation: calculatePrecipitationInStorage(
+      system,
+      subregion.annualprecipitation,
+    ),
   }));
 }
 
@@ -245,11 +258,17 @@ function updateManureStorageSystems(
     // Add non-empty systems back to the array
     if (newSystem.length > 0) {
       // Solid manure or non-separated liquid don't require other updates
-      if (system.manureType !== ManureType.Liquid || !system.percentLiquidSeperation) {
+      if (
+        system.manureType !== ManureType.Liquid
+        || !system.percentLiquidSeperation
+      ) {
         acc.push({ ...system, manuresInSystem: newSystem });
       } else {
         // The separated amounts need to be recalculated
-        const totalAmount = newSystem.reduce((sum, m) => sum + m.data.annualAmount, 0);
+        const totalAmount = newSystem.reduce(
+          (sum, m) => sum + m.data.annualAmount,
+          0,
+        );
         const [separatedLiquidsUSGallons, separatedSolidsTons] = calculateSeparatedSolidAndLiquid(
           totalAmount,
           system.percentLiquidSeperation,
@@ -291,7 +310,9 @@ function updateDerivedManures(newFileYear: NMPFileYear) {
 
     // Any system with separated liquid produces a derived manure
     if (system.separatedLiquidsUSGallons > 0) {
-      const prevManure = prevDerivedManures.find((m) => m.originUuid === system.uuid);
+      const prevManure = prevDerivedManures.find(
+        (m) => m.originUuid === system.uuid,
+      );
       let newManure: NMPFileDerivedManure;
       if (prevManure) {
         // Update the amount
@@ -376,7 +397,9 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
           manureType: ManureType.Solid,
           annualAmount: animal.manureData.annualSolidManure,
           annualAmountTonsWeight: animal.manureData.annualSolidManure,
-          annualAmountDisplayWeight: getSolidManureDisplay(animal.manureData.annualSolidManure),
+          annualAmountDisplayWeight: getSolidManureDisplay(
+            animal.manureData.annualSolidManure,
+          ),
           // managedManureName is the name of the manure, number of animals and manure type
           // Calves (0 to 3 months old), 2 animals, Solid
           managedManureName: `${animal.manureData.name}, ${animalStr}, Solid`,
@@ -390,7 +413,9 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
           manureType: ManureType.Liquid,
           annualAmount: animal.manureData.annualLiquidManure,
           annualAmountUSGallonsVolume: animal.manureData.annualLiquidManure,
-          annualAmountDisplayWeight: getLiquidManureDisplay(animal.manureData.annualLiquidManure),
+          annualAmountDisplayWeight: getLiquidManureDisplay(
+            animal.manureData.annualLiquidManure,
+          ),
           managedManureName: `${animal.manureData.name}, ${animalStr}, Liquid`,
           uuid: animal.uuid,
         };
@@ -398,10 +423,10 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
         // Milking centre wash water is added into the liquid dairy cow manure
         // Josh said that milking dairy cow manure should always be liquid, but that's never enforced
         if (
-          animal.animalId === DAIRY_COW_ID &&
-          animal.subtype === MILKING_COW_ID &&
-          animal.washWater !== undefined &&
-          animal.washWaterUnit !== undefined
+          animal.animalId === DAIRY_COW_ID
+          && animal.subtype === MILKING_COW_ID
+          && animal.washWater !== undefined
+          && animal.washWaterUnit !== undefined
         ) {
           // Sum the two values and replace the annual amounts
           generatedManure.originalAnnualAmount = generatedManure.annualAmount;
@@ -410,8 +435,8 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
             animal.washWaterUnit,
             animal.animalsPerFarm!,
           );
-          generatedManure.annualAmount =
-            generatedManure.originalAnnualAmount + generatedManure.originalWashWaterAmount;
+          generatedManure.annualAmount = generatedManure.originalAnnualAmount
+            + generatedManure.originalWashWaterAmount;
           generatedManure.annualAmountUSGallonsVolume = generatedManure.annualAmount;
           generatedManure.annualAmountDisplayWeight = getLiquidManureDisplay(
             generatedManure.annualAmount,
@@ -477,9 +502,9 @@ export function updateSoilNitrateCredit(
       if (interiorOrExterior.location === 'CoastalBC') {
         // Apply credit if applicable
         if (
-          isCurrentYear &&
-          interiorOrExterior.fromdatemonth <= soilTestMonth &&
-          soilTestMonth <= interiorOrExterior.todatemonth
+          isCurrentYear
+          && interiorOrExterior.fromdatemonth <= soilTestMonth
+          && soilTestMonth <= interiorOrExterior.todatemonth
         ) {
           if (!fieldEle.soilNitrateCredit?.isCustomValue) {
             // Replace with updated value only if value is still applicable but is not custom
@@ -493,8 +518,8 @@ export function updateSoilNitrateCredit(
       if (interiorOrExterior.location === 'InteriorBC') {
         // Apply credit if applicable
         if (
-          (isPreviousYear && interiorOrExterior.fromdatemonth <= soilTestMonth) ||
-          (isCurrentYear && soilTestMonth <= interiorOrExterior.todatemonth)
+          (isPreviousYear && interiorOrExterior.fromdatemonth <= soilTestMonth)
+          || (isCurrentYear && soilTestMonth <= interiorOrExterior.todatemonth)
         ) {
           if (!fieldEle.soilNitrateCredit?.isCustomValue) {
             // Replace with updated value only if value is still applicable but is not custom
@@ -548,17 +573,21 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
   }
 
   if (!state.tables) {
-    throw new Error('Action to edit an NMP file was dispatched before caching tables.');
+    throw new Error(
+      'Action to edit an NMP file was dispatched before caching tables.',
+    );
   }
 
   if (action.type === 'SAVE_FARM_DETAILS') {
     // Years *is* an array, but we don't like that and cheat to make it a single-value array
     // Make new blank year if no year exists or if we have a different year saved
     if (
-      newAppState.nmpFile.years.length === 0 ||
-      action.newFarmDetails.year !== newAppState.nmpFile.years[0].year
+      newAppState.nmpFile.years.length === 0
+      || action.newFarmDetails.year !== newAppState.nmpFile.years[0].year
     ) {
-      newAppState.nmpFile.years = [{ ...DEFAULT_NMPFILE_YEAR, year: action.newFarmDetails.year }];
+      newAppState.nmpFile.years = [
+        { ...DEFAULT_NMPFILE_YEAR, year: action.newFarmDetails.year },
+      ];
       // Otherwise, keep the existing year and edit as necessary
     } else if (!action.newFarmDetails.hasAnimals) {
       // Clear the animals array if animals have been removed
@@ -566,7 +595,9 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
     }
 
     // When the region or subregion change, any calculations that use the values need to be updated
-    if (newAppState.nmpFile.farmDetails.farmRegion !== action.newFarmDetails.farmRegion) {
+    if (
+      newAppState.nmpFile.farmDetails.farmRegion !== action.newFarmDetails.farmRegion
+    ) {
       const year = newAppState.nmpFile.years[0];
       // First, crop requirement values need to be updated
       year.fields = updateFieldCropCalculations(
@@ -590,9 +621,10 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       );
     }
     if (
-      newAppState.nmpFile.farmDetails.farmSubregion !== action.newFarmDetails.farmSubregion &&
-      action.newFarmDetails.farmSubregion &&
-      newAppState.nmpFile.years[0].manureStorageSystems
+      newAppState.nmpFile.farmDetails.farmSubregion
+        !== action.newFarmDetails.farmSubregion
+      && action.newFarmDetails.farmSubregion
+      && newAppState.nmpFile.years[0].manureStorageSystems
     ) {
       // Update precipitation-related values
       const year = newAppState.nmpFile.years[0];
@@ -677,7 +709,9 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
             (m) => m.managedManureName === manure.data.managedManureName,
           );
           if (!matchingManure) {
-            throw new Error(`No imported manure found with name ${manure.data.managedManureName}`);
+            throw new Error(
+              `No imported manure found with name ${manure.data.managedManureName}`,
+            );
           }
           matchingManure.assignedToStoredSystem = true;
         } else if (manure.type === 'Generated') {
@@ -685,11 +719,15 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
             (m) => m.managedManureName === manure.data.managedManureName,
           );
           if (!matchingManure) {
-            throw new Error(`No generated manure found with name ${manure.data.managedManureName}`);
+            throw new Error(
+              `No generated manure found with name ${manure.data.managedManureName}`,
+            );
           }
           matchingManure.assignedToStoredSystem = true;
         } else {
-          const matchingManure = newDerivedManures.find((m) => m.uuid === manure.data.uuid);
+          const matchingManure = newDerivedManures.find(
+            (m) => m.uuid === manure.data.uuid,
+          );
           if (!matchingManure) {
             throw new Error(`No derived manure found with uuid ${manure.data.uuid}`);
           }

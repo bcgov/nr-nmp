@@ -32,7 +32,7 @@ const nmpFile = {
           uuid: 'id',
         },
       ],
-      farmAnimals: [{ animalId: DAIRY_COW_ID }]
+      farmAnimals: [{ animalId: DAIRY_COW_ID }],
     },
   ],
 };

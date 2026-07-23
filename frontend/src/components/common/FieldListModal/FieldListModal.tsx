@@ -53,7 +53,10 @@ export default function FieldListModal({
 
   const validateUniqueName = (): boolean => {
     if (!formData.fieldName) return true;
-    return isFieldNameUnique(formData, rowEditIndex === undefined ? -1 : rowEditIndex);
+    return isFieldNameUnique(
+      formData,
+      rowEditIndex === undefined ? -1 : rowEditIndex,
+    );
   };
 
   return (
@@ -98,7 +101,9 @@ export default function FieldListModal({
               value={formData.previousYearManureApplicationId}
               placeholder="Select"
               onChange={(e) => {
-                handleFormFieldChange({ previousYearManureApplicationId: e as number });
+                handleFormFieldChange({
+                  previousYearManureApplicationId: e as number,
+                });
               }}
               noSort
             />

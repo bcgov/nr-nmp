@@ -1,4 +1,8 @@
-import { CalculateNutrientsRow, CropNutrients, Schedule } from './CalculateNutrients';
+import {
+  CalculateNutrientsRow,
+  CropNutrients,
+  Schedule,
+} from './CalculateNutrients';
 
 export interface NMPFileCrop extends CalculateNutrientsRow {
   cropId: number;

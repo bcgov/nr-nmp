@@ -48,7 +48,8 @@ export type NMPFileDerivedManure = {
   originUuid: string; // uuid of the storage system it derives from
 };
 
-export type NMPFileManure = NMPFileGeneratedManure | NMPFileImportedManure | NMPFileDerivedManure;
+export type NMPFileManure =
+  NMPFileGeneratedManure | NMPFileImportedManure | NMPFileDerivedManure;
 
 export type ManureInSystem =
   | {
@@ -71,7 +72,6 @@ export type SolidManureStorage = {
   uncoveredAreaSqFt?: number;
 };
 
-// eslint-disable-next-line no-shadow
 export enum Shape {
   Rectangular = 1,
   Circular = 2,
@@ -99,7 +99,8 @@ export type SlopedWallStorage = {
   slopeOfWall: number;
 };
 
-export type StorageStructure = RectangularStorage | CircularStorage | SlopedWallStorage;
+export type StorageStructure =
+  RectangularStorage | CircularStorage | SlopedWallStorage;
 
 export type LiquidManureStorage = {
   name: string;
@@ -138,4 +139,5 @@ export type LiquidManureStorageSystem = {
   uuid: string;
 };
 
-export type NMPFileManureStorageSystem = SolidManureStorageSystem | LiquidManureStorageSystem;
+export type NMPFileManureStorageSystem =
+  SolidManureStorageSystem | LiquidManureStorageSystem;

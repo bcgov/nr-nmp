@@ -14,7 +14,6 @@ export type InjectionUnit = {
   conversionToImpGallonsPerMinute: number;
 };
 
-// eslint-disable-next-line no-shadow
 export enum Schedule {
   Monthly = 1,
   Biweekly,

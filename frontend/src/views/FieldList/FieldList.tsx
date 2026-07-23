@@ -6,7 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowId,
+} from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { AlertDialog, FieldListModal, Tabs, View } from '@/components/common';
 import {
@@ -27,9 +32,9 @@ export default function FieldList() {
   const [showViewError, setShowViewError] = useState<string>('');
 
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
-    undefined,
-  );
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<
+    AlertDialogContinueBtn | undefined
+  >(undefined);
 
   const navigate = useNavigate();
 
@@ -37,10 +42,13 @@ export default function FieldList() {
     state.nmpFile.years[0].fields || [],
   );
 
-  const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
-    setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
-    setIsDialogOpen(true);
-  }, []);
+  const handleEditRow = useCallback(
+    (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
+      setIsDialogOpen(true);
+    },
+    [],
+  );
 
   const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
     setFieldList((prev) => {
@@ -85,8 +93,9 @@ export default function FieldList() {
   };
 
   const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileField>, index: number) =>
-      !fieldList.some((fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx),
+    (data: Partial<NMPFileField>, index: number) => !fieldList.some(
+      (fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx,
+    ),
     [fieldList],
   );
 
@@ -129,7 +138,9 @@ export default function FieldList() {
             <FontAwesomeIcon
               css={tableActionButtonCss}
               onClick={() => {
-                setDialogText(`Are you sure you want to delete field ${e.row.fieldName}?`);
+                setDialogText(
+                  `Are you sure you want to delete field ${e.row.fieldName}?`,
+                );
                 setDeleteBtnConfig({
                   btnText: 'Delete',
                   handleClick: () => {
@@ -183,7 +194,9 @@ export default function FieldList() {
       {isDialogOpen && (
         <FieldListModal
           mode={rowEditIndex !== undefined ? 'Edit Field' : 'Add Field'}
-          initialModalData={rowEditIndex !== undefined ? fieldList[rowEditIndex] : undefined}
+          initialModalData={
+            rowEditIndex !== undefined ? fieldList[rowEditIndex] : undefined
+          }
           rowEditIndex={rowEditIndex}
           setFieldList={setFieldList}
           isFieldNameUnique={isFieldNameUnique}

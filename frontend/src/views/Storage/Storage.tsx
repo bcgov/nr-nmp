@@ -19,8 +19,12 @@ export default function Storage() {
   const { state, dispatch } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
-  const [subregionData, setSubregionData] = useState<Subregion | undefined>(undefined);
-  const [modalMode, setModalMode] = useState<StorageModalMode | undefined>(undefined);
+  const [subregionData, setSubregionData] = useState<Subregion | undefined>(
+    undefined,
+  );
+  const [modalMode, setModalMode] = useState<StorageModalMode | undefined>(
+    undefined,
+  );
 
   const { generatedManures } = state.nmpFile.years[0];
   const { importedManures } = state.nmpFile.years[0];
@@ -131,7 +135,9 @@ export default function Storage() {
               ? state.nmpFile.years[0].manureStorageSystems![modalMode.systemIndex]
               : undefined
           }
-          annualPrecipitation={subregionData ? subregionData.annualprecipitation : undefined}
+          annualPrecipitation={
+            subregionData ? subregionData.annualprecipitation : undefined
+          }
           unassignedManures={unassignedManures}
           handleDialogClose={handleDialogClose}
           isOpen={modalMode !== undefined}
@@ -139,7 +145,12 @@ export default function Storage() {
       )}
       <Tabs
         activeTab={2}
-        tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+        tabLabel={[
+          'Add Animals',
+          'Manure & Imports',
+          'Storage',
+          'Nutrient Analysis',
+        ]}
       />
       <Grid
         container
@@ -149,86 +160,92 @@ export default function Storage() {
           container
           size={8}
         >
-          {(state.nmpFile.years[0].manureStorageSystems || []).map((system, systemIndex) => (
-            <SystemDisplay key={system.name}>
-              <div className="row">
-                <div>
-                  <span>{system.name}</span>
+          {(state.nmpFile.years[0].manureStorageSystems || []).map(
+            (system, systemIndex) => (
+              <SystemDisplay key={system.name}>
+                <div className="row">
+                  <div>
+                    <span>{system.name}</span>
+                  </div>
+                  <div>
+                    <FontAwesomeIcon
+                      css={tableActionButtonCss}
+                      onClick={() => setModalMode({ mode: 'system_edit', systemIndex })}
+                      icon={faEdit}
+                      aria-label="Edit"
+                    />
+                    <FontAwesomeIcon
+                      css={tableActionButtonCss}
+                      onClick={() => handleDeleteSystem(systemIndex)}
+                      icon={faTrash}
+                      aria-label="Delete"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <FontAwesomeIcon
-                    css={tableActionButtonCss}
-                    onClick={() => setModalMode({ mode: 'system_edit', systemIndex })}
-                    icon={faEdit}
-                    aria-label="Edit"
-                  />
-                  <FontAwesomeIcon
-                    css={tableActionButtonCss}
-                    onClick={() => handleDeleteSystem(systemIndex)}
-                    icon={faTrash}
-                    aria-label="Delete"
-                  />
-                </div>
-              </div>
-              {system.manureType === ManureType.Liquid ? (
-                <ul>
-                  {system.manureStorages.map((storage, storageIndex) => (
-                    <li
-                      className="row"
-                      key={storage.name}
+                {system.manureType === ManureType.Liquid ? (
+                  <ul>
+                    {system.manureStorages.map((storage, storageIndex) => (
+                      <li
+                        className="row"
+                        key={storage.name}
+                      >
+                        <div>
+                          <span>{storage.name}</span>
+                        </div>
+                        <div>
+                          <FontAwesomeIcon
+                            css={tableActionButtonCss}
+                            onClick={() => setModalMode({
+                              mode: 'storage_edit',
+                              systemIndex,
+                              storageIndex,
+                            })}
+                            icon={faEdit}
+                            aria-label="Edit"
+                          />
+                          <FontAwesomeIcon
+                            css={tableActionButtonCss}
+                            onClick={() => handleDeleteStorage(systemIndex, storageIndex)}
+                            icon={faTrash}
+                            aria-label="Delete"
+                          />
+                        </div>
+                      </li>
+                    ))}
+                    <Button
+                      size="small"
+                      variant="secondary"
+                      onPress={() => {
+                        setModalMode({ mode: 'storage_create', systemIndex });
+                      }}
                     >
+                      Add a Storage to this System
+                    </Button>
+                  </ul>
+                ) : (
+                  <ul>
+                    <li className="row">
                       <div>
-                        <span>{storage.name}</span>
+                        <span>{system.manureStorage.name}</span>
                       </div>
-                      <div>
+                      <div className="margin-right">
                         <FontAwesomeIcon
                           css={tableActionButtonCss}
-                          onClick={() =>
-                            setModalMode({ mode: 'storage_edit', systemIndex, storageIndex })
-                          }
+                          onClick={() => setModalMode({
+                            mode: 'storage_edit',
+                            systemIndex,
+                            storageIndex: 0,
+                          })}
                           icon={faEdit}
                           aria-label="Edit"
                         />
-                        <FontAwesomeIcon
-                          css={tableActionButtonCss}
-                          onClick={() => handleDeleteStorage(systemIndex, storageIndex)}
-                          icon={faTrash}
-                          aria-label="Delete"
-                        />
                       </div>
                     </li>
-                  ))}
-                  <Button
-                    size="small"
-                    variant="secondary"
-                    onPress={() => {
-                      setModalMode({ mode: 'storage_create', systemIndex });
-                    }}
-                  >
-                    Add a Storage to this System
-                  </Button>
-                </ul>
-              ) : (
-                <ul>
-                  <li className="row">
-                    <div>
-                      <span>{system.manureStorage.name}</span>
-                    </div>
-                    <div className="margin-right">
-                      <FontAwesomeIcon
-                        css={tableActionButtonCss}
-                        onClick={() =>
-                          setModalMode({ mode: 'storage_edit', systemIndex, storageIndex: 0 })
-                        }
-                        icon={faEdit}
-                        aria-label="Edit"
-                      />
-                    </div>
-                  </li>
-                </ul>
-              )}
-            </SystemDisplay>
-          ))}
+                  </ul>
+                )}
+              </SystemDisplay>
+            ),
+          )}
         </Grid>
         <Grid
           container
@@ -237,7 +254,10 @@ export default function Storage() {
           <div>
             <div>Materials Needing Storage</div>
             {unassignedManures.map((m) => (
-              <div key={m.data.managedManureName}>- {m.data.managedManureName}</div>
+              <div key={m.data.managedManureName}>
+                -
+                {m.data.managedManureName}
+              </div>
             ))}
           </div>
         </Grid>

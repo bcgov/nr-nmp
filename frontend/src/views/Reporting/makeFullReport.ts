@@ -1,6 +1,13 @@
 /* eslint-disable prefer-const */
 import { jsPDF } from 'jspdf';
-import { autoTable, CellInput, FontStyle, HookData, RowInput, UserOptions } from 'jspdf-autotable';
+import {
+  autoTable,
+  CellInput,
+  FontStyle,
+  HookData,
+  RowInput,
+  UserOptions,
+} from 'jspdf-autotable';
 import { DAIRY_COW_ID, DEFAULT_SOIL_TEST } from '@/constants';
 import {
   CalculateNutrientsRow,
@@ -24,13 +31,24 @@ import {
   getFertilizerUnitUSGallonPerAcreConversion,
   numberToSuperscript,
 } from './utils';
-import { fertigationToFertigationRows, findBalanceMessage } from '../CalculateNutrients/utils';
+import {
+  fertigationToFertigationRows,
+  findBalanceMessage,
+} from '../CalculateNutrients/utils';
 import { printNum, sumPropertyInObjectArr } from '@/utils/utils';
-import { calculatePrecipitationInStorage, getRunoffInSystem } from '@/utils/manureStorageSystems';
+import {
+  calculatePrecipitationInStorage,
+  getRunoffInSystem,
+} from '@/utils/manureStorageSystems';
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
-  styles: { lineColor: 'black', lineWidth: 0.5, textColor: 'black', font: 'BCSans' },
+  styles: {
+    lineColor: 'black',
+    lineWidth: 0.5,
+    textColor: 'black',
+    font: 'BCSans',
+  },
   headStyles: { fillColor: [164, 205, 215], lineWidth: 0.5 },
 };
 
@@ -41,7 +59,12 @@ type FertilizerRequiredStep = {
 };
 
 // Each page of the full report will start with this
-const drawStandardHeader = (data: HookData, doc: jsPDF, farmName: string, year: string) => {
+const drawStandardHeader = (
+  data: HookData,
+  doc: jsPDF,
+  farmName: string,
+  year: string,
+) => {
   doc.setFontSize(14);
   const x = Math.ceil(data.settings.margin.left);
   let nextY = Math.ceil(data.settings.margin.left);
@@ -111,14 +134,16 @@ const generateApplicationSchedule = (
       body:
         allApplied.length > 0
           ? allApplied.map((nutrientSource) => [
-              nutrientSource.name,
-              // Manures, but not fertilizers, have a season
-              'applicationId' in nutrientSource
-                ? SEASON_APPLICATION.find((s) => s.Id === nutrientSource.applicationId)!.Season
-                : '',
-              // Example display: 10 L/ac
-              `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
-            ])
+            nutrientSource.name,
+            // Manures, but not fertilizers, have a season
+            'applicationId' in nutrientSource
+              ? SEASON_APPLICATION.find(
+                (s) => s.Id === nutrientSource.applicationId,
+              )!.Season
+              : '',
+            // Example display: 10 L/ac
+            `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
+          ])
           : [['None planned', '', '']],
       foot: [
         [
@@ -185,14 +210,17 @@ const generateManureCompostInventory = (
             // take into account solid-liquid separation
             let { annualAmount } = m.data;
             if (
-              m.type === 'Generated' &&
-              m.data.originalAnnualAmount !== undefined &&
-              m.data.originalWashWaterAmount !== undefined
+              m.type === 'Generated'
+              && m.data.originalAnnualAmount !== undefined
+              && m.data.originalWashWaterAmount !== undefined
             ) {
               annualAmount = m.data.originalAnnualAmount;
               totalWashWater += m.data.originalWashWaterAmount;
             }
-            if (system.manureType === ManureType.Liquid && system.percentLiquidSeperation > 0) {
+            if (
+              system.manureType === ManureType.Liquid
+              && system.percentLiquidSeperation > 0
+            ) {
               annualAmount *= (100 - system.percentLiquidSeperation) / 100;
             }
             storageSum += annualAmount;
@@ -204,11 +232,17 @@ const generateManureCompostInventory = (
           });
           if (totalWashWater > 0) {
             // Wash water is also affected by solid-liquid separation
-            if (system.manureType === ManureType.Liquid && system.percentLiquidSeperation > 0) {
+            if (
+              system.manureType === ManureType.Liquid
+              && system.percentLiquidSeperation > 0
+            ) {
               totalWashWater *= (100 - system.percentLiquidSeperation) / 100;
             }
             storageSum += totalWashWater;
-            newRows.push(['Milking Center Wash Water', `${printNum(totalWashWater)} US gallons`]);
+            newRows.push([
+              'Milking Center Wash Water',
+              `${printNum(totalWashWater)} US gallons`,
+            ]);
           }
           if (system.annualPrecipitation) {
             const { annualPrecipitation } = system;
@@ -231,11 +265,18 @@ const generateManureCompostInventory = (
           return acc.concat(newRows);
         }, [] as RowInput[]),
         ...unassignedManures.reduce((acc, manure, idx) => {
-          const newRows: CellInput[][] =
-            // Add the section header if this is the first manure
-            idx === 0
-              ? [[{ content: 'Material not Stored', styles: { fontStyle: 'bold' } }, '']]
-              : [];
+          // Add the section header if this is the first manure
+          const newRows: CellInput[][] = idx === 0
+            ? [
+              [
+                {
+                  content: 'Material not Stored',
+                  styles: { fontStyle: 'bold' },
+                },
+                '',
+              ],
+            ]
+            : [];
           newRows.push([
             `        ${manure.uniqueMaterialName}`,
             `${printNum(manure.annualAmount)} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
@@ -267,7 +308,15 @@ const generateManureAndCompostUse = (
       doc.setFont(doc.getFont().fontName, 'normal');
     },
     // Table
-    head: [['Material', 'Material Source', 'Annual Amount', 'Land-applied', 'Amount Remaining']],
+    head: [
+      [
+        'Material',
+        'Material Source',
+        'Annual Amount',
+        'Land-applied',
+        'Amount Remaining',
+      ],
+    ],
     columnStyles: {
       0: { cellWidth: pageWidth * 0.25 },
       1: { cellWidth: pageWidth * 0.25 },
@@ -325,19 +374,27 @@ const generateLiquidStorageCapacity = (
     const system = storageSystems[i];
     // eslint-disable-next-line no-continue
     if (system.manureType === ManureType.Solid) continue;
-    const annualManure = system.manuresInSystem.reduce((sum, m) => sum + m.data.annualAmount, 0);
+    const annualManure = system.manuresInSystem.reduce(
+      (sum, m) => sum + m.data.annualAmount,
+      0,
+    );
     // October to March is six months, so half of a year
     const materialGenerated = annualManure / 2;
     const materialStored = system.separatedLiquidsUSGallons / 2;
     // Oct to Mar is the rainy season and has its own precipitation rate
-    const precipitation =
-      calculatePrecipitationInStorage(system, subregion.annualprecipitationocttomar) || 0;
+    const precipitation = calculatePrecipitationInStorage(
+      system,
+      subregion.annualprecipitationocttomar,
+    ) || 0;
     const runoff = getRunoffInSystem(system, subregion.annualprecipitationocttomar);
     // NOTE: Run-off is currently omitted. See: https://teams.microsoft.com/l/message/19:8bcf7a4ea1b542d8b91aec33374a5b42@thread.tacv2/1763420706800?tenantId=6fdb5200-3d0d-4a8a-b036-d3685e359adc&groupId=f7f32209-f2e2-4a93-8a2f-c049baa8220f&parentMessageId=1762541236175&teamName=External%3A%20Sustainment%20Team&channelName=NMP&createdTime=1763420706800&ngc=true
     const directPrecipitation = precipitation - runoff;
     const totalStored = (materialStored || materialGenerated) + precipitation;
 
-    const totalStorageVolume = system.manureStorages.reduce((acc, m) => acc + m.volumeUSGallons, 0);
+    const totalStorageVolume = system.manureStorages.reduce(
+      (acc, m) => acc + m.volumeUSGallons,
+      0,
+    );
     autoTable(doc, {
       ...sharedAutoTableSettings,
       // Table
@@ -364,37 +421,37 @@ const generateLiquidStorageCapacity = (
       body: [
         ...(materialStored
           ? [
-              [
-                '        Materials Generated or Imported',
-                `${printNum(materialGenerated)} US gallons`,
-              ],
-              [
-                {
-                  content: 'Material Stored (October to March)',
-                  styles: { fontStyle: 'bold' as FontStyle },
-                },
-                '',
-                '',
-              ],
-              [
-                '        Materials Stored (after Solid/Liquid Separation)',
-                `${printNum(materialStored)} US gallons`,
-              ],
-            ]
+            [
+              '        Materials Generated or Imported',
+              `${printNum(materialGenerated)} US gallons`,
+            ],
+            [
+              {
+                content: 'Material Stored (October to March)',
+                styles: { fontStyle: 'bold' as FontStyle },
+              },
+              '',
+              '',
+            ],
+            [
+              '        Materials Stored (after Solid/Liquid Separation)',
+              `${printNum(materialStored)} US gallons`,
+            ],
+          ]
           : [
-              [
-                {
-                  content: 'Material Stored (October to March)',
-                  styles: { fontStyle: 'bold' as FontStyle },
-                },
-                '',
-                '',
-              ],
-              [
-                '        Materials Generated or Imported',
-                `${printNum(materialGenerated)} US gallons`,
-              ],
-            ]),
+            [
+              {
+                content: 'Material Stored (October to March)',
+                styles: { fontStyle: 'bold' as FontStyle },
+              },
+              '',
+              '',
+            ],
+            [
+              '        Materials Generated or Imported',
+              `${printNum(materialGenerated)} US gallons`,
+            ],
+          ]),
         [
           '        Precipitation, Direct into Storage',
           `${printNum(directPrecipitation)} US gallons`,
@@ -431,14 +488,16 @@ const generateFertilizerRequired = (
   nmpFileYear: NMPFileYear,
   fertilizerUnits: FertilizerUnit[],
 ) => {
-  const fertilizers: FertilizerRequiredStep[] =
-    // Group fertilizers across each field by name and sum the amounts
-    nmpFileYear.fields.reduce((acc, field) => {
+  // Group fertilizers across each field by name and sum the amounts
+  const fertilizers: FertilizerRequiredStep[] = nmpFileYear.fields.reduce(
+    (acc, field) => {
       field.fertilizers.forEach((fert) => {
         let idx = acc.findIndex((f) => f.name === fert.name);
         if (idx === -1) {
           idx = acc.length;
-          const fertilizerUnit = fertilizerUnits.find((u) => u.id === fert.applUnitId);
+          const fertilizerUnit = fertilizerUnits.find(
+            (u) => u.id === fert.applUnitId,
+          );
           if (fertilizerUnit === undefined) {
             throw new Error(`Fertilizer unit ${fert.applUnitId} not found.`);
           }
@@ -450,16 +509,18 @@ const generateFertilizerRequired = (
         }
         // Add the converted amount and field acreage
         const stats = acc[idx];
-        stats.totalAmount +=
+        stats.totalAmount
           // Converts to kg/ac or US gal/ac and multiplies by # of acres
-          fert.applicationRate *
-          (stats.unit === 'kg'
+          += fert.applicationRate
+          * (stats.unit === 'kg'
             ? getFertilizerUnitKgPerAcreConversion(fert.applUnitId)
-            : getFertilizerUnitUSGallonPerAcreConversion(fert.applUnitId)) *
-          field.area;
+            : getFertilizerUnitUSGallonPerAcreConversion(fert.applUnitId))
+          * field.area;
       });
       return acc;
-    }, [] as FertilizerRequiredStep[]);
+    },
+    [] as FertilizerRequiredStep[],
+  );
 
   if (fertilizers.length > 0) {
     doc.addPage();
@@ -530,8 +591,8 @@ const generateFieldSummary = (
   if (soilTest?.sampleDate) {
     splitDateStr = new Date(soilTest.sampleDate).toDateString().split(' ');
   }
-  const soilTestName =
-    soilTestMethods.find((m) => m.id === soilTest?.soilTestId)?.name || 'not selected';
+  const soilTestName = soilTestMethods.find((m) => m.id === soilTest?.soilTestId)?.name
+    || 'not selected';
   autoTable(doc, {
     ...sharedAutoTableSettings,
     head: [
@@ -556,13 +617,13 @@ const generateFieldSummary = (
     },
     body: soilTest
       ? [
-          [
-            `Nitrate-N: ${soilTest.valNO3H} ppm`,
-            `Phosphorous: ${soilTest.valP} ppm (${phosphorousRanges.find((r) => soilTest.valP! < r.upperlimit)?.rating || ''})`,
-            `Potassium: ${soilTest.valK} ppm (${potassiumRanges.find((r) => soilTest.valK! < r.upperlimit)?.rating || ''})`,
-            `pH: ${soilTest.valPH}`,
-          ],
-        ]
+        [
+          `Nitrate-N: ${soilTest.valNO3H} ppm`,
+          `Phosphorous: ${soilTest.valP} ppm (${phosphorousRanges.find((r) => soilTest.valP! < r.upperlimit)?.rating || ''})`,
+          `Potassium: ${soilTest.valK} ppm (${potassiumRanges.find((r) => soilTest.valK! < r.upperlimit)?.rating || ''})`,
+          `pH: ${soilTest.valPH}`,
+        ],
+      ]
       : undefined,
     foot: [
       [
@@ -601,24 +662,26 @@ const generateFieldSummary = (
     body:
       allApplied.length > 0
         ? allApplied.map((nutrientSource) => {
-            let seasonApplication;
-            // Manures, but not fertilizers, have a season and application method
-            if ('applicationId' in nutrientSource) {
-              seasonApplication = SEASON_APPLICATION.find(
-                (s) => s.Id === nutrientSource.applicationId,
+          let seasonApplication;
+          // Manures, but not fertilizers, have a season and application method
+          if ('applicationId' in nutrientSource) {
+            seasonApplication = SEASON_APPLICATION.find(
+              (s) => s.Id === nutrientSource.applicationId,
+            );
+            if (!seasonApplication) {
+              throw new Error(
+                `Season application ${nutrientSource.applicationId} not found`,
               );
-              if (!seasonApplication) {
-                throw new Error(`Season application ${nutrientSource.applicationId} not found`);
-              }
             }
-            return [
-              nutrientSource.name,
-              seasonApplication?.Season || '',
-              seasonApplication?.ApplicationMethod || '',
-              // Example display: 10 L/ac
-              `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
-            ];
-          })
+          }
+          return [
+            nutrientSource.name,
+            seasonApplication?.Season || '',
+            seasonApplication?.ApplicationMethod || '',
+            // Example display: 10 L/ac
+            `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
+          ];
+        })
         : [['None planned', '', '', '']],
   });
 
@@ -660,16 +723,16 @@ const generateFieldSummary = (
     ...field.crops,
     ...(field.previousYearManureApplicationNCredit
       ? [
-          {
-            name: "Previous years' manure",
-            reqN: field.previousYearManureApplicationNCredit,
-            reqP2o5: 0,
-            reqK2o: 0,
-            remN: 0,
-            remP2o5: 0,
-            remK2o: 0,
-          },
-        ]
+        {
+          name: "Previous years' manure",
+          reqN: field.previousYearManureApplicationNCredit,
+          reqP2o5: 0,
+          reqK2o: 0,
+          remN: 0,
+          remP2o5: 0,
+          remK2o: 0,
+        },
+      ]
       : []),
     ...field.fertilizers,
     ...field.manures,
@@ -704,7 +767,10 @@ const generateFieldSummary = (
         { content: 'Crop Removal (lb/ac)', colSpan: 3 },
       ],
       [
-        { content: '', styles: { fillColor: [255, 255, 255], lineWidth: { bottom: 1 } } },
+        {
+          content: '',
+          styles: { fillColor: [255, 255, 255], lineWidth: { bottom: 1 } },
+        },
         { content: 'N', styles: { lineWidth: { bottom: 1 } } },
         { content: 'P₂O₅', styles: { lineWidth: { bottom: 1 } } },
         { content: 'K₂O', styles: { lineWidth: { bottom: 1 } } },
@@ -714,7 +780,11 @@ const generateFieldSummary = (
       ],
     ],
     columnStyles: {
-      0: { cellWidth: pageWidth * 0.25, fillColor: [255, 255, 255], halign: 'left' },
+      0: {
+        cellWidth: pageWidth * 0.25,
+        fillColor: [255, 255, 255],
+        halign: 'left',
+      },
       1: { cellWidth: pageWidth * 0.125, fillColor: [239, 239, 239] },
       2: { cellWidth: pageWidth * 0.125, fillColor: [239, 239, 239] },
       3: { cellWidth: pageWidth * 0.125, fillColor: [239, 239, 239] },
@@ -724,11 +794,17 @@ const generateFieldSummary = (
     },
     body: allRows.map((row) => {
       let hasFootnote = false;
-      if ('crudeProtein' in row && 'crudeProteinAdjusted' in row && row.crudeProteinAdjusted) {
+      if (
+        'crudeProtein' in row
+        && 'crudeProteinAdjusted' in row
+        && row.crudeProteinAdjusted
+      ) {
         tableFootnotes.push(`Crude protein adjusted to ${row.crudeProtein}%`);
         hasFootnote = true;
       } else if ('reqN' in row && 'reqNAdjusted' in row && row.reqNAdjusted) {
-        tableFootnotes.push(`Crop required nitrogen adjusted to ${Math.abs(row.reqN)}`);
+        tableFootnotes.push(
+          `Crop required nitrogen adjusted to ${Math.abs(row.reqN)}`,
+        );
         hasFootnote = true;
       } else if ('nh4Retention' in row && 'nAvailable' in row) {
         let footnote;
@@ -743,14 +819,22 @@ const generateFieldSummary = (
         if (hasFootnote) {
           tableFootnotes.push(footnote!);
         }
-      } else if ('density' in row && 'densityAdjusted' in row && row.densityAdjusted) {
+      } else if (
+        'density' in row
+        && 'densityAdjusted' in row
+        && row.densityAdjusted
+      ) {
         tableFootnotes.push(`Liquid density adjusted to ${row.density}`);
         hasFootnote = true;
       }
       // Some type shenanigans to accomodate fertigation, which has a date
-      const rowName = (row as any).date ? `${row.name} on ${(row as any).date}` : row.name;
+      const rowName = (row as any).date
+        ? `${row.name} on ${(row as any).date}`
+        : row.name;
       return [
-        hasFootnote ? `${rowName}${numberToSuperscript(tableFootnotes.length)}` : rowName,
+        hasFootnote
+          ? `${rowName}${numberToSuperscript(tableFootnotes.length)}`
+          : rowName,
         row.reqN,
         row.reqP2o5,
         row.reqK2o,
@@ -763,7 +847,11 @@ const generateFieldSummary = (
       [
         {
           content: 'Balance',
-          styles: { fillColor: [255, 255, 255], fontStyle: 'bold', halign: 'left' },
+          styles: {
+            fillColor: [255, 255, 255],
+            fontStyle: 'bold',
+            halign: 'left',
+          },
         },
         `${balance.reqN}`,
         `${balance.reqP2o5}`,
@@ -788,7 +876,9 @@ const generateFieldSummary = (
     if (key !== 'id' && key !== 'name') {
       const message = findBalanceMessage(key, value);
       if (message && message.icon !== '/good.svg') {
-        balanceFootnotes.push(message.text.replace('{0}', Math.abs(value ?? 0).toFixed(1)));
+        balanceFootnotes.push(
+          message.text.replace('{0}', Math.abs(value ?? 0).toFixed(1)),
+        );
       }
     }
   });
@@ -857,7 +947,10 @@ const generateManureAndCompostAnalysis = (
     },
     body: nmpFileYear.nutrientAnalyses.map((analysis) => {
       let hasFootnote = false;
-      if (hasDairyCattle && unassignedManures.some((m) => m.uuid === analysis.sourceUuid)) {
+      if (
+        hasDairyCattle
+        && unassignedManures.some((m) => m.uuid === analysis.sourceUuid)
+      ) {
         footnotes.push(
           `${analysis.uniqueMaterialName} includes materials that have not been allocated to a storage.`,
         );
@@ -896,7 +989,9 @@ const generateSoilTestResults = (
 ) => {
   doc.addPage();
   // If any soil test is defined, all fields use the same ST method
-  const soilTests = nmpFileYear.fields.map((f) => f.soilTest).filter((s) => s !== undefined);
+  const soilTests = nmpFileYear.fields
+    .map((f) => f.soilTest)
+    .filter((s) => s !== undefined);
   // The first table just shows the name of the soil test
   autoTable(doc, {
     ...sharedAutoTableSettings,
@@ -998,14 +1093,35 @@ export default async function makeFullReportPdf(
   // TODO: Add Table of Contents as the first page and page number
 
   // Second page: Application Schedule
-  generateApplicationSchedule(doc, pageWidth, farmName, year, nmpFileYear, fertilizerUnits);
+  generateApplicationSchedule(
+    doc,
+    pageWidth,
+    farmName,
+    year,
+    nmpFileYear,
+    fertilizerUnits,
+  );
 
   // Third page: Manure/Compost Inventory
-  generateManureCompostInventory(doc, pageWidth, farmName, year, nmpFileYear, unassignedManures);
+  generateManureCompostInventory(
+    doc,
+    pageWidth,
+    farmName,
+    year,
+    nmpFileYear,
+    unassignedManures,
+  );
 
   // Optional page: Manure and Compost Use
   if (nmpFileYear.nutrientAnalyses.length > 0) {
-    generateManureAndCompostUse(doc, pageWidth, farmName, year, nmpFileYear, materialRemainingData);
+    generateManureAndCompostUse(
+      doc,
+      pageWidth,
+      farmName,
+      year,
+      nmpFileYear,
+      materialRemainingData,
+    );
   }
 
   // This graph goes on the Manure and Compost Use page if one exists,
@@ -1015,7 +1131,14 @@ export default async function makeFullReportPdf(
   }
 
   // Fourth page: Fertilizer Required
-  generateFertilizerRequired(doc, pageWidth, farmName, year, nmpFileYear, fertilizerUnits);
+  generateFertilizerRequired(
+    doc,
+    pageWidth,
+    farmName,
+    year,
+    nmpFileYear,
+    fertilizerUnits,
+  );
 
   // Per field: Field Summary page
   for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
@@ -1059,7 +1182,9 @@ export default async function makeFullReportPdf(
   );
 
   // Download document
-  const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
+  const prependDate = new Date().toLocaleDateString('sv-SE', {
+    dateStyle: 'short',
+  });
   doc.save(`${prependDate}-${farmName}-Full-Report.pdf`);
   return doc;
 }

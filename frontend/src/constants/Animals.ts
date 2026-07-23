@@ -1,4 +1,9 @@
-import { NMPFileBeefCattle, NMPFileDairyCattle, ManureType, NMPFilePoultry } from '@/types';
+import {
+  NMPFileBeefCattle,
+  NMPFileDairyCattle,
+  ManureType,
+  NMPFilePoultry,
+} from '@/types';
 
 export const BEEF_COW_ID = '1';
 export const DAIRY_COW_ID = '2';

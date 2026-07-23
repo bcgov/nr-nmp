@@ -7,7 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowId,
+} from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { Button } from '@bcgov/design-system-react-components';
 import {
@@ -46,33 +51,42 @@ export default function SoilTests() {
   const [showWarning, setShowWarning] = useState<boolean>(false);
 
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
-    undefined,
-  );
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<
+    AlertDialogContinueBtn | undefined
+  >(undefined);
 
-  const [soilTestMethods, setSoilTestMethods] = useState<SelectOption<SoilTestMethods>[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<
+    SelectOption<SoilTestMethods>[]
+  >([]);
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestphosphorousranges',
   ).data;
-  const potassiumRanges: SoilTestNutrientRange[] =
-    apiCache.getInitializedResponse('soiltestpotassiumranges').data;
+  const potassiumRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
+    'soiltestpotassiumranges',
+  ).data;
   const [currentFieldIndex, setCurrentFieldIndex] = useState<number | null>(null);
 
-  const handleEditRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
-    const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-    setCurrentFieldIndex(index);
-  }, []);
-
-  const handleDeleteRow = useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
-    setFields((prev) => {
+  const handleEditRow = useCallback(
+    (e: { id: GridRowId; api: GridApiCommunity }) => {
       const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
-      if (prev[index].soilTest === undefined) return prev;
+      setCurrentFieldIndex(index);
+    },
+    [],
+  );
 
-      const newList = [...prev];
-      newList[index].soilTest = undefined;
-      return newList;
-    });
-  }, []);
+  const handleDeleteRow = useCallback(
+    (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setFields((prev) => {
+        const index = e.api.getRowIndexRelativeToVisibleRows(e.id);
+        if (prev[index].soilTest === undefined) return prev;
+
+        const newList = [...prev];
+        newList[index].soilTest = undefined;
+        return newList;
+      });
+    },
+    [],
+  );
 
   const handleDialogClose = () => {
     setCurrentFieldIndex(null);
@@ -148,14 +162,22 @@ export default function SoilTests() {
 
   const columns: GridColDef[] = useMemo(
     () => [
-      { field: 'fieldName', headerName: 'Field Name', width: 150, minWidth: 150, maxWidth: 400 },
+      {
+        field: 'fieldName',
+        headerName: 'Field Name',
+        width: 150,
+        minWidth: 150,
+        maxWidth: 400,
+      },
       {
         field: 'soilTest',
         headerName: 'Sampling Month',
         valueGetter: (_value, row) => {
           let splitDateStr: string | undefined;
           if (row?.soilTest?.sampleDate) {
-            const soilDate = new Date(row.soilTest.sampleDate).toDateString().split(' ');
+            const soilDate = new Date(row.soilTest.sampleDate)
+              .toDateString()
+              .split(' ');
             splitDateStr = `${soilDate[1]} ${soilDate[3]}`;
           }
           return splitDateStr || '';
@@ -293,8 +315,8 @@ export default function SoilTests() {
         continueBtn={{ handleClick: () => handleNextPage() }}
       >
         <WarningMessage>
-          For fields without a soil test, very high soil P and K fertility and a pH of 6.0 will be
-          assumed. Crop P and K requirements will be 0 on fields.
+          For fields without a soil test, very high soil P and K fertility and a pH
+          of 6.0 will be assumed. Crop P and K requirements will be 0 on fields.
         </WarningMessage>
       </AlertDialog>
       {currentFieldIndex !== null && (
@@ -319,11 +341,13 @@ export default function SoilTests() {
             <li>No - Click Next</li>
           </ul>
           <WarningMessage>
-            For fields without a soil test, very high soil P and K fertility and a pH of 6.0 will be
-            assumed. Crop P and K requirements will be 0 on fields.
+            For fields without a soil test, very high soil P and K fertility and a pH
+            of 6.0 will be assumed. Crop P and K requirements will be 0 on fields.
           </WarningMessage>
           <br />
-          <WarningMessage>Results will not be accurate without a soil test.</WarningMessage>
+          <WarningMessage>
+            Results will not be accurate without a soil test.
+          </WarningMessage>
         </InfoBox>
       )}
       <Grid

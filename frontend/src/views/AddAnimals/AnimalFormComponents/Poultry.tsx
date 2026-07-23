@@ -11,14 +11,19 @@ import {
   Animal,
   AnimalSubtype,
 } from '@/types';
-import { calculatePoultryAnnualLiquidManure, calculatePoultryAnnualSolidManure } from '../utils';
+import {
+  calculatePoultryAnnualLiquidManure,
+  calculatePoultryAnnualSolidManure,
+} from '../utils';
 import AnimalFormWrapper from './AnimalFormWrapper';
 import { DUCK_ID, MANURE_TYPE_OPTIONS, POULTRY_ID } from '@/constants';
 
 type PoultryProps = {
   formData: NMPFilePoultry;
   animals: SelectOption<Animal>[];
-  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
+  handleInputChanges: (changes: {
+    [name: string]: string | number | undefined;
+  }) => void;
   handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
@@ -31,7 +36,9 @@ export default function Poultry({
 }: PoultryProps) {
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<AnimalSubtype[]>([]);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
+  const [subtypeOptions, setSubtypeOptions] = useState<
+    { id: string; label: string }[]
+  >([]);
 
   const onSubmit = () => {
     // Calculate manure
@@ -101,7 +108,10 @@ export default function Poultry({
           items={subtypeOptions}
           onChange={(e) => {
             e === DUCK_ID
-              ? handleInputChanges({ subtype: e as string, manureType: ManureType.Solid })
+              ? handleInputChanges({
+                subtype: e as string,
+                manureType: ManureType.Solid,
+              })
               : handleInputChanges({ subtype: e as string });
           }}
           isRequired

@@ -37,14 +37,12 @@ class APICache {
 
   private async initialize() {
     await Promise.all(
-      InitialEndpoints.map((endpoint) =>
-        axiosGet(`${env.VITE_BACKEND_URL}/api/${endpoint}/`).then((res) => {
-          if (res.status === 200) {
-            this.endpointCache[endpoint] = res;
-          }
-          // TODO: Handle errors here
-        }),
-      ),
+      InitialEndpoints.map((endpoint) => axiosGet(`${env.VITE_BACKEND_URL}/api/${endpoint}/`).then((res) => {
+        if (res.status === 200) {
+          this.endpointCache[endpoint] = res;
+        }
+        // TODO: Handle errors here
+      })),
     ).then(() => {
       this.initialized = true;
     });
@@ -79,7 +77,9 @@ class APICache {
 
   getAppStateTables(): AppStateTables {
     if (!this.initialized) {
-      throw new Error('getAppStateTables was called before initialization completed.');
+      throw new Error(
+        'getAppStateTables was called before initialization completed.',
+      );
     }
     return {
       crops: this.endpointCache.crops.data,
@@ -89,11 +89,16 @@ class APICache {
       nitrateCredit: this.endpointCache.nitratecredit.data,
       nMineralizations: this.endpointCache.nmineralizations.data,
       regions: this.endpointCache.regions.data,
-      soilTestPhosphorousKelownaRanges: this.endpointCache.soiltestphosphorouskelonwaranges.data,
-      soilTestPotassiumKelownaRanges: this.endpointCache.soiltestpotassiumkelownaranges.data,
-      soilTestPhosphorousRecommendations: this.endpointCache.soiltestphosphorousrecommendation.data,
-      soilTestPhosphorousRegions: this.endpointCache.cropsoiltestphosphorousregions.data,
-      soilTestPotassiumRecommendation: this.endpointCache.soiltestpotassiumrecommendation.data,
+      soilTestPhosphorousKelownaRanges:
+        this.endpointCache.soiltestphosphorouskelonwaranges.data,
+      soilTestPotassiumKelownaRanges:
+        this.endpointCache.soiltestpotassiumkelownaranges.data,
+      soilTestPhosphorousRecommendations:
+        this.endpointCache.soiltestphosphorousrecommendation.data,
+      soilTestPhosphorousRegions:
+        this.endpointCache.cropsoiltestphosphorousregions.data,
+      soilTestPotassiumRecommendation:
+        this.endpointCache.soiltestpotassiumrecommendation.data,
       soilTestPotassiumRegions: this.endpointCache.cropsoilpotassiumregions.data,
       subregions: this.endpointCache.subregions.data,
       manureUnits: this.endpointCache.units.data,
@@ -102,7 +107,9 @@ class APICache {
 
   getInitializedResponse(endpoint: InitialEndpoint) {
     if (!this.initialized) {
-      throw new Error('getInitializedResponse was called before initialization completed.');
+      throw new Error(
+        'getInitializedResponse was called before initialization completed.',
+      );
     }
     return this.endpointCache[endpoint];
   }

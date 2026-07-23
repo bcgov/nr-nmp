@@ -72,7 +72,8 @@ It should be updated if the source file is updated, but that project is paused.
 
 /* Hover and focus states */
 
-.bcds-react-aria-TextField--container > .bcds-react-aria-TextField--Input[data-focused] {
+.bcds-react-aria-TextField--container
+  > .bcds-react-aria-TextField--Input[data-focused] {
   outline: none;
 }
 

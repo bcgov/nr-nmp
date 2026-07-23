@@ -6,7 +6,9 @@ const APICacheContext = createContext(cache);
 
 function APICacheProvider(props: { children: React.ReactNode }) {
   const { children } = props;
-  return <APICacheContext.Provider value={cache}>{children}</APICacheContext.Provider>;
+  return (
+    <APICacheContext.Provider value={cache}>{children}</APICacheContext.Provider>
+  );
 }
 
 export { APICacheContext, APICacheProvider };

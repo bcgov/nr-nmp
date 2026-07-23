@@ -25,11 +25,15 @@ export default function MaterialRemainingDisplay({
 
   // Filter data if a specific source is selected
   const filteredStoredManures = selectedSourceUuid
-    ? appliedStoredManures.filter((manure) => manure.sourceUuid === selectedSourceUuid)
+    ? appliedStoredManures.filter(
+      (manure) => manure.sourceUuid === selectedSourceUuid,
+    )
     : appliedStoredManures;
 
   const filteredImportedManures = selectedSourceUuid
-    ? appliedImportedManures.filter((manure) => manure.sourceUuid === selectedSourceUuid)
+    ? appliedImportedManures.filter(
+      (manure) => manure.sourceUuid === selectedSourceUuid,
+    )
     : appliedImportedManures;
 
   const allAppliedManures = [...filteredStoredManures, ...filteredImportedManures];
@@ -40,7 +44,8 @@ export default function MaterialRemainingDisplay({
       <MaterialRemainingContainer>
         <MaterialRemainingTitle>Material Remaining</MaterialRemainingTitle>
         <EmptyState>
-          No manure materials found. Add animals or import manures to track remaining materials.
+          No manure materials found. Add animals or import manures to track remaining
+          materials.
         </EmptyState>
       </MaterialRemainingContainer>
     );

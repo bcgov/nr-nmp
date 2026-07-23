@@ -191,12 +191,18 @@ export default function FertigationModal({
     () => state.nmpFile.years[0].fields[fieldIndex],
     [state.nmpFile, fieldIndex],
   );
-  const [fertilizerTypes, setFertilizerTypes] = useState<SelectOption<FertilizerType>[]>([]);
+  const [fertilizerTypes, setFertilizerTypes] = useState<
+    SelectOption<FertilizerType>[]
+  >([]);
   const [fertilizers, setFertilizers] = useState<SelectOption<Fertilizer>[]>([]);
-  const [filteredFertilizers, setFilteredFertilizers] = useState<SelectOption<Fertilizer>[]>([]);
+  const [filteredFertilizers, setFilteredFertilizers] = useState<
+    SelectOption<Fertilizer>[]
+  >([]);
   const [liquidUnits, setLiquidUnits] = useState<SelectOption<FertilizerUnit>[]>([]);
   const [densityUnits, setDensityUnits] = useState<SelectOption<DensityUnit>[]>([]);
-  const [liqDensityFactors, setLiqDensityFactors] = useState<LiquidFertilizerDensity[]>([]);
+  const [liqDensityFactors, setLiqDensityFactors] = useState<
+    LiquidFertilizerDensity[]
+  >([]);
   const [formData, setFormData] = useState<NMPFileFertigation>(
     initialModalData || EMPTY_FERTIGATION_FORM_DATA,
   );
@@ -219,75 +225,92 @@ export default function FertigationModal({
   const apiCache = useContext(APICacheContext);
 
   const isLiquidFertilizer = useMemo(
-    () =>
-      fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value.dryliquid ===
-      'liquid',
+    () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
+      .dryliquid === 'liquid',
     [fertilizerTypes, formData.fertilizerTypeId],
   );
 
   const isDryFertilizer = useMemo(
-    () =>
-      fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value.dryliquid ===
-      'dry',
+    () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
+      .dryliquid === 'dry',
     [fertilizerTypes, formData.fertilizerTypeId],
   );
 
   const isCustomFertilizer = useMemo(
-    () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value.custom,
+    () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
+      .custom,
     [fertilizerTypes, formData.fertilizerTypeId],
   );
 
   useEffect(() => {
-    apiCache.callEndpoint('api/fertilizertypes/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        const fertilizerTs: FertilizerType[] = response.data;
-        setFertilizerTypes(
-          fertilizerTs.map((ele) => ({ id: ele.id, label: ele.name, value: ele })),
-        );
+    apiCache
+      .callEndpoint('api/fertilizertypes/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const fertilizerTs: FertilizerType[] = response.data;
+          setFertilizerTypes(
+            fertilizerTs.map((ele) => ({
+              id: ele.id,
+              label: ele.name,
+              value: ele,
+            })),
+          );
 
-        // Fetch fertilizers sequentially, after fertilizer types
-        apiCache
-          .callEndpoint('api/fertilizers/')
-          .then((secondResponse: { status?: any; data: any }) => {
-            if (secondResponse.status === 200) {
-              const ferts: Fertilizer[] = secondResponse.data;
-              const fertOptions = ferts.map((ele) => ({ id: ele.id, label: ele.name, value: ele }));
-              setFertilizers(fertOptions);
+          // Fetch fertilizers sequentially, after fertilizer types
+          apiCache
+            .callEndpoint('api/fertilizers/')
+            .then((secondResponse: { status?: any; data: any }) => {
+              if (secondResponse.status === 200) {
+                const ferts: Fertilizer[] = secondResponse.data;
+                const fertOptions = ferts.map((ele) => ({
+                  id: ele.id,
+                  label: ele.name,
+                  value: ele,
+                }));
+                setFertilizers(fertOptions);
 
-              // If the fertilizerTypeId is already set, set the filtered options as well
-              if (formData.fertilizerTypeId) {
-                setFilteredFertilizers(
-                  fertOptions.filter(
-                    (ele) =>
-                      ele.value.dryliquid ===
-                      fertilizerTs.find((fertType) => fertType.id === formData.fertilizerTypeId)
-                        ?.dryliquid,
-                  ),
-                );
+                // If the fertilizerTypeId is already set, set the filtered options as well
+                if (formData.fertilizerTypeId) {
+                  setFilteredFertilizers(
+                    fertOptions.filter(
+                      (ele) => ele.value.dryliquid
+                        === fertilizerTs.find(
+                          (fertType) => fertType.id === formData.fertilizerTypeId,
+                        )?.dryliquid,
+                    ),
+                  );
+                }
               }
-            }
-          });
-      }
-    });
+            });
+        }
+      });
 
-    apiCache.callEndpoint('api/fertilizerunits/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        const units: FertilizerUnit[] = response.data;
-        const unitOptions = units.map((ele) => ({ id: ele.id, label: ele.name, value: ele }));
-        const unitsDry: SelectOption<FertilizerUnit>[] = [];
-        const unitsLiquid: SelectOption<FertilizerUnit>[] = [];
-        unitOptions.forEach((u) =>
-          u.value.dryliquid === 'dry' ? unitsDry.push(u) : unitsLiquid.push(u),
-        );
-        setLiquidUnits(unitsLiquid);
-      }
-    });
+    apiCache
+      .callEndpoint('api/fertilizerunits/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const units: FertilizerUnit[] = response.data;
+          const unitOptions = units.map((ele) => ({
+            id: ele.id,
+            label: ele.name,
+            value: ele,
+          }));
+          const unitsDry: SelectOption<FertilizerUnit>[] = [];
+          const unitsLiquid: SelectOption<FertilizerUnit>[] = [];
+          unitOptions.forEach((u) => (u.value.dryliquid === 'dry' ? unitsDry.push(u) : unitsLiquid.push(u)));
+          setLiquidUnits(unitsLiquid);
+        }
+      });
 
     apiCache.callEndpoint('api/densityunits/').then((response) => {
       if (response.status === 200) {
         const { data } = response;
         setDensityUnits(
-          (data as DensityUnit[]).map((ele) => ({ id: ele.id, label: ele.name, value: ele })),
+          (data as DensityUnit[]).map((ele) => ({
+            id: ele.id,
+            label: ele.name,
+            value: ele,
+          })),
         );
       }
     });
@@ -324,8 +347,9 @@ export default function FertigationModal({
       nutrients = formData.customNutrients;
     } else {
       const f = fertilizers.find((ele) => ele.id === formData.fertilizerId)?.value;
-      if (f === undefined)
+      if (f === undefined) {
         throw new Error(`Fertilizer ${formData.fertilizerId} is missing from list.`);
+      }
       nutrients = { N: f.nitrogen, P2O5: f.phosphorous, K2O: f.potassium };
     }
 
@@ -335,12 +359,22 @@ export default function FertigationModal({
     )!;
 
     if (isLiquidFertilizer) {
-      const applicationUnit = liquidUnits.find((u) => u.id === formData.applUnitId)?.value;
-      if (!applicationUnit)
-        throw new Error(`Fertilizer unit ${formData.applUnitId} is missing from list.`);
-      const densityUnit = densityUnits.find((u) => u.id === formData.densityUnitId)?.value;
-      if (!densityUnit)
-        throw new Error(`Density unit ${formData.densityUnitId} is missing from list.`);
+      const applicationUnit = liquidUnits.find(
+        (u) => u.id === formData.applUnitId,
+      )?.value;
+      if (!applicationUnit) {
+        throw new Error(
+          `Fertilizer unit ${formData.applUnitId} is missing from list.`,
+        );
+      }
+      const densityUnit = densityUnits.find(
+        (u) => u.id === formData.densityUnitId,
+      )?.value;
+      if (!densityUnit) {
+        throw new Error(
+          `Density unit ${formData.densityUnitId} is missing from list.`,
+        );
+      }
 
       const volume = getProductVolumePerApplication(
         formData.applicationRate!,
@@ -362,12 +396,15 @@ export default function FertigationModal({
         formData.density!,
         densityUnit,
       );
-      const reqN =
-        Math.round(getAppliedNutrientPerApplication(weight, field.area, nutrients.N) * 10) / 10;
-      const reqP2o5 =
-        Math.round(getAppliedNutrientPerApplication(weight, field.area, nutrients.P2O5) * 10) / 10;
-      const reqK2o =
-        Math.round(getAppliedNutrientPerApplication(weight, field.area, nutrients.K2O) * 10) / 10;
+      const reqN = Math.round(
+        getAppliedNutrientPerApplication(weight, field.area, nutrients.N) * 10,
+      ) / 10;
+      const reqP2o5 = Math.round(
+        getAppliedNutrientPerApplication(weight, field.area, nutrients.P2O5) * 10,
+      ) / 10;
+      const reqK2o = Math.round(
+        getAppliedNutrientPerApplication(weight, field.area, nutrients.K2O) * 10,
+      ) / 10;
       setFormData((prev) => ({
         ...prev,
         volume,
@@ -395,7 +432,9 @@ export default function FertigationModal({
         throw new Error('Solubility and units are required for dry fertigation');
       }
       if (!formData.amountToDissolveUnitId) {
-        throw new Error('Amount to dissolve and units are required for dry fertigation');
+        throw new Error(
+          'Amount to dissolve and units are required for dry fertigation',
+        );
       }
 
       const solidCalc = calculateSolidFertigation(
@@ -453,10 +492,9 @@ export default function FertigationModal({
         if (name === 'fertilizerTypeId') {
           setFilteredFertilizers(
             fertilizers.filter(
-              (ele) =>
-                ele.value.dryliquid ===
-                  fertilizerTypes.find((fertType) => fertType.id === value)?.value.dryliquid &&
-                ele.value.fertigation === true,
+              (ele) => ele.value.dryliquid
+                  === fertilizerTypes.find((fertType) => fertType.id === value)?.value
+                    .dryliquid && ele.value.fertigation === true,
             ),
           );
 
@@ -475,7 +513,9 @@ export default function FertigationModal({
           next.name = filteredFertilizers.find((f) => f.id === value)!.label;
           // Load liquid densities.
           if (isLiquidFertilizer && !isCustomFertilizer) {
-            const densityValue = liqDensityFactors.find((ele) => ele.fertilizerid === value)!;
+            const densityValue = liqDensityFactors.find(
+              (ele) => ele.fertilizerid === value,
+            )!;
 
             next.density = densityValue.value;
             next.densityUnitId = densityValue.densityunitid;
@@ -484,8 +524,8 @@ export default function FertigationModal({
           // Auto-populate solubility for dry fertilizers
           if (isDryFertilizer && next.solubilityUnitId) {
             const solubilityData = DRY_FERTILIZER_SOLUBILITIES.find(
-              (item) =>
-                item.fertilizerId === value && item.solubilityUnitId === next.solubilityUnitId,
+              (item) => item.fertilizerId === value
+                && item.solubilityUnitId === next.solubilityUnitId,
             );
             if (solubilityData) {
               next.solubility = solubilityData.value;
@@ -496,7 +536,8 @@ export default function FertigationModal({
         if (name === 'densityUnitId') {
           if (isLiquidFertilizer && !isCustomFertilizer) {
             const densityValue = liqDensityFactors.find(
-              (ele) => ele.fertilizerid === formData.fertilizerId && ele.densityunitid === value,
+              (ele) => ele.fertilizerid === formData.fertilizerId
+                && ele.densityunitid === value,
             );
             // densityValue is undef when a fertilizer is unselected
             next.density = densityValue ? densityValue.value : 0;
@@ -507,7 +548,8 @@ export default function FertigationModal({
           // Auto-populate solubility when units change for dry fertilizers
           if (isDryFertilizer && next.fertilizerId) {
             const solubilityData = DRY_FERTILIZER_SOLUBILITIES.find(
-              (item) => item.fertilizerId === next.fertilizerId && item.solubilityUnitId === value,
+              (item) => item.fertilizerId === next.fertilizerId
+                && item.solubilityUnitId === value,
             );
             if (solubilityData) {
               next.solubility = solubilityData.value;
@@ -662,9 +704,9 @@ export default function FertigationModal({
                     label="Units"
                     placeholder="Select Units"
                     value={formData.amountToDissolveUnitId}
-                    onChange={(e) =>
-                      handleInputChanges({ amountToDissolveUnitId: e as number })
-                    }
+                    onChange={(e) => handleInputChanges({
+                      amountToDissolveUnitId: e as number,
+                    })}
                     noSort
                     autoselectFirst
                   />
@@ -693,7 +735,9 @@ export default function FertigationModal({
                       />
                     </div>
                     <div css={concentrationItemStyles}>
-                      <div css={concentrationHeaderStyles}>Nutrient Concentration (kg/L)</div>
+                      <div css={concentrationHeaderStyles}>
+                        Nutrient Concentration (kg/L)
+                      </div>
                       <DataGrid
                         sx={{ ...customTableStyle, fontSize: '12px' }}
                         columns={NUTRIENT_COLUMNS}
@@ -723,7 +767,9 @@ export default function FertigationModal({
                           : solubilityStatusNotSoluble
                       }
                     >
-                      Status: {formData.dryAction}
+                      Status:
+                      {' '}
+                      {formData.dryAction}
                     </div>
                   ) : (
                     <div css={solubilityStatusNormal}>Normal</div>
@@ -748,12 +794,10 @@ export default function FertigationModal({
                     label="Units"
                     placeholder="Select Units"
                     value={formData.applUnitId}
-                    onChange={(e) =>
-                      handleInputChanges({
-                        applUnitId: e as number,
-                        applUnitName: liquidUnits.find((u) => u.id === e)!.label,
-                      })
-                    }
+                    onChange={(e) => handleInputChanges({
+                      applUnitId: e as number,
+                      applUnitName: liquidUnits.find((u) => u.id === e)!.label,
+                    })}
                     noSort
                     autoselectFirst
                   />
@@ -839,7 +883,9 @@ export default function FertigationModal({
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div css={calculationValueStyles}>{printNum(formData.volume, 2)}</div>
+                <div css={calculationValueStyles}>
+                  {printNum(formData.volume, 2)}
+                </div>
               </div>
               <div css={calculationItemStyles}>
                 <span css={calculationLabelStyles}>
@@ -848,23 +894,35 @@ export default function FertigationModal({
                     ? ` (${formData.applUnitName.slice(0, formData.applUnitName.indexOf('/'))})`
                     : ''}
                 </span>
-                <div css={calculationValueStyles}>{printNum(formData.volumeForSeason, 2)}</div>
+                <div css={calculationValueStyles}>
+                  {printNum(formData.volumeForSeason, 2)}
+                </div>
               </div>
               <div css={calculationItemStyles}>
-                <span css={calculationLabelStyles}>Time per Application (minutes)</span>
-                <div css={calculationValueStyles}>{printNum(formData.applicationTime, 2)}</div>
+                <span css={calculationLabelStyles}>
+                  Time per Application (minutes)
+                </span>
+                <div css={calculationValueStyles}>
+                  {printNum(formData.applicationTime, 2)}
+                </div>
               </div>
             </div>
           )}
           {isDryFertilizer && (
             <div css={dryApplicationTimeStyles}>
-              <span css={calculationLabelStyles}>Time per Application (minutes)</span>
-              <div css={calculationValueStyles}>{printNum(formData.applicationTime, 2)}</div>
+              <span css={calculationLabelStyles}>
+                Time per Application (minutes)
+              </span>
+              <div css={calculationValueStyles}>
+                {printNum(formData.applicationTime, 2)}
+              </div>
             </div>
           )}
           <div css={nutrientTablesContainerStyles}>
             <div css={nutrientTableItemStyles}>
-              <div css={nutrientTableHeaderStyles}>Applied Nutrients per Fertigation (lb/ac)</div>
+              <div css={nutrientTableHeaderStyles}>
+                Applied Nutrients per Fertigation (lb/ac)
+              </div>
               <DataGrid
                 sx={{ ...customTableStyle, fontSize: '12px' }}
                 columns={NUTRIENT_COLUMNS}
@@ -877,7 +935,9 @@ export default function FertigationModal({
               />
             </div>
             <div css={nutrientTableItemStyles}>
-              <div css={nutrientTableHeaderStyles}>Total Applied Nutrients (lb/ac)</div>
+              <div css={nutrientTableHeaderStyles}>
+                Total Applied Nutrients (lb/ac)
+              </div>
               <DataGrid
                 sx={{ ...customTableStyle, fontSize: '12px' }}
                 columns={NUTRIENT_COLUMNS}
@@ -890,7 +950,9 @@ export default function FertigationModal({
               />
             </div>
             <div css={nutrientTableItemStyles}>
-              <div css={nutrientTableHeaderStyles}>Still Required This Year (lb/ac)</div>
+              <div css={nutrientTableHeaderStyles}>
+                Still Required This Year (lb/ac)
+              </div>
               <DataGrid
                 sx={{ ...customTableStyle, fontSize: '12px' }}
                 columns={BALANCE_COLUMNS}

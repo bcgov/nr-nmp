@@ -56,7 +56,10 @@ export default function ProgressStepper() {
     return [
       ...baseSteps,
       { name: 'Fields and Soil', paths: [FIELD_LIST, SOIL_TESTS, CROPS] },
-      { name: 'Manure and Compost', paths: [MANURE_IMPORTS, NUTRIENT_ANALYSIS] },
+      {
+        name: 'Manure and Compost',
+        paths: [MANURE_IMPORTS, NUTRIENT_ANALYSIS],
+      },
       { name: 'Calculate Nutrients', paths: [CALCULATE_NUTRIENTS] },
       { name: 'Reporting', paths: [REPORTING] },
     ];
@@ -69,11 +72,14 @@ export default function ProgressStepper() {
 
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      paddingY="2.5rem"
-      width="100%"
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: '2.5rem',
+        paddingBottom: '2.5rem',
+        width: '100%',
+      }}
     >
       <Stepper
         sx={{ width: '100%' }}

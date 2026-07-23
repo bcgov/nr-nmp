@@ -1,6 +1,5 @@
 export type WashWaterUnit = 'PER_DAY_PER_ANIMAL' | 'PER_DAY';
 
-// eslint-disable-next-line no-shadow
 export enum ManureType {
   Liquid = 1,
   Solid = 2,
@@ -30,7 +29,11 @@ export type NMPFileDairyCattle = {
   washWaterAdjusted?: boolean; // only affects report
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
-    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
+    | {
+        name: string;
+        annualSolidManure: undefined;
+        annualLiquidManure: number;
+      };
   uuid: string;
 };
 
@@ -43,7 +46,11 @@ export type NMPFilePoultry = {
   daysPerFlock?: number;
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
-    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
+    | {
+        name: string;
+        annualSolidManure: undefined;
+        annualLiquidManure: number;
+      };
   uuid: string;
 };
 
@@ -60,12 +67,13 @@ export type NMPFileOtherAnimal = {
   daysCollected?: number;
   manureData?:
     | { name: string; annualSolidManure: number; annualLiquidManure: undefined }
-    | { name: string; annualSolidManure: undefined; annualLiquidManure: number };
+    | {
+        name: string;
+        annualSolidManure: undefined;
+        annualLiquidManure: number;
+      };
   uuid: string;
 };
 
 export type NMPFileAnimal =
-  | NMPFileBeefCattle
-  | NMPFileDairyCattle
-  | NMPFilePoultry
-  | NMPFileOtherAnimal;
+  NMPFileBeefCattle | NMPFileDairyCattle | NMPFilePoultry | NMPFileOtherAnimal;

@@ -13,7 +13,9 @@ interface MilkingFieldsProps {
   washWaterDefault: number;
   animalsPerFarm: number;
   washWaterUnit?: WashWaterUnit;
-  handleInputChanges: (changes: { [name: string]: string | number | boolean | undefined }) => void;
+  handleInputChanges: (changes: {
+    [name: string]: string | number | boolean | undefined;
+  }) => void;
 }
 
 const washWaterOptions: { id: string; label: string }[] = [
@@ -36,17 +38,19 @@ export default function MilkingFields({
   const [washWater, setWashWater] = useState<number>(washWaterInit);
 
   const washWaterDefaultCorrected = useMemo(
-    () =>
-      washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
-        ? washWaterDefault
-        : washWaterDefault * animalsPerFarm,
+    () => (washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
+      ? washWaterDefault
+      : washWaterDefault * animalsPerFarm),
     [washWaterUnit, animalsPerFarm, washWaterDefault],
   );
 
   // When the breed changes, change the milk production value
   useEffect(() => {
     setMilkProduction(milkProductionDefault);
-    handleInputChanges({ milkProduction: milkProductionDefault, milkProductionAdjusted: false });
+    handleInputChanges({
+      milkProduction: milkProductionDefault,
+      milkProductionAdjusted: false,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [milkProductionDefault]);
 
@@ -81,7 +85,10 @@ export default function MilkingFields({
         washWaterUnit: newUnit,
         washWaterAdjusted: false,
       });
-    } else if (newUnit === PER_DAY_UNIT && washWaterUnit === PER_DAY_PER_ANIMAL_UNIT) {
+    } else if (
+      newUnit === PER_DAY_UNIT
+      && washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
+    ) {
       setWashWater(washWaterDefault * animalsPerFarm);
       handleInputChanges({
         washWater: washWaterDefault * animalsPerFarm,

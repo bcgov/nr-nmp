@@ -42,35 +42,38 @@ export default function AddAnimals() {
   useEffect(() => {
     dispatch({ type: 'SET_SHOW_ANIMALS_STEP', showAnimalsStep: true });
 
-    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        const { data } = response;
-        setAnimals(data);
-      }
-    });
+    apiCache
+      .callEndpoint('/api/animals/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setAnimals(data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const hasDairyCattle = useMemo(
-    () =>
-      state.nmpFile.years[0].farmAnimals?.some(
-        (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
-      ),
+    () => state.nmpFile.years[0].farmAnimals?.some(
+      (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
+    ),
     [state.nmpFile.years],
   );
 
   const tabs = useMemo(
-    () =>
-      hasDairyCattle
-        ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
-        : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
+    () => (hasDairyCattle
+      ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
+      : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis']),
     [hasDairyCattle],
   );
 
-  const handleEditRow = React.useCallback((e: { id: GridRowId; api: GridApiCommunity }) => {
-    setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
-    setIsDialogOpen(true);
-  }, []);
+  const handleEditRow = React.useCallback(
+    (e: { id: GridRowId; api: GridApiCommunity }) => {
+      setRowEditIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
+      setIsDialogOpen(true);
+    },
+    [],
+  );
 
   const handleDeleteRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
     setAnimalList((prev) => {
@@ -149,7 +152,11 @@ export default function AddAnimals() {
             return (
               <span css={specialTableRowStyle}>
                 <DoubleRowStyle>{params.value}</DoubleRowStyle>
-                <DoubleRowStyle>{washWaterGallons} U.S. gallons</DoubleRowStyle>
+                <DoubleRowStyle>
+                  {washWaterGallons}
+                  {' '}
+                  U.S. gallons
+                </DoubleRowStyle>
               </span>
             );
           }
@@ -206,7 +213,9 @@ export default function AddAnimals() {
       </div>
       {isDialogOpen && (
         <AddAnimalsModal
-          initialModalData={rowEditIndex !== undefined ? animalList[rowEditIndex] : undefined}
+          initialModalData={
+            rowEditIndex !== undefined ? animalList[rowEditIndex] : undefined
+          }
           rowEditIndex={rowEditIndex}
           setAnimalList={setAnimalList}
           isOpen={isDialogOpen}

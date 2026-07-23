@@ -19,7 +19,10 @@ export function getDensityFactor(moisturePercentage: number): number {
 
   const moistureDecimal = moisturePercentage / 100;
   return (
-    7.9386 * moistureDecimal ** 3 - 16.43 * moistureDecimal ** 2 + 11.993 * moistureDecimal - 2.3975
+    7.9386 * moistureDecimal ** 3
+    - 16.43 * moistureDecimal ** 2
+    + 11.993 * moistureDecimal
+    - 2.3975
   );
 }
 

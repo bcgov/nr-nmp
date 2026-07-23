@@ -19,7 +19,9 @@ import { NumberField, Select } from '@/components/common';
 type OtherAnimalsProps = {
   formData: NMPFileOtherAnimal;
   animals: SelectOption<Animal>[];
-  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
+  handleInputChanges: (changes: {
+    [name: string]: string | number | undefined;
+  }) => void;
   handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
@@ -31,12 +33,16 @@ export default function OtherAnimals({
   ...props
 }: OtherAnimalsProps) {
   const apiCache = useContext(APICacheContext);
-  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
+  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(
+    !!formData.daysCollected,
+  );
   const [subtypes, setSubtypes] = useState<SelectOption<AnimalSubtype>[]>([]);
 
   const onSubmit = () => {
     // Calculate manure
-    const selectedSubtype = subtypes.find((s) => s.id.toString() === formData.subtype);
+    const selectedSubtype = subtypes.find(
+      (s) => s.id.toString() === formData.subtype,
+    );
     if (selectedSubtype !== null && selectedSubtype !== undefined) {
       let withManureCalc: NMPFileOtherAnimal;
       if (formData.manureType === ManureType.Liquid) {
@@ -74,21 +80,23 @@ export default function OtherAnimals({
 
   // autoset subtype for animals that only have one subtype
   useEffect(() => {
-    apiCache.callEndpoint(`api/animal_subtypes/${formData.animalId}/`).then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const mappedSubtypes = data.map((row: any) => ({
-          id: String(row.id),
-          label: row.name,
-          value: row,
-        }));
-        setSubtypes(mappedSubtypes);
-        // if animal not swine and only has one subtype option set subtype automatically
-        if (mappedSubtypes.length === 1) {
-          handleInputChanges({ subtype: String(mappedSubtypes[0].id) });
+    apiCache
+      .callEndpoint(`api/animal_subtypes/${formData.animalId}/`)
+      .then((response) => {
+        if (response.status === 200) {
+          const { data } = response;
+          const mappedSubtypes = data.map((row: any) => ({
+            id: String(row.id),
+            label: row.name,
+            value: row,
+          }));
+          setSubtypes(mappedSubtypes);
+          // if animal not swine and only has one subtype option set subtype automatically
+          if (mappedSubtypes.length === 1) {
+            handleInputChanges({ subtype: String(mappedSubtypes[0].id) });
+          }
         }
-      }
-    });
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.animalId]);
 
@@ -113,20 +121,20 @@ export default function OtherAnimals({
             isRequired
           />
 
-          {formData.subtype &&
-          subtypes.find((s) => s.id.toString() === formData.subtype)?.value
+          {formData.subtype
+          && subtypes.find((s) => s.id.toString() === formData.subtype)?.value
             .solidperpoundperanimalperday !== 0 ? (
-            <Select
-              label="Manure Type"
-              name="manureType"
-              value={formData.manureType}
-              items={MANURE_TYPE_OPTIONS}
-              onChange={(e) => {
-                handleInputChanges({ manureType: e as number });
-              }}
-              isRequired
-            />
-          ) : null}
+              <Select
+                label="Manure Type"
+                name="manureType"
+                value={formData.manureType}
+                items={MANURE_TYPE_OPTIONS}
+                onChange={(e) => {
+                  handleInputChanges({ manureType: e as number });
+                }}
+                isRequired
+              />
+            ) : null}
         </Grid>
       )}
       <Grid size={formGridBreakpoints}>

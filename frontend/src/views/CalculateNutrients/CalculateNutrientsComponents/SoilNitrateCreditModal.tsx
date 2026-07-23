@@ -34,7 +34,8 @@ export default function SoilNitrateCreditModal({
   setFields,
   onClose,
   ...props
-}: SoilNitrateCreditModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
+}: SoilNitrateCreditModalProps &
+  Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const [formData, setFormData] = useState(initialModalData || defaultFormData);
 
   const handleSubmit = () => {
@@ -59,7 +60,10 @@ export default function SoilNitrateCreditModal({
     onClose();
   };
 
-  const handleNutrientChange = (prop: keyof NMPFileSoilNitrateCredit, value: number) => {
+  const handleNutrientChange = (
+    prop: keyof NMPFileSoilNitrateCredit,
+    value: number,
+  ) => {
     setFormData((prev) => ({ ...prev, [prop]: value, isCustomValue: true }));
   };
 

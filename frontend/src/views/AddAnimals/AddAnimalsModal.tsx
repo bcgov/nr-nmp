@@ -41,7 +41,9 @@ export default function AddAnimalsModal({
   onClose,
   ...props
 }: AddAnimalsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
-  const [formData, setFormData] = useState<NMPFileAnimal | undefined>(initialModalData);
+  const [formData, setFormData] = useState<NMPFileAnimal | undefined>(
+    initialModalData,
+  );
   const [animals, setAnimals] = useState<SelectOption<Animal>[]>([]);
   const apiCache = useContext(APICacheContext);
 
@@ -66,20 +68,33 @@ export default function AddAnimalsModal({
       // Whenever the animal type changes, reset the form
       if (changes.animalId !== undefined) {
         if (changes.animalId === BEEF_COW_ID) {
-          return { ...INITIAL_BEEF_FORM_DATA, ...changes, uuid: crypto.randomUUID() };
+          return {
+            ...INITIAL_BEEF_FORM_DATA,
+            ...changes,
+            uuid: crypto.randomUUID(),
+          };
         }
         if (changes.animalId === DAIRY_COW_ID) {
-          return { ...INITIAL_DAIRY_FORM_DATA, ...changes, uuid: crypto.randomUUID() };
+          return {
+            ...INITIAL_DAIRY_FORM_DATA,
+            ...changes,
+            uuid: crypto.randomUUID(),
+          };
         }
         if (changes.animalId === POULTRY_ID) {
-          return { ...INITIAL_POULTRY_FORM_DATA, ...changes, uuid: crypto.randomUUID() };
+          return {
+            ...INITIAL_POULTRY_FORM_DATA,
+            ...changes,
+            uuid: crypto.randomUUID(),
+          };
         }
 
         if (!OTHER_ANIMAL_IDS.some((id) => id === changes.animalId)) {
           throw new Error(`Invalid animalId: ${changes.animalId}`);
         }
         return {
-          manureType: changes.animalId === SWINE_ID ? ManureType.Liquid : ManureType.Solid,
+          manureType:
+            changes.animalId === SWINE_ID ? ManureType.Liquid : ManureType.Solid,
           daysCollected: 0,
           ...changes,
           animalId: changes.animalId as OtherAnimalId,
@@ -88,24 +103,28 @@ export default function AddAnimalsModal({
       }
 
       if (prev === undefined) {
-        throw new Error('AddAnimalsModal tried to change a property before animalId');
+        throw new Error(
+          'AddAnimalsModal tried to change a property before animalId',
+        );
       }
       return { ...prev, ...changes };
     });
   };
 
   useEffect(() => {
-    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const options = (data as Animal[]).map((row) => ({
-          id: String(row.id),
-          label: row.name,
-          value: row,
-        }));
-        setAnimals(options);
-      }
-    });
+    apiCache
+      .callEndpoint('/api/animals/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          const options = (data as Animal[]).map((row) => ({
+            id: String(row.id),
+            label: row.name,
+            value: row,
+          }));
+          setAnimals(options);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -149,14 +168,15 @@ export default function AddAnimalsModal({
           onCancel={onClose}
         />
       )}
-      {formData !== undefined && OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
-        <OtherAnimals
-          animals={animals}
-          formData={formData as NMPFileOtherAnimal}
-          handleInputChanges={handleInputChanges}
-          handleSubmit={handleSubmit}
-          onCancel={onClose}
-        />
+      {formData !== undefined
+        && OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
+          <OtherAnimals
+            animals={animals}
+            formData={formData as NMPFileOtherAnimal}
+            handleInputChanges={handleInputChanges}
+            handleSubmit={handleSubmit}
+            onCancel={onClose}
+          />
       )}
     </Modal>
   );

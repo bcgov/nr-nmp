@@ -6,7 +6,11 @@ import {
   ButtonGroup,
 } from '@bcgov/design-system-react-components';
 import Divider from '@mui/material/Divider';
-import { AlertDialogCloseBtn, AlertDialogContinueBtn, AlertDialogExtraConfig } from '@/types';
+import {
+  AlertDialogCloseBtn,
+  AlertDialogContinueBtn,
+  AlertDialogExtraConfig,
+} from '@/types';
 
 export interface ModalProps {
   isOpen: boolean;

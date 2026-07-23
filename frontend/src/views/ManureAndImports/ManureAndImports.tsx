@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRowId, GridRenderCellParams } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRowId,
+  GridRenderCellParams,
+} from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
@@ -20,7 +25,11 @@ import useAppState from '@/hooks/useAppState';
 import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS, STORAGE } from '@/constants/routes';
 
 import { AlertDialog, Tabs, View } from '@/components/common';
-import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
+import {
+  addRecordGroupStyle,
+  customTableStyle,
+  tableActionButtonCss,
+} from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
 import { booleanChecker, liquidSolidManureDisplay, printNum } from '@/utils/utils';
 import { DAIRY_COW_ID } from '@/constants';
@@ -31,7 +40,9 @@ export default function ManureAndImports() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
 
-  const [animalList] = useState<Array<NMPFileAnimal>>(state.nmpFile.years[0]?.farmAnimals || []);
+  const [animalList] = useState<Array<NMPFileAnimal>>(
+    state.nmpFile.years[0]?.farmAnimals || [],
+  );
 
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [rowEditIndex, setRowEditIndex] = useState<number | undefined>(undefined);
@@ -46,9 +57,9 @@ export default function ManureAndImports() {
   >([]);
 
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
-    undefined,
-  );
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<
+    AlertDialogContinueBtn | undefined
+  >(undefined);
 
   const hasDairyCattle = useMemo(
     () => animalList.some((animal) => animal.animalId === DAIRY_COW_ID),
@@ -63,9 +74,8 @@ export default function ManureAndImports() {
         (item) => item.inputunit === data.units,
       );
 
-      const annualAmountUSGallonsVolume =
-        (data.annualAmount || 0) *
-        (liquidManureConversionFactor?.usgallonsoutput
+      const annualAmountUSGallonsVolume = (data.annualAmount || 0)
+        * (liquidManureConversionFactor?.usgallonsoutput
           ? parseFloat(liquidManureConversionFactor.usgallonsoutput)
           : 0);
 
@@ -79,23 +89,20 @@ export default function ManureAndImports() {
         (item) => item.inputunit === data.units,
       );
 
-      const annualAmountCubicMetersVolume =
-        (data.annualAmount || 0) *
-        getDensityFactoredConversionUsingMoisture(
+      const annualAmountCubicMetersVolume = (data.annualAmount || 0)
+        * getDensityFactoredConversionUsingMoisture(
           data.moisture || 0,
           solidManureConversionFactor?.cubicmetersoutput || '',
         );
 
-      const annualAmountCubicYardsVolume =
-        (data.annualAmount || 0) *
-        getDensityFactoredConversionUsingMoisture(
+      const annualAmountCubicYardsVolume = (data.annualAmount || 0)
+        * getDensityFactoredConversionUsingMoisture(
           data.moisture || 0,
           solidManureConversionFactor?.cubicyardsoutput || '',
         );
 
-      const annualAmountTonsWeight =
-        (data.annualAmount || 0) *
-        getDensityFactoredConversionUsingMoisture(
+      const annualAmountTonsWeight = (data.annualAmount || 0)
+        * getDensityFactoredConversionUsingMoisture(
           data.moisture || 0,
           solidManureConversionFactor?.ustonsoutput || '',
         );
@@ -164,11 +171,13 @@ export default function ManureAndImports() {
           setSolidManureDropdownOptions(response.data);
         }
       });
-    apiCache.callEndpoint('/api/animals/').then((response: { status?: any; data: Animal[] }) => {
-      if (response.status === 200) {
-        setAnimals(response.data);
-      }
-    });
+    apiCache
+      .callEndpoint('/api/animals/')
+      .then((response: { status?: any; data: Animal[] }) => {
+        if (response.status === 200) {
+          setAnimals(response.data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -285,7 +294,9 @@ export default function ManureAndImports() {
             <FontAwesomeIcon
               css={tableActionButtonCss}
               onClick={() => {
-                setDialogText(`Are you sure you want to delete ${row.row.managedManureName}?`);
+                setDialogText(
+                  `Are you sure you want to delete ${row.row.managedManureName}?`,
+                );
                 setDeleteBtnConfig({
                   btnText: 'Delete',
                   handleClick: () => {
@@ -337,7 +348,9 @@ export default function ManureAndImports() {
       </div>
       {isDialogOpen && (
         <ManureImportModal
-          initialModalData={rowEditIndex !== undefined ? manures[rowEditIndex] : undefined}
+          initialModalData={
+            rowEditIndex !== undefined ? manures[rowEditIndex] : undefined
+          }
           handleDialogClose={handleDialogClose}
           handleSubmit={handleSubmit}
           manuresList={manures}
@@ -347,7 +360,12 @@ export default function ManureAndImports() {
       {state.showAnimalsStep && hasDairyCattle ? (
         <Tabs
           activeTab={1}
-          tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+          tabLabel={[
+            'Add Animals',
+            'Manure & Imports',
+            'Storage',
+            'Nutrient Analysis',
+          ]}
         />
       ) : state.showAnimalsStep ? (
         <Tabs

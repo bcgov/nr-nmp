@@ -51,7 +51,9 @@ export function getFertilizerUnitUSGallonPerAcreConversion(unitId: number) {
  */
 export function addText(doc: jsPDF, text: string, x: number, nextY: number) {
   doc.text(text, x, nextY, { maxWidth: 180 });
-  return Math.ceil(doc.getTextDimensions(doc.splitTextToSize(text, 180)).h) + 2 + nextY;
+  return (
+    Math.ceil(doc.getTextDimensions(doc.splitTextToSize(text, 180)).h) + 2 + nextY
+  );
 }
 
 const superscriptNumberDict: { [num: string]: string } = {
