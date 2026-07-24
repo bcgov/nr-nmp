@@ -22,7 +22,7 @@ exports[`Reporting renders correctly 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -46,7 +46,7 @@ exports[`Reporting renders correctly 1`] = `
               class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
             >
               <span
-                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-1dfpv9p-MuiStepLabel-label"
               >
                 Home
               </span>
@@ -71,7 +71,7 @@ exports[`Reporting renders correctly 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -95,7 +95,7 @@ exports[`Reporting renders correctly 1`] = `
               class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
             >
               <span
-                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-1dfpv9p-MuiStepLabel-label"
               >
                 Farm Information
               </span>
@@ -151,7 +151,7 @@ exports[`Reporting renders correctly 1`] = `
               class="bcds-react-aria-Button medium primary  "
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«r0»"
+              id="react-aria-_r_0_"
               tabindex="0"
               type="button"
             >
@@ -165,7 +165,7 @@ exports[`Reporting renders correctly 1`] = `
               class="bcds-react-aria-Button medium primary  "
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«r2»"
+              id="react-aria-_r_2_"
               tabindex="0"
               type="button"
             >
@@ -193,7 +193,7 @@ exports[`Reporting renders correctly 1`] = `
             class="bcds-react-aria-Button medium primary  "
             data-rac=""
             data-react-aria-pressable="true"
-            id="react-aria-«r4»"
+            id="react-aria-_r_4_"
             tabindex="0"
             type="button"
           >
@@ -214,7 +214,7 @@ exports[`Reporting renders correctly 1`] = `
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r6»"
+          id="react-aria-_r_6_"
           tabindex="0"
           type="button"
         >
@@ -224,7 +224,7 @@ exports[`Reporting renders correctly 1`] = `
           class="bcds-react-aria-Button medium primary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r8»"
+          id="react-aria-_r_8_"
           tabindex="0"
           type="button"
         >

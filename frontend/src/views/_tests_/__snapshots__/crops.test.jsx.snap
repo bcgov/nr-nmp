@@ -22,7 +22,7 @@ exports[`Crops is correct 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -46,7 +46,7 @@ exports[`Crops is correct 1`] = `
               class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
             >
               <span
-                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-1dfpv9p-MuiStepLabel-label"
               >
                 Home
               </span>
@@ -71,7 +71,7 @@ exports[`Crops is correct 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -95,7 +95,7 @@ exports[`Crops is correct 1`] = `
               class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
             >
               <span
-                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-1dfpv9p-MuiStepLabel-label"
               >
                 Farm Information
               </span>
@@ -169,7 +169,7 @@ exports[`Crops is correct 1`] = `
       </div>
     </div>
     <div
-      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1t9y035-MuiDataGrid-root"
+      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-dv2dfv-MuiDataGrid-root"
       style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 0; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 840px; --DataGrid-columnsTotalWidth: 840px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
     >
       <div
@@ -190,7 +190,7 @@ exports[`Crops is correct 1`] = `
             role="presentation"
           />
           <div
-            class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+            class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1gj5o6u-MuiDataGrid-virtualScroller"
             role="presentation"
             style="overflow-x: hidden;"
           >
@@ -415,7 +415,7 @@ exports[`Crops is correct 1`] = `
                   <div
                     aria-colindex="5"
                     aria-sort="none"
-                    class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
+                    class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--last"
                     data-field="ActionsCrop2"
                     role="columnheader"
                     style="width: 200px;"
@@ -467,7 +467,7 @@ exports[`Crops is correct 1`] = `
                     role="presentation"
                   />
                   <div
-                    class="MuiDataGrid-scrollbarFiller MuiDataGrid-scrollbarFiller--header"
+                    class="MuiDataGrid-scrollbarFiller"
                     role="presentation"
                   />
                 </div>
@@ -505,11 +505,12 @@ exports[`Crops is correct 1`] = `
           </div>
           <div
             aria-hidden="true"
-            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
+            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-14mn80j"
             tabindex="-1"
           >
             <div
               class="MuiDataGrid-scrollbarContent"
+              style="width: 840px;"
             />
           </div>
         </div>
@@ -517,7 +518,7 @@ exports[`Crops is correct 1`] = `
       <style
         href="/MuiDataGridVariables-3851315942"
       >
-        .MuiDataGridVariables-3851315942{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:rgba(0, 0, 0, 0.04);--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#1976d2;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;}
+        .MuiDataGridVariables-3851315942{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:#f5f5f5;--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#eeeeee;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;}
       </style>
     </div>
     <div
@@ -532,7 +533,7 @@ exports[`Crops is correct 1`] = `
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r0»"
+          id="react-aria-_r_0_"
           tabindex="0"
           type="button"
         >
@@ -542,7 +543,7 @@ exports[`Crops is correct 1`] = `
           class="bcds-react-aria-Button medium primary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r2»"
+          id="react-aria-_r_2_"
           tabindex="0"
           type="button"
         >
@@ -579,7 +580,7 @@ exports[`CropsModal is correct 1`] = `
       >
         <button
           aria-label="Dismiss"
-          id="react-aria-«rj»"
+          id="react-aria-_r_j_"
           style="width: 1px; height: 1px;"
           tabindex="-1"
         />
@@ -602,7 +603,7 @@ exports[`CropsModal is correct 1`] = `
               class="bcds-react-aria-Button small tertiary  icon"
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«rl»"
+              id="react-aria-_r_l_"
               tabindex="0"
               type="button"
             >
@@ -655,18 +656,18 @@ exports[`CropsModal is correct 1`] = `
                   >
                     <span
                       class="bcds-react-aria-Select--Label"
-                      id="react-aria-«rq»"
+                      id="react-aria-_r_q_"
                     >
                       Crop Type (required)
                     </span>
                     <button
                       aria-expanded="false"
                       aria-haspopup="listbox"
-                      aria-labelledby="react-aria-«ru» react-aria-«rq»"
+                      aria-labelledby="react-aria-_r_u_ react-aria-_r_q_"
                       class="bcds-react-aria-Select--Button medium false"
                       data-rac=""
                       data-react-aria-pressable="true"
-                      id="react-aria-«rp»"
+                      id="react-aria-_r_p_"
                       tabindex="0"
                       type="button"
                     >
@@ -674,7 +675,7 @@ exports[`CropsModal is correct 1`] = `
                         class="bcds-react-aria-SelectValue"
                         data-placeholder="true"
                         data-rac=""
-                        id="react-aria-«ru»"
+                        id="react-aria-_r_u_"
                       >
                         Select an item
                       </span>
@@ -726,7 +727,7 @@ exports[`CropsModal is correct 1`] = `
                   class="bcds-react-aria-Button medium secondary  "
                   data-rac=""
                   data-react-aria-pressable="true"
-                  id="react-aria-«r11»"
+                  id="react-aria-_r_11_"
                   tabindex="0"
                   type="button"
                 >
@@ -738,7 +739,7 @@ exports[`CropsModal is correct 1`] = `
                   data-rac=""
                   data-react-aria-pressable="true"
                   disabled=""
-                  id="react-aria-«r13»"
+                  id="react-aria-_r_13_"
                   type="submit"
                 >
                   Calculate
@@ -749,7 +750,7 @@ exports[`CropsModal is correct 1`] = `
                   data-rac=""
                   data-react-aria-pressable="true"
                   disabled=""
-                  id="react-aria-«r15»"
+                  id="react-aria-_r_15_"
                   type="submit"
                 >
                   Submit

@@ -22,7 +22,7 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -46,7 +46,7 @@ exports[`renders correctly 1`] = `
               class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
             >
               <span
-                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-1dfpv9p-MuiStepLabel-label"
               >
                 Home
               </span>
@@ -71,7 +71,7 @@ exports[`renders correctly 1`] = `
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
@@ -95,7 +95,7 @@ exports[`renders correctly 1`] = `
               class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
             >
               <span
-                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-1dfpv9p-MuiStepLabel-label"
               >
                 Farm Information
               </span>
@@ -131,7 +131,7 @@ exports[`renders correctly 1`] = `
             <label
               class="bcds-react-aria-TextField--Label"
               for="farmName"
-              id="react-aria-«r1»"
+              id="react-aria-_r_1_"
             >
               Farm Name
               <span
@@ -144,7 +144,7 @@ exports[`renders correctly 1`] = `
               class="bcds-react-aria-TextField--container medium"
             >
               <input
-                aria-labelledby="react-aria-«r1»"
+                aria-labelledby="react-aria-_r_1_"
                 class="bcds-react-aria-TextField--Input"
                 data-rac=""
                 id="farmName"
@@ -171,18 +171,18 @@ exports[`renders correctly 1`] = `
           >
             <span
               class="bcds-react-aria-Select--Label"
-              id="react-aria-«r8»"
+              id="react-aria-_r_8_"
             >
               Year (required)
             </span>
             <button
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="react-aria-«rc» react-aria-«r8»"
+              aria-labelledby="react-aria-_r_c_ react-aria-_r_8_"
               class="bcds-react-aria-Select--Button medium false"
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«r7»"
+              id="react-aria-_r_7_"
               tabindex="0"
               type="button"
             >
@@ -190,7 +190,7 @@ exports[`renders correctly 1`] = `
                 class="bcds-react-aria-SelectValue"
                 data-placeholder="true"
                 data-rac=""
-                id="react-aria-«rc»"
+                id="react-aria-_r_c_"
               >
                 Select an item
               </span>
@@ -290,18 +290,18 @@ exports[`renders correctly 1`] = `
           >
             <span
               class="bcds-react-aria-Select--Label"
-              id="react-aria-«ri»"
+              id="react-aria-_r_i_"
             >
               Region (required)
             </span>
             <button
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="react-aria-«rm» react-aria-«ri»"
+              aria-labelledby="react-aria-_r_m_ react-aria-_r_i_"
               class="bcds-react-aria-Select--Button medium false"
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«rh»"
+              id="react-aria-_r_h_"
               tabindex="0"
               type="button"
             >
@@ -309,7 +309,7 @@ exports[`renders correctly 1`] = `
                 class="bcds-react-aria-SelectValue"
                 data-placeholder="true"
                 data-rac=""
-                id="react-aria-«rm»"
+                id="react-aria-_r_m_"
               >
                 Select an item
               </span>
@@ -360,27 +360,27 @@ exports[`renders correctly 1`] = `
           >
             <span
               class="bcds-react-aria-Select--Label"
-              id="react-aria-«rs»"
+              id="react-aria-_r_s_"
             >
               Subregion (required)
             </span>
             <button
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="react-aria-«r10» react-aria-«rs»"
+              aria-labelledby="react-aria-_r_10_ react-aria-_r_s_"
               class="bcds-react-aria-Select--Button medium false"
               data-disabled="true"
               data-rac=""
               data-react-aria-pressable="true"
               disabled=""
-              id="react-aria-«rr»"
+              id="react-aria-_r_r_"
               type="button"
             >
               <span
                 class="bcds-react-aria-SelectValue"
                 data-placeholder="true"
                 data-rac=""
-                id="react-aria-«r10»"
+                id="react-aria-_r_10_"
               >
                 Select an item
               </span>
@@ -431,7 +431,7 @@ exports[`renders correctly 1`] = `
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
             data-rac=""
-            id="react-aria-«r13»"
+            id="react-aria-_r_13_"
             role="radiogroup"
           >
             <div
@@ -447,7 +447,7 @@ exports[`renders correctly 1`] = `
                 >
                   <input
                     data-react-aria-pressable="true"
-                    name="react-aria-«r18»"
+                    name="react-aria-_r_18_"
                     tabindex="-1"
                     title=""
                     type="radio"
@@ -468,7 +468,7 @@ exports[`renders correctly 1`] = `
                   <input
                     checked=""
                     data-react-aria-pressable="true"
-                    name="react-aria-«r18»"
+                    name="react-aria-_r_18_"
                     tabindex="0"
                     title=""
                     type="radio"
@@ -495,7 +495,7 @@ exports[`renders correctly 1`] = `
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
             data-rac=""
-            id="react-aria-«r19»"
+            id="react-aria-_r_19_"
             role="radiogroup"
           >
             <div
@@ -511,7 +511,7 @@ exports[`renders correctly 1`] = `
                 >
                   <input
                     data-react-aria-pressable="true"
-                    name="react-aria-«r1e»"
+                    name="react-aria-_r_1e_"
                     tabindex="-1"
                     title=""
                     type="radio"
@@ -532,7 +532,7 @@ exports[`renders correctly 1`] = `
                   <input
                     checked=""
                     data-react-aria-pressable="true"
-                    name="react-aria-«r1e»"
+                    name="react-aria-_r_1e_"
                     tabindex="0"
                     title=""
                     type="radio"
@@ -553,7 +553,7 @@ exports[`renders correctly 1`] = `
             aria-label="Farm Animals"
             class="css-1hyfx7x"
             data-rac=""
-            id="react-aria-«r1f»"
+            id="react-aria-_r_1f_"
             role="group"
           >
             <div
@@ -575,7 +575,7 @@ exports[`renders correctly 1`] = `
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r1k»"
+          id="react-aria-_r_1k_"
           tabindex="0"
           type="button"
         >
@@ -585,7 +585,7 @@ exports[`renders correctly 1`] = `
           class="bcds-react-aria-Button medium primary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r1m»"
+          id="react-aria-_r_1m_"
           tabindex="0"
           type="button"
         >
