@@ -5,4 +5,7 @@ declare global {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export const env: Record<string, any> = { ...import.meta.env, ...window.config };
+export const env: Record<string, any> = {
+  ...import.meta.env,
+  ...window.config,
+};

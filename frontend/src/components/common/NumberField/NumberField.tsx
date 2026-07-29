@@ -12,8 +12,10 @@ import { SvgExclamationIcon } from '@bcgov/design-system-react-components';
 import '@bcgov/design-tokens/css/variables.css';
 import './NumberField.css';
 
-export interface NumberFieldProps
-  extends Omit<ReactAriaNumberFieldProps, 'validate, minValue, maxValue'> {
+export interface NumberFieldProps extends Omit<
+  ReactAriaNumberFieldProps,
+  'validate, minValue, maxValue'
+> {
   /* Sets size of text input field */
   size?: 'medium' | 'small';
   /* Sets text label above text input field */
@@ -46,10 +48,9 @@ export default function NumberField({
 }: NumberFieldProps) {
   const validate = useMemo(() => {
     if (minValue !== undefined && maxValue !== undefined) {
-      return (value: number) =>
-        value < minValue! || value > maxValue!
-          ? [`Must be between ${minValue} and ${maxValue}.`]
-          : undefined;
+      return (value: number) => (value < minValue! || value > maxValue!
+        ? [`Must be between ${minValue} and ${maxValue}.`]
+        : undefined);
     }
     if (minValue !== undefined) {
       return (value: number) => (value < minValue! ? [`Minimum is ${minValue}.`] : undefined);

@@ -1,7 +1,14 @@
 /**
  * @summary The Farm Information page for the application
  */
-import React, { useState, useEffect, useContext, useMemo, useCallback, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Checkbox,
@@ -12,7 +19,13 @@ import {
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
-import { AlertDialog, Select, TextField, View, YesNoRadioButtons } from '@/components/common';
+import {
+  AlertDialog,
+  Select,
+  TextField,
+  View,
+  YesNoRadioButtons,
+} from '@/components/common';
 import {
   formCss,
   formGridBreakpoints,
@@ -30,14 +43,20 @@ export default function FarmInformation() {
   const apiCache = useContext(APICacheContext);
   const formRef = useRef<null | HTMLFormElement>(null);
 
-  const [formData, setFormData] = useState<NMPFileFarmDetails>({ ...state.nmpFile.farmDetails });
+  const [formData, setFormData] = useState<NMPFileFarmDetails>({
+    ...state.nmpFile.farmDetails,
+  });
 
   // Props for animal selections
-  const [rawAnimalNames, setRawAnimalNames] = useState<{ [id: string]: string }>({});
+  const [rawAnimalNames, setRawAnimalNames] = useState<{
+    [id: string]: string;
+  }>({});
 
   // Props for region selections
   const [regionOptions, setRegionOptions] = useState<SelectOption<Region>[]>([]);
-  const [subregionOptions, setSubregionOptions] = useState<SelectOption<Subregion>[]>([]);
+  const [subregionOptions, setSubregionOptions] = useState<
+    SelectOption<Subregion>[]
+  >([]);
 
   // Initialize year list up to current year + 1
   const yearOptions = useMemo(() => {
@@ -94,11 +113,13 @@ export default function FarmInformation() {
     }
     apiCache.callEndpoint(`api/subregions/${region}/`).then((response) => {
       const { data } = response;
-      const subregions: SelectOption<Subregion>[] = (data as Subregion[]).map((row) => ({
-        id: row.id,
-        label: row.name,
-        value: row,
-      }));
+      const subregions: SelectOption<Subregion>[] = (data as Subregion[]).map(
+        (row) => ({
+          id: row.id,
+          label: row.name,
+          value: row,
+        }),
+      );
 
       setSubregionOptions(subregions);
     });
@@ -122,7 +143,9 @@ export default function FarmInformation() {
           key={asTitleCase}
           value={id}
         >
-          I have {pluralName.toLowerCase()}
+          I have
+          {' '}
+          {pluralName.toLowerCase()}
         </Checkbox>
       );
     });
@@ -172,7 +195,9 @@ export default function FarmInformation() {
     const a = document.createElement('a');
     a.href = url;
 
-    const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
+    const prependDate = new Date().toLocaleDateString('sv-SE', {
+      dateStyle: 'short',
+    });
     const farmName = formData?.farmName;
 
     a.download = `${prependDate}-${farmName}.nmp`;
@@ -194,7 +219,11 @@ export default function FarmInformation() {
         title="Warning - Unsaved data"
         onOpenChange={() => setShowWarningDialog(false)}
         continueBtn={{ handleClick: () => navigate(LANDING_PAGE) }}
-        extraBtn={{ btnText: 'Download', variant: 'primary', handleClick: () => downloadBlob() }}
+        extraBtn={{
+          btnText: 'Download',
+          variant: 'primary',
+          handleClick: () => downloadBlob(),
+        }}
       >
         <div style={{ color: 'red' }}>
           Download file to save the changes you made, or Continue without saving.
@@ -238,7 +267,10 @@ export default function FarmInformation() {
               value={formData.farmRegion}
               onChange={(e) => {
                 const opt = regionOptions.find((r) => r.id === e)!;
-                handleChange({ farmRegion: e as number, regionLocationId: opt.value.locationid });
+                handleChange({
+                  farmRegion: e as number,
+                  regionLocationId: opt.value.locationid,
+                });
               }}
             />
           </Grid>
@@ -252,7 +284,9 @@ export default function FarmInformation() {
               isDisabled={!(subregionOptions && subregionOptions.length)}
             />
           </Grid>
-          <Subheader>Select all agriculture that occupy your farm (check all that apply)</Subheader>
+          <Subheader>
+            Select all agriculture that occupy your farm (check all that apply)
+          </Subheader>
           <Grid size={12}>
             <YesNoRadioButtons
               value={formData.hasHorticulturalCrops}
@@ -279,8 +313,8 @@ export default function FarmInformation() {
               css={
                 formData.hasAnimals
                   ? {
-                      '> div': [showCheckboxGroup, { gap: '0 !important' }],
-                    }
+                    '> div': [showCheckboxGroup, { gap: '0 !important' }],
+                  }
                   : hideCheckboxGroup
               }
               orientation="vertical"

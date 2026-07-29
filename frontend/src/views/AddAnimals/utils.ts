@@ -20,7 +20,9 @@ export function calculateAnnualSolidManure(
       `Invalid number of collection days: must be between 0 and 365 but received ${daysCollected}`,
     );
   }
-  return (poundsPerAnimal * animalsPerFarm * daysCollected * (coefficient || 1)) / 2000; // 1 US ton = 2000 pounds
+  return (
+    (poundsPerAnimal * animalsPerFarm * daysCollected * (coefficient || 1)) / 2000
+  ); // 1 US ton = 2000 pounds
 }
 
 /**
@@ -97,5 +99,9 @@ export function calculateAnnualWashWater(
   washWaterUnit: WashWaterUnit,
   animalsPerFarm: number,
 ) {
-  return washWater * 365 * (washWaterUnit === PER_DAY_PER_ANIMAL_UNIT ? animalsPerFarm : 1);
+  return (
+    washWater
+    * 365
+    * (washWaterUnit === PER_DAY_PER_ANIMAL_UNIT ? animalsPerFarm : 1)
+  );
 }

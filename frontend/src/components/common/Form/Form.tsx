@@ -1,6 +1,10 @@
 import React from 'react';
 import { FormProps as BaseFormProps, PressEvent } from 'react-aria-components';
-import { Button, ButtonGroup, Form as BcGovForm } from '@bcgov/design-system-react-components';
+import {
+  Button,
+  ButtonGroup,
+  Form as BcGovForm,
+} from '@bcgov/design-system-react-components';
 import Divider from '@mui/material/Divider';
 import { formCss } from '@/common.styles';
 

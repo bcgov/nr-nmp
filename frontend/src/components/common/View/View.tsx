@@ -1,7 +1,12 @@
 import React from 'react';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import ProgressStepper from '../ProgressStepper/ProgressStepper';
-import { StyledContent, PageTitleStyle, AppTitleStyle, ButtonGroupWrapper } from './view.style';
+import {
+  StyledContent,
+  PageTitleStyle,
+  AppTitleStyle,
+  ButtonGroupWrapper,
+} from './view.style';
 
 interface ViewProps {
   title: string;

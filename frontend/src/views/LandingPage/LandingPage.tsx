@@ -27,7 +27,10 @@ export default function LandingPage() {
     fr.onload = () => {
       const data = fr.result;
       if (data) {
-        dispatch({ type: 'OVERWRITE_NMPFILE', newFile: JSON.parse(data as string) });
+        dispatch({
+          type: 'OVERWRITE_NMPFILE',
+          newFile: JSON.parse(data as string),
+        });
         navigate('/farm-information');
       }
     };
@@ -41,10 +44,11 @@ export default function LandingPage() {
   return (
     <View title="Nutrient Management Calculator">
       <p>
-        The Nutrient Management Calculator provides a starting point for the efficient use of
-        fertilizer and manure on farms. This tool assists in you choosing the right rate and
-        nutrient source for your crops. You can start a new calculation or pick up where you left
-        off by uploading an existing .nmp file.
+        The Nutrient Management Calculator provides a starting point for the
+        efficient use of fertilizer and manure on farms. This tool assists in you
+        choosing the right rate and nutrient source for your crops. You can start a
+        new calculation or pick up where you left off by uploading an existing .nmp
+        file.
       </p>
       <ButtonGroup
         alignment="start"

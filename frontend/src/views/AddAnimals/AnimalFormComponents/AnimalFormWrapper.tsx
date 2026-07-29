@@ -7,7 +7,9 @@ import { Animal, SelectOption } from '@/types';
 type AnimalFormWrapperProps = {
   animals: SelectOption<Animal>[];
   selectedAnimalId?: string;
-  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
+  handleInputChanges: (changes: {
+    [name: string]: string | number | undefined;
+  }) => void;
   onCancel: (e: PressEvent) => void;
   onSubmit: () => void;
   isConfirmDisabled?: boolean;

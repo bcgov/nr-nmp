@@ -1,7 +1,14 @@
 /**
  * @summary The field table on the calculate nutrients page
  */
-import { useContext, useEffect, useState, Dispatch, SetStateAction, useMemo } from 'react';
+import {
+  useContext,
+  useEffect,
+  useState,
+  Dispatch,
+  SetStateAction,
+  useMemo,
+} from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -163,14 +170,14 @@ export default function ManureModal({
     if (!manureForm.solidLiquid) return null;
 
     // Convert string to ManureType enum
-    return manureForm.solidLiquid === 'Liquid' ? ManureType.Liquid : ManureType.Solid;
+    return manureForm.solidLiquid === 'Liquid'
+      ? ManureType.Liquid
+      : ManureType.Solid;
   }, [manureForm.solidLiquid]);
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
 
-  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
-    null,
-  );
+  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(null);
 
   const [solidConversions, setSolidConversions] = useState<
     SolidMaterialApplicationTonPerAcreRateConversions[]
@@ -187,20 +194,27 @@ export default function ManureModal({
   );
 
   const regions: Region[] = apiCache.getInitializedResponse('regions').data;
-  const nMineralizations: NitrogenMineralization[] =
-    apiCache.getInitializedResponse('nmineralizations').data;
+  const nMineralizations: NitrogenMineralization[] = apiCache.getInitializedResponse('nmineralizations').data;
   const applicableNMineralization = useMemo(() => {
-    const region = regions.find((r) => r.id === state.nmpFile.farmDetails.farmRegion);
+    const region = regions.find(
+      (r) => r.id === state.nmpFile.farmDetails.farmRegion,
+    );
     if (!region) {
-      throw new Error(`No region found with id ${state.nmpFile.farmDetails.farmRegion}`);
+      throw new Error(
+        `No region found with id ${state.nmpFile.farmDetails.farmRegion}`,
+      );
     }
     const locationId = region.locationid;
     return nMineralizations.find(
-      (n) =>
-        n.locationid === locationId &&
-        n.nmineralizationid === selectedNutrientAnalysis?.nMineralizationId,
+      (n) => n.locationid === locationId
+        && n.nmineralizationid === selectedNutrientAnalysis?.nMineralizationId,
     );
-  }, [regions, nMineralizations, selectedNutrientAnalysis, state.nmpFile.farmDetails.farmRegion]);
+  }, [
+    regions,
+    nMineralizations,
+    selectedNutrientAnalysis,
+    state.nmpFile.farmDetails.farmRegion,
+  ]);
 
   const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
   const selectedManure = useMemo(
@@ -225,11 +239,11 @@ export default function ManureModal({
 
   useEffect(() => {
     if (
-      !yearDataWithPendingApplication ||
-      !selectedMaterialType ||
-      manureUnits.length === 0 ||
-      solidConversions.length === 0 ||
-      liquidConversions.length === 0
+      !yearDataWithPendingApplication
+      || !selectedMaterialType
+      || manureUnits.length === 0
+      || solidConversions.length === 0
+      || liquidConversions.length === 0
     ) {
       setMaterialRemainingData(null);
       return;
@@ -258,17 +272,23 @@ export default function ManureModal({
   ]);
 
   const [ammoniaRetentions, setAmmoniaRetentions] = useState<AmmoniaRetention[]>([]);
-  const [defaultAmmonia, setDefaultAmmonia] = useState<number | undefined>(undefined);
+  const [defaultAmmonia, setDefaultAmmonia] = useState<number | undefined>(
+    undefined,
+  );
 
-  const [nmineralizations, setNMineralizations] = useState<NitrogenMineralization[]>([]);
-  const [defaultOrganicN, setDefaultOrganicN] = useState<number | undefined>(undefined);
+  const [nmineralizations, setNMineralizations] = useState<NitrogenMineralization[]>(
+    [],
+  );
+  const [defaultOrganicN, setDefaultOrganicN] = useState<number | undefined>(
+    undefined,
+  );
 
   const filteredApplicationMethods = useMemo(() => {
     if (!manureForm.solidLiquid) return [];
     return SEASON_APPLICATION.filter(
-      (a) =>
-        a.ManureType === 3 || // 3 here means solid or liquid
-        a.ManureType === ManureType[manureForm.solidLiquid as keyof typeof ManureType],
+      (a) => a.ManureType === 3 // 3 here means solid or liquid
+        || a.ManureType
+          === ManureType[manureForm.solidLiquid as keyof typeof ManureType],
     ).map((a) => ({
       id: a.Id,
       label: a.Name,
@@ -298,9 +318,8 @@ export default function ManureModal({
   useEffect(() => {
     if (!selectedManure) return;
     const valueDecimal = ammoniaRetentions.find(
-      (a) =>
-        a.drymatter === selectedManure.drymatterid &&
-        a.seasonapplicationid === manureForm.applicationId,
+      (a) => a.drymatter === selectedManure.drymatterid
+        && a.seasonapplicationid === manureForm.applicationId,
     )?.value;
     const valuePercent = valueDecimal ? valueDecimal * 100 : undefined;
     setDefaultAmmonia(valuePercent);
@@ -317,31 +336,36 @@ export default function ManureModal({
   useEffect(() => {
     if (!selectedManure) return;
     const valueDecimal = nmineralizations.find(
-      (n) =>
-        n.nmineralizationid === selectedManure.nmineralizationid &&
-        n.locationid === state.nmpFile.farmDetails.regionLocationId,
+      (n) => n.nmineralizationid === selectedManure.nmineralizationid
+        && n.locationid === state.nmpFile.farmDetails.regionLocationId,
     )?.firstyearvalue;
     const valuePercent = valueDecimal ? valueDecimal * 100 : undefined;
     setDefaultOrganicN(valuePercent);
     // TODO: DON'T set this if the user just opened the editing modal (resets the saved value)
     if (valuePercent !== undefined) {
-      setManureForm((prev) => ({ ...prev, nAvailable: valuePercent, nAvailableAdjusted: false }));
+      setManureForm((prev) => ({
+        ...prev,
+        nAvailable: valuePercent,
+        nAvailableAdjusted: false,
+      }));
     }
   }, [state.nmpFile.farmDetails.regionLocationId, selectedManure, nmineralizations]);
 
   useEffect(() => {
-    apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
-      if (response.status === 200) {
-        const { data } = response;
-        setManureUnits(
-          data.map((unit) => ({
-            value: unit,
-            id: unit.id,
-            label: unit.name,
-          })),
-        );
-      }
-    });
+    apiCache
+      .callEndpoint('api/units/')
+      .then((response: { status?: any; data: Units[] }) => {
+        if (response.status === 200) {
+          const { data } = response;
+          setManureUnits(
+            data.map((unit) => ({
+              value: unit,
+              id: unit.id,
+              label: unit.name,
+            })),
+          );
+        }
+      });
 
     apiCache
       .callEndpoint('api/ammoniaretentions/')
@@ -362,7 +386,10 @@ export default function ManureModal({
     apiCache
       .callEndpoint('api/solidmaterialapplicationtonperacrerateconversions/')
       .then(
-        (response: { status?: any; data: SolidMaterialApplicationTonPerAcreRateConversions[] }) => {
+        (response: {
+          status?: any;
+          data: SolidMaterialApplicationTonPerAcreRateConversions[];
+        }) => {
           if (response.status === 200) {
             setSolidConversions(response.data);
           }
@@ -483,7 +510,9 @@ export default function ManureModal({
                   label: ele.manureName,
                 }))}
                 onChange={(e) => {
-                  const manureWNutrients = manuresWithNutrients.find((m) => m.manureId === e)!;
+                  const manureWNutrients = manuresWithNutrients.find(
+                    (m) => m.manureId === e,
+                  )!;
                   handleChanges({
                     manureId: e as number,
                     manureName: manureWNutrients.manureName,
@@ -528,22 +557,25 @@ export default function ManureModal({
               <NumberField
                 label="Ammonium-N Retention (%)"
                 value={manureForm.nh4Retention}
-                onChange={(e) =>
-                  handleChanges({ nh4Retention: e, nh4RetentionAdjusted: e !== defaultAmmonia })
-                }
+                onChange={(e) => handleChanges({
+                  nh4Retention: e,
+                  nh4RetentionAdjusted: e !== defaultAmmonia,
+                })}
                 maxValue={100}
                 iconRight={
-                  defaultAmmonia !== undefined && manureForm.nh4Retention !== defaultAmmonia ? (
+                  defaultAmmonia !== undefined
+                  && manureForm.nh4Retention !== defaultAmmonia ? (
                     <button
                       type="button"
                       css={{ backgroundColor: '#ffa500' }}
-                      onClick={() =>
-                        handleChanges({ nh4Retention: defaultAmmonia, nh4RetentionAdjusted: false })
-                      }
+                      onClick={() => handleChanges({
+                        nh4Retention: defaultAmmonia,
+                        nh4RetentionAdjusted: false,
+                      })}
                     >
                       <LoopIcon />
                     </button>
-                  ) : undefined
+                    ) : undefined
                 }
               />
             </Grid>
@@ -551,22 +583,25 @@ export default function ManureModal({
               <NumberField
                 label="Organic N Available (%)"
                 value={manureForm.nAvailable}
-                onChange={(e) =>
-                  handleChanges({ nAvailable: e, nAvailableAdjusted: e !== defaultOrganicN })
-                }
+                onChange={(e) => handleChanges({
+                  nAvailable: e,
+                  nAvailableAdjusted: e !== defaultOrganicN,
+                })}
                 maxValue={100}
                 iconRight={
-                  defaultOrganicN !== undefined && manureForm.nAvailable !== defaultOrganicN ? (
+                  defaultOrganicN !== undefined
+                  && manureForm.nAvailable !== defaultOrganicN ? (
                     <button
                       type="button"
                       css={{ backgroundColor: '#ffa500' }}
-                      onClick={() =>
-                        handleChanges({ nAvailable: defaultOrganicN, nAvailableAdjusted: false })
-                      }
+                      onClick={() => handleChanges({
+                        nAvailable: defaultOrganicN,
+                        nAvailableAdjusted: false,
+                      })}
                     >
                       <LoopIcon />
                     </button>
-                  ) : undefined
+                    ) : undefined
                 }
               />
             </Grid>
@@ -599,7 +634,10 @@ export default function ManureModal({
               />
             </Grid>
             <Grid size={{ ...formGridBreakpoints, md: 4 }}>
-              <span css={{ fontWeight: 'bold' }}>Still Required This Year (lb/ac) </span>
+              <span css={{ fontWeight: 'bold' }}>
+                Still Required This Year (lb/ac)
+                {' '}
+              </span>
               <DataGrid
                 sx={{ ...customTableStyle }}
                 columns={NUTRIENT_COLUMNS}
@@ -626,12 +664,13 @@ export default function ManureModal({
       ) : (
         <div style={{ color: 'red' }}>
           <div style={{ padding: '1rem' }}>
-            Warning, no manure or compose sources have been added this farm with assigned nutrient
-            analyses.
+            Warning, no manure or compose sources have been added this farm with
+            assigned nutrient analyses.
           </div>
           <div style={{ padding: '1rem' }}>
-            Return to the manure section and add either animals or an imported manure, then assign a
-            nutrient analysis to the manures before adding manure applications to a field.
+            Return to the manure section and add either animals or an imported
+            manure, then assign a nutrient analysis to the manures before adding
+            manure applications to a field.
           </div>
           <ButtonGroup
             alignment="end"

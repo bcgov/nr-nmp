@@ -1,5 +1,12 @@
 /* eslint-disable no-case-declarations */
-import React, { useContext, useEffect, useMemo, useReducer, useState, useCallback } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+  useCallback,
+} from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -11,7 +18,14 @@ import {
   NumberField,
   Form,
 } from '@/components/common';
-import { CropType, Crop, PreviousCrop, NMPFileCrop, NMPFileField, SelectOption } from '@/types';
+import {
+  CropType,
+  Crop,
+  PreviousCrop,
+  NMPFileCrop,
+  NMPFileField,
+  SelectOption,
+} from '@/types';
 import {
   postprocessModalData,
   calculateCropRequirements,
@@ -31,7 +45,11 @@ import { HARVEST_UNIT_OPTIONS } from '../../constants/harvestUnits';
 import useAppState from '@/hooks/useAppState';
 import { cropsModalReducer, showUnitDropdown } from './utils';
 
-type BerryQuantity = { id: number; plantsperacre: number; distancebetweenplants: string };
+type BerryQuantity = {
+  id: number;
+  plantsperacre: number;
+  distancebetweenplants: string;
+};
 
 // Define constants for column headings for Nutrient added/removed tables
 const requireAndRemoveColumns: GridColDef[] = [
@@ -92,7 +110,8 @@ function preprocessModalData(data: NMPFileCrop): NMPFileCrop {
     remP2o5: Math.abs(data.remP2o5),
     remK2o: Math.abs(data.remK2o),
     // Preserve the calculated N value if it exists (and make it positive)
-    calculatedN: data.calculatedN !== undefined ? Math.abs(data.calculatedN) : undefined,
+    calculatedN:
+      data.calculatedN !== undefined ? Math.abs(data.calculatedN) : undefined,
   };
 }
 
@@ -118,18 +137,26 @@ function CropsModal({
   const apiCache = useContext(APICacheContext);
 
   const [
-    { formData, selectedCropType, selectedCrop, isFormYieldEqualToDefault, calculatedReqN },
+    {
+      formData,
+      selectedCropType,
+      selectedCrop,
+      isFormYieldEqualToDefault,
+      calculatedReqN,
+    },
     dispatch,
   ] = useReducer(cropsModalReducer, {
-    formData: initialModalData ? preprocessModalData(initialModalData) : DEFAULT_NMPFILE_CROPS,
+    formData: initialModalData
+      ? preprocessModalData(initialModalData)
+      : DEFAULT_NMPFILE_CROPS,
     selectedCropType: undefined,
     selectedCrop: undefined,
     defaultYieldInTons: undefined,
     // If the N value was adjusted, use the stored calculated value for the refresh button
     calculatedReqN:
-      initialModalData &&
-      initialModalData.reqNAdjusted &&
-      initialModalData.calculatedN !== undefined
+      initialModalData
+      && initialModalData.reqNAdjusted
+      && initialModalData.calculatedN !== undefined
         ? Math.abs(initialModalData.calculatedN) // Ensure it's positive
         : undefined,
     isFormYieldEqualToDefault: true,
@@ -139,7 +166,9 @@ function CropsModal({
   // These 4 are related to berries and are stored in the DB in the SelectOption format
   const [plantAges, setPlantAges] = useState<SelectOption<undefined>[]>([]);
   const [berryQuantities, setBerryQuantities] = useState<BerryQuantity[]>([]);
-  const [whereWillPruningsGo, setWhereWillPruningsGo] = useState<SelectOption<undefined>[]>([]);
+  const [whereWillPruningsGo, setWhereWillPruningsGo] = useState<
+    SelectOption<undefined>[]
+  >([]);
 
   const filteredCrops = useMemo<Crop[]>(() => {
     if (formData.cropTypeId === 0) return [];
@@ -150,20 +179,18 @@ function CropsModal({
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
 
   const berryPlantsPerAcreOptions = useMemo(
-    () =>
-      berryQuantities.map((ele) => ({
-        id: ele.id,
-        label: ele.plantsperacre?.toString(),
-      })),
+    () => berryQuantities.map((ele) => ({
+      id: ele.id,
+      label: ele.plantsperacre?.toString(),
+    })),
     [berryQuantities],
   );
 
   const berryDistBtwPlantsOptions = useMemo(
-    () =>
-      berryQuantities.map((ele) => ({
-        id: ele.id,
-        label: ele.distancebetweenplants,
-      })),
+    () => berryQuantities.map((ele) => ({
+      id: ele.id,
+      label: ele.distancebetweenplants,
+    })),
     [berryQuantities],
   );
 
@@ -178,7 +205,10 @@ function CropsModal({
             updatedCrops = [...prevField.crops];
             updatedCrops[cropIndex] = postprocessModalData(formData, calculatedReqN);
           } else {
-            updatedCrops = [...prevField.crops, postprocessModalData(formData, calculatedReqN)];
+            updatedCrops = [
+              ...prevField.crops,
+              postprocessModalData(formData, calculatedReqN),
+            ];
           }
           return { ...prevField, crops: updatedCrops };
         }
@@ -196,9 +226,9 @@ function CropsModal({
   // OR if we're editing an existing crop (since calculations were already done)
   useEffect(() => {
     if (
-      selectedCropType?.id === CROP_TYPE_OTHER_ID ||
-      (initialModalData?.reqNAdjusted && selectedCropType?.modifynitrogen) ||
-      cropIndex !== undefined // Editing existing crop
+      selectedCropType?.id === CROP_TYPE_OTHER_ID
+      || (initialModalData?.reqNAdjusted && selectedCropType?.modifynitrogen)
+      || cropIndex !== undefined // Editing existing crop
     ) {
       setCalculationsPerformed(true);
     } else {
@@ -213,7 +243,10 @@ function CropsModal({
         .callEndpoint(`api/croptypes/${formData.cropTypeId}/`)
         .then((response: { status: any; data: CropType[] }) => {
           if (response.status === 200) {
-            dispatch({ type: 'SET_SELECTED_CROP_TYPE', cropType: response.data[0] });
+            dispatch({
+              type: 'SET_SELECTED_CROP_TYPE',
+              cropType: response.data[0],
+            });
           }
         });
       apiCache
@@ -236,16 +269,20 @@ function CropsModal({
           setPreviousCrops(response.data);
         }
       });
-    apiCache.callEndpoint('api/plantage/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        setPlantAges(response.data);
-      }
-    });
-    apiCache.callEndpoint('api/berryQuantities/').then((response: { status?: any; data: any }) => {
-      if (response.status === 200) {
-        setBerryQuantities(response.data);
-      }
-    });
+    apiCache
+      .callEndpoint('api/plantage/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          setPlantAges(response.data);
+        }
+      });
+    apiCache
+      .callEndpoint('api/berryQuantities/')
+      .then((response: { status?: any; data: any }) => {
+        if (response.status === 200) {
+          setBerryQuantities(response.data);
+        }
+      });
     apiCache
       .callEndpoint('api/wherewillpruningsgo/')
       .then((response: { status?: any; data: any }) => {
@@ -260,14 +297,17 @@ function CropsModal({
     (attr: keyof NMPFileCrop, value: string | number | boolean) => {
       // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables after calculations
       // OR when we're editing an existing crop (since calculations were already done)
-      const isEditingFieldVegN =
-        (attr === 'reqN' || attr === 'reqNAdjusted') &&
-        selectedCropType?.modifynitrogen &&
-        calculationsPerformed;
+      const isEditingFieldVegN = (attr === 'reqN' || attr === 'reqNAdjusted')
+        && selectedCropType?.modifynitrogen
+        && calculationsPerformed;
 
       const isEditingExistingCrop = cropIndex !== undefined;
 
-      if (formData.cropId !== CROP_OTHER_ID && !isEditingFieldVegN && !isEditingExistingCrop) {
+      if (
+        formData.cropId !== CROP_OTHER_ID
+        && !isEditingFieldVegN
+        && !isEditingExistingCrop
+      ) {
         setCalculationsPerformed(false);
       }
 
@@ -275,8 +315,7 @@ function CropsModal({
         case 'cropTypeId':
           const cropTypeId = value as number;
           const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
-          if (cropType === undefined)
-            throw new Error(`Crop type ${cropTypeId} is missing from list.`);
+          if (cropType === undefined) throw new Error(`Crop type ${cropTypeId} is missing from list.`);
           dispatch({ type: 'SET_CROP_TYPE_ID', cropTypeId, cropType });
           return;
         case 'cropId':
@@ -289,14 +328,23 @@ function CropsModal({
           dispatch({ type: 'SET_YIELD', yield: value as number });
           return;
         case 'yieldHarvestUnit':
-          dispatch({ type: 'SET_YIELD_HARVEST_UNIT', unit: value as HarvestUnit });
+          dispatch({
+            type: 'SET_YIELD_HARVEST_UNIT',
+            unit: value as HarvestUnit,
+          });
           return;
         case 'whereWillPruningsGo':
           const selectedPruningOption = whereWillPruningsGo.find(
             (option) => option.id === Number(value),
           );
-          const pruningLocation = selectedPruningOption ? selectedPruningOption.label : '';
-          dispatch({ type: 'SET_FORM_DATA_ATTR', attr, value: pruningLocation });
+          const pruningLocation = selectedPruningOption
+            ? selectedPruningOption.label
+            : '';
+          dispatch({
+            type: 'SET_FORM_DATA_ATTR',
+            attr,
+            value: pruningLocation,
+          });
           return;
         case 'numberOfPlantsPerAcre':
         case 'distanceBtwnPlantsRows':
@@ -367,7 +415,11 @@ function CropsModal({
   }, [tables, nmpFile.farmDetails.farmRegion, field, formData]);
 
   useEffect(() => {
-    if (cropIndex !== undefined && selectedCrop !== undefined && selectedCropType !== undefined) {
+    if (
+      cropIndex !== undefined
+      && selectedCrop !== undefined
+      && selectedCropType !== undefined
+    ) {
       // Only auto-calculate if we don't already have a calculatedReqN value
       if (calculatedReqN === undefined) {
         handleCalculate();
@@ -395,9 +447,15 @@ function CropsModal({
    * Fetches default yield based on selected crop and region
    */
   useEffect(() => {
-    if (formData.cropId !== 0 && formData.cropId !== CROP_OTHER_ID && selectedCrop !== undefined) {
+    if (
+      formData.cropId !== 0
+      && formData.cropId !== CROP_OTHER_ID
+      && selectedCrop !== undefined
+    ) {
       apiCache
-        .callEndpoint(`api/cropyields/${formData.cropId}/${nmpFile.farmDetails.regionLocationId}/`)
+        .callEndpoint(
+          `api/cropyields/${formData.cropId}/${nmpFile.farmDetails.regionLocationId}/`,
+        )
         .then((response) => {
           if (response.status === 200) {
             const { data } = response;
@@ -434,8 +492,8 @@ function CropsModal({
 
   // Check if N can be edited (Field vegetables with modifynitrogen = true AND calculations have been performed)
   // For editing existing crops, allow editing if modifynitrogen is true (since calculations were already done)
-  const isNEditable =
-    selectedCropType?.modifynitrogen && (calculationsPerformed || cropIndex !== undefined);
+  const isNEditable = selectedCropType?.modifynitrogen
+    && (calculationsPerformed || cropIndex !== undefined);
 
   // Dynamic columns for requirement table - make N editable for Field vegetables
   const requirementColumns: GridColDef[] = useMemo(
@@ -491,7 +549,9 @@ function CropsModal({
                       });
                     }}
                   >
-                    <LoopIcon style={{ fontSize: '12px', margin: '0', padding: '0' }} />
+                    <LoopIcon
+                      style={{ fontSize: '12px', margin: '0', padding: '0' }}
+                    />
                   </button>
                 ) : undefined
               }
@@ -552,7 +612,13 @@ function CropsModal({
         flex: 1,
       },
     ],
-    [isNEditable, handleFormFieldChange, formData.reqNAdjusted, calculatedReqN, dispatch],
+    [
+      isNEditable,
+      handleFormFieldChange,
+      formData.reqNAdjusted,
+      calculatedReqN,
+      dispatch,
+    ],
   );
 
   return (
@@ -565,9 +631,9 @@ function CropsModal({
         onCancel={onClose}
         onCalculate={handleCalculate}
         isCalculateDisabled={
-          selectedCropType === undefined ||
-          selectedCropType.id === CROP_TYPE_OTHER_ID ||
-          (selectedCrop === undefined && !selectedCropType.customcrop)
+          selectedCropType === undefined
+          || selectedCropType.id === CROP_TYPE_OTHER_ID
+          || (selectedCrop === undefined && !selectedCropType.customcrop)
         }
         onConfirm={handleSubmit}
         isConfirmDisabled={!calculationsPerformed}
@@ -609,7 +675,10 @@ function CropsModal({
                   <Select
                     isRequired
                     label="Crop"
-                    items={filteredCrops.map((ele) => ({ id: ele.id, label: ele.cropname }))}
+                    items={filteredCrops.map((ele) => ({
+                      id: ele.id,
+                      label: ele.cropname,
+                    }))}
                     isDisabled={filteredCrops.length === 0}
                     value={formData.cropId}
                     onChange={(e) => handleFormFieldChange('cropId', e as number)}
@@ -698,7 +767,8 @@ function CropsModal({
                       items={berryDistBtwPlantsOptions}
                       value={
                         berryQuantities.find(
-                          (ele) => ele.distancebetweenplants === formData.distanceBtwnPlantsRows,
+                          (ele) => ele.distancebetweenplants
+                            === formData.distanceBtwnPlantsRows,
                         )?.id || 0
                       }
                       onChange={(e) => handleFormFieldChange('distanceBtwnPlantsRows', e as number)}
@@ -844,10 +914,14 @@ function CropsModal({
                     size={12}
                   >
                     <Grid size={6}>
-                      <span css={{ fontWeight: 'bold' }}>Crop Requirement (lb/ac)</span>
+                      <span css={{ fontWeight: 'bold' }}>
+                        Crop Requirement (lb/ac)
+                      </span>
                     </Grid>
                     <Grid size={6}>
-                      <span css={{ fontWeight: 'bold' }}>Nutrient Removal (lb/ac)</span>
+                      <span css={{ fontWeight: 'bold' }}>
+                        Nutrient Removal (lb/ac)
+                      </span>
                     </Grid>
                   </Grid>
                   <Grid
@@ -930,10 +1004,14 @@ function CropsModal({
                     sx={{ marginTop: '1rem' }}
                   >
                     <Grid size={{ xs: 6 }}>
-                      <span css={{ fontWeight: 'bold' }}>Crop Requirement (lb/ac)</span>
+                      <span css={{ fontWeight: 'bold' }}>
+                        Crop Requirement (lb/ac)
+                      </span>
                       <DataGrid
                         sx={{ ...customTableStyle }}
-                        columns={isNEditable ? requirementColumns : requireAndRemoveColumns}
+                        columns={
+                          isNEditable ? requirementColumns : requireAndRemoveColumns
+                        }
                         rows={requirementRows}
                         disableRowSelectionOnClick
                         disableColumnMenu
@@ -942,7 +1020,9 @@ function CropsModal({
                       />
                     </Grid>
                     <Grid size={{ xs: 6 }}>
-                      <span css={{ fontWeight: 'bold' }}>Nutrient Removal (lb/ac)</span>
+                      <span css={{ fontWeight: 'bold' }}>
+                        Nutrient Removal (lb/ac)
+                      </span>
                       <DataGrid
                         sx={{ ...customTableStyle }}
                         columns={requireAndRemoveColumns}

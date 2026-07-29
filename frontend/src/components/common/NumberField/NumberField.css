@@ -66,7 +66,8 @@
 
 /* Hover and focus states */
 
-.bcds-react-aria-NumberField--container > .bcds-react-aria-NumberField--Input[data-focused] {
+.bcds-react-aria-NumberField--container
+  > .bcds-react-aria-NumberField--Input[data-focused] {
   outline: none;
 }
 
@@ -83,7 +84,8 @@
 
 /* Disabled and invalid states */
 
-.bcds-react-aria-NumberField[data-disabled] > .bcds-react-aria-NumberField--container {
+.bcds-react-aria-NumberField[data-disabled]
+  > .bcds-react-aria-NumberField--container {
   background: var(--surface-color-forms-disabled);
   cursor: not-allowed;
 }
@@ -93,13 +95,15 @@
   cursor: not-allowed;
 }
 
-.bcds-react-aria-NumberField[data-invalid] > .bcds-react-aria-NumberField--container {
+.bcds-react-aria-NumberField[data-invalid]
+  > .bcds-react-aria-NumberField--container {
   border-radius: var(--layout-border-radius-medium);
   border: var(--layout-border-width-small) solid var(--support-border-color-danger);
   background: var(--surface-color-forms-default);
 }
 
-.bcds-react-aria-NumberField[data-readonly] > .bcds-react-aria-NumberField--container {
+.bcds-react-aria-NumberField[data-readonly]
+  > .bcds-react-aria-NumberField--container {
   background: var(--surface-color-forms-disabled);
 }
 

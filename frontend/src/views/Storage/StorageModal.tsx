@@ -43,11 +43,11 @@ export default function StorageModal({
     // For storage_create mode, append a blank liquid manure storage
     mode.mode === 'storage_create'
       ? {
-          ...(initialModalData as LiquidManureStorageSystem),
-          manureStorages: (initialModalData as LiquidManureStorageSystem).manureStorages.concat(
-            DEFAULT_LIQUID_MANURE_STORAGE,
-          ),
-        }
+        ...(initialModalData as LiquidManureStorageSystem),
+        manureStorages: (
+            initialModalData as LiquidManureStorageSystem
+        ).manureStorages.concat(DEFAULT_LIQUID_MANURE_STORAGE),
+      }
       : initialModalData || { ...DEFAULT_FORM_DATA, uuid: crypto.randomUUID() },
   );
 
@@ -58,7 +58,10 @@ export default function StorageModal({
     // Add precipitation data to the form
     const withRainData = {
       ...formData,
-      annualPrecipitation: calculatePrecipitationInStorage(formData, annualPrecipitation),
+      annualPrecipitation: calculatePrecipitationInStorage(
+        formData,
+        annualPrecipitation,
+      ),
     };
     const newList = [...(state.nmpFile.years[0].manureStorageSystems || [])];
     if (mode.mode !== 'create') {
@@ -94,7 +97,9 @@ export default function StorageModal({
             unassignedManures={unassignedManures}
           />
         ) : (
-          <StorageSystemDetailsDisplay formData={formData as NMPFileManureStorageSystem} />
+          <StorageSystemDetailsDisplay
+            formData={formData as NMPFileManureStorageSystem}
+          />
         )}
         {mode.mode !== 'system_edit' && (
           <>
@@ -109,7 +114,9 @@ export default function StorageModal({
               <LiquidStorageDetails
                 formData={formData}
                 setFormData={
-                  setFormData as React.Dispatch<React.SetStateAction<LiquidManureStorageSystem>>
+                  setFormData as React.Dispatch<
+                    React.SetStateAction<LiquidManureStorageSystem>
+                  >
                 }
                 storageIndex={
                   mode.mode === 'storage_edit'
@@ -122,7 +129,9 @@ export default function StorageModal({
               <SolidStorageDetails
                 formData={formData}
                 setFormData={
-                  setFormData as React.Dispatch<React.SetStateAction<SolidManureStorageSystem>>
+                  setFormData as React.Dispatch<
+                    React.SetStateAction<SolidManureStorageSystem>
+                  >
                 }
               />
             )}

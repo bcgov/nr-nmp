@@ -6,7 +6,11 @@ import DEFAULT_NMPFILE_YEAR from '../../constants/DefaultNMPFileYear';
 import DEFAULT_NMPFILE_FIELD from '../../constants/DefaultNMPFileField';
 import FieldList from '../FieldList/FieldList';
 import { FieldListModal } from '../../components/common';
-import { FARM_INFORMATION, NUTRIENT_ANALYSIS, SOIL_TESTS } from '../../constants/routes';
+import {
+  FARM_INFORMATION,
+  NUTRIENT_ANALYSIS,
+  SOIL_TESTS,
+} from '../../constants/routes';
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
@@ -117,7 +121,9 @@ describe('FieldList navigation tests', () => {
     const button = screen.getByText('Next');
     fireEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith(SOIL_TESTS);
-    expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'SAVE_FIELDS' }));
+    expect(mockDispatch).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'SAVE_FIELDS' }),
+    );
   });
 
   it('FieldList does not allow Next without fields', () => {
@@ -201,7 +207,9 @@ describe('FieldList navigation tests', () => {
     const button = screen.getByText('Back');
     fireEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith(NUTRIENT_ANALYSIS);
-    expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'SAVE_FIELDS' }));
+    expect(mockDispatch).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'SAVE_FIELDS' }),
+    );
   });
 });
 
@@ -215,7 +223,10 @@ describe('FieldListModal unit tests', () => {
       render(
         <FieldListModal
           // I give up on figuring out the select
-          initialModalData={{ ...DEFAULT_NMPFILE_FIELD, previousYearManureApplicationId: 1 }}
+          initialModalData={{
+            ...DEFAULT_NMPFILE_FIELD,
+            previousYearManureApplicationId: 1,
+          }}
           mode="Add Field"
           setFieldList={mockSetFieldList}
           isFieldNameUnique={mockSetNameIsUnique}

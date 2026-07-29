@@ -10,14 +10,12 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime', // Include this for new JSX Transform
-    'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh', '@typescript-eslint', 'react', 'prettier'],
+  plugins: ['@typescript-eslint', 'react'],
   rules: {
     'react/no-unknown-property': ['error', { ignore: ['css'] }],
-    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'import/extensions': [
       'off',
       'ignorePackages',
@@ -28,7 +26,7 @@ module.exports = {
         tsx: 'always',
       },
     ],
-    'prettier/prettier': 'error',
+    'max-len': 1,
   },
   settings: {
     react: {
@@ -57,7 +55,7 @@ module.exports = {
         'no-nested-ternary': 'off',
         'arrow-parens': ['error', 'always'], // Ensure parentheses around arrow function arguments
         'no-unused-vars': 'off',
-        'no-unused-expressions': ['error', { 'allowTernary': true }],
+        'no-unused-expressions': ['error', { allowTernary: true }],
         'jsx-a11y/label-has-associated-control': [
           2,
           {

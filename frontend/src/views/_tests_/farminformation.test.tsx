@@ -7,11 +7,9 @@ import FarmInformation from '../FarmInformation/FarmInformation';
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
 
-jest.mock('../../services/APICache', () =>
-  jest.fn().mockImplementation(() => ({
-    callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
-  })),
-);
+jest.mock('../../services/APICache', () => jest.fn().mockImplementation(() => ({
+  callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
+})));
 
 // Snapshot test for FarmInformation view
 it('renders correctly', async () => {

@@ -2,7 +2,11 @@
  * @summary Styling for AddAnimals view
  */
 import styled from '@emotion/styled';
-import { buttonGroup, componentContainer, paragraphCss } from '../../../common.styles';
+import {
+  buttonGroup,
+  componentContainer,
+  paragraphCss,
+} from '../../../common.styles';
 
 export const StyledContent = styled.div`
   margin-bottom: 1rem;

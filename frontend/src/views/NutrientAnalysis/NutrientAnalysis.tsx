@@ -17,8 +17,17 @@ import {
   AlertDialogContinueBtn,
 } from '@/types';
 import useAppState from '@/hooks/useAppState';
-import { MANURE_IMPORTS, FIELD_LIST, CALCULATE_NUTRIENTS, STORAGE } from '@/constants/routes';
-import { addRecordGroupStyle, customTableStyle, tableActionButtonCss } from '@/common.styles';
+import {
+  MANURE_IMPORTS,
+  FIELD_LIST,
+  CALCULATE_NUTRIENTS,
+  STORAGE,
+} from '@/constants/routes';
+import {
+  addRecordGroupStyle,
+  customTableStyle,
+  tableActionButtonCss,
+} from '@/common.styles';
 import NutrientAnalysisModal from './NutrientAnalysisModal';
 import { DAIRY_COW_ID } from '@/constants';
 
@@ -26,35 +35,34 @@ export default function NutrientAnalysis() {
   const { state, dispatch } = useAppState();
 
   const manures: NMPFileManure[] = useMemo(
-    () =>
-      (state.nmpFile.years[0]?.importedManures || []).concat(
-        state.nmpFile.years[0]?.generatedManures || [],
-        state.nmpFile.years[0]?.derivedManures || [],
-      ),
+    () => (state.nmpFile.years[0]?.importedManures || []).concat(
+      state.nmpFile.years[0]?.generatedManures || [],
+      state.nmpFile.years[0]?.derivedManures || [],
+    ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const storageSystems: NMPFileManureStorageSystem[] =
-    state.nmpFile.years[0].manureStorageSystems || [];
+  const storageSystems: NMPFileManureStorageSystem[] = state.nmpFile.years[0].manureStorageSystems || [];
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editId, setEditId] = useState<string | null>(null);
   // for each manuresource user can create nutrient analysis' objects
-  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<NMPFileNutrientAnalysis[]>(
-    state.nmpFile.years[0].nutrientAnalyses,
-  );
+  const [nutrientAnalysisData, setNutrientAnalysisData] = useState<
+    NMPFileNutrientAnalysis[]
+  >(state.nmpFile.years[0].nutrientAnalyses);
   // for each manuresource user can create nutrient analysis' objects
-  const [analysisForm, setAnalysisForm] = useState<NMPFileNutrientAnalysis | undefined>(undefined);
+  const [analysisForm, setAnalysisForm] = useState<
+    NMPFileNutrientAnalysis | undefined
+  >(undefined);
 
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
-    undefined,
-  );
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<
+    AlertDialogContinueBtn | undefined
+  >(undefined);
   const hasDairyCattle = useMemo(
-    () =>
-      state.nmpFile.years[0]?.farmAnimals?.some(
-        (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
-      ),
+    () => state.nmpFile.years[0]?.farmAnimals?.some(
+      (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
+    ),
     [state.nmpFile.years],
   );
 
@@ -77,9 +85,7 @@ export default function NutrientAnalysis() {
     setNutrientAnalysisData((prevState) => {
       // if editing an entry then updates that entry
       if (editId !== null) {
-        return prevState.map((item: NMPFileNutrientAnalysis) =>
-          item.sourceUuid === editId ? { ...data } : item,
-        );
+        return prevState.map((item: NMPFileNutrientAnalysis) => (item.sourceUuid === editId ? { ...data } : item));
       }
       // else add this new entry
       return [...prevState, { ...data }];
@@ -184,7 +190,9 @@ export default function NutrientAnalysis() {
             <FontAwesomeIcon
               css={tableActionButtonCss}
               onClick={() => {
-                setDialogText(`Are you sure you want to delete ${row.row.sourceName}?`);
+                setDialogText(
+                  `Are you sure you want to delete ${row.row.sourceName}?`,
+                );
                 setDeleteBtnConfig({
                   btnText: 'Delete',
                   handleClick: () => {
@@ -250,7 +258,12 @@ export default function NutrientAnalysis() {
       {state.showAnimalsStep && hasDairyCattle ? (
         <Tabs
           activeTab={3}
-          tabLabel={['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']}
+          tabLabel={[
+            'Add Animals',
+            'Manure & Imports',
+            'Storage',
+            'Nutrient Analysis',
+          ]}
         />
       ) : state.showAnimalsStep ? (
         <Tabs

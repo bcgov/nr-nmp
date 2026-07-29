@@ -22,11 +22,11 @@ export default function soilTestCalculation(
   }
 
   // Calculate converted Kelowna K value (if you need it)
-  const convertedKelownaK =
-    soilTestMethods.find((method) => method.id === soilTestId)!.converttokelownak !== undefined
-      ? soilTestData.valK! *
-        soilTestMethods.find((method) => method.id === soilTestId)!.converttokelownak
-      : soilTestData.valK!;
+  const convertedKelownaK = soilTestMethods.find((method) => method.id === soilTestId)!.converttokelownak
+    !== undefined
+    ? soilTestData.valK!
+        * soilTestMethods.find((method) => method.id === soilTestId)!.converttokelownak
+    : soilTestData.valK!;
 
   if (!(lessThan72 || greaterThan72)) {
     throw new Error('Unable to calculate convertedKelownaP');

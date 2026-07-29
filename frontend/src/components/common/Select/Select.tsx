@@ -44,7 +44,10 @@ function Select({
       selectedSortFcn = defaultSortFcn;
     }
   }
-  const sortedItems = useMemo(() => items?.sort(selectedSortFcn), [items, selectedSortFcn]);
+  const sortedItems = useMemo(
+    () => items?.sort(selectedSortFcn),
+    [items, selectedSortFcn],
+  );
 
   useEffect(() => {
     if (autoselectFirst && onChange && sortedItems && sortedItems.length > 0) {

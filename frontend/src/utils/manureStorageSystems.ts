@@ -21,7 +21,9 @@ export function calcRectangularVolumeFtCubed(storage: RectangularStorage) {
 }
 
 export function calcRectangularVolumeGallons(storage: RectangularStorage) {
-  return Math.round(storage.lengthFt * storage.heightFt * storage.widthFt * ft3ToGallons);
+  return Math.round(
+    storage.lengthFt * storage.heightFt * storage.widthFt * ft3ToGallons,
+  );
 }
 
 export function calcCircularSurfaceAreaSqFt(storage: CircularStorage) {
@@ -35,7 +37,9 @@ export function calcCircularVolumeFtCubed(storage: CircularStorage) {
 
 export function calcCircularVolumeGallons(storage: CircularStorage) {
   const activeHeight = storage.heightFt - 1; // height - freeBoard
-  return Math.round(activeHeight * 3.1428 * (storage.diameterFt / 2) ** 2 * ft3ToGallons);
+  return Math.round(
+    activeHeight * 3.1428 * (storage.diameterFt / 2) ** 2 * ft3ToGallons,
+  );
 }
 
 export function calcSlopedWallSurfaceAreaSqFt(storage: SlopedWallStorage) {
@@ -48,7 +52,9 @@ export function calcSlopedWallVolumeFtCubed(storage: SlopedWallStorage) {
   const bottomWidth = storage.topWidthFt - (2 * storage.heightFt) / storage.slopeOfWall;
   const areaBottom = bottomLength * bottomWidth;
   const areaTop = storage.topLengthFt * storage.topWidthFt;
-  return Math.round((activeHeight / 3) * areaBottom + areaTop + Math.sqrt(areaBottom * areaTop));
+  return Math.round(
+    (activeHeight / 3) * areaBottom + areaTop + Math.sqrt(areaBottom * areaTop),
+  );
 }
 
 export function calcSlopedWallVolumeGallons(storage: SlopedWallStorage) {
@@ -58,7 +64,8 @@ export function calcSlopedWallVolumeGallons(storage: SlopedWallStorage) {
   const areaBottom = bottomLength * bottomWidth;
   const areaTop = storage.topLengthFt * storage.topWidthFt;
   return Math.round(
-    ((activeHeight / 3) * areaBottom + areaTop + Math.sqrt(areaBottom * areaTop)) * ft3ToGallons,
+    ((activeHeight / 3) * areaBottom + areaTop + Math.sqrt(areaBottom * areaTop))
+      * ft3ToGallons,
   );
 }
 
@@ -108,22 +115,26 @@ export function calculatePrecipitationInStorage(
         totalUncoveredArea += calcStorageSurfaceAreaSqFt(storage.structure);
       }
     });
-    annualPrecipitation =
-      totalUncoveredArea > 0
-        ? totalUncoveredArea * precipitationRate * PrecipitationConversionFactor.Liquid
-        : undefined;
+    annualPrecipitation = totalUncoveredArea > 0
+      ? totalUncoveredArea
+          * precipitationRate
+          * PrecipitationConversionFactor.Liquid
+      : undefined;
   } else {
     // For solid manure
     annualPrecipitation = system.manureStorage.uncoveredAreaSqFt
-      ? system.manureStorage.uncoveredAreaSqFt *
-        precipitationRate *
-        PrecipitationConversionFactor.Solid
+      ? system.manureStorage.uncoveredAreaSqFt
+        * precipitationRate
+        * PrecipitationConversionFactor.Solid
       : undefined;
   }
   return annualPrecipitation;
 }
 
-export function getRunoffInSystem(system: LiquidManureStorageSystem, precipitationRate: number) {
+export function getRunoffInSystem(
+  system: LiquidManureStorageSystem,
+  precipitationRate: number,
+) {
   const runoffArea = system.runoffAreaSqFt || 0;
   return runoffArea * precipitationRate * PrecipitationConversionFactor.Liquid;
 }

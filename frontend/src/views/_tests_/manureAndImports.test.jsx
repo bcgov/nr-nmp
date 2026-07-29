@@ -6,7 +6,12 @@ import DEFAULT_NMPFILE_YEAR from '../../constants/DefaultNMPFileYear';
 import DEFAULT_NMPFILE_FIELD from '../../constants/DefaultNMPFileField';
 import ManureAndImports from '../ManureAndImports/ManureAndImports';
 import ManureImportModal from '../ManureAndImports/ManureImportModal';
-import { ADD_ANIMALS, CROPS, NUTRIENT_ANALYSIS, STORAGE } from '../../constants/routes';
+import {
+  ADD_ANIMALS,
+  CROPS,
+  NUTRIENT_ANALYSIS,
+  STORAGE,
+} from '../../constants/routes';
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
@@ -183,7 +188,13 @@ describe('manureAndImports navigation tests', () => {
       state: {
         nmpFile: {
           ...DEFAULT_NMPFILE,
-          years: [{ ...DEFAULT_NMPFILE_YEAR, year: '2025', fields: [DEFAULT_NMPFILE_FIELD] }],
+          years: [
+            {
+              ...DEFAULT_NMPFILE_YEAR,
+              year: '2025',
+              fields: [DEFAULT_NMPFILE_FIELD],
+            },
+          ],
         },
         showAnimalsStep: false,
       },

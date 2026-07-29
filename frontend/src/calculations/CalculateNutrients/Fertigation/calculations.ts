@@ -26,8 +26,7 @@ function getProductVolumeInImpGallons(
   applicationUnit: FertilizerUnit,
   areaInAcres: number,
 ) {
-  const appRateInImpGalPerAcre =
-    applicationRate * applicationUnit.conversiontoimperialgallonsperacre;
+  const appRateInImpGalPerAcre = applicationRate * applicationUnit.conversiontoimperialgallonsperacre;
   return appRateInImpGalPerAcre * areaInAcres;
 }
 
@@ -41,8 +40,8 @@ export function getProductVolumePerApplication(
   areaInAcres: number,
 ) {
   return (
-    getProductVolumeInImpGallons(applicationRate, applicationUnit, areaInAcres) *
-    getFertilizerUnitImpGallonConversion(applicationUnit)
+    getProductVolumeInImpGallons(applicationRate, applicationUnit, areaInAcres)
+    * getFertilizerUnitImpGallonConversion(applicationUnit)
   );
 }
 
@@ -50,7 +49,10 @@ export function getProductVolumePerApplication(
  * Seasonal Product Volume = Product Volume * Applications Per Season
  * @returns Product volume per season in the same unit as productVolume
  */
-export function getProductVolumePerSeason(productVolume: number, applicationsPerSeason: number) {
+export function getProductVolumePerSeason(
+  productVolume: number,
+  applicationsPerSeason: number,
+) {
   return productVolume * applicationsPerSeason;
 }
 
@@ -146,7 +148,10 @@ function convertTankVolumeToImpGallons(volume: number, fromUnit: number): number
   }
 }
 
-function convertSolubilityToGramsPerLiter(solubility: number, fromUnit: number): number {
+function convertSolubilityToGramsPerLiter(
+  solubility: number,
+  fromUnit: number,
+): number {
   switch (fromUnit) {
     case 1: // g/L
       return solubility;
@@ -213,9 +218,18 @@ export function calculateSolidFertigation(
   valK2O: number,
 ): SolidFertigationResult {
   // Convert units to standard units for calculations
-  const amountToDissolveInLbs = convertDissolveToLbs(amountToDissolve, amountToDissolveUnits);
-  const tankVolumeInImpGal = convertTankVolumeToImpGallons(tankVolume, tankVolumeUnits);
-  const solInWaterInGramsPerL = convertSolubilityToGramsPerLiter(solInWater, solInWaterUnits);
+  const amountToDissolveInLbs = convertDissolveToLbs(
+    amountToDissolve,
+    amountToDissolveUnits,
+  );
+  const tankVolumeInImpGal = convertTankVolumeToImpGallons(
+    tankVolume,
+    tankVolumeUnits,
+  );
+  const solInWaterInGramsPerL = convertSolubilityToGramsPerLiter(
+    solInWater,
+    solInWaterUnits,
+  );
   const convertedInjectionRate = convertInjectionRateToImpGallonsPerMin(
     injectionRate,
     injectionRateUnits,
@@ -243,12 +257,14 @@ export function calculateSolidFertigation(
     // Need in lb/us gallon - convert from imperial gallons to US gallons
     const tankVolumeInUSGal = tankVolumeInImpGal * 1.201;
 
-    nutrientConcentrationN =
-      Math.round(((amountToDissolveInLbs * valN) / 100 / tankVolumeInUSGal) * 100) / 100;
-    nutrientConcentrationP2O5 =
-      Math.round(((amountToDissolveInLbs * valP2O5) / 100 / tankVolumeInUSGal) * 100) / 100;
-    nutrientConcentrationK2O =
-      Math.round(((amountToDissolveInLbs * valK2O) / 100 / tankVolumeInUSGal) * 100) / 100;
+    nutrientConcentrationN = Math.round(((amountToDissolveInLbs * valN) / 100 / tankVolumeInUSGal) * 100)
+      / 100;
+    nutrientConcentrationP2O5 = Math.round(
+      ((amountToDissolveInLbs * valP2O5) / 100 / tankVolumeInUSGal) * 100,
+    ) / 100;
+    nutrientConcentrationK2O = Math.round(
+      ((amountToDissolveInLbs * valK2O) / 100 / tankVolumeInUSGal) * 100,
+    ) / 100;
 
     // kg/L concentrations
     kglNutrientConcentrationN = Math.round(nutrientConcentrationN * 0.12 * 100) / 100;

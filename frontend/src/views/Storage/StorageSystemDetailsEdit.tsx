@@ -43,21 +43,17 @@ export default function StorageSystemDetailsEdit({
   );
 
   const [fullManureList, setFullManureList] = useState<ManureInSystem[]>(
-    [...unassignedManures, ...formData.manuresInSystem].sort((a, b) =>
-      a.data.managedManureName.localeCompare(b.data.managedManureName),
-    ),
+    [...unassignedManures, ...formData.manuresInSystem].sort((a, b) => a.data.managedManureName.localeCompare(b.data.managedManureName)),
   );
 
   // get sum of all chosen manures, used for solid and liquid seperation
   const totalManureGallons = useMemo(
-    () =>
-      selectedManureNames.reduce(
-        (sum, manure) =>
-          sum +
-          (fullManureList.find((m) => m.data.managedManureName === manure)?.data
+    () => selectedManureNames.reduce(
+      (sum, manure) => sum
+          + (fullManureList.find((m) => m.data.managedManureName === manure)?.data
             ?.annualAmountUSGallonsVolume || 0),
-        0,
-      ),
+      0,
+    ),
     [selectedManureNames, fullManureList],
   );
 
@@ -122,8 +118,7 @@ export default function StorageSystemDetailsEdit({
     if (Object.prototype.hasOwnProperty.call(changes, 'hasSeperation')) {
       updatedChanges = changes as Partial<LiquidManureStorageSystem>;
       if (updatedChanges.hasSeperation === false) {
-        updatedChanges.percentLiquidSeperation =
-          DEFAULT_LIQUID_MANURE_SYSTEM.percentLiquidSeperation;
+        updatedChanges.percentLiquidSeperation = DEFAULT_LIQUID_MANURE_SYSTEM.percentLiquidSeperation;
         updatedChanges.separatedLiquidsUSGallons = undefined;
         updatedChanges.separatedSolidsTons = undefined;
       } else {
@@ -135,7 +130,9 @@ export default function StorageSystemDetailsEdit({
         updatedChanges.separatedSolidsTons = separatedSolids;
       }
     }
-    setFormData((prev) => ({ ...prev, ...updatedChanges }) as NMPFileManureStorageSystem);
+    setFormData(
+      (prev) => ({ ...prev, ...updatedChanges }) as NMPFileManureStorageSystem,
+    );
   };
 
   // Set the seperated liquid/solid when the total amount changes
@@ -153,24 +150,22 @@ export default function StorageSystemDetailsEdit({
 
   const handleSelectedChange = (selected: string[]) => {
     const selectedManures: ManureInSystem[] = [];
-    setFullManureList((prev) =>
-      prev.map((manure) => {
-        let newManure: ManureInSystem;
-        if (selected.includes(manure.data.managedManureName)) {
-          newManure = {
-            ...manure,
-            data: { ...manure.data, assignedToStoredSystem: true },
-          } as ManureInSystem;
-          selectedManures.push(newManure);
-        } else {
-          newManure = {
-            ...manure,
-            data: { ...manure.data, assignedToStoredSystem: false },
-          } as ManureInSystem;
-        }
-        return newManure;
-      }),
-    );
+    setFullManureList((prev) => prev.map((manure) => {
+      let newManure: ManureInSystem;
+      if (selected.includes(manure.data.managedManureName)) {
+        newManure = {
+          ...manure,
+          data: { ...manure.data, assignedToStoredSystem: true },
+        } as ManureInSystem;
+        selectedManures.push(newManure);
+      } else {
+        newManure = {
+          ...manure,
+          data: { ...manure.data, assignedToStoredSystem: false },
+        } as ManureInSystem;
+      }
+      return newManure;
+    }));
     setFormData((prev) => ({ ...prev, manuresInSystem: selectedManures }));
   };
 
@@ -193,15 +188,12 @@ export default function StorageSystemDetailsEdit({
             items={MANURE_TYPE_OPTIONS}
             onChange={(e) => {
               handleManureTypeChange(e as number);
-              setFullManureList((prev) =>
-                prev.map(
-                  (m) =>
-                    ({
-                      ...m,
-                      data: { ...m.data, assignedToStoredSystem: false },
-                    }) as ManureInSystem,
-                ),
-              );
+              setFullManureList((prev) => prev.map(
+                (m) => ({
+                  ...m,
+                  data: { ...m.data, assignedToStoredSystem: false },
+                }) as ManureInSystem,
+              ));
             }}
             isDisabled={mode !== 'create'}
             style={{ flexGrow: 1 }}
@@ -236,8 +228,8 @@ export default function StorageSystemDetailsEdit({
             </CheckboxGroup>
           ) : (
             <span style={{ font: 'var(--typography-regular-small-body)' }}>
-              There are no unstored materials of this type. To add materials, please return to Add
-              Animals or Manure and Imports.
+              There are no unstored materials of this type. To add materials, please
+              return to Add Animals or Manure and Imports.
             </span>
           )}
         </Grid>
@@ -332,11 +324,19 @@ export default function StorageSystemDetailsEdit({
                   <>
                     <p>
                       Separated liquids
-                      <p>{printNum(formData.separatedLiquidsUSGallons)} U.S. Gallons</p>
+                      <p>
+                        {printNum(formData.separatedLiquidsUSGallons)}
+                        {' '}
+                        U.S. Gallons
+                      </p>
                     </p>
                     <p>
                       Separated solids
-                      <p>{printNum(formData.separatedSolidsTons)} tons</p>
+                      <p>
+                        {printNum(formData.separatedSolidsTons)}
+                        {' '}
+                        tons
+                      </p>
                     </p>
                   </>
                 )}

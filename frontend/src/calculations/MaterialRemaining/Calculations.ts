@@ -14,11 +14,16 @@ import {
   MaterialRemainingData,
 } from '@/types';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
-import { getDensityFactor, evaluateConversionFormula } from '@/utils/densityCalculations';
+import {
+  getDensityFactor,
+  evaluateConversionFormula,
+} from '@/utils/densityCalculations';
 
 // Type aliases for convenience
-export type SolidMaterialConversion = SolidMaterialApplicationTonPerAcreRateConversions;
-export type LiquidMaterialConversion = LiquidMaterialApplicationUsGallonsPerAcreRateConversions;
+export type SolidMaterialConversion =
+  SolidMaterialApplicationTonPerAcreRateConversions;
+export type LiquidMaterialConversion =
+  LiquidMaterialApplicationUsGallonsPerAcreRateConversions;
 
 // Re-export types for external use
 export type { FieldApplicationData, AppliedManureData, MaterialRemainingData };
@@ -40,13 +45,17 @@ function getConversionFactor(
   }
 
   // Check solid conversions
-  const solidConversion = solidConversions.find((conv) => conv.applicationrateunit === unit.id);
+  const solidConversion = solidConversions.find(
+    (conv) => conv.applicationrateunit === unit.id,
+  );
   if (solidConversion) {
     return evaluateConversionFormula(solidConversion.tonsperacreconversion, density);
   }
 
   // Check liquid conversions
-  const liquidConversion = liquidConversions.find((conv) => conv.applicationrateunit === unit.id);
+  const liquidConversion = liquidConversions.find(
+    (conv) => conv.applicationrateunit === unit.id,
+  );
   if (liquidConversion) {
     return liquidConversion.usgallonsperacreconversion;
   }
@@ -109,7 +118,9 @@ function calculateFieldApplications(
     if (!field.manures || field.manures.length === 0) return;
 
     // Find manures applied to this field that match our source UUID
-    const matchingManures = field.manures.filter((manure) => manure.sourceUuid === sourceUuid);
+    const matchingManures = field.manures.filter(
+      (manure) => manure.sourceUuid === sourceUuid,
+    );
 
     if (matchingManures.length === 0) return;
 
@@ -129,11 +140,9 @@ function calculateFieldApplications(
       );
 
       if (manure.solidLiquid === 'Liquid') {
-        fieldApplication.totalAppliedGallons =
-          (fieldApplication.totalAppliedGallons || 0) + appliedAmount;
+        fieldApplication.totalAppliedGallons = (fieldApplication.totalAppliedGallons || 0) + appliedAmount;
       } else {
-        fieldApplication.totalAppliedTons =
-          (fieldApplication.totalAppliedTons || 0) + appliedAmount;
+        fieldApplication.totalAppliedTons = (fieldApplication.totalAppliedTons || 0) + appliedAmount;
       }
     });
 
@@ -156,12 +165,18 @@ function calculateTotalApplied(fieldApplications: FieldApplicationData[]): numbe
 /**
  * Calculate whole percent values
  */
-function calculateWholePercentApplied(totalApplied: number, totalToApply: number): number {
+function calculateWholePercentApplied(
+  totalApplied: number,
+  totalToApply: number,
+): number {
   if (totalToApply === 0) return 0;
   return Math.floor((totalApplied / totalToApply) * 100);
 }
 
-function calculateWholePercentRemaining(totalRemaining: number, totalToApply: number): number {
+function calculateWholePercentRemaining(
+  totalRemaining: number,
+  totalToApply: number,
+): number {
   if (totalToApply === 0) return 0;
 
   const adjustedRemaining = totalRemaining >= 0 ? totalRemaining : 0;
@@ -189,10 +204,13 @@ function createStoredManureData(
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
-  const totalAnnualManureToApply =
-    storageSystem.totalAnnualManureAmount ?? getStandardizedAnnualManureAmount(storageSystem);
+  const totalAnnualManureToApply = storageSystem.totalAnnualManureAmount
+    ?? getStandardizedAnnualManureAmount(storageSystem);
   const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
-  const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManureToApply);
+  const wholePercentApplied = calculateWholePercentApplied(
+    totalApplied,
+    totalAnnualManureToApply,
+  );
   const wholePercentRemaining = calculateWholePercentRemaining(
     totalRemaining,
     totalAnnualManureToApply,
@@ -231,10 +249,13 @@ function createImportedManureData(
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
-  const totalAnnualManureToApply =
-    importedManure.totalAnnualManureAmount ?? getStandardizedAnnualManureAmount(importedManure);
+  const totalAnnualManureToApply = importedManure.totalAnnualManureAmount
+    ?? getStandardizedAnnualManureAmount(importedManure);
   const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
-  const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManureToApply);
+  const wholePercentApplied = calculateWholePercentApplied(
+    totalApplied,
+    totalAnnualManureToApply,
+  );
   const wholePercentRemaining = calculateWholePercentRemaining(
     totalRemaining,
     totalAnnualManureToApply,
@@ -312,7 +333,10 @@ export function calculateMaterialRemainingSummary(data: MaterialRemainingData): 
   sourcesOverApplied: number;
   averagePercentApplied: number;
 } {
-  const allAppliedManures = [...data.appliedStoredManures, ...data.appliedImportedManures];
+  const allAppliedManures = [
+    ...data.appliedStoredManures,
+    ...data.appliedImportedManures,
+  ];
   const totalSources = allAppliedManures.length;
 
   if (totalSources === 0) {

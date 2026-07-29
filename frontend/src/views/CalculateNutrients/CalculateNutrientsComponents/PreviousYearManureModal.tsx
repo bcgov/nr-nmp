@@ -45,9 +45,9 @@ export default function PreviousYearManureModal({
 }: PreviousYearManureModalProps) {
   const [formData, setFormData] = useState<PreviousYearManureFormData>(initialModalData);
 
-  const [calculatedDefaultCredit, setCalculatedDefaultCredit] = useState<number | undefined>(
-    undefined,
-  );
+  const [calculatedDefaultCredit, setCalculatedDefaultCredit] = useState<
+    number | undefined
+  >(undefined);
 
   useEffect(() => {
     calcPrevYearManureApplDefault({
@@ -63,8 +63,8 @@ export default function PreviousYearManureModal({
 
   useEffect(() => {
     if (
-      formData.previousYearManureApplicationNCredit === undefined &&
-      calculatedDefaultCredit !== undefined
+      formData.previousYearManureApplicationNCredit === undefined
+      && calculatedDefaultCredit !== undefined
     ) {
       setFormData((prev) => ({
         ...prev,
@@ -86,7 +86,8 @@ export default function PreviousYearManureModal({
       updatedFields[fieldIndex] = {
         ...updatedFields[fieldIndex],
         previousYearManureApplicationId: formData.previousYearManureApplicationId,
-        previousYearManureApplicationNCredit: formData.previousYearManureApplicationNCredit,
+        previousYearManureApplicationNCredit:
+          formData.previousYearManureApplicationNCredit,
       };
       return updatedFields;
     });
@@ -133,21 +134,27 @@ export default function PreviousYearManureModal({
               minValue={0}
               step={0.1}
               iconRight={
-                calculatedDefaultCredit !== undefined &&
-                formData.previousYearManureApplicationNCredit !== calculatedDefaultCredit ? (
-                  <button
-                    type="button"
-                    css={resetButtonStyle}
-                    onClick={handleResetToCalculated}
-                    title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
-                  >
-                    <LoopIcon />
-                  </button>
-                ) : undefined
+                calculatedDefaultCredit !== undefined
+                && formData.previousYearManureApplicationNCredit
+                  !== calculatedDefaultCredit ? (
+                    <button
+                      type="button"
+                      css={resetButtonStyle}
+                      onClick={handleResetToCalculated}
+                      title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
+                    >
+                      <LoopIcon />
+                    </button>
+                  ) : undefined
               }
             />
             {calculatedDefaultCredit !== undefined && (
-              <div style={helperTextStyle}>Calculated default: {calculatedDefaultCredit} lb/ac</div>
+              <div style={helperTextStyle}>
+                Calculated default:
+                {calculatedDefaultCredit}
+                {' '}
+                lb/ac
+              </div>
             )}
           </Grid>
         </Grid>

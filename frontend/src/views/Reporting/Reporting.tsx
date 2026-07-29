@@ -37,8 +37,9 @@ export default function Reporting() {
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestphosphorousranges',
   ).data;
-  const potassiumRanges: SoilTestNutrientRange[] =
-    apiCache.getInitializedResponse('soiltestpotassiumranges').data;
+  const potassiumRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
+    'soiltestpotassiumranges',
+  ).data;
   const [manureUnits, setManureUnits] = useState<Units[]>([]);
   const [solidConversions, setSolidConversions] = useState<
     SolidMaterialApplicationTonPerAcreRateConversions[]
@@ -47,17 +48,14 @@ export default function Reporting() {
     LiquidMaterialApplicationUsGallonsPerAcreRateConversions[]
   >([]);
   const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
-  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
-    null,
-  );
+  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(null);
 
   const unassignedManures = useMemo(
-    () =>
-      [
-        ...(state.nmpFile.years[0].generatedManures || []),
-        ...(state.nmpFile.years[0].importedManures || []),
-        ...(state.nmpFile.years[0].derivedManures || []),
-      ].filter((m) => !m.assignedToStoredSystem),
+    () => [
+      ...(state.nmpFile.years[0].generatedManures || []),
+      ...(state.nmpFile.years[0].importedManures || []),
+      ...(state.nmpFile.years[0].derivedManures || []),
+    ].filter((m) => !m.assignedToStoredSystem),
     [state.nmpFile.years],
   );
 
@@ -91,15 +89,20 @@ export default function Reporting() {
           setSubregion(response.data.length > 0 ? response.data[0] : null);
         }
       });
-    apiCache.callEndpoint('api/units/').then((response: { status?: any; data: Units[] }) => {
-      if (response.status === 200) {
-        setManureUnits(response.data);
-      }
-    });
+    apiCache
+      .callEndpoint('api/units/')
+      .then((response: { status?: any; data: Units[] }) => {
+        if (response.status === 200) {
+          setManureUnits(response.data);
+        }
+      });
     apiCache
       .callEndpoint('api/solidmaterialapplicationtonperacrerateconversions/')
       .then(
-        (response: { status?: any; data: SolidMaterialApplicationTonPerAcreRateConversions[] }) => {
+        (response: {
+          status?: any;
+          data: SolidMaterialApplicationTonPerAcreRateConversions[];
+        }) => {
           if (response.status === 200) {
             setSolidConversions(response.data);
           }
@@ -123,10 +126,10 @@ export default function Reporting() {
   // Calculate material remaining data
   useEffect(() => {
     if (
-      manureUnits.length === 0 ||
-      solidConversions.length === 0 ||
-      liquidConversions.length === 0 ||
-      manures.length === 0
+      manureUnits.length === 0
+      || solidConversions.length === 0
+      || liquidConversions.length === 0
+      || manures.length === 0
     ) {
       return;
     }
@@ -150,14 +153,22 @@ export default function Reporting() {
       manureUnits,
     );
     setMaterialRemainingData(result);
-  }, [manureUnits, solidConversions, liquidConversions, manures, state.nmpFile.years]);
+  }, [
+    manureUnits,
+    solidConversions,
+    liquidConversions,
+    manures,
+    state.nmpFile.years,
+  ]);
 
   async function downloadBlob() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(state.nmpFile)]));
     const a = document.createElement('a');
     a.href = url;
 
-    const prependDate = new Date().toLocaleDateString('sv-SE', { dateStyle: 'short' });
+    const prependDate = new Date().toLocaleDateString('sv-SE', {
+      dateStyle: 'short',
+    });
     const farmName = state.nmpFile?.farmDetails?.farmName;
 
     a.download = `${prependDate}-${farmName}.nmp`;
@@ -172,9 +183,8 @@ export default function Reporting() {
   };
 
   const handleNextPage = () => {
-    window.location.href =
-      'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-' +
-      'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing';
+    window.location.href = 'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-'
+      + 'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing';
   };
 
   return (
@@ -195,7 +205,10 @@ export default function Reporting() {
             <ul>
               {unassignedManures.map((manure) => (
                 <li key={`${manure.managedManureName}`}>
-                  {manure.manureType} - {manure.managedManureName}
+                  {manure.manureType}
+                  {' '}
+                  -
+                  {manure.managedManureName}
                 </li>
               ))}
             </ul>
@@ -222,19 +235,19 @@ export default function Reporting() {
               orientation="vertical"
             >
               <Button
-                onPress={() =>
-                  makeFullReportPdf(
-                    state.nmpFile,
-                    subregion,
-                    fertilizerUnits,
-                    soilTestMethods,
-                    phosphorousRanges,
-                    potassiumRanges,
-                    materialRemainingData,
-                  )
-                }
+                onPress={() => makeFullReportPdf(
+                  state.nmpFile,
+                  subregion,
+                  fertilizerUnits,
+                  soilTestMethods,
+                  phosphorousRanges,
+                  potassiumRanges,
+                  materialRemainingData,
+                )}
               >
-                <div style={{ width: '100%', textAlign: 'center' }}>Complete report</div>
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                  Complete report
+                </div>
               </Button>
               <Button onPress={() => {}}>Record keeping sheets</Button>
             </ButtonGroup>

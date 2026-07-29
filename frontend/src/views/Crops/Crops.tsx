@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 /**
  * @summary This is the Crops Tab component for managing crop data for fields
  * @description Allows users to view, add, edit and delete crops associated with fields
@@ -10,7 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@bcgov/design-system-react-components';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowId } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowId,
+} from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
 import { AlertDialog, Tabs, View } from '../../components/common';
@@ -27,21 +30,29 @@ function Crops() {
   );
 
   const [editingFieldIndex, setEditingFieldIndex] = useState<number>(0);
-  const [editingCropIndex, setEditingCropIndex] = useState<number | undefined>(undefined);
+  const [editingCropIndex, setEditingCropIndex] = useState<number | undefined>(
+    undefined,
+  );
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const [dialogText, setDialogText] = useState<string>('');
-  const [deleteBtnConfig, setDeleteBtnConfig] = useState<AlertDialogContinueBtn | undefined>(
-    undefined,
-  );
+  const [deleteBtnConfig, setDeleteBtnConfig] = useState<
+    AlertDialogContinueBtn | undefined
+  >(undefined);
 
-  const handleEditCrop = (e: { id: GridRowId; api: GridApiCommunity }, cropIndex: number) => {
+  const handleEditCrop = (
+    e: { id: GridRowId; api: GridApiCommunity },
+    cropIndex: number,
+  ) => {
     setEditingFieldIndex(e.api.getRowIndexRelativeToVisibleRows(e.id));
     setEditingCropIndex(cropIndex);
     setIsDialogOpen(true);
   };
 
-  const handleDeleteCrop = (e: { id: GridRowId; api: GridApiCommunity }, cropIndex: number) => {
+  const handleDeleteCrop = (
+    e: { id: GridRowId; api: GridApiCommunity },
+    cropIndex: number,
+  ) => {
     setFields((prev) => {
       const fieldIndex = e.api.getRowIndexRelativeToVisibleRows(e.id);
       const newFieldsList = [...prev];
@@ -51,7 +62,11 @@ function Crops() {
   };
 
   const handleNextPage = () => {
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.year,
+      newFields: fields,
+    });
     if (!state.showAnimalsStep) {
       navigate(MANURE_IMPORTS);
     } else {
@@ -60,7 +75,11 @@ function Crops() {
   };
 
   const handlePreviousPage = () => {
-    dispatch({ type: 'SAVE_FIELDS', year: state.nmpFile.farmDetails.year, newFields: fields });
+    dispatch({
+      type: 'SAVE_FIELDS',
+      year: state.nmpFile.farmDetails.year,
+      newFields: fields,
+    });
     navigate(SOIL_TESTS);
   };
 

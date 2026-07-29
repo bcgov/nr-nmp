@@ -5,7 +5,12 @@ import Grid from '@mui/material/Grid';
 import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 import { formGridBreakpoints, ModalInstructions } from '../../common.styles';
 import { Form, Modal, NumberField } from '../../components/common';
-import { NMPFileField, NMPFileSoilTest, SelectOption, SoilTestMethods } from '@/types';
+import {
+  NMPFileField,
+  NMPFileSoilTest,
+  SelectOption,
+  SoilTestMethods,
+} from '@/types';
 import { StyledDatePicker } from './soilTests.styles';
 
 type SoilModalProps = {
@@ -34,7 +39,9 @@ export default function SoilTestsModal({
     [formData?.sampleDate],
   );
 
-  const handleFormFieldChange = (changes: Partial<Omit<NMPFileSoilTest, 'soilTestId'>>) => {
+  const handleFormFieldChange = (
+    changes: Partial<Omit<NMPFileSoilTest, 'soilTestId'>>,
+  ) => {
     setFormData((prev) => ({ ...prev, ...changes }));
   };
 
@@ -54,8 +61,7 @@ export default function SoilTestsModal({
 
       setFields((prevFields) => {
         const newList = [...prevFields];
-        if (currentFieldIndex !== null)
-          newList[currentFieldIndex].soilTest = { ...newFormData, soilTestId };
+        if (currentFieldIndex !== null) newList[currentFieldIndex].soilTest = { ...newFormData, soilTestId };
         return newList;
       });
       return newFormData;
@@ -76,8 +82,8 @@ export default function SoilTestsModal({
         id="modal-form"
       >
         <ModalInstructions>
-          Enter values expressed in ppm or mg/kg. Do not enter results from soil samples taken
-          deeper than 6 inches (15cm).
+          Enter values expressed in ppm or mg/kg. Do not enter results from soil
+          samples taken deeper than 6 inches (15cm).
         </ModalInstructions>
         <Grid
           container
@@ -90,7 +96,9 @@ export default function SoilTestsModal({
                 <ReactDatePicker
                   selected={formDataDate}
                   onChange={(e) => {
-                    handleFormFieldChange({ sampleDate: e ? e.toISOString() : undefined });
+                    handleFormFieldChange({
+                      sampleDate: e ? e.toISOString() : undefined,
+                    });
                   }}
                   dateFormat="MM/yyyy"
                   showMonthYearPicker

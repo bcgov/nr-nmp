@@ -10,7 +10,10 @@ type SolidStorageDetailsProps = {
   setFormData: React.Dispatch<React.SetStateAction<SolidManureStorageSystem>>;
 };
 
-export default function SolidStorageDetails({ formData, setFormData }: SolidStorageDetailsProps) {
+export default function SolidStorageDetails({
+  formData,
+  setFormData,
+}: SolidStorageDetailsProps) {
   const handleStorageChange = (changes: Partial<SolidManureStorage>) => {
     setFormData((prev) => ({
       ...prev,

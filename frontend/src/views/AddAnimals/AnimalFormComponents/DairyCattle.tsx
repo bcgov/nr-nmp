@@ -21,7 +21,9 @@ import { DAIRY_COW_ID, MILKING_COW_ID } from '@/constants';
 type DairyCattleProps = {
   formData: NMPFileDairyCattle;
   animals: SelectOption<Animal>[];
-  handleInputChanges: (changes: { [name: string]: string | number | boolean | undefined }) => void;
+  handleInputChanges: (changes: {
+    [name: string]: string | number | boolean | undefined;
+  }) => void;
   handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
@@ -34,9 +36,13 @@ export default function DairyCattle({
 }: DairyCattleProps) {
   const apiCache = useContext(APICacheContext);
   const [subtypes, setSubtypes] = useState<AnimalSubtype[]>([]);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
+  const [subtypeOptions, setSubtypeOptions] = useState<
+    { id: string; label: string }[]
+  >([]);
   const [breeds, setBreeds] = useState<DairyCattleBreed[]>([]);
-  const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>([]);
+  const [breedOptions, setBreedOptions] = useState<{ id: string; label: string }[]>(
+    [],
+  );
 
   // Initial values for milking fields, if "Milking cow" is selected //
   const washWaterDefault = useMemo(() => {
@@ -69,10 +75,9 @@ export default function DairyCattle({
       } else {
         const expectedMilkProduction = subtype.milkproduction * breed.breedmanurefactor;
         // Due to potential floating point issues, round factor to 1 if numbers are close
-        const milkProdPercent =
-          Math.abs(expectedMilkProduction - formData.milkProduction) < 1
-            ? 1
-            : formData.milkProduction / expectedMilkProduction;
+        const milkProdPercent = Math.abs(expectedMilkProduction - formData.milkProduction) < 1
+          ? 1
+          : formData.milkProduction / expectedMilkProduction;
         extraCoefficient = breed.breedmanurefactor * milkProdPercent;
       }
     } else {
@@ -113,18 +118,20 @@ export default function DairyCattle({
   };
 
   useEffect(() => {
-    apiCache.callEndpoint(`api/animal_subtypes/${DAIRY_COW_ID}/`).then((response) => {
-      if (response.status === 200) {
-        setSubtypes(response.data);
-        const subtypeOptionz: { id: string; label: string }[] = response.data.map(
-          (row: AnimalSubtype) => ({
-            id: row.id.toString(),
-            label: row.name,
-          }),
-        );
-        setSubtypeOptions(subtypeOptionz);
-      }
-    });
+    apiCache
+      .callEndpoint(`api/animal_subtypes/${DAIRY_COW_ID}/`)
+      .then((response) => {
+        if (response.status === 200) {
+          setSubtypes(response.data);
+          const subtypeOptionz: { id: string; label: string }[] = response.data.map(
+            (row: AnimalSubtype) => ({
+              id: row.id.toString(),
+              label: row.name,
+            }),
+          );
+          setSubtypeOptions(subtypeOptionz);
+        }
+      });
 
     apiCache.callEndpoint('api/breeds/').then((response) => {
       if (response.status === 200) {
@@ -191,9 +198,9 @@ export default function DairyCattle({
           maxValue={365}
         />
       </Grid>
-      {formData.subtype === MILKING_COW_ID &&
-        milkProductionDefault !== undefined &&
-        washWaterDefault !== undefined && (
+      {formData.subtype === MILKING_COW_ID
+        && milkProductionDefault !== undefined
+        && washWaterDefault !== undefined && (
           <MilkingFields
             milkProductionInit={
               formData.milkProduction !== undefined
@@ -201,13 +208,17 @@ export default function DairyCattle({
                 : milkProductionDefault
             }
             milkProductionDefault={milkProductionDefault}
-            washWaterInit={formData.washWater !== undefined ? formData.washWater : washWaterDefault}
+            washWaterInit={
+              formData.washWater !== undefined
+                ? formData.washWater
+                : washWaterDefault
+            }
             washWaterDefault={washWaterDefault}
             animalsPerFarm={formData.animalsPerFarm || 0}
             washWaterUnit={formData.washWaterUnit}
             handleInputChanges={handleInputChanges}
           />
-        )}
+      )}
     </AnimalFormWrapper>
   );
 }

@@ -19,7 +19,9 @@ import { BEEF_COW_ID } from '@/constants';
 type BeefCattleProps = {
   formData: NMPFileBeefCattle;
   animals: SelectOption<Animal>[];
-  handleInputChanges: (changes: { [name: string]: string | number | undefined }) => void;
+  handleInputChanges: (changes: {
+    [name: string]: string | number | undefined;
+  }) => void;
   handleSubmit: (newFormData: NMPFileAnimal) => void;
   onCancel: () => void;
 };
@@ -31,8 +33,12 @@ export default function BeefCattle({
   ...props
 }: BeefCattleProps) {
   const apiCache = useContext(APICacheContext);
-  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(!!formData.daysCollected);
-  const [subtypeOptions, setSubtypeOptions] = useState<{ id: string; label: string }[]>([]);
+  const [showCollectionDays, setShowCollectionDays] = useState<boolean>(
+    !!formData.daysCollected,
+  );
+  const [subtypeOptions, setSubtypeOptions] = useState<
+    { id: string; label: string }[]
+  >([]);
   const [subtypes, setSubtypes] = useState<AnimalSubtype[]>([]);
 
   const onSubmit = () => {
