@@ -598,7 +598,7 @@ export default function FertilizerModal({
           <Grid size={formGridBreakpoints}>
             <InputField
               label="Date"
-              type="date"
+              type="month"
               name="applDate"
               value={formState.applDate || ''}
               onChange={(e: any) => {
