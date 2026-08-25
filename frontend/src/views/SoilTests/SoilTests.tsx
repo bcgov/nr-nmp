@@ -335,7 +335,7 @@ export default function SoilTests() {
       />
       {!soilTestId && (
         <InfoBox>
-          Do you have soil test from within the past 3 years?
+          Do you have soil tests from within the past 3 years?
           <ul>
             <li>Yes - Select the lab used (soil test methods)</li>
             <li>No - Click Next</li>
