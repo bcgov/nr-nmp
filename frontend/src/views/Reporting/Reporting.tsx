@@ -22,6 +22,7 @@ import {
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   MaterialRemainingData,
   Subregion,
+  PreviousCrop,
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
@@ -48,6 +49,7 @@ export default function Reporting() {
     LiquidMaterialApplicationUsGallonsPerAcreRateConversions[]
   >([]);
   const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
+  const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
   const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(null);
 
   const unassignedManures = useMemo(
@@ -120,6 +122,13 @@ export default function Reporting() {
           }
         },
       );
+    apiCache
+      .callEndpoint('api/previouscroptypes/')
+      .then((response: { status?: any; data: PreviousCrop[] }) => {
+        if (response.status === 200) {
+          setPreviousCrops(response.data);
+        }
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -242,6 +251,7 @@ export default function Reporting() {
                   soilTestMethods,
                   phosphorousRanges,
                   potassiumRanges,
+                  previousCrops,
                   materialRemainingData,
                 )}
               >
