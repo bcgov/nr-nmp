@@ -37,13 +37,13 @@ export const liquidSolidManureDisplay = (manureObj?: { [key: string]: number }) 
   const liquid = manureObj?.annualLiquidManure || 0;
   // for displaying solid and or liquid
   if (solid && liquid) {
-    return `${printNum(solid)} tons/ ${printNum(liquid)} gal`;
+    return `${printNum(solid)} tons/ ${printNum(liquid)} U.S. gallons`;
   }
   if (solid) {
     return `${printNum(solid)} tons`;
   }
   if (liquid) {
-    return `${printNum(liquid)} gal`;
+    return `${printNum(liquid)} U.S. gallons`;
   }
   return '0';
 };
