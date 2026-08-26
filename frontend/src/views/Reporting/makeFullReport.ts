@@ -280,7 +280,7 @@ const generateManureCompostInventory = (
             : [];
           newRows.push([
             `        ${manure.uniqueMaterialName}`,
-            `${printNum(manure.annualAmount)} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+            `${printNum(manure.manureType === ManureType.Liquid ? manure.annualAmountUSGallonsVolume! : manure.annualAmountTonsWeight!)} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
           ]);
           return acc.concat(newRows);
         }, [] as RowInput[]),
