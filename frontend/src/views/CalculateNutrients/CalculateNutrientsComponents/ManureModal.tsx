@@ -507,7 +507,7 @@ export default function ManureModal({
                 value={manureForm.manureId}
                 items={manuresWithNutrients.map((ele: NMPFileNutrientAnalysis) => ({
                   id: ele.manureId,
-                  label: ele.manureName,
+                  label: ele.sourceName,
                 }))}
                 onChange={(e) => {
                   const manureWNutrients = manuresWithNutrients.find(
@@ -516,7 +516,7 @@ export default function ManureModal({
                   handleChanges({
                     manureId: e as number,
                     manureName: manureWNutrients.manureName,
-                    name: manureWNutrients.manureName,
+                    name: manureWNutrients.sourceName,
                     solidLiquid: manureWNutrients.solidLiquid,
                     sourceUuid: manureWNutrients.sourceUuid,
                   });
