@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import MUITabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -6,9 +6,11 @@ import Box from '@mui/material/Box';
 export default function Tabs({
   activeTab,
   tabLabel,
+  onChange,
 }: {
   activeTab: number;
   tabLabel: Array<string>;
+  onChange?: ((event: React.SyntheticEvent, value: any) => void) | undefined;
 }) {
   const [value, setValue] = useState(activeTab);
 
@@ -20,6 +22,7 @@ export default function Tabs({
         <MUITabs
           value={value}
           aria-label="tab"
+          onChange={onChange}
         >
           {tabLabel.map((ele, i) => (
             <Tab

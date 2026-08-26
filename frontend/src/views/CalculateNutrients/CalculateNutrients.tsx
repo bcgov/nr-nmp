@@ -390,6 +390,7 @@ export default function CalculateNutrients() {
             ? fieldList.map((field) => field.fieldName)
             : ['Field 1']
         }
+        onChange={(_, f) => setActiveField(f)}
       />
       <ButtonGroup
         alignment="end"
