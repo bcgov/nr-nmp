@@ -23,6 +23,7 @@ import {
   SoilTestNutrientRange,
   MaterialRemainingData,
   Subregion,
+  PreviousCrop,
 } from '@/types';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
 import {
@@ -279,7 +280,7 @@ const generateManureCompostInventory = (
             : [];
           newRows.push([
             `        ${manure.uniqueMaterialName}`,
-            `${printNum(manure.annualAmount)} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+            `${printNum(manure.manureType === ManureType.Liquid ? manure.annualAmountUSGallonsVolume! : manure.annualAmountTonsWeight!)} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
           ]);
           return acc.concat(newRows);
         }, [] as RowInput[]),
@@ -555,6 +556,7 @@ const generateFieldSummary = (
   soilTestMethods: SoilTestMethods[],
   phosphorousRanges: SoilTestNutrientRange[],
   potassiumRanges: SoilTestNutrientRange[],
+  previousCrops: PreviousCrop[],
 ) => {
   doc.addPage();
   // First table shows crops
@@ -581,7 +583,7 @@ const generateFieldSummary = (
     body: field.crops.map((crop) => [
       `${crop.name}`,
       `${crop.yield} ${crop.yieldHarvestUnit ? crop.yieldHarvestUnit : 'ton/ac'}`,
-      `${crop.nCredit === 0 ? 'none (no N credit)' : crop.nCredit}`,
+      `${previousCrops.find((c) => c.id === crop.prevCropId)?.name || 'none (no N credit)'}`,
     ]),
   });
 
@@ -1070,6 +1072,7 @@ export default async function makeFullReportPdf(
   soilTestMethods: SoilTestMethods[],
   phosphorousRanges: SoilTestNutrientRange[],
   potassiumRanges: SoilTestNutrientRange[],
+  previousCrops: PreviousCrop[],
   materialRemainingData: MaterialRemainingData | null,
 ) {
   // eslint-disable-next-line new-cap
@@ -1153,6 +1156,7 @@ export default async function makeFullReportPdf(
       soilTestMethods,
       phosphorousRanges,
       potassiumRanges,
+      previousCrops,
     );
   }
 
