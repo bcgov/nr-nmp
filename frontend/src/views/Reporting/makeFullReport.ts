@@ -141,7 +141,8 @@ const generateApplicationSchedule = (
               ? SEASON_APPLICATION.find(
                 (s) => s.Id === nutrientSource.applicationId,
               )!.Season
-              : '',
+              // Fertilizers may have an application date
+              : nutrientSource.applDate || '',
             // Example display: 10 L/ac
             `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
           ])
@@ -664,10 +665,9 @@ const generateFieldSummary = (
     body:
       allApplied.length > 0
         ? allApplied.map((nutrientSource) => {
-          let seasonApplication;
-          // Manures, but not fertilizers, have a season and application method
           if ('applicationId' in nutrientSource) {
-            seasonApplication = SEASON_APPLICATION.find(
+            // Manures have 'applicationId' and seasonal values
+            const seasonApplication = SEASON_APPLICATION.find(
               (s) => s.Id === nutrientSource.applicationId,
             );
             if (!seasonApplication) {
@@ -675,11 +675,19 @@ const generateFieldSummary = (
                 `Season application ${nutrientSource.applicationId} not found`,
               );
             }
+            return [
+              nutrientSource.name,
+              seasonApplication.Season,
+              seasonApplication.ApplicationMethod,
+              // Example display: 10 L/ac
+              `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
+            ];
           }
+          // Fertilizers have different properties
           return [
             nutrientSource.name,
-            seasonApplication?.Season || '',
-            seasonApplication?.ApplicationMethod || '',
+            nutrientSource.applDate || '',
+            nutrientSource.applicationMethod || '',
             // Example display: 10 L/ac
             `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
           ];
