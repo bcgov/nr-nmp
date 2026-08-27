@@ -27,14 +27,14 @@ import {
   AlertDialogContinueBtn,
   NMPFileField,
   SelectOption,
-  SoilTestMethods,
+  SoilTestMethod,
   SoilTestNutrientRange,
 } from '@/types';
 import { InfoBox, WarningMessage } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import SoilTestsModal from './SoilTestsModal';
-import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
+import { getKelownaRating, soilTestCalculation } from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 
 export default function SoilTests() {
   const { state, dispatch } = useAppState();
@@ -56,7 +56,7 @@ export default function SoilTests() {
   >(undefined);
 
   const [soilTestMethods, setSoilTestMethods] = useState<
-    SelectOption<SoilTestMethods>[]
+    SelectOption<SoilTestMethod>[]
   >([]);
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestphosphorousranges',
@@ -145,7 +145,7 @@ export default function SoilTests() {
   useEffect(() => {
     apiCache
       .callEndpoint('soiltestmethods')
-      .then((response: { status?: any; data: SoilTestMethods[] }) => {
+      .then((response: { status?: any; data: SoilTestMethod[] }) => {
         if (response.status === 200) {
           const { data } = response;
           setSoilTestMethods(
@@ -204,13 +204,11 @@ export default function SoilTests() {
         field: 'valP',
         headerName: 'P (ppm)',
         valueGetter: (_value, row) => {
-          const ppm: number | undefined = row.soilTest?.valP;
-          if (ppm !== undefined) {
-            const range = phosphorousRanges.find((r) => ppm < r.upperlimit);
-            const label = range?.rating || '';
-            return `${ppm} ${label}`;
+          const { soilTest } = row;
+          if (soilTest !== undefined) {
+            return `${soilTest.valP} ${getKelownaRating(soilTest.convertedKelownaP!, phosphorousRanges)}`;
           }
-          return ppm;
+          return undefined;
         },
         width: 110,
         minWidth: 110,
@@ -221,13 +219,11 @@ export default function SoilTests() {
         field: 'valK',
         headerName: 'K (ppm)',
         valueGetter: (_value, row) => {
-          const ppm: number = row.soilTest?.valK;
-          if (ppm !== undefined) {
-            const range = potassiumRanges.find((r) => ppm < r.upperlimit);
-            const label = range?.rating || '';
-            return `${ppm} ${label}`;
+          const { soilTest } = row;
+          if (soilTest !== undefined) {
+            return `${soilTest.valK} ${getKelownaRating(soilTest.convertedKelownaK, potassiumRanges)}`;
           }
-          return ppm;
+          return undefined;
         },
         width: 110,
         minWidth: 110,
@@ -237,7 +233,7 @@ export default function SoilTests() {
       {
         field: 'valPH',
         headerName: 'pH',
-        valueGetter: (_value, row) => row?.soilTest?.valPH,
+        valueGetter: (_value, row) => row.soilTest?.valPH,
         width: 80,
         minWidth: 80,
         maxWidth: 100,

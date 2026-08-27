@@ -2,14 +2,14 @@ import React, { useMemo, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Grid from '@mui/material/Grid';
-import soilTestCalculation from '@/calculations/FieldAndSoil/SoilTests/Calculations';
+import { soilTestCalculation } from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 import { formGridBreakpoints, ModalInstructions } from '../../common.styles';
 import { Form, Modal, NumberField } from '../../components/common';
 import {
   NMPFileField,
   NMPFileSoilTest,
   SelectOption,
-  SoilTestMethods,
+  SoilTestMethod,
 } from '@/types';
 import { StyledDatePicker } from './soilTests.styles';
 
@@ -17,7 +17,7 @@ type SoilModalProps = {
   initialFormData?: Omit<NMPFileSoilTest, 'soilTestId'>;
   currentFieldIndex: number;
   soilTestId: number;
-  soilTestMethods: SelectOption<SoilTestMethods>[];
+  soilTestMethods: SelectOption<SoilTestMethod>[];
   setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
   handleDialogClose: () => void;
 };
@@ -61,7 +61,9 @@ export default function SoilTestsModal({
 
       setFields((prevFields) => {
         const newList = [...prevFields];
-        if (currentFieldIndex !== null) newList[currentFieldIndex].soilTest = { ...newFormData, soilTestId };
+        if (currentFieldIndex !== null) {
+          newList[currentFieldIndex].soilTest = { ...newFormData, soilTestId };
+        }
         return newList;
       });
       return newFormData;

@@ -1,39 +1,30 @@
-import { NMPFileSoilTest, SoilTestMethods } from '@/types';
+import { NMPFileSoilTest, SoilTestMethod, SoilTestNutrientRange } from '@/types';
 
-export default function soilTestCalculation(
-  soilTestMethods: SoilTestMethods[],
+export function getKelownaRating(
+  convertedKelownaNutrient: number,
+  nutrientRanges: SoilTestNutrientRange[],
+): string {
+  return (nutrientRanges.find((r) => convertedKelownaNutrient <= r.upperlimit)
+    || nutrientRanges[nutrientRanges.length - 1]).rating;
+}
+
+export function soilTestCalculation(
+  soilTestMethods: SoilTestMethod[],
   soilTestId: number,
   soilTestData: Pick<NMPFileSoilTest, 'valP' | 'valPH' | 'valK'>,
 ) {
-  // Calculate convertedKelownaP directly
-  const lessThan72 = soilTestMethods.find(
-    (method) => method.id === soilTestId,
-  )!.converttokelownaphlessthan72;
-  const greaterThan72 = soilTestMethods.find(
-    (method) => method.id === soilTestId,
-  )!.converttokelownaphgreaterthan72;
-
-  let convertedKelownaP = soilTestData.valP!;
-
-  if (soilTestData.valPH! < 7.2 && lessThan72 !== undefined) {
-    convertedKelownaP = soilTestData.valP! * lessThan72;
-  } else if (soilTestData.valPH! >= 7.2 && greaterThan72 !== undefined) {
-    convertedKelownaP = soilTestData.valP! * greaterThan72;
+  const soilTestMethod = soilTestMethods.find((method) => method.id === soilTestId);
+  if (!soilTestMethod) {
+    throw new Error(`No soil test method with id ${soilTestId}`);
   }
-
-  // Calculate converted Kelowna K value (if you need it)
-  const convertedKelownaK = soilTestMethods.find((method) => method.id === soilTestId)!.converttokelownak
-    !== undefined
-    ? soilTestData.valK!
-        * soilTestMethods.find((method) => method.id === soilTestId)!.converttokelownak
-    : soilTestData.valK!;
-
-  if (!(lessThan72 || greaterThan72)) {
-    throw new Error('Unable to calculate convertedKelownaP');
+  let convertedKelownaP;
+  if (soilTestData.valPH! < 7.2) {
+    convertedKelownaP = soilTestData.valP! * soilTestMethod.converttokelownaphlessthan72;
+  } else {
+    convertedKelownaP = soilTestData.valP! * soilTestMethod.converttokelownaphgreaterthan72;
   }
-  if (!convertedKelownaK) {
-    throw new Error('Unable to calculate convertedKelownaK');
-  }
+  const convertedKelownaK = soilTestData.valK! * soilTestMethod.converttokelownak;
+
   return {
     convertedKelownaP,
     convertedKelownaK,

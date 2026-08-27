@@ -19,7 +19,7 @@ import {
   NMPFileManureStorageSystem,
   NMPFileYear,
   Schedule,
-  SoilTestMethods,
+  SoilTestMethod,
   SoilTestNutrientRange,
   MaterialRemainingData,
   Subregion,
@@ -41,6 +41,7 @@ import {
   calculatePrecipitationInStorage,
   getRunoffInSystem,
 } from '@/utils/manureStorageSystems';
+import { getKelownaRating } from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
@@ -554,7 +555,7 @@ const generateFieldSummary = (
   year: string,
   field: NMPFileField,
   fertilizerUnits: FertilizerUnit[],
-  soilTestMethods: SoilTestMethods[],
+  soilTestMethods: SoilTestMethod[],
   phosphorousRanges: SoilTestNutrientRange[],
   potassiumRanges: SoilTestNutrientRange[],
   previousCrops: PreviousCrop[],
@@ -993,7 +994,7 @@ const generateSoilTestResults = (
   farmName: string,
   year: string,
   nmpFileYear: NMPFileYear,
-  soilTestMethods: SoilTestMethods[],
+  soilTestMethods: SoilTestMethod[],
   phosphorousRanges: SoilTestNutrientRange[],
   potassiumRanges: SoilTestNutrientRange[],
 ) => {
@@ -1066,8 +1067,8 @@ const generateSoilTestResults = (
         `${field.crops.map((c) => `${c.name}`).join('\n')}`,
         soilTest.valPH!,
         soilTest.valNO3H!,
-        `${soilTest.valP} ${phosphorousRanges.find((r) => soilTest.valP! < r.upperlimit)?.rating || ''}`,
-        `${soilTest.valK} ${potassiumRanges.find((r) => soilTest.valK! < r.upperlimit)?.rating || ''}`,
+        `${soilTest.valP} ${getKelownaRating(soilTest.convertedKelownaP!, phosphorousRanges)}`,
+        `${soilTest.valK} ${getKelownaRating(soilTest.convertedKelownaK!, potassiumRanges)}`,
       ];
     }),
   });
@@ -1077,7 +1078,7 @@ export default async function makeFullReportPdf(
   nmpFile: NMPFile,
   subregion: Subregion | null,
   fertilizerUnits: FertilizerUnit[],
-  soilTestMethods: SoilTestMethods[],
+  soilTestMethods: SoilTestMethod[],
   phosphorousRanges: SoilTestNutrientRange[],
   potassiumRanges: SoilTestNutrientRange[],
   previousCrops: PreviousCrop[],
