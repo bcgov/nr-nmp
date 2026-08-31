@@ -410,5 +410,5 @@ export function getCustomFertilizerName(
   phosphorous: number,
   potassium: number,
 ): string {
-  return `Custom (${typeId === DRY_CUSTOM_ID ? 'Dry ' : 'Liquid'}) ${printNum(nitrogen, 1)}-${printNum(phosphorous, 1)}-${printNum(potassium, 1)}`;
+  return `Custom (${typeId === DRY_CUSTOM_ID ? 'Dry' : 'Liquid'}) ${printNum(nitrogen)}-${printNum(phosphorous)}-${printNum(potassium)}`;
 }
