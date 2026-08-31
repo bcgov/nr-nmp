@@ -14,6 +14,8 @@ import {
 } from '@/types';
 import { tableActionButtonCss } from '../../common.styles';
 import { NUTRIENT_MESSAGES } from './nutrientMessages';
+import { DRY_CUSTOM_ID } from '@/constants';
+import { printNum } from '@/utils/utils';
 
 const initialAgronomicBalance: CropNutrients = { N: 0, P2O5: 0, K2O: 0 };
 const COLUMN_WIDTH: number = 90;
@@ -400,4 +402,13 @@ export function fertigationToFertigationRows(fertigations: NMPFileFertigation[])
     }
     return accRows;
   }, [] as any[]);
+}
+
+export function getCustomFertilizerName(
+  typeId: number,
+  nitrogen: number,
+  phosphorous: number,
+  potassium: number,
+): string {
+  return `Custom (${typeId === DRY_CUSTOM_ID ? 'Dry ' : 'Liquid'}) ${printNum(nitrogen, 1)}-${printNum(phosphorous, 1)}-${printNum(potassium, 1)}`;
 }

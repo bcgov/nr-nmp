@@ -39,7 +39,7 @@ import {
   getTimePerApplication,
   calculateSolidFertigation,
 } from '@/calculations/CalculateNutrients/Fertigation/calculations';
-import { renderBalanceCell } from '../../utils';
+import { getCustomFertilizerName, renderBalanceCell } from '../../utils';
 import {
   AMOUNT_TO_DISSOLVE_UNITS,
   SOLUBILITY_RATE_UNITS,
@@ -503,7 +503,6 @@ export default function FertigationModal({
 
           if (value === DRY_CUSTOM_ID || value === LIQUID_CUSTOM_ID) {
             next.customNutrients = EMPTY_CROP_NUTRIENTS;
-            next.name = 'Custom fertilizer';
           } else {
             next.customNutrients = undefined;
           }
@@ -565,10 +564,19 @@ export default function FertigationModal({
 
   const handleCustomChanges = (name: keyof CropNutrients, value: number) => {
     setIsCalculationCurrent(false);
-    setFormData((prev) => ({
-      ...prev,
-      customNutrients: { ...prev.customNutrients!, [name]: value },
-    }));
+    setFormData((prev) => {
+      const customNutrients = { ...prev.customNutrients!, [name]: value };
+      return ({
+        ...prev,
+        customNutrients,
+        name: getCustomFertilizerName(
+          prev.fertilizerTypeId,
+          customNutrients.N,
+          customNutrients.P2O5,
+          customNutrients.K2O,
+        ),
+      });
+    });
   };
 
   return (

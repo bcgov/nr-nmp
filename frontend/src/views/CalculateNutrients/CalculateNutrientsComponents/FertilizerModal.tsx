@@ -22,7 +22,7 @@ import {
   NMPFileFertilizer,
   CustomFertilizer,
 } from '@/types';
-import { calcFertBalance, renderBalanceCell } from '../utils';
+import { calcFertBalance, getCustomFertilizerName, renderBalanceCell } from '../utils';
 import {
   DRY_CUSTOM_ID,
   EMPTY_CUSTOM_FERTILIZER,
@@ -375,10 +375,19 @@ export default function FertilizerModal({
   };
 
   const handleCustomFertilizerChanges = (updates: Partial<CustomFertilizer>) => {
-    setFormState((prev) => ({
-      ...prev,
-      customFertilizer: { ...prev.customFertilizer!, ...updates },
-    }));
+    setFormState((prev) => {
+      const customFertilizer = { ...prev.customFertilizer!, ...updates };
+      return ({
+        ...prev,
+        customFertilizer,
+        name: getCustomFertilizerName(
+          prev.fertilizerTypeId,
+          customFertilizer.nitrogen,
+          customFertilizer.phosphorous,
+          customFertilizer.potassium,
+        ),
+      });
+    });
   };
 
   const handleInputChanges = (updates: Partial<NMPFileFertilizer>) => {
@@ -404,13 +413,11 @@ export default function FertilizerModal({
               ...EMPTY_CUSTOM_FERTILIZER,
               dryliquid: 'dry',
             };
-            next.name = 'Custom fertilizer';
           } else if (value === LIQUID_CUSTOM_ID) {
             next.customFertilizer = {
               ...EMPTY_CUSTOM_FERTILIZER,
               dryliquid: 'liquid',
             };
-            next.name = 'Custom fertilizer';
           }
         }
 
