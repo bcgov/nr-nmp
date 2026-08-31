@@ -219,6 +219,7 @@ export default function Reporting() {
                   {manure.manureType}
                   {' '}
                   -
+                  {' '}
                   {manure.managedManureName}
                 </li>
               ))}
