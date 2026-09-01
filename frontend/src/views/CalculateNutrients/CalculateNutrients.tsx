@@ -563,7 +563,8 @@ export default function CalculateNutrients() {
         slots={{ noRowsOverlay: NoRows }}
       />
       {/* Previous Year Manure Row */}
-      {currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
+      {currentField.previousYearManureApplicationId
+        && currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
           rows={[
