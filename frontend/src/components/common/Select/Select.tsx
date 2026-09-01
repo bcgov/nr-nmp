@@ -10,7 +10,7 @@ import { Key } from 'react-aria-components';
 interface ListBoxItemProps {
   [key: string]: any;
   label: string;
-  id: string;
+  id: string; // if id is false-y, the label is used as the Key
 }
 
 type SortFunction = (a: any, b: any) => -1 | 0 | 1;

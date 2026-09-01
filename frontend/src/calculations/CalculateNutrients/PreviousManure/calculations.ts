@@ -1,26 +1,9 @@
 import { NMPFileField, PreviousYearManureApplication } from '@/types';
 
-export interface PreviousYearManureData {
-  fieldName: string;
-  display: boolean;
-  nitrogen?: number;
-}
-
 /**
  * Constant for no manure application frequency
  */
-const NO_MANURE_FREQUENCY = 0;
-
-/**
- * Checks if manure was added in the previous year based on frequency
- * @param previousYearManureApplicationId - The frequency ID to check
- * @returns boolean True if manure was applied in previous year
- */
-export function wasManureAddedInPreviousYear(
-  previousYearManureApplicationId: number,
-): boolean {
-  return previousYearManureApplicationId > NO_MANURE_FREQUENCY;
-}
+export const NO_MANURE_FREQUENCY = '0';
 
 /**
  * Parses nitrogen credit array from string format "{22,30,45}"
@@ -36,31 +19,25 @@ function parseNitrogenCreditArray(creditString: string): number[] {
 
 /**
  * Helper function to get the default nitrogen credit based on frequency and volume category
- * @param prevYearManureApplicationFrequency - The frequency ID
+ * @param prevYearManureApplicationId - The frequency ID
  * @param manureApplicationHistory - The volume category (ManureApplicationHistory)
  * @param previousManureApplications - The database table of previous manure applications
  * @returns number Default nitrogen credit value
  */
 function prevYearManureDefaultLookup(
-  prevYearManureApplicationFrequency: number,
+  prevYearManureApplicationId: number,
   manureApplicationHistory: number,
   previousManureApplications: PreviousYearManureApplication[],
 ): number {
-  const matchingApplication = previousManureApplications.find(
-    (app) => app.previousyearmanureaplicationfrequency
-      === prevYearManureApplicationFrequency,
+  const application = previousManureApplications.find(
+    (app) => app.previousyearmanureaplicationfrequency === prevYearManureApplicationId,
   );
-
-  if (!matchingApplication) {
-    return 0;
+  if (!application) {
+    throw new Error(`No previous year manure application with id ${prevYearManureApplicationId}`);
   }
 
-  const creditArray = parseNitrogenCreditArray(
-    matchingApplication.defaultnitrogencredit,
-  );
-  const index = Math.min(manureApplicationHistory, creditArray.length - 1);
-
-  return creditArray[index] || 0;
+  const creditsArray = parseNitrogenCreditArray(application.defaultnitrogencredit);
+  return creditsArray[manureApplicationHistory];
 }
 
 /**
@@ -73,54 +50,16 @@ export function calcPrevYearManureApplDefault(
   field: NMPFileField,
   previousManureApplications: PreviousYearManureApplication[],
 ): number {
-  try {
-    if (
-      !field.previousYearManureApplicationId
-      || field.previousYearManureApplicationId === NO_MANURE_FREQUENCY
-    ) {
-      return 0;
-    }
-
-    const largestManureHistory = Math.max(
-      0,
-      ...field.crops.map((crop) => crop.manureApplicationHistory || 0),
-    );
-
-    return prevYearManureDefaultLookup(
-      field.previousYearManureApplicationId,
-      largestManureHistory,
-      previousManureApplications,
-    );
-  } catch (error) {
-    console.error(
-      'Error calculating previous year manure application default:',
-      error,
-    );
+  const id = field.previousYearManureApplicationId;
+  if (!id || id === NO_MANURE_FREQUENCY) {
     return 0;
   }
-}
+  if (field.crops.length === 0) {
+    return prevYearManureDefaultLookup(Number(id), 0, previousManureApplications);
+  }
 
-/**
- * Calculates previous year manure data for a field
- * @param field - Field data object
- * @param previousManureApplications - The database table of previous manure applications
- * @returns PreviousYearManureData Complete previous year manure data
- */
-export function calculatePrevYearManure(
-  field: NMPFileField,
-  previousManureApplications: PreviousYearManureApplication[],
-): PreviousYearManureData {
-  const frequency = field.previousYearManureApplicationId;
-  const wasAdded = wasManureAddedInPreviousYear(frequency);
-  const defaultCredit = calcPrevYearManureApplDefault(
-    field,
-    previousManureApplications,
+  const highestIndex = Math.max(
+    ...field.crops.map((crop) => crop.manureApplicationHistory!),
   );
-  const nitrogenCredit = field.previousYearManureApplicationNCredit ?? defaultCredit;
-
-  return {
-    fieldName: field.fieldName,
-    display: wasAdded,
-    nitrogen: nitrogenCredit,
-  };
+  return prevYearManureDefaultLookup(Number(id), highestIndex, previousManureApplications);
 }

@@ -2,7 +2,7 @@
  * @summary The calculate nutrients page for the application
  * calculates the field nutrients based on the crops and manure
  */
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -15,7 +15,7 @@ import {
 } from '@mui/x-data-grid';
 import { GridApiCommunity } from '@mui/x-data-grid/internals';
 import useAppState from '@/hooks/useAppState';
-import { calculatePrevYearManure } from '@/calculations/CalculateNutrients/PreviousManure';
+import { NO_MANURE_FREQUENCY } from '@/calculations/CalculateNutrients/PreviousManure';
 import { AlertDialog, Tabs, View } from '../../components/common';
 import { CROPS, NUTRIENT_ANALYSIS, REPORTING } from '@/constants/routes';
 
@@ -38,13 +38,7 @@ import {
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import {
-  AlertDialogContinueBtn,
-  CalculateNutrientsRow,
-  NMPFileField,
-  PreviousYearManureApplication,
-} from '@/types';
-import { APICacheContext } from '@/context/APICacheContext.tsx';
+import { AlertDialogContinueBtn, CalculateNutrientsRow, NMPFileField } from '@/types';
 import SoilNitrateCreditModal from './CalculateNutrientsComponents/SoilNitrateCreditModal.tsx';
 
 function NoRows() {
@@ -66,23 +60,7 @@ export default function CalculateNutrients() {
   const [fieldList, setFieldList] = useState<Array<NMPFileField>>(
     state.nmpFile.years[0].fields || [],
   );
-  const apiCache = useContext(APICacheContext);
-  const previousManureApplications: PreviousYearManureApplication[] = apiCache.getInitializedResponse('previousyearmanureapplications').data;
-  const prevYearManureData = useMemo(() => {
-    // Calculate previous year manure data when active field changes
-    const currentField = fieldList[activeField];
-    if (!currentField) {
-      return null;
-    }
-    const prevData = calculatePrevYearManure(
-      currentField,
-      previousManureApplications,
-    );
-    if (!currentField.previousYearManureApplicationNCredit) {
-      currentField.previousYearManureApplicationNCredit = prevData.nitrogen;
-    }
-    return prevData;
-  }, [activeField, fieldList, previousManureApplications]);
+  const currentField = useMemo(() => fieldList[activeField], [fieldList, activeField]);
 
   const [warningText, setWarningText] = useState<string>('');
   const [deleteBtnConfig, setDeleteBtnConfig] = useState<
@@ -105,10 +83,10 @@ export default function CalculateNutrients() {
       handleEditRow,
       handleDeleteRow,
       renderNutrientCell,
-      fieldList[activeField].crops.length ? 'Crops' : undefined,
+      currentField.crops.length ? 'Crops' : undefined,
       false,
     );
-  }, [activeField, fieldList]);
+  }, [activeField, currentField]);
 
   const manureColumns: GridColDef[] = useMemo(() => {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
@@ -157,8 +135,8 @@ export default function CalculateNutrients() {
   }, [activeField]);
 
   const fertigationRows = useMemo(
-    () => fertigationToFertigationRows(fieldList[activeField].fertigations),
-    [fieldList, activeField],
+    () => fertigationToFertigationRows(currentField.fertigations),
+    [currentField],
   );
 
   // This uses the index defined in fertigationRows
@@ -228,7 +206,7 @@ export default function CalculateNutrients() {
       () => setOpenDialog(['previousYearManure', 0]),
       () => {},
       renderNutrientCell,
-      'Previous Year Manure',
+      '',
       true,
       false,
     ),
@@ -237,18 +215,16 @@ export default function CalculateNutrients() {
 
   const balanceRow: CalculateNutrientsRow = useMemo(() => {
     const allRows: (CalculateNutrientsRow | undefined)[] = [
-      ...fieldList[activeField].crops,
-      ...fieldList[activeField].fertilizers,
-      ...fertigationToFertigationRows(fieldList[activeField].fertigations),
-      ...fieldList[activeField].otherNutrients,
-      ...fieldList[activeField].manures,
-      fieldList[activeField].soilNitrateCredit,
+      ...currentField.crops,
+      ...currentField.fertilizers,
+      ...fertigationToFertigationRows(currentField.fertigations),
+      ...currentField.otherNutrients,
+      ...currentField.manures,
+      currentField.soilNitrateCredit,
     ];
 
     // Add previous year manure nitrogen credit to the balance
-    const prevYearNitrogen = prevYearManureData?.display
-      ? prevYearManureData.nitrogen || 0
-      : 0;
+    const prevYearNitrogen = currentField.previousYearManureApplicationNCredit || 0;
 
     return {
       name: 'Balance',
@@ -274,7 +250,7 @@ export default function CalculateNutrients() {
         Math.round(allRows.reduce((sum, row) => sum + (row?.remK2o ?? 0), 0) * 10)
         / 10,
     };
-  }, [fieldList, activeField, prevYearManureData]);
+  }, [currentField]);
 
   // When balance row changes, clear previous messages and set new messages
   useEffect(() => {
@@ -445,7 +421,7 @@ export default function CalculateNutrients() {
       {openDialog[0] === 'field' && (
         <FieldListModal
           mode="Duplicate Field"
-          initialModalData={fieldList[activeField]}
+          initialModalData={currentField}
           rowEditIndex={undefined}
           setFieldList={setFieldList}
           isFieldNameUnique={isFieldNameUnique}
@@ -455,10 +431,10 @@ export default function CalculateNutrients() {
       )}
       {openDialog[0] === 'crop' && (
         <CropsModal
-          field={fieldList[activeField]}
+          field={currentField}
           fieldIndex={activeField}
           cropIndex={openDialog[1]}
-          initialModalData={fieldList[activeField].crops[openDialog[1]!]}
+          initialModalData={currentField.crops[openDialog[1]!]}
           setFields={setFieldList}
           isOpen={openDialog[0] === 'crop'}
           onClose={handleDialogClose}
@@ -470,7 +446,7 @@ export default function CalculateNutrients() {
           // NOTE: Custom fertilizer nutrients aren't saved
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].fertilizers[openDialog[1]]
+              ? currentField.fertilizers[openDialog[1]]
               : undefined
           }
           rowEditIndex={openDialog[1]}
@@ -486,10 +462,10 @@ export default function CalculateNutrients() {
           fieldIndex={activeField}
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].manures[openDialog[1]]
+              ? currentField.manures[openDialog[1]]
               : undefined
           }
-          field={fieldList[activeField]}
+          field={currentField}
           fields={fieldList}
           rowEditIndex={openDialog[1]}
           setFields={setFieldList}
@@ -504,12 +480,12 @@ export default function CalculateNutrients() {
           fieldIndex={activeField}
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].fertigations[openDialog[1]]
+              ? currentField.fertigations[openDialog[1]]
               : undefined
           }
           rowEditIndex={openDialog[1]}
           balanceRow={balanceRow}
-          field={fieldList[activeField]}
+          field={currentField}
           setFields={setFieldList}
           isOpen={openDialog[0] === 'fertigation'}
           onClose={handleDialogClose}
@@ -521,7 +497,7 @@ export default function CalculateNutrients() {
           fieldIndex={activeField}
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].otherNutrients[openDialog[1]]
+              ? currentField.otherNutrients[openDialog[1]]
               : undefined
           }
           rowEditIndex={openDialog[1]}
@@ -536,7 +512,7 @@ export default function CalculateNutrients() {
           fieldIndex={activeField}
           initialModalData={
             openDialog[1] !== undefined
-              ? fieldList[activeField].soilNitrateCredit
+              ? currentField.soilNitrateCredit
               : undefined
           }
           rowEditIndex={openDialog[1]}
@@ -553,13 +529,7 @@ export default function CalculateNutrients() {
           onClose={handleDialogClose}
           setFields={setFieldList}
           modalStyle={{ width: '600px' }}
-          field={fieldList[activeField]}
-          initialModalData={{
-            previousYearManureApplicationId:
-              fieldList[activeField].previousYearManureApplicationId,
-            previousYearManureApplicationNCredit:
-              fieldList[activeField].previousYearManureApplicationNCredit,
-          }}
+          field={currentField}
         />
       )}
       <div
@@ -580,9 +550,9 @@ export default function CalculateNutrients() {
           ...customCalcTableStyle,
           '--DataGrid-overlayHeight': '0px',
           '--DataGrid-rowBorderColor':
-            fieldList[activeField]?.crops.length > 0 ? 'inherit' : 'none',
+            currentField.crops.length > 0 ? 'inherit' : 'none',
         }}
-        rows={fieldList[activeField].crops}
+        rows={currentField.crops}
         columns={cropColumns}
         getRowId={() => crypto.randomUUID()}
         disableRowSelectionOnClick
@@ -593,13 +563,13 @@ export default function CalculateNutrients() {
         slots={{ noRowsOverlay: NoRows }}
       />
       {/* Previous Year Manure Row */}
-      {prevYearManureData?.display && (
+      {currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
           rows={[
             {
-              name: '',
-              reqN: prevYearManureData.nitrogen || 0,
+              name: "Previous years' manure",
+              reqN: currentField.previousYearManureApplicationNCredit || 0,
               reqP2o5: 0,
               reqK2o: 0,
               remN: 0,
@@ -616,10 +586,10 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].fertilizers.length > 0 && (
+      {currentField.fertilizers.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={fieldList[activeField].fertilizers}
+          rows={currentField.fertilizers}
           columns={fertilizerColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
@@ -629,10 +599,10 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].manures.length > 0 && (
+      {currentField.manures.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={fieldList[activeField].manures}
+          rows={currentField.manures}
           columns={manureColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
@@ -642,7 +612,7 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].fertigations.length > 0 && (
+      {currentField.fertigations.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
           rows={fertigationRows}
@@ -655,10 +625,10 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].otherNutrients.length > 0 && (
+      {currentField.otherNutrients.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={fieldList[activeField].otherNutrients}
+          rows={currentField.otherNutrients}
           columns={otherColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
@@ -668,10 +638,10 @@ export default function CalculateNutrients() {
           hideFooter
         />
       )}
-      {fieldList[activeField].soilNitrateCredit && (
+      {currentField.soilNitrateCredit && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}
-          rows={[fieldList[activeField].soilNitrateCredit]}
+          rows={[currentField.soilNitrateCredit]}
           columns={soilNitrateColumns}
           getRowId={() => crypto.randomUUID()}
           disableRowSelectionOnClick
