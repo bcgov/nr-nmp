@@ -209,7 +209,7 @@ export interface Region {
 }
 
 // _SoilTestMethods
-export type SoilTestMethods = {
+export type SoilTestMethod = {
   id: number;
   name: string;
   converttokelownaphlessthan72: number;

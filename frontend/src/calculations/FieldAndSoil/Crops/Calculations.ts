@@ -65,7 +65,7 @@ function validateIds(combinedCropData: NMPFileCrop, crop: Crop, cropType: CropTy
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
- * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @param {CropType} cropType - CropType object that corresponds to the combinedCropData cropTypeId
  * @returns {number} Amount of K₂O removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalK20(
@@ -100,7 +100,7 @@ export function getCropRemovalK20(
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
- * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @param {CropType} cropType - CropType object that corresponds to the combinedCropData cropTypeId
  * @returns {number} Amount of P₂O₅ removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalP205(
@@ -135,7 +135,7 @@ export function getCropRemovalP205(
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
- * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @param {CropType} cropType - CropType object that corresponds to the combinedCropData cropTypeId
  * @returns {number} Amount of N removed in lbs/acre, rounded to nearest integer
  */
 export function getCropRemovalN(
@@ -181,7 +181,7 @@ export function getCropRemovalN(
  *
  * @param {NMPFileCrop} combinedCropData - Crop data including yields and specifications
  * @param {Crop} crop - Crop object that corresponds with the combinedCropData cropId
- * @param {CropType} cropType - CropType object that corresponds with the combinedCropData cropTypeId
+ * @param {CropType} cropType - CropType object that corresponds to the combinedCropData cropTypeId
  * @returns {number} Required N application in lbs/acre, rounded to nearest integer
  */
 export function getCropRequirementN(

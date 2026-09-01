@@ -14,7 +14,7 @@ import useAppState from '@/hooks/useAppState';
 import { APICacheContext } from '@/context/APICacheContext';
 import {
   FertilizerUnit,
-  SoilTestMethods,
+  SoilTestMethod,
   SoilTestNutrientRange,
   Units,
   Manure,
@@ -34,7 +34,7 @@ export default function Reporting() {
   const apiCache = useContext(APICacheContext);
   const [subregion, setSubregion] = useState<Subregion | null>(null);
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
-  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethods[]>([]);
+  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethod[]>([]);
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestphosphorousranges',
   ).data;
@@ -50,7 +50,9 @@ export default function Reporting() {
   >([]);
   const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
-  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(null);
+  const [materialRemainingData, setMaterialRemainingData] = useState<
+    MaterialRemainingData | null
+  >(null);
 
   const unassignedManures = useMemo(
     () => [
@@ -77,7 +79,7 @@ export default function Reporting() {
       });
     apiCache
       .callEndpoint('api/soiltestmethods/')
-      .then((response: { status?: any; data: SoilTestMethods[] }) => {
+      .then((response: { status?: any; data: SoilTestMethod[] }) => {
         if (response.status === 200) {
           setSoilTestMethods(response.data);
         }
