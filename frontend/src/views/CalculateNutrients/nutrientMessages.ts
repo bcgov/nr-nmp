@@ -104,7 +104,7 @@ export const NUTRIENT_MESSAGES: NutrientMessage[] = [
     id: 10,
     text: 'Reduce crop P₂O₅ removal balance below 80 lb/ac per year in the long term.',
     icon: '/stop triangle.svg',
-    balanceType: 'remP2O5',
+    balanceType: 'remP2o5',
     reqBalanceLow: 15,
     reqBalanceHigh: 99999,
     remBalanceLow: 80,
