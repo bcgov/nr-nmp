@@ -3,6 +3,7 @@
  */
 import { ComponentProps, useEffect, useMemo } from 'react';
 import { Select as BcGovSelect } from '@bcgov/design-system-react-components';
+import { Key } from 'react-aria-components';
 
 // Copied from @bcgov/design-system-react-components library
 // because they don't export their types
@@ -19,6 +20,7 @@ type ThisComponentProps = {
   sortFunction?: SortFunction;
   noSort?: boolean;
   autoselectFirst?: boolean;
+  autoselectDefault?: Key;
 };
 
 const defaultSortFcn = (a: ListBoxItemProps, b: ListBoxItemProps) => {
@@ -31,6 +33,7 @@ function Select({
   sortFunction,
   noSort,
   autoselectFirst,
+  autoselectDefault,
   value,
   onChange,
   items,
@@ -50,14 +53,22 @@ function Select({
   );
 
   useEffect(() => {
-    if (autoselectFirst && onChange && sortedItems && sortedItems.length > 0) {
-      if (value === null || value === undefined) {
-        onChange(sortedItems[0].id!);
-      } else if (!sortedItems.some((elem) => elem.id === value)) {
-        onChange(sortedItems[0].id!);
-      }
+    if (!onChange || !sortedItems || sortedItems.length === 0
+      || sortedItems.some((elem) => elem.id === value)
+    ) {
+      return;
     }
-  }, [autoselectFirst, value, sortedItems, onChange]);
+
+    if (autoselectDefault !== undefined
+      && sortedItems.some((elem) => elem.id === autoselectDefault)
+    ) {
+      onChange(autoselectDefault);
+      return;
+    }
+    if (autoselectFirst) {
+      onChange(sortedItems[0].id!);
+    }
+  }, [autoselectFirst, autoselectDefault, value, sortedItems, onChange]);
 
   return (
     <BcGovSelect
