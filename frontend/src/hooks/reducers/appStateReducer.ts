@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { calcPrevYearManureApplDefault } from '@/calculations/CalculateNutrients/PreviousManure/calculations';
 import {
   calculateCropRequirements,
   postprocessModalData,
@@ -487,6 +488,24 @@ function saveAnimals(newFileYear: NMPFileYear, newAnimals: NMPFileAnimal[]) {
   filterNutrientAnalysesAndAppliedManures(newFileYear);
 }
 
+function updatePrevYearManureNCredits(
+  fields: NMPFileField[],
+  tables: AppStateTables,
+): NMPFileField[] {
+  return fields.map((field) => {
+    if (field.previousYearNCreditUpdated) {
+      return field;
+    }
+    return {
+      ...field,
+      previousYearManureApplicationNCredit: calcPrevYearManureApplDefault(
+        field,
+        tables.previousYearManureApplications,
+      ),
+    };
+  });
+}
+
 export function updateSoilNitrateCredit(
   fields: NMPFileField[],
   regionLocationId: number,
@@ -677,6 +696,8 @@ export function appStateReducer(state: AppState, action: AppStateAction): AppSta
       );
     } else {
       year.fields = structuredClone(action.newFields);
+      // Views other than Soil Tests can alter the default ncredit
+      year.fields = updatePrevYearManureNCredits(year.fields, state.tables);
     }
   } else if (action.type === 'SAVE_NUTRIENT_ANALYSIS') {
     year.nutrientAnalyses = structuredClone(action.newNutrientAnalyses);

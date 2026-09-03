@@ -102,7 +102,9 @@ export default function FieldListModal({
               placeholder="Select"
               onChange={(e) => {
                 handleFormFieldChange({
-                  previousYearManureApplicationId: e as number,
+                  previousYearManureApplicationId: e as string,
+                  // Set to false so N credit is set to default
+                  previousYearNCreditUpdated: false,
                 });
               }}
               noSort

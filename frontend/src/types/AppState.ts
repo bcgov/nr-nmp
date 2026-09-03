@@ -5,6 +5,7 @@ import {
   Manure,
   NitrateCredit,
   NitrogenMineralization,
+  PreviousYearManureApplication,
   Region,
   SoilTestNutrientKelownaRange,
   SoilTestPhosphorousRecommendation,
@@ -23,6 +24,7 @@ export type AppStateTables = {
   manures: Manure[];
   nitrateCredit: NitrateCredit[];
   nMineralizations: NitrogenMineralization[];
+  previousYearManureApplications: PreviousYearManureApplication[];
   regions: Region[];
   soilTestPhosphorousKelownaRanges: SoilTestNutrientKelownaRange[];
   soilTestPotassiumKelownaRanges: SoilTestNutrientKelownaRange[];

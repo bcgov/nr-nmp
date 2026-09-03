@@ -117,7 +117,7 @@ export interface NMPFileSoilNitrateCredit extends CalculateNutrientsRow {
 export type NMPFileField = {
   fieldName: string;
   area: number;
-  previousYearManureApplicationId: number;
+  previousYearManureApplicationId?: string;
   comment: string;
   crops: NMPFileCrop[];
   soilTest?: NMPFileSoilTest;
@@ -125,6 +125,7 @@ export type NMPFileField = {
   fertilizers: NMPFileFertilizer[];
   fertigations: NMPFileFertigation[];
   otherNutrients: NMPFileOtherNutrient[];
+  previousYearNCreditUpdated: boolean;
   previousYearManureApplicationNCredit?: number;
   soilNitrateCredit?: NMPFileSoilNitrateCredit;
 };
