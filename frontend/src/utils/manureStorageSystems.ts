@@ -17,12 +17,14 @@ export function calcRectangularSurfaceAreaSqFt(storage: RectangularStorage) {
 }
 
 export function calcRectangularVolumeFtCubed(storage: RectangularStorage) {
-  return Math.round(storage.lengthFt * storage.heightFt * storage.widthFt);
+  const activeHeight = storage.heightFt - 1; // height - freeBoard
+  return Math.round(storage.lengthFt * activeHeight * storage.widthFt);
 }
 
 export function calcRectangularVolumeGallons(storage: RectangularStorage) {
+  const activeHeight = storage.heightFt - 1; // height - freeBoard
   return Math.round(
-    storage.lengthFt * storage.heightFt * storage.widthFt * ft3ToGallons,
+    storage.lengthFt * activeHeight * storage.widthFt * ft3ToGallons,
   );
 }
 
