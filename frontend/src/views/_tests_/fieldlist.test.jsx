@@ -14,8 +14,9 @@ import {
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
-jest.mock('../../services/APICache', () =>
-  jest.fn().mockImplementation(() => ({
+jest.mock(
+  '../../services/APICache',
+  () => jest.fn().mockImplementation(() => ({
     callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
     getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
   })),
@@ -225,7 +226,7 @@ describe('FieldListModal unit tests', () => {
           // I give up on figuring out the select
           initialModalData={{
             ...DEFAULT_NMPFILE_FIELD,
-            previousYearManureApplicationId: 1,
+            previousYearManureApplicationId: '1',
           }}
           mode="Add Field"
           setFieldList={mockSetFieldList}
@@ -247,7 +248,7 @@ describe('FieldListModal unit tests', () => {
       {
         fieldName: 'Farm',
         area: 1,
-        previousYearManureApplicationId: 1,
+        previousYearManureApplicationId: '1',
         comment: 'Bananas',
         soilTest: undefined,
         crops: [],
