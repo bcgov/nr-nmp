@@ -550,6 +550,7 @@ export default function ManureModal({
                 items={filteredManureUnits}
                 onChange={(e) => handleChanges({ applUnitId: e as number })}
                 autoselectFirst
+                autoselectDefault={3} // id of US gallons/ac
                 noSort
               />
             </Grid>
