@@ -24,6 +24,7 @@ import {
   MaterialRemainingData,
   Subregion,
   PreviousCrop,
+  Units,
 } from '@/types';
 import SEASON_APPLICATION from '../CalculateNutrients/unseededData';
 import {
@@ -82,6 +83,7 @@ const generateApplicationSchedule = (
   year: string,
   nmpFileYear: NMPFileYear,
   fertilizerUnits: FertilizerUnit[],
+  manureUnits: Units[],
 ) => {
   for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
     const field = nmpFileYear.fields[i];
@@ -135,18 +137,32 @@ const generateApplicationSchedule = (
       },
       body:
         allApplied.length > 0
-          ? allApplied.map((nutrientSource) => [
-            nutrientSource.name,
-            // Manures, but not fertilizers, have a season
-            'applicationId' in nutrientSource
-              ? SEASON_APPLICATION.find(
+          ? allApplied.map((nutrientSource) => {
+            if ('applicationId' in nutrientSource) {
+            // Manures have 'applicationId' and seasonal values
+              const seasonApplication = SEASON_APPLICATION.find(
                 (s) => s.Id === nutrientSource.applicationId,
-              )!.Season
-              // Fertilizers may have an application date
-              : nutrientSource.applDate || '',
-            // Example display: 10 L/ac
-            `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
-          ])
+              );
+              if (!seasonApplication) {
+                throw new Error(
+                  `Season application ${nutrientSource.applicationId} not found`,
+                );
+              }
+              return [
+                nutrientSource.name,
+                seasonApplication.Season,
+                // Example display: 10 L/ac
+                `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+              ];
+            }
+            // Fertilizers have different properties
+            return [
+              nutrientSource.name,
+              nutrientSource.applDate || '',
+              // Example display: 10 L/ac
+              `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+            ];
+          })
           : [['None planned', '', '']],
       foot: [
         [
@@ -346,7 +362,7 @@ const generateManureAndCompostUse = (
           // Format land-applied with percentage
           landApplied = `${printNum(matchingMaterial.totalApplied)} ${unit} (${matchingMaterial.wholePercentApplied}%)`;
 
-          // Format amount remaining - show "None" if less than 10%, otherwise show amount with percentage
+          // Amount remaining: show "None" if less than 10%, otherwise show amount with percentage
           if (matchingMaterial.wholePercentRemaining < 10) {
             amountRemaining = 'None';
           } else {
@@ -555,6 +571,7 @@ const generateFieldSummary = (
   year: string,
   field: NMPFileField,
   fertilizerUnits: FertilizerUnit[],
+  manureUnits: Units[],
   soilTestMethods: SoilTestMethod[],
   phosphorousRanges: SoilTestNutrientRange[],
   potassiumRanges: SoilTestNutrientRange[],
@@ -681,7 +698,7 @@ const generateFieldSummary = (
               seasonApplication.Season,
               seasonApplication.ApplicationMethod,
               // Example display: 10 L/ac
-              `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
+              `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
             ];
           }
           // Fertilizers have different properties
@@ -690,7 +707,7 @@ const generateFieldSummary = (
             nutrientSource.applDate || '',
             nutrientSource.applicationMethod || '',
             // Example display: 10 L/ac
-            `${nutrientSource.applicationRate} ${fertilizerUnits.find((f) => f.id === nutrientSource.applUnitId)!.name}`,
+            `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
           ];
         })
         : [['None planned', '', '', '']],
@@ -1078,6 +1095,7 @@ export default async function makeFullReportPdf(
   nmpFile: NMPFile,
   subregion: Subregion | null,
   fertilizerUnits: FertilizerUnit[],
+  manureUnits: Units[],
   soilTestMethods: SoilTestMethod[],
   phosphorousRanges: SoilTestNutrientRange[],
   potassiumRanges: SoilTestNutrientRange[],
@@ -1102,7 +1120,7 @@ export default async function makeFullReportPdf(
   const storageSystems = nmpFileYear.manureStorageSystems || [];
 
   // First page: Table of Contents
-  // TODO: Add Table of Contents as the first page and page number
+  // TODO: Add Table of Contents as the first page
 
   // Second page: Application Schedule
   generateApplicationSchedule(
@@ -1112,6 +1130,7 @@ export default async function makeFullReportPdf(
     year,
     nmpFileYear,
     fertilizerUnits,
+    manureUnits,
   );
 
   // Third page: Manure/Compost Inventory
@@ -1162,6 +1181,7 @@ export default async function makeFullReportPdf(
       year,
       field,
       fertilizerUnits,
+      manureUnits,
       soilTestMethods,
       phosphorousRanges,
       potassiumRanges,
