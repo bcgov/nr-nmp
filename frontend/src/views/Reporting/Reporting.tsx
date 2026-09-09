@@ -33,15 +33,15 @@ export default function Reporting() {
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
   const [subregion, setSubregion] = useState<Subregion | null>(null);
+  const manureUnits: Units[] = apiCache.getInitializedResponse('units').data;
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
-  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethod[]>([]);
+  const soilTestMethods: SoilTestMethod[] = apiCache.getInitializedResponse('soiltestmethods').data;
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestphosphorousranges',
   ).data;
   const potassiumRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestpotassiumranges',
   ).data;
-  const [manureUnits, setManureUnits] = useState<Units[]>([]);
   const [solidConversions, setSolidConversions] = useState<
     SolidMaterialApplicationTonPerAcreRateConversions[]
   >([]);
@@ -78,26 +78,12 @@ export default function Reporting() {
         }
       });
     apiCache
-      .callEndpoint('api/soiltestmethods/')
-      .then((response: { status?: any; data: SoilTestMethod[] }) => {
-        if (response.status === 200) {
-          setSoilTestMethods(response.data);
-        }
-      });
-    apiCache
       .callEndpoint(
         `api/subregions/${state.nmpFile.farmDetails.farmRegion}/${state.nmpFile.farmDetails.farmSubregion!}/`,
       )
       .then((response) => {
         if (response.status === 200) {
           setSubregion(response.data.length > 0 ? response.data[0] : null);
-        }
-      });
-    apiCache
-      .callEndpoint('api/units/')
-      .then((response: { status?: any; data: Units[] }) => {
-        if (response.status === 200) {
-          setManureUnits(response.data);
         }
       });
     apiCache
@@ -137,8 +123,7 @@ export default function Reporting() {
   // Calculate material remaining data
   useEffect(() => {
     if (
-      manureUnits.length === 0
-      || solidConversions.length === 0
+      solidConversions.length === 0
       || liquidConversions.length === 0
       || manures.length === 0
     ) {
@@ -251,6 +236,7 @@ export default function Reporting() {
                   state.nmpFile,
                   subregion,
                   fertilizerUnits,
+                  manureUnits,
                   soilTestMethods,
                   phosphorousRanges,
                   potassiumRanges,
