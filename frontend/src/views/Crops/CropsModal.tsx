@@ -848,6 +848,12 @@ function CropsModal({
                       </Grid>
                     </Grid>
                   )}
+                  {!formData.hasLeafTest && (
+                    <div style={{ color: 'red', font: 'var(--typography-regular-small-body)' }}>
+                      For fields without a leaf test, &apos;High&apos; leaf P and K content will be
+                      assumed. Crop P and K requirements will be 0 on fields without a leaf test.
+                    </div>
+                  )}
                 </>
               )}
               {selectedCropType?.covercrop && (
