@@ -74,18 +74,20 @@ function AlertDialog({
               alignment="end"
               orientation="horizontal"
             >
-              <Button
-                variant="secondary"
-                onPress={() => {
-                  if (closeBtn?.handleClick) {
-                    closeBtn.handleClick();
-                  } else {
-                    handleClose();
-                  }
-                }}
-              >
-                {closeBtn?.btnText || 'Cancel'}
-              </Button>
+              {!(closeBtn?.hide) && (
+                <Button
+                  variant="secondary"
+                  onPress={() => {
+                    if (closeBtn?.handleClick) {
+                      closeBtn.handleClick();
+                    } else {
+                      handleClose();
+                    }
+                  }}
+                >
+                  {closeBtn?.btnText || 'Cancel'}
+                </Button>
+              )}
               {extraBtn && (
                 <Button
                   variant={extraBtn.variant}

@@ -30,6 +30,7 @@ export const Heading = styled.h2`
   min-width: 150px;
   display: contents;
   text-decoration: none;
+  cursor: pointer;
 `;
 
 export const Banner = styled.div`
@@ -65,8 +66,5 @@ export const Image = styled.img`
     width: 100px;
     padding-right: 5px;
   }
-`;
-
-export const StyledLink = styled.a`
-  text-decoration: none;
+  cursor: pointer;
 `;

@@ -27,6 +27,7 @@ import {
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
 import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
+import { downloadBlob } from './utils';
 
 export default function Reporting() {
   const { state } = useAppState();
@@ -157,23 +158,6 @@ export default function Reporting() {
     state.nmpFile.years,
   ]);
 
-  async function downloadBlob() {
-    const url = URL.createObjectURL(new Blob([JSON.stringify(state.nmpFile)]));
-    const a = document.createElement('a');
-    a.href = url;
-
-    const prependDate = new Date().toLocaleDateString('sv-SE', {
-      dateStyle: 'short',
-    });
-    const farmName = state.nmpFile?.farmDetails?.farmName;
-
-    a.download = `${prependDate}-${farmName}.nmp`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
   const handlePreviousPage = () => {
     navigate(CALCULATE_NUTRIENTS);
   };
@@ -263,7 +247,7 @@ export default function Reporting() {
           <div>To continue later, Download file to your computer</div>
           <div>Load a file on the Home page when you want to continue</div>
           <div>
-            <Button onPress={() => downloadBlob()}>Download file</Button>
+            <Button onPress={() => downloadBlob(state.nmpFile)}>Download file</Button>
           </div>
         </Grid>
       </Grid>

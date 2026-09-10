@@ -1,4 +1,5 @@
 import { jsPDF } from 'jspdf';
+import { NMPFile } from '@/types';
 
 export function getFertilizerUnitKgPerAcreConversion(unitId: number) {
   switch (unitId) {
@@ -74,4 +75,21 @@ export function numberToSuperscript(num: number): string {
     .split('')
     .map((c) => superscriptNumberDict[c])
     .join();
+}
+
+export async function downloadBlob(nmpFile: NMPFile) {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(nmpFile)]));
+  const a = document.createElement('a');
+  a.href = url;
+
+  const prependDate = new Date().toLocaleDateString('sv-SE', {
+    dateStyle: 'short',
+  });
+  const farmName = nmpFile?.farmDetails?.farmName;
+
+  a.download = `${prependDate}-${farmName}.nmp`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
