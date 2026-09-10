@@ -29,6 +29,7 @@ export default function RedirectDialog(
       continueBtn={{ handleClick: () => {
         dispatch({ type: 'RESET_NMPFILE' });
         navigate(LANDING_PAGE);
+        onOpenChange(false);
       } }}
     >
       <div style={{ color: 'red' }}>
