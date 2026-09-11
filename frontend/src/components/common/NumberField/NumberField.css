@@ -42,13 +42,13 @@
 
 /* Sizes */
 .bcds-react-aria-NumberField--container.small {
-  height: 40px;
-  min-height: 40px;
+  height: var(--layout-margin-xxlarge);
+  min-height: var(--layout-margin-xxlarge);
 }
 
 .bcds-react-aria-NumberField--container.medium {
-  height: 45px;
-  min-height: 45px;
+  height: calc(var(--layout-margin-xxlarge) + 5px);
+  min-height: calc(var(--layout-margin-xxlarge) + 5px);
 }
 
 /* Text input field */
