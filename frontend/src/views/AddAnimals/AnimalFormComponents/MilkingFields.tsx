@@ -104,7 +104,7 @@ export default function MilkingFields({
       <Grid size={formGridBreakpoints}>
         <NumberField
           isRequired
-          label="Milk Production"
+          label="Milk Production per lb/day/animal"
           value={milkProduction}
           onChange={(e) => {
             setMilkProduction(e);
@@ -127,19 +127,24 @@ export default function MilkingFields({
           }
         />
       </Grid>
-      <Grid size={formGridBreakpoints}>
-        <NumberField
-          isRequired
-          label="Milking Centre Wash Water"
-          value={washWater}
-          onChange={(e) => {
-            setWashWater(e);
-            handleInputChanges({
-              washWater: e,
-              washWaterAdjusted: washWaterDefaultCorrected !== e,
-            });
-          }}
-          iconRight={
+      <Grid
+        size={12}
+        container
+        direction="row"
+      >
+        <Grid size={5}>
+          <NumberField
+            isRequired
+            label="Milking Centre Wash Water"
+            value={washWater}
+            onChange={(e) => {
+              setWashWater(e);
+              handleInputChanges({
+                washWater: e,
+                washWaterAdjusted: washWaterDefaultCorrected !== e,
+              });
+            }}
+            iconRight={
             washWater !== washWaterDefaultCorrected ? (
               <ResetButton onClick={() => {
                 setWashWater(washWaterDefaultCorrected);
@@ -151,17 +156,18 @@ export default function MilkingFields({
               />
             ) : undefined
           }
-        />
-      </Grid>
-      <Grid size={formGridBreakpoints}>
-        <Select
-          label="(Units)"
-          value={washWaterUnit || PER_DAY_PER_ANIMAL_UNIT}
-          items={washWaterOptions}
-          onChange={(e) => handleUnitChange(e as WashWaterUnit)}
-          isRequired
-          noSort
-        />
+          />
+        </Grid>
+        <Grid size={4}>
+          <Select
+            label="Units"
+            value={washWaterUnit || PER_DAY_PER_ANIMAL_UNIT}
+            items={washWaterOptions}
+            onChange={(e) => handleUnitChange(e as WashWaterUnit)}
+            isRequired
+            noSort
+          />
+        </Grid>
       </Grid>
     </>
   );

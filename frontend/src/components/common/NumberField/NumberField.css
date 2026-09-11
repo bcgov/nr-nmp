@@ -42,13 +42,13 @@
 
 /* Sizes */
 .bcds-react-aria-NumberField--container.small {
-  height: var(--layout-margin-xlarge);
-  min-height: var(--layout-margin-xlarge);
+  height: var(--layout-margin-xxlarge);
+  min-height: var(--layout-margin-xxlarge);
 }
 
 .bcds-react-aria-NumberField--container.medium {
-  height: var(--layout-margin-xxlarge);
-  min-height: var(--layout-margin-xxlarge);
+  height: calc(var(--layout-margin-xxlarge) + 5px);
+  min-height: calc(var(--layout-margin-xxlarge) + 5px);
 }
 
 /* Text input field */
@@ -75,7 +75,7 @@
   border-radius: var(--layout-border-radius-large);
   border: var(--layout-border-width-small) solid var(--surface-color-border-active);
   outline: solid var(--layout-border-width-medium) var(--surface-color-border-active);
-  outline-offset: var(--layout-margin-hair);
+  outline-offset: 0;
 }
 
 .bcds-react-aria-NumberField--container:hover {
