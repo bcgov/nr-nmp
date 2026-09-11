@@ -17,6 +17,7 @@ export type CropsModalState = {
   selectedCropType?: CropType;
   selectedCrop?: Crop;
   defaultYieldInTons?: number;
+  defaultCrudeProtein?: number;
   calculatedReqN?: number;
   // isFormYieldEqualToDefault inits to true to hide a button
   isFormYieldEqualToDefault: boolean;
@@ -47,6 +48,11 @@ type SetYieldInTonsAction = {
 type SetYieldHarvestUnit = {
   type: 'SET_YIELD_HARVEST_UNIT';
   unit: HarvestUnit;
+};
+
+type SetProteinAction = {
+  type: 'SET_PROTEIN',
+  crudeProtein: number;
 };
 
 type SetCalculatedValuesAction = {
@@ -84,6 +90,10 @@ type RestoreDefaultYieldAction = {
   type: 'RESTORE_DEFAULT_YIELD';
 };
 
+type RestoreDefaultProteinAction = {
+  type: 'RESTORE_DEFAULT_PROTEIN';
+}
+
 type RemoveLeafTestAction = {
   type: 'REMOVE_LEAF_TEST';
 };
@@ -94,12 +104,14 @@ export type CropsModalReducerAction =
   | SetYieldAction
   | SetYieldInTonsAction
   | SetYieldHarvestUnit
+  | SetProteinAction
   | SetCalculatedValuesAction
   | SetFormDataAttrAction
   | SetSelectedCropTypeAction
   | SetSelectedCropAction
   | SetDefaultYieldAction
   | RestoreDefaultYieldAction
+  | RestoreDefaultProteinAction
   | RemoveLeafTestAction;
 
 function isCropSet(cropId: number, selectedCrop?: Crop) {
@@ -150,7 +162,7 @@ export function cropsModalReducer(
   state: CropsModalState,
   action: CropsModalReducerAction,
 ): CropsModalState {
-  const { formData, selectedCrop, defaultYieldInTons } = state;
+  const { formData, selectedCrop, defaultYieldInTons, defaultCrudeProtein } = state;
   switch (action.type) {
     case 'SET_CROP_TYPE_ID':
       return {
@@ -159,19 +171,19 @@ export function cropsModalReducer(
         formData: {
           ...formData,
           cropTypeId: action.cropTypeId,
-          // Special case #1: if this is a cover crop, default coverCropHarvested to false, otherwise clear it
+          // If this is a cover crop, default coverCropHarvested to false, otherwise clear it
           coverCropHarvested: action.cropType.covercrop
             ? formData.coverCropHarvested === undefined
               ? false
               : formData.coverCropHarvested
             : undefined,
-          // Special case #2: if this is the Other crop type, set the crop id to Other, otherwise reset crop id
+          // If this is the Other crop type, set the crop id to Other, otherwise reset crop id
           cropId: action.cropTypeId === CROP_TYPE_OTHER_ID ? CROP_OTHER_ID : 0,
-          // Special case #3: if this crop type shows the unit dropdown, set yieldHarvestUnit to bu/ac, otherwise clear it
+          // If the crop type shows unit dropdown, set yieldHarvestUnit to bu/ac, otherwise clear it
           yieldHarvestUnit: showUnitDropdown(action.cropTypeId)
             ? HarvestUnit.BushelsPerAcre
             : undefined,
-          // Special case #4: if this is Berry, set berry fields to default, otherwise set to undefined
+          // If this is Berry, set berry fields to default, otherwise set to undefined
           willSawdustBeApplied:
             action.cropTypeId === CROP_TYPE_BERRIES_ID ? false : undefined,
           willPlantsBePruned:
@@ -188,12 +200,15 @@ export function cropsModalReducer(
         },
         selectedCrop: undefined,
         defaultYieldInTons: undefined,
+        defaultCrudeProtein: undefined,
       };
 
     case 'SET_CROP_ID':
-      // TODO: Make these into constants once you know what "unitConversionFactor" means. There's gotta be a better name
+      // TODO: Make into constants once you know what "unitConversionFactor" means. What units?
       const nToProteinConversionFactor = 0.625;
       const unitConversionFactor = 0.5;
+      const crudeProtein = action.crop.cropremovalfactornitrogen
+        * nToProteinConversionFactor * unitConversionFactor;
 
       return {
         ...state,
@@ -203,12 +218,10 @@ export function cropsModalReducer(
           cropId: action.cropId,
           name: action.crop.cropname,
           manureApplicationHistory: action.crop.manureapplicationhistory,
-          crudeProtein:
-            action.crop.cropremovalfactornitrogen
-            * nToProteinConversionFactor
-            * unitConversionFactor,
+          crudeProtein,
           crudeProteinAdjusted: false,
         },
+        defaultCrudeProtein: crudeProtein,
       };
 
     case 'SET_YIELD':
@@ -282,6 +295,16 @@ export function cropsModalReducer(
             action.unit === HarvestUnit.TonsPerAcre
               ? formData.yield / selectedCrop!.harvestbushelsperton // Going from bu/ac to tons/ac
               : formData.yield * selectedCrop!.harvestbushelsperton, // Going from tons/ac to bu/ac
+        },
+      };
+
+    case 'SET_PROTEIN':
+      return {
+        ...state,
+        formData: {
+          ...formData,
+          crudeProtein: action.crudeProtein,
+          crudeProteinAdjusted: action.crudeProtein !== defaultCrudeProtein,
         },
       };
 
@@ -373,6 +396,12 @@ export function cropsModalReducer(
         ...state,
         isFormYieldEqualToDefault: true,
         formData: { ...formData, yield: defaultYieldInTons },
+      };
+
+    case 'RESTORE_DEFAULT_PROTEIN':
+      return {
+        ...state,
+        formData: { ...formData, crudeProtein: defaultCrudeProtein, crudeProteinAdjusted: false },
       };
 
     default:

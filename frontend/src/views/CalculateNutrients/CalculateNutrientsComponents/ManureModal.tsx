@@ -11,11 +11,10 @@ import {
 } from 'react';
 import Grid from '@mui/material/Grid';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import LoopIcon from '@mui/icons-material/Loop';
 import { Button, ButtonGroup } from '@bcgov/design-system-react-components';
 import { APICacheContext } from '@/context/APICacheContext';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
-import { Form, NumberField, Select } from '@/components/common';
+import { Form, NumberField, ResetButton, Select } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 // Data not seeded in DB.
 import SEASON_APPLICATION from '../unseededData';
@@ -564,19 +563,13 @@ export default function ManureModal({
                 })}
                 maxValue={100}
                 iconRight={
-                  defaultAmmonia !== undefined
-                  && manureForm.nh4Retention !== defaultAmmonia ? (
-                    <button
-                      type="button"
-                      css={{ backgroundColor: '#ffa500' }}
-                      onClick={() => handleChanges({
-                        nh4Retention: defaultAmmonia,
-                        nh4RetentionAdjusted: false,
-                      })}
-                    >
-                      <LoopIcon />
-                    </button>
-                    ) : undefined
+                  defaultAmmonia !== undefined && manureForm.nh4Retention !== defaultAmmonia ? (
+                    <ResetButton onClick={() => handleChanges({
+                      nh4Retention: defaultAmmonia,
+                      nh4RetentionAdjusted: false,
+                    })}
+                    />
+                  ) : undefined
                 }
               />
             </Grid>
@@ -590,19 +583,13 @@ export default function ManureModal({
                 })}
                 maxValue={100}
                 iconRight={
-                  defaultOrganicN !== undefined
-                  && manureForm.nAvailable !== defaultOrganicN ? (
-                    <button
-                      type="button"
-                      css={{ backgroundColor: '#ffa500' }}
-                      onClick={() => handleChanges({
-                        nAvailable: defaultOrganicN,
-                        nAvailableAdjusted: false,
-                      })}
-                    >
-                      <LoopIcon />
-                    </button>
-                    ) : undefined
+                  defaultOrganicN !== undefined && manureForm.nAvailable !== defaultOrganicN ? (
+                    <ResetButton onClick={() => handleChanges({
+                      nAvailable: defaultOrganicN,
+                      nAvailableAdjusted: false,
+                    })}
+                    />
+                  ) : undefined
                 }
               />
             </Grid>

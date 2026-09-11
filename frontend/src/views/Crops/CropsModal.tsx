@@ -17,6 +17,7 @@ import {
   TextField,
   NumberField,
   Form,
+  ResetButton,
 } from '@/components/common';
 import {
   CropType,
@@ -295,8 +296,9 @@ function CropsModal({
 
   const handleFormFieldChange = useCallback(
     (attr: keyof NMPFileCrop, value: string | number | boolean) => {
-      // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables after calculations
-      // OR when we're editing an existing crop (since calculations were already done)
+      // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables
+      // after calculations OR when we're editing an existing crop
+      // (since calculations were already done)
       const isEditingFieldVegN = (attr === 'reqN' || attr === 'reqNAdjusted')
         && selectedCropType?.modifynitrogen
         && calculationsPerformed;
@@ -332,6 +334,9 @@ function CropsModal({
             type: 'SET_YIELD_HARVEST_UNIT',
             unit: value as HarvestUnit,
           });
+          return;
+        case 'crudeProtein':
+          dispatch({ type: 'SET_PROTEIN', crudeProtein: value as number });
           return;
         case 'whereWillPruningsGo':
           const selectedPruningOption = whereWillPruningsGo.find(
@@ -490,8 +495,8 @@ function CropsModal({
     return [{ id: Math.random(), reqN: remN, reqP2o5: remP2o5, reqK2o: remK2o }];
   }, [formData]);
 
-  // Check if N can be edited (Field vegetables with modifynitrogen = true AND calculations have been performed)
-  // For editing existing crops, allow editing if modifynitrogen is true (since calculations were already done)
+  // Check if N can be edited (Field vegetables w/ modifynitrogen AND calculations have been done)
+  // For existing crop, allow editing if modifynitrogen = true (calculations were already done)
   const isNEditable = selectedCropType?.modifynitrogen
     && (calculationsPerformed || cropIndex !== undefined);
 
@@ -691,17 +696,9 @@ function CropsModal({
                   label={`Yield${showUnitDropdown(formData.cropTypeId) ? '' : ' (tons/ac)'}`}
                   value={formData.yield}
                   onChange={(e) => handleFormFieldChange('yield', e)}
-                  iconRight={
-                    !isFormYieldEqualToDefault ? (
-                      <button
-                        type="button"
-                        css={{ backgroundColor: '#ffa500' }}
-                        onClick={() => dispatch({ type: 'RESTORE_DEFAULT_YIELD' })}
-                      >
-                        <LoopIcon />
-                      </button>
-                    ) : undefined
-                  }
+                  iconRight={!isFormYieldEqualToDefault ? (
+                    <ResetButton onClick={() => dispatch({ type: 'RESTORE_DEFAULT_YIELD' })} />
+                  ) : undefined}
                 />
               </Grid>
               {showUnitDropdown(formData.cropTypeId) && (
@@ -711,9 +708,7 @@ function CropsModal({
                     isRequired
                     items={HARVEST_UNIT_OPTIONS}
                     value={formData.yieldHarvestUnit}
-                    onChange={(e) => {
-                      handleFormFieldChange('yieldHarvestUnit', e as string);
-                    }}
+                    onChange={(e) => handleFormFieldChange('yieldHarvestUnit', e as string)}
                   />
                 </Grid>
               )}
@@ -723,16 +718,11 @@ function CropsModal({
                     isRequired
                     label="Crude Protein (%)"
                     value={formData.crudeProtein}
-                    onChange={(e) => {
-                      handleFormFieldChange('crudeProtein', e);
-                      // Technically, this should only be set true if it
-                      // doesn't equal the default, but I don't feel like
-                      // saving the default
-                      if (e !== formData.crudeProtein) {
-                        handleFormFieldChange('crudeProteinAdjusted', true);
-                      }
-                    }}
+                    onChange={(e) => handleFormFieldChange('crudeProtein', e as number)}
                     maxValue={100}
+                    iconRight={formData.crudeProteinAdjusted ? (
+                      <ResetButton onClick={() => dispatch({ type: 'RESTORE_DEFAULT_PROTEIN' })} />
+                    ) : undefined}
                   />
                 </Grid>
               )}
