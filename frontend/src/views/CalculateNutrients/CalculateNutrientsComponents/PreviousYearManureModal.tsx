@@ -1,7 +1,6 @@
 import { useState, SetStateAction, useMemo, useContext } from 'react';
 import { Grid } from '@mui/material';
-import LoopIcon from '@mui/icons-material/Loop';
-import { Modal, Form, NumberField } from '@/components/common';
+import { Modal, Form, NumberField, ResetButton } from '@/components/common';
 import { NMPFileField } from '@/types';
 import { calcPrevYearManureApplDefault } from '@/calculations/CalculateNutrients/PreviousManure/calculations';
 import { APICacheContext } from '@/context/APICacheContext';
@@ -14,14 +13,6 @@ interface PreviousYearManureModalProps {
   modalStyle?: object;
   field: NMPFileField;
 }
-
-const resetButtonStyle = {
-  backgroundColor: '#ffa500',
-  border: 'none',
-  borderRadius: '4px',
-  padding: '4px',
-  cursor: 'pointer',
-} as const;
 
 export default function PreviousYearManureModal({
   fieldIndex,
@@ -80,14 +71,10 @@ export default function PreviousYearManureModal({
               minValue={0}
               step={0.1}
               iconRight={nCredit !== calculatedDefaultCredit ? (
-                <button
-                  type="button"
-                  css={resetButtonStyle}
+                <ResetButton
                   onClick={() => setNCredit(calculatedDefaultCredit)}
                   title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
-                >
-                  <LoopIcon />
-                </button>
+                />
               ) : undefined}
             />
           </Grid>

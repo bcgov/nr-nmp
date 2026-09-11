@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import LoopIcon from '@mui/icons-material/Loop';
 import { WashWaterUnit } from '@/types';
-import { NumberField, Select } from '@/components/common';
+import { NumberField, ResetButton, Select } from '@/components/common';
 import { formGridBreakpoints } from '@/common.styles';
 import { PER_DAY_PER_ANIMAL_UNIT, PER_DAY_UNIT } from '@/constants';
 
@@ -116,19 +115,14 @@ export default function MilkingFields({
           }}
           iconRight={
             milkProduction !== milkProductionDefault ? (
-              <button
-                type="button"
-                css={{ backgroundColor: '#ffa500' }}
-                onClick={() => {
-                  setMilkProduction(milkProductionDefault);
-                  handleInputChanges({
-                    milkProduction: milkProductionDefault,
-                    milkProductionAdjusted: false,
-                  });
-                }}
-              >
-                <LoopIcon />
-              </button>
+              <ResetButton onClick={() => {
+                setMilkProduction(milkProductionDefault);
+                handleInputChanges({
+                  milkProduction: milkProductionDefault,
+                  milkProductionAdjusted: false,
+                });
+              }}
+              />
             ) : undefined
           }
         />
@@ -147,19 +141,14 @@ export default function MilkingFields({
           }}
           iconRight={
             washWater !== washWaterDefaultCorrected ? (
-              <button
-                type="button"
-                css={{ backgroundColor: '#ffa500' }}
-                onClick={() => {
-                  setWashWater(washWaterDefaultCorrected);
-                  handleInputChanges({
-                    washWater: washWaterDefaultCorrected,
-                    washWaterAdjusted: false,
-                  });
-                }}
-              >
-                <LoopIcon />
-              </button>
+              <ResetButton onClick={() => {
+                setWashWater(washWaterDefaultCorrected);
+                handleInputChanges({
+                  washWater: washWaterDefaultCorrected,
+                  washWaterAdjusted: false,
+                });
+              }}
+              />
             ) : undefined
           }
         />
