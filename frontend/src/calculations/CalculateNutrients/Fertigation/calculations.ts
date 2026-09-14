@@ -26,7 +26,8 @@ function getProductVolumeInImpGallons(
   applicationUnit: FertilizerUnit,
   areaInAcres: number,
 ) {
-  const appRateInImpGalPerAcre = applicationRate * applicationUnit.conversiontoimperialgallonsperacre;
+  const appRateInImpGalPerAcre = applicationRate
+    * applicationUnit.conversiontoimperialgallonsperacre;
   return appRateInImpGalPerAcre * areaInAcres;
 }
 
@@ -257,8 +258,9 @@ export function calculateSolidFertigation(
     // Need in lb/us gallon - convert from imperial gallons to US gallons
     const tankVolumeInUSGal = tankVolumeInImpGal * 1.201;
 
-    nutrientConcentrationN = Math.round(((amountToDissolveInLbs * valN) / 100 / tankVolumeInUSGal) * 100)
-      / 100;
+    nutrientConcentrationN = Math.round(
+      ((amountToDissolveInLbs * valN) / 100 / tankVolumeInUSGal) * 100,
+    ) / 100;
     nutrientConcentrationP2O5 = Math.round(
       ((amountToDissolveInLbs * valP2O5) / 100 / tankVolumeInUSGal) * 100,
     ) / 100;

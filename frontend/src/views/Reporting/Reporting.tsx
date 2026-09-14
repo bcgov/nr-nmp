@@ -23,11 +23,14 @@ import {
   MaterialRemainingData,
   Subregion,
   PreviousCrop,
+  ManureType,
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
-import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
+import { calculateMaterialRemainingData } from '@/calculations/MaterialRemaining/Calculations';
 import { downloadBlob } from './utils';
+import WarningBox from './WarningBox';
+import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
 
 export default function Reporting() {
   const { state } = useAppState();
@@ -51,11 +54,19 @@ export default function Reporting() {
   >([]);
   const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
-  const [materialRemainingData, setMaterialRemainingData] = useState<
-    MaterialRemainingData | null
-  >(null);
+  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(null);
 
   const unassignedManures = useMemo(
+    () => state.nmpFile.years[0].nutrientAnalyses.filter(
+      // Loop over each manure applied to each field to determine if any match the nutrient analysis
+      (manureWithNutrients) => !state.nmpFile.years[0].fields.some((field) => field.manures.some(
+        (appliedManure) => appliedManure.sourceUuid === manureWithNutrients.sourceUuid,
+      )),
+    ),
+    [state.nmpFile.years],
+  );
+
+  const unstoredManures = useMemo(
     () => [
       ...(state.nmpFile.years[0].generatedManures || []),
       ...(state.nmpFile.years[0].importedManures || []),
@@ -142,11 +153,11 @@ export default function Reporting() {
       }
     });
 
-    const result = calculateMaterialRemaining(
+    const result = calculateMaterialRemainingData(
       state.nmpFile.years[0],
+      Object.keys(manureData).length > 0 ? manureData : undefined,
       solidConversions,
       liquidConversions,
-      Object.keys(manureData).length > 0 ? manureData : undefined,
       manureUnits,
     );
     setMaterialRemainingData(result);
@@ -174,27 +185,23 @@ export default function Reporting() {
       handleNext={handleNextPage}
       nextBtnText="Finish"
     >
+      {unassignedManures.length > 0 && (
+        <WarningBox
+          heading="The following materials are not applied to a field"
+          bullets={unassignedManures.map(
+            (m) => `${m.sourceName}: ${m.solidLiquid === 'Solid' ? getSolidManureDisplay(m.annualAmount) : getLiquidManureDisplay(m.annualAmount)}`,
+          )}
+        />
+      )}
+
       {/* only show if you have dairy cattle */}
-      {unassignedManures.length > 0 && isDairyCattle && (
-        <Grid
-          container
-          sx={{ marginTop: '1rem' }}
-        >
-          <div style={{ border: '1px solid #c81212', width: '100%' }}>
-            The following materials are not stored:
-            <ul>
-              {unassignedManures.map((manure) => (
-                <li key={`${manure.managedManureName}`}>
-                  {manure.manureType}
-                  {' '}
-                  -
-                  {' '}
-                  {manure.managedManureName}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Grid>
+      {unstoredManures.length > 0 && isDairyCattle && (
+        <WarningBox
+          heading="The following materials are not stored"
+          bullets={unstoredManures.map(
+            (m) => `${m.managedManureName}, ${m.manureType === ManureType.Solid ? 'Solid' : 'Liquid'}`,
+          )}
+        />
       )}
 
       <Grid
@@ -204,9 +211,7 @@ export default function Reporting() {
       >
         <Grid
           size={{ xs: 4 }}
-          sx={{
-            justifyItems: 'center',
-          }}
+          sx={{ justifyItems: 'center' }}
         >
           <SectionHeader>PDFs (Opens a new file)</SectionHeader>
           <div css={{ paddingBottom: '1rem' }}>
@@ -247,7 +252,9 @@ export default function Reporting() {
           <div>To continue later, Download file to your computer</div>
           <div>Load a file on the Home page when you want to continue</div>
           <div>
-            <Button onPress={() => downloadBlob(state.nmpFile)}>Download file</Button>
+            <Button onPress={() => downloadBlob(state.nmpFile)}>
+              Download file
+            </Button>
           </div>
         </Grid>
       </Grid>

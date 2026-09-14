@@ -140,9 +140,11 @@ function calculateFieldApplications(
       );
 
       if (manure.solidLiquid === 'Liquid') {
-        fieldApplication.totalAppliedGallons = (fieldApplication.totalAppliedGallons || 0) + appliedAmount;
+        fieldApplication.totalAppliedGallons = (fieldApplication.totalAppliedGallons || 0)
+          + appliedAmount;
       } else {
-        fieldApplication.totalAppliedTons = (fieldApplication.totalAppliedTons || 0) + appliedAmount;
+        fieldApplication.totalAppliedTons = (fieldApplication.totalAppliedTons || 0)
+          + appliedAmount;
       }
     });
 
@@ -369,23 +371,4 @@ export function calculateMaterialRemainingSummary(data: MaterialRemainingData): 
     sourcesOverApplied,
     averagePercentApplied,
   };
-}
-
-/**
- * Enhanced material remaining calculation
- */
-export function calculateMaterialRemaining(
-  yearData: NMPFileYear,
-  solidConversions: SolidMaterialConversion[],
-  liquidConversions: LiquidMaterialConversion[],
-  manureData?: { [manureId: number]: { moisture?: number } },
-  availableUnits: Units[] = [],
-): MaterialRemainingData {
-  return calculateMaterialRemainingData(
-    yearData,
-    manureData,
-    solidConversions,
-    liquidConversions,
-    availableUnits,
-  );
 }

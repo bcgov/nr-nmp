@@ -34,7 +34,10 @@ import { InfoBox, WarningMessage } from './soilTests.styles';
 import useAppState from '@/hooks/useAppState';
 import { CROPS, FIELD_LIST } from '@/constants/routes';
 import SoilTestsModal from './SoilTestsModal';
-import { getKelownaRating, soilTestCalculation } from '@/calculations/FieldAndSoil/SoilTests/Calculations';
+import {
+  getKelownaRating,
+  soilTestCalculation,
+} from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 
 export default function SoilTests() {
   const { state, dispatch } = useAppState();

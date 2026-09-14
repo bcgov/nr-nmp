@@ -517,9 +517,7 @@ export default function CalculateNutrients() {
         <SoilNitrateCreditModal
           fieldIndex={activeField}
           initialModalData={
-            openDialog[1] !== undefined
-              ? currentField.soilNitrateCredit
-              : undefined
+            openDialog[1] !== undefined ? currentField.soilNitrateCredit : undefined
           }
           rowEditIndex={openDialog[1]}
           setFields={setFieldList}
@@ -571,27 +569,27 @@ export default function CalculateNutrients() {
       {/* Previous Year Manure Row */}
       {currentField.previousYearManureApplicationId
         && currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
-        <DataGrid
-          sx={{ ...customTableStyle, ...customCalcTableStyle, ...singleRowTableStyle }}
-          rows={[
-            {
-              name: "Previous years' manure",
-              reqN: currentField.previousYearManureApplicationNCredit || 0,
-              reqP2o5: 0,
-              reqK2o: 0,
-              remN: 0,
-              remP2o5: 0,
-              remK2o: 0,
-            },
-          ]}
-          columns={previousYearManureColumns}
-          getRowId={() => crypto.randomUUID()}
-          disableRowSelectionOnClick
-          disableColumnMenu
-          columnHeaderHeight={16}
-          hideFooterPagination
-          hideFooter
-        />
+          <DataGrid
+            sx={{ ...customTableStyle, ...customCalcTableStyle, ...singleRowTableStyle }}
+            rows={[
+              {
+                name: "Previous years' manure",
+                reqN: currentField.previousYearManureApplicationNCredit || 0,
+                reqP2o5: 0,
+                reqK2o: 0,
+                remN: 0,
+                remP2o5: 0,
+                remK2o: 0,
+              },
+            ]}
+            columns={previousYearManureColumns}
+            getRowId={() => crypto.randomUUID()}
+            disableRowSelectionOnClick
+            disableColumnMenu
+            columnHeaderHeight={16}
+            hideFooterPagination
+            hideFooter
+          />
       )}
       {currentField.fertilizers.length > 0 && (
         <DataGrid

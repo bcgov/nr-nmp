@@ -74,7 +74,7 @@ function AlertDialog({
               alignment="end"
               orientation="horizontal"
             >
-              {!(closeBtn?.hide) && (
+              {!closeBtn?.hide && (
                 <Button
                   variant="secondary"
                   onPress={() => {

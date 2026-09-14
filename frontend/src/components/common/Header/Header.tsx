@@ -30,13 +30,14 @@ export default function Header() {
             }
           }}
         />
-        <Heading onClick={() => {
-          if (state.nmpFile.years.length === 0) {
-            navigate(LANDING_PAGE);
-          } else {
-            setIsOpen(true);
-          }
-        }}
+        <Heading
+          onClick={() => {
+            if (state.nmpFile.years.length === 0) {
+              navigate(LANDING_PAGE);
+            } else {
+              setIsOpen(true);
+            }
+          }}
         >
           Nutrient Management Calculator
         </Heading>

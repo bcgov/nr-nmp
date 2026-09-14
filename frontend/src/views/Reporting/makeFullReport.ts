@@ -139,7 +139,7 @@ const generateApplicationSchedule = (
         allApplied.length > 0
           ? allApplied.map((nutrientSource) => {
             if ('applicationId' in nutrientSource) {
-            // Manures have 'applicationId' and seasonal values
+              // Manures have 'applicationId' and seasonal values
               const seasonApplication = SEASON_APPLICATION.find(
                 (s) => s.Id === nutrientSource.applicationId,
               );
