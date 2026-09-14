@@ -1,3 +1,7 @@
+.bcds-react-aria-Select {
+  gap: var(--layout-margin-hair);
+}
+
 /* Sizes */
 .bcds-react-aria-Select.small .bcds-react-aria-Select--Button {
   height: var(--layout-margin-xlarge);
@@ -5,6 +9,6 @@
 }
 
 .bcds-react-aria-Select.medium .bcds-react-aria-Select--Button{
-  height: var(--layout-margin-xxlarge) !important;
+  height: var(--layout-margin-xxlarge);
   min-height: var(--layout-margin-xxlarge) !important;
 }
