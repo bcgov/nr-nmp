@@ -24,7 +24,8 @@ export const EMPTY_CUSTOM_FERTILIZER: Omit<CustomFertilizer, 'dryliquid'> = {
 };
 
 // Taken from https://github.com/bcgov/agri-nmp/blob/ce60d005a1990fe441ee347a9bfac700dd092bd3/app/Agri.Data/SeedData/FertigationData.json#L232
-// Could get converted into a table, but, given that this seems to just be conversion factors, I wouldn't do it unless we're asked
+// Could get converted into a table, but, given that this seems to just be conversion factors,
+// I wouldn't do it unless we're asked
 export const DRY_FERTILIZER_SOLUBILITIES: DryFertilizerSolubilities[] = [
   {
     id: 1,
@@ -107,11 +108,9 @@ export const INJECTION_RATE_UNITS: InjectionUnit[] = [
   { id: 3, name: 'Imp. gallon/min', conversionToImpGallonsPerMinute: 1 },
 ];
 
-export const INJECTION_UNIT_OPTIONS: SelectOption<InjectionUnit>[] = INJECTION_RATE_UNITS.map((value) => ({
-  id: value.id,
-  label: value.name,
-  value,
-}));
+export const INJECTION_UNIT_OPTIONS: SelectOption<InjectionUnit>[] = INJECTION_RATE_UNITS.map(
+  (value) => ({ id: value.id, label: value.name, value }),
+);
 
 export const SOLUBILITY_RATE_UNITS: { id: number; label: string }[] = [
   { id: 1, label: 'g/L' },

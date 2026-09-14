@@ -180,7 +180,9 @@ function updateFieldAppliedManure(
           && n.nmineralizationid === nutrientAnalysis.nMineralizationId,
       );
       if (!nMineralization) {
-        throw new Error(`No n mineralization with location id ${locationId} and nmineralization id ${nutrientAnalysis.nMineralizationId}`);
+        throw new Error(
+          `No n mineralization with location id ${locationId} and nmineralization id ${nutrientAnalysis.nMineralizationId}`,
+        );
       }
       const manureTableData = tables.manures.find((m) => m.id === appliedManure.manureId);
       if (!manureTableData) {
@@ -389,9 +391,7 @@ function filterNutrientAnalysesAndAppliedManures(newFileYear: NMPFileYear) {
     (n) => allUuids.some((uuid) => n.sourceUuid === uuid),
   );
   newFileYear.fields = newFileYear.fields.map((field) => {
-    const newManures = field.manures.filter(
-      (m) => allUuids.some((uuid) => m.sourceUuid === uuid),
-    );
+    const newManures = field.manures.filter((m) => allUuids.some((uuid) => m.sourceUuid === uuid));
     return { ...field, manures: newManures };
   });
 }

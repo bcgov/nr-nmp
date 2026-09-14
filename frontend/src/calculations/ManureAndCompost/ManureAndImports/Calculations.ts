@@ -173,7 +173,8 @@ export default function calculateManureNutrientInputs(
 
   // STEP 5E: Calculate Available Ammonium Nitrogen
   // Formula: (NH4-N / 10000) × Retention Factor
-  const availableAmmoniumNitrogen = (manureWithNutrients.NH4N / tenThousand) * ammoniaRetentionFactor;
+  const availableAmmoniumNitrogen = (manureWithNutrients.NH4N / tenThousand)
+    * ammoniaRetentionFactor;
 
   // ==================================================================================
   // STEP 6: First Year Nitrogen Calculation
@@ -181,7 +182,8 @@ export default function calculateManureNutrientInputs(
   // Total First Year N = Retained NH4-N + Mineralized Organic-N + Baseline Total N
 
   // Calculate mineralized organic nitrogen for first year
-  const mineralizedOrganicNFirstYear = organicNitrogenContent * organicNMineralizationRates.OrganicN_FirstYear;
+  const mineralizedOrganicNFirstYear = organicNitrogenContent
+    * organicNMineralizationRates.OrganicN_FirstYear;
 
   // Sum all nitrogen sources for first year availability
   const totalAvailableNFirstYear = availableAmmoniumNitrogen
@@ -199,7 +201,8 @@ export default function calculateManureNutrientInputs(
   // ==================================================================================
   // Formula: Long Term N = Retained NH4-N + Mineralized Organic-N (long-term rate)
 
-  const mineralizedOrganicNLongTerm = organicNitrogenContent * organicNMineralizationRates.OrganicN_LongTerm;
+  const mineralizedOrganicNLongTerm = organicNitrogenContent
+    * organicNMineralizationRates.OrganicN_LongTerm;
 
   // Total available nitrogen = ammonium + mineralized organic
   const totalAvailableNLongTerm = availableAmmoniumNitrogen + mineralizedOrganicNLongTerm;
