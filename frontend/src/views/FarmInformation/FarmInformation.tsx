@@ -20,7 +20,6 @@ import {
 import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
 import {
-  AlertDialog,
   Select,
   TextField,
   View,
@@ -36,6 +35,7 @@ import Subheader from './farmInformation.styles';
 import { APICacheContext } from '@/context/APICacheContext';
 import { ADD_ANIMALS, FIELD_LIST, LANDING_PAGE } from '@/constants/routes';
 import { NMPFileFarmDetails, Region, SelectOption, Subregion } from '@/types';
+import RedirectDialog from '@/components/common/RedirectDialog/RedirectDialog';
 
 export default function FarmInformation() {
   const { state, dispatch } = useAppState();
@@ -186,6 +186,7 @@ export default function FarmInformation() {
     if (formData.farmName) {
       setShowWarningDialog(true);
     } else {
+      dispatch({ type: 'RESET_NMPFILE' });
       navigate(LANDING_PAGE);
     }
   };
@@ -214,21 +215,11 @@ export default function FarmInformation() {
       // Trigger submit event to use <Form>'s validation
       handleNext={() => formRef.current?.requestSubmit()}
     >
-      <AlertDialog
+      <RedirectDialog
         isOpen={showWarningDialog}
-        title="Warning - Unsaved data"
         onOpenChange={() => setShowWarningDialog(false)}
-        continueBtn={{ handleClick: () => navigate(LANDING_PAGE) }}
-        extraBtn={{
-          btnText: 'Download',
-          variant: 'primary',
-          handleClick: () => downloadBlob(),
-        }}
-      >
-        <div style={{ color: 'red' }}>
-          Download file to save the changes you made, or Continue without saving.
-        </div>
-      </AlertDialog>
+        downloadFile={() => downloadBlob()}
+      />
       <Form
         css={formCss}
         onSubmit={onSubmit}

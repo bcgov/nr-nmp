@@ -12,6 +12,7 @@ import TextField from './TextField/TextField';
 import View from './View/View';
 import FieldListModal from './FieldListModal/FieldListModal';
 import AlertDialog from './AlertDialog/AlertDialog';
+import ResetButton from './ResetButton/ResetButton';
 
 export {
   Header,
@@ -28,4 +29,5 @@ export {
   View,
   FieldListModal,
   AlertDialog,
+  ResetButton,
 };

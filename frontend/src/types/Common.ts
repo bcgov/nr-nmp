@@ -12,6 +12,6 @@ export type AlertDialogContinueBtn = {
   variant?: 'link' | 'secondary' | 'primary' | 'tertiary' | undefined;
 };
 
-export type AlertDialogCloseBtn = Partial<AlertDialogContinueBtn>;
+export type AlertDialogCloseBtn = Partial<AlertDialogContinueBtn> & { hide?: boolean };
 
 export type AlertDialogExtraConfig = Required<AlertDialogContinueBtn>;

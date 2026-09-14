@@ -3,12 +3,11 @@
  */
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import LoopIcon from '@mui/icons-material/Loop';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { InputField, NumberField, Select, Form } from '@/components/common';
+import { InputField, NumberField, Select, Form, ResetButton } from '@/components/common';
 
 import {
   Fertilizer,
@@ -565,19 +564,13 @@ export default function FertilizerModal({
                     densityAdjusted: e !== defaultDensity,
                   })}
                   iconRight={
-                    defaultDensity !== undefined
-                    && formState.density !== defaultDensity ? (
-                      <button
-                        type="button"
-                        css={{ backgroundColor: '#ffa500' }}
-                        onClick={() => handleInputChanges({
-                          density: defaultDensity,
-                          densityAdjusted: false,
-                        })}
-                      >
-                        <LoopIcon />
-                      </button>
-                      ) : undefined
+                    defaultDensity !== undefined && formState.density !== defaultDensity ? (
+                      <ResetButton onClick={() => handleInputChanges({
+                        density: defaultDensity,
+                        densityAdjusted: false,
+                      })}
+                      />
+                    ) : undefined
                   }
                 />
               </Grid>

@@ -27,21 +27,22 @@ import {
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
 import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
+import { downloadBlob } from './utils';
 
 export default function Reporting() {
   const { state } = useAppState();
   const navigate = useNavigate();
   const apiCache = useContext(APICacheContext);
   const [subregion, setSubregion] = useState<Subregion | null>(null);
+  const manureUnits: Units[] = apiCache.getInitializedResponse('units').data;
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
-  const [soilTestMethods, setSoilTestMethods] = useState<SoilTestMethod[]>([]);
+  const soilTestMethods: SoilTestMethod[] = apiCache.getInitializedResponse('soiltestmethods').data;
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestphosphorousranges',
   ).data;
   const potassiumRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestpotassiumranges',
   ).data;
-  const [manureUnits, setManureUnits] = useState<Units[]>([]);
   const [solidConversions, setSolidConversions] = useState<
     SolidMaterialApplicationTonPerAcreRateConversions[]
   >([]);
@@ -78,26 +79,12 @@ export default function Reporting() {
         }
       });
     apiCache
-      .callEndpoint('api/soiltestmethods/')
-      .then((response: { status?: any; data: SoilTestMethod[] }) => {
-        if (response.status === 200) {
-          setSoilTestMethods(response.data);
-        }
-      });
-    apiCache
       .callEndpoint(
         `api/subregions/${state.nmpFile.farmDetails.farmRegion}/${state.nmpFile.farmDetails.farmSubregion!}/`,
       )
       .then((response) => {
         if (response.status === 200) {
           setSubregion(response.data.length > 0 ? response.data[0] : null);
-        }
-      });
-    apiCache
-      .callEndpoint('api/units/')
-      .then((response: { status?: any; data: Units[] }) => {
-        if (response.status === 200) {
-          setManureUnits(response.data);
         }
       });
     apiCache
@@ -137,8 +124,7 @@ export default function Reporting() {
   // Calculate material remaining data
   useEffect(() => {
     if (
-      manureUnits.length === 0
-      || solidConversions.length === 0
+      solidConversions.length === 0
       || liquidConversions.length === 0
       || manures.length === 0
     ) {
@@ -171,23 +157,6 @@ export default function Reporting() {
     manures,
     state.nmpFile.years,
   ]);
-
-  async function downloadBlob() {
-    const url = URL.createObjectURL(new Blob([JSON.stringify(state.nmpFile)]));
-    const a = document.createElement('a');
-    a.href = url;
-
-    const prependDate = new Date().toLocaleDateString('sv-SE', {
-      dateStyle: 'short',
-    });
-    const farmName = state.nmpFile?.farmDetails?.farmName;
-
-    a.download = `${prependDate}-${farmName}.nmp`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
 
   const handlePreviousPage = () => {
     navigate(CALCULATE_NUTRIENTS);
@@ -251,6 +220,7 @@ export default function Reporting() {
                   state.nmpFile,
                   subregion,
                   fertilizerUnits,
+                  manureUnits,
                   soilTestMethods,
                   phosphorousRanges,
                   potassiumRanges,
@@ -277,7 +247,7 @@ export default function Reporting() {
           <div>To continue later, Download file to your computer</div>
           <div>Load a file on the Home page when you want to continue</div>
           <div>
-            <Button onPress={() => downloadBlob()}>Download file</Button>
+            <Button onPress={() => downloadBlob(state.nmpFile)}>Download file</Button>
           </div>
         </Grid>
       </Grid>
