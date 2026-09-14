@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-shadow
 export enum HarvestUnit {
   BushelsPerAcre = 'bc/ac',
   TonsPerAcre = 'ton/ac',

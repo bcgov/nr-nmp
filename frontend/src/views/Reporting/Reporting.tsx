@@ -54,17 +54,22 @@ export default function Reporting() {
   >([]);
   const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
-  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(null);
+  const [materialRemainingData, setMaterialRemainingData] = useState<
+    MaterialRemainingData | null
+  >(null);
 
-  const unassignedManures = useMemo(
-    () => state.nmpFile.years[0].nutrientAnalyses.filter(
-      // Loop over each manure applied to each field to determine if any match the nutrient analysis
-      (manureWithNutrients) => !state.nmpFile.years[0].fields.some((field) => field.manures.some(
-        (appliedManure) => appliedManure.sourceUuid === manureWithNutrients.sourceUuid,
-      )),
-    ),
-    [state.nmpFile.years],
-  );
+  const [remainingMaterials, overappliedMaterials] = useMemo(() => {
+    if (materialRemainingData === null) return [[], []];
+
+    const allAppliedManures = [
+      ...materialRemainingData.appliedStoredManures,
+      ...materialRemainingData.appliedUnstoredManures,
+    ];
+    return [
+      allAppliedManures.filter((manure) => manure.wholePercentRemaining >= 10),
+      allAppliedManures.filter((manure) => manure.totalAnnualManureRemainingToApply < 0),
+    ];
+  }, [materialRemainingData]);
 
   const unstoredManures = useMemo(
     () => [
@@ -185,11 +190,20 @@ export default function Reporting() {
       handleNext={handleNextPage}
       nextBtnText="Finish"
     >
-      {unassignedManures.length > 0 && (
+      {remainingMaterials.length > 0 && (
         <WarningBox
           heading="The following materials are not applied to a field"
-          bullets={unassignedManures.map(
-            (m) => `${m.sourceName}: ${m.solidLiquid === 'Solid' ? getSolidManureDisplay(m.annualAmount) : getLiquidManureDisplay(m.annualAmount)}`,
+          bullets={remainingMaterials.map(
+            (m) => `${m.sourceName}: ${m.manureType === ManureType.Solid ? getSolidManureDisplay(m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(m.totalAnnualManureRemainingToApply)} (${m.wholePercentRemaining}% remaining)`,
+          )}
+        />
+      )}
+
+      {overappliedMaterials.length > 0 && (
+        <WarningBox
+          heading="There is not enough of the following materials to meet the planned application rates"
+          bullets={overappliedMaterials.map(
+            (m) => `${m.sourceName}: overutilized by ${m.manureType === ManureType.Solid ? getSolidManureDisplay(-1 * m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(-1 * m.totalAnnualManureRemainingToApply)}`,
           )}
         />
       )}
@@ -198,9 +212,7 @@ export default function Reporting() {
       {unstoredManures.length > 0 && isDairyCattle && (
         <WarningBox
           heading="The following materials are not stored"
-          bullets={unstoredManures.map(
-            (m) => `${m.managedManureName}, ${m.manureType === ManureType.Solid ? 'Solid' : 'Liquid'}`,
-          )}
+          bullets={unstoredManures.map((m) => `${m.managedManureName}`)}
         />
       )}
 

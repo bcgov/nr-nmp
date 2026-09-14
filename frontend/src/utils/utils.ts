@@ -1,6 +1,7 @@
 import { DAIRY_COW_ID, MILKING_COW_ID } from '@/constants';
 import {
   ManureType,
+  NMPFileDerivedManure,
   NMPFileGeneratedManure,
   NMPFileImportedManure,
   NMPFileManureStorageSystem,
@@ -58,7 +59,9 @@ export function getLiquidManureDisplay(amount: number) {
   return `${rounded} U.S. gallon${rounded === '1' ? '' : 's'}`;
 }
 
-export const isDairyAndMilkingCattle = (animalId: string, subType: string) => animalId === DAIRY_COW_ID && subType === MILKING_COW_ID;
+export const isDairyAndMilkingCattle = (animalId: string, subType: string) => (
+  animalId === DAIRY_COW_ID && subType === MILKING_COW_ID
+);
 
 export const mathSymbolConverter = (input: string) => {
   let newStr = '';
@@ -74,11 +77,13 @@ export const mathSymbolConverter = (input: string) => {
 /**
  * Calculates the annual amount of manure produced from a given source.
  * @param manureSource The source of a manure, before nutrient analysis
- * @returns The annual amount of manure produced, in tons for solid/dry manure and US gallons for liquid manure
+ * @returns The annual amount of manure produced, in tons for solid and US gallons for liquid
  */
 export function getStandardizedAnnualManureAmount(
-  manureSource:
-    NMPFileGeneratedManure | NMPFileImportedManure | NMPFileManureStorageSystem,
+  manureSource: NMPFileGeneratedManure
+    | NMPFileImportedManure
+    | NMPFileDerivedManure
+    | NMPFileManureStorageSystem,
 ) {
   if (!manureSource.manureType) {
     throw new Error('getStandardizedAnnualManureAmount called without manureType');
