@@ -22,7 +22,6 @@ import {
   REPORTING,
   STORAGE,
 } from '@/constants/routes';
-import { AcUnitOutlined } from '@mui/icons-material';
 
 interface StepConfig {
   name: string;
