@@ -6485,7 +6485,7 @@
     "model": "shared.subregion",
     "pk": 61,
     "fields": {
-      "name": "Kelowna",
+      "name": "West Kelowna",
       "annualprecipitation": 361.0,
       "annualprecipitationocttomar": 176.0,
       "regionid": 5
