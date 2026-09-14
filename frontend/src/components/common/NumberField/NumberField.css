@@ -32,7 +32,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--layout-margin-small);
   background: var(--surface-color-forms-default);
   box-sizing: border-box;
   border: var(--layout-border-width-small) solid var(--surface-color-border-default);
@@ -42,13 +41,13 @@
 
 /* Sizes */
 .bcds-react-aria-NumberField--container.small {
-  height: var(--layout-margin-xxlarge);
-  min-height: var(--layout-margin-xxlarge);
+  height: var(--layout-margin-xlarge);
+  min-height: var(--layout-margin-xlarge);
 }
 
 .bcds-react-aria-NumberField--container.medium {
-  height: calc(var(--layout-margin-xxlarge) + 5px);
-  min-height: calc(var(--layout-margin-xxlarge) + 5px);
+  height: var(--layout-margin-xxlarge);
+  min-height: var(--layout-margin-xxlarge);
 }
 
 /* Text input field */
@@ -65,7 +64,6 @@
 }
 
 /* Hover and focus states */
-
 .bcds-react-aria-NumberField--container
   > .bcds-react-aria-NumberField--Input[data-focused] {
   outline: none;
@@ -83,7 +81,6 @@
 }
 
 /* Disabled and invalid states */
-
 .bcds-react-aria-NumberField[data-disabled]
   > .bcds-react-aria-NumberField--container {
   background: var(--surface-color-forms-disabled);

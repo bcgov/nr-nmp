@@ -1,0 +1,10 @@
+/* Sizes */
+.bcds-react-aria-Select.small .bcds-react-aria-Select--Button {
+  height: var(--layout-margin-xlarge);
+  min-height: var(--layout-margin-xlarge);
+}
+
+.bcds-react-aria-Select.medium .bcds-react-aria-Select--Button{
+  height: var(--layout-margin-xxlarge) !important;
+  min-height: var(--layout-margin-xxlarge) !important;
+}
