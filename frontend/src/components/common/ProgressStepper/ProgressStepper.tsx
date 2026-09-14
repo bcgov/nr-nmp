@@ -1,10 +1,12 @@
-import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
+import StepButton from '@mui/material/StepButton';
+import RedirectDialog from '../RedirectDialog/RedirectDialog';
+import { downloadBlob } from '@/views/Reporting/utils';
 
 import useAppState from '../../../hooks/useAppState';
 import {
@@ -20,6 +22,7 @@ import {
   REPORTING,
   STORAGE,
 } from '@/constants/routes';
+import { AcUnitOutlined } from '@mui/icons-material';
 
 interface StepConfig {
   name: string;
@@ -29,6 +32,8 @@ interface StepConfig {
 export default function ProgressStepper() {
   const { state } = useAppState();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const steps: StepConfig[] = useMemo(() => {
     const baseSteps = [
@@ -70,6 +75,19 @@ export default function ProgressStepper() {
     [steps, pathname],
   );
 
+  // navigate to past step, if home open warning dialog
+  const handleStepClick = (stepIndex: number, stepPath: string) => {
+    if (stepIndex === 0) {
+      if (state.nmpFile.years.length === 0) {
+        navigate(LANDING_PAGE);
+      } else {
+        setIsOpen(true);
+      }
+    } else if (stepIndex < activeStep) {
+      navigate(stepPath);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -81,17 +99,29 @@ export default function ProgressStepper() {
         width: '100%',
       }}
     >
+      {isOpen && (
+        <RedirectDialog
+          isOpen={isOpen}
+          onOpenChange={(b) => setIsOpen(b)}
+          downloadFile={() => downloadBlob(state.nmpFile)}
+        />
+      )}
       <Stepper
         sx={{ width: '100%' }}
         activeStep={activeStep}
         alternativeLabel
       >
-        {steps.map((step) => (
+        {steps.map((step, index) => (
           <Step
             sx={{ paddingX: '0' }}
             key={step.name}
           >
-            <StepLabel>{step.name}</StepLabel>
+            <StepButton
+              onClick={() => handleStepClick(index, step.paths[0])}
+              disabled={index >= activeStep}
+            >
+              {step.name}
+            </StepButton>
           </Step>
         ))}
       </Stepper>
