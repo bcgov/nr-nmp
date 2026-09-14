@@ -9,7 +9,7 @@ export interface FieldApplicationData {
 export interface AppliedManureData {
   sourceName: string;
   sourceUuid: string;
-  manureMaterialType: ManureType | null;
+  manureType: ManureType;
   totalAnnualManureToApply: number;
   totalApplied: number;
   totalAnnualManureRemainingToApply: number;
@@ -19,6 +19,5 @@ export interface AppliedManureData {
 
 export interface MaterialRemainingData {
   appliedStoredManures: AppliedManureData[];
-  appliedImportedManures: AppliedManureData[];
-  materialsRemainingWarnings: string[];
+  appliedUnstoredManures: AppliedManureData[];
 }

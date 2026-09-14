@@ -9,7 +9,6 @@ export type NMPFileGeneratedManure = {
   annualAmountDisplayWeight?: string;
   managedManureName: string;
   assignedToStoredSystem?: boolean;
-  totalAnnualManureAmount?: number;
   uuid: string;
   // Only used for Milking Cows
   originalAnnualAmount?: number;
@@ -30,7 +29,6 @@ export type NMPFileImportedManure = {
   moisture?: number;
   assignedToStoredSystem?: boolean;
   managedManureName: string;
-  totalAnnualManureAmount?: number;
   uuid: string;
 };
 
@@ -72,6 +70,7 @@ export type SolidManureStorage = {
   uncoveredAreaSqFt?: number;
 };
 
+// eslint-disable-next-line no-shadow
 export enum Shape {
   Rectangular = 1,
   Circular = 2,
@@ -119,7 +118,6 @@ export type SolidManureStorageSystem = {
   manuresInSystem: ManureInSystem[];
   manureStorage: SolidManureStorage;
   annualPrecipitation?: number;
-  totalAnnualManureAmount?: number;
   uuid: string;
 };
 
@@ -135,7 +133,6 @@ export type LiquidManureStorageSystem = {
   separatedSolidsTons: number;
   manureStorages: LiquidManureStorage[];
   annualPrecipitation?: number; // includes precipitation and yard/roof runoff
-  totalAnnualManureAmount?: number;
   uuid: string;
 };
 

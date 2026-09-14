@@ -350,7 +350,7 @@ const generateManureAndCompostUse = (
       if (materialRemainingData) {
         const allMaterials = [
           ...materialRemainingData.appliedStoredManures,
-          ...materialRemainingData.appliedImportedManures,
+          ...materialRemainingData.appliedUnstoredManures,
         ];
         const matchingMaterial = allMaterials.find(
           (material) => material.sourceUuid === analysis.sourceUuid,
