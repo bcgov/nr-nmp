@@ -32,7 +32,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--layout-margin-small);
   background: var(--surface-color-forms-default);
   box-sizing: border-box;
   border: var(--layout-border-width-small) solid var(--surface-color-border-default);
@@ -65,7 +64,6 @@
 }
 
 /* Hover and focus states */
-
 .bcds-react-aria-NumberField--container
   > .bcds-react-aria-NumberField--Input[data-focused] {
   outline: none;
@@ -75,7 +73,7 @@
   border-radius: var(--layout-border-radius-large);
   border: var(--layout-border-width-small) solid var(--surface-color-border-active);
   outline: solid var(--layout-border-width-medium) var(--surface-color-border-active);
-  outline-offset: var(--layout-margin-hair);
+  outline-offset: 0;
 }
 
 .bcds-react-aria-NumberField--container:hover {
@@ -83,7 +81,6 @@
 }
 
 /* Disabled and invalid states */
-
 .bcds-react-aria-NumberField[data-disabled]
   > .bcds-react-aria-NumberField--container {
   background: var(--surface-color-forms-disabled);

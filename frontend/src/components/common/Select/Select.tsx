@@ -3,6 +3,7 @@
  */
 import { ComponentProps, useEffect, useMemo } from 'react';
 import { Select as BcGovSelect } from '@bcgov/design-system-react-components';
+import './Select.css';
 import { Key } from 'react-aria-components';
 
 // Copied from @bcgov/design-system-react-components library

@@ -109,7 +109,7 @@ export default function LiquidStorageDetails({
       <Grid
         container
         size={6}
-        direction="row"
+        direction="column"
       >
         <TextField
           isRequired
