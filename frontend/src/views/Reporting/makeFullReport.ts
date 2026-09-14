@@ -139,7 +139,7 @@ const generateApplicationSchedule = (
         allApplied.length > 0
           ? allApplied.map((nutrientSource) => {
             if ('applicationId' in nutrientSource) {
-            // Manures have 'applicationId' and seasonal values
+              // Manures have 'applicationId' and seasonal values
               const seasonApplication = SEASON_APPLICATION.find(
                 (s) => s.Id === nutrientSource.applicationId,
               );
@@ -350,7 +350,7 @@ const generateManureAndCompostUse = (
       if (materialRemainingData) {
         const allMaterials = [
           ...materialRemainingData.appliedStoredManures,
-          ...materialRemainingData.appliedImportedManures,
+          ...materialRemainingData.appliedUnstoredManures,
         ];
         const matchingMaterial = allMaterials.find(
           (material) => material.sourceUuid === analysis.sourceUuid,

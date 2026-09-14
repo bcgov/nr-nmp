@@ -63,7 +63,7 @@ export function getDensityFactoredConversionUsingMoisture(
  *
  * @param manureAmount Total manure in US gallons
  * @param percentSeparation Percent of solid/liquid separation as a whole number
- * @returns A tuple containing the separated liquids in US gallons followed by the separated solids in US tons
+ * @returns A tuple with the separated liquids in US gallons and the separated solids in US tons
  */
 export function calculateSeparatedSolidAndLiquid(
   manureAmount: number,

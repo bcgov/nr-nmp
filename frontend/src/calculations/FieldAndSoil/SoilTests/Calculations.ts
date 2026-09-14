@@ -4,8 +4,10 @@ export function getKelownaRating(
   convertedKelownaNutrient: number,
   nutrientRanges: SoilTestNutrientRange[],
 ): string {
-  return (nutrientRanges.find((r) => convertedKelownaNutrient <= r.upperlimit)
-    || nutrientRanges[nutrientRanges.length - 1]).rating;
+  return (
+    nutrientRanges.find((r) => convertedKelownaNutrient <= r.upperlimit)
+    || nutrientRanges[nutrientRanges.length - 1]
+  ).rating;
 }
 
 export function soilTestCalculation(

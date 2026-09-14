@@ -23,11 +23,14 @@ import {
   MaterialRemainingData,
   Subregion,
   PreviousCrop,
+  ManureType,
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
-import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
+import { calculateMaterialRemainingData } from '@/calculations/MaterialRemaining/Calculations';
 import { downloadBlob } from './utils';
+import WarningBox from './WarningBox';
+import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
 
 export default function Reporting() {
   const { state } = useAppState();
@@ -55,7 +58,20 @@ export default function Reporting() {
     MaterialRemainingData | null
   >(null);
 
-  const unassignedManures = useMemo(
+  const [remainingMaterials, overappliedMaterials] = useMemo(() => {
+    if (materialRemainingData === null) return [[], []];
+
+    const allAppliedManures = [
+      ...materialRemainingData.appliedStoredManures,
+      ...materialRemainingData.appliedUnstoredManures,
+    ];
+    return [
+      allAppliedManures.filter((manure) => manure.wholePercentRemaining >= 10),
+      allAppliedManures.filter((manure) => manure.totalAnnualManureRemainingToApply < 0),
+    ];
+  }, [materialRemainingData]);
+
+  const unstoredManures = useMemo(
     () => [
       ...(state.nmpFile.years[0].generatedManures || []),
       ...(state.nmpFile.years[0].importedManures || []),
@@ -142,11 +158,11 @@ export default function Reporting() {
       }
     });
 
-    const result = calculateMaterialRemaining(
+    const result = calculateMaterialRemainingData(
       state.nmpFile.years[0],
+      Object.keys(manureData).length > 0 ? manureData : undefined,
       solidConversions,
       liquidConversions,
-      Object.keys(manureData).length > 0 ? manureData : undefined,
       manureUnits,
     );
     setMaterialRemainingData(result);
@@ -174,27 +190,30 @@ export default function Reporting() {
       handleNext={handleNextPage}
       nextBtnText="Finish"
     >
+      {remainingMaterials.length > 0 && (
+        <WarningBox
+          heading="The following materials are not applied to a field"
+          bullets={remainingMaterials.map(
+            (m) => `${m.sourceName}: ${m.manureType === ManureType.Solid ? getSolidManureDisplay(m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(m.totalAnnualManureRemainingToApply)} (${m.wholePercentRemaining}% remaining)`,
+          )}
+        />
+      )}
+
+      {overappliedMaterials.length > 0 && (
+        <WarningBox
+          heading="There is not enough of the following materials to meet the planned application rates"
+          bullets={overappliedMaterials.map(
+            (m) => `${m.sourceName}: overutilized by ${m.manureType === ManureType.Solid ? getSolidManureDisplay(-1 * m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(-1 * m.totalAnnualManureRemainingToApply)}`,
+          )}
+        />
+      )}
+
       {/* only show if you have dairy cattle */}
-      {unassignedManures.length > 0 && isDairyCattle && (
-        <Grid
-          container
-          sx={{ marginTop: '1rem' }}
-        >
-          <div style={{ border: '1px solid #c81212', width: '100%' }}>
-            The following materials are not stored:
-            <ul>
-              {unassignedManures.map((manure) => (
-                <li key={`${manure.managedManureName}`}>
-                  {manure.manureType}
-                  {' '}
-                  -
-                  {' '}
-                  {manure.managedManureName}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Grid>
+      {unstoredManures.length > 0 && isDairyCattle && (
+        <WarningBox
+          heading="The following materials are not stored"
+          bullets={unstoredManures.map((m) => `${m.managedManureName}`)}
+        />
       )}
 
       <Grid
@@ -204,9 +223,7 @@ export default function Reporting() {
       >
         <Grid
           size={{ xs: 4 }}
-          sx={{
-            justifyItems: 'center',
-          }}
+          sx={{ justifyItems: 'center' }}
         >
           <SectionHeader>PDFs (Opens a new file)</SectionHeader>
           <div css={{ paddingBottom: '1rem' }}>
@@ -247,7 +264,9 @@ export default function Reporting() {
           <div>To continue later, Download file to your computer</div>
           <div>Load a file on the Home page when you want to continue</div>
           <div>
-            <Button onPress={() => downloadBlob(state.nmpFile)}>Download file</Button>
+            <Button onPress={() => downloadBlob(state.nmpFile)}>
+              Download file
+            </Button>
           </div>
         </Grid>
       </Grid>

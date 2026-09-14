@@ -11,7 +11,7 @@ import MaterialRemainingItem from './MaterialRemainingItem';
 
 interface MaterialRemainingDisplayProps {
   materialRemainingData: MaterialRemainingData;
-  selectedSourceUuid?: string; // Filter to show only this specific material
+  selectedSourceUuid: string; // Filter to show only this specific material
 }
 
 /**
@@ -21,25 +21,14 @@ export default function MaterialRemainingDisplay({
   materialRemainingData,
   selectedSourceUuid,
 }: MaterialRemainingDisplayProps) {
-  const { appliedStoredManures, appliedImportedManures } = materialRemainingData;
+  const { appliedStoredManures, appliedUnstoredManures } = materialRemainingData;
 
   // Filter data if a specific source is selected
-  const filteredStoredManures = selectedSourceUuid
-    ? appliedStoredManures.filter(
-      (manure) => manure.sourceUuid === selectedSourceUuid,
-    )
-    : appliedStoredManures;
+  const filteredMaterialRemaining = [
+    ...appliedStoredManures, ...appliedUnstoredManures,
+  ].filter((manure) => manure.sourceUuid === selectedSourceUuid);
 
-  const filteredImportedManures = selectedSourceUuid
-    ? appliedImportedManures.filter(
-      (manure) => manure.sourceUuid === selectedSourceUuid,
-    )
-    : appliedImportedManures;
-
-  const allAppliedManures = [...filteredStoredManures, ...filteredImportedManures];
-  const hasAnyData = allAppliedManures.length > 0;
-
-  if (!hasAnyData) {
+  if (filteredMaterialRemaining.length === 0) {
     return (
       <MaterialRemainingContainer>
         <MaterialRemainingTitle>Material Remaining</MaterialRemainingTitle>
@@ -54,19 +43,9 @@ export default function MaterialRemainingDisplay({
   return (
     <MaterialRemainingContainer>
       <MaterialRemainingTitle>Material Remaining</MaterialRemainingTitle>
-
-      {/* Storage Systems */}
-      {filteredStoredManures.map((manure) => (
+      {filteredMaterialRemaining.map((manure) => (
         <MaterialRemainingItem
-          key={`stored-${manure.sourceName}-${manure.totalAnnualManureToApply}`}
-          appliedManure={manure}
-        />
-      ))}
-
-      {/* Imported Manures */}
-      {filteredImportedManures.map((manure) => (
-        <MaterialRemainingItem
-          key={`imported-${manure.sourceName}-${manure.totalAnnualManureToApply}`}
+          key={`${manure.sourceName}-${manure.totalAnnualManureToApply}`}
           appliedManure={manure}
         />
       ))}
