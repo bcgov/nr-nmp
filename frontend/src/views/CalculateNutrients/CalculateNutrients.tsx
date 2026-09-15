@@ -41,6 +41,25 @@ import {
 import { AlertDialogContinueBtn, CalculateNutrientsRow, NMPFileField } from '@/types';
 import SoilNitrateCreditModal from './CalculateNutrientsComponents/SoilNitrateCreditModal.tsx';
 
+const customCalcTableStyle = {
+  '& .MuiDataGrid-columnHeaderTitleContainerContent': {
+    fontWeight: 'bold',
+  },
+  '& .MuiDataGrid-overlayWrapperInner': {
+    fontWeight: 'bold',
+  },
+  '& .MuiDataGrid-columnHeader': {
+    backgroundColor: 'white !important',
+    borderColor: 'none !important',
+  },
+};
+
+const singleRowTableStyle = {
+  '& .MuiDataGrid-row > .MuiDataGrid-cell:nth-child(2)': {
+    fontWeight: 'bold',
+  },
+};
+
 function NoRows() {
   return <div />;
 }
@@ -308,19 +327,6 @@ export default function CalculateNutrients() {
     }
   };
 
-  const customCalcTableStyle = {
-    '& .MuiDataGrid-columnHeaderTitleContainerContent': {
-      fontWeight: 'bold',
-    },
-    '& .MuiDataGrid-overlayWrapperInner': {
-      fontWeight: 'bold',
-    },
-    '& .MuiDataGrid-columnHeader': {
-      backgroundColor: 'white !important',
-      borderColor: 'none !important',
-    },
-  };
-
   return (
     <View
       title="Calculate Nutrients"
@@ -566,7 +572,7 @@ export default function CalculateNutrients() {
       {currentField.previousYearManureApplicationId
         && currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
         <DataGrid
-          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          sx={{ ...customTableStyle, ...customCalcTableStyle, ...singleRowTableStyle }}
           rows={[
             {
               name: "Previous years' manure",
@@ -641,7 +647,7 @@ export default function CalculateNutrients() {
       )}
       {currentField.soilNitrateCredit && (
         <DataGrid
-          sx={{ ...customTableStyle, ...customCalcTableStyle }}
+          sx={{ ...customTableStyle, ...customCalcTableStyle, ...singleRowTableStyle }}
           rows={[currentField.soilNitrateCredit]}
           columns={soilNitrateColumns}
           getRowId={() => crypto.randomUUID()}
