@@ -26,7 +26,7 @@ type ThisComponentProps = {
 
 const defaultSortFcn = (a: ListBoxItemProps, b: ListBoxItemProps) => {
   if (a.label < b.label) return -1;
-  if (b.label > a.label) return 1;
+  if (b.label < a.label) return 1;
   return 0;
 };
 
