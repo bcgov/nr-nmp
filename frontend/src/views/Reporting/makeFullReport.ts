@@ -37,7 +37,7 @@ import {
   fertigationToFertigationRows,
   findBalanceMessage,
 } from '../CalculateNutrients/utils';
-import { printNum, sumPropertyInObjectArr } from '@/utils/utils';
+import { getLiquidManureDisplay, getSolidManureDisplay, printNum, sumPropertyInObjectArr } from '@/utils/utils';
 import {
   calculatePrecipitationInStorage,
   getRunoffInSystem,
@@ -246,7 +246,7 @@ const generateManureCompostInventory = (
             // \t doesn't work in this new font so I used spaces
             newRows.push([
               `        ${m.data.uniqueMaterialName}`,
-              `${printNum(annualAmount)} ${m.data.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+              `${m.data.manureType === ManureType.Liquid ? getLiquidManureDisplay(annualAmount) : getSolidManureDisplay(annualAmount)}`,
             ]);
           });
           if (totalWashWater > 0) {
@@ -260,7 +260,7 @@ const generateManureCompostInventory = (
             storageSum += totalWashWater;
             newRows.push([
               'Milking Center Wash Water',
-              `${printNum(totalWashWater)} US gallons`,
+              `${getLiquidManureDisplay(totalWashWater)}`,
             ]);
           }
           if (system.annualPrecipitation) {
@@ -268,7 +268,7 @@ const generateManureCompostInventory = (
             storageSum += annualPrecipitation;
             newRows.push([
               'Precipitation',
-              `${printNum(annualPrecipitation)} ${system.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+              `${system.manureType === ManureType.Liquid ? getLiquidManureDisplay(annualPrecipitation) : getSolidManureDisplay(annualPrecipitation)}`,
             ]);
           }
 
@@ -276,7 +276,7 @@ const generateManureCompostInventory = (
           newRows.unshift([
             { content: system.name, styles: { fontStyle: 'bold' } },
             {
-              content: `${printNum(storageSum)} ${system.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+              content: `${system.manureType === ManureType.Liquid ? getLiquidManureDisplay(storageSum) : getSolidManureDisplay(storageSum)}`,
               styles: { fontStyle: 'bold' },
             },
           ]);
@@ -298,7 +298,7 @@ const generateManureCompostInventory = (
             : [];
           newRows.push([
             `        ${manure.uniqueMaterialName}`,
-            `${printNum(manure.manureType === ManureType.Liquid ? manure.annualAmountUSGallonsVolume! : manure.annualAmountTonsWeight!)} ${manure.manureType === ManureType.Liquid ? 'US gallons' : 'tons'}`,
+            `${manure.manureType === ManureType.Liquid ? getLiquidManureDisplay(manure.annualAmountUSGallonsVolume!) : getSolidManureDisplay(manure.annualAmountTonsWeight!)}`,
           ]);
           return acc.concat(newRows);
         }, [] as RowInput[]),
@@ -357,10 +357,8 @@ const generateManureAndCompostUse = (
         );
 
         if (matchingMaterial) {
-          const unit = analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons';
-
           // Format land-applied with percentage
-          landApplied = `${printNum(matchingMaterial.totalApplied)} ${unit} (${matchingMaterial.wholePercentApplied}%)`;
+          landApplied = `${analysis.solidLiquid === 'Liquid' ? getLiquidManureDisplay(matchingMaterial.totalApplied) : getSolidManureDisplay(matchingMaterial.totalApplied)} (${matchingMaterial.wholePercentApplied}%)`;
 
           // Amount remaining: show "None" if less than 10%, otherwise show amount with percentage
           if (matchingMaterial.wholePercentRemaining < 10) {
@@ -374,7 +372,7 @@ const generateManureAndCompostUse = (
       return [
         analysis.manureName,
         analysis.uniqueMaterialName,
-        `${printNum(analysis.annualAmount)} ${analysis.solidLiquid === 'Solid' ? 'tons' : 'US gallons'}`,
+        `${analysis.solidLiquid === 'Liquid' ? getLiquidManureDisplay(analysis.annualAmount) : getSolidManureDisplay(analysis.annualAmount)}`,
         landApplied,
         amountRemaining,
       ];
@@ -442,7 +440,7 @@ const generateLiquidStorageCapacity = (
           ? [
             [
               '        Materials Generated or Imported',
-              `${printNum(materialGenerated)} US gallons`,
+              `${getLiquidManureDisplay(materialGenerated)}`,
             ],
             [
               {
@@ -454,7 +452,7 @@ const generateLiquidStorageCapacity = (
             ],
             [
               '        Materials Stored (after Solid/Liquid Separation)',
-              `${printNum(materialStored)} US gallons`,
+              `${getLiquidManureDisplay(materialStored)}`,
             ],
           ]
           : [
@@ -468,20 +466,20 @@ const generateLiquidStorageCapacity = (
             ],
             [
               '        Materials Generated or Imported',
-              `${printNum(materialGenerated)} US gallons`,
+              `${getLiquidManureDisplay(materialGenerated)}`,
             ],
           ]),
         [
           '        Precipitation, Direct into Storage',
-          `${printNum(directPrecipitation)} US gallons`,
+          `${getLiquidManureDisplay(directPrecipitation)}`,
         ],
         [
           { content: '        Total Stored', styles: { fontStyle: 'bold' } },
-          `${printNum(totalStored)} US gallons`,
+          `${getLiquidManureDisplay(totalStored)}`,
         ],
         [
           { content: 'Storage Volume', styles: { fontStyle: 'bold' } },
-          `${printNum(totalStorageVolume)} US gallons`,
+          `${getLiquidManureDisplay(totalStorageVolume)}`,
         ],
       ],
     });

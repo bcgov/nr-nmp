@@ -31,23 +31,6 @@ export function printNum(num: number, digits: number = 0): string {
   return Math.round(num).toLocaleString();
 }
 
-// Used in AddAnimals.tsx and ManureAndImports.tsx
-export const liquidSolidManureDisplay = (manureObj?: { [key: string]: number }) => {
-  const solid = manureObj?.annualSolidManure || 0;
-  const liquid = manureObj?.annualLiquidManure || 0;
-  // for displaying solid and or liquid
-  if (solid && liquid) {
-    return `${printNum(solid)} tons/ ${printNum(liquid)} U.S. gallons`;
-  }
-  if (solid) {
-    return `${printNum(solid)} tons`;
-  }
-  if (liquid) {
-    return `${printNum(liquid)} U.S. gallons`;
-  }
-  return '0';
-};
-
 export function getSolidManureDisplay(amount: number) {
   const rounded = printNum(amount);
   return `${rounded} ton${rounded === '1' ? '' : 's'}`;
@@ -57,6 +40,23 @@ export function getLiquidManureDisplay(amount: number) {
   const rounded = printNum(amount);
   return `${rounded} U.S. gallon${rounded === '1' ? '' : 's'}`;
 }
+
+// Used in AddAnimals.tsx and ManureAndImports.tsx
+export const liquidSolidManureDisplay = (manureObj?: { [key: string]: number }) => {
+  const solid = manureObj?.annualSolidManure || 0;
+  const liquid = manureObj?.annualLiquidManure || 0;
+  // for displaying solid and or liquid
+  if (solid && liquid) {
+    return `${getSolidManureDisplay(solid)}/ ${getLiquidManureDisplay(liquid)}`;
+  }
+  if (solid) {
+    return `${getSolidManureDisplay(solid)}`;
+  }
+  if (liquid) {
+    return `${getLiquidManureDisplay(liquid)}`;
+  }
+  return '0';
+};
 
 export const isDairyAndMilkingCattle = (animalId: string, subType: string) => animalId === DAIRY_COW_ID && subType === MILKING_COW_ID;
 
