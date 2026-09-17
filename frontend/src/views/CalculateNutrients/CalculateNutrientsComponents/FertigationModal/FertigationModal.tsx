@@ -566,7 +566,7 @@ export default function FertigationModal({
     setIsCalculationCurrent(false);
     setFormData((prev) => {
       const customNutrients = { ...prev.customNutrients!, [name]: value };
-      return ({
+      return {
         ...prev,
         customNutrients,
         name: getCustomFertilizerName(
@@ -575,7 +575,7 @@ export default function FertigationModal({
           customNutrients.P2O5,
           customNutrients.K2O,
         ),
-      });
+      };
     });
   };
 

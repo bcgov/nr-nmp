@@ -12,6 +12,10 @@ import {
   FieldApplicationData,
   AppliedManureData,
   MaterialRemainingData,
+  NMPFileImportedManure,
+  NMPFileGeneratedManure,
+  NMPFileDerivedManure,
+  NMPFileManureStorageSystem,
 } from '@/types';
 import { getStandardizedAnnualManureAmount } from '@/utils/utils';
 import {
@@ -140,9 +144,11 @@ function calculateFieldApplications(
       );
 
       if (manure.solidLiquid === 'Liquid') {
-        fieldApplication.totalAppliedGallons = (fieldApplication.totalAppliedGallons || 0) + appliedAmount;
+        fieldApplication.totalAppliedGallons = (fieldApplication.totalAppliedGallons || 0)
+          + appliedAmount;
       } else {
-        fieldApplication.totalAppliedTons = (fieldApplication.totalAppliedTons || 0) + appliedAmount;
+        fieldApplication.totalAppliedTons = (fieldApplication.totalAppliedTons || 0)
+          + appliedAmount;
       }
     });
 
@@ -188,7 +194,7 @@ function calculateWholePercentRemaining(
  */
 function createStoredManureData(
   yearData: NMPFileYear,
-  storageSystem: any,
+  storageSystem: NMPFileManureStorageSystem,
   manureData: { [manureId: number]: { moisture?: number } } | undefined,
   solidConversions: SolidMaterialConversion[],
   liquidConversions: LiquidMaterialConversion[],
@@ -204,23 +210,19 @@ function createStoredManureData(
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
-  const totalAnnualManureToApply = storageSystem.totalAnnualManureAmount
-    ?? getStandardizedAnnualManureAmount(storageSystem);
-  const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
-  const wholePercentApplied = calculateWholePercentApplied(
-    totalApplied,
-    totalAnnualManureToApply,
-  );
+  const totalAnnualManure = getStandardizedAnnualManureAmount(storageSystem);
+  const totalRemaining = totalAnnualManure - totalApplied;
+  const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManure);
   const wholePercentRemaining = calculateWholePercentRemaining(
-    totalRemaining,
-    totalAnnualManureToApply,
+    Math.max(0, totalRemaining),
+    totalAnnualManure,
   );
 
   return {
     sourceName: storageSystem.name,
     sourceUuid: storageSystem.uuid,
-    manureMaterialType: storageSystem.manureType || null,
-    totalAnnualManureToApply,
+    manureType: storageSystem.manureType,
+    totalAnnualManureToApply: totalAnnualManure,
     totalApplied,
     totalAnnualManureRemainingToApply: totalRemaining,
     wholePercentApplied,
@@ -231,9 +233,9 @@ function createStoredManureData(
 /**
  * Create applied manure data for imported manures
  */
-function createImportedManureData(
+function createUnstoredManureData(
   yearData: NMPFileYear,
-  importedManure: any,
+  unstoredManure: NMPFileGeneratedManure | NMPFileImportedManure | NMPFileDerivedManure,
   manureData: { [manureId: number]: { moisture?: number } } | undefined,
   solidConversions: SolidMaterialConversion[],
   liquidConversions: LiquidMaterialConversion[],
@@ -241,7 +243,7 @@ function createImportedManureData(
 ): AppliedManureData {
   const fieldApplications = calculateFieldApplications(
     yearData.fields,
-    importedManure.uuid,
+    unstoredManure.uuid,
     manureData,
     solidConversions,
     liquidConversions,
@@ -249,23 +251,19 @@ function createImportedManureData(
   );
 
   const totalApplied = calculateTotalApplied(fieldApplications);
-  const totalAnnualManureToApply = importedManure.totalAnnualManureAmount
-    ?? getStandardizedAnnualManureAmount(importedManure);
-  const totalRemaining = Math.max(0, totalAnnualManureToApply - totalApplied);
-  const wholePercentApplied = calculateWholePercentApplied(
-    totalApplied,
-    totalAnnualManureToApply,
-  );
+  const totalAnnualManure = getStandardizedAnnualManureAmount(unstoredManure);
+  const totalRemaining = totalAnnualManure - totalApplied;
+  const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManure);
   const wholePercentRemaining = calculateWholePercentRemaining(
-    totalRemaining,
-    totalAnnualManureToApply,
+    Math.max(0, totalRemaining),
+    totalAnnualManure,
   );
 
   return {
-    sourceName: importedManure.managedManureName,
-    sourceUuid: importedManure.uuid,
-    manureMaterialType: importedManure.manureType || null,
-    totalAnnualManureToApply,
+    sourceName: unstoredManure.uniqueMaterialName,
+    sourceUuid: unstoredManure.uuid,
+    manureType: unstoredManure.manureType!,
+    totalAnnualManureToApply: totalAnnualManure,
     totalApplied,
     totalAnnualManureRemainingToApply: totalRemaining,
     wholePercentApplied,
@@ -274,7 +272,7 @@ function createImportedManureData(
 }
 
 /**
- * Main function to calculate material remaining data for a year
+ * Calculate material remaining data for a year
  */
 export function calculateMaterialRemainingData(
   yearData: NMPFileYear,
@@ -284,8 +282,7 @@ export function calculateMaterialRemainingData(
   availableUnits: Units[] = [],
 ): MaterialRemainingData {
   const appliedStoredManures: AppliedManureData[] = [];
-  const appliedImportedManures: AppliedManureData[] = [];
-  const materialsRemainingWarnings: string[] = [];
+  const appliedUnstoredManures: AppliedManureData[] = [];
 
   // Process Storage Systems
   if (yearData.manureStorageSystems) {
@@ -302,90 +299,26 @@ export function calculateMaterialRemainingData(
     });
   }
 
-  // Process Imported Manures
-  if (yearData.importedManures) {
-    yearData.importedManures.forEach((importedManure) => {
-      const appliedImportedManure = createImportedManureData(
-        yearData,
-        importedManure,
-        manureData,
-        solidConversions,
-        liquidConversions,
-        availableUnits,
-      );
-      appliedImportedManures.push(appliedImportedManure);
-    });
-  }
+  // Process Unstored Manures
+  const singleManures = [
+    ...(yearData.generatedManures || []),
+    ...(yearData.importedManures || []),
+    ...(yearData.derivedManures || []),
+  ].filter((m) => !m.assignedToStoredSystem);
+  singleManures.forEach((unstoredManure) => {
+    const appliedUnstoredManure = createUnstoredManureData(
+      yearData,
+      unstoredManure,
+      manureData,
+      solidConversions,
+      liquidConversions,
+      availableUnits,
+    );
+    appliedUnstoredManures.push(appliedUnstoredManure);
+  });
 
   return {
     appliedStoredManures,
-    appliedImportedManures,
-    materialsRemainingWarnings,
+    appliedUnstoredManures,
   };
-}
-
-/**
- * Calculate summary statistics for material remaining data
- */
-export function calculateMaterialRemainingSummary(data: MaterialRemainingData): {
-  totalSources: number;
-  sourcesWithRemainingMaterial: number;
-  sourcesOverApplied: number;
-  averagePercentApplied: number;
-} {
-  const allAppliedManures = [
-    ...data.appliedStoredManures,
-    ...data.appliedImportedManures,
-  ];
-  const totalSources = allAppliedManures.length;
-
-  if (totalSources === 0) {
-    return {
-      totalSources: 0,
-      sourcesWithRemainingMaterial: 0,
-      sourcesOverApplied: 0,
-      averagePercentApplied: 0,
-    };
-  }
-
-  const sourcesWithRemainingMaterial = allAppliedManures.filter(
-    (manure) => manure.wholePercentRemaining >= 10,
-  ).length;
-
-  const sourcesOverApplied = allAppliedManures.filter(
-    (manure) => manure.totalAnnualManureRemainingToApply < 0,
-  ).length;
-
-  const totalPercentApplied = allAppliedManures.reduce(
-    (sum, manure) => sum + manure.wholePercentApplied,
-    0,
-  );
-
-  const averagePercentApplied = Math.round(totalPercentApplied / totalSources);
-
-  return {
-    totalSources,
-    sourcesWithRemainingMaterial,
-    sourcesOverApplied,
-    averagePercentApplied,
-  };
-}
-
-/**
- * Enhanced material remaining calculation
- */
-export function calculateMaterialRemaining(
-  yearData: NMPFileYear,
-  solidConversions: SolidMaterialConversion[],
-  liquidConversions: LiquidMaterialConversion[],
-  manureData?: { [manureId: number]: { moisture?: number } },
-  availableUnits: Units[] = [],
-): MaterialRemainingData {
-  return calculateMaterialRemainingData(
-    yearData,
-    manureData,
-    solidConversions,
-    liquidConversions,
-    availableUnits,
-  );
 }
