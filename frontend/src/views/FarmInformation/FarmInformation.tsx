@@ -19,12 +19,7 @@ import {
 } from '@bcgov/design-system-react-components';
 import Grid from '@mui/material/Grid';
 import useAppState from '@/hooks/useAppState';
-import {
-  Select,
-  TextField,
-  View,
-  YesNoRadioButtons,
-} from '@/components/common';
+import { Select, TextField, View, YesNoRadioButtons } from '@/components/common';
 import {
   formCss,
   formGridBreakpoints,

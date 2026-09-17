@@ -4,9 +4,11 @@ import useAppState from '@/hooks/useAppState';
 import { LANDING_PAGE } from '@/constants/routes';
 import AlertDialog from '../AlertDialog/AlertDialog';
 
-export default function RedirectDialog(
-  props: {isOpen: boolean, onOpenChange: (isOpen: boolean) => void, downloadFile: () => void},
-) {
+export default function RedirectDialog(props: {
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  downloadFile: () => void;
+}) {
   const { isOpen, onOpenChange, downloadFile } = props;
   const { dispatch } = useAppState();
   const navigate = useNavigate();

@@ -39,7 +39,7 @@ import {
 import calculateManureNutrientInputs from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS } from '@/constants/routes';
-import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
+import { calculateMaterialRemainingData } from '@/calculations/MaterialRemaining/Calculations';
 import { MaterialRemainingDisplay } from '@/components/MaterialRemaining';
 
 type AddManureModalProps = {
@@ -176,7 +176,9 @@ export default function ManureModal({
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
 
-  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(null);
+  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
+    null,
+  );
 
   const [solidConversions, setSolidConversions] = useState<
     SolidMaterialApplicationTonPerAcreRateConversions[]
@@ -249,11 +251,11 @@ export default function ManureModal({
     }
 
     try {
-      const result = calculateMaterialRemaining(
+      const result = calculateMaterialRemainingData(
         yearDataWithPendingApplication,
+        manureData,
         solidConversions,
         liquidConversions,
-        manureData,
         manureUnits.map((unit) => unit.value),
       );
       setMaterialRemainingData(result);

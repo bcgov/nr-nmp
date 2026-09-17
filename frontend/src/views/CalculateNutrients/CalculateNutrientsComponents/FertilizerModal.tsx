@@ -376,7 +376,7 @@ export default function FertilizerModal({
   const handleCustomFertilizerChanges = (updates: Partial<CustomFertilizer>) => {
     setFormState((prev) => {
       const customFertilizer = { ...prev.customFertilizer!, ...updates };
-      return ({
+      return {
         ...prev,
         customFertilizer,
         name: getCustomFertilizerName(
@@ -385,7 +385,7 @@ export default function FertilizerModal({
           customFertilizer.phosphorous,
           customFertilizer.potassium,
         ),
-      });
+      };
     });
   };
 
