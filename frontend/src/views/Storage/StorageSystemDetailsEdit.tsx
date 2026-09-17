@@ -21,12 +21,13 @@ import {
   MANURE_TYPE_OPTIONS,
 } from '@/constants';
 import { calculateSeparatedSolidAndLiquid } from '@/utils/densityCalculations';
-import { printNum } from '@/utils/utils';
+import { getLiquidManureDisplay, getSolidManureDisplay } from '@/utils/utils';
 
 type StorageSystemDetailsEditProps = {
   mode: 'create' | 'system_edit';
   formData: StorageModalFormData;
   setFormData: React.Dispatch<React.SetStateAction<StorageModalFormData>>;
+  setIsConfirmDisabled: React.Dispatch<React.SetStateAction<boolean>>;
   unassignedManures: ManureInSystem[];
 };
 
@@ -34,6 +35,7 @@ export default function StorageSystemDetailsEdit({
   mode,
   formData,
   setFormData,
+  setIsConfirmDisabled,
   unassignedManures,
 }: StorageSystemDetailsEditProps) {
   // Need to maintain a string[] for the CheckboxGroup
@@ -134,6 +136,10 @@ export default function StorageSystemDetailsEdit({
       (prev) => ({ ...prev, ...updatedChanges }) as NMPFileManureStorageSystem,
     );
   };
+
+  useEffect(() => {
+    setIsConfirmDisabled(availableManures.length === 0);
+  }, [setIsConfirmDisabled, availableManures]);
 
   // Set the seperated liquid/solid when the total amount changes
   useEffect(() => {
@@ -325,17 +331,13 @@ export default function StorageSystemDetailsEdit({
                     <p>
                       Separated liquids
                       <p>
-                        {printNum(formData.separatedLiquidsUSGallons)}
-                        {' '}
-                        U.S. Gallons
+                        {getLiquidManureDisplay(formData.separatedLiquidsUSGallons)}
                       </p>
                     </p>
                     <p>
                       Separated solids
                       <p>
-                        {printNum(formData.separatedSolidsTons)}
-                        {' '}
-                        tons
+                        {getSolidManureDisplay(formData.separatedSolidsTons)}
                       </p>
                     </p>
                   </>
