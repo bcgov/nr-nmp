@@ -6583,16 +6583,6 @@
   },
   {
     "model": "shared.subregion",
-    "pk": 71,
-    "fields": {
-      "name": "Grand Forks",
-      "annualprecipitation": 500.0,
-      "annualprecipitationocttomar": 266.0,
-      "regionid": 13
-    }
-  },
-  {
-    "model": "shared.subregion",
     "pk": 72,
     "fields": {
       "name": "Beaverdell",
