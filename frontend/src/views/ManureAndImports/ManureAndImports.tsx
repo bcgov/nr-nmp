@@ -31,7 +31,7 @@ import {
   tableActionButtonCss,
 } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
-import { booleanChecker, liquidSolidManureDisplay, printNum } from '@/utils/utils';
+import { booleanChecker, getLiquidManureDisplay, getSolidManureDisplay, liquidSolidManureDisplay, printNum } from '@/utils/utils';
 import { DAIRY_COW_ID } from '@/constants';
 
 // Create a new component for crops manure and imports for now
@@ -82,7 +82,7 @@ export default function ManureAndImports() {
       updatedManureFormData = {
         ...data,
         annualAmountUSGallonsVolume,
-        annualAmountDisplayVolume: `${printNum(annualAmountUSGallonsVolume)} U.S. gallons`,
+        annualAmountDisplayVolume: `${getLiquidManureDisplay(annualAmountUSGallonsVolume)}`,
       };
     } else if (data.manureType === ManureType.Solid) {
       const solidManureConversionFactor = solidManureDropdownOptions.find(
@@ -107,13 +107,14 @@ export default function ManureAndImports() {
           solidManureConversionFactor?.ustonsoutput || '',
         );
 
+      const roundedCubicYards = printNum(annualAmountCubicYardsVolume);
       updatedManureFormData = {
         ...data,
         annualAmountCubicYardsVolume,
         annualAmountCubicMetersVolume,
         annualAmountTonsWeight,
-        annualAmountDisplayVolume: `${printNum(annualAmountCubicYardsVolume)} yards³ (${printNum(annualAmountCubicMetersVolume)} m³)`,
-        annualAmountDisplayWeight: `${printNum(annualAmountTonsWeight)} tons`,
+        annualAmountDisplayVolume: `${roundedCubicYards} yard${roundedCubicYards === '1' ? '' : 's'}³ (${printNum(annualAmountCubicMetersVolume)} m³)`,
+        annualAmountDisplayWeight: `${getSolidManureDisplay(annualAmountTonsWeight)}`,
       };
     } else {
       throw new Error("Manure type isn't set.");

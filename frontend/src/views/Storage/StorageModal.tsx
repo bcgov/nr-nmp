@@ -50,6 +50,7 @@ export default function StorageModal({
       }
       : initialModalData || { ...DEFAULT_FORM_DATA, uuid: crypto.randomUUID() },
   );
+  const [isConfirmDisabled, setIsConfirmedDisabled] = useState<boolean>(false);
 
   const handleSubmit = () => {
     if (formData.manureType === undefined) throw new Error('Form validation failed.');
@@ -88,12 +89,14 @@ export default function StorageModal({
         css={formCss}
         onCancel={handleDialogClose}
         onConfirm={handleSubmit}
+        isConfirmDisabled={isConfirmDisabled}
       >
         {mode.mode === 'create' || mode.mode === 'system_edit' ? (
           <StorageSystemDetailsEdit
             mode={mode.mode}
             formData={formData}
             setFormData={setFormData}
+            setIsConfirmDisabled={setIsConfirmedDisabled}
             unassignedManures={unassignedManures}
           />
         ) : (

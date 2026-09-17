@@ -23,7 +23,7 @@ import {
 } from '@/constants';
 import { calcStorageVolumeGallons } from '@/utils/manureStorageSystems';
 import { Text } from './StorageModal.styles';
-import { printNum } from '@/utils/utils';
+import { getLiquidManureDisplay } from '@/utils/utils';
 
 const storageShapeOptions = [
   { id: Shape.Rectangular, label: Shape[Shape.Rectangular] },
@@ -241,8 +241,8 @@ export default function LiquidStorageDetails({
             <Text className="bcds-react-aria-Text primary small">
               Storage Volume
             </Text>
-            <Text className="bcds-react-aria-Text primary small">{`${printNum(selectedStorage.volumeUSGallons)} U.S. Gallons (${selectedStorage.name})`}</Text>
-            <Text className="bcds-react-aria-Text primary small">{`${printNum(totalVolume)} U.S. Gallons (${formData.name})`}</Text>
+            <Text className="bcds-react-aria-Text primary small">{`${getLiquidManureDisplay(selectedStorage.volumeUSGallons)} (${selectedStorage.name})`}</Text>
+            <Text className="bcds-react-aria-Text primary small">{`${getLiquidManureDisplay(totalVolume)} (${formData.name})`}</Text>
           </>
         )}
       </Grid>
