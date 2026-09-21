@@ -44,6 +44,18 @@ import {
 } from '@/utils/manureStorageSystems';
 import { getKelownaRating } from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 
+// eslint-disable-next-line no-shadow
+enum Titles {
+  ApplicationSchedule = 'Application Schedule',
+  ManureCompostInventory = 'Manure/Compost Inventory',
+  ManureAndCompostUse = 'Manure and Compost Use',
+  LiquidStorageCapacity = 'Liquid Storage Capacity: October to March',
+  FertilizerRequired = 'Fertilizer Required',
+  FieldSummary = 'Field Summary:',
+  ManureAndCompostAnalysis = 'Manure and Compost Analysis',
+  SoilTestResults = 'Soil Test Results',
+}
+
 const sharedAutoTableSettings: Partial<UserOptions> = {
   theme: 'grid',
   styles: {
@@ -76,6 +88,41 @@ const drawStandardHeader = (
   return [x, nextY];
 };
 
+const generateTableOfContents = (
+  doc: jsPDF,
+  farmName: string,
+  year: string,
+  pageList: string[],
+) => {
+  // No table is added to this page, but, because AutoTable is used to format
+  // every other page, it's used here as well
+  autoTable(doc, {
+    // Page Header
+    willDrawPage(data) {
+      let [x, nextY] = drawStandardHeader(data, doc, farmName, year);
+      doc.setFontSize(15);
+      doc.setFont(doc.getFont().fontName, 'bold');
+      nextY = addText(doc, 'Included in Report', x, nextY + 2);
+      doc.setFontSize(14);
+      for (let i = 0; i < pageList.length; i += 1) {
+        nextY = addText(doc, pageList[i], x + 2, nextY + (i === 0 ? 2 : 0));
+      }
+      doc.setFont(doc.getFont().fontName, 'normal');
+      doc.setFontSize(10);
+      addText(
+        doc,
+        'All information contained within the Nutrient Management Calculator is provided solely "as is" '
+        + 'at the user\'s own risk. Although every effort has been made to ensure that the information contained '
+        + 'in the Nutrient Management Calculator is accurate, the Government of British Columbia assumes no '
+        + 'legal liability or responsibility for the completeness, accuracy, or usefulness of the information '
+        + 'provided or any product resulting from the use of the Nutrient Management Calculator.',
+        x,
+        nextY + 6,
+      );
+    },
+  });
+};
+
 const generateApplicationSchedule = (
   doc: jsPDF,
   pageWidth: number,
@@ -85,6 +132,7 @@ const generateApplicationSchedule = (
   fertilizerUnits: FertilizerUnit[],
   manureUnits: Units[],
 ) => {
+  doc.addPage();
   for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
     const field = nmpFileYear.fields[i];
     const allApplied = [...field.manures, ...field.fertilizers];
@@ -95,7 +143,7 @@ const generateApplicationSchedule = (
       willDrawPage(data) {
         const [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
         doc.setFont(doc.getFont().fontName, 'bold');
-        addText(doc, 'Application Schedule', nextX, nextY + 2);
+        addText(doc, Titles.ApplicationSchedule, nextX, nextY + 2);
         doc.setFont(doc.getFont().fontName, 'normal');
       },
       // Table
@@ -186,125 +234,122 @@ const generateManureCompostInventory = (
   pageWidth: number,
   farmName: string,
   year: string,
-  nmpFileYear: NMPFileYear,
+  storageSystems: NMPFileManureStorageSystem[],
   unassignedManures: NMPFileManure[],
 ) => {
-  const storageSystems = nmpFileYear.manureStorageSystems || [];
-  if (storageSystems.length > 0 || unassignedManures.length > 0) {
-    doc.addPage();
-    // TODO: Check on this
-    /* Commenting out for now bc I want to ask Josh about this and the assumptions
+  doc.addPage();
+  // TODO: Check on this
+  /* Commenting out for now bc I want to ask Josh about this and the assumptions
       const footnotes: string[] = [
         `Milking Center Wash Water adjusted to _ US gallons/day/animal`,
         `Milk Production adjusted to _ lb/day/animal`,
       ];
       */
-    autoTable(doc, {
-      ...sharedAutoTableSettings,
-      // Page Header
-      margin: { top: 40 },
-      willDrawPage(data) {
-        const [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
-        doc.setFont(doc.getFont().fontName, 'bold');
-        addText(doc, 'Manure/Compost Inventory', nextX, nextY + 2);
-        doc.setFont(doc.getFont().fontName, 'normal');
-      },
-      // Table
-      head: [['Material', 'Annual Amount']],
-      columnStyles: {
-        0: { cellWidth: pageWidth * 0.6 },
-        1: { cellWidth: 'auto' },
-      },
-      body: [
-        ...storageSystems.reduce((acc, system) => {
-          // For a storage system, there is a rows with system name in bold,
-          // a row for each manure in the system, an extra row if there is
-          // Milking Center Wash Water and a final row for precipitation,
-          // if the system contains any
-          const newRows: CellInput[][] = [];
-          let storageSum = 0;
-          let totalWashWater = 0;
-          system.manuresInSystem.forEach((m) => {
-            // The *actual* annual amount needs to remove wash water and
-            // take into account solid-liquid separation
-            let { annualAmount } = m.data;
-            if (
-              m.type === 'Generated'
+  autoTable(doc, {
+    ...sharedAutoTableSettings,
+    // Page Header
+    margin: { top: 40 },
+    willDrawPage(data) {
+      const [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
+      doc.setFont(doc.getFont().fontName, 'bold');
+      addText(doc, Titles.ManureCompostInventory, nextX, nextY + 2);
+      doc.setFont(doc.getFont().fontName, 'normal');
+    },
+    // Table
+    head: [['Material', 'Annual Amount']],
+    columnStyles: {
+      0: { cellWidth: pageWidth * 0.6 },
+      1: { cellWidth: 'auto' },
+    },
+    body: [
+      ...storageSystems.reduce((acc, system) => {
+        // For a storage system, there is a rows with system name in bold,
+        // a row for each manure in the system, an extra row if there is
+        // Milking Center Wash Water and a final row for precipitation,
+        // if the system contains any
+        const newRows: CellInput[][] = [];
+        let storageSum = 0;
+        let totalWashWater = 0;
+        system.manuresInSystem.forEach((m) => {
+          // The *actual* annual amount needs to remove wash water and
+          // take into account solid-liquid separation
+          let { annualAmount } = m.data;
+          if (
+            m.type === 'Generated'
               && m.data.originalAnnualAmount !== undefined
               && m.data.originalWashWaterAmount !== undefined
-            ) {
-              annualAmount = m.data.originalAnnualAmount;
-              totalWashWater += m.data.originalWashWaterAmount;
-            }
-            if (
-              system.manureType === ManureType.Liquid
-              && system.percentLiquidSeperation > 0
-            ) {
-              annualAmount *= (100 - system.percentLiquidSeperation) / 100;
-            }
-            storageSum += annualAmount;
-            // \t doesn't work in this new font so I used spaces
-            newRows.push([
-              `        ${m.data.uniqueMaterialName}`,
-              `${m.data.manureType === ManureType.Liquid ? getLiquidManureDisplay(annualAmount) : getSolidManureDisplay(annualAmount)}`,
-            ]);
-          });
-          if (totalWashWater > 0) {
-            // Wash water is also affected by solid-liquid separation
-            if (
-              system.manureType === ManureType.Liquid
-              && system.percentLiquidSeperation > 0
-            ) {
-              totalWashWater *= (100 - system.percentLiquidSeperation) / 100;
-            }
-            storageSum += totalWashWater;
-            newRows.push([
-              'Milking Center Wash Water',
-              `${getLiquidManureDisplay(totalWashWater)}`,
-            ]);
+          ) {
+            annualAmount = m.data.originalAnnualAmount;
+            totalWashWater += m.data.originalWashWaterAmount;
           }
-          if (system.annualPrecipitation) {
-            const { annualPrecipitation } = system;
-            storageSum += annualPrecipitation;
-            newRows.push([
-              'Precipitation',
-              `${system.manureType === ManureType.Liquid ? getLiquidManureDisplay(annualPrecipitation) : getSolidManureDisplay(annualPrecipitation)}`,
-            ]);
+          if (
+            system.manureType === ManureType.Liquid
+              && system.percentLiquidSeperation > 0
+          ) {
+            annualAmount *= (100 - system.percentLiquidSeperation) / 100;
           }
-
-          // The title is prepended to the array with the sum
-          newRows.unshift([
-            { content: system.name, styles: { fontStyle: 'bold' } },
-            {
-              content: `${system.manureType === ManureType.Liquid ? getLiquidManureDisplay(storageSum) : getSolidManureDisplay(storageSum)}`,
-              styles: { fontStyle: 'bold' },
-            },
-          ]);
-
-          return acc.concat(newRows);
-        }, [] as RowInput[]),
-        ...unassignedManures.reduce((acc, manure, idx) => {
-          // Add the section header if this is the first manure
-          const newRows: CellInput[][] = idx === 0
-            ? [
-              [
-                {
-                  content: 'Material not Stored',
-                  styles: { fontStyle: 'bold' },
-                },
-                '',
-              ],
-            ]
-            : [];
+          storageSum += annualAmount;
+          // \t doesn't work in this new font so I used spaces
           newRows.push([
-            `        ${manure.uniqueMaterialName}`,
-            `${manure.manureType === ManureType.Liquid ? getLiquidManureDisplay(manure.annualAmountUSGallonsVolume!) : getSolidManureDisplay(manure.annualAmountTonsWeight!)}`,
+            `        ${m.data.uniqueMaterialName}`,
+            `${m.data.manureType === ManureType.Liquid ? getLiquidManureDisplay(annualAmount) : getSolidManureDisplay(annualAmount)}`,
           ]);
-          return acc.concat(newRows);
-        }, [] as RowInput[]),
-      ],
-    });
-  }
+        });
+        if (totalWashWater > 0) {
+          // Wash water is also affected by solid-liquid separation
+          if (
+            system.manureType === ManureType.Liquid
+              && system.percentLiquidSeperation > 0
+          ) {
+            totalWashWater *= (100 - system.percentLiquidSeperation) / 100;
+          }
+          storageSum += totalWashWater;
+          newRows.push([
+            'Milking Center Wash Water',
+            `${getLiquidManureDisplay(totalWashWater)}`,
+          ]);
+        }
+        if (system.annualPrecipitation) {
+          const { annualPrecipitation } = system;
+          storageSum += annualPrecipitation;
+          newRows.push([
+            'Precipitation',
+            `${system.manureType === ManureType.Liquid ? getLiquidManureDisplay(annualPrecipitation) : getSolidManureDisplay(annualPrecipitation)}`,
+          ]);
+        }
+
+        // The title is prepended to the array with the sum
+        newRows.unshift([
+          { content: system.name, styles: { fontStyle: 'bold' } },
+          {
+            content: `${system.manureType === ManureType.Liquid ? getLiquidManureDisplay(storageSum) : getSolidManureDisplay(storageSum)}`,
+            styles: { fontStyle: 'bold' },
+          },
+        ]);
+
+        return acc.concat(newRows);
+      }, [] as RowInput[]),
+      ...unassignedManures.reduce((acc, manure, idx) => {
+        // Add the section header if this is the first manure
+        const newRows: CellInput[][] = idx === 0
+          ? [
+            [
+              {
+                content: 'Material not Stored',
+                styles: { fontStyle: 'bold' },
+              },
+              '',
+            ],
+          ]
+          : [];
+        newRows.push([
+          `        ${manure.uniqueMaterialName}`,
+          `${manure.manureType === ManureType.Liquid ? getLiquidManureDisplay(manure.annualAmountUSGallonsVolume!) : getSolidManureDisplay(manure.annualAmountTonsWeight!)}`,
+        ]);
+        return acc.concat(newRows);
+      }, [] as RowInput[]),
+    ],
+  });
 };
 
 const generateManureAndCompostUse = (
@@ -323,7 +368,7 @@ const generateManureAndCompostUse = (
     willDrawPage(data) {
       const [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
       doc.setFont(doc.getFont().fontName, 'bold');
-      addText(doc, 'Manure and Compost Use', nextX, nextY + 2);
+      addText(doc, Titles.ManureAndCompostUse, nextX, nextY + 2);
       doc.setFont(doc.getFont().fontName, 'normal');
     },
     // Table
@@ -418,7 +463,7 @@ const generateLiquidStorageCapacity = (
       head: [
         [
           {
-            content: 'Liquid Storage Capacity: October to March',
+            content: Titles.LiquidStorageCapacity,
             styles: {
               fillColor: [255, 255, 255],
               lineWidth: { top: 0, left: 0, bottom: 0.5, right: 0 },
@@ -497,69 +542,70 @@ const generateLiquidStorageCapacity = (
   }
 };
 
-const generateFertilizerRequired = (
-  doc: jsPDF,
-  pageWidth: number,
-  farmName: string,
-  year: string,
+// Group fertilizers across each field by name and sum the amounts
+const getFertilizerList = (
   nmpFileYear: NMPFileYear,
   fertilizerUnits: FertilizerUnit[],
-) => {
-  // Group fertilizers across each field by name and sum the amounts
-  const fertilizers: FertilizerRequiredStep[] = nmpFileYear.fields.reduce(
-    (acc, field) => {
-      field.fertilizers.forEach((fert) => {
-        let idx = acc.findIndex((f) => f.name === fert.name);
-        if (idx === -1) {
-          idx = acc.length;
-          const fertilizerUnit = fertilizerUnits.find(
-            (u) => u.id === fert.applUnitId,
-          );
-          if (fertilizerUnit === undefined) {
-            throw new Error(`Fertilizer unit ${fert.applUnitId} not found.`);
-          }
-          acc.push({
-            name: fert.name,
-            totalAmount: 0,
-            unit: fertilizerUnit.dryliquid === 'dry' ? 'kg' : 'US gallons',
-          });
+) => nmpFileYear.fields.reduce(
+  (acc, field) => {
+    field.fertilizers.forEach((fert) => {
+      let idx = acc.findIndex((f) => f.name === fert.name);
+      if (idx === -1) {
+        idx = acc.length;
+        const fertilizerUnit = fertilizerUnits.find(
+          (u) => u.id === fert.applUnitId,
+        );
+        if (fertilizerUnit === undefined) {
+          throw new Error(`Fertilizer unit ${fert.applUnitId} not found.`);
         }
-        // Add the converted amount and field acreage
-        const stats = acc[idx];
-        stats.totalAmount
+        acc.push({
+          name: fert.name,
+          totalAmount: 0,
+          unit: fertilizerUnit.dryliquid === 'dry' ? 'kg' : 'US gallons',
+        });
+      }
+      // Add the converted amount and field acreage
+      const stats = acc[idx];
+      stats.totalAmount
           // Converts to kg/ac or US gal/ac and multiplies by # of acres
           += fert.applicationRate
           * (stats.unit === 'kg'
             ? getFertilizerUnitKgPerAcreConversion(fert.applUnitId)
             : getFertilizerUnitUSGallonPerAcreConversion(fert.applUnitId))
           * field.area;
-      });
-      return acc;
-    },
-    [] as FertilizerRequiredStep[],
-  );
-
-  if (fertilizers.length > 0) {
-    doc.addPage();
-    autoTable(doc, {
-      ...sharedAutoTableSettings,
-      // Page Header
-      margin: { top: 40 },
-      willDrawPage(data) {
-        const [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
-        doc.setFont(doc.getFont().fontName, 'bold');
-        addText(doc, 'Fertilizer Required', nextX, nextY + 2);
-        doc.setFont(doc.getFont().fontName, 'normal');
-      },
-      // Table
-      head: [['Material', `Total Amount Required in ${nmpFileYear.year}`]],
-      columnStyles: {
-        0: { cellWidth: pageWidth * 0.6 },
-        1: { cellWidth: 'auto' },
-      },
-      body: fertilizers.map((f) => [f.name, `${printNum(f.totalAmount)} ${f.unit}`]),
     });
-  }
+    return acc;
+  },
+    [] as FertilizerRequiredStep[],
+);
+
+const generateFertilizerRequired = (
+  doc: jsPDF,
+  pageWidth: number,
+  farmName: string,
+  year: string,
+  nmpFileYear: NMPFileYear,
+  fertilizers: FertilizerRequiredStep[],
+) => {
+  doc.addPage();
+  autoTable(doc, {
+    ...sharedAutoTableSettings,
+    // Page Header
+    margin: { top: 40 },
+    willDrawPage(data) {
+      const [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
+      doc.setFont(doc.getFont().fontName, 'bold');
+      addText(doc, Titles.FertilizerRequired, nextX, nextY + 2);
+      doc.setFont(doc.getFont().fontName, 'normal');
+    },
+    // Table
+    head: [['Material', `Total Amount Required in ${nmpFileYear.year}`]],
+    columnStyles: {
+      0: { cellWidth: pageWidth * 0.6 },
+      1: { cellWidth: 'auto' },
+    },
+    body: fertilizers.map((f) => [f.name, `${printNum(f.totalAmount)} ${f.unit}`]),
+  });
 };
 
 const generateFieldSummary = (
@@ -584,7 +630,7 @@ const generateFieldSummary = (
     willDrawPage(data) {
       let [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
       const fieldSummaryY = nextY + 2;
-      nextY = addText(doc, 'Field Summary:', nextX, fieldSummaryY);
+      nextY = addText(doc, Titles.FieldSummary, nextX, fieldSummaryY);
       doc.setFont(doc.getFont().fontName, 'bold');
       doc.text(`${field.fieldName}`, nextX + 40, fieldSummaryY);
       doc.setFontSize(10);
@@ -940,7 +986,7 @@ const generateManureAndCompostAnalysis = (
     willDrawPage(data) {
       let [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
       doc.setFont(doc.getFont().fontName, 'bold');
-      nextY = addText(doc, 'Manure and Compost Analysis', nextX, nextY + 2);
+      nextY = addText(doc, Titles.ManureAndCompostAnalysis, nextX, nextY + 2);
       doc.setFont(doc.getFont().fontName, 'normal');
       doc.setFontSize(10);
       addText(
@@ -1026,7 +1072,7 @@ const generateSoilTestResults = (
     willDrawPage(data) {
       const [nextX, nextY] = drawStandardHeader(data, doc, farmName, year);
       doc.setFont(doc.getFont().fontName, 'bold');
-      addText(doc, 'Soil Test Results', nextX, nextY + 2);
+      addText(doc, Titles.SoilTestResults, nextX, nextY + 2);
       doc.setFont(doc.getFont().fontName, 'normal');
     },
     columnStyles: {
@@ -1116,9 +1162,27 @@ export default async function makeFullReportPdf(
     (animal) => animal.animalId === DAIRY_COW_ID,
   );
   const storageSystems = nmpFileYear.manureStorageSystems || [];
+  const fertilizers = getFertilizerList(nmpFileYear, fertilizerUnits);
+
+  // Conditionals for optional pages
+  const includeManureCompostInventory = storageSystems.length > 0 || unassignedManures.length > 0;
+  const includeManureAndCompostPages = nmpFileYear.nutrientAnalyses.length > 0;
+  const includeFertilizerRequired = fertilizers.length > 0;
+
+  // Make list of the included pages
+  const pageList = [];
+  pageList.push(Titles.ApplicationSchedule);
+  if (includeManureCompostInventory) pageList.push(Titles.ManureCompostInventory);
+  if (includeManureAndCompostPages) pageList.push(Titles.ManureAndCompostUse);
+  if (includeFertilizerRequired) pageList.push(Titles.FertilizerRequired);
+  for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
+    pageList.push(`${Titles.FieldSummary} ${nmpFileYear.fields[i].fieldName}`);
+  }
+  if (includeManureAndCompostPages) pageList.push(Titles.ManureAndCompostAnalysis);
+  pageList.push(Titles.SoilTestResults);
 
   // First page: Table of Contents
-  // TODO: Add Table of Contents as the first page
+  generateTableOfContents(doc, farmName, year, pageList);
 
   // Second page: Application Schedule
   generateApplicationSchedule(
@@ -1131,18 +1195,20 @@ export default async function makeFullReportPdf(
     manureUnits,
   );
 
-  // Third page: Manure/Compost Inventory
-  generateManureCompostInventory(
-    doc,
-    pageWidth,
-    farmName,
-    year,
-    nmpFileYear,
-    unassignedManures,
-  );
+  // Optional page: Manure/Compost Inventory
+  if (includeManureCompostInventory) {
+    generateManureCompostInventory(
+      doc,
+      pageWidth,
+      farmName,
+      year,
+      storageSystems,
+      unassignedManures,
+    );
+  }
 
   // Optional page: Manure and Compost Use
-  if (nmpFileYear.nutrientAnalyses.length > 0) {
+  if (includeManureAndCompostPages) {
     generateManureAndCompostUse(
       doc,
       pageWidth,
@@ -1159,15 +1225,17 @@ export default async function makeFullReportPdf(
     generateLiquidStorageCapacity(doc, pageWidth, storageSystems, subregion);
   }
 
-  // Fourth page: Fertilizer Required
-  generateFertilizerRequired(
-    doc,
-    pageWidth,
-    farmName,
-    year,
-    nmpFileYear,
-    fertilizerUnits,
-  );
+  // Optional page: Fertilizer Required
+  if (includeFertilizerRequired) {
+    generateFertilizerRequired(
+      doc,
+      pageWidth,
+      farmName,
+      year,
+      nmpFileYear,
+      fertilizers,
+    );
+  }
 
   // Per field: Field Summary page
   for (let i = 0; i < nmpFileYear.fields.length; i += 1) {
@@ -1188,7 +1256,7 @@ export default async function makeFullReportPdf(
   }
 
   // Optional page: Manure and Compost Analysis
-  if (nmpFileYear.nutrientAnalyses.length > 0) {
+  if (includeManureAndCompostPages) {
     generateManureAndCompostAnalysis(
       doc,
       pageWidth,
