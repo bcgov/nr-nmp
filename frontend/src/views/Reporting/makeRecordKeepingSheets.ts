@@ -15,7 +15,6 @@ const drawStandardHeader = (
   const x = Math.ceil(data.settings.margin.left);
   let nextY = Math.ceil(data.settings.margin.left);
   nextY = addText(doc, `Farm Name: ${farmName}`, x, nextY);
-  // make on one row space between farm name and year
   nextY = addText(doc, `Planning Year: ${year}`, x, nextY);
   return [x, nextY];
 };
@@ -84,7 +83,8 @@ export default async function makeRecordKeepingSheetsPdf(
             },
           },
           {
-            content: `Actual Yield: ${field.crops.map((c) => `${c.yield}`).join('\n             ')}`, // newline + spaces
+            // this value is blank on purpose as the farmer will print and complete
+            content: 'Actual Yield:', // newline + spaces
             colSpan: 1,
             styles: {
               fontStyle: 'normal',
@@ -122,6 +122,7 @@ export default async function makeRecordKeepingSheetsPdf(
             styles: { halign: 'center', fontStyle: 'bold' },
           },
           {
+            // this is blank on purpose as the farmer will print and complete
             content: 'Notes or modifications to plan',
             colSpan: 2,
             styles: { halign: 'center', fontStyle: 'bold' },
@@ -161,8 +162,6 @@ export default async function makeRecordKeepingSheetsPdf(
                 seasonApplication.Season,
                 // Example display: 10 L/ac
                 `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
-                // field notes
-                field.comment || '',
               ];
             }
             // Fertilizers have different properties
@@ -173,8 +172,6 @@ export default async function makeRecordKeepingSheetsPdf(
               nutrientSource.applDate || '',
               // Example display: 10 L/ac
               `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
-              // field notes
-              field.comment || '',
             ];
           })
           : [['None planned', '', '']],
