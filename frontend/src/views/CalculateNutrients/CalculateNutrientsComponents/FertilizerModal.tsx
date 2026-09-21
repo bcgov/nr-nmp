@@ -21,12 +21,13 @@ import {
   NMPFileFertilizer,
   CustomFertilizer,
 } from '@/types';
-import { calcFertBalance, getCustomFertilizerName, renderBalanceCell } from '../utils';
+import { calcFertBalance, getCustomFertilizerName } from '../utils';
 import {
   DRY_CUSTOM_ID,
   EMPTY_CUSTOM_FERTILIZER,
   LIQUID_CUSTOM_ID,
 } from '@/constants';
+import { MODAL_BALANCE_COLUMNS, NutrientRow } from '../constants';
 
 type FertilizerModalProps = {
   fieldIndex: number;
@@ -37,16 +38,11 @@ type FertilizerModalProps = {
   onClose: () => void;
 };
 
-type BalanceCalcRow = {
-  reqN: number;
-  reqP2o5: number;
-  reqK2o: number;
-};
-
 const NUTRIENT_COLUMNS: GridColDef[] = [
   {
     field: 'N',
     headerName: 'N',
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -57,6 +53,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
         <span>P₂O₅</span>
       </strong>
     ),
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -67,38 +64,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
         <span>K₂O</span>
       </strong>
     ),
-    sortable: false,
-    resizable: false,
-  },
-];
-
-const BALANCE_COLUMNS: GridColDef[] = [
-  {
-    field: 'reqN',
-    headerName: 'N',
-    renderCell: renderBalanceCell('reqN', true),
-    sortable: false,
-    resizable: false,
-  },
-  {
-    field: 'reqP2o5',
-    renderHeader: () => (
-      <strong>
-        <span>P₂O₅</span>
-      </strong>
-    ),
-    renderCell: renderBalanceCell('reqP2o5', true),
-    sortable: false,
-    resizable: false,
-  },
-  {
-    field: 'reqK2o',
-    renderHeader: () => (
-      <strong>
-        <span>K₂O</span>
-      </strong>
-    ),
-    renderCell: renderBalanceCell('reqK2o', true),
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -157,7 +123,7 @@ export default function FertilizerModal({
   const [defaultDensity, setDefaultDensity] = useState<number | undefined>(
     undefined,
   );
-  const [balanceCalcRow, setBalanceCacRow] = useState<BalanceCalcRow>({
+  const [balanceCalcRow, setBalanceCalcRow] = useState<NutrientRow>({
     reqN: Math.min(balanceRow.reqN, 0),
     reqP2o5: Math.min(balanceRow.reqP2o5, 0),
     reqK2o: Math.min(balanceRow.reqK2o, 0),
@@ -357,10 +323,18 @@ export default function FertilizerModal({
       densityConvFactor,
     );
     setCalculatedData(cropNutrients);
-    setBalanceCacRow({
-      reqN: Math.min(0, balanceRow.reqN + cropNutrients.N),
-      reqP2o5: Math.min(0, balanceRow.reqP2o5 + cropNutrients.P2O5),
-      reqK2o: Math.min(0, balanceRow.reqK2o + cropNutrients.K2O),
+
+    // To update the balance, subtract the existing value for the fertilizer (if one exists)
+    // and add the new nutrient value. If there is still a nutrient deficit, reqN will be
+    // negative. If the nutrient balance is positive (i.e. no more deficit) set Still Required
+    // to 0
+    setBalanceCalcRow({
+      reqN: Math.min(0, balanceRow.reqN - (initialModalData?.reqN || 0) + cropNutrients.N),
+      reqP2o5: Math.min(
+        0,
+        balanceRow.reqP2o5 - (initialModalData?.reqP2o5 || 0) + cropNutrients.P2O5,
+      ),
+      reqK2o: Math.min(0, balanceRow.reqK2o - (initialModalData?.reqK2o || 0) + cropNutrients.K2O),
     });
     setFormState((prev) => ({
       ...prev,
@@ -661,7 +635,7 @@ export default function FertilizerModal({
                   Still Required This Year (lb/ac)
                   <DataGrid
                     sx={{ ...customTableStyle }}
-                    columns={BALANCE_COLUMNS}
+                    columns={MODAL_BALANCE_COLUMNS}
                     rows={[balanceCalcRow]}
                     getRowId={() => crypto.randomUUID()}
                     disableRowSelectionOnClick

@@ -18,7 +18,7 @@ import { Form, NumberField, ResetButton, Select } from '@/components/common';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 // Data not seeded in DB.
 import SEASON_APPLICATION from '../unseededData';
-import { DEFAULT_NMPFILE_APPLIED_MANURE, EMPTY_CROP_NUTRIENTS } from '@/constants';
+import { DEFAULT_NMPFILE_APPLIED_MANURE } from '@/constants';
 
 import {
   CropNutrients,
@@ -35,18 +35,20 @@ import {
   SolidMaterialApplicationTonPerAcreRateConversions,
   LiquidMaterialApplicationUsGallonsPerAcreRateConversions,
   Region,
+  CalculateNutrientsRow,
 } from '@/types';
 import calculateManureNutrientInputs from '@/calculations/ManureAndCompost/ManureAndImports/Calculations';
 import useAppState from '@/hooks/useAppState';
 import { MANURE_IMPORTS } from '@/constants/routes';
 import { calculateMaterialRemainingData } from '@/calculations/MaterialRemaining/Calculations';
 import { MaterialRemainingDisplay } from '@/components/MaterialRemaining';
+import { MODAL_BALANCE_COLUMNS, NutrientRow } from '../constants';
 
 type AddManureModalProps = {
   fieldIndex: number;
   initialModalData?: NMPFileAppliedManure;
   rowEditIndex?: number;
-  field: NMPFileField;
+  balanceRow: CalculateNutrientsRow;
   fields: NMPFileField[];
   setFields: Dispatch<SetStateAction<NMPFileField[]>>;
   onCancel: () => void;
@@ -57,9 +59,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
   {
     field: 'N',
     headerName: 'N',
-    width: 80,
-    minWidth: 75,
-    maxWidth: 200,
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -70,9 +70,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
         <span>P₂O₅</span>
       </strong>
     ),
-    width: 80,
-    minWidth: 75,
-    maxWidth: 200,
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -83,9 +81,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
         <span>K₂O</span>
       </strong>
     ),
-    width: 80,
-    minWidth: 75,
-    maxWidth: 200,
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -95,8 +91,8 @@ export default function ManureModal({
   fieldIndex,
   initialModalData,
   rowEditIndex,
+  balanceRow,
   onCancel,
-  field,
   fields,
   setFields,
   navigateAway,
@@ -116,6 +112,11 @@ export default function ManureModal({
   const [isCalculationCurrent, setIsCalculationCurrent] = useState<boolean>(
     initialModalData !== undefined,
   );
+  const [balanceCalcRow, setBalanceCalcRow] = useState<NutrientRow>({
+    reqN: Math.min(balanceRow.reqN, 0),
+    reqP2o5: Math.min(balanceRow.reqP2o5, 0),
+    reqK2o: Math.min(balanceRow.reqK2o, 0),
+  });
 
   // Material remaining calculations with current form data
   const [pendingApplication, setPendingApplication] = useState<NMPFileAppliedManure | null>(null);
@@ -312,8 +313,6 @@ export default function ManureModal({
     }),
     [manureForm],
   );
-  // TODO: Replace this with a calculation based on the balance row
-  const [stillReqTable, setStillReqTable] = useState<CropNutrients>(EMPTY_CROP_NUTRIENTS);
 
   // Set the default values for NH₄ and organic N //
   useEffect(() => {
@@ -412,23 +411,27 @@ export default function ManureModal({
   }, [apiCache]);
 
   const handleModalClose = () => {
-    setStillReqTable(EMPTY_CROP_NUTRIENTS);
     onCancel();
   };
 
   const handleSubmit = () => {
     setFields((prevFields) => {
-      const newFields = [...prevFields];
-      const newField = newFields[fieldIndex];
-      if (rowEditIndex !== undefined) {
-        // Replace manure at index
-        const newManures = [...newField.manures];
-        newManures[rowEditIndex] = { ...manureForm };
-        newField.manures = newManures;
-      } else {
-        // Append to end of list
-        newField.manures = [...newField.manures, { ...manureForm }];
-      }
+      const newFields = prevFields.map((prev, index) => {
+        if (index !== fieldIndex) return prev;
+
+        const newField = { ...prev };
+        if (rowEditIndex !== undefined) {
+          // Replace manure at index
+          const newManures = [...newField.manures];
+          newManures[rowEditIndex] = { ...manureForm };
+          newField.manures = newManures;
+        } else {
+          // Append to end of list
+          newField.manures = [...newField.manures, { ...manureForm }];
+        }
+        return newField;
+      });
+
       return newFields;
     });
 
@@ -467,11 +470,17 @@ export default function ManureModal({
     setManureForm(updatedForm);
     // Store the pending application for material remaining display
     setPendingApplication(updatedForm);
-    // TODO: Calculate the balance column correctly!
-    setStillReqTable({
-      N: field.crops[0].reqN + (field.crops[1]?.reqN || 0),
-      P2O5: field.crops[0].reqP2o5 + (field.crops[1]?.reqP2o5 || 0),
-      K2O: field.crops[0].reqK2o + (field.crops[1]?.reqK2o || 0),
+    // To update the balance, subtract the existing value for the fertilizer (if one exists)
+    // and add the new nutrient value. If there is still a nutrient deficit, reqN will be
+    // negative. If the nutrient balance is positive (i.e. no more deficit) set Still Required
+    // to 0
+    setBalanceCalcRow({
+      reqN: Math.min(0, balanceRow.reqN - (initialModalData?.reqN || 0) + updatedForm.reqN),
+      reqP2o5: Math.min(
+        0,
+        balanceRow.reqP2o5 - (initialModalData?.reqP2o5 || 0) + updatedForm.reqP2o5,
+      ),
+      reqK2o: Math.min(0, balanceRow.reqK2o - (initialModalData?.reqK2o || 0) + updatedForm.reqK2o),
     });
     setIsCalculationCurrent(true);
   };
@@ -630,8 +639,8 @@ export default function ManureModal({
               </span>
               <DataGrid
                 sx={{ ...customTableStyle }}
-                columns={NUTRIENT_COLUMNS}
-                rows={[stillReqTable]}
+                columns={MODAL_BALANCE_COLUMNS}
+                rows={[balanceCalcRow]}
                 getRowId={() => crypto.randomUUID()}
                 disableRowSelectionOnClick
                 disableColumnMenu
