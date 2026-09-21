@@ -39,7 +39,7 @@ import {
   getTimePerApplication,
   calculateSolidFertigation,
 } from '@/calculations/CalculateNutrients/Fertigation/calculations';
-import { getCustomFertilizerName, renderBalanceCell } from '../../utils';
+import { getCustomFertilizerName } from '../../utils';
 import {
   AMOUNT_TO_DISSOLVE_UNITS,
   SOLUBILITY_RATE_UNITS,
@@ -65,6 +65,7 @@ import {
   nutrientTableHeaderStyles,
 } from './fertigationModal.styles';
 import { printNum } from '@/utils/utils';
+import { MODAL_BALANCE_COLUMNS, NutrientRow } from '../../constants';
 
 type FertigationModalProps = {
   fieldIndex: number;
@@ -76,16 +77,11 @@ type FertigationModalProps = {
   onClose: () => void;
 };
 
-type NutrientRow = {
-  reqN: number;
-  reqP2o5: number;
-  reqK2o: number;
-};
-
 const NUTRIENT_COLUMNS: GridColDef[] = [
   {
     field: 'reqN',
     headerName: 'N',
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -96,6 +92,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
         <span>P₂O₅</span>
       </strong>
     ),
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -106,38 +103,7 @@ const NUTRIENT_COLUMNS: GridColDef[] = [
         <span>K₂O</span>
       </strong>
     ),
-    sortable: false,
-    resizable: false,
-  },
-];
-
-const BALANCE_COLUMNS: GridColDef[] = [
-  {
-    field: 'reqN',
-    headerName: 'N',
-    renderCell: renderBalanceCell('reqN', true),
-    sortable: false,
-    resizable: false,
-  },
-  {
-    field: 'reqP2o5',
-    renderHeader: () => (
-      <strong>
-        <span>P₂O₅</span>
-      </strong>
-    ),
-    renderCell: renderBalanceCell('reqP2o5', true),
-    sortable: false,
-    resizable: false,
-  },
-  {
-    field: 'reqK2o',
-    renderHeader: () => (
-      <strong>
-        <span>K₂O</span>
-      </strong>
-    ),
-    renderCell: renderBalanceCell('reqK2o', true),
+    flex: 1,
     sortable: false,
     resizable: false,
   },
@@ -187,6 +153,7 @@ export default function FertigationModal({
   ...props
 }: FertigationModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
   const { state } = useAppState();
+  const apiCache = useContext(APICacheContext);
   const field = useMemo(
     () => state.nmpFile.years[0].fields[fieldIndex],
     [state.nmpFile, fieldIndex],
@@ -209,11 +176,6 @@ export default function FertigationModal({
   const [isCalculationCurrent, setIsCalculationCurrent] = useState<boolean>(
     initialModalData !== undefined,
   );
-  const [balanceCalcRow, setBalanceCacRow] = useState<NutrientRow>({
-    reqN: Math.min(balanceRow.reqN, 0),
-    reqP2o5: Math.min(balanceRow.reqP2o5, 0),
-    reqK2o: Math.min(balanceRow.reqK2o, 0),
-  });
   const totalNutrientRow = useMemo<NutrientRow>(
     () => ({
       reqN: formData.reqN * formData.eventsPerSeason,
@@ -222,7 +184,24 @@ export default function FertigationModal({
     }),
     [formData],
   );
-  const apiCache = useContext(APICacheContext);
+
+  // To update the balance, subtract the total nutrients of the initial fertigation
+  // and add the total nutrients of the current fertigation. If there is no longer a
+  // nutrient deficit, set Still Required to 0
+  const balanceCalcRow = useMemo<NutrientRow>(
+    () => ({
+      reqN: balanceRow.reqN - (
+        initialModalData ? initialModalData.reqN * initialModalData.eventsPerSeason : 0
+      ) + totalNutrientRow.reqN,
+      reqP2o5: balanceRow.reqP2o5 - (
+        initialModalData ? initialModalData.reqP2o5 * initialModalData.eventsPerSeason : 0
+      ) + totalNutrientRow.reqP2o5,
+      reqK2o: balanceRow.reqK2o - (
+        initialModalData ? initialModalData.reqK2o * initialModalData.eventsPerSeason : 0
+      ) + totalNutrientRow.reqK2o,
+    }),
+    [balanceRow, initialModalData, totalNutrientRow],
+  );
 
   const isLiquidFertilizer = useMemo(
     () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
@@ -326,15 +305,20 @@ export default function FertigationModal({
 
   const handleSubmit = () => {
     setFields((prevFields) => {
-      const newFields = [...prevFields];
-      const newField = newFields[fieldIndex];
-      if (rowEditIndex !== undefined) {
-        const newFertigations = [...newField.fertigations];
-        newFertigations[rowEditIndex] = { ...formData };
-        newField.fertigations = newFertigations;
-      } else {
-        newField.fertigations = [...newField.fertigations, { ...formData }];
-      }
+      const newFields = prevFields.map((prev, index) => {
+        if (index !== fieldIndex) return prev;
+
+        const newField = { ...prev };
+        if (rowEditIndex !== undefined) {
+          const newFertigations = [...newField.fertigations];
+          newFertigations[rowEditIndex] = { ...formData };
+          newField.fertigations = newFertigations;
+        } else {
+          newField.fertigations = [...newField.fertigations, { ...formData }];
+        }
+        return newField;
+      });
+
       return newFields;
     });
 
@@ -417,11 +401,6 @@ export default function FertigationModal({
         reqK2o,
         remK2o: reqK2o,
       }));
-      setBalanceCacRow({
-        reqN: Math.min(0, balanceRow.reqN + reqN),
-        reqP2o5: Math.min(0, balanceRow.reqP2o5 + reqP2o5),
-        reqK2o: Math.min(0, balanceRow.reqK2o + reqK2o),
-      });
     }
 
     if (isDryFertilizer) {
@@ -471,12 +450,6 @@ export default function FertigationModal({
         kglNutrientConcentrationP2O5: solidCalc.kglNutrientConcentrationP2O5,
         kglNutrientConcentrationK2O: solidCalc.kglNutrientConcentrationK2O,
       }));
-
-      setBalanceCacRow({
-        reqN: Math.min(0, balanceRow.reqN + solidCalc.calcN),
-        reqP2o5: Math.min(0, balanceRow.reqP2o5 + solidCalc.calcP2O5),
-        reqK2o: Math.min(0, balanceRow.reqK2o + solidCalc.calcK2O),
-      });
     }
 
     setIsCalculationCurrent(true);
@@ -963,7 +936,7 @@ export default function FertigationModal({
               </div>
               <DataGrid
                 sx={{ ...customTableStyle, fontSize: '12px' }}
-                columns={BALANCE_COLUMNS}
+                columns={MODAL_BALANCE_COLUMNS}
                 rows={[balanceCalcRow]}
                 getRowId={() => crypto.randomUUID()}
                 disableRowSelectionOnClick

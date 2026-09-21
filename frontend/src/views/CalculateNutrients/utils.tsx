@@ -228,18 +228,23 @@ export function renderNutrientCell({ value }: any) {
   );
 }
 
-export const findBalanceMessage = (balanceType: string, balanceValue: number) => NUTRIENT_MESSAGES.find((msg) => {
-  if (msg.balanceType !== balanceType) return false;
+export function findBalanceMessage(balanceType: string, balanceValue: number) {
+  return NUTRIENT_MESSAGES.find((msg) => {
+    if (msg.balanceType !== balanceType) return false;
 
-  // either compares balance value to req (agronomic) or rem (crop removal) high low range
-  const isReq = balanceType.startsWith('req');
-  const low = isReq ? msg.reqBalanceLow : msg.remBalanceLow;
-  const high = isReq ? msg.reqBalanceHigh : msg.remBalanceHigh;
+    // either compares balance value to req (agronomic) or rem (crop removal) high low range
+    const isReq = balanceType.startsWith('req');
+    const low = isReq ? msg.reqBalanceLow : msg.remBalanceLow;
+    const high = isReq ? msg.reqBalanceHigh : msg.remBalanceHigh;
 
-  return balanceValue >= low && balanceValue <= high;
-});
+    return balanceValue >= low && balanceValue <= high;
+  });
+}
 
-export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) => function renderBalanceCellInner({ value }: any) {
+export const renderBalanceCell = (
+  balanceType: string,
+  showAsAbs?: boolean,
+) => function renderBalanceCellInner({ value }: any) {
   const message = findBalanceMessage(balanceType, value);
 
   return React.createElement(
