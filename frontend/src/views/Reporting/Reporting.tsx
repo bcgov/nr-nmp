@@ -26,6 +26,7 @@ import {
 } from '@/types';
 import { DAIRY_COW_ID } from '@/constants';
 import makeFullReportPdf from './makeFullReport';
+import makeRecordKeepingSheetsPdf from './makeRecordKeepingSheets';
 import { calculateMaterialRemaining } from '@/calculations/MaterialRemaining/Calculations';
 import { downloadBlob } from './utils';
 
@@ -232,7 +233,16 @@ export default function Reporting() {
                   Complete report
                 </div>
               </Button>
-              <Button onPress={() => {}}>Record keeping sheets</Button>
+              <Button onPress={() => makeRecordKeepingSheetsPdf(
+                state.nmpFile,
+                fertilizerUnits,
+                manureUnits,
+              )}
+              >
+                <div style={{ width: '100%', textAlign: 'center' }}>
+                  Record keeping sheets
+                </div>
+              </Button>
             </ButtonGroup>
           </div>
         </Grid>
