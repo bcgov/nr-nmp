@@ -36,6 +36,7 @@ export const Heading = styled.h2`
 export const Banner = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
   margin: 0;
   height: 72px;
 `;
@@ -56,6 +57,7 @@ export const BannerLeft = styled.div`
   padding: 0 0.5em;
   margin: 0;
 `;
+
 export const Image = styled.img`
   width: 175px;
   top: 10px;
