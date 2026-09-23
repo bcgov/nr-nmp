@@ -34,6 +34,7 @@ function Crops() {
     undefined,
   );
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [displayWarning, setDisplayWarning] = useState<boolean>(false);
 
   const [dialogText, setDialogText] = useState<string>('');
   const [deleteBtnConfig, setDeleteBtnConfig] = useState<
@@ -62,6 +63,11 @@ function Crops() {
   };
 
   const handleNextPage = () => {
+    if (!fields.some((f) => f.crops.length > 0)) {
+      setDisplayWarning(true);
+      return;
+    }
+
     dispatch({
       type: 'SAVE_FIELDS',
       year: state.nmpFile.farmDetails.year,
@@ -256,6 +262,7 @@ function Crops() {
           fieldIndex={editingFieldIndex}
           cropIndex={editingCropIndex}
           setFields={setFields}
+          setDisplayWarning={setDisplayWarning}
           initialModalData={
             editingCropIndex !== undefined
               ? fields[editingFieldIndex].crops[editingCropIndex]
@@ -266,8 +273,9 @@ function Crops() {
           modalStyle={{ width: '700px' }}
         />
       )}
+      {displayWarning && <div style={{ color: 'red', marginTop: '1.25rem' }}>You must add a crop to proceed</div>}
       <DataGrid
-        sx={{ ...customTableStyle, marginTop: '1.25rem' }}
+        sx={{ ...customTableStyle }}
         rows={fields}
         columns={fieldColumns}
         getRowId={() => crypto.randomUUID()}
