@@ -1,4 +1,4 @@
-# BC Ministry of Agriculture Nutrition Management Program
+# BC Ministry of Agriculture Nutritient Management Program
 
 - [About](#about)
 - [Development setup](#development-setup)
