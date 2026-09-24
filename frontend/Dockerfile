@@ -1,5 +1,5 @@
 # Base image for the container
-FROM node:22.23.1 AS build
+FROM node:26.10.0 AS build
 
 # Set the working directory
 WORKDIR /app/
