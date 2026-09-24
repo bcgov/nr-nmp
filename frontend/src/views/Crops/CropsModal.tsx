@@ -122,6 +122,7 @@ type CropsModalProps = {
   cropIndex?: number;
   initialModalData?: NMPFileCrop;
   setFields: React.Dispatch<React.SetStateAction<NMPFileField[]>>;
+  setDisplayWarning: React.Dispatch<React.SetStateAction<boolean>>;
   onClose: () => void;
 };
 
@@ -131,6 +132,7 @@ function CropsModal({
   cropIndex,
   initialModalData,
   setFields,
+  setDisplayWarning,
   onClose,
   ...props
 }: CropsModalProps & Omit<ModalProps, 'title' | 'children' | 'onOpenChange'>) {
@@ -217,7 +219,7 @@ function CropsModal({
       });
       return newFields;
     });
-
+    setDisplayWarning(false);
     onClose();
   };
 

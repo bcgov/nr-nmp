@@ -3,6 +3,7 @@
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@bcgov/design-system-react-components';
 import useAppState from '@/hooks/useAppState';
 import { LANDING_PAGE } from '@/constants/routes';
 import { downloadBlob } from '@/views/Reporting/utils';
@@ -41,6 +42,15 @@ export default function Header() {
         >
           Nutrient Management Calculator
         </Heading>
+        {state.nmpFile.years.length !== 0 && (
+          <Button
+            variant="link"
+            style={{ color: 'white', marginLeft: 'auto' }}
+            onClick={() => downloadBlob(state.nmpFile)}
+          >
+            Continue later
+          </Button>
+        )}
       </Banner>
       {isOpen && (
         <RedirectDialog
