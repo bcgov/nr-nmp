@@ -1,11 +1,11 @@
-# React + TypeScript + Vite
+# NMP Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Expanding the ESLint configuration](#expanding-the-eslint-configuration)
+- [Developing](#developing)
+  - [Scripts to Run Before Check-In](#scripts-to-run-before-check-in)
+- [Testing](#testing)
+  - [Running Tests](#running-tests)
+- [Project READme's](#project-readmes)
 
 ## Expanding the ESLint configuration
 
@@ -49,9 +49,13 @@ export default tseslint.config({
 });
 ```
 
+## Developing
+
 ### Scripts to Run Before Check-In
 
-Before checking in code, run `npm run format` and then immediately `npm run lint`.
+Before checking in code, within `/frontend` run `npm run format` and then immediately `npm run lint`.
+
+## Testing
 
 ### Running Tests
 
@@ -61,3 +65,9 @@ For Jest both unit and snapshot tests are used.
 To run all tests, run `npm run test`. You can run just the Jest or Cypress tests with `npm run test:jest` or `npm run test:cypress` respectively.
 
 After creating a snapshot test run `npm run test:jest` to automatically create a snapshot (ex. Component.test.jsx.snap). To update snapshots run `npm run test:jest -- -u` which will run all tests and update snapshots.
+
+## Project READme's
+
+- [Main Readme](/README.md)
+- [Backend Readme](/backend/README.md)
+- [Database Readme](/database/README.md)
