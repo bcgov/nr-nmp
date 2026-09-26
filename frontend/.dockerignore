@@ -26,12 +26,10 @@ npm-debug.*
 **/.dist/
 **/build/
 **/coverage/
-**/cypress/
 **/dist/
 **/test/
 **/target/
 *.sarif
-cypress.*
 jest.*
 
 # System
