@@ -8,101 +8,127 @@ exports[`AddAnimals component snapshot test 1`] = `
     <div
       class="MuiBox-root css-a57597"
     >
-      <div
-        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-149z4i0-MuiStepper-root"
+      <ol
+        aria-orientation="horizontal"
+        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-1olibiv-MuiStepper-root"
+        role="tablist"
       >
-        <div
-          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        <li
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-rj4n1q-MuiStep-root"
+          role="presentation"
         >
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            aria-posinset="1"
+            aria-selected="true"
+            aria-setsize="2"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-6xhywq-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            role="tab"
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  1
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-zm8jsj-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-f2ct5c-MuiStepLabel-iconContainer"
               >
-                Home
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    1
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1xr18l4-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-14spb1x-MuiStepLabel-label"
+                >
+                  Home
+                </span>
               </span>
             </span>
-          </span>
-        </div>
-        <div
-          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+          </button>
+        </li>
+        <li
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-rj4n1q-MuiStep-root"
+          role="presentation"
         >
           <div
             class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-1k81fv-MuiStepConnector-root"
           >
             <span
-              class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
+              class="MuiStepConnector-line css-14ncu80-MuiStepConnector-line"
             />
           </div>
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            aria-posinset="2"
+            aria-selected="false"
+            aria-setsize="2"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-6xhywq-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            role="tab"
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  2
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-zm8jsj-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-f2ct5c-MuiStepLabel-iconContainer"
               >
-                Farm Information
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    2
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1xr18l4-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-14spb1x-MuiStepLabel-label"
+                >
+                  Farm Information
+                </span>
               </span>
             </span>
-          </span>
-        </div>
-      </div>
+          </button>
+        </li>
+      </ol>
     </div>
     <div
       class="css-1xllnsb"
@@ -126,7 +152,7 @@ exports[`AddAnimals component snapshot test 1`] = `
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r0»"
+          id="react-aria-mocked-id"
           tabindex="0"
           type="button"
         >
@@ -149,12 +175,12 @@ exports[`AddAnimals component snapshot test 1`] = `
           >
             <div
               aria-label="tab"
-              class="MuiTabs-list MuiTabs-flexContainer css-hzcega-MuiTabs-list"
+              class="MuiTabs-list css-hzcega-MuiTabs-list"
               role="tablist"
             >
               <button
                 aria-selected="true"
-                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-1usuzwp-MuiButtonBase-root-MuiTab-root"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-1a6igjw-MuiButtonBase-root-MuiTab-root"
                 role="tab"
                 tabindex="0"
                 type="button"
@@ -163,7 +189,7 @@ exports[`AddAnimals component snapshot test 1`] = `
               </button>
               <button
                 aria-selected="false"
-                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1usuzwp-MuiButtonBase-root-MuiTab-root"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1a6igjw-MuiButtonBase-root-MuiTab-root"
                 role="tab"
                 tabindex="-1"
                 type="button"
@@ -172,7 +198,7 @@ exports[`AddAnimals component snapshot test 1`] = `
               </button>
               <button
                 aria-selected="false"
-                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1usuzwp-MuiButtonBase-root-MuiTab-root"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1a6igjw-MuiButtonBase-root-MuiTab-root"
                 role="tab"
                 tabindex="-1"
                 type="button"
@@ -189,12 +215,12 @@ exports[`AddAnimals component snapshot test 1`] = `
       </div>
     </div>
     <div
-      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1t9y035-MuiDataGrid-root"
-      style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 0; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 495px; --DataGrid-columnsTotalWidth: 495px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3962610333 css-xvr68z-MuiDataGrid-root"
+      style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 0; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 495px; --DataGrid-columnsTotalWidth: 495px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --DataGrid-horizontalFiller: 0px; --height: 52px;"
     >
       <div
         class="MuiDataGrid-mainContent"
-        role="presentation"
+        role="none"
       >
         <div
           aria-colcount="3"
@@ -207,237 +233,249 @@ exports[`AddAnimals component snapshot test 1`] = `
           <div
             class="css-18l11qw"
             data-id="gridPanelAnchor"
-            role="presentation"
+            role="none"
           />
           <div
-            class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+            class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1kuhtq2-MuiDataGrid-virtualScroller"
             role="presentation"
             style="overflow-x: hidden;"
           >
             <div
-              class="MuiDataGrid-topContainer MuiDataGrid-container--top css-b1wygl"
+              class="MuiDataGrid-virtualScrollerContent css-12sjlri-MuiDataGrid-virtualScrollerContent"
               role="presentation"
             >
               <div
-                class="MuiDataGrid-columnHeaders css-1gtv474-MuiDataGrid-columnHeaders"
+                class="css-1n32xef"
                 role="presentation"
+                style="width: 0px; height: 0px;"
               >
                 <div
-                  aria-rowindex="1"
-                  class="MuiDataGrid-row--borderBottom css-yseucu-MuiDataGrid-columnHeaderRow"
-                  role="row"
-                  style="height: 56px;"
+                  class="MuiDataGrid-topContainer MuiDataGrid-container--top css-b1wygl"
+                  role="none"
                 >
                   <div
-                    role="presentation"
-                    style="width: 0px;"
-                  />
-                  <div
-                    aria-colindex="1"
-                    aria-sort="none"
-                    class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
-                    data-field="animalId"
-                    role="columnheader"
-                    style="width: 175px;"
-                    tabindex="0"
+                    class="MuiDataGrid-columnHeaders css-1gtv474-MuiDataGrid-columnHeaders"
+                    role="rowgroup"
                   >
                     <div
-                      class="MuiDataGrid-columnHeaderDraggableContainer"
-                      draggable="false"
-                      role="presentation"
+                      aria-rowindex="1"
+                      class="MuiDataGrid-row--borderBottom css-yseucu-MuiDataGrid-columnHeaderRow"
+                      role="row"
+                      style="height: 56px; --height: 56px;"
                     >
                       <div
-                        class="MuiDataGrid-columnHeaderTitleContainer"
-                        role="presentation"
-                      >
-                        <div
-                          class="MuiDataGrid-columnHeaderTitleContainerContent"
-                        >
-                          <div
-                            class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
-                            data-mui-internal-clone-element="true"
-                          >
-                            Animal Type
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--resizable MuiDataGrid-columnSeparator--sideRight"
-                      style="min-height: 56px;"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
-                        data-testid="SeparatorIcon"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <rect
-                          height="24"
-                          rx="0.5"
-                          width="1"
-                          x="11.5"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div
-                    aria-colindex="2"
-                    aria-sort="none"
-                    class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
-                    data-field="manureData"
-                    role="columnheader"
-                    style="width: 200px;"
-                    tabindex="-1"
-                  >
-                    <div
-                      class="MuiDataGrid-columnHeaderDraggableContainer"
-                      draggable="false"
-                      role="presentation"
-                    >
+                        role="none"
+                        style="width: 0px;"
+                      />
                       <div
-                        class="MuiDataGrid-columnHeaderTitleContainer"
-                        role="presentation"
+                        aria-colindex="1"
+                        aria-sort="none"
+                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                        data-field="animalId"
+                        role="columnheader"
+                        style="width: 175px;"
+                        tabindex="0"
                       >
                         <div
-                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                          draggable="false"
+                          role="none"
                         >
                           <div
-                            class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
-                            data-mui-internal-clone-element="true"
+                            class="MuiDataGrid-columnHeaderTitleContainer"
+                            role="none"
                           >
-                            Annual Manure
+                            <div
+                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                            >
+                              <div
+                                class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
+                                data-mui-internal-clone-element="true"
+                              >
+                                Animal Type
+                              </div>
+                            </div>
                           </div>
                         </div>
+                        <div
+                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--resizable MuiDataGrid-columnSeparator--sideRight"
+                          style="min-height: 56px;"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                            data-testid="SeparatorIcon"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <rect
+                              height="24"
+                              rx="0.5"
+                              width="1"
+                              x="11.5"
+                            />
+                          </svg>
+                        </div>
                       </div>
-                    </div>
-                    <div
-                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--resizable MuiDataGrid-columnSeparator--sideRight"
-                      style="min-height: 56px;"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
-                        data-testid="SeparatorIcon"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <rect
-                          height="24"
-                          rx="0.5"
-                          width="1"
-                          x="11.5"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div
-                    aria-colindex="3"
-                    aria-sort="none"
-                    class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
-                    data-field="actions"
-                    role="columnheader"
-                    style="width: 120px;"
-                    tabindex="-1"
-                  >
-                    <div
-                      class="MuiDataGrid-columnHeaderDraggableContainer"
-                      draggable="false"
-                      role="presentation"
-                    >
                       <div
-                        class="MuiDataGrid-columnHeaderTitleContainer"
-                        role="presentation"
+                        aria-colindex="2"
+                        aria-sort="none"
+                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                        data-field="manureData"
+                        role="columnheader"
+                        style="width: 200px;"
+                        tabindex="-1"
                       >
                         <div
-                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                          draggable="false"
+                          role="none"
                         >
                           <div
-                            class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
-                            data-mui-internal-clone-element="true"
+                            class="MuiDataGrid-columnHeaderTitleContainer"
+                            role="none"
                           >
-                            Actions
+                            <div
+                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                            >
+                              <div
+                                class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
+                                data-mui-internal-clone-element="true"
+                              >
+                                Annual Manure
+                              </div>
+                            </div>
                           </div>
                         </div>
+                        <div
+                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--resizable MuiDataGrid-columnSeparator--sideRight"
+                          style="min-height: 56px;"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                            data-testid="SeparatorIcon"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <rect
+                              height="24"
+                              rx="0.5"
+                              width="1"
+                              x="11.5"
+                            />
+                          </svg>
+                        </div>
                       </div>
-                    </div>
-                    <div
-                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--resizable MuiDataGrid-columnSeparator--sideRight"
-                      style="min-height: 56px;"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
-                        data-testid="SeparatorIcon"
-                        focusable="false"
-                        viewBox="0 0 24 24"
+                      <div
+                        aria-colindex="3"
+                        aria-sort="none"
+                        class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--last"
+                        data-field="actions"
+                        role="columnheader"
+                        style="width: 120px;"
+                        tabindex="-1"
                       >
-                        <rect
-                          height="24"
-                          rx="0.5"
-                          width="1"
-                          x="11.5"
-                        />
-                      </svg>
+                        <div
+                          class="MuiDataGrid-columnHeaderDraggableContainer"
+                          draggable="false"
+                          role="none"
+                        >
+                          <div
+                            class="MuiDataGrid-columnHeaderTitleContainer"
+                            role="none"
+                          >
+                            <div
+                              class="MuiDataGrid-columnHeaderTitleContainerContent"
+                            >
+                              <div
+                                class="MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"
+                                data-mui-internal-clone-element="true"
+                              >
+                                Actions
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--resizable MuiDataGrid-columnSeparator--sideRight"
+                          style="min-height: 56px;"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-1umw9bq-MuiSvgIcon-root"
+                            data-testid="SeparatorIcon"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <rect
+                              height="24"
+                              rx="0.5"
+                              width="1"
+                              x="11.5"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div
+                        class="MuiDataGrid-filler MuiDataGrid-filler--horizontal"
+                        role="none"
+                      />
+                      <div
+                        class="MuiDataGrid-scrollbarFiller"
+                        role="none"
+                        style="right: 0px;"
+                      />
                     </div>
                   </div>
-                  <div
-                    class="MuiDataGrid-filler"
-                    role="presentation"
-                  />
-                  <div
-                    class="MuiDataGrid-scrollbarFiller MuiDataGrid-scrollbarFiller--header"
-                    role="presentation"
-                  />
                 </div>
-              </div>
-            </div>
-            <div
-              class="MuiDataGrid-overlayWrapper css-1u5xmwx-MuiDataGrid-overlayWrapper"
-            >
-              <div
-                class="MuiDataGrid-overlayWrapperInner css-1mbsuzk-MuiDataGrid-overlayWrapperInner"
-                style="height: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); width: 0px;"
-              >
                 <div
-                  class="MuiDataGrid-overlay css-w16tsr-MuiDataGrid-overlay"
+                  class="MuiDataGrid-overlayWrapper css-1p5kamq-MuiDataGrid-overlayWrapper"
                 >
-                  No rows
+                  <div
+                    class="MuiDataGrid-overlayWrapperInner css-1mbsuzk-MuiDataGrid-overlayWrapperInner"
+                    style="height: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); width: 0px;"
+                  >
+                    <div
+                      class="MuiDataGrid-overlay css-w16tsr-MuiDataGrid-overlay"
+                    >
+                      No rows
+                    </div>
+                  </div>
                 </div>
+                <div
+                  class="MuiDataGrid-virtualScrollerRenderZone css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone"
+                  role="rowgroup"
+                  style="transform: translate3d(0, 56px, 0);"
+                />
+                <div
+                  class="MuiDataGrid-contentFiller"
+                  role="presentation"
+                  style="width: auto; height: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); flex: 0 0 auto;"
+                />
+                <div
+                  class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-ov7qw3"
+                  role="none"
+                />
               </div>
             </div>
-            <div
-              class="MuiDataGrid-virtualScrollerContent css-aymtem-MuiDataGrid-virtualScrollerContent"
-              role="presentation"
-              style="width: auto; flex-basis: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); flex-shrink: 0;"
-            >
-              <div
-                class="MuiDataGrid-virtualScrollerRenderZone css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone"
-                role="rowgroup"
-                style="transform: translate3d(0, 0px, 0);"
-              />
-            </div>
-            <div
-              class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
-              role="presentation"
-            />
           </div>
           <div
             aria-hidden="true"
-            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
+            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-14mn80j"
             tabindex="-1"
           >
             <div
               class="MuiDataGrid-scrollbarContent"
+              style="width: 495px;"
             />
           </div>
         </div>
       </div>
       <style
-        href="/MuiDataGridVariables-3851315942"
+        href="/MuiDataGridVariables-3962610333"
       >
-        .MuiDataGridVariables-3851315942{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:rgba(0, 0, 0, 0.04);--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#1976d2;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;}
+        .MuiDataGridVariables-3962610333{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:#f5f5f5;--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#eeeeee;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;--DataGrid-t-z-index-modal:1300;}
       </style>
     </div>
     <div
@@ -455,7 +493,7 @@ exports[`AddAnimals component snapshot test 1`] = `
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r2»"
+          id="react-aria-mocked-id"
           tabindex="0"
           type="button"
         >
@@ -465,7 +503,7 @@ exports[`AddAnimals component snapshot test 1`] = `
           class="bcds-react-aria-Button medium primary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r4»"
+          id="react-aria-mocked-id"
           tabindex="0"
           type="button"
         >
@@ -490,7 +528,7 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
   <div
     class="react-aria-ModalOverlay"
     data-rac=""
-    style="--visual-viewport-height: 768px; --page-height: 0px;"
+    style="--visual-viewport-width: 0px; --visual-viewport-height: 0px; --page-width: 0px; --page-height: 0px;"
   >
     <div
       class="bcds-react-aria-Modal"
@@ -502,7 +540,7 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
       >
         <button
           aria-label="Dismiss"
-          id="react-aria-«rf»"
+          id="react-aria-mocked-id"
           style="width: 1px; height: 1px;"
           tabindex="-1"
         />
@@ -525,7 +563,7 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
               class="bcds-react-aria-Button small tertiary  icon"
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«rh»"
+              id="react-aria-mocked-id"
               tabindex="0"
               type="button"
             >
@@ -568,28 +606,27 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
                 <div
                   class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
                 >
-                  <template
-                    data-react-aria-hidden="true"
-                  />
+                  <template />
                   <div
-                    class="bcds-react-aria-Select"
+                    class="bcds-react-aria-Select medium wrap"
                     data-rac=""
                     data-required="true"
                   >
                     <span
                       class="bcds-react-aria-Select--Label"
-                      id="react-aria-«rm»"
+                      id="react-aria-mocked-id"
                     >
                       Animal Type (required)
                     </span>
                     <button
+                      aria-describedby="react-aria-mocked-id react-aria-mocked-id"
                       aria-expanded="false"
                       aria-haspopup="listbox"
-                      aria-labelledby="react-aria-«rq» react-aria-«rm»"
-                      class="bcds-react-aria-Select--Button medium false"
+                      aria-labelledby="react-aria-mocked-id react-aria-mocked-id"
+                      class="bcds-react-aria-Select--Button medium "
                       data-rac=""
                       data-react-aria-pressable="true"
-                      id="react-aria-«rl»"
+                      id="react-aria-mocked-id"
                       tabindex="0"
                       type="button"
                     >
@@ -597,9 +634,13 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
                         class="bcds-react-aria-SelectValue"
                         data-placeholder="true"
                         data-rac=""
-                        id="react-aria-«rq»"
+                        id="react-aria-mocked-id"
                       >
-                        Select Animal Type
+                        <span
+                          class="bcds-react-aria-SelectValue--Text"
+                        >
+                          Select Animal Type
+                        </span>
                       </span>
                       <svg
                         fill="none"
@@ -628,7 +669,12 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
                           tabindex="-1"
                           title=""
                         >
-                          <option />
+                          <option
+                            label=" "
+                            value=""
+                          >
+                             
+                          </option>
                           <option
                             value="1"
                           >
@@ -654,7 +700,7 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
                   class="bcds-react-aria-Button medium secondary  "
                   data-rac=""
                   data-react-aria-pressable="true"
-                  id="react-aria-«rt»"
+                  id="react-aria-mocked-id"
                   tabindex="0"
                   type="button"
                 >
@@ -666,7 +712,7 @@ exports[`AddAnimalsModal component snapshot test 1`] = `
                   data-rac=""
                   data-react-aria-pressable="true"
                   disabled=""
-                  id="react-aria-«rv»"
+                  id="react-aria-mocked-id"
                   type="submit"
                 >
                   Confirm
