@@ -14,44 +14,52 @@ exports[`Calculate Nutrients is correct 1`] = `
         <div
           class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
         >
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            aria-current="step"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-jgff3m-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  1
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
               >
-                Home
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    1
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                >
+                  Home
+                </span>
               </span>
             </span>
-          </span>
+          </button>
         </div>
         <div
           class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
@@ -63,44 +71,51 @@ exports[`Calculate Nutrients is correct 1`] = `
               class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
             />
           </div>
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-jgff3m-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  2
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
               >
-                Farm Information
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    2
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                >
+                  Farm Information
+                </span>
               </span>
             </span>
-          </span>
+          </button>
         </div>
       </div>
     </div>
@@ -2345,8 +2360,8 @@ exports[`Fertigation modal is correct 1`] = `
                       Applied Nutrients per Fertigation (lb/ac)
                     </div>
                     <div
-                      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-jfqiad-MuiDataGrid-root"
-                      style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 300px; --DataGrid-columnsTotalWidth: 300px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+                      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1e7wgry-MuiDataGrid-root"
+                      style="--DataGrid-hasScrollX: 0; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 0px; --DataGrid-columnsTotalWidth: 0px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
                     >
                       <div
                         class="MuiDataGrid-mainContent"
@@ -2366,7 +2381,7 @@ exports[`Fertigation modal is correct 1`] = `
                             role="presentation"
                           />
                           <div
-                            class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+                            class="MuiDataGrid-virtualScroller css-1vigakz-MuiDataGrid-virtualScroller"
                             role="presentation"
                             style="overflow-x: hidden;"
                           >
@@ -2394,7 +2409,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                     data-field="reqN"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="0"
                                   >
                                     <div
@@ -2444,7 +2459,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                     data-field="reqP2o5"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -2493,7 +2508,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
                                     data-field="reqK2o"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -2579,7 +2594,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="0"
                                     data-field="reqN"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                     title="0"
                                   >
@@ -2593,7 +2608,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="1"
                                     data-field="reqP2o5"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                     title="0"
                                   >
@@ -2607,7 +2622,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="2"
                                     data-field="reqK2o"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                     title="0"
                                   >
@@ -2623,15 +2638,6 @@ exports[`Fertigation modal is correct 1`] = `
                             <div
                               class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
                               role="presentation"
-                            />
-                          </div>
-                          <div
-                            aria-hidden="true"
-                            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
-                            tabindex="-1"
-                          >
-                            <div
-                              class="MuiDataGrid-scrollbarContent"
                             />
                           </div>
                           <div
@@ -2661,8 +2667,8 @@ exports[`Fertigation modal is correct 1`] = `
                       Total Applied Nutrients (lb/ac)
                     </div>
                     <div
-                      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-jfqiad-MuiDataGrid-root"
-                      style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 300px; --DataGrid-columnsTotalWidth: 300px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+                      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1e7wgry-MuiDataGrid-root"
+                      style="--DataGrid-hasScrollX: 0; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 0px; --DataGrid-columnsTotalWidth: 0px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
                     >
                       <div
                         class="MuiDataGrid-mainContent"
@@ -2682,7 +2688,7 @@ exports[`Fertigation modal is correct 1`] = `
                             role="presentation"
                           />
                           <div
-                            class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+                            class="MuiDataGrid-virtualScroller css-1vigakz-MuiDataGrid-virtualScroller"
                             role="presentation"
                             style="overflow-x: hidden;"
                           >
@@ -2710,7 +2716,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                     data-field="reqN"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="0"
                                   >
                                     <div
@@ -2760,7 +2766,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                     data-field="reqP2o5"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -2809,7 +2815,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
                                     data-field="reqK2o"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -2895,7 +2901,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="0"
                                     data-field="reqN"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                     title="0"
                                   >
@@ -2909,7 +2915,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="1"
                                     data-field="reqP2o5"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                     title="0"
                                   >
@@ -2923,7 +2929,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="2"
                                     data-field="reqK2o"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                     title="0"
                                   >
@@ -2939,15 +2945,6 @@ exports[`Fertigation modal is correct 1`] = `
                             <div
                               class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
                               role="presentation"
-                            />
-                          </div>
-                          <div
-                            aria-hidden="true"
-                            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
-                            tabindex="-1"
-                          >
-                            <div
-                              class="MuiDataGrid-scrollbarContent"
                             />
                           </div>
                           <div
@@ -2977,8 +2974,8 @@ exports[`Fertigation modal is correct 1`] = `
                       Still Required This Year (lb/ac)
                     </div>
                     <div
-                      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-jfqiad-MuiDataGrid-root"
-                      style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 300px; --DataGrid-columnsTotalWidth: 300px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+                      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1e7wgry-MuiDataGrid-root"
+                      style="--DataGrid-hasScrollX: 0; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 0px; --DataGrid-columnsTotalWidth: 0px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
                     >
                       <div
                         class="MuiDataGrid-mainContent"
@@ -2998,7 +2995,7 @@ exports[`Fertigation modal is correct 1`] = `
                             role="presentation"
                           />
                           <div
-                            class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+                            class="MuiDataGrid-virtualScroller css-1vigakz-MuiDataGrid-virtualScroller"
                             role="presentation"
                             style="overflow-x: hidden;"
                           >
@@ -3026,7 +3023,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                     data-field="reqN"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="0"
                                   >
                                     <div
@@ -3076,7 +3073,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                     data-field="reqP2o5"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -3125,7 +3122,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
                                     data-field="reqK2o"
                                     role="columnheader"
-                                    style="width: 100px;"
+                                    style="width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -3211,7 +3208,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="0"
                                     data-field="reqN"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -3226,7 +3223,7 @@ exports[`Fertigation modal is correct 1`] = `
                                         style="width: 1em; height: 1em; margin-right: 0.5em;"
                                       />
                                       <span>
-                                        0
+                                        5
                                       </span>
                                     </div>
                                   </div>
@@ -3238,7 +3235,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="1"
                                     data-field="reqP2o5"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -3253,7 +3250,7 @@ exports[`Fertigation modal is correct 1`] = `
                                         style="width: 1em; height: 1em; margin-right: 0.5em;"
                                       />
                                       <span>
-                                        0
+                                        5
                                       </span>
                                     </div>
                                   </div>
@@ -3265,7 +3262,7 @@ exports[`Fertigation modal is correct 1`] = `
                                     data-colindex="2"
                                     data-field="reqK2o"
                                     role="gridcell"
-                                    style="--width: 100px;"
+                                    style="--width: 0px;"
                                     tabindex="-1"
                                   >
                                     <div
@@ -3280,7 +3277,7 @@ exports[`Fertigation modal is correct 1`] = `
                                         style="width: 1em; height: 1em; margin-right: 0.5em;"
                                       />
                                       <span>
-                                        0
+                                        5
                                       </span>
                                     </div>
                                   </div>
@@ -3294,15 +3291,6 @@ exports[`Fertigation modal is correct 1`] = `
                             <div
                               class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
                               role="presentation"
-                            />
-                          </div>
-                          <div
-                            aria-hidden="true"
-                            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
-                            tabindex="-1"
-                          >
-                            <div
-                              class="MuiDataGrid-scrollbarContent"
                             />
                           </div>
                           <div
@@ -3835,7 +3823,7 @@ exports[`Fertilizer modal is correct 1`] = `
                     <input
                       class="css-wepaho"
                       name="applDate"
-                      type="date"
+                      type="month"
                       value=""
                     />
                   </div>
@@ -3856,8 +3844,8 @@ exports[`Fertilizer modal is correct 1`] = `
                       >
                         Available This Year (lb/ac)
                         <div
-                          class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1a7rzds-MuiDataGrid-root"
-                          style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 300px; --DataGrid-columnsTotalWidth: 300px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+                          class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-11xgf6d-MuiDataGrid-root"
+                          style="--DataGrid-hasScrollX: 0; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 0px; --DataGrid-columnsTotalWidth: 0px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
                         >
                           <div
                             class="MuiDataGrid-mainContent"
@@ -3877,7 +3865,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                 role="presentation"
                               />
                               <div
-                                class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+                                class="MuiDataGrid-virtualScroller css-1vigakz-MuiDataGrid-virtualScroller"
                                 role="presentation"
                                 style="overflow-x: hidden;"
                               >
@@ -3905,7 +3893,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                         data-field="N"
                                         role="columnheader"
-                                        style="width: 100px;"
+                                        style="width: 0px;"
                                         tabindex="0"
                                       >
                                         <div
@@ -3955,7 +3943,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                         data-field="P2O5"
                                         role="columnheader"
-                                        style="width: 100px;"
+                                        style="width: 0px;"
                                         tabindex="-1"
                                       >
                                         <div
@@ -4004,7 +3992,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
                                         data-field="K2O"
                                         role="columnheader"
-                                        style="width: 100px;"
+                                        style="width: 0px;"
                                         tabindex="-1"
                                       >
                                         <div
@@ -4090,7 +4078,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         data-colindex="0"
                                         data-field="N"
                                         role="gridcell"
-                                        style="--width: 100px;"
+                                        style="--width: 0px;"
                                         tabindex="-1"
                                         title="0"
                                       >
@@ -4104,7 +4092,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         data-colindex="1"
                                         data-field="P2O5"
                                         role="gridcell"
-                                        style="--width: 100px;"
+                                        style="--width: 0px;"
                                         tabindex="-1"
                                         title="0"
                                       >
@@ -4118,7 +4106,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         data-colindex="2"
                                         data-field="K2O"
                                         role="gridcell"
-                                        style="--width: 100px;"
+                                        style="--width: 0px;"
                                         tabindex="-1"
                                         title="0"
                                       >
@@ -4134,15 +4122,6 @@ exports[`Fertilizer modal is correct 1`] = `
                                 <div
                                   class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
                                   role="presentation"
-                                />
-                              </div>
-                              <div
-                                aria-hidden="true"
-                                class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
-                                tabindex="-1"
-                              >
-                                <div
-                                  class="MuiDataGrid-scrollbarContent"
                                 />
                               </div>
                               <div
@@ -4172,8 +4151,8 @@ exports[`Fertilizer modal is correct 1`] = `
                       >
                         Still Required This Year (lb/ac)
                         <div
-                          class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1a7rzds-MuiDataGrid-root"
-                          style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 300px; --DataGrid-columnsTotalWidth: 300px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
+                          class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-11xgf6d-MuiDataGrid-root"
+                          style="--DataGrid-hasScrollX: 0; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 0px; --DataGrid-columnsTotalWidth: 0px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"
                         >
                           <div
                             class="MuiDataGrid-mainContent"
@@ -4193,7 +4172,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                 role="presentation"
                               />
                               <div
-                                class="MuiDataGrid-virtualScroller MuiDataGrid-virtualScroller--hasScrollX css-1vigakz-MuiDataGrid-virtualScroller"
+                                class="MuiDataGrid-virtualScroller css-1vigakz-MuiDataGrid-virtualScroller"
                                 role="presentation"
                                 style="overflow-x: hidden;"
                               >
@@ -4221,7 +4200,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                         data-field="reqN"
                                         role="columnheader"
-                                        style="width: 100px;"
+                                        style="width: 0px;"
                                         tabindex="0"
                                       >
                                         <div
@@ -4271,7 +4250,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
                                         data-field="reqP2o5"
                                         role="columnheader"
-                                        style="width: 100px;"
+                                        style="width: 0px;"
                                         tabindex="-1"
                                       >
                                         <div
@@ -4320,7 +4299,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor MuiDataGrid-columnHeader--lastUnpinned MuiDataGrid-columnHeader--last"
                                         data-field="reqK2o"
                                         role="columnheader"
-                                        style="width: 100px;"
+                                        style="width: 0px;"
                                         tabindex="-1"
                                       >
                                         <div
@@ -4406,7 +4385,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         data-colindex="0"
                                         data-field="reqN"
                                         role="gridcell"
-                                        style="--width: 100px;"
+                                        style="--width: 0px;"
                                         tabindex="-1"
                                       >
                                         <div
@@ -4433,7 +4412,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         data-colindex="1"
                                         data-field="reqP2o5"
                                         role="gridcell"
-                                        style="--width: 100px;"
+                                        style="--width: 0px;"
                                         tabindex="-1"
                                       >
                                         <div
@@ -4460,7 +4439,7 @@ exports[`Fertilizer modal is correct 1`] = `
                                         data-colindex="2"
                                         data-field="reqK2o"
                                         role="gridcell"
-                                        style="--width: 100px;"
+                                        style="--width: 0px;"
                                         tabindex="-1"
                                       >
                                         <div
@@ -4489,15 +4468,6 @@ exports[`Fertilizer modal is correct 1`] = `
                                 <div
                                   class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-gzxaox"
                                   role="presentation"
-                                />
-                              </div>
-                              <div
-                                aria-hidden="true"
-                                class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--horizontal css-2n9dey"
-                                tabindex="-1"
-                              >
-                                <div
-                                  class="MuiDataGrid-scrollbarContent"
                                 />
                               </div>
                               <div
@@ -4811,7 +4781,7 @@ exports[`Field modal on Calculate Nutrients is correct 1`] = `
                         >
                           <option />
                           <option
-                            value="No Manure in the last 2 years"
+                            value="0"
                           >
                             No Manure in the last 2 years
                           </option>

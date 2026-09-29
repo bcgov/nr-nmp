@@ -256,8 +256,7 @@ describe('FieldListModal unit tests', () => {
         fertigations: [],
         otherNutrients: [],
         manures: [],
-        previousYearManureApplicationNCredit: undefined,
-        soilNitrateCredit: undefined,
+        previousYearNCreditUpdated: false,
       },
     ]);
   });

@@ -14,44 +14,52 @@ exports[`Reporting renders correctly 1`] = `
         <div
           class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
         >
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            aria-current="step"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-jgff3m-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  1
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
               >
-                Home
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    1
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                >
+                  Home
+                </span>
               </span>
             </span>
-          </span>
+          </button>
         </div>
         <div
           class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
@@ -63,44 +71,51 @@ exports[`Reporting renders correctly 1`] = `
               class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
             />
           </div>
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-jgff3m-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  2
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
               >
-                Farm Information
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    2
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                >
+                  Farm Information
+                </span>
               </span>
             </span>
-          </span>
+          </button>
         </div>
       </div>
     </div>
@@ -118,12 +133,14 @@ exports[`Reporting renders correctly 1`] = `
       class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row css-12w8ukd-MuiGrid-root"
     >
       <div
-        style="border: 1px solid rgb(200, 18, 18); width: 100%;"
+        style="border: 1px solid rgb(200, 18, 18); width: 100%; padding-top: 1.25rem; padding-left: 1.25rem; padding-right: 1.25rem;"
       >
-        The following materials are not stored:
+        <h4>
+          The following materials are not stored
+        </h4>
         <ul>
           <li>
-             - Manure
+            Manure
           </li>
         </ul>
       </div>
@@ -169,7 +186,11 @@ exports[`Reporting renders correctly 1`] = `
               tabindex="0"
               type="button"
             >
-              Record keeping sheets
+              <div
+                style="width: 100%; text-align: center;"
+              >
+                Record keeping sheets
+              </div>
             </button>
           </div>
         </div>
