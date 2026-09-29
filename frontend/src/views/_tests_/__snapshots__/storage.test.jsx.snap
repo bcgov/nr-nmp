@@ -18,21 +18,24 @@ exports[`Storage renders correctly 1`] = `
           role="presentation"
         >
           <button
-            aria-current="step"
-            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-jgff3m-MuiButtonBase-root-MuiStepButton-root"
+            aria-posinset="1"
+            aria-selected="true"
+            aria-setsize="2"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-6xhywq-MuiButtonBase-root-MuiStepButton-root"
             disabled=""
+            role="tab"
             tabindex="-1"
             type="button"
           >
             <span
-              class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+              class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-zm8jsj-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+                class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-f2ct5c-MuiStepLabel-iconContainer"
               >
                 <svg
                   aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                   focusable="false"
                   viewBox="0 0 24 24"
                 >
@@ -53,19 +56,20 @@ exports[`Storage renders correctly 1`] = `
                 </svg>
               </span>
               <span
-                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1xr18l4-MuiStepLabel-labelContainer"
               >
                 <span
-                  class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                  class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-14spb1x-MuiStepLabel-label"
                 >
                   Home
                 </span>
               </span>
             </span>
           </button>
-        </div>
-        <div
-          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        </li>
+        <li
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-rj4n1q-MuiStep-root"
+          role="presentation"
         >
           <div
             class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-1k81fv-MuiStepConnector-root"
@@ -75,20 +79,24 @@ exports[`Storage renders correctly 1`] = `
             />
           </div>
           <button
-            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-jgff3m-MuiButtonBase-root-MuiStepButton-root"
+            aria-posinset="2"
+            aria-selected="false"
+            aria-setsize="2"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-6xhywq-MuiButtonBase-root-MuiStepButton-root"
             disabled=""
+            role="tab"
             tabindex="-1"
             type="button"
           >
             <span
-              class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+              class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-zm8jsj-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
+                class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-f2ct5c-MuiStepLabel-iconContainer"
               >
                 <svg
                   aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
                   focusable="false"
                   viewBox="0 0 24 24"
                 >
@@ -109,18 +117,18 @@ exports[`Storage renders correctly 1`] = `
                 </svg>
               </span>
               <span
-                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1xr18l4-MuiStepLabel-labelContainer"
               >
                 <span
-                  class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                  class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-14spb1x-MuiStepLabel-label"
                 >
                   Farm Information
                 </span>
               </span>
             </span>
           </button>
-        </div>
-      </div>
+        </li>
+      </ol>
     </div>
     <div
       class="css-1xllnsb"
