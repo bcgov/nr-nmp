@@ -220,8 +220,9 @@ describe('FieldListModal unit tests', () => {
     const mockSetNameIsUnique = jest.fn(() => true);
     const mockOnClose = jest.fn();
 
+    let tree;
     await waitFor(() => {
-      render(
+      tree = render(
         <FieldListModal
           // I give up on figuring out the select
           initialModalData={{
@@ -237,10 +238,10 @@ describe('FieldListModal unit tests', () => {
       );
     });
 
-    const firstInput = screen.getByLabelText('Field Name (required)');
+    const firstInput = tree.getByTestId('field-name');
     fireEvent.change(firstInput, { target: { value: 'Farm' } });
     // Skipping the NumberField and Select
-    const fourthInput = screen.getByLabelText('Comments (optional)');
+    const fourthInput = tree.getByTestId('comments');
     fireEvent.change(fourthInput, { target: { value: 'Bananas' } });
     const confirm = screen.getByText('Confirm');
     fireEvent.click(confirm);
@@ -248,15 +249,14 @@ describe('FieldListModal unit tests', () => {
       {
         fieldName: 'Farm',
         area: 1,
+        previousYearNCreditUpdated: false,
         previousYearManureApplicationId: '1',
         comment: 'Bananas',
-        soilTest: undefined,
         crops: [],
         fertilizers: [],
         fertigations: [],
         otherNutrients: [],
         manures: [],
-        previousYearNCreditUpdated: false,
       },
     ]);
   });

@@ -77,6 +77,7 @@ export default function FieldListModal({
             <TextField
               isRequired
               label="Field Name"
+              inputTestId="field-name"
               value={formData.fieldName}
               onChange={(e) => handleFormFieldChange({ fieldName: e })}
               validate={() => (validateUniqueName() ? undefined : 'Field name must be unique')}
@@ -113,6 +114,7 @@ export default function FieldListModal({
           <Grid size={formGridBreakpoints}>
             <TextField
               label="Comments (optional)"
+              inputTestId="comments"
               value={formData.comment}
               onChange={(e) => handleFormFieldChange({ comment: e })}
             />

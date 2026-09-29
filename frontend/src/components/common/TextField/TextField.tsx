@@ -33,6 +33,8 @@ export interface TextFieldProps extends ReactAriaTextFieldProps {
   iconLeft?: React.ReactElement;
   /* Icon slot to right of text input field */
   iconRight?: React.ReactElement;
+  /* data-testid for the Input */
+  inputTestId?: string;
 }
 
 export default function TextField({
@@ -41,6 +43,7 @@ export default function TextField({
   description,
   iconLeft,
   iconRight,
+  inputTestId,
   ...props
 }: TextFieldProps) {
   return (
@@ -62,7 +65,7 @@ export default function TextField({
             className={`bcds-react-aria-TextField--container ${size === 'small' ? 'small' : 'medium'}`}
           >
             {iconLeft}
-            <Input className="bcds-react-aria-TextField--Input" />
+            <Input className="bcds-react-aria-TextField--Input" data-testid={inputTestId} />
             {isInvalid && <SvgExclamationIcon />}
             {iconRight}
           </div>
