@@ -8,11 +8,14 @@ exports[`FarmInformations component snapshot test 1`] = `
     <div
       class="MuiBox-root css-a57597"
     >
-      <div
-        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-149z4i0-MuiStepper-root"
+      <ol
+        aria-orientation="horizontal"
+        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-1olibiv-MuiStepper-root"
+        role="tablist"
       >
-        <div
-          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        <li
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-rj4n1q-MuiStep-root"
+          role="presentation"
         >
           <button
             aria-current="step"
@@ -68,7 +71,7 @@ exports[`FarmInformations component snapshot test 1`] = `
             class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-1k81fv-MuiStepConnector-root"
           >
             <span
-              class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
+              class="MuiStepConnector-line css-14ncu80-MuiStepConnector-line"
             />
           </div>
           <button
@@ -177,11 +180,9 @@ exports[`FarmInformations component snapshot test 1`] = `
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
-          <template
-            data-react-aria-hidden="true"
-          />
+          <template />
           <div
-            class="bcds-react-aria-Select"
+            class="bcds-react-aria-Select medium wrap"
             data-rac=""
             data-required="true"
           >
@@ -209,7 +210,11 @@ exports[`FarmInformations component snapshot test 1`] = `
                 data-rac=""
                 id="react-aria-mocked-id"
               >
-                Select an item
+                <span
+                  class="bcds-react-aria-SelectValue--Text"
+                >
+                  Select an item
+                </span>
               </span>
               <svg
                 fill="none"
@@ -238,7 +243,12 @@ exports[`FarmInformations component snapshot test 1`] = `
                   tabindex="-1"
                   title=""
                 >
-                  <option />
+                  <option
+                    label=" "
+                    value=""
+                  >
+                     
+                  </option>
                   <option
                     value="2027"
                   >
@@ -297,11 +307,9 @@ exports[`FarmInformations component snapshot test 1`] = `
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
-          <template
-            data-react-aria-hidden="true"
-          />
+          <template />
           <div
-            class="bcds-react-aria-Select"
+            class="bcds-react-aria-Select medium wrap"
             data-rac=""
             data-required="true"
           >
@@ -329,7 +337,11 @@ exports[`FarmInformations component snapshot test 1`] = `
                 data-rac=""
                 id="react-aria-mocked-id"
               >
-                Select an item
+                <span
+                  class="bcds-react-aria-SelectValue--Text"
+                >
+                  Select an item
+                </span>
               </span>
               <svg
                 fill="none"
@@ -358,7 +370,12 @@ exports[`FarmInformations component snapshot test 1`] = `
                   tabindex="-1"
                   title=""
                 >
-                  <option />
+                  <option
+                    label=" "
+                    value=""
+                  >
+                     
+                  </option>
                 </select>
               </label>
             </div>
@@ -367,11 +384,9 @@ exports[`FarmInformations component snapshot test 1`] = `
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
-          <template
-            data-react-aria-hidden="true"
-          />
+          <template />
           <div
-            class="bcds-react-aria-Select"
+            class="bcds-react-aria-Select medium wrap"
             data-disabled="true"
             data-rac=""
             data-required="true"
@@ -401,7 +416,11 @@ exports[`FarmInformations component snapshot test 1`] = `
                 data-rac=""
                 id="react-aria-mocked-id"
               >
-                Select an item
+                <span
+                  class="bcds-react-aria-SelectValue--Text"
+                >
+                  Select an item
+                </span>
               </span>
               <svg
                 fill="none"
@@ -430,7 +449,12 @@ exports[`FarmInformations component snapshot test 1`] = `
                   required=""
                   tabindex="-1"
                 >
-                  <option />
+                  <option
+                    label=" "
+                    value=""
+                  >
+                     
+                  </option>
                 </select>
               </label>
             </div>
