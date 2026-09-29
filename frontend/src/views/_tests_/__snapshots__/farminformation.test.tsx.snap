@@ -8,101 +8,127 @@ exports[`renders correctly 1`] = `
     <div
       class="MuiBox-root css-a57597"
     >
-      <div
-        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-149z4i0-MuiStepper-root"
+      <ol
+        aria-orientation="horizontal"
+        class="MuiStepper-root MuiStepper-horizontal MuiStepper-alternativeLabel css-1olibiv-MuiStepper-root"
+        role="tablist"
       >
-        <div
-          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+        <li
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-rj4n1q-MuiStep-root"
+          role="presentation"
         >
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            aria-posinset="1"
+            aria-selected="true"
+            aria-setsize="2"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-6xhywq-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            role="tab"
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  1
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal MuiStepLabel-alternativeLabel css-zm8jsj-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-active MuiStepLabel-alternativeLabel css-f2ct5c-MuiStepLabel-iconContainer"
               >
-                Home
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    1
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1xr18l4-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-active MuiStepLabel-alternativeLabel css-14spb1x-MuiStepLabel-label"
+                >
+                  Home
+                </span>
               </span>
             </span>
-          </span>
-        </div>
-        <div
-          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-144tjfk-MuiStep-root"
+          </button>
+        </li>
+        <li
+          class="MuiStep-root MuiStep-horizontal MuiStep-alternativeLabel css-rj4n1q-MuiStep-root"
+          role="presentation"
         >
           <div
             class="MuiStepConnector-root MuiStepConnector-horizontal MuiStepConnector-alternativeLabel Mui-disabled css-1k81fv-MuiStepConnector-root"
           >
             <span
-              class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-14ncu80-MuiStepConnector-line"
+              class="MuiStepConnector-line css-14ncu80-MuiStepConnector-line"
             />
           </div>
-          <span
-            class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-3yr9gi-MuiStepLabel-root"
+          <button
+            aria-posinset="2"
+            aria-selected="false"
+            aria-setsize="2"
+            class="MuiButtonBase-root Mui-disabled MuiStepButton-root MuiStepButton-horizontal css-6xhywq-MuiButtonBase-root-MuiStepButton-root"
+            disabled=""
+            role="tab"
+            tabindex="-1"
+            type="button"
           >
             <span
-              class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-1b2ju2j-MuiStepLabel-iconContainer"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-3hpdci-MuiSvgIcon-root-MuiStepIcon-root"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="12"
-                />
-                <text
-                  class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
-                  dominant-baseline="central"
-                  text-anchor="middle"
-                  x="12"
-                  y="12"
-                >
-                  2
-                </text>
-              </svg>
-            </span>
-            <span
-              class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-p8xe3-MuiStepLabel-labelContainer"
+              class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled MuiStepLabel-alternativeLabel css-zm8jsj-MuiStepLabel-root"
             >
               <span
-                class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-12eb3rq-MuiStepLabel-label"
+                class="MuiStepLabel-iconContainer Mui-disabled MuiStepLabel-alternativeLabel css-f2ct5c-MuiStepLabel-iconContainer"
               >
-                Farm Information
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1t8gtdm-MuiSvgIcon-root-MuiStepIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="12"
+                  />
+                  <text
+                    class="MuiStepIcon-text css-1g86afo-MuiStepIcon-text"
+                    dominant-baseline="central"
+                    text-anchor="middle"
+                    x="12"
+                    y="12"
+                  >
+                    2
+                  </text>
+                </svg>
+              </span>
+              <span
+                class="MuiStepLabel-labelContainer MuiStepLabel-alternativeLabel css-1xr18l4-MuiStepLabel-labelContainer"
+              >
+                <span
+                  class="MuiStepLabel-label Mui-disabled MuiStepLabel-alternativeLabel css-14spb1x-MuiStepLabel-label"
+                >
+                  Farm Information
+                </span>
               </span>
             </span>
-          </span>
-        </div>
-      </div>
+          </button>
+        </li>
+      </ol>
     </div>
     <div
       class="css-1xllnsb"
@@ -131,7 +157,7 @@ exports[`renders correctly 1`] = `
             <label
               class="bcds-react-aria-TextField--Label"
               for="farmName"
-              id="react-aria-«r1»"
+              id="react-aria-mocked-id"
             >
               Farm Name
               <span
@@ -144,7 +170,8 @@ exports[`renders correctly 1`] = `
               class="bcds-react-aria-TextField--container medium"
             >
               <input
-                aria-labelledby="react-aria-«r1»"
+                aria-describedby="react-aria-mocked-id react-aria-mocked-id"
+                aria-labelledby="react-aria-mocked-id"
                 class="bcds-react-aria-TextField--Input"
                 data-rac=""
                 id="farmName"
@@ -161,28 +188,27 @@ exports[`renders correctly 1`] = `
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
-          <template
-            data-react-aria-hidden="true"
-          />
+          <template />
           <div
-            class="bcds-react-aria-Select"
+            class="bcds-react-aria-Select medium wrap"
             data-rac=""
             data-required="true"
           >
             <span
               class="bcds-react-aria-Select--Label"
-              id="react-aria-«r8»"
+              id="react-aria-mocked-id"
             >
               Year (required)
             </span>
             <button
+              aria-describedby="react-aria-mocked-id react-aria-mocked-id"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="react-aria-«rc» react-aria-«r8»"
-              class="bcds-react-aria-Select--Button medium false"
+              aria-labelledby="react-aria-mocked-id react-aria-mocked-id"
+              class="bcds-react-aria-Select--Button medium "
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«r7»"
+              id="react-aria-mocked-id"
               tabindex="0"
               type="button"
             >
@@ -190,9 +216,13 @@ exports[`renders correctly 1`] = `
                 class="bcds-react-aria-SelectValue"
                 data-placeholder="true"
                 data-rac=""
-                id="react-aria-«rc»"
+                id="react-aria-mocked-id"
               >
-                Select an item
+                <span
+                  class="bcds-react-aria-SelectValue--Text"
+                >
+                  Select an item
+                </span>
               </span>
               <svg
                 fill="none"
@@ -221,7 +251,12 @@ exports[`renders correctly 1`] = `
                   tabindex="-1"
                   title=""
                 >
-                  <option />
+                  <option
+                    label=" "
+                    value=""
+                  >
+                     
+                  </option>
                   <option
                     value="2027"
                   >
@@ -280,28 +315,27 @@ exports[`renders correctly 1`] = `
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
-          <template
-            data-react-aria-hidden="true"
-          />
+          <template />
           <div
-            class="bcds-react-aria-Select"
+            class="bcds-react-aria-Select medium wrap"
             data-rac=""
             data-required="true"
           >
             <span
               class="bcds-react-aria-Select--Label"
-              id="react-aria-«ri»"
+              id="react-aria-mocked-id"
             >
               Region (required)
             </span>
             <button
+              aria-describedby="react-aria-mocked-id react-aria-mocked-id"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="react-aria-«rm» react-aria-«ri»"
-              class="bcds-react-aria-Select--Button medium false"
+              aria-labelledby="react-aria-mocked-id react-aria-mocked-id"
+              class="bcds-react-aria-Select--Button medium "
               data-rac=""
               data-react-aria-pressable="true"
-              id="react-aria-«rh»"
+              id="react-aria-mocked-id"
               tabindex="0"
               type="button"
             >
@@ -309,9 +343,13 @@ exports[`renders correctly 1`] = `
                 class="bcds-react-aria-SelectValue"
                 data-placeholder="true"
                 data-rac=""
-                id="react-aria-«rm»"
+                id="react-aria-mocked-id"
               >
-                Select an item
+                <span
+                  class="bcds-react-aria-SelectValue--Text"
+                >
+                  Select an item
+                </span>
               </span>
               <svg
                 fill="none"
@@ -340,7 +378,12 @@ exports[`renders correctly 1`] = `
                   tabindex="-1"
                   title=""
                 >
-                  <option />
+                  <option
+                    label=" "
+                    value=""
+                  >
+                     
+                  </option>
                 </select>
               </label>
             </div>
@@ -349,40 +392,43 @@ exports[`renders correctly 1`] = `
         <div
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
         >
-          <template
-            data-react-aria-hidden="true"
-          />
+          <template />
           <div
-            class="bcds-react-aria-Select"
+            class="bcds-react-aria-Select medium wrap"
             data-disabled="true"
             data-rac=""
             data-required="true"
           >
             <span
               class="bcds-react-aria-Select--Label"
-              id="react-aria-«rs»"
+              id="react-aria-mocked-id"
             >
               Subregion (required)
             </span>
             <button
+              aria-describedby="react-aria-mocked-id react-aria-mocked-id"
               aria-expanded="false"
               aria-haspopup="listbox"
-              aria-labelledby="react-aria-«r10» react-aria-«rs»"
-              class="bcds-react-aria-Select--Button medium false"
+              aria-labelledby="react-aria-mocked-id react-aria-mocked-id"
+              class="bcds-react-aria-Select--Button medium "
               data-disabled="true"
               data-rac=""
               data-react-aria-pressable="true"
               disabled=""
-              id="react-aria-«rr»"
+              id="react-aria-mocked-id"
               type="button"
             >
               <span
                 class="bcds-react-aria-SelectValue"
                 data-placeholder="true"
                 data-rac=""
-                id="react-aria-«r10»"
+                id="react-aria-mocked-id"
               >
-                Select an item
+                <span
+                  class="bcds-react-aria-SelectValue--Text"
+                >
+                  Select an item
+                </span>
               </span>
               <svg
                 fill="none"
@@ -411,7 +457,12 @@ exports[`renders correctly 1`] = `
                   required=""
                   tabindex="-1"
                 >
-                  <option />
+                  <option
+                    label=" "
+                    value=""
+                  >
+                     
+                  </option>
                 </select>
               </label>
             </div>
@@ -426,12 +477,13 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
         >
           <div
+            aria-describedby="react-aria-mocked-id react-aria-mocked-id"
             aria-label="I have crops"
             aria-orientation="vertical"
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
             data-rac=""
-            id="react-aria-«r13»"
+            id="react-aria-mocked-id"
             role="radiogroup"
           >
             <div
@@ -446,8 +498,9 @@ exports[`renders correctly 1`] = `
                   style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
                 >
                   <input
+                    aria-describedby="react-aria-mocked-id"
                     data-react-aria-pressable="true"
-                    name="react-aria-«r18»"
+                    name="react-aria-mocked-id"
                     tabindex="-1"
                     title=""
                     type="radio"
@@ -466,9 +519,10 @@ exports[`renders correctly 1`] = `
                   style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
                 >
                   <input
+                    aria-describedby="react-aria-mocked-id"
                     checked=""
                     data-react-aria-pressable="true"
-                    name="react-aria-«r18»"
+                    name="react-aria-mocked-id"
                     tabindex="0"
                     title=""
                     type="radio"
@@ -490,12 +544,13 @@ exports[`renders correctly 1`] = `
           class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"
         >
           <div
+            aria-describedby="react-aria-mocked-id react-aria-mocked-id"
             aria-label="I have livestock"
             aria-orientation="vertical"
             class="bcds-react-aria-RadioGroup"
             data-orientation="vertical"
             data-rac=""
-            id="react-aria-«r19»"
+            id="react-aria-mocked-id"
             role="radiogroup"
           >
             <div
@@ -510,8 +565,9 @@ exports[`renders correctly 1`] = `
                   style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
                 >
                   <input
+                    aria-describedby="react-aria-mocked-id"
                     data-react-aria-pressable="true"
-                    name="react-aria-«r1e»"
+                    name="react-aria-mocked-id"
                     tabindex="-1"
                     title=""
                     type="radio"
@@ -530,9 +586,10 @@ exports[`renders correctly 1`] = `
                   style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
                 >
                   <input
+                    aria-describedby="react-aria-mocked-id"
                     checked=""
                     data-react-aria-pressable="true"
-                    name="react-aria-«r1e»"
+                    name="react-aria-mocked-id"
                     tabindex="0"
                     title=""
                     type="radio"
@@ -550,10 +607,11 @@ exports[`renders correctly 1`] = `
             </div>
           </div>
           <div
+            aria-describedby="react-aria-mocked-id react-aria-mocked-id"
             aria-label="Farm Animals"
             class="css-1hyfx7x"
             data-rac=""
-            id="react-aria-«r1f»"
+            id="react-aria-mocked-id"
             role="group"
           >
             <div
@@ -575,7 +633,7 @@ exports[`renders correctly 1`] = `
           class="bcds-react-aria-Button medium secondary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r1k»"
+          id="react-aria-mocked-id"
           tabindex="0"
           type="button"
         >
@@ -585,7 +643,7 @@ exports[`renders correctly 1`] = `
           class="bcds-react-aria-Button medium primary  "
           data-rac=""
           data-react-aria-pressable="true"
-          id="react-aria-«r1m»"
+          id="react-aria-mocked-id"
           tabindex="0"
           type="button"
         >

@@ -442,6 +442,7 @@ export default function CalculateNutrients() {
           cropIndex={openDialog[1]}
           initialModalData={currentField.crops[openDialog[1]!]}
           setFields={setFieldList}
+          setDisplayWarning={() => {}}
           isOpen={openDialog[0] === 'crop'}
           onClose={handleDialogClose}
         />
