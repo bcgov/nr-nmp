@@ -147,7 +147,7 @@ export default async function makeRecordKeepingSheetsPdf(
         allApplied.length > 0
           ? allApplied.map((nutrientSource) => {
             if ('applicationId' in nutrientSource) {
-            // Manures have 'applicationId' and seasonal values
+              // Manures have 'applicationId' and seasonal values
               const seasonApplication = SEASON_APPLICATION.find(
                 (s) => s.Id === nutrientSource.applicationId,
               );
@@ -168,7 +168,9 @@ export default async function makeRecordKeepingSheetsPdf(
             return [
               // fertilizer nutrient type, name, amount, season, application, unit
               // if custom fertilizer display Custom - type - N-P-K, else display name
-              nutrientSource.customFertilizer ? `Custom (${nutrientSource.customFertilizer.dryliquid}) ${nutrientSource.customFertilizer.nitrogen}-${nutrientSource.customFertilizer.phosphorous}-${nutrientSource.customFertilizer.potassium}` : `${nutrientSource.name}`,
+              nutrientSource.customFertilizer
+                ? `Custom (${nutrientSource.customFertilizer.dryliquid}) ${nutrientSource.customFertilizer.nitrogen}-${nutrientSource.customFertilizer.phosphorous}-${nutrientSource.customFertilizer.potassium}`
+                : `${nutrientSource.name}`,
               nutrientSource.applDate || '',
               // Example display: 10 L/ac
               `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,

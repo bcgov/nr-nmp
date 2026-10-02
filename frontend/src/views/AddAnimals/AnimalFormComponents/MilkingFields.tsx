@@ -115,13 +115,14 @@ export default function MilkingFields({
           }}
           iconRight={
             milkProduction !== milkProductionDefault ? (
-              <ResetButton onClick={() => {
-                setMilkProduction(milkProductionDefault);
-                handleInputChanges({
-                  milkProduction: milkProductionDefault,
-                  milkProductionAdjusted: false,
-                });
-              }}
+              <ResetButton
+                onClick={() => {
+                  setMilkProduction(milkProductionDefault);
+                  handleInputChanges({
+                    milkProduction: milkProductionDefault,
+                    milkProductionAdjusted: false,
+                  });
+                }}
               />
             ) : undefined
           }
@@ -145,17 +146,18 @@ export default function MilkingFields({
               });
             }}
             iconRight={
-            washWater !== washWaterDefaultCorrected ? (
-              <ResetButton onClick={() => {
-                setWashWater(washWaterDefaultCorrected);
-                handleInputChanges({
-                  washWater: washWaterDefaultCorrected,
-                  washWaterAdjusted: false,
-                });
-              }}
-              />
-            ) : undefined
-          }
+              washWater !== washWaterDefaultCorrected ? (
+                <ResetButton
+                  onClick={() => {
+                    setWashWater(washWaterDefaultCorrected);
+                    handleInputChanges({
+                      washWater: washWaterDefaultCorrected,
+                      washWaterAdjusted: false,
+                    });
+                  }}
+                />
+              ) : undefined
+            }
           />
         </Grid>
         <Grid size={4}>

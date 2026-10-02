@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`SoilTests is correct 1`] = `
+exports[`SoilTests component snapshot test 1`] = `
 <DocumentFragment>
   <div
     class="css-1lqntaz"
@@ -196,6 +196,7 @@ exports[`SoilTests is correct 1`] = `
     </div>
     <div
       class="css-2fkxsm"
+      data-testid="infobox"
     >
       Do you have soil tests from within the past 3 years?
       <ul>
@@ -326,7 +327,7 @@ exports[`SoilTests is correct 1`] = `
 </DocumentFragment>
 `;
 
-exports[`SoilTestsModal is correct 1`] = `
+exports[`SoilTestsModal component snapshot test 1`] = `
 <body>
   <div
     aria-hidden="true"

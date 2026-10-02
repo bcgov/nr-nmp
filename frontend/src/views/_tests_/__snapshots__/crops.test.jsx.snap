@@ -196,7 +196,7 @@ exports[`Crops is correct 1`] = `
     </div>
     <div
       class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3962610333 css-ywqok-MuiDataGrid-root"
-      style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 0; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 840px; --DataGrid-columnsTotalWidth: 840px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --DataGrid-horizontalFiller: 0px; --height: 52px;"
+      style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 1; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 840px; --DataGrid-columnsTotalWidth: 840px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --DataGrid-horizontalFiller: 0px; --height: 52px;"
     >
       <div
         class="MuiDataGrid-mainContent"
@@ -205,7 +205,7 @@ exports[`Crops is correct 1`] = `
         <div
           aria-colcount="5"
           aria-multiselectable="false"
-          aria-rowcount="1"
+          aria-rowcount="2"
           class="MuiDataGrid-main css-1bgckiu-MuiDataGrid-main"
           role="grid"
           tabindex="-1"
@@ -510,28 +510,105 @@ exports[`Crops is correct 1`] = `
                   </div>
                 </div>
                 <div
-                  class="MuiDataGrid-overlayWrapper css-1p5kamq-MuiDataGrid-overlayWrapper"
-                >
-                  <div
-                    class="MuiDataGrid-overlayWrapperInner css-1mbsuzk-MuiDataGrid-overlayWrapperInner"
-                    style="height: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); width: 0px;"
-                  >
-                    <div
-                      class="MuiDataGrid-overlay css-w16tsr-MuiDataGrid-overlay"
-                    >
-                      No rows
-                    </div>
-                  </div>
-                </div>
-                <div
                   class="MuiDataGrid-virtualScrollerRenderZone css-11dqcl8-MuiDataGrid-virtualScrollerRenderZone"
                   role="rowgroup"
                   style="transform: translate3d(0, 56px, 0);"
-                />
+                >
+                  <div
+                    aria-rowindex="2"
+                    aria-selected="false"
+                    class="MuiDataGrid-row MuiDataGrid-row--firstVisible MuiDataGrid-row--lastVisible"
+                    data-id="916859ed-1272-4863-a935-803debaa2d08"
+                    data-rowindex="0"
+                    role="row"
+                    style="max-height: 52px; min-height: 52px; --height: 52px;"
+                  >
+                    <div
+                      class="MuiDataGrid-cellOffsetLeft"
+                      role="none"
+                      style="width: 0px;"
+                    />
+                    <div
+                      aria-colindex="1"
+                      aria-colspan="1"
+                      aria-rowspan="1"
+                      class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                      data-colindex="0"
+                      data-field="fieldName"
+                      role="gridcell"
+                      style="--width: 150px;"
+                      tabindex="-1"
+                      title=""
+                    />
+                    <div
+                      aria-colindex="2"
+                      aria-colspan="1"
+                      aria-rowspan="1"
+                      class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                      data-colindex="1"
+                      data-field="crops1"
+                      role="gridcell"
+                      style="--width: 170px;"
+                      tabindex="-1"
+                      title=""
+                    />
+                    <div
+                      aria-colindex="3"
+                      aria-colspan="1"
+                      aria-rowspan="1"
+                      class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                      data-colindex="2"
+                      data-field="actionsCrop1"
+                      role="gridcell"
+                      style="--width: 150px;"
+                      tabindex="-1"
+                    >
+                      <div>
+                        <button
+                          class="bcds-react-aria-Button small primary  "
+                          data-rac=""
+                          data-react-aria-pressable="true"
+                          id="react-aria-mocked-id"
+                          tabindex="0"
+                          type="button"
+                        >
+                          Add Crop
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      aria-colindex="4"
+                      aria-colspan="1"
+                      aria-rowspan="1"
+                      class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                      data-colindex="3"
+                      data-field="crops2"
+                      role="gridcell"
+                      style="--width: 170px;"
+                      tabindex="-1"
+                      title=""
+                    />
+                    <div
+                      aria-colindex="5"
+                      aria-colspan="1"
+                      aria-rowspan="1"
+                      class="MuiDataGrid-cell MuiDataGrid-cell--textLeft"
+                      data-colindex="4"
+                      data-field="ActionsCrop2"
+                      role="gridcell"
+                      style="--width: 200px;"
+                      tabindex="-1"
+                    />
+                    <div
+                      class="MuiDataGrid-cell MuiDataGrid-cellEmpty"
+                      role="none"
+                    />
+                  </div>
+                </div>
                 <div
                   class="MuiDataGrid-contentFiller"
                   role="presentation"
-                  style="width: auto; height: var(--DataGrid-overlayHeight, calc(var(--height) * 2)); flex: 0 0 auto;"
+                  style="width: auto; height: 52px; flex: 0 0 auto;"
                 />
                 <div
                   class="MuiDataGrid-bottomContainer MuiDataGrid-container--bottom css-ov7qw3"
@@ -550,6 +627,20 @@ exports[`Crops is correct 1`] = `
               style="width: 840px;"
             />
           </div>
+          <div
+            aria-hidden="true"
+            class="MuiDataGrid-scrollbar MuiDataGrid-scrollbar--vertical css-487mga"
+            tabindex="-1"
+          >
+            <div
+              class="MuiDataGrid-scrollbarContent"
+              style="height: 52px;"
+            />
+          </div>
+          <div
+            aria-hidden="true"
+            class="css-dg75k8"
+          />
         </div>
       </div>
       <style
