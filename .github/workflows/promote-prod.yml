@@ -1,0 +1,25 @@
+name: Promote to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_no:
+        description: "PR-number tag to promote"
+        type: number
+        required: true
+
+
+concurrency:
+  # Do not interrupt previous workflows
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  deploys-prod:
+    name: PROD Deploys (${{ inputs.pr_no }})
+    secrets: inherit
+    uses: ./.github/workflows/.deploy.yml
+    with:
+      environment: prod
+      tag: ${{ inputs.pr_no }}
+      target: prod
