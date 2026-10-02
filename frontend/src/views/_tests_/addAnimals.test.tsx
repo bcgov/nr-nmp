@@ -147,12 +147,12 @@ describe('AddAnimals calculations', () => {
 });
 
 describe('AddAnimals component unit tests', () => {
+  const mockDispatch = jest.fn();
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('calls AppService dispatch on render', () => {
-    const mockDispatch = jest.fn();
+  it('calls AppService dispatch on render', async () => {
     mockUseAppService.mockReturnValue({
       state: {
         nmpFile: farmTestFile,
@@ -161,19 +161,21 @@ describe('AddAnimals component unit tests', () => {
       },
       dispatch: mockDispatch,
     });
-    render(
-      <MemoryRouter>
-        <AddAnimals />
-      </MemoryRouter>,
-    );
+    await waitFor(() => {
+      render(
+        <MemoryRouter>
+          <AddAnimals />
+        </MemoryRouter>,
+      );
+    });
+
     expect(mockDispatch).toHaveBeenCalledWith({
       type: 'SET_SHOW_ANIMALS_STEP',
       showAnimalsStep: true,
     });
   });
 
-  it('allows Next if an animal is added', () => {
-    const mockDispatch = jest.fn();
+  it('allows Next if an animal is added', async () => {
     mockUseAppService.mockReturnValue({
       state: {
         nmpFile: {
@@ -192,11 +194,13 @@ describe('AddAnimals component unit tests', () => {
       dispatch: mockDispatch,
     });
 
-    render(
-      <MemoryRouter>
-        <AddAnimals />
-      </MemoryRouter>,
-    );
+    await waitFor(() => {
+      render(
+        <MemoryRouter>
+          <AddAnimals />
+        </MemoryRouter>,
+      );
+    });
     const button = screen.getByText('Next');
     fireEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith(MANURE_IMPORTS);
@@ -205,8 +209,7 @@ describe('AddAnimals component unit tests', () => {
     );
   });
 
-  it('blocks Next if no animals added', () => {
-    const mockDispatch = jest.fn();
+  it('blocks Next if no animals added', async () => {
     mockUseAppService.mockReturnValue({
       state: {
         nmpFile: farmTestFile,
@@ -216,11 +219,13 @@ describe('AddAnimals component unit tests', () => {
       dispatch: mockDispatch,
     });
 
-    render(
-      <MemoryRouter>
-        <AddAnimals />
-      </MemoryRouter>,
-    );
+    await waitFor(() => {
+      render(
+        <MemoryRouter>
+          <AddAnimals />
+        </MemoryRouter>,
+      );
+    });
     mockDispatch.mockClear(); // clear call on render
     const button = screen.getByText('Next');
     fireEvent.click(button);
@@ -228,7 +233,7 @@ describe('AddAnimals component unit tests', () => {
     expect(mockDispatch).not.toHaveBeenCalled();
   });
 
-  it('allows Previous redirect regardless', () => {
+  it('allows Previous redirect regardless', async () => {
     mockUseAppService.mockReturnValue({
       state: {
         nmpFile: farmTestFile,
@@ -238,11 +243,13 @@ describe('AddAnimals component unit tests', () => {
       dispatch: jest.fn(),
     });
 
-    render(
-      <MemoryRouter>
-        <AddAnimals />
-      </MemoryRouter>,
-    );
+    await waitFor(() => {
+      render(
+        <MemoryRouter>
+          <AddAnimals />
+        </MemoryRouter>,
+      );
+    });
     const button = screen.getByText('Back');
     fireEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith(FARM_INFORMATION);

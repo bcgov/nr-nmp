@@ -65,7 +65,10 @@ export default function TextField({
             className={`bcds-react-aria-TextField--container ${size === 'small' ? 'small' : 'medium'}`}
           >
             {iconLeft}
-            <Input className="bcds-react-aria-TextField--Input" data-testid={inputTestId} />
+            <Input
+              className="bcds-react-aria-TextField--Input"
+              data-testid={inputTestId}
+            />
             {isInvalid && <SvgExclamationIcon />}
             {iconRight}
           </div>

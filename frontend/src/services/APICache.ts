@@ -88,7 +88,8 @@ class APICache {
       manures: this.endpointCache.manures.data,
       nitrateCredit: this.endpointCache.nitratecredit.data,
       nMineralizations: this.endpointCache.nmineralizations.data,
-      previousYearManureApplications: this.endpointCache.previousyearmanureapplications.data,
+      previousYearManureApplications:
+        this.endpointCache.previousyearmanureapplications.data,
       regions: this.endpointCache.regions.data,
       soilTestPhosphorousKelownaRanges:
         this.endpointCache.soiltestphosphorouskelonwaranges.data,

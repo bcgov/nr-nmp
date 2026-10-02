@@ -273,7 +273,11 @@ function Crops() {
           modalStyle={{ width: '700px' }}
         />
       )}
-      {displayWarning && <div style={{ color: 'red', marginTop: '1.25rem' }}>You must add a crop to proceed</div>}
+      {displayWarning && (
+        <div style={{ color: 'red', marginTop: '1.25rem' }}>
+          You must add a crop to proceed
+        </div>
+      )}
       <DataGrid
         sx={{ ...customTableStyle }}
         rows={fields}

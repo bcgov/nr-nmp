@@ -259,6 +259,7 @@ export default function SoilTests() {
                     icon={faEdit}
                   />
                   <FontAwesomeIcon
+                    data-testid="delete-icon"
                     css={tableActionButtonCss}
                     onClick={() => {
                       setDialogText(
@@ -333,7 +334,7 @@ export default function SoilTests() {
         tabLabel={['Field List', 'Soil Tests', 'Crops']}
       />
       {!soilTestId && (
-        <InfoBox>
+        <InfoBox data-testid="infobox">
           Do you have soil tests from within the past 3 years?
           <ul>
             <li>Yes - Select the lab used (soil test methods)</li>
