@@ -1,0 +1,40 @@
+name: Promote to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_no:
+        description: "PR-number tag to promote"
+        type: number
+        required: true
+
+
+concurrency:
+  # Do not interrupt previous workflows
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  deploys-prod:
+    name: PROD Deploys (${{ inputs.pr_no }})
+    secrets: inherit
+    uses: ./.github/workflows/.deploy.yml
+    with:
+      environment: prod
+      tag: ${{ inputs.pr_no }}
+      target: prod
+
+  promote:
+    name: Promote Images
+    needs: [deploys-prod]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [database, backend, frontend]
+    steps:
+      - uses: shrink/actions-docker-registry-tag@f04afd0559f66b288586792eb150f45136a927fa # v4
+        with:
+          registry: ghcr.io
+          repository: ${{ github.repository }}/${{ matrix.package }}
+          target: ${{ inputs.pr_no }}
+          tags: prod
