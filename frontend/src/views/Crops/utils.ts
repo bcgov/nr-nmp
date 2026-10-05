@@ -51,7 +51,7 @@ type SetYieldHarvestUnit = {
 };
 
 type SetProteinAction = {
-  type: 'SET_PROTEIN',
+  type: 'SET_PROTEIN';
   crudeProtein: number;
 };
 
@@ -92,7 +92,7 @@ type RestoreDefaultYieldAction = {
 
 type RestoreDefaultProteinAction = {
   type: 'RESTORE_DEFAULT_PROTEIN';
-}
+};
 
 type RemoveLeafTestAction = {
   type: 'REMOVE_LEAF_TEST';
@@ -208,7 +208,8 @@ export function cropsModalReducer(
       const nToProteinConversionFactor = 0.625;
       const unitConversionFactor = 0.5;
       const crudeProtein = action.crop.cropremovalfactornitrogen
-        * nToProteinConversionFactor * unitConversionFactor;
+        * nToProteinConversionFactor
+        * unitConversionFactor;
 
       return {
         ...state,
@@ -401,7 +402,11 @@ export function cropsModalReducer(
     case 'RESTORE_DEFAULT_PROTEIN':
       return {
         ...state,
-        formData: { ...formData, crudeProtein: defaultCrudeProtein, crudeProteinAdjusted: false },
+        formData: {
+          ...formData,
+          crudeProtein: defaultCrudeProtein,
+          crudeProteinAdjusted: false,
+        },
       };
 
     default:

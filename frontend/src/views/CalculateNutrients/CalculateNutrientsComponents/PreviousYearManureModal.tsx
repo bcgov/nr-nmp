@@ -22,7 +22,9 @@ export default function PreviousYearManureModal({
   modalStyle,
   field,
 }: PreviousYearManureModalProps) {
-  const [nCredit, setNCredit] = useState<number>(field.previousYearManureApplicationNCredit || 0);
+  const [nCredit, setNCredit] = useState<number>(
+    field.previousYearManureApplicationNCredit || 0,
+  );
   const apiCache = useContext(APICacheContext);
   const calculatedDefaultCredit = useMemo(
     () => calcPrevYearManureApplDefault(
@@ -73,12 +75,14 @@ export default function PreviousYearManureModal({
               onChange={(value) => setNCredit(value)}
               minValue={0}
               step={0.1}
-              iconRight={nCredit !== calculatedDefaultCredit ? (
-                <ResetButton
-                  onClick={() => setNCredit(calculatedDefaultCredit)}
-                  title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
-                />
-              ) : undefined}
+              iconRight={
+                nCredit !== calculatedDefaultCredit ? (
+                  <ResetButton
+                    onClick={() => setNCredit(calculatedDefaultCredit)}
+                    title={`Reset to calculated value (${calculatedDefaultCredit} lb/ac)`}
+                  />
+                ) : undefined
+              }
             />
           </Grid>
         </Grid>

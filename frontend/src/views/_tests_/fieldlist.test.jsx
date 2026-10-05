@@ -48,7 +48,7 @@ global.crypto.randomUUID = () => '916859ed-1272-4863-a935-803debaa2d08';
 
 // Copy in for tests that use structuredClone
 const mockStructuredClone = jest.fn((x) => x);
-global.structuredClone = () => mockStructuredClone();
+global.structuredClone = mockStructuredClone;
 
 it('FieldList is correct', async () => {
   mockUseAppService.mockImplementation(() => ({

@@ -38,7 +38,11 @@ import {
   genHandleDeleteRow,
   renderNutrientCell,
 } from './utils.tsx';
-import { AlertDialogContinueBtn, CalculateNutrientsRow, NMPFileField } from '@/types';
+import {
+  AlertDialogContinueBtn,
+  CalculateNutrientsRow,
+  NMPFileField,
+} from '@/types';
 import SoilNitrateCreditModal from './CalculateNutrientsComponents/SoilNitrateCreditModal.tsx';
 
 const customCalcTableStyle = {
@@ -79,7 +83,10 @@ export default function CalculateNutrients() {
   const [fieldList, setFieldList] = useState<Array<NMPFileField>>(
     state.nmpFile.years[0].fields || [],
   );
-  const currentField = useMemo(() => fieldList[activeField], [fieldList, activeField]);
+  const currentField = useMemo(
+    () => fieldList[activeField],
+    [fieldList, activeField],
+  );
 
   const [warningText, setWarningText] = useState<string>('');
   const [deleteBtnConfig, setDeleteBtnConfig] = useState<
@@ -571,7 +578,11 @@ export default function CalculateNutrients() {
       {currentField.previousYearManureApplicationId
         && currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
           <DataGrid
-            sx={{ ...customTableStyle, ...customCalcTableStyle, ...singleRowTableStyle }}
+            sx={{
+              ...customTableStyle,
+              ...customCalcTableStyle,
+              ...singleRowTableStyle,
+            }}
             rows={[
               {
                 name: "Previous years' manure",
@@ -646,7 +657,11 @@ export default function CalculateNutrients() {
       )}
       {currentField.soilNitrateCredit && (
         <DataGrid
-          sx={{ ...customTableStyle, ...customCalcTableStyle, ...singleRowTableStyle }}
+          sx={{
+            ...customTableStyle,
+            ...customCalcTableStyle,
+            ...singleRowTableStyle,
+          }}
           rows={[currentField.soilNitrateCredit]}
           columns={soilNitrateColumns}
           getRowId={() => crypto.randomUUID()}

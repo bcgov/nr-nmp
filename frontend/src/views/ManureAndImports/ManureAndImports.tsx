@@ -31,7 +31,13 @@ import {
   tableActionButtonCss,
 } from '@/common.styles';
 import ManureImportModal from './ManureImportModal';
-import { booleanChecker, getLiquidManureDisplay, getSolidManureDisplay, liquidSolidManureDisplay, printNum } from '@/utils/utils';
+import {
+  booleanChecker,
+  getLiquidManureDisplay,
+  getSolidManureDisplay,
+  liquidSolidManureDisplay,
+  printNum,
+} from '@/utils/utils';
 import { DAIRY_COW_ID } from '@/constants';
 
 // Create a new component for crops manure and imports for now

@@ -8,7 +8,7 @@
   min-height: var(--layout-margin-xlarge);
 }
 
-.bcds-react-aria-Select.medium .bcds-react-aria-Select--Button{
+.bcds-react-aria-Select.medium .bcds-react-aria-Select--Button {
   height: var(--layout-margin-xxlarge);
   min-height: var(--layout-margin-xxlarge) !important;
 }

@@ -698,9 +698,13 @@ function CropsModal({
                   label={`Yield${showUnitDropdown(formData.cropTypeId) ? '' : ' (tons/ac)'}`}
                   value={formData.yield}
                   onChange={(e) => handleFormFieldChange('yield', e)}
-                  iconRight={!isFormYieldEqualToDefault ? (
-                    <ResetButton onClick={() => dispatch({ type: 'RESTORE_DEFAULT_YIELD' })} />
-                  ) : undefined}
+                  iconRight={
+                    !isFormYieldEqualToDefault ? (
+                      <ResetButton
+                        onClick={() => dispatch({ type: 'RESTORE_DEFAULT_YIELD' })}
+                      />
+                    ) : undefined
+                  }
                 />
               </Grid>
               {showUnitDropdown(formData.cropTypeId) && (
@@ -722,9 +726,13 @@ function CropsModal({
                     value={formData.crudeProtein}
                     onChange={(e) => handleFormFieldChange('crudeProtein', e as number)}
                     maxValue={100}
-                    iconRight={formData.crudeProteinAdjusted ? (
-                      <ResetButton onClick={() => dispatch({ type: 'RESTORE_DEFAULT_PROTEIN' })} />
-                    ) : undefined}
+                    iconRight={
+                      formData.crudeProteinAdjusted ? (
+                        <ResetButton
+                          onClick={() => dispatch({ type: 'RESTORE_DEFAULT_PROTEIN' })}
+                        />
+                      ) : undefined
+                    }
                   />
                 </Grid>
               )}
@@ -841,9 +849,15 @@ function CropsModal({
                     </Grid>
                   )}
                   {!formData.hasLeafTest && (
-                    <div style={{ color: 'red', font: 'var(--typography-regular-small-body)' }}>
-                      For fields without a leaf test, &apos;High&apos; leaf P and K content will be
-                      assumed. Crop P and K requirements will be 0 on fields without a leaf test.
+                    <div
+                      style={{
+                        color: 'red',
+                        font: 'var(--typography-regular-small-body)',
+                      }}
+                    >
+                      For fields without a leaf test, &apos;High&apos; leaf P and K
+                      content will be assumed. Crop P and K requirements will be 0 on
+                      fields without a leaf test.
                     </div>
                   )}
                 </>

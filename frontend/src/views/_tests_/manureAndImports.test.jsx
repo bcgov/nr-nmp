@@ -1,4 +1,6 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import useAppState from '../../hooks/useAppState';
 import DEFAULT_NMPFILE from '../../constants/DefaultNMPFile';
@@ -15,12 +17,10 @@ import {
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
-jest.mock('../../services/APICache', () =>
-  jest.fn().mockImplementation(() => ({
-    callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
-    getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
-  })),
-);
+jest.mock('../../services/APICache', () => jest.fn().mockImplementation(() => ({
+  callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
+  getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
+})));
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -152,7 +152,7 @@ const farmTestFile = {
 
 // Copy in for tests that use structuredClone
 const mockStructuredClone = jest.fn((x) => x);
-global.structuredClone = () => mockStructuredClone();
+global.structuredClone = mockStructuredClone;
 
 describe('manureAndImports navigation tests', () => {
   afterEach(() => {
@@ -230,7 +230,7 @@ describe('manureAndImports navigation tests', () => {
     jest.clearAllMocks();
   });
 
-  it('manureAndImports can navigate to next page (/nutrient_analysis)', () => {
+  it('manureAndImports can navigate to next page (/nutrient_analysis)', async () => {
     const mockDispatch = jest.fn();
     mockUseAppService.mockImplementation(() => ({
       state: {
@@ -243,11 +243,13 @@ describe('manureAndImports navigation tests', () => {
       dispatch: mockDispatch,
     }));
 
-    render(
-      <MemoryRouter>
-        <ManureAndImports />
-      </MemoryRouter>,
-    );
+    await waitFor(() => {
+      render(
+        <MemoryRouter>
+          <ManureAndImports />
+        </MemoryRouter>,
+      );
+    });
 
     const button = screen.getByText('Next');
     fireEvent.click(button);
@@ -266,13 +268,14 @@ describe('manureAndImports navigation tests', () => {
       },
       dispatch: mockDispatch,
     }));
-    await act(async () =>
+
+    await waitFor(async () => {
       render(
         <MemoryRouter>
           <ManureAndImports />
         </MemoryRouter>,
-      ),
-    );
+      );
+    });
 
     const button = await screen.getByText('Next');
     await fireEvent.click(button);
@@ -282,7 +285,7 @@ describe('manureAndImports navigation tests', () => {
     );
   });
 
-  it('manureAndImports can navigate to back a page (/crops)', () => {
+  it('manureAndImports can navigate to back a page (/crops)', async () => {
     const mockDispatch = jest.fn();
     mockUseAppService.mockImplementation(() => ({
       state: {
@@ -295,11 +298,13 @@ describe('manureAndImports navigation tests', () => {
       dispatch: mockDispatch,
     }));
 
-    render(
-      <MemoryRouter>
-        <ManureAndImports />
-      </MemoryRouter>,
-    );
+    await waitFor(() => {
+      render(
+        <MemoryRouter>
+          <ManureAndImports />
+        </MemoryRouter>,
+      );
+    });
 
     const button = screen.getByText('Back');
     fireEvent.click(button);
@@ -309,7 +314,7 @@ describe('manureAndImports navigation tests', () => {
     );
   });
 
-  it('manureAndImports can navigate to back a page (/add-animals)', () => {
+  it('manureAndImports can navigate to back a page (/add-animals)', async () => {
     const mockDispatch = jest.fn();
     mockUseAppService.mockImplementation(() => ({
       state: {
@@ -322,11 +327,13 @@ describe('manureAndImports navigation tests', () => {
       dispatch: mockDispatch,
     }));
 
-    render(
-      <MemoryRouter>
-        <ManureAndImports />
-      </MemoryRouter>,
-    );
+    await waitFor(() => {
+      render(
+        <MemoryRouter>
+          <ManureAndImports />
+        </MemoryRouter>,
+      );
+    });
 
     const button = screen.getByText('Back');
     fireEvent.click(button);

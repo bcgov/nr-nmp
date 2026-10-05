@@ -25,7 +25,8 @@ export default function MaterialRemainingDisplay({
 
   // Filter data if a specific source is selected
   const filteredMaterialRemaining = [
-    ...appliedStoredManures, ...appliedUnstoredManures,
+    ...appliedStoredManures,
+    ...appliedUnstoredManures,
   ].filter((manure) => manure.sourceUuid === selectedSourceUuid);
 
   if (filteredMaterialRemaining.length === 0) {

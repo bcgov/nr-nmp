@@ -18,7 +18,10 @@ jest.mock('../../services/APICache', () =>
 
 // Copy in for tests that use structuredClone
 const mockStructuredClone = jest.fn((x) => x);
-global.structuredClone = () => mockStructuredClone();
+global.structuredClone = mockStructuredClone;
+
+// Set a constant for the data-id so the snapshot is consistent
+global.crypto.randomUUID = () => '916859ed-1272-4863-a935-803debaa2d08';
 
 it('Crops is correct', async () => {
   mockUseAppService.mockImplementation(() => ({

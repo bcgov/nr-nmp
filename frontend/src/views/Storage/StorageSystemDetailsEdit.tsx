@@ -336,9 +336,7 @@ export default function StorageSystemDetailsEdit({
                     </p>
                     <p>
                       Separated solids
-                      <p>
-                        {getSolidManureDisplay(formData.separatedSolidsTons)}
-                      </p>
+                      <p>{getSolidManureDisplay(formData.separatedSolidsTons)}</p>
                     </p>
                   </>
                 )}
