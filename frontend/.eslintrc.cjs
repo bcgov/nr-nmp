@@ -2,8 +2,6 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true, jest: true },
   extends: [
-    'airbnb',
-    'airbnb/hooks',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
