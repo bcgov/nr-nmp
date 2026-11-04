@@ -37,12 +37,14 @@ class APICache {
 
   private async initialize() {
     await Promise.all(
-      InitialEndpoints.map((endpoint) => axiosGet(`${env.VITE_BACKEND_URL}/api/${endpoint}/`).then((res) => {
-        if (res.status === 200) {
-          this.endpointCache[endpoint] = res;
-        }
-        // TODO: Handle errors here
-      })),
+      InitialEndpoints.map((endpoint) =>
+        axiosGet(`${env.VITE_BACKEND_URL}/api/${endpoint}/`).then((res) => {
+          if (res.status === 200) {
+            this.endpointCache[endpoint] = res;
+          }
+          // TODO: Handle errors here
+        }),
+      ),
     ).then(() => {
       this.initialized = true;
     });

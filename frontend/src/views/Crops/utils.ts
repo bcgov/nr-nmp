@@ -118,8 +118,8 @@ function isCropSet(cropId: number, selectedCrop?: Crop) {
   if (cropId === 0) return false;
   // If cropId is non-zero, selectedCrop should match it
   if (
-    cropId !== CROP_OTHER_ID
-    && (selectedCrop === undefined || cropId !== selectedCrop.id)
+    cropId !== CROP_OTHER_ID &&
+    (selectedCrop === undefined || cropId !== selectedCrop.id)
   ) {
     throw new Error('Crops modal entered bad state');
   }
@@ -141,17 +141,17 @@ function compareYieldToDefaultYield(
 ) {
   // Default to true to hide reset button
   if (
-    defaultYieldInTons === undefined
-    || cropId === CROP_OTHER_ID
-    || !isCropSet(cropId, selectedCrop)
+    defaultYieldInTons === undefined ||
+    cropId === CROP_OTHER_ID ||
+    !isCropSet(cropId, selectedCrop)
   ) {
     return true;
   }
 
   if (yieldHarvestUnit !== undefined) {
     validateBushelConversion(selectedCrop);
-    return yieldHarvestUnit === HarvestUnit.BushelsPerAcre
-      && selectedCrop!.harvestbushelsperton
+    return yieldHarvestUnit === HarvestUnit.BushelsPerAcre &&
+      selectedCrop!.harvestbushelsperton
       ? Yield === defaultYieldInTons * selectedCrop!.harvestbushelsperton
       : Yield === defaultYieldInTons;
   }
@@ -207,9 +207,10 @@ export function cropsModalReducer(
       // TODO: Make into constants once you know what "unitConversionFactor" means. What units?
       const nToProteinConversionFactor = 0.625;
       const unitConversionFactor = 0.5;
-      const crudeProtein = action.crop.cropremovalfactornitrogen
-        * nToProteinConversionFactor
-        * unitConversionFactor;
+      const crudeProtein =
+        action.crop.cropremovalfactornitrogen *
+        nToProteinConversionFactor *
+        unitConversionFactor;
 
       return {
         ...state,
@@ -240,8 +241,8 @@ export function cropsModalReducer(
 
     case 'SET_YIELD_IN_TONS':
       if (
-        isCropSet(formData.cropId, selectedCrop)
-        && formData.yieldHarvestUnit !== undefined
+        isCropSet(formData.cropId, selectedCrop) &&
+        formData.yieldHarvestUnit !== undefined
       ) {
         validateBushelConversion(selectedCrop);
         return {
@@ -249,8 +250,8 @@ export function cropsModalReducer(
           formData: {
             ...formData,
             yield:
-              formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre
-              && selectedCrop!.harvestbushelsperton
+              formData.yieldHarvestUnit === HarvestUnit.BushelsPerAcre &&
+              selectedCrop!.harvestbushelsperton
                 ? action.yield * selectedCrop!.harvestbushelsperton
                 : action.yield,
           },
@@ -371,8 +372,8 @@ export function cropsModalReducer(
 
     case 'RESTORE_DEFAULT_YIELD':
       if (
-        defaultYieldInTons === undefined
-        || !isCropSet(formData.cropId, selectedCrop)
+        defaultYieldInTons === undefined ||
+        !isCropSet(formData.cropId, selectedCrop)
       ) {
         throw new Error('Crops modal entered bad state');
       }

@@ -40,7 +40,8 @@ export default function Reporting() {
   const [subregion, setSubregion] = useState<Subregion | null>(null);
   const manureUnits: Units[] = apiCache.getInitializedResponse('units').data;
   const [fertilizerUnits, setFertilizerUnits] = useState<FertilizerUnit[]>([]);
-  const soilTestMethods: SoilTestMethod[] = apiCache.getInitializedResponse('soiltestmethods').data;
+  const soilTestMethods: SoilTestMethod[] =
+    apiCache.getInitializedResponse('soiltestmethods').data;
   const phosphorousRanges: SoilTestNutrientRange[] = apiCache.getInitializedResponse(
     'soiltestphosphorousranges',
   ).data;
@@ -55,9 +56,8 @@ export default function Reporting() {
   >([]);
   const manures: Manure[] = apiCache.getInitializedResponse('manures').data;
   const [previousCrops, setPreviousCrops] = useState<PreviousCrop[]>([]);
-  const [materialRemainingData, setMaterialRemainingData] = useState<
-    MaterialRemainingData | null
-  >(null);
+  const [materialRemainingData, setMaterialRemainingData] =
+    useState<MaterialRemainingData | null>(null);
 
   const [remainingMaterials, overappliedMaterials] = useMemo(() => {
     if (materialRemainingData === null) return [[], []];
@@ -68,16 +68,19 @@ export default function Reporting() {
     ];
     return [
       allAppliedManures.filter((manure) => manure.wholePercentRemaining >= 10),
-      allAppliedManures.filter((manure) => manure.totalAnnualManureRemainingToApply < 0),
+      allAppliedManures.filter(
+        (manure) => manure.totalAnnualManureRemainingToApply < 0,
+      ),
     ];
   }, [materialRemainingData]);
 
   const unstoredManures = useMemo(
-    () => [
-      ...(state.nmpFile.years[0].generatedManures || []),
-      ...(state.nmpFile.years[0].importedManures || []),
-      ...(state.nmpFile.years[0].derivedManures || []),
-    ].filter((m) => !m.assignedToStoredSystem),
+    () =>
+      [
+        ...(state.nmpFile.years[0].generatedManures || []),
+        ...(state.nmpFile.years[0].importedManures || []),
+        ...(state.nmpFile.years[0].derivedManures || []),
+      ].filter((m) => !m.assignedToStoredSystem),
     [state.nmpFile.years],
   );
 
@@ -135,15 +138,14 @@ export default function Reporting() {
           setPreviousCrops(response.data);
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Calculate material remaining data
   useEffect(() => {
     if (
-      solidConversions.length === 0
-      || liquidConversions.length === 0
-      || manures.length === 0
+      solidConversions.length === 0 ||
+      liquidConversions.length === 0 ||
+      manures.length === 0
     ) {
       return;
     }
@@ -180,8 +182,9 @@ export default function Reporting() {
   };
 
   const handleNextPage = () => {
-    window.location.href = 'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-'
-      + 'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing';
+    window.location.href =
+      'https://www2.gov.bc.ca/gov/content/industry/agriculture-seafood/agricultural-land-and-' +
+      'environment/soil-nutrients/nutrient-management/what-to-apply/soil-nutrient-testing';
   };
 
   return (
@@ -195,7 +198,8 @@ export default function Reporting() {
         <WarningBox
           heading="The following materials are not applied to a field"
           bullets={remainingMaterials.map(
-            (m) => `${m.sourceName}: ${m.manureType === ManureType.Solid ? getSolidManureDisplay(m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(m.totalAnnualManureRemainingToApply)} (${m.wholePercentRemaining}% remaining)`,
+            (m) =>
+              `${m.sourceName}: ${m.manureType === ManureType.Solid ? getSolidManureDisplay(m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(m.totalAnnualManureRemainingToApply)} (${m.wholePercentRemaining}% remaining)`,
           )}
         />
       )}
@@ -204,7 +208,8 @@ export default function Reporting() {
         <WarningBox
           heading="There is not enough of the following materials to meet the planned application rates"
           bullets={overappliedMaterials.map(
-            (m) => `${m.sourceName}: overutilized by ${m.manureType === ManureType.Solid ? getSolidManureDisplay(-1 * m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(-1 * m.totalAnnualManureRemainingToApply)}`,
+            (m) =>
+              `${m.sourceName}: overutilized by ${m.manureType === ManureType.Solid ? getSolidManureDisplay(-1 * m.totalAnnualManureRemainingToApply) : getLiquidManureDisplay(-1 * m.totalAnnualManureRemainingToApply)}`,
           )}
         />
       )}
@@ -234,27 +239,32 @@ export default function Reporting() {
               orientation="vertical"
             >
               <Button
-                onPress={() => makeFullReportPdf(
-                  state.nmpFile,
-                  subregion,
-                  fertilizerUnits,
-                  manureUnits,
-                  soilTestMethods,
-                  phosphorousRanges,
-                  potassiumRanges,
-                  previousCrops,
-                  materialRemainingData,
-                )}
+                onPress={() =>
+                  makeFullReportPdf(
+                    state.nmpFile,
+                    subregion,
+                    fertilizerUnits,
+                    manureUnits,
+                    soilTestMethods,
+                    phosphorousRanges,
+                    potassiumRanges,
+                    previousCrops,
+                    materialRemainingData,
+                  )
+                }
               >
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   Complete report
                 </div>
               </Button>
-              <Button onPress={() => makeRecordKeepingSheetsPdf(
-                state.nmpFile,
-                fertilizerUnits,
-                manureUnits,
-              )}
+              <Button
+                onPress={() =>
+                  makeRecordKeepingSheetsPdf(
+                    state.nmpFile,
+                    fertilizerUnits,
+                    manureUnits,
+                  )
+                }
               >
                 <div style={{ width: '100%', textAlign: 'center' }}>
                   Record keeping sheets

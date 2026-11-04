@@ -58,7 +58,6 @@ export default function ManureImportModal({
           setSolidManureDropdownOptions(response.data);
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isNameUnique = () => {
@@ -66,7 +65,8 @@ export default function ManureImportModal({
     if (initialModalData) return true;
     // Otherwise, make sure none of the manures in the list have the same name
     return !manuresList.some(
-      (ele: NMPFileImportedManure) => ele.uniqueMaterialName === formData.uniqueMaterialName,
+      (ele: NMPFileImportedManure) =>
+        ele.uniqueMaterialName === formData.uniqueMaterialName,
     );
   };
 
@@ -106,7 +106,9 @@ export default function ManureImportModal({
                 handleInputChange({ uniqueMaterialName: e });
               }}
               maxLength={100}
-              validate={() => (!isNameUnique() ? 'Unique material name required.' : undefined)}
+              validate={() =>
+                !isNameUnique() ? 'Unique material name required.' : undefined
+              }
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

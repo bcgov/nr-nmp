@@ -30,10 +30,13 @@ function prevYearManureDefaultLookup(
   previousManureApplications: PreviousYearManureApplication[],
 ): number {
   const application = previousManureApplications.find(
-    (app) => app.previousyearmanureaplicationfrequency === prevYearManureApplicationId,
+    (app) =>
+      app.previousyearmanureaplicationfrequency === prevYearManureApplicationId,
   );
   if (!application) {
-    throw new Error(`No previous year manure application with id ${prevYearManureApplicationId}`);
+    throw new Error(
+      `No previous year manure application with id ${prevYearManureApplicationId}`,
+    );
   }
 
   const creditsArray = parseNitrogenCreditArray(application.defaultnitrogencredit);
@@ -61,5 +64,9 @@ export function calcPrevYearManureApplDefault(
   const highestIndex = Math.max(
     ...field.crops.map((crop) => crop.manureApplicationHistory!),
   );
-  return prevYearManureDefaultLookup(Number(id), highestIndex, previousManureApplications);
+  return prevYearManureDefaultLookup(
+    Number(id),
+    highestIndex,
+    previousManureApplications,
+  );
 }

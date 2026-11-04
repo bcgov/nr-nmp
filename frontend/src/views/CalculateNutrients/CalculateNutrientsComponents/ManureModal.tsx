@@ -119,7 +119,8 @@ export default function ManureModal({
   });
 
   // Material remaining calculations with current form data
-  const [pendingApplication, setPendingApplication] = useState<NMPFileAppliedManure | null>(null);
+  const [pendingApplication, setPendingApplication] =
+    useState<NMPFileAppliedManure | null>(null);
 
   // Create modified year data that includes the pending application
   const yearDataWithPendingApplication = useMemo(() => {
@@ -177,9 +178,8 @@ export default function ManureModal({
 
   const [manureUnits, setManureUnits] = useState<SelectOption<Units>[]>([]);
 
-  const [materialRemainingData, setMaterialRemainingData] = useState<MaterialRemainingData | null>(
-    null,
-  );
+  const [materialRemainingData, setMaterialRemainingData] =
+    useState<MaterialRemainingData | null>(null);
 
   const [solidConversions, setSolidConversions] = useState<
     SolidMaterialApplicationTonPerAcreRateConversions[]
@@ -196,7 +196,8 @@ export default function ManureModal({
   );
 
   const regions: Region[] = apiCache.getInitializedResponse('regions').data;
-  const nMineralizations: NitrogenMineralization[] = apiCache.getInitializedResponse('nmineralizations').data;
+  const nMineralizations: NitrogenMineralization[] =
+    apiCache.getInitializedResponse('nmineralizations').data;
   const applicableNMineralization = useMemo(() => {
     const region = regions.find(
       (r) => r.id === state.nmpFile.farmDetails.farmRegion,
@@ -208,8 +209,9 @@ export default function ManureModal({
     }
     const locationId = region.locationid;
     return nMineralizations.find(
-      (n) => n.locationid === locationId
-        && n.nmineralizationid === selectedNutrientAnalysis?.nMineralizationId,
+      (n) =>
+        n.locationid === locationId &&
+        n.nmineralizationid === selectedNutrientAnalysis?.nMineralizationId,
     );
   }, [
     regions,
@@ -241,11 +243,11 @@ export default function ManureModal({
 
   useEffect(() => {
     if (
-      !yearDataWithPendingApplication
-      || !selectedMaterialType
-      || manureUnits.length === 0
-      || solidConversions.length === 0
-      || liquidConversions.length === 0
+      !yearDataWithPendingApplication ||
+      !selectedMaterialType ||
+      manureUnits.length === 0 ||
+      solidConversions.length === 0 ||
+      liquidConversions.length === 0
     ) {
       setMaterialRemainingData(null);
       return;
@@ -288,9 +290,10 @@ export default function ManureModal({
   const filteredApplicationMethods = useMemo(() => {
     if (!manureForm.solidLiquid) return [];
     return SEASON_APPLICATION.filter(
-      (a) => a.ManureType === 3 // 3 here means solid or liquid
-        || a.ManureType
-          === ManureType[manureForm.solidLiquid as keyof typeof ManureType],
+      (a) =>
+        a.ManureType === 3 || // 3 here means solid or liquid
+        a.ManureType ===
+          ManureType[manureForm.solidLiquid as keyof typeof ManureType],
     ).map((a) => ({
       id: a.Id,
       label: a.Name,
@@ -318,8 +321,9 @@ export default function ManureModal({
   useEffect(() => {
     if (!selectedManure) return;
     const valueDecimal = ammoniaRetentions.find(
-      (a) => a.drymatter === selectedManure.drymatterid
-        && a.seasonapplicationid === manureForm.applicationId,
+      (a) =>
+        a.drymatter === selectedManure.drymatterid &&
+        a.seasonapplicationid === manureForm.applicationId,
     )?.value;
     const valuePercent = valueDecimal ? valueDecimal * 100 : undefined;
     setDefaultAmmonia(valuePercent);
@@ -336,8 +340,9 @@ export default function ManureModal({
   useEffect(() => {
     if (!selectedManure) return;
     const valueDecimal = nmineralizations.find(
-      (n) => n.nmineralizationid === selectedManure.nmineralizationid
-        && n.locationid === state.nmpFile.farmDetails.regionLocationId,
+      (n) =>
+        n.nmineralizationid === selectedManure.nmineralizationid &&
+        n.locationid === state.nmpFile.farmDetails.regionLocationId,
     )?.firstyearvalue;
     const valuePercent = valueDecimal ? valueDecimal * 100 : undefined;
     setDefaultOrganicN(valuePercent);
@@ -475,12 +480,18 @@ export default function ManureModal({
     // negative. If the nutrient balance is positive (i.e. no more deficit) set Still Required
     // to 0
     setBalanceCalcRow({
-      reqN: Math.min(0, balanceRow.reqN - (initialModalData?.reqN || 0) + updatedForm.reqN),
+      reqN: Math.min(
+        0,
+        balanceRow.reqN - (initialModalData?.reqN || 0) + updatedForm.reqN,
+      ),
       reqP2o5: Math.min(
         0,
         balanceRow.reqP2o5 - (initialModalData?.reqP2o5 || 0) + updatedForm.reqP2o5,
       ),
-      reqK2o: Math.min(0, balanceRow.reqK2o - (initialModalData?.reqK2o || 0) + updatedForm.reqK2o),
+      reqK2o: Math.min(
+        0,
+        balanceRow.reqK2o - (initialModalData?.reqK2o || 0) + updatedForm.reqK2o,
+      ),
     });
     setIsCalculationCurrent(true);
   };
@@ -568,17 +579,23 @@ export default function ManureModal({
               <NumberField
                 label="Ammonium-N Retention (%)"
                 value={manureForm.nh4Retention}
-                onChange={(e) => handleChanges({
-                  nh4Retention: e,
-                  nh4RetentionAdjusted: e !== defaultAmmonia,
-                })}
+                onChange={(e) =>
+                  handleChanges({
+                    nh4Retention: e,
+                    nh4RetentionAdjusted: e !== defaultAmmonia,
+                  })
+                }
                 maxValue={100}
                 iconRight={
-                  defaultAmmonia !== undefined && manureForm.nh4Retention !== defaultAmmonia ? (
-                    <ResetButton onClick={() => handleChanges({
-                      nh4Retention: defaultAmmonia,
-                      nh4RetentionAdjusted: false,
-                    })}
+                  defaultAmmonia !== undefined &&
+                  manureForm.nh4Retention !== defaultAmmonia ? (
+                    <ResetButton
+                      onClick={() =>
+                        handleChanges({
+                          nh4Retention: defaultAmmonia,
+                          nh4RetentionAdjusted: false,
+                        })
+                      }
                     />
                   ) : undefined
                 }
@@ -588,17 +605,23 @@ export default function ManureModal({
               <NumberField
                 label="Organic N Available (%)"
                 value={manureForm.nAvailable}
-                onChange={(e) => handleChanges({
-                  nAvailable: e,
-                  nAvailableAdjusted: e !== defaultOrganicN,
-                })}
+                onChange={(e) =>
+                  handleChanges({
+                    nAvailable: e,
+                    nAvailableAdjusted: e !== defaultOrganicN,
+                  })
+                }
                 maxValue={100}
                 iconRight={
-                  defaultOrganicN !== undefined && manureForm.nAvailable !== defaultOrganicN ? (
-                    <ResetButton onClick={() => handleChanges({
-                      nAvailable: defaultOrganicN,
-                      nAvailableAdjusted: false,
-                    })}
+                  defaultOrganicN !== undefined &&
+                  manureForm.nAvailable !== defaultOrganicN ? (
+                    <ResetButton
+                      onClick={() =>
+                        handleChanges({
+                          nAvailable: defaultOrganicN,
+                          nAvailableAdjusted: false,
+                        })
+                      }
                     />
                   ) : undefined
                 }
@@ -634,8 +657,7 @@ export default function ManureModal({
             </Grid>
             <Grid size={{ ...formGridBreakpoints, md: 4 }}>
               <span css={{ fontWeight: 'bold' }}>
-                Still Required This Year (lb/ac)
-                {' '}
+                Still Required This Year (lb/ac){' '}
               </span>
               <DataGrid
                 sx={{ ...customTableStyle }}

@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { jsPDF } from 'jspdf';
 import { autoTable, HookData } from 'jspdf-autotable';
 import { FertilizerUnit, NMPFile, Units } from '@/types';
@@ -24,7 +23,6 @@ export default async function makeRecordKeepingSheetsPdf(
   fertilizerUnits: FertilizerUnit[],
   manureUnits: Units[],
 ) {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   doc.setFont('BCSans');
   const pageWidth: number = doc.internal.pageSize.getWidth() - 30;
@@ -146,36 +144,36 @@ export default async function makeRecordKeepingSheetsPdf(
       body:
         allApplied.length > 0
           ? allApplied.map((nutrientSource) => {
-            if ('applicationId' in nutrientSource) {
-              // Manures have 'applicationId' and seasonal values
-              const seasonApplication = SEASON_APPLICATION.find(
-                (s) => s.Id === nutrientSource.applicationId,
-              );
-              if (!seasonApplication) {
-                throw new Error(
-                  `Season application ${nutrientSource.applicationId} not found`,
+              if ('applicationId' in nutrientSource) {
+                // Manures have 'applicationId' and seasonal values
+                const seasonApplication = SEASON_APPLICATION.find(
+                  (s) => s.Id === nutrientSource.applicationId,
                 );
+                if (!seasonApplication) {
+                  throw new Error(
+                    `Season application ${nutrientSource.applicationId} not found`,
+                  );
+                }
+                return [
+                  // manure nutrient name, amount, season, application, unit
+                  nutrientSource.name,
+                  seasonApplication.Season,
+                  // Example display: 10 L/ac
+                  `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+                ];
               }
+              // Fertilizers have different properties
               return [
-                // manure nutrient name, amount, season, application, unit
-                nutrientSource.name,
-                seasonApplication.Season,
+                // fertilizer nutrient type, name, amount, season, application, unit
+                // if custom fertilizer display Custom - type - N-P-K, else display name
+                nutrientSource.customFertilizer
+                  ? `Custom (${nutrientSource.customFertilizer.dryliquid}) ${nutrientSource.customFertilizer.nitrogen}-${nutrientSource.customFertilizer.phosphorous}-${nutrientSource.customFertilizer.potassium}`
+                  : `${nutrientSource.name}`,
+                nutrientSource.applDate || '',
                 // Example display: 10 L/ac
-                `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+                `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
               ];
-            }
-            // Fertilizers have different properties
-            return [
-              // fertilizer nutrient type, name, amount, season, application, unit
-              // if custom fertilizer display Custom - type - N-P-K, else display name
-              nutrientSource.customFertilizer
-                ? `Custom (${nutrientSource.customFertilizer.dryliquid}) ${nutrientSource.customFertilizer.nitrogen}-${nutrientSource.customFertilizer.phosphorous}-${nutrientSource.customFertilizer.potassium}`
-                : `${nutrientSource.name}`,
-              nutrientSource.applDate || '',
-              // Example display: 10 L/ac
-              `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
-            ];
-          })
+            })
           : [['None planned', '', '']],
     });
   }

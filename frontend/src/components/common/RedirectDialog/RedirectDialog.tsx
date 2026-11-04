@@ -20,28 +20,29 @@ export default function RedirectDialog(props: {
       onOpenChange={(b) => onOpenChange(b)}
       title="Warning - Unsaved Data"
       closeBtn={{ hide: downloadClicked }}
-      extraBtn={downloadClicked ? undefined : {
-        variant: 'primary',
-        btnText: 'Download file',
+      extraBtn={
+        downloadClicked
+          ? undefined
+          : {
+              variant: 'primary',
+              btnText: 'Download file',
+              handleClick: () => {
+                downloadFile();
+                setDownloadClicked(true);
+              },
+            }
+      }
+      continueBtn={{
         handleClick: () => {
-          downloadFile();
-          setDownloadClicked(true);
+          dispatch({ type: 'RESET_NMPFILE' });
+          navigate(LANDING_PAGE);
+          onOpenChange(false);
         },
       }}
-      continueBtn={{ handleClick: () => {
-        dispatch({ type: 'RESET_NMPFILE' });
-        navigate(LANDING_PAGE);
-        onOpenChange(false);
-      } }}
     >
       <div style={{ color: 'red' }}>
-        <b>Download file</b>
-        {' '}
-        to save the changes you made, or
-        {' '}
-        <b>Continue</b>
-        {' '}
-        without saving.
+        <b>Download file</b> to save the changes you made, or <b>Continue</b> without
+        saving.
       </div>
     </AlertDialog>
   );

@@ -8,7 +8,6 @@ export default async function axiosGet(
   let err;
   for (let i = 0; i < maxTries; i += 1) {
     try {
-      // eslint-disable-next-line no-await-in-loop
       const response = await axios.get(url, config);
       return response;
     } catch (e: any) {

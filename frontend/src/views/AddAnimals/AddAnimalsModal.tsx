@@ -125,7 +125,6 @@ export default function AddAnimalsModal({
           setAnimals(options);
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -168,8 +167,8 @@ export default function AddAnimalsModal({
           onCancel={onClose}
         />
       )}
-      {formData !== undefined
-        && OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
+      {formData !== undefined &&
+        OTHER_ANIMAL_IDS.some((id) => id === formData.animalId) && (
           <OtherAnimals
             animals={animals}
             formData={formData as NMPFileOtherAnimal}
@@ -177,7 +176,7 @@ export default function AddAnimalsModal({
             handleSubmit={handleSubmit}
             onCancel={onClose}
           />
-      )}
+        )}
     </Modal>
   );
 }

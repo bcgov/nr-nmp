@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import useAppState from '../../hooks/useAppState';

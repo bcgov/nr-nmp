@@ -1,6 +1,4 @@
-import {
-  fireEvent, render, screen, waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import useAppState from '../../hooks/useAppState';
 import DEFAULT_NMPFILE from '../../constants/DefaultNMPFile';
@@ -17,10 +15,12 @@ import {
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
-jest.mock('../../services/APICache', () => jest.fn().mockImplementation(() => ({
-  callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
-  getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
-})));
+jest.mock('../../services/APICache', () =>
+  jest.fn().mockImplementation(() => ({
+    callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
+    getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
+  })),
+);
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -152,6 +152,7 @@ const farmTestFile = {
 
 // Copy in for tests that use structuredClone
 const mockStructuredClone = jest.fn((x) => x);
+// eslint-disable-next-line no-undef
 global.structuredClone = mockStructuredClone;
 
 describe('manureAndImports navigation tests', () => {

@@ -54,14 +54,18 @@ function Select({
   );
 
   useEffect(() => {
-    if (!onChange || !sortedItems || sortedItems.length === 0
-      || sortedItems.some((elem) => elem.id === value)
+    if (
+      !onChange ||
+      !sortedItems ||
+      sortedItems.length === 0 ||
+      sortedItems.some((elem) => elem.id === value)
     ) {
       return;
     }
 
-    if (autoselectDefault !== undefined
-      && sortedItems.some((elem) => elem.id === autoselectDefault)
+    if (
+      autoselectDefault !== undefined &&
+      sortedItems.some((elem) => elem.id === autoselectDefault)
     ) {
       onChange(autoselectDefault);
       return;

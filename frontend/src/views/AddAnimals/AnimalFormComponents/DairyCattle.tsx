@@ -48,13 +48,15 @@ export default function DairyCattle({
   const washWaterDefault = useMemo(() => {
     if (subtypes.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
-    if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
+    if (milkingCow === undefined)
+      throw new Error('Milking cow is missing from list.');
     return milkingCow.washwater;
   }, [subtypes]);
   const milkProductionDefault = useMemo(() => {
     if (subtypes.length === 0 || breeds.length === 0) return undefined;
     const milkingCow = subtypes.find((s) => s.id.toString() === MILKING_COW_ID);
-    if (milkingCow === undefined) throw new Error('Milking cow is missing from list.');
+    if (milkingCow === undefined)
+      throw new Error('Milking cow is missing from list.');
     const breed = breeds.find((b) => b.id.toString() === formData.breed);
     if (breed === undefined) throw new Error(`Breed ${breed} is missing from list.`);
     return milkingCow.milkproduction * breed.breedmanurefactor;
@@ -63,7 +65,8 @@ export default function DairyCattle({
   const onSubmit = () => {
     // Calculate manure
     const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    if (subtype === undefined)
+      throw new Error('Chosen subtype is missing from list.');
     const breed = breeds.find((b) => b.id.toString() === formData.breed);
     if (breed === undefined) throw new Error('Chosen breed is missing from list.');
     const nonGrazingDays = 365 - formData.grazingDaysPerYear!;
@@ -73,11 +76,13 @@ export default function DairyCattle({
       if (formData.milkProduction === undefined) {
         extraCoefficient = 0;
       } else {
-        const expectedMilkProduction = subtype.milkproduction * breed.breedmanurefactor;
+        const expectedMilkProduction =
+          subtype.milkproduction * breed.breedmanurefactor;
         // Due to potential floating point issues, round factor to 1 if numbers are close
-        const milkProdPercent = Math.abs(expectedMilkProduction - formData.milkProduction) < 1
-          ? 1
-          : formData.milkProduction / expectedMilkProduction;
+        const milkProdPercent =
+          Math.abs(expectedMilkProduction - formData.milkProduction) < 1
+            ? 1
+            : formData.milkProduction / expectedMilkProduction;
         extraCoefficient = breed.breedmanurefactor * milkProdPercent;
       }
     } else {
@@ -143,7 +148,6 @@ export default function DairyCattle({
         setBreedOptions(breedOptionz);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -198,9 +202,9 @@ export default function DairyCattle({
           maxValue={365}
         />
       </Grid>
-      {formData.subtype === MILKING_COW_ID
-        && milkProductionDefault !== undefined
-        && washWaterDefault !== undefined && (
+      {formData.subtype === MILKING_COW_ID &&
+        milkProductionDefault !== undefined &&
+        washWaterDefault !== undefined && (
           <MilkingFields
             milkProductionInit={
               formData.milkProduction !== undefined
@@ -218,7 +222,7 @@ export default function DairyCattle({
             washWaterUnit={formData.washWaterUnit}
             handleInputChanges={handleInputChanges}
           />
-      )}
+        )}
     </AnimalFormWrapper>
   );
 }

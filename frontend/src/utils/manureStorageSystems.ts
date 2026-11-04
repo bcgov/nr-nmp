@@ -50,8 +50,10 @@ export function calcSlopedWallSurfaceAreaSqFt(storage: SlopedWallStorage) {
 
 export function calcSlopedWallVolumeFtCubed(storage: SlopedWallStorage) {
   const activeHeight = storage.heightFt - 1; // height - freeBoard
-  const bottomLength = storage.topLengthFt - (2 * storage.heightFt) / storage.slopeOfWall;
-  const bottomWidth = storage.topWidthFt - (2 * storage.heightFt) / storage.slopeOfWall;
+  const bottomLength =
+    storage.topLengthFt - (2 * storage.heightFt) / storage.slopeOfWall;
+  const bottomWidth =
+    storage.topWidthFt - (2 * storage.heightFt) / storage.slopeOfWall;
   const areaBottom = bottomLength * bottomWidth;
   const areaTop = storage.topLengthFt * storage.topWidthFt;
   return Math.round(
@@ -61,13 +63,15 @@ export function calcSlopedWallVolumeFtCubed(storage: SlopedWallStorage) {
 
 export function calcSlopedWallVolumeGallons(storage: SlopedWallStorage) {
   const activeHeight = storage.heightFt - 1; // height - freeBoard
-  const bottomLength = storage.topLengthFt - (2 * storage.heightFt) / storage.slopeOfWall;
-  const bottomWidth = storage.topWidthFt - (2 * storage.heightFt) / storage.slopeOfWall;
+  const bottomLength =
+    storage.topLengthFt - (2 * storage.heightFt) / storage.slopeOfWall;
+  const bottomWidth =
+    storage.topWidthFt - (2 * storage.heightFt) / storage.slopeOfWall;
   const areaBottom = bottomLength * bottomWidth;
   const areaTop = storage.topLengthFt * storage.topWidthFt;
   return Math.round(
-    ((activeHeight / 3) * areaBottom + areaTop + Math.sqrt(areaBottom * areaTop))
-      * ft3ToGallons,
+    ((activeHeight / 3) * areaBottom + areaTop + Math.sqrt(areaBottom * areaTop)) *
+      ft3ToGallons,
   );
 }
 
@@ -117,17 +121,18 @@ export function calculatePrecipitationInStorage(
         totalUncoveredArea += calcStorageSurfaceAreaSqFt(storage.structure);
       }
     });
-    annualPrecipitation = totalUncoveredArea > 0
-      ? totalUncoveredArea
-          * precipitationRate
-          * PrecipitationConversionFactor.Liquid
-      : undefined;
+    annualPrecipitation =
+      totalUncoveredArea > 0
+        ? totalUncoveredArea *
+          precipitationRate *
+          PrecipitationConversionFactor.Liquid
+        : undefined;
   } else {
     // For solid manure
     annualPrecipitation = system.manureStorage.uncoveredAreaSqFt
-      ? system.manureStorage.uncoveredAreaSqFt
-        * precipitationRate
-        * PrecipitationConversionFactor.Solid
+      ? system.manureStorage.uncoveredAreaSqFt *
+        precipitationRate *
+        PrecipitationConversionFactor.Solid
       : undefined;
   }
   return annualPrecipitation;

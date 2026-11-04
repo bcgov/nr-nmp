@@ -30,7 +30,8 @@ export const getDataFromLocalStorage = (key: string) => {
  * @type    {( key: string )}
  * @returns boolean values
  */
-export const localStorageKeyExists = (key: string) => getDataFromLocalStorage(key) !== null;
+export const localStorageKeyExists = (key: string) =>
+  getDataFromLocalStorage(key) !== null;
 
 // Currently unused
 /**

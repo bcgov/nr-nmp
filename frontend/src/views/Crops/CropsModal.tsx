@@ -157,9 +157,9 @@ function CropsModal({
     defaultYieldInTons: undefined,
     // If the N value was adjusted, use the stored calculated value for the refresh button
     calculatedReqN:
-      initialModalData
-      && initialModalData.reqNAdjusted
-      && initialModalData.calculatedN !== undefined
+      initialModalData &&
+      initialModalData.reqNAdjusted &&
+      initialModalData.calculatedN !== undefined
         ? Math.abs(initialModalData.calculatedN) // Ensure it's positive
         : undefined,
     isFormYieldEqualToDefault: true,
@@ -182,18 +182,20 @@ function CropsModal({
   const [calculationsPerformed, setCalculationsPerformed] = useState(false);
 
   const berryPlantsPerAcreOptions = useMemo(
-    () => berryQuantities.map((ele) => ({
-      id: ele.id,
-      label: ele.plantsperacre?.toString(),
-    })),
+    () =>
+      berryQuantities.map((ele) => ({
+        id: ele.id,
+        label: ele.plantsperacre?.toString(),
+      })),
     [berryQuantities],
   );
 
   const berryDistBtwPlantsOptions = useMemo(
-    () => berryQuantities.map((ele) => ({
-      id: ele.id,
-      label: ele.distancebetweenplants,
-    })),
+    () =>
+      berryQuantities.map((ele) => ({
+        id: ele.id,
+        label: ele.distancebetweenplants,
+      })),
     [berryQuantities],
   );
 
@@ -229,9 +231,9 @@ function CropsModal({
   // OR if we're editing an existing crop (since calculations were already done)
   useEffect(() => {
     if (
-      selectedCropType?.id === CROP_TYPE_OTHER_ID
-      || (initialModalData?.reqNAdjusted && selectedCropType?.modifynitrogen)
-      || cropIndex !== undefined // Editing existing crop
+      selectedCropType?.id === CROP_TYPE_OTHER_ID ||
+      (initialModalData?.reqNAdjusted && selectedCropType?.modifynitrogen) ||
+      cropIndex !== undefined // Editing existing crop
     ) {
       setCalculationsPerformed(true);
     } else {
@@ -260,7 +262,6 @@ function CropsModal({
           }
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Populate dropdowns on load
@@ -293,7 +294,6 @@ function CropsModal({
           setWhereWillPruningsGo(response.data);
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFormFieldChange = useCallback(
@@ -301,16 +301,17 @@ function CropsModal({
       // Reset calculation button, except when editing reqN or reqNAdjusted for Field vegetables
       // after calculations OR when we're editing an existing crop
       // (since calculations were already done)
-      const isEditingFieldVegN = (attr === 'reqN' || attr === 'reqNAdjusted')
-        && selectedCropType?.modifynitrogen
-        && calculationsPerformed;
+      const isEditingFieldVegN =
+        (attr === 'reqN' || attr === 'reqNAdjusted') &&
+        selectedCropType?.modifynitrogen &&
+        calculationsPerformed;
 
       const isEditingExistingCrop = cropIndex !== undefined;
 
       if (
-        formData.cropId !== CROP_OTHER_ID
-        && !isEditingFieldVegN
-        && !isEditingExistingCrop
+        formData.cropId !== CROP_OTHER_ID &&
+        !isEditingFieldVegN &&
+        !isEditingExistingCrop
       ) {
         setCalculationsPerformed(false);
       }
@@ -319,13 +320,15 @@ function CropsModal({
         case 'cropTypeId':
           const cropTypeId = value as number;
           const cropType = cropTypes.find((cT: CropType) => cT.id === cropTypeId);
-          if (cropType === undefined) throw new Error(`Crop type ${cropTypeId} is missing from list.`);
+          if (cropType === undefined)
+            throw new Error(`Crop type ${cropTypeId} is missing from list.`);
           dispatch({ type: 'SET_CROP_TYPE_ID', cropTypeId, cropType });
           return;
         case 'cropId':
           const cropId = Number(value);
           const crop = crops.find((c) => c.id === cropId);
-          if (crop === undefined) throw new Error(`Crop id ${cropId} is not in crop list.`);
+          if (crop === undefined)
+            throw new Error(`Crop id ${cropId} is not in crop list.`);
           dispatch({ type: 'SET_CROP_ID', cropId, crop });
           return;
         case 'yield':
@@ -423,9 +426,9 @@ function CropsModal({
 
   useEffect(() => {
     if (
-      cropIndex !== undefined
-      && selectedCrop !== undefined
-      && selectedCropType !== undefined
+      cropIndex !== undefined &&
+      selectedCrop !== undefined &&
+      selectedCropType !== undefined
     ) {
       // Only auto-calculate if we don't already have a calculatedReqN value
       if (calculatedReqN === undefined) {
@@ -455,9 +458,9 @@ function CropsModal({
    */
   useEffect(() => {
     if (
-      formData.cropId !== 0
-      && formData.cropId !== CROP_OTHER_ID
-      && selectedCrop !== undefined
+      formData.cropId !== 0 &&
+      formData.cropId !== CROP_OTHER_ID &&
+      selectedCrop !== undefined
     ) {
       apiCache
         .callEndpoint(
@@ -482,7 +485,6 @@ function CropsModal({
           }
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.cropId, selectedCrop]);
 
   // Set data for nutrients added table
@@ -499,8 +501,9 @@ function CropsModal({
 
   // Check if N can be edited (Field vegetables w/ modifynitrogen AND calculations have been done)
   // For existing crop, allow editing if modifynitrogen = true (calculations were already done)
-  const isNEditable = selectedCropType?.modifynitrogen
-    && (calculationsPerformed || cropIndex !== undefined);
+  const isNEditable =
+    selectedCropType?.modifynitrogen &&
+    (calculationsPerformed || cropIndex !== undefined);
 
   // Dynamic columns for requirement table - make N editable for Field vegetables
   const requirementColumns: GridColDef[] = useMemo(
@@ -638,9 +641,9 @@ function CropsModal({
         onCancel={onClose}
         onCalculate={handleCalculate}
         isCalculateDisabled={
-          selectedCropType === undefined
-          || selectedCropType.id === CROP_TYPE_OTHER_ID
-          || (selectedCrop === undefined && !selectedCropType.customcrop)
+          selectedCropType === undefined ||
+          selectedCropType.id === CROP_TYPE_OTHER_ID ||
+          (selectedCrop === undefined && !selectedCropType.customcrop)
         }
         onConfirm={handleSubmit}
         isConfirmDisabled={!calculationsPerformed}
@@ -714,7 +717,9 @@ function CropsModal({
                     isRequired
                     items={HARVEST_UNIT_OPTIONS}
                     value={formData.yieldHarvestUnit}
-                    onChange={(e) => handleFormFieldChange('yieldHarvestUnit', e as string)}
+                    onChange={(e) =>
+                      handleFormFieldChange('yieldHarvestUnit', e as string)
+                    }
                   />
                 </Grid>
               )}
@@ -724,12 +729,16 @@ function CropsModal({
                     isRequired
                     label="Crude Protein (%)"
                     value={formData.crudeProtein}
-                    onChange={(e) => handleFormFieldChange('crudeProtein', e as number)}
+                    onChange={(e) =>
+                      handleFormFieldChange('crudeProtein', e as number)
+                    }
                     maxValue={100}
                     iconRight={
                       formData.crudeProteinAdjusted ? (
                         <ResetButton
-                          onClick={() => dispatch({ type: 'RESTORE_DEFAULT_PROTEIN' })}
+                          onClick={() =>
+                            dispatch({ type: 'RESTORE_DEFAULT_PROTEIN' })
+                          }
                         />
                       ) : undefined
                     }
@@ -744,7 +753,9 @@ function CropsModal({
                       label="Plant Age (Years)"
                       items={plantAges}
                       value={formData.plantAgeYears}
-                      onChange={(e) => handleFormFieldChange('plantAgeYears', e as number)}
+                      onChange={(e) =>
+                        handleFormFieldChange('plantAgeYears', e as number)
+                      }
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
@@ -754,10 +765,13 @@ function CropsModal({
                       items={berryPlantsPerAcreOptions}
                       value={
                         berryQuantities.find(
-                          (ele) => ele.plantsperacre === formData.numberOfPlantsPerAcre,
+                          (ele) =>
+                            ele.plantsperacre === formData.numberOfPlantsPerAcre,
                         )?.id || 0
                       }
-                      onChange={(e) => handleFormFieldChange('numberOfPlantsPerAcre', e as number)}
+                      onChange={(e) =>
+                        handleFormFieldChange('numberOfPlantsPerAcre', e as number)
+                      }
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
@@ -767,11 +781,14 @@ function CropsModal({
                       items={berryDistBtwPlantsOptions}
                       value={
                         berryQuantities.find(
-                          (ele) => ele.distancebetweenplants
-                            === formData.distanceBtwnPlantsRows,
+                          (ele) =>
+                            ele.distancebetweenplants ===
+                            formData.distanceBtwnPlantsRows,
                         )?.id || 0
                       }
-                      onChange={(e) => handleFormFieldChange('distanceBtwnPlantsRows', e as number)}
+                      onChange={(e) =>
+                        handleFormFieldChange('distanceBtwnPlantsRows', e as number)
+                      }
                     />
                   </Grid>
                 </>
@@ -798,7 +815,9 @@ function CropsModal({
                           (option) => option.label === formData.whereWillPruningsGo,
                         )?.id || 0
                       }
-                      onChange={(e) => handleFormFieldChange('whereWillPruningsGo', e as number)}
+                      onChange={(e) =>
+                        handleFormFieldChange('whereWillPruningsGo', e as number)
+                      }
                     />
                   </Grid>
                   <Grid size={formGridBreakpoints}>
@@ -878,7 +897,8 @@ function CropsModal({
                 <>
                   {(() => {
                     const availablePreviousCrops = previousCrops.filter(
-                      (crop) => crop.previouscropcode === selectedCrop?.previouscropcode,
+                      (crop) =>
+                        crop.previouscropcode === selectedCrop?.previouscropcode,
                     );
 
                     // There is always a "no credit" option, so if the array

@@ -59,9 +59,8 @@ export const liquidSolidManureDisplay = (manureObj?: { [key: string]: number }) 
   return '0';
 };
 
-export const isDairyAndMilkingCattle = (animalId: string, subType: string) => (
-  animalId === DAIRY_COW_ID && subType === MILKING_COW_ID
-);
+export const isDairyAndMilkingCattle = (animalId: string, subType: string) =>
+  animalId === DAIRY_COW_ID && subType === MILKING_COW_ID;
 
 export const mathSymbolConverter = (input: string) => {
   let newStr = '';
@@ -80,7 +79,8 @@ export const mathSymbolConverter = (input: string) => {
  * @returns The annual amount of manure produced, in tons for solid and US gallons for liquid
  */
 export function getStandardizedAnnualManureAmount(
-  manureSource: NMPFileGeneratedManure
+  manureSource:
+    | NMPFileGeneratedManure
     | NMPFileImportedManure
     | NMPFileDerivedManure
     | NMPFileManureStorageSystem,
@@ -90,9 +90,10 @@ export function getStandardizedAnnualManureAmount(
   }
 
   let total = 0;
-  const amountKey = manureSource.manureType === ManureType.Liquid
-    ? 'annualAmountUSGallonsVolume'
-    : 'annualAmountTonsWeight';
+  const amountKey =
+    manureSource.manureType === ManureType.Liquid
+      ? 'annualAmountUSGallonsVolume'
+      : 'annualAmountTonsWeight';
 
   if ('manuresInSystem' in manureSource) {
     if (manureSource.manureType === ManureType.Liquid) {
@@ -100,8 +101,9 @@ export function getStandardizedAnnualManureAmount(
       if (manureSource.hasSeperation) {
         // If there's separation, use separated liquids
         if (manureSource.separatedLiquidsUSGallons > 0) {
-          total = manureSource.separatedLiquidsUSGallons
-            + (manureSource.annualPrecipitation || 0);
+          total =
+            manureSource.separatedLiquidsUSGallons +
+            (manureSource.annualPrecipitation || 0);
         } else {
           total = 0;
         }

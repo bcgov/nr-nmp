@@ -44,7 +44,8 @@ export default function BeefCattle({
   const onSubmit = () => {
     // Calculate manure
     const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    if (subtype === undefined)
+      throw new Error('Chosen subtype is missing from list.');
     const withManureCalc = {
       ...formData,
       manureData: {
@@ -74,7 +75,6 @@ export default function BeefCattle({
         setSubtypeOptions(sOptions);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

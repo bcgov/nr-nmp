@@ -43,18 +43,20 @@ export default function StorageModal({
     // For storage_create mode, append a blank liquid manure storage
     mode.mode === 'storage_create'
       ? {
-        ...(initialModalData as LiquidManureStorageSystem),
-        manureStorages: (
+          ...(initialModalData as LiquidManureStorageSystem),
+          manureStorages: (
             initialModalData as LiquidManureStorageSystem
-        ).manureStorages.concat(DEFAULT_LIQUID_MANURE_STORAGE),
-      }
+          ).manureStorages.concat(DEFAULT_LIQUID_MANURE_STORAGE),
+        }
       : initialModalData || { ...DEFAULT_FORM_DATA, uuid: crypto.randomUUID() },
   );
   const [isConfirmDisabled, setIsConfirmedDisabled] = useState<boolean>(false);
 
   const handleSubmit = () => {
-    if (formData.manureType === undefined) throw new Error('Form validation failed.');
-    if (annualPrecipitation === undefined) throw new Error('No precipitation data found.');
+    if (formData.manureType === undefined)
+      throw new Error('Form validation failed.');
+    if (annualPrecipitation === undefined)
+      throw new Error('No precipitation data found.');
 
     // Add precipitation data to the form
     const withRainData = {

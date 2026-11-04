@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import useAppState from '../../hooks/useAppState';
@@ -14,9 +15,8 @@ import {
 
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
-jest.mock(
-  '../../services/APICache',
-  () => jest.fn().mockImplementation(() => ({
+jest.mock('../../services/APICache', () =>
+  jest.fn().mockImplementation(() => ({
     callEndpoint: jest.fn(() => Promise.resolve({ status: 200, data: [] })),
     getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
   })),

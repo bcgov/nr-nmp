@@ -20,7 +20,6 @@ function App() {
     apiCache.promise.then(() => {
       dispatch({ type: 'CACHE_TABLES', tables: apiCache.getAppStateTables() });
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

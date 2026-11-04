@@ -69,9 +69,10 @@ export default function NutrientAnalysisModal({
     ...storageSystems
       .filter(
         // Don't filter out an id that's currently being edited
-        (ele) => (initialModalData && ele.uuid === initialModalData.sourceUuid)
+        (ele) =>
+          (initialModalData && ele.uuid === initialModalData.sourceUuid) ||
           // Filter out ids that already have a nutrient analysis
-          || !currentNutrientAnalyses.some((n) => n.sourceUuid === ele.uuid),
+          !currentNutrientAnalyses.some((n) => n.sourceUuid === ele.uuid),
       )
       .map((storageEle) => ({
         id: storageEle.uuid,
@@ -81,11 +82,12 @@ export default function NutrientAnalysisModal({
 
     ...manures
       .filter(
-        (ele) => !ele.assignedToStoredSystem
+        (ele) =>
+          !ele.assignedToStoredSystem &&
           // Don't filter out an id that's currently being edited
-          && ((initialModalData && ele.uuid === initialModalData.sourceUuid)
+          ((initialModalData && ele.uuid === initialModalData.sourceUuid) ||
             // Filter out ids that already have a nutrient analysis
-            || !currentNutrientAnalyses.some((n) => n.sourceUuid === ele.uuid)),
+            !currentNutrientAnalyses.some((n) => n.sourceUuid === ele.uuid)),
       )
       .map((ele: NMPFileManure) => ({
         id: ele.uuid,
@@ -119,10 +121,11 @@ export default function NutrientAnalysisModal({
           };
         }
         if (name === 'manureName') {
-          const updatedUniqueMaterialName = next.uniqueMaterialName === ''
-            || next.uniqueMaterialName !== `Custom - ${next.manureName}`
-            ? `Custom - ${value}`
-            : next.uniqueMaterialName;
+          const updatedUniqueMaterialName =
+            next.uniqueMaterialName === '' ||
+            next.uniqueMaterialName !== `Custom - ${next.manureName}`
+              ? `Custom - ${value}`
+              : next.uniqueMaterialName;
           const selectedManure = manureOptions.find(
             (manure) => manure.value.name === value,
           )?.value;
@@ -215,8 +218,8 @@ export default function NutrientAnalysisModal({
                 handleInputChanges({
                   manureName: e as string,
                   bookLab:
-                    (e as string) === '(Other, solid)'
-                    || (e as string) === '(Other, liquid)'
+                    (e as string) === '(Other, solid)' ||
+                    (e as string) === '(Other, liquid)'
                       ? 'lab'
                       : 'book',
                   nMineralizationId: opt.value.nmineralizationid,
@@ -229,13 +232,15 @@ export default function NutrientAnalysisModal({
             <Checkbox
               isRequired={!formData.bookLab}
               isDisabled={
-                !(formData.sourceUuid && formData.manureId)
-                || formData.manureName === '(Other, solid)'
-                || formData.manureName === '(Other, liquid)'
+                !(formData.sourceUuid && formData.manureId) ||
+                formData.manureName === '(Other, solid)' ||
+                formData.manureName === '(Other, liquid)'
               }
               value="book"
               isSelected={formData.bookLab === 'book'}
-              onChange={(s: boolean) => handleInputChanges({ bookLab: s ? 'book' : '' })}
+              onChange={(s: boolean) =>
+                handleInputChanges({ bookLab: s ? 'book' : '' })
+              }
             >
               Book Value
             </Checkbox>
@@ -246,7 +251,9 @@ export default function NutrientAnalysisModal({
               isDisabled={!(formData.sourceUuid && formData.manureId)}
               value="lab"
               isSelected={formData.bookLab === 'lab'}
-              onChange={(s: boolean) => handleInputChanges({ bookLab: s ? 'lab' : '' })}
+              onChange={(s: boolean) =>
+                handleInputChanges({ bookLab: s ? 'lab' : '' })
+              }
             >
               Lab Value
             </Checkbox>

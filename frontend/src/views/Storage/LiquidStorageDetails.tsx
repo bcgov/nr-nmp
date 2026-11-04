@@ -149,19 +149,23 @@ export default function LiquidStorageDetails({
               isRequired
               label="Diameter(ft)"
               value={selectedStorage.structure.diameterFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as CircularStorage),
-                diameterFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as CircularStorage),
+                  diameterFt: e,
+                })
+              }
             />
             <NumberField
               isRequired
               label="Height(ft)"
               value={selectedStorage.structure.heightFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as CircularStorage),
-                heightFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as CircularStorage),
+                  heightFt: e,
+                })
+              }
             />
           </div>
         )}
@@ -171,28 +175,34 @@ export default function LiquidStorageDetails({
               isRequired
               label="Length(ft)"
               value={selectedStorage.structure.lengthFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as RectangularStorage),
-                lengthFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as RectangularStorage),
+                  lengthFt: e,
+                })
+              }
             />
             <NumberField
               isRequired
               label="Width(ft)"
               value={selectedStorage.structure.widthFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as RectangularStorage),
-                widthFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as RectangularStorage),
+                  widthFt: e,
+                })
+              }
             />
             <NumberField
               isRequired
               label="Height(ft)"
               value={selectedStorage.structure.heightFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as RectangularStorage),
-                heightFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as RectangularStorage),
+                  heightFt: e,
+                })
+              }
             />
           </div>
         )}
@@ -202,37 +212,45 @@ export default function LiquidStorageDetails({
               isRequired
               label="Top-Length(ft)"
               value={selectedStorage.structure.topLengthFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as SlopedWallStorage),
-                topLengthFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as SlopedWallStorage),
+                  topLengthFt: e,
+                })
+              }
             />
             <NumberField
               isRequired
               label="Top-Width(ft)"
               value={selectedStorage.structure.topWidthFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as SlopedWallStorage),
-                topWidthFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as SlopedWallStorage),
+                  topWidthFt: e,
+                })
+              }
             />
             <NumberField
               isRequired
               label="Height(ft)"
               value={selectedStorage.structure.heightFt}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as SlopedWallStorage),
-                heightFt: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as SlopedWallStorage),
+                  heightFt: e,
+                })
+              }
             />
             <NumberField
               isRequired
               label="Slope of wall (X:1)"
               value={selectedStorage.structure.slopeOfWall}
-              onChange={(e: number) => handleStructureChange({
-                ...(selectedStorage.structure as SlopedWallStorage),
-                slopeOfWall: e,
-              })}
+              onChange={(e: number) =>
+                handleStructureChange({
+                  ...(selectedStorage.structure as SlopedWallStorage),
+                  slopeOfWall: e,
+                })
+              }
             />
           </div>
         )}

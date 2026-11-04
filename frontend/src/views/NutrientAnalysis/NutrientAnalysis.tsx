@@ -35,14 +35,16 @@ export default function NutrientAnalysis() {
   const { state, dispatch } = useAppState();
 
   const manures: NMPFileManure[] = useMemo(
-    () => (state.nmpFile.years[0]?.importedManures || []).concat(
-      state.nmpFile.years[0]?.generatedManures || [],
-      state.nmpFile.years[0]?.derivedManures || [],
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    () =>
+      (state.nmpFile.years[0]?.importedManures || []).concat(
+        state.nmpFile.years[0]?.generatedManures || [],
+        state.nmpFile.years[0]?.derivedManures || [],
+      ),
+
     [],
   );
-  const storageSystems: NMPFileManureStorageSystem[] = state.nmpFile.years[0].manureStorageSystems || [];
+  const storageSystems: NMPFileManureStorageSystem[] =
+    state.nmpFile.years[0].manureStorageSystems || [];
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -60,9 +62,10 @@ export default function NutrientAnalysis() {
     AlertDialogContinueBtn | undefined
   >(undefined);
   const hasDairyCattle = useMemo(
-    () => state.nmpFile.years[0]?.farmAnimals?.some(
-      (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
-    ),
+    () =>
+      state.nmpFile.years[0]?.farmAnimals?.some(
+        (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
+      ),
     [state.nmpFile.years],
   );
 
@@ -73,7 +76,9 @@ export default function NutrientAnalysis() {
   };
 
   const handleDelete = (uuid: string) => {
-    setNutrientAnalysisData((prevState) => prevState.filter((ele) => ele.sourceUuid !== uuid));
+    setNutrientAnalysisData((prevState) =>
+      prevState.filter((ele) => ele.sourceUuid !== uuid),
+    );
   };
   const handleDialogClose = () => {
     setIsDialogOpen(false);
@@ -85,7 +90,9 @@ export default function NutrientAnalysis() {
     setNutrientAnalysisData((prevState) => {
       // if editing an entry then updates that entry
       if (editId !== null) {
-        return prevState.map((item: NMPFileNutrientAnalysis) => (item.sourceUuid === editId ? { ...data } : item));
+        return prevState.map((item: NMPFileNutrientAnalysis) =>
+          item.sourceUuid === editId ? { ...data } : item,
+        );
       }
       // else add this new entry
       return [...prevState, { ...data }];
@@ -210,7 +217,7 @@ export default function NutrientAnalysis() {
         resizable: false,
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [nutrientAnalysisData],
   );
 

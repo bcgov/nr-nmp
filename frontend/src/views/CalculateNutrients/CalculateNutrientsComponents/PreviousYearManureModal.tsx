@@ -27,10 +27,11 @@ export default function PreviousYearManureModal({
   );
   const apiCache = useContext(APICacheContext);
   const calculatedDefaultCredit = useMemo(
-    () => calcPrevYearManureApplDefault(
-      field,
-      apiCache.getInitializedResponse('previousyearmanureapplications').data,
-    ),
+    () =>
+      calcPrevYearManureApplDefault(
+        field,
+        apiCache.getInitializedResponse('previousyearmanureapplications').data,
+      ),
     [field, apiCache],
   );
   const isFormValid = useMemo(() => nCredit >= 0, [nCredit]);

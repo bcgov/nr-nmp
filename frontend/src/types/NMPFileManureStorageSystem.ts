@@ -70,7 +70,6 @@ export type SolidManureStorage = {
   uncoveredAreaSqFt?: number;
 };
 
-// eslint-disable-next-line no-shadow
 export enum Shape {
   Rectangular = 1,
   Circular = 2,

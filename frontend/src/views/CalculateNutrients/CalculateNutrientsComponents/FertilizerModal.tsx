@@ -7,7 +7,13 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Modal, { ModalProps } from '@/components/common/Modal/Modal';
 import { customTableStyle, formGridBreakpoints } from '@/common.styles';
 import { APICacheContext } from '@/context/APICacheContext';
-import { InputField, NumberField, Select, Form, ResetButton } from '@/components/common';
+import {
+  InputField,
+  NumberField,
+  Select,
+  Form,
+  ResetButton,
+} from '@/components/common';
 
 import {
   Fertilizer,
@@ -138,29 +144,33 @@ export default function FertilizerModal({
   const [calculatedData, setCalculatedData] = useState<CropNutrients | null>(
     initialModalData
       ? {
-        N: initialModalData.reqN,
-        P2O5: initialModalData.reqP2o5,
-        K2O: initialModalData.reqK2o,
-      }
+          N: initialModalData.reqN,
+          P2O5: initialModalData.reqP2o5,
+          K2O: initialModalData.reqK2o,
+        }
       : null,
   );
 
-  const dryOrLiquidUnitOptions: SelectOption<FertilizerUnit>[] = fertilizerUnits.filter(
-    (ele) => ele.value.dryliquid
-        === fertilizerTypes.find(
+  const dryOrLiquidUnitOptions: SelectOption<FertilizerUnit>[] =
+    fertilizerUnits.filter(
+      (ele) =>
+        ele.value.dryliquid ===
+        fertilizerTypes.find(
           (fertType) => fertType.id === formState.fertilizerTypeId,
         )?.value.dryliquid,
-  );
+    );
 
   const isLiquidFertilizer = useMemo(
-    () => fertilizerTypes.find((ele) => ele.id === formState.fertilizerTypeId)?.value
-      .dryliquid === 'liquid',
+    () =>
+      fertilizerTypes.find((ele) => ele.id === formState.fertilizerTypeId)?.value
+        .dryliquid === 'liquid',
     [fertilizerTypes, formState.fertilizerTypeId],
   );
 
   const isCustomFertilizer = useMemo(
-    () => fertilizerTypes.find((ele) => ele.id === formState.fertilizerTypeId)?.value
-      .custom,
+    () =>
+      fertilizerTypes.find((ele) => ele.id === formState.fertilizerTypeId)?.value
+        .custom,
     [fertilizerTypes, formState.fertilizerTypeId],
   );
 
@@ -199,8 +209,10 @@ export default function FertilizerModal({
   if (conversionFactors.data.length === 0) {
     throw new Error('Conversion factors are not defined.');
   }
-  const kgToLb = conversionFactors.data[0].kilogramperhectaretopoundperacreconversion;
-  const lbPer1000ToAcre = conversionFactors.data[0].poundper1000ftsquaredtopoundperacreconversion;
+  const kgToLb =
+    conversionFactors.data[0].kilogramperhectaretopoundperacreconversion;
+  const lbPer1000ToAcre =
+    conversionFactors.data[0].poundper1000ftsquaredtopoundperacreconversion;
 
   useEffect(() => {
     apiCache
@@ -233,8 +245,9 @@ export default function FertilizerModal({
                 if (formState.fertilizerTypeId) {
                   setFilteredFertilizers(
                     fertOptions.filter(
-                      (ele) => ele.value.dryliquid
-                        === fertilizerTs.find(
+                      (ele) =>
+                        ele.value.dryliquid ===
+                        fertilizerTs.find(
                           (fertType) => fertType.id === formState.fertilizerTypeId,
                         )?.dryliquid,
                     ),
@@ -278,7 +291,6 @@ export default function FertilizerModal({
         setLiqDensityFactors(data);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleModalCalculate = () => {
@@ -329,12 +341,18 @@ export default function FertilizerModal({
     // negative. If the nutrient balance is positive (i.e. no more deficit) set Still Required
     // to 0
     setBalanceCalcRow({
-      reqN: Math.min(0, balanceRow.reqN - (initialModalData?.reqN || 0) + cropNutrients.N),
+      reqN: Math.min(
+        0,
+        balanceRow.reqN - (initialModalData?.reqN || 0) + cropNutrients.N,
+      ),
       reqP2o5: Math.min(
         0,
         balanceRow.reqP2o5 - (initialModalData?.reqP2o5 || 0) + cropNutrients.P2O5,
       ),
-      reqK2o: Math.min(0, balanceRow.reqK2o - (initialModalData?.reqK2o || 0) + cropNutrients.K2O),
+      reqK2o: Math.min(
+        0,
+        balanceRow.reqK2o - (initialModalData?.reqK2o || 0) + cropNutrients.K2O,
+      ),
     });
     setFormState((prev) => ({
       ...prev,
@@ -372,8 +390,9 @@ export default function FertilizerModal({
         if (name === 'fertilizerTypeId') {
           setFilteredFertilizers(
             fertilizers.filter(
-              (ele) => ele.value.dryliquid
-                === fertilizerTypes.find((fertType) => fertType.id === value)?.value
+              (ele) =>
+                ele.value.dryliquid ===
+                fertilizerTypes.find((fertType) => fertType.id === value)?.value
                   .dryliquid,
             ),
           );
@@ -414,8 +433,9 @@ export default function FertilizerModal({
         if (name === 'densityUnitId') {
           if (isLiquidFertilizer && !isCustomFertilizer) {
             const densityValue = liqDensityFactors.find(
-              (ele) => ele.fertilizerid === formState.fertilizerId
-                && ele.densityunitid === value,
+              (ele) =>
+                ele.fertilizerid === formState.fertilizerId &&
+                ele.densityunitid === value,
             );
             // densityValue is undef when a fertilizer is unselected
             if (densityValue) {
@@ -480,7 +500,9 @@ export default function FertilizerModal({
                     isRequired
                     label="P₂O₅ (%)"
                     value={formState.customFertilizer.phosphorous}
-                    onChange={(e) => handleCustomFertilizerChanges({ phosphorous: e })}
+                    onChange={(e) =>
+                      handleCustomFertilizerChanges({ phosphorous: e })
+                    }
                     maxValue={100}
                   />
                 </Grid>
@@ -533,16 +555,22 @@ export default function FertilizerModal({
                   isRequired
                   label="Density"
                   value={formState.density}
-                  onChange={(e) => handleInputChanges({
-                    density: e,
-                    densityAdjusted: e !== defaultDensity,
-                  })}
+                  onChange={(e) =>
+                    handleInputChanges({
+                      density: e,
+                      densityAdjusted: e !== defaultDensity,
+                    })
+                  }
                   iconRight={
-                    defaultDensity !== undefined && formState.density !== defaultDensity ? (
-                      <ResetButton onClick={() => handleInputChanges({
-                        density: defaultDensity,
-                        densityAdjusted: false,
-                      })}
+                    defaultDensity !== undefined &&
+                    formState.density !== defaultDensity ? (
+                      <ResetButton
+                        onClick={() =>
+                          handleInputChanges({
+                            density: defaultDensity,
+                            densityAdjusted: false,
+                          })
+                        }
                       />
                     ) : undefined
                   }
@@ -555,7 +583,9 @@ export default function FertilizerModal({
                   label="Density Units"
                   placeholder="Select Units"
                   value={formState.densityUnitId}
-                  onChange={(e) => handleInputChanges({ densityUnitId: e as number })}
+                  onChange={(e) =>
+                    handleInputChanges({ densityUnitId: e as number })
+                  }
                   autoselectFirst
                 />
               </Grid>
@@ -566,7 +596,9 @@ export default function FertilizerModal({
               items={FERTILIZER_METHODS}
               label="Method"
               value={formState.applicationMethod}
-              onChange={(e) => handleInputChanges({ applicationMethod: e as string })}
+              onChange={(e) =>
+                handleInputChanges({ applicationMethod: e as string })
+              }
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

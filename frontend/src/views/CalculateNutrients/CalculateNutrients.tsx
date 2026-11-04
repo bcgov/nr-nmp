@@ -97,14 +97,15 @@ export default function CalculateNutrients() {
     const handleEditRow = (e: { id: GridRowId; api: GridApiCommunity }) => {
       setOpenDialog(['crop', e.api.getRowIndexRelativeToVisibleRows(e.id)]);
     };
-    const handleDeleteRow = (evt: GridRenderCellParams) => genHandleDeleteRow(
-      evt,
-      activeField,
-      'crops',
-      setFieldList,
-      setWarningText,
-      setDeleteBtnConfig,
-    );
+    const handleDeleteRow = (evt: GridRenderCellParams) =>
+      genHandleDeleteRow(
+        evt,
+        activeField,
+        'crops',
+        setFieldList,
+        setWarningText,
+        setDeleteBtnConfig,
+      );
     return generateColumns(
       handleEditRow,
       handleDeleteRow,
@@ -228,14 +229,15 @@ export default function CalculateNutrients() {
   }, []);
 
   const previousYearManureColumns: GridColDef[] = useMemo(
-    () => generateColumns(
-      () => setOpenDialog(['previousYearManure', 0]),
-      () => {},
-      renderNutrientCell,
-      '',
-      true,
-      false,
-    ),
+    () =>
+      generateColumns(
+        () => setOpenDialog(['previousYearManure', 0]),
+        () => {},
+        renderNutrientCell,
+        '',
+        true,
+        false,
+      ),
     [],
   );
 
@@ -256,25 +258,25 @@ export default function CalculateNutrients() {
       name: 'Balance',
       reqN:
         Math.round(
-          (allRows.reduce((sum, row) => sum + (row?.reqN ?? 0), 0)
-            + prevYearNitrogen)
-            * 10,
+          (allRows.reduce((sum, row) => sum + (row?.reqN ?? 0), 0) +
+            prevYearNitrogen) *
+            10,
         ) / 10,
       reqP2o5:
-        Math.round(allRows.reduce((sum, row) => sum + (row?.reqP2o5 ?? 0), 0) * 10)
-        / 10,
+        Math.round(allRows.reduce((sum, row) => sum + (row?.reqP2o5 ?? 0), 0) * 10) /
+        10,
       reqK2o:
-        Math.round(allRows.reduce((sum, row) => sum + (row?.reqK2o ?? 0), 0) * 10)
-        / 10,
+        Math.round(allRows.reduce((sum, row) => sum + (row?.reqK2o ?? 0), 0) * 10) /
+        10,
       remN:
-        Math.round(allRows.reduce((sum, row) => sum + (row?.remN ?? 0), 0) * 10)
-        / 10,
+        Math.round(allRows.reduce((sum, row) => sum + (row?.remN ?? 0), 0) * 10) /
+        10,
       remP2o5:
-        Math.round(allRows.reduce((sum, row) => sum + (row?.remP2o5 ?? 0), 0) * 10)
-        / 10,
+        Math.round(allRows.reduce((sum, row) => sum + (row?.remP2o5 ?? 0), 0) * 10) /
+        10,
       remK2o:
-        Math.round(allRows.reduce((sum, row) => sum + (row?.remK2o ?? 0), 0) * 10)
-        / 10,
+        Math.round(allRows.reduce((sum, row) => sum + (row?.remK2o ?? 0), 0) * 10) /
+        10,
     };
   }, [currentField]);
 
@@ -303,9 +305,10 @@ export default function CalculateNutrients() {
   const handleDialogClose = useCallback(() => setOpenDialog(['', undefined]), []);
 
   const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileField>, index: number) => !fieldList.some(
-      (fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx,
-    ),
+    (data: Partial<NMPFileField>, index: number) =>
+      !fieldList.some(
+        (fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx,
+      ),
     [fieldList],
   );
 
@@ -575,8 +578,8 @@ export default function CalculateNutrients() {
         slots={{ noRowsOverlay: NoRows }}
       />
       {/* Previous Year Manure Row */}
-      {currentField.previousYearManureApplicationId
-        && currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
+      {currentField.previousYearManureApplicationId &&
+        currentField.previousYearManureApplicationId !== NO_MANURE_FREQUENCY && (
           <DataGrid
             sx={{
               ...customTableStyle,
@@ -602,7 +605,7 @@ export default function CalculateNutrients() {
             hideFooterPagination
             hideFooter
           />
-      )}
+        )}
       {currentField.fertilizers.length > 0 && (
         <DataGrid
           sx={{ ...customTableStyle, ...customCalcTableStyle }}

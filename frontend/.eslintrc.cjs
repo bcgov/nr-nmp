@@ -11,7 +11,7 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'react'],
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'jsx-a11y'],
   rules: {
     'react/no-unknown-property': ['error', { ignore: ['css'] }],
     'import/extensions': [
@@ -24,7 +24,8 @@ module.exports = {
         tsx: 'always',
       },
     ],
-    'max-len': 1,
+    'max-len': [1, { code: 100 }],
+    'no-redeclare': 'off',
   },
   settings: {
     react: {

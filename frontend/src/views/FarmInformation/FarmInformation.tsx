@@ -78,7 +78,6 @@ export default function FarmInformation() {
           data as { id: number; name: string }[]
         ).reduce(
           (dict, row) => {
-            // eslint-disable-next-line no-param-reassign
             dict[row.id] = row.name;
             return dict;
           },
@@ -97,7 +96,6 @@ export default function FarmInformation() {
       }));
       setRegionOptions(regions);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -138,9 +136,7 @@ export default function FarmInformation() {
           key={asTitleCase}
           value={id}
         >
-          I have
-          {' '}
-          {pluralName.toLowerCase()}
+          I have {pluralName.toLowerCase()}
         </Checkbox>
       );
     });
@@ -299,8 +295,8 @@ export default function FarmInformation() {
               css={
                 formData.hasAnimals
                   ? {
-                    '> div': [showCheckboxGroup, { gap: '0 !important' }],
-                  }
+                      '> div': [showCheckboxGroup, { gap: '0 !important' }],
+                    }
                   : hideCheckboxGroup
               }
               orientation="vertical"

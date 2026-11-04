@@ -48,15 +48,18 @@ export default function NumberField({
 }: NumberFieldProps) {
   const validate = useMemo(() => {
     if (minValue !== undefined && maxValue !== undefined) {
-      return (value: number) => (value < minValue! || value > maxValue!
-        ? [`Must be between ${minValue} and ${maxValue}.`]
-        : undefined);
+      return (value: number) =>
+        value < minValue! || value > maxValue!
+          ? [`Must be between ${minValue} and ${maxValue}.`]
+          : undefined;
     }
     if (minValue !== undefined) {
-      return (value: number) => (value < minValue! ? [`Minimum is ${minValue}.`] : undefined);
+      return (value: number) =>
+        value < minValue! ? [`Minimum is ${minValue}.`] : undefined;
     }
     if (maxValue !== undefined) {
-      return (value: number) => (value < maxValue! ? [`Maximum is ${maxValue}.`] : undefined);
+      return (value: number) =>
+        value < maxValue! ? [`Maximum is ${maxValue}.`] : undefined;
     }
     return undefined;
   }, [minValue, maxValue]);

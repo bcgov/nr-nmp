@@ -41,9 +41,10 @@ export const calcFertBalance = (
   // this will check for units and adjust accordingly
   // Liquid fertilizers also get multiplied by their density to convert to lb/ac
   if (fert.dryliquid.includes('liquid')) {
-    if (!density || !densityConvFactor) throw new Error('Liquid fertilizer missing density or density units');
-    convertedApplRate
-      *= applUnit.conversiontoimperialgallonsperacre * density * densityConvFactor;
+    if (!density || !densityConvFactor)
+      throw new Error('Liquid fertilizer missing density or density units');
+    convertedApplRate *=
+      applUnit.conversiontoimperialgallonsperacre * density * densityConvFactor;
   }
 
   if (fert.dryliquid.includes('dry')) {
@@ -99,7 +100,8 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Nitrogen',
-    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>N</span>),
+    renderHeader: () =>
+      hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>N</span>,
     renderCell,
     sortable: false,
   },
@@ -109,7 +111,8 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
-    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>P₂O₅</span>),
+    renderHeader: () =>
+      hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>P₂O₅</span>,
     renderCell,
     sortable: false,
   },
@@ -119,7 +122,8 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Potassium',
-    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>K₂O</span>),
+    renderHeader: () =>
+      hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>K₂O</span>,
     renderCell,
     sortable: false,
   },
@@ -129,7 +133,8 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Nitrogen',
-    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>N</span>),
+    renderHeader: () =>
+      hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>N</span>,
     renderCell,
     sortable: false,
   },
@@ -139,7 +144,8 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 100,
     description: 'Phosphorous',
-    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>P₂O₅</span>),
+    renderHeader: () =>
+      hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>P₂O₅</span>,
     renderCell,
     sortable: false,
   },
@@ -149,7 +155,8 @@ export const generateColumns = (
     minWidth: COLUMN_WIDTH,
     maxWidth: 130,
     description: 'Potassium',
-    renderHeader: () => (hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>K₂O</span>),
+    renderHeader: () =>
+      hideColumnHeaders ? <div /> : <span css={COLUMN_STYLE}>K₂O</span>,
     renderCell,
     sortable: false,
   },
@@ -161,7 +168,7 @@ export const generateColumns = (
       // If 'action' isn't defined or is 0 (indicating
       // that this is the first row) then show buttons
       // 'action' is only defined for fertigation rows
-      (!row.value ? (
+      !row.value ? (
         <>
           <FontAwesomeIcon
             css={tableActionButtonCss}
@@ -184,7 +191,7 @@ export const generateColumns = (
         </>
       ) : (
         <div />
-      )),
+      ),
     sortable: false,
     resizable: false,
   },
@@ -241,39 +248,37 @@ export function findBalanceMessage(balanceType: string, balanceValue: number) {
   });
 }
 
-export const renderBalanceCell = (
-  balanceType: string,
-  showAsAbs?: boolean,
-) => function renderBalanceCellInner({ value }: any) {
-  const message = findBalanceMessage(balanceType, value);
+export const renderBalanceCell = (balanceType: string, showAsAbs?: boolean) =>
+  function renderBalanceCellInner({ value }: any) {
+    const message = findBalanceMessage(balanceType, value);
 
-  return React.createElement(
-    'div',
-    {
-      style: {
-        display: 'flex',
-        alignItems: 'baseline',
-        justifyContent: 'center',
+    return React.createElement(
+      'div',
+      {
+        style: {
+          display: 'flex',
+          alignItems: 'baseline',
+          justifyContent: 'center',
+        },
       },
-    },
-    message?.icon
-      ? [
-        React.createElement('span', { style: { marginLeft: '-1.5em' } }),
-        React.createElement('img', {
-          key: 'icon',
-          src: message.icon,
-          alt: 'Balance icon',
-          style: { width: '1em', height: '1em', marginRight: '0.5em' },
-        }),
-        React.createElement(
-          'span',
-          { key: 'value' },
-          showAsAbs ? Math.abs(value as number) : value,
-        ),
-      ]
-      : React.createElement('span', { style: {} }, value),
-  );
-};
+      message?.icon
+        ? [
+            React.createElement('span', { style: { marginLeft: '-1.5em' } }),
+            React.createElement('img', {
+              key: 'icon',
+              src: message.icon,
+              alt: 'Balance icon',
+              style: { width: '1em', height: '1em', marginRight: '0.5em' },
+            }),
+            React.createElement(
+              'span',
+              { key: 'value' },
+              showAsAbs ? Math.abs(value as number) : value,
+            ),
+          ]
+        : React.createElement('span', { style: {} }, value),
+    );
+  };
 
 export const BALANCE_COLUMNS = [
   {

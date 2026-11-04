@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import { jsPDF } from 'jspdf';
 import {
   autoTable,
@@ -37,14 +36,18 @@ import {
   fertigationToFertigationRows,
   findBalanceMessage,
 } from '../CalculateNutrients/utils';
-import { getLiquidManureDisplay, getSolidManureDisplay, printNum, sumPropertyInObjectArr } from '@/utils/utils';
+import {
+  getLiquidManureDisplay,
+  getSolidManureDisplay,
+  printNum,
+  sumPropertyInObjectArr,
+} from '@/utils/utils';
 import {
   calculatePrecipitationInStorage,
   getRunoffInSystem,
 } from '@/utils/manureStorageSystems';
 import { getKelownaRating } from '@/calculations/FieldAndSoil/SoilTests/Calculations';
 
-// eslint-disable-next-line no-shadow
 enum Titles {
   ApplicationSchedule = 'Application Schedule',
   ManureCompostInventory = 'Manure/Compost Inventory',
@@ -111,11 +114,11 @@ const generateTableOfContents = (
       doc.setFontSize(10);
       addText(
         doc,
-        'All information contained within the Nutrient Management Calculator is provided solely "as is" '
-        + 'at the user\'s own risk. Although every effort has been made to ensure that the information contained '
-        + 'in the Nutrient Management Calculator is accurate, the Government of British Columbia assumes no '
-        + 'legal liability or responsibility for the completeness, accuracy, or usefulness of the information '
-        + 'provided or any product resulting from the use of the Nutrient Management Calculator.',
+        'All information contained within the Nutrient Management Calculator is provided solely "as is" ' +
+          "at the user's own risk. Although every effort has been made to ensure that the information contained " +
+          'in the Nutrient Management Calculator is accurate, the Government of British Columbia assumes no ' +
+          'legal liability or responsibility for the completeness, accuracy, or usefulness of the information ' +
+          'provided or any product resulting from the use of the Nutrient Management Calculator.',
         x,
         nextY + 6,
       );
@@ -186,31 +189,31 @@ const generateApplicationSchedule = (
       body:
         allApplied.length > 0
           ? allApplied.map((nutrientSource) => {
-            if ('applicationId' in nutrientSource) {
-              // Manures have 'applicationId' and seasonal values
-              const seasonApplication = SEASON_APPLICATION.find(
-                (s) => s.Id === nutrientSource.applicationId,
-              );
-              if (!seasonApplication) {
-                throw new Error(
-                  `Season application ${nutrientSource.applicationId} not found`,
+              if ('applicationId' in nutrientSource) {
+                // Manures have 'applicationId' and seasonal values
+                const seasonApplication = SEASON_APPLICATION.find(
+                  (s) => s.Id === nutrientSource.applicationId,
                 );
+                if (!seasonApplication) {
+                  throw new Error(
+                    `Season application ${nutrientSource.applicationId} not found`,
+                  );
+                }
+                return [
+                  nutrientSource.name,
+                  seasonApplication.Season,
+                  // Example display: 10 L/ac
+                  `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+                ];
               }
+              // Fertilizers have different properties
               return [
                 nutrientSource.name,
-                seasonApplication.Season,
+                nutrientSource.applDate || '',
                 // Example display: 10 L/ac
-                `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+                `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
               ];
-            }
-            // Fertilizers have different properties
-            return [
-              nutrientSource.name,
-              nutrientSource.applDate || '',
-              // Example display: 10 L/ac
-              `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
-            ];
-          })
+            })
           : [['None planned', '', '']],
       foot: [
         [
@@ -275,16 +278,16 @@ const generateManureCompostInventory = (
           // take into account solid-liquid separation
           let { annualAmount } = m.data;
           if (
-            m.type === 'Generated'
-              && m.data.originalAnnualAmount !== undefined
-              && m.data.originalWashWaterAmount !== undefined
+            m.type === 'Generated' &&
+            m.data.originalAnnualAmount !== undefined &&
+            m.data.originalWashWaterAmount !== undefined
           ) {
             annualAmount = m.data.originalAnnualAmount;
             totalWashWater += m.data.originalWashWaterAmount;
           }
           if (
-            system.manureType === ManureType.Liquid
-              && system.percentLiquidSeperation > 0
+            system.manureType === ManureType.Liquid &&
+            system.percentLiquidSeperation > 0
           ) {
             annualAmount *= (100 - system.percentLiquidSeperation) / 100;
           }
@@ -298,8 +301,8 @@ const generateManureCompostInventory = (
         if (totalWashWater > 0) {
           // Wash water is also affected by solid-liquid separation
           if (
-            system.manureType === ManureType.Liquid
-              && system.percentLiquidSeperation > 0
+            system.manureType === ManureType.Liquid &&
+            system.percentLiquidSeperation > 0
           ) {
             totalWashWater *= (100 - system.percentLiquidSeperation) / 100;
           }
@@ -331,17 +334,18 @@ const generateManureCompostInventory = (
       }, [] as RowInput[]),
       ...unassignedManures.reduce((acc, manure, idx) => {
         // Add the section header if this is the first manure
-        const newRows: CellInput[][] = idx === 0
-          ? [
-            [
-              {
-                content: 'Material not Stored',
-                styles: { fontStyle: 'bold' },
-              },
-              '',
-            ],
-          ]
-          : [];
+        const newRows: CellInput[][] =
+          idx === 0
+            ? [
+                [
+                  {
+                    content: 'Material not Stored',
+                    styles: { fontStyle: 'bold' },
+                  },
+                  '',
+                ],
+              ]
+            : [];
         newRows.push([
           `        ${manure.uniqueMaterialName}`,
           `${manure.manureType === ManureType.Liquid ? getLiquidManureDisplay(manure.annualAmountUSGallonsVolume!) : getSolidManureDisplay(manure.annualAmountTonsWeight!)}`,
@@ -434,7 +438,7 @@ const generateLiquidStorageCapacity = (
   // This is on the same page as the previous table (Manure and Compost Use)
   for (let i = 0; i < storageSystems.length; i += 1) {
     const system = storageSystems[i];
-    // eslint-disable-next-line no-continue
+
     if (system.manureType === ManureType.Solid) continue;
     const annualManure = system.manuresInSystem.reduce(
       (sum, m) => sum + m.data.annualAmount,
@@ -444,10 +448,11 @@ const generateLiquidStorageCapacity = (
     const materialGenerated = annualManure / 2;
     const materialStored = system.separatedLiquidsUSGallons / 2;
     // Oct to Mar is the rainy season and has its own precipitation rate
-    const precipitation = calculatePrecipitationInStorage(
-      system,
-      subregion.annualprecipitationocttomar,
-    ) || 0;
+    const precipitation =
+      calculatePrecipitationInStorage(
+        system,
+        subregion.annualprecipitationocttomar,
+      ) || 0;
     const runoff = getRunoffInSystem(system, subregion.annualprecipitationocttomar);
     // NOTE: Run-off is currently omitted. See: https://teams.microsoft.com/l/message/19:8bcf7a4ea1b542d8b91aec33374a5b42@thread.tacv2/1763420706800?tenantId=6fdb5200-3d0d-4a8a-b036-d3685e359adc&groupId=f7f32209-f2e2-4a93-8a2f-c049baa8220f&parentMessageId=1762541236175&teamName=External%3A%20Sustainment%20Team&channelName=NMP&createdTime=1763420706800&ngc=true
     const directPrecipitation = precipitation - runoff;
@@ -483,37 +488,37 @@ const generateLiquidStorageCapacity = (
       body: [
         ...(materialStored
           ? [
-            [
-              '        Materials Generated or Imported',
-              `${getLiquidManureDisplay(materialGenerated)}`,
-            ],
-            [
-              {
-                content: 'Material Stored (October to March)',
-                styles: { fontStyle: 'bold' as FontStyle },
-              },
-              '',
-              '',
-            ],
-            [
-              '        Materials Stored (after Solid/Liquid Separation)',
-              `${getLiquidManureDisplay(materialStored)}`,
-            ],
-          ]
+              [
+                '        Materials Generated or Imported',
+                `${getLiquidManureDisplay(materialGenerated)}`,
+              ],
+              [
+                {
+                  content: 'Material Stored (October to March)',
+                  styles: { fontStyle: 'bold' as FontStyle },
+                },
+                '',
+                '',
+              ],
+              [
+                '        Materials Stored (after Solid/Liquid Separation)',
+                `${getLiquidManureDisplay(materialStored)}`,
+              ],
+            ]
           : [
-            [
-              {
-                content: 'Material Stored (October to March)',
-                styles: { fontStyle: 'bold' as FontStyle },
-              },
-              '',
-              '',
-            ],
-            [
-              '        Materials Generated or Imported',
-              `${getLiquidManureDisplay(materialGenerated)}`,
-            ],
-          ]),
+              [
+                {
+                  content: 'Material Stored (October to March)',
+                  styles: { fontStyle: 'bold' as FontStyle },
+                },
+                '',
+                '',
+              ],
+              [
+                '        Materials Generated or Imported',
+                `${getLiquidManureDisplay(materialGenerated)}`,
+              ],
+            ]),
         [
           '        Precipitation, Direct into Storage',
           `${getLiquidManureDisplay(directPrecipitation)}`,
@@ -546,15 +551,13 @@ const generateLiquidStorageCapacity = (
 const getFertilizerList = (
   nmpFileYear: NMPFileYear,
   fertilizerUnits: FertilizerUnit[],
-) => nmpFileYear.fields.reduce(
-  (acc, field) => {
+) =>
+  nmpFileYear.fields.reduce((acc, field) => {
     field.fertilizers.forEach((fert) => {
       let idx = acc.findIndex((f) => f.name === fert.name);
       if (idx === -1) {
         idx = acc.length;
-        const fertilizerUnit = fertilizerUnits.find(
-          (u) => u.id === fert.applUnitId,
-        );
+        const fertilizerUnit = fertilizerUnits.find((u) => u.id === fert.applUnitId);
         if (fertilizerUnit === undefined) {
           throw new Error(`Fertilizer unit ${fert.applUnitId} not found.`);
         }
@@ -566,18 +569,16 @@ const getFertilizerList = (
       }
       // Add the converted amount and field acreage
       const stats = acc[idx];
-      stats.totalAmount
-          // Converts to kg/ac or US gal/ac and multiplies by # of acres
-          += fert.applicationRate
-          * (stats.unit === 'kg'
-            ? getFertilizerUnitKgPerAcreConversion(fert.applUnitId)
-            : getFertilizerUnitUSGallonPerAcreConversion(fert.applUnitId))
-          * field.area;
+      stats.totalAmount +=
+        // Converts to kg/ac or US gal/ac and multiplies by # of acres
+        fert.applicationRate *
+        (stats.unit === 'kg'
+          ? getFertilizerUnitKgPerAcreConversion(fert.applUnitId)
+          : getFertilizerUnitUSGallonPerAcreConversion(fert.applUnitId)) *
+        field.area;
     });
     return acc;
-  },
-    [] as FertilizerRequiredStep[],
-);
+  }, [] as FertilizerRequiredStep[]);
 
 const generateFertilizerRequired = (
   doc: jsPDF,
@@ -656,8 +657,9 @@ const generateFieldSummary = (
   if (soilTest?.sampleDate) {
     splitDateStr = new Date(soilTest.sampleDate).toDateString().split(' ');
   }
-  const soilTestName = soilTestMethods.find((m) => m.id === soilTest?.soilTestId)?.name
-    || 'not selected';
+  const soilTestName =
+    soilTestMethods.find((m) => m.id === soilTest?.soilTestId)?.name ||
+    'not selected';
   autoTable(doc, {
     ...sharedAutoTableSettings,
     head: [
@@ -682,13 +684,13 @@ const generateFieldSummary = (
     },
     body: soilTest
       ? [
-        [
-          `Nitrate-N: ${soilTest.valNO3H} ppm`,
-          `Phosphorous: ${soilTest.valP} ppm (${phosphorousRanges.find((r) => soilTest.valP! < r.upperlimit)?.rating || ''})`,
-          `Potassium: ${soilTest.valK} ppm (${potassiumRanges.find((r) => soilTest.valK! < r.upperlimit)?.rating || ''})`,
-          `pH: ${soilTest.valPH}`,
-        ],
-      ]
+          [
+            `Nitrate-N: ${soilTest.valNO3H} ppm`,
+            `Phosphorous: ${soilTest.valP} ppm (${phosphorousRanges.find((r) => soilTest.valP! < r.upperlimit)?.rating || ''})`,
+            `Potassium: ${soilTest.valK} ppm (${potassiumRanges.find((r) => soilTest.valK! < r.upperlimit)?.rating || ''})`,
+            `pH: ${soilTest.valPH}`,
+          ],
+        ]
       : undefined,
     foot: [
       [
@@ -727,33 +729,33 @@ const generateFieldSummary = (
     body:
       allApplied.length > 0
         ? allApplied.map((nutrientSource) => {
-          if ('applicationId' in nutrientSource) {
-            // Manures have 'applicationId' and seasonal values
-            const seasonApplication = SEASON_APPLICATION.find(
-              (s) => s.Id === nutrientSource.applicationId,
-            );
-            if (!seasonApplication) {
-              throw new Error(
-                `Season application ${nutrientSource.applicationId} not found`,
+            if ('applicationId' in nutrientSource) {
+              // Manures have 'applicationId' and seasonal values
+              const seasonApplication = SEASON_APPLICATION.find(
+                (s) => s.Id === nutrientSource.applicationId,
               );
+              if (!seasonApplication) {
+                throw new Error(
+                  `Season application ${nutrientSource.applicationId} not found`,
+                );
+              }
+              return [
+                nutrientSource.name,
+                seasonApplication.Season,
+                seasonApplication.ApplicationMethod,
+                // Example display: 10 L/ac
+                `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+              ];
             }
+            // Fertilizers have different properties
             return [
               nutrientSource.name,
-              seasonApplication.Season,
-              seasonApplication.ApplicationMethod,
+              nutrientSource.applDate || '',
+              nutrientSource.applicationMethod || '',
               // Example display: 10 L/ac
-              `${nutrientSource.applicationRate} ${manureUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
+              `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
             ];
-          }
-          // Fertilizers have different properties
-          return [
-            nutrientSource.name,
-            nutrientSource.applDate || '',
-            nutrientSource.applicationMethod || '',
-            // Example display: 10 L/ac
-            `${nutrientSource.applicationRate} ${fertilizerUnits.find((u) => u.id === nutrientSource.applUnitId)!.name}`,
-          ];
-        })
+          })
         : [['None planned', '', '', '']],
   });
 
@@ -795,16 +797,16 @@ const generateFieldSummary = (
     ...field.crops,
     ...(field.previousYearManureApplicationNCredit
       ? [
-        {
-          name: "Previous years' manure",
-          reqN: field.previousYearManureApplicationNCredit,
-          reqP2o5: 0,
-          reqK2o: 0,
-          remN: 0,
-          remP2o5: 0,
-          remK2o: 0,
-        },
-      ]
+          {
+            name: "Previous years' manure",
+            reqN: field.previousYearManureApplicationNCredit,
+            reqP2o5: 0,
+            reqK2o: 0,
+            remN: 0,
+            remP2o5: 0,
+            remK2o: 0,
+          },
+        ]
       : []),
     ...field.fertilizers,
     ...field.manures,
@@ -867,9 +869,9 @@ const generateFieldSummary = (
     body: allRows.map((row) => {
       let hasFootnote = false;
       if (
-        'crudeProtein' in row
-        && 'crudeProteinAdjusted' in row
-        && row.crudeProteinAdjusted
+        'crudeProtein' in row &&
+        'crudeProteinAdjusted' in row &&
+        row.crudeProteinAdjusted
       ) {
         tableFootnotes.push(`Crude protein adjusted to ${row.crudeProtein}%`);
         hasFootnote = true;
@@ -892,9 +894,9 @@ const generateFieldSummary = (
           tableFootnotes.push(footnote!);
         }
       } else if (
-        'density' in row
-        && 'densityAdjusted' in row
-        && row.densityAdjusted
+        'density' in row &&
+        'densityAdjusted' in row &&
+        row.densityAdjusted
       ) {
         tableFootnotes.push(`Liquid density adjusted to ${row.density}`);
         hasFootnote = true;
@@ -1020,8 +1022,8 @@ const generateManureAndCompostAnalysis = (
     body: nmpFileYear.nutrientAnalyses.map((analysis) => {
       let hasFootnote = false;
       if (
-        hasDairyCattle
-        && unassignedManures.some((m) => m.uuid === analysis.sourceUuid)
+        hasDairyCattle &&
+        unassignedManures.some((m) => m.uuid === analysis.sourceUuid)
       ) {
         footnotes.push(
           `${analysis.uniqueMaterialName} includes materials that have not been allocated to a storage.`,
@@ -1146,7 +1148,6 @@ export default async function makeFullReportPdf(
   previousCrops: PreviousCrop[],
   materialRemainingData: MaterialRemainingData | null,
 ) {
-  // eslint-disable-next-line new-cap
   const doc = new jsPDF();
   doc.setFont('BCSans');
   const pageWidth: number = doc.internal.pageSize.getWidth() - 30;
@@ -1165,7 +1166,8 @@ export default async function makeFullReportPdf(
   const fertilizers = getFertilizerList(nmpFileYear, fertilizerUnits);
 
   // Conditionals for optional pages
-  const includeManureCompostInventory = storageSystems.length > 0 || unassignedManures.length > 0;
+  const includeManureCompostInventory =
+    storageSystems.length > 0 || unassignedManures.length > 0;
   const includeManureAndCompostPages = nmpFileYear.nutrientAnalyses.length > 0;
   const includeFertilizerRequired = fertilizers.length > 0;
 

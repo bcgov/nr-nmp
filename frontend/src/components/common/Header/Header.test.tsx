@@ -10,7 +10,11 @@ jest.mock('react-router-dom', () => ({
 
 describe('Header tests', () => {
   test('Title displays', () => {
-    render(<MemoryRouter><Header /></MemoryRouter>);
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>,
+    );
     const elem = screen.getByText('Nutrient Management Calculator');
     expect(elem).toBeInTheDocument();
   });

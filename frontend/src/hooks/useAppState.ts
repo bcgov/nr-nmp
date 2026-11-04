@@ -8,7 +8,8 @@ import { AppStateAction } from './reducers/appStateReducer';
  */
 const useAppState = () => {
   const state = useContext<AppState>(AppStateContext);
-  const dispatch = useContext<ActionDispatch<[action: AppStateAction]>>(AppDispatchContext);
+  const dispatch =
+    useContext<ActionDispatch<[action: AppStateAction]>>(AppDispatchContext);
 
   return useMemo(
     () => ({
