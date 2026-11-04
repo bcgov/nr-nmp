@@ -17,20 +17,24 @@ import { INITIAL_BEEF_FORM_DATA } from '@/constants';
 jest.mock('@/hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
 
-jest.mock('../../services/APICache', () => jest.fn().mockImplementation(() => ({
-  callEndpoint: jest.fn((endpoint) => Promise.resolve(
-    (() => {
-      if (endpoint === '/api/animals/') {
-        return { status: 200, data: [{ id: 1, name: 'Beef Cattle' }] };
-      }
-      if ((endpoint as string).includes('subtypes')) {
-        return { status: 200, data: [{ id: 0, name: 'Blah' }] };
-      }
-      return { status: 200, data: [] };
-    })(),
-  )),
-  getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
-})));
+jest.mock('../../services/APICache', () =>
+  jest.fn().mockImplementation(() => ({
+    callEndpoint: jest.fn((endpoint) =>
+      Promise.resolve(
+        (() => {
+          if (endpoint === '/api/animals/') {
+            return { status: 200, data: [{ id: 1, name: 'Beef Cattle' }] };
+          }
+          if ((endpoint as string).includes('subtypes')) {
+            return { status: 200, data: [{ id: 0, name: 'Blah' }] };
+          }
+          return { status: 200, data: [] };
+        })(),
+      ),
+    ),
+    getInitializedResponse: jest.fn(() => ({ status: 200, data: [] })),
+  })),
+);
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({

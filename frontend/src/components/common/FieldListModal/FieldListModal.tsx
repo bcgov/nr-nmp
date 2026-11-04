@@ -80,7 +80,9 @@ export default function FieldListModal({
               inputTestId="field-name"
               value={formData.fieldName}
               onChange={(e) => handleFormFieldChange({ fieldName: e })}
-              validate={() => (validateUniqueName() ? undefined : 'Field name must be unique')}
+              validate={() =>
+                validateUniqueName() ? undefined : 'Field name must be unique'
+              }
             />
           </Grid>
           <Grid size={formGridBreakpoints}>

@@ -37,6 +37,7 @@ const nmpFile = {
 };
 
 // Set a constant for the data-id so the snapshot is consistent
+// eslint-disable-next-line no-undef
 global.crypto.randomUUID = () => '916859ed-1272-4863-a935-803debaa2d08';
 
 // Snapshot test for Landing Page view

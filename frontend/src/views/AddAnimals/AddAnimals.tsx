@@ -50,20 +50,21 @@ export default function AddAnimals() {
           setAnimals(data);
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const hasDairyCattle = useMemo(
-    () => state.nmpFile.years[0].farmAnimals?.some(
-      (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
-    ),
+    () =>
+      state.nmpFile.years[0].farmAnimals?.some(
+        (animal: NMPFileAnimal) => animal.animalId === DAIRY_COW_ID,
+      ),
     [state.nmpFile.years],
   );
 
   const tabs = useMemo(
-    () => (hasDairyCattle
-      ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
-      : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis']),
+    () =>
+      hasDairyCattle
+        ? ['Add Animals', 'Manure & Imports', 'Storage', 'Nutrient Analysis']
+        : ['Add Animals', 'Manure & Imports', 'Nutrient Analysis'],
     [hasDairyCattle],
   );
 
@@ -120,7 +121,8 @@ export default function AddAnimals() {
         field: 'animalId',
         headerName: 'Animal Type',
         width: 175,
-        valueGetter: (val: any) => animals.find((ele) => String(ele.id) === val)?.name || val,
+        valueGetter: (val: any) =>
+          animals.find((ele) => String(ele.id) === val)?.name || val,
         renderCell: (params: any) => {
           if (isDairyAndMilkingCattle(params.row.animalId, params.row.subtype)) {
             return (
@@ -142,7 +144,8 @@ export default function AddAnimals() {
         maxWidth: 300,
         valueGetter: (params: any) => liquidSolidManureDisplay(params),
         renderCell: (params: any) => {
-          const { animalId, animalsPerFarm, subtype, washWater, washWaterUnit } = params.row;
+          const { animalId, animalsPerFarm, subtype, washWater, washWaterUnit } =
+            params.row;
           if (isDairyAndMilkingCattle(animalId, subtype)) {
             const washWaterGallons = calculateAnnualWashWater(
               washWater,
@@ -152,11 +155,7 @@ export default function AddAnimals() {
             return (
               <span css={specialTableRowStyle}>
                 <DoubleRowStyle>{params.value}</DoubleRowStyle>
-                <DoubleRowStyle>
-                  {washWaterGallons}
-                  {' '}
-                  U.S. gallons
-                </DoubleRowStyle>
+                <DoubleRowStyle>{washWaterGallons} U.S. gallons</DoubleRowStyle>
               </span>
             );
           }

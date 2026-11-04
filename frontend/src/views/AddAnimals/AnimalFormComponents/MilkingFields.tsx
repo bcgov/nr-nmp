@@ -37,9 +37,10 @@ export default function MilkingFields({
   const [washWater, setWashWater] = useState<number>(washWaterInit);
 
   const washWaterDefaultCorrected = useMemo(
-    () => (washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
-      ? washWaterDefault
-      : washWaterDefault * animalsPerFarm),
+    () =>
+      washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
+        ? washWaterDefault
+        : washWaterDefault * animalsPerFarm,
     [washWaterUnit, animalsPerFarm, washWaterDefault],
   );
 
@@ -50,7 +51,6 @@ export default function MilkingFields({
       milkProduction: milkProductionDefault,
       milkProductionAdjusted: false,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [milkProductionDefault]);
 
   // On mount, set milking fields to init values
@@ -73,7 +73,6 @@ export default function MilkingFields({
         washWaterAdjusted: undefined,
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUnitChange = (newUnit: WashWaterUnit) => {
@@ -85,8 +84,8 @@ export default function MilkingFields({
         washWaterAdjusted: false,
       });
     } else if (
-      newUnit === PER_DAY_UNIT
-      && washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
+      newUnit === PER_DAY_UNIT &&
+      washWaterUnit === PER_DAY_PER_ANIMAL_UNIT
     ) {
       setWashWater(washWaterDefault * animalsPerFarm);
       handleInputChanges({

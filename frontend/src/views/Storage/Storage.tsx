@@ -60,7 +60,6 @@ export default function Storage() {
         setSubregionData(currentSubregion);
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // These function don't save to the NMP file
@@ -93,7 +92,8 @@ export default function Storage() {
     (systemIndex: number, storageIndex: number) => {
       const newList = [...state.nmpFile.years[0].manureStorageSystems!];
       const system = newList[systemIndex];
-      if (system.manureType !== ManureType.Liquid) throw new Error('Storage entered bad state');
+      if (system.manureType !== ManureType.Liquid)
+        throw new Error('Storage entered bad state');
       const newStorageList = [...system.manureStorages];
       newStorageList.splice(storageIndex, 1);
       newList[systemIndex] = { ...system, manureStorages: newStorageList };
@@ -170,7 +170,9 @@ export default function Storage() {
                   <div>
                     <FontAwesomeIcon
                       css={tableActionButtonCss}
-                      onClick={() => setModalMode({ mode: 'system_edit', systemIndex })}
+                      onClick={() =>
+                        setModalMode({ mode: 'system_edit', systemIndex })
+                      }
                       icon={faEdit}
                       aria-label="Edit"
                     />
@@ -195,17 +197,21 @@ export default function Storage() {
                         <div>
                           <FontAwesomeIcon
                             css={tableActionButtonCss}
-                            onClick={() => setModalMode({
-                              mode: 'storage_edit',
-                              systemIndex,
-                              storageIndex,
-                            })}
+                            onClick={() =>
+                              setModalMode({
+                                mode: 'storage_edit',
+                                systemIndex,
+                                storageIndex,
+                              })
+                            }
                             icon={faEdit}
                             aria-label="Edit"
                           />
                           <FontAwesomeIcon
                             css={tableActionButtonCss}
-                            onClick={() => handleDeleteStorage(systemIndex, storageIndex)}
+                            onClick={() =>
+                              handleDeleteStorage(systemIndex, storageIndex)
+                            }
                             icon={faTrash}
                             aria-label="Delete"
                           />
@@ -231,11 +237,13 @@ export default function Storage() {
                       <div className="margin-right">
                         <FontAwesomeIcon
                           css={tableActionButtonCss}
-                          onClick={() => setModalMode({
-                            mode: 'storage_edit',
-                            systemIndex,
-                            storageIndex: 0,
-                          })}
+                          onClick={() =>
+                            setModalMode({
+                              mode: 'storage_edit',
+                              systemIndex,
+                              storageIndex: 0,
+                            })
+                          }
                           icon={faEdit}
                           aria-label="Edit"
                         />
@@ -254,10 +262,7 @@ export default function Storage() {
           <div>
             <div>Materials Needing Storage</div>
             {unassignedManures.map((m) => (
-              <div key={m.data.managedManureName}>
-                -
-                {m.data.managedManureName}
-              </div>
+              <div key={m.data.managedManureName}>-{m.data.managedManureName}</div>
             ))}
           </div>
         </Grid>

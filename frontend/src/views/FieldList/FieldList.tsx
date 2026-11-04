@@ -93,9 +93,10 @@ export default function FieldList() {
   };
 
   const isFieldNameUnique = useCallback(
-    (data: Partial<NMPFileField>, index: number) => !fieldList.some(
-      (fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx,
-    ),
+    (data: Partial<NMPFileField>, index: number) =>
+      !fieldList.some(
+        (fieldRow, idx) => fieldRow.fieldName === data.fieldName && index !== idx,
+      ),
     [fieldList],
   );
 

@@ -160,7 +160,6 @@ export default function SoilTests() {
           );
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns: GridColDef[] = useMemo(

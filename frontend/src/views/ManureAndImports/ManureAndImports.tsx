@@ -80,8 +80,9 @@ export default function ManureAndImports() {
         (item) => item.inputunit === data.units,
       );
 
-      const annualAmountUSGallonsVolume = (data.annualAmount || 0)
-        * (liquidManureConversionFactor?.usgallonsoutput
+      const annualAmountUSGallonsVolume =
+        (data.annualAmount || 0) *
+        (liquidManureConversionFactor?.usgallonsoutput
           ? parseFloat(liquidManureConversionFactor.usgallonsoutput)
           : 0);
 
@@ -95,20 +96,23 @@ export default function ManureAndImports() {
         (item) => item.inputunit === data.units,
       );
 
-      const annualAmountCubicMetersVolume = (data.annualAmount || 0)
-        * getDensityFactoredConversionUsingMoisture(
+      const annualAmountCubicMetersVolume =
+        (data.annualAmount || 0) *
+        getDensityFactoredConversionUsingMoisture(
           data.moisture || 0,
           solidManureConversionFactor?.cubicmetersoutput || '',
         );
 
-      const annualAmountCubicYardsVolume = (data.annualAmount || 0)
-        * getDensityFactoredConversionUsingMoisture(
+      const annualAmountCubicYardsVolume =
+        (data.annualAmount || 0) *
+        getDensityFactoredConversionUsingMoisture(
           data.moisture || 0,
           solidManureConversionFactor?.cubicyardsoutput || '',
         );
 
-      const annualAmountTonsWeight = (data.annualAmount || 0)
-        * getDensityFactoredConversionUsingMoisture(
+      const annualAmountTonsWeight =
+        (data.annualAmount || 0) *
+        getDensityFactoredConversionUsingMoisture(
           data.moisture || 0,
           solidManureConversionFactor?.ustonsoutput || '',
         );
@@ -185,7 +189,6 @@ export default function ManureAndImports() {
           setAnimals(response.data);
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -217,7 +220,8 @@ export default function ManureAndImports() {
         width: 200,
         minWidth: 150,
         maxWidth: 300,
-        valueGetter: (val: any) => animals.find((ele) => String(ele.id) === val)?.name || val,
+        valueGetter: (val: any) =>
+          animals.find((ele) => String(ele.id) === val)?.name || val,
         sortable: false,
       },
       {
@@ -226,7 +230,8 @@ export default function ManureAndImports() {
         width: 325,
         minWidth: 150,
         maxWidth: 500,
-        valueGetter: (val: string) => animalList.find((a) => a.uuid === val)!.manureData?.name,
+        valueGetter: (val: string) =>
+          animalList.find((a) => a.uuid === val)!.manureData?.name,
         sortable: false,
       },
       {
@@ -283,7 +288,8 @@ export default function ManureAndImports() {
         width: 75,
         minWidth: 75,
         maxWidth: 300,
-        valueGetter: (param: boolean | string) => (booleanChecker(param) ? 'Yes' : 'No'),
+        valueGetter: (param: boolean | string) =>
+          booleanChecker(param) ? 'Yes' : 'No',
         sortable: false,
       },
       {
@@ -390,7 +396,9 @@ export default function ManureAndImports() {
           sx={{ ...customTableStyle, marginTop: '1.25rem' }}
           rows={animalList}
           columns={columnsAnimalManure}
-          getRowId={(row: NMPFileAnimal) => `${row.animalId}_${row.subtype}_${row.manureType}`}
+          getRowId={(row: NMPFileAnimal) =>
+            `${row.animalId}_${row.subtype}_${row.manureType}`
+          }
           disableRowSelectionOnClick
           disableColumnMenu
           hideFooterPagination

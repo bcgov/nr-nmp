@@ -1,6 +1,4 @@
-import {
-  render, waitFor, screen, fireEvent,
-} from '@testing-library/react';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import useAppState from '../../hooks/useAppState';
 import DEFAULT_NMPFILE from '../../constants/DefaultNMPFile';
@@ -30,20 +28,22 @@ const mockNutrientRanges = [
   { id: 2, upperlimit: 25, rating: 'B' },
   { id: 3, upperlimit: 40, rating: 'C' },
 ];
-jest.mock('../../services/APICache', () => jest.fn().mockImplementation(() => ({
-  callEndpoint: jest.fn((ep) => {
-    if (ep === 'soiltestmethods') {
-      return Promise.resolve({ status: 200, data: mockSoilTestMethods });
-    }
-    return Promise.resolve({ status: 200, data: [] });
-  }),
-  getInitializedResponse: jest.fn((ep) => {
-    if (ep === 'soiltestphosphorousranges' || ep === 'soiltestpotassiumranges') {
-      return { status: 200, data: mockNutrientRanges };
-    }
-    return { status: 200, data: [] };
-  }),
-})));
+jest.mock('../../services/APICache', () =>
+  jest.fn().mockImplementation(() => ({
+    callEndpoint: jest.fn((ep) => {
+      if (ep === 'soiltestmethods') {
+        return Promise.resolve({ status: 200, data: mockSoilTestMethods });
+      }
+      return Promise.resolve({ status: 200, data: [] });
+    }),
+    getInitializedResponse: jest.fn((ep) => {
+      if (ep === 'soiltestphosphorousranges' || ep === 'soiltestpotassiumranges') {
+        return { status: 200, data: mockNutrientRanges };
+      }
+      return { status: 200, data: [] };
+    }),
+  })),
+);
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -53,6 +53,7 @@ jest.mock('react-router-dom', () => ({
 
 // Copy in for tests that use structuredClone
 const mockStructuredClone = jest.fn((x) => x);
+// eslint-disable-next-line no-undef
 global.structuredClone = mockStructuredClone;
 
 const mockNMPFile = {
@@ -143,8 +144,8 @@ describe('SoilTests calculations', () => {
       convertedKelownaP: 15,
       convertedKelownaK: 2,
     });
-    expect(
-      () => soilTestCalculation(mockSoilTestMethods, 3, { valP: 5, valPH: 7, valK: 4 }),
+    expect(() =>
+      soilTestCalculation(mockSoilTestMethods, 3, { valP: 5, valPH: 7, valK: 4 }),
     ).toThrow();
   });
 });
@@ -191,10 +192,12 @@ describe('SoilTests component unit tests', () => {
             {
               ...DEFAULT_NMPFILE_YEAR,
               year: '2025',
-              fields: [{
-                ...DEFAULT_NMPFILE_FIELD,
-                soilTest: mockSoilTest,
-              }],
+              fields: [
+                {
+                  ...DEFAULT_NMPFILE_FIELD,
+                  soilTest: mockSoilTest,
+                },
+              ],
             },
           ],
         },
@@ -247,10 +250,12 @@ describe('SoilTests component unit tests', () => {
             {
               ...DEFAULT_NMPFILE_YEAR,
               year: '2025',
-              fields: [{
-                ...DEFAULT_NMPFILE_FIELD,
-                soilTest: mockSoilTest,
-              }],
+              fields: [
+                {
+                  ...DEFAULT_NMPFILE_FIELD,
+                  soilTest: mockSoilTest,
+                },
+              ],
             },
           ],
         },

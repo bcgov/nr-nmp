@@ -1,4 +1,3 @@
-/* eslint-disable default-param-last */
 import { PER_DAY_PER_ANIMAL_UNIT } from '@/constants';
 import { WashWaterUnit } from '@/types';
 
@@ -100,8 +99,8 @@ export function calculateAnnualWashWater(
   animalsPerFarm: number,
 ) {
   return (
-    washWater
-    * 365
-    * (washWaterUnit === PER_DAY_PER_ANIMAL_UNIT ? animalsPerFarm : 1)
+    washWater *
+    365 *
+    (washWaterUnit === PER_DAY_PER_ANIMAL_UNIT ? animalsPerFarm : 1)
   );
 }

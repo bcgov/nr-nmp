@@ -190,34 +190,46 @@ export default function FertigationModal({
   // nutrient deficit, set Still Required to 0
   const balanceCalcRow = useMemo<NutrientRow>(
     () => ({
-      reqN: balanceRow.reqN - (
-        initialModalData ? initialModalData.reqN * initialModalData.eventsPerSeason : 0
-      ) + totalNutrientRow.reqN,
-      reqP2o5: balanceRow.reqP2o5 - (
-        initialModalData ? initialModalData.reqP2o5 * initialModalData.eventsPerSeason : 0
-      ) + totalNutrientRow.reqP2o5,
-      reqK2o: balanceRow.reqK2o - (
-        initialModalData ? initialModalData.reqK2o * initialModalData.eventsPerSeason : 0
-      ) + totalNutrientRow.reqK2o,
+      reqN:
+        balanceRow.reqN -
+        (initialModalData
+          ? initialModalData.reqN * initialModalData.eventsPerSeason
+          : 0) +
+        totalNutrientRow.reqN,
+      reqP2o5:
+        balanceRow.reqP2o5 -
+        (initialModalData
+          ? initialModalData.reqP2o5 * initialModalData.eventsPerSeason
+          : 0) +
+        totalNutrientRow.reqP2o5,
+      reqK2o:
+        balanceRow.reqK2o -
+        (initialModalData
+          ? initialModalData.reqK2o * initialModalData.eventsPerSeason
+          : 0) +
+        totalNutrientRow.reqK2o,
     }),
     [balanceRow, initialModalData, totalNutrientRow],
   );
 
   const isLiquidFertilizer = useMemo(
-    () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
-      .dryliquid === 'liquid',
+    () =>
+      fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
+        .dryliquid === 'liquid',
     [fertilizerTypes, formData.fertilizerTypeId],
   );
 
   const isDryFertilizer = useMemo(
-    () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
-      .dryliquid === 'dry',
+    () =>
+      fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
+        .dryliquid === 'dry',
     [fertilizerTypes, formData.fertilizerTypeId],
   );
 
   const isCustomFertilizer = useMemo(
-    () => fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
-      .custom,
+    () =>
+      fertilizerTypes.find((ele) => ele.id === formData.fertilizerTypeId)?.value
+        .custom,
     [fertilizerTypes, formData.fertilizerTypeId],
   );
 
@@ -252,8 +264,9 @@ export default function FertigationModal({
                 if (formData.fertilizerTypeId) {
                   setFilteredFertilizers(
                     fertOptions.filter(
-                      (ele) => ele.value.dryliquid
-                        === fertilizerTs.find(
+                      (ele) =>
+                        ele.value.dryliquid ===
+                        fertilizerTs.find(
                           (fertType) => fertType.id === formData.fertilizerTypeId,
                         )?.dryliquid,
                     ),
@@ -276,7 +289,9 @@ export default function FertigationModal({
           }));
           const unitsDry: SelectOption<FertilizerUnit>[] = [];
           const unitsLiquid: SelectOption<FertilizerUnit>[] = [];
-          unitOptions.forEach((u) => (u.value.dryliquid === 'dry' ? unitsDry.push(u) : unitsLiquid.push(u)));
+          unitOptions.forEach((u) =>
+            u.value.dryliquid === 'dry' ? unitsDry.push(u) : unitsLiquid.push(u),
+          );
           setLiquidUnits(unitsLiquid);
         }
       });
@@ -300,7 +315,6 @@ export default function FertigationModal({
         setLiqDensityFactors(data);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = () => {
@@ -380,15 +394,18 @@ export default function FertigationModal({
         formData.density!,
         densityUnit,
       );
-      const reqN = Math.round(
-        getAppliedNutrientPerApplication(weight, field.area, nutrients.N) * 10,
-      ) / 10;
-      const reqP2o5 = Math.round(
-        getAppliedNutrientPerApplication(weight, field.area, nutrients.P2O5) * 10,
-      ) / 10;
-      const reqK2o = Math.round(
-        getAppliedNutrientPerApplication(weight, field.area, nutrients.K2O) * 10,
-      ) / 10;
+      const reqN =
+        Math.round(
+          getAppliedNutrientPerApplication(weight, field.area, nutrients.N) * 10,
+        ) / 10;
+      const reqP2o5 =
+        Math.round(
+          getAppliedNutrientPerApplication(weight, field.area, nutrients.P2O5) * 10,
+        ) / 10;
+      const reqK2o =
+        Math.round(
+          getAppliedNutrientPerApplication(weight, field.area, nutrients.K2O) * 10,
+        ) / 10;
       setFormData((prev) => ({
         ...prev,
         volume,
@@ -465,8 +482,9 @@ export default function FertigationModal({
         if (name === 'fertilizerTypeId') {
           setFilteredFertilizers(
             fertilizers.filter(
-              (ele) => ele.value.dryliquid
-                  === fertilizerTypes.find((fertType) => fertType.id === value)?.value
+              (ele) =>
+                ele.value.dryliquid ===
+                  fertilizerTypes.find((fertType) => fertType.id === value)?.value
                     .dryliquid && ele.value.fertigation === true,
             ),
           );
@@ -496,8 +514,9 @@ export default function FertigationModal({
           // Auto-populate solubility for dry fertilizers
           if (isDryFertilizer && next.solubilityUnitId) {
             const solubilityData = DRY_FERTILIZER_SOLUBILITIES.find(
-              (item) => item.fertilizerId === value
-                && item.solubilityUnitId === next.solubilityUnitId,
+              (item) =>
+                item.fertilizerId === value &&
+                item.solubilityUnitId === next.solubilityUnitId,
             );
             if (solubilityData) {
               next.solubility = solubilityData.value;
@@ -508,8 +527,9 @@ export default function FertigationModal({
         if (name === 'densityUnitId') {
           if (isLiquidFertilizer && !isCustomFertilizer) {
             const densityValue = liqDensityFactors.find(
-              (ele) => ele.fertilizerid === formData.fertilizerId
-                && ele.densityunitid === value,
+              (ele) =>
+                ele.fertilizerid === formData.fertilizerId &&
+                ele.densityunitid === value,
             );
             // densityValue is undef when a fertilizer is unselected
             next.density = densityValue ? densityValue.value : 0;
@@ -520,8 +540,9 @@ export default function FertigationModal({
           // Auto-populate solubility when units change for dry fertilizers
           if (isDryFertilizer && next.fertilizerId) {
             const solubilityData = DRY_FERTILIZER_SOLUBILITIES.find(
-              (item) => item.fertilizerId === next.fertilizerId
-                && item.solubilityUnitId === value,
+              (item) =>
+                item.fertilizerId === next.fertilizerId &&
+                item.solubilityUnitId === value,
             );
             if (solubilityData) {
               next.solubility = solubilityData.value;
@@ -576,7 +597,9 @@ export default function FertigationModal({
                 label="Fertilizer Type"
                 placeholder="Select Fertilizer Type"
                 value={formData.fertilizerTypeId}
-                onChange={(e) => handleInputChanges({ fertilizerTypeId: e as number })}
+                onChange={(e) =>
+                  handleInputChanges({ fertilizerTypeId: e as number })
+                }
               />
             </Grid>
             {formData.customNutrients ? (
@@ -664,7 +687,9 @@ export default function FertigationModal({
                     label="Units"
                     placeholder="Select Units"
                     value={formData.solubilityUnitId}
-                    onChange={(e) => handleInputChanges({ solubilityUnitId: e as number })}
+                    onChange={(e) =>
+                      handleInputChanges({ solubilityUnitId: e as number })
+                    }
                     noSort
                     autoselectFirst
                   />
@@ -685,9 +710,11 @@ export default function FertigationModal({
                     label="Units"
                     placeholder="Select Units"
                     value={formData.amountToDissolveUnitId}
-                    onChange={(e) => handleInputChanges({
-                      amountToDissolveUnitId: e as number,
-                    })}
+                    onChange={(e) =>
+                      handleInputChanges({
+                        amountToDissolveUnitId: e as number,
+                      })
+                    }
                     noSort
                     autoselectFirst
                   />
@@ -748,9 +775,7 @@ export default function FertigationModal({
                           : solubilityStatusNotSoluble
                       }
                     >
-                      Status:
-                      {' '}
-                      {formData.dryAction}
+                      Status: {formData.dryAction}
                     </div>
                   ) : (
                     <div css={solubilityStatusNormal}>Normal</div>
@@ -775,10 +800,12 @@ export default function FertigationModal({
                     label="Units"
                     placeholder="Select Units"
                     value={formData.applUnitId}
-                    onChange={(e) => handleInputChanges({
-                      applUnitId: e as number,
-                      applUnitName: liquidUnits.find((u) => u.id === e)!.label,
-                    })}
+                    onChange={(e) =>
+                      handleInputChanges({
+                        applUnitId: e as number,
+                        applUnitName: liquidUnits.find((u) => u.id === e)!.label,
+                      })
+                    }
                     noSort
                     autoselectFirst
                   />
@@ -798,7 +825,9 @@ export default function FertigationModal({
                     label="Units"
                     placeholder="Select Units"
                     value={formData.densityUnitId}
-                    onChange={(e) => handleInputChanges({ densityUnitId: e as number })}
+                    onChange={(e) =>
+                      handleInputChanges({ densityUnitId: e as number })
+                    }
                     noSort
                     autoselectFirst
                   />
@@ -820,7 +849,9 @@ export default function FertigationModal({
                 label="Units"
                 placeholder="Select Units"
                 value={formData.injectionUnitId}
-                onChange={(e) => handleInputChanges({ injectionUnitId: e as number })}
+                onChange={(e) =>
+                  handleInputChanges({ injectionUnitId: e as number })
+                }
                 noSort
                 autoselectFirst
               />

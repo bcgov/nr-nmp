@@ -26,8 +26,8 @@ function getProductVolumeInImpGallons(
   applicationUnit: FertilizerUnit,
   areaInAcres: number,
 ) {
-  const appRateInImpGalPerAcre = applicationRate
-    * applicationUnit.conversiontoimperialgallonsperacre;
+  const appRateInImpGalPerAcre =
+    applicationRate * applicationUnit.conversiontoimperialgallonsperacre;
   return appRateInImpGalPerAcre * areaInAcres;
 }
 
@@ -41,8 +41,8 @@ export function getProductVolumePerApplication(
   areaInAcres: number,
 ) {
   return (
-    getProductVolumeInImpGallons(applicationRate, applicationUnit, areaInAcres)
-    * getFertilizerUnitImpGallonConversion(applicationUnit)
+    getProductVolumeInImpGallons(applicationRate, applicationUnit, areaInAcres) *
+    getFertilizerUnitImpGallonConversion(applicationUnit)
   );
 }
 
@@ -73,7 +73,8 @@ export function getTimePerApplication(
     applicationUnit,
     areaInAcres,
   );
-  const injectionRateInImpGalPerMin = injectionRate * injectionUnit.conversionToImpGallonsPerMinute;
+  const injectionRateInImpGalPerMin =
+    injectionRate * injectionUnit.conversionToImpGallonsPerMinute;
   return productVolInImpGal / injectionRateInImpGalPerMin;
 }
 
@@ -258,28 +259,36 @@ export function calculateSolidFertigation(
     // Need in lb/us gallon - convert from imperial gallons to US gallons
     const tankVolumeInUSGal = tankVolumeInImpGal * 1.201;
 
-    nutrientConcentrationN = Math.round(
-      ((amountToDissolveInLbs * valN) / 100 / tankVolumeInUSGal) * 100,
-    ) / 100;
-    nutrientConcentrationP2O5 = Math.round(
-      ((amountToDissolveInLbs * valP2O5) / 100 / tankVolumeInUSGal) * 100,
-    ) / 100;
-    nutrientConcentrationK2O = Math.round(
-      ((amountToDissolveInLbs * valK2O) / 100 / tankVolumeInUSGal) * 100,
-    ) / 100;
+    nutrientConcentrationN =
+      Math.round(((amountToDissolveInLbs * valN) / 100 / tankVolumeInUSGal) * 100) /
+      100;
+    nutrientConcentrationP2O5 =
+      Math.round(
+        ((amountToDissolveInLbs * valP2O5) / 100 / tankVolumeInUSGal) * 100,
+      ) / 100;
+    nutrientConcentrationK2O =
+      Math.round(
+        ((amountToDissolveInLbs * valK2O) / 100 / tankVolumeInUSGal) * 100,
+      ) / 100;
 
     // kg/L concentrations
-    kglNutrientConcentrationN = Math.round(nutrientConcentrationN * 0.12 * 100) / 100;
-    kglNutrientConcentrationP2O5 = Math.round(nutrientConcentrationP2O5 * 0.12 * 100) / 100;
-    kglNutrientConcentrationK2O = Math.round(nutrientConcentrationK2O * 0.12 * 100) / 100;
+    kglNutrientConcentrationN =
+      Math.round(nutrientConcentrationN * 0.12 * 100) / 100;
+    kglNutrientConcentrationP2O5 =
+      Math.round(nutrientConcentrationP2O5 * 0.12 * 100) / 100;
+    kglNutrientConcentrationK2O =
+      Math.round(nutrientConcentrationK2O * 0.12 * 100) / 100;
   } else {
     dryAction = 'Reduce the amount to dissolve';
   }
 
   // Calculate applied nutrients per application
-  const calcN = Math.round((((valN / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
-  const calcP2O5 = Math.round((((valP2O5 / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
-  const calcK2O = Math.round((((valK2O / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
+  const calcN =
+    Math.round((((valN / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
+  const calcP2O5 =
+    Math.round((((valP2O5 / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
+  const calcK2O =
+    Math.round((((valK2O / 100) * amountToDissolveInLbs) / fieldArea) * 100) / 100;
 
   // Calculate total applied nutrients
   const totN = Math.round(calcN * eventsPerSeason * 100) / 100;

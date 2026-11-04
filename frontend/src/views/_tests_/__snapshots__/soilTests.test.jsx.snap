@@ -256,11 +256,12 @@ exports[`SoilTests component snapshot test 1`] = `
               </span>
             </span>
             <svg
+              aria-hidden="true"
               fill="none"
-              height="20"
-              id="chevron-down-icon"
+              focusable="false"
+              height="20px"
               viewBox="0 0 20 20"
-              width="20"
+              width="20px"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -340,7 +341,7 @@ exports[`SoilTestsModal component snapshot test 1`] = `
   <div
     class="react-aria-ModalOverlay"
     data-rac=""
-    style="--visual-viewport-width: 0px; --visual-viewport-height: 0px; --page-width: 0px; --page-height: 0px;"
+    style="--visual-viewport-width: 0px; --visual-viewport-height: 768px; --page-width: 0px; --page-height: 0px;"
   >
     <div
       class="bcds-react-aria-Modal"
@@ -380,10 +381,11 @@ exports[`SoilTestsModal component snapshot test 1`] = `
               type="button"
             >
               <svg
-                height="20"
-                id="close-icon"
+                aria-hidden="true"
+                focusable="false"
+                height="20px"
                 viewBox="0 0 20 20"
-                width="20"
+                width="20px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <g>

@@ -60,16 +60,21 @@ export default function calculateManureNutrientInputs(
   // Potassium conversions:
   // - K to K2O
   // - Availability factors account for how much is plant-accessible first year vs long term
-  const potassiumAvailabilityFirstYear = conversionFactors.potassiumavailabilityfirstyear;
-  const potassiumAvailabilityLongTerm = conversionFactors.potassiumavailabilitylongterm;
+  const potassiumAvailabilityFirstYear =
+    conversionFactors.potassiumavailabilityfirstyear;
+  const potassiumAvailabilityLongTerm =
+    conversionFactors.potassiumavailabilitylongterm;
   const potassiumKtoK2OConversion = conversionFactors.potassiumktok2oconversion;
 
   // Phosphorus conversions:
   // - P to P2O5
   // - Availability factors are typically lower than K because P binds to soil particles
-  const phosphorousAvailabilityFirstYear = conversionFactors.phosphorousavailabilityfirstyear;
-  const phosphorousAvailabilityLongTerm = conversionFactors.phosphorousavailabilitylongterm;
-  const phosphorousPtoP2O5Conversion = conversionFactors.phosphorousptop2o5conversion;
+  const phosphorousAvailabilityFirstYear =
+    conversionFactors.phosphorousavailabilityfirstyear;
+  const phosphorousAvailabilityLongTerm =
+    conversionFactors.phosphorousavailabilitylongterm;
+  const phosphorousPtoP2O5Conversion =
+    conversionFactors.phosphorousptop2o5conversion;
 
   // Standard conversion constant: 2000 lbs per ton
   const lbPerTonConversion = conversionFactors.poundpertonconversion;
@@ -91,9 +96,9 @@ export default function calculateManureNutrientInputs(
   // Special handling for solid manure measured in cubic yards:
   // Cubic yards must be converted to weight using manure-specific bulk density
   if (
-    applicationRateUnit.id === 6
-    && manureWithNutrients.solidLiquid
-    && manureWithNutrients.solidLiquid.toUpperCase() === 'SOLID'
+    applicationRateUnit.id === 6 &&
+    manureWithNutrients.solidLiquid &&
+    manureWithNutrients.solidLiquid.toUpperCase() === 'SOLID'
   ) {
     // Multiply by cubic yard conversion factor to get weight in tons
     adjustedApplicationRate = applicationRate * manure.cubicyardconversion;
@@ -105,21 +110,21 @@ export default function calculateManureNutrientInputs(
   // Formula: App Rate × K Content × lb/ton × K-to-K2O × Availability × Unit Conversion
 
   nutrientInputs.K2O_FirstYear = Math.round(
-    adjustedApplicationRate
-      * manureWithNutrients.K
-      * lbPerTonConversion
-      * potassiumKtoK2OConversion
-      * potassiumAvailabilityFirstYear
-      * unitConversionFactor,
+    adjustedApplicationRate *
+      manureWithNutrients.K *
+      lbPerTonConversion *
+      potassiumKtoK2OConversion *
+      potassiumAvailabilityFirstYear *
+      unitConversionFactor,
   );
 
   nutrientInputs.K2O_LongTerm = Math.round(
-    adjustedApplicationRate
-      * manureWithNutrients.K
-      * lbPerTonConversion
-      * potassiumKtoK2OConversion
-      * potassiumAvailabilityLongTerm
-      * unitConversionFactor,
+    adjustedApplicationRate *
+      manureWithNutrients.K *
+      lbPerTonConversion *
+      potassiumKtoK2OConversion *
+      potassiumAvailabilityLongTerm *
+      unitConversionFactor,
   );
 
   // ==================================================================================
@@ -128,21 +133,21 @@ export default function calculateManureNutrientInputs(
   // Formula: App Rate × P Content × lb/ton × P-to-P2O5 × Availability × Unit Conversion
 
   nutrientInputs.P2O5_FirstYear = Math.round(
-    adjustedApplicationRate
-      * manureWithNutrients.P
-      * lbPerTonConversion
-      * phosphorousPtoP2O5Conversion
-      * phosphorousAvailabilityFirstYear
-      * unitConversionFactor,
+    adjustedApplicationRate *
+      manureWithNutrients.P *
+      lbPerTonConversion *
+      phosphorousPtoP2O5Conversion *
+      phosphorousAvailabilityFirstYear *
+      unitConversionFactor,
   );
 
   nutrientInputs.P2O5_LongTerm = Math.round(
-    adjustedApplicationRate
-      * manureWithNutrients.P
-      * lbPerTonConversion
-      * phosphorousPtoP2O5Conversion
-      * phosphorousAvailabilityLongTerm
-      * unitConversionFactor,
+    adjustedApplicationRate *
+      manureWithNutrients.P *
+      lbPerTonConversion *
+      phosphorousPtoP2O5Conversion *
+      phosphorousAvailabilityLongTerm *
+      unitConversionFactor,
   );
 
   // ==================================================================================
@@ -151,7 +156,8 @@ export default function calculateManureNutrientInputs(
 
   // STEP 5A: Calculate Organic Nitrogen Content
   // Formula: Organic-N = Total N - (NH4-N / 10000)
-  const organicNitrogenContent = manureWithNutrients.N - manureWithNutrients.NH4N / tenThousand;
+  const organicNitrogenContent =
+    manureWithNutrients.N - manureWithNutrients.NH4N / tenThousand;
 
   // STEP 5B: Get Mineralization Rates from Database
   let organicNMineralizationRates = {
@@ -173,8 +179,8 @@ export default function calculateManureNutrientInputs(
 
   // STEP 5E: Calculate Available Ammonium Nitrogen
   // Formula: (NH4-N / 10000) × Retention Factor
-  const availableAmmoniumNitrogen = (manureWithNutrients.NH4N / tenThousand)
-    * ammoniaRetentionFactor;
+  const availableAmmoniumNitrogen =
+    (manureWithNutrients.NH4N / tenThousand) * ammoniaRetentionFactor;
 
   // ==================================================================================
   // STEP 6: First Year Nitrogen Calculation
@@ -182,13 +188,14 @@ export default function calculateManureNutrientInputs(
   // Total First Year N = Retained NH4-N + Mineralized Organic-N + Baseline Total N
 
   // Calculate mineralized organic nitrogen for first year
-  const mineralizedOrganicNFirstYear = organicNitrogenContent
-    * organicNMineralizationRates.OrganicN_FirstYear;
+  const mineralizedOrganicNFirstYear =
+    organicNitrogenContent * organicNMineralizationRates.OrganicN_FirstYear;
 
   // Sum all nitrogen sources for first year availability
-  const totalAvailableNFirstYear = availableAmmoniumNitrogen
-    + mineralizedOrganicNFirstYear
-    + manureWithNutrients.N / tenThousand;
+  const totalAvailableNFirstYear =
+    availableAmmoniumNitrogen +
+    mineralizedOrganicNFirstYear +
+    manureWithNutrients.N / tenThousand;
 
   // Convert to lbs/acre and apply to field area
   const nitrogenPerTonFirstYear = totalAvailableNFirstYear * lbPerTonConversion;
@@ -201,11 +208,12 @@ export default function calculateManureNutrientInputs(
   // ==================================================================================
   // Formula: Long Term N = Retained NH4-N + Mineralized Organic-N (long-term rate)
 
-  const mineralizedOrganicNLongTerm = organicNitrogenContent
-    * organicNMineralizationRates.OrganicN_LongTerm;
+  const mineralizedOrganicNLongTerm =
+    organicNitrogenContent * organicNMineralizationRates.OrganicN_LongTerm;
 
   // Total available nitrogen = ammonium + mineralized organic
-  const totalAvailableNLongTerm = availableAmmoniumNitrogen + mineralizedOrganicNLongTerm;
+  const totalAvailableNLongTerm =
+    availableAmmoniumNitrogen + mineralizedOrganicNLongTerm;
 
   // Convert to lbs/acre
   const nitrogenPerTonLongTerm = totalAvailableNLongTerm * lbPerTonConversion;

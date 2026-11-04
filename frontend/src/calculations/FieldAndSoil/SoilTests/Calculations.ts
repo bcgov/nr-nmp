@@ -5,8 +5,8 @@ export function getKelownaRating(
   nutrientRanges: SoilTestNutrientRange[],
 ): string {
   return (
-    nutrientRanges.find((r) => convertedKelownaNutrient <= r.upperlimit)
-    || nutrientRanges[nutrientRanges.length - 1]
+    nutrientRanges.find((r) => convertedKelownaNutrient <= r.upperlimit) ||
+    nutrientRanges[nutrientRanges.length - 1]
   ).rating;
 }
 
@@ -21,9 +21,11 @@ export function soilTestCalculation(
   }
   let convertedKelownaP;
   if (soilTestData.valPH! < 7.2) {
-    convertedKelownaP = soilTestData.valP! * soilTestMethod.converttokelownaphlessthan72;
+    convertedKelownaP =
+      soilTestData.valP! * soilTestMethod.converttokelownaphlessthan72;
   } else {
-    convertedKelownaP = soilTestData.valP! * soilTestMethod.converttokelownaphgreaterthan72;
+    convertedKelownaP =
+      soilTestData.valP! * soilTestMethod.converttokelownaphgreaterthan72;
   }
   const convertedKelownaK = soilTestData.valK! * soilTestMethod.converttokelownak;
 

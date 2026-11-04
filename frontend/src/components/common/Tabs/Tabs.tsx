@@ -27,7 +27,7 @@ export default function Tabs({
           {tabLabel.map((ele, i) => (
             <Tab
               label={ele}
-              // eslint-disable-next-line react/no-array-index-key
+
               key={`${ele} + ${i}`}
             />
           ))}

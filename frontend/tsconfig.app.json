@@ -5,8 +5,8 @@
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "rootDir": "./src",
     "skipLibCheck": true,
-    "baseUrl": ".",
     "types": [
       "@emotion/react/types/css-prop",
       "jest",

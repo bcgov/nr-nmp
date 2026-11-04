@@ -23,13 +23,18 @@ const conversionFactors = {
 };
 jest.mock('../../hooks/useAppState');
 const mockUseAppService = jest.mocked(useAppState);
-jest.mock('../../services/APICache', () => jest.fn().mockImplementation(() => ({
-  callEndpoint: jest.fn(() => Promise.resolve(res)),
-  // Returning different objects was causing infinite recursions
-  getInitializedResponse: jest.fn((s) => (s === 'cropsconversionfactors' ? conversionFactors : res)),
-})));
+jest.mock('../../services/APICache', () =>
+  jest.fn().mockImplementation(() => ({
+    callEndpoint: jest.fn(() => Promise.resolve(res)),
+    // Returning different objects was causing infinite recursions
+    getInitializedResponse: jest.fn((s) =>
+      s === 'cropsconversionfactors' ? conversionFactors : res,
+    ),
+  })),
+);
 
 // Set a constant for the data-id so the snapshot is consistent
+// eslint-disable-next-line no-undef
 global.crypto.randomUUID = () => '916859ed-1272-4863-a935-803debaa2d08';
 
 const nmpFile = {

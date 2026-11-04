@@ -206,7 +206,7 @@ exports[`NutrientAnalysis is correct 1`] = `
       </div>
     </div>
     <div
-      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3962610333 css-xvr68z-MuiDataGrid-root"
+      class="MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3035231636 css-7wogom-MuiDataGrid-root"
       style="--DataGrid-hasScrollX: 1; --DataGrid-hasScrollY: 0; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 820px; --DataGrid-columnsTotalWidth: 820px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --DataGrid-horizontalFiller: 0px; --height: 52px;"
     >
       <div
@@ -663,9 +663,9 @@ exports[`NutrientAnalysis is correct 1`] = `
         </div>
       </div>
       <style
-        href="/MuiDataGridVariables-3962610333"
+        href="/MuiDataGridVariables-3035231636"
       >
-        .MuiDataGridVariables-3962610333{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:#f5f5f5;--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#eeeeee;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;--DataGrid-t-z-index-modal:1300;}
+        .MuiDataGridVariables-3035231636{--DataGrid-t-spacing-unit:8px;--DataGrid-t-color-border-base:rgba(224, 224, 224, 1);--DataGrid-t-color-background-base:#fff;--DataGrid-t-color-background-overlay:#fff;--DataGrid-t-color-background-backdrop:rgba(255, 255, 255, 0.38);--DataGrid-t-color-foreground-base:rgba(0, 0, 0, 0.87);--DataGrid-t-color-foreground-muted:rgba(0, 0, 0, 0.6);--DataGrid-t-color-foreground-accent:#1565c0;--DataGrid-t-color-foreground-disabled:rgba(0, 0, 0, 0.38);--DataGrid-t-color-foreground-error:#c62828;--DataGrid-t-color-interactive-hover:#f5f5f5;--DataGrid-t-color-interactive-hover-opacity:0.04;--DataGrid-t-color-interactive-focus:rgba(from #1976d2 r g b / 1);--DataGrid-t-color-interactive-focus-opacity:0.12;--DataGrid-t-color-interactive-disabled:rgba(from rgba(0, 0, 0, 0.26) r g b / 1);--DataGrid-t-color-interactive-disabled-opacity:0.38;--DataGrid-t-color-interactive-selected:#eeeeee;--DataGrid-t-color-interactive-selected-opacity:0.08;--DataGrid-t-header-background-base:#fff;--DataGrid-t-cell-background-pinned:#fff;--DataGrid-t-radius-base:4px;--DataGrid-t-typography-font-family-base:"Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-weight-light:300;--DataGrid-t-typography-font-weight-regular:400;--DataGrid-t-typography-font-weight-medium:500;--DataGrid-t-typography-font-weight-bold:700;--DataGrid-t-typography-font-body:400 0.875rem / 1.43 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-small:400 0.75rem / 1.66 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-typography-font-large:400 1rem / 1.5 "Roboto", "Helvetica", "Arial", sans-serif;--DataGrid-t-transition-easing-ease-in:cubic-bezier(0.4, 0, 1, 1);--DataGrid-t-transition-easing-ease-out:cubic-bezier(0.0, 0, 0.2, 1);--DataGrid-t-transition-easing-ease-in-out:cubic-bezier(0.4, 0, 0.2, 1);--DataGrid-t-transition-duration-short:200ms;--DataGrid-t-transition-duration-base:250ms;--DataGrid-t-transition-duration-long:300ms;--DataGrid-t-shadow-base:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);--DataGrid-t-shadow-overlay:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);--DataGrid-t-z-index-panel:1300;--DataGrid-t-z-index-menu:1300;--DataGrid-t-z-index-modal:1300;}
       </style>
     </div>
     <div
@@ -715,7 +715,7 @@ exports[`NutrientAnalysisModal is correct 1`] = `
   <div
     class="react-aria-ModalOverlay"
     data-rac=""
-    style="--visual-viewport-width: 0px; --visual-viewport-height: 0px; --page-width: 0px; --page-height: 0px;"
+    style="--visual-viewport-width: 0px; --visual-viewport-height: 768px; --page-width: 0px; --page-height: 0px;"
   >
     <div
       class="bcds-react-aria-Modal"
@@ -755,10 +755,11 @@ exports[`NutrientAnalysisModal is correct 1`] = `
               type="button"
             >
               <svg
-                height="20"
-                id="close-icon"
+                aria-hidden="true"
+                focusable="false"
+                height="20px"
                 viewBox="0 0 20 20"
-                width="20"
+                width="20px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <g>
@@ -835,11 +836,12 @@ exports[`NutrientAnalysisModal is correct 1`] = `
                         </span>
                       </span>
                       <svg
+                        aria-hidden="true"
                         fill="none"
-                        height="20"
-                        id="chevron-down-icon"
+                        focusable="false"
+                        height="20px"
                         viewBox="0 0 20 20"
-                        width="20"
+                        width="20px"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
@@ -912,11 +914,12 @@ exports[`NutrientAnalysisModal is correct 1`] = `
                         </span>
                       </span>
                       <svg
+                        aria-hidden="true"
                         fill="none"
-                        height="20"
-                        id="chevron-down-icon"
+                        focusable="false"
+                        height="20px"
                         viewBox="0 0 20 20"
-                        width="20"
+                        width="20px"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
@@ -952,68 +955,82 @@ exports[`NutrientAnalysisModal is correct 1`] = `
                 <div
                   class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
                 >
-                  <label
+                  <div
                     class="bcds-react-aria-Checkbox"
                     data-disabled="true"
                     data-rac=""
-                    data-react-aria-pressable="true"
                     data-required="true"
                   >
-                    <span
-                      style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                    <label
+                      class="bcds-react-aria-Checkbox--Button"
+                      data-disabled="true"
+                      data-rac=""
+                      data-react-aria-pressable="true"
+                      data-required="true"
                     >
-                      <input
-                        data-react-aria-pressable="true"
-                        disabled=""
-                        required=""
-                        type="checkbox"
-                        value="book"
+                      <span
+                        style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                      >
+                        <input
+                          data-react-aria-pressable="true"
+                          disabled=""
+                          required=""
+                          type="checkbox"
+                          value="book"
+                        />
+                      </span>
+                      <div
+                        class="bcds-react-aria-Checkbox--Indicator"
                       />
-                    </span>
-                    <div
-                      class="checkbox"
-                    />
-                    <span
-                      class="label"
-                    >
-                      Book Value
-                       
-                      (required)
-                    </span>
-                  </label>
+                      <span
+                        class="bcds-react-aria-Checkbox--Label"
+                      >
+                        Book Value
+                         
+                        (required)
+                      </span>
+                    </label>
+                  </div>
                 </div>
                 <div
                   class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-204a8q-MuiGrid-root"
                 >
-                  <label
+                  <div
                     class="bcds-react-aria-Checkbox"
                     data-disabled="true"
                     data-rac=""
-                    data-react-aria-pressable="true"
                     data-required="true"
                   >
-                    <span
-                      style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                    <label
+                      class="bcds-react-aria-Checkbox--Button"
+                      data-disabled="true"
+                      data-rac=""
+                      data-react-aria-pressable="true"
+                      data-required="true"
                     >
-                      <input
-                        data-react-aria-pressable="true"
-                        disabled=""
-                        required=""
-                        type="checkbox"
-                        value="lab"
+                      <span
+                        style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                      >
+                        <input
+                          data-react-aria-pressable="true"
+                          disabled=""
+                          required=""
+                          type="checkbox"
+                          value="lab"
+                        />
+                      </span>
+                      <div
+                        class="bcds-react-aria-Checkbox--Indicator"
                       />
-                    </span>
-                    <div
-                      class="checkbox"
-                    />
-                    <span
-                      class="label"
-                    >
-                      Lab Value
-                       
-                      (required)
-                    </span>
-                  </label>
+                      <span
+                        class="bcds-react-aria-Checkbox--Label"
+                      >
+                        Lab Value
+                         
+                        (required)
+                      </span>
+                    </label>
+                  </div>
                 </div>
                 <div
                   class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 css-yqiqnf-MuiGrid-root"

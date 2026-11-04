@@ -43,7 +43,8 @@ export default function Poultry({
   const onSubmit = () => {
     // Calculate manure
     const subtype = subtypes.find((s) => s.id.toString() === formData.subtype);
-    if (subtype === undefined) throw new Error('Chosen subtype is missing from list.');
+    if (subtype === undefined)
+      throw new Error('Chosen subtype is missing from list.');
 
     let withManureCalc: NMPFilePoultry;
     if (formData.manureType === ManureType.Liquid) {
@@ -91,7 +92,6 @@ export default function Poultry({
         setSubtypeOptions(subtypeOptionz);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -109,9 +109,9 @@ export default function Poultry({
           onChange={(e) => {
             e === DUCK_ID
               ? handleInputChanges({
-                subtype: e as string,
-                manureType: ManureType.Solid,
-              })
+                  subtype: e as string,
+                  manureType: ManureType.Solid,
+                })
               : handleInputChanges({ subtype: e as string });
           }}
           isRequired

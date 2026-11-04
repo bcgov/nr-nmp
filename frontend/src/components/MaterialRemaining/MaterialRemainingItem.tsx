@@ -19,8 +19,7 @@ export default function MaterialRemainingItem({
     <StyledMaterialRemainingItem>
       <SourceName>{appliedManure.sourceName}</SourceName>
       <PercentageDisplay $percentRemaining={appliedManure.wholePercentRemaining}>
-        {appliedManure.wholePercentRemaining}
-        % Remaining
+        {appliedManure.wholePercentRemaining}% Remaining
       </PercentageDisplay>
     </StyledMaterialRemainingItem>
   );

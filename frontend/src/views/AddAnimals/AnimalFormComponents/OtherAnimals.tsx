@@ -97,7 +97,6 @@ export default function OtherAnimals({
           }
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.animalId]);
 
   return (
@@ -121,20 +120,20 @@ export default function OtherAnimals({
             isRequired
           />
 
-          {formData.subtype
-          && subtypes.find((s) => s.id.toString() === formData.subtype)?.value
+          {formData.subtype &&
+          subtypes.find((s) => s.id.toString() === formData.subtype)?.value
             .solidperpoundperanimalperday !== 0 ? (
-              <Select
-                label="Manure Type"
-                name="manureType"
-                value={formData.manureType}
-                items={MANURE_TYPE_OPTIONS}
-                onChange={(e) => {
-                  handleInputChanges({ manureType: e as number });
-                }}
-                isRequired
-              />
-            ) : null}
+            <Select
+              label="Manure Type"
+              name="manureType"
+              value={formData.manureType}
+              items={MANURE_TYPE_OPTIONS}
+              onChange={(e) => {
+                handleInputChanges({ manureType: e as number });
+              }}
+              isRequired
+            />
+          ) : null}
         </Grid>
       )}
       <Grid size={formGridBreakpoints}>

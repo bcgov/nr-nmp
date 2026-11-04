@@ -1,5 +1,5 @@
 # Base image for the container
-FROM node:26.10.0 AS build
+FROM node:26-slim AS build
 
 # Set the working directory
 WORKDIR /app/
@@ -8,7 +8,7 @@ WORKDIR /app/
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --ignore-scripts
+RUN npm ci --ignore-scripts
 
 # Copy the rest of the application code
 COPY . /app

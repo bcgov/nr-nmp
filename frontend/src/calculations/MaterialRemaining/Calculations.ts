@@ -144,11 +144,11 @@ function calculateFieldApplications(
       );
 
       if (manure.solidLiquid === 'Liquid') {
-        fieldApplication.totalAppliedGallons = (fieldApplication.totalAppliedGallons || 0)
-          + appliedAmount;
+        fieldApplication.totalAppliedGallons =
+          (fieldApplication.totalAppliedGallons || 0) + appliedAmount;
       } else {
-        fieldApplication.totalAppliedTons = (fieldApplication.totalAppliedTons || 0)
-          + appliedAmount;
+        fieldApplication.totalAppliedTons =
+          (fieldApplication.totalAppliedTons || 0) + appliedAmount;
       }
     });
 
@@ -163,7 +163,8 @@ function calculateFieldApplications(
  */
 function calculateTotalApplied(fieldApplications: FieldApplicationData[]): number {
   return fieldApplications.reduce((total, field) => {
-    const fieldTotal = (field.totalAppliedGallons || 0) + (field.totalAppliedTons || 0);
+    const fieldTotal =
+      (field.totalAppliedGallons || 0) + (field.totalAppliedTons || 0);
     return total + fieldTotal;
   }, 0);
 }
@@ -212,7 +213,10 @@ function createStoredManureData(
   const totalApplied = calculateTotalApplied(fieldApplications);
   const totalAnnualManure = getStandardizedAnnualManureAmount(storageSystem);
   const totalRemaining = totalAnnualManure - totalApplied;
-  const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManure);
+  const wholePercentApplied = calculateWholePercentApplied(
+    totalApplied,
+    totalAnnualManure,
+  );
   const wholePercentRemaining = calculateWholePercentRemaining(
     Math.max(0, totalRemaining),
     totalAnnualManure,
@@ -235,7 +239,8 @@ function createStoredManureData(
  */
 function createUnstoredManureData(
   yearData: NMPFileYear,
-  unstoredManure: NMPFileGeneratedManure | NMPFileImportedManure | NMPFileDerivedManure,
+  unstoredManure:
+    NMPFileGeneratedManure | NMPFileImportedManure | NMPFileDerivedManure,
   manureData: { [manureId: number]: { moisture?: number } } | undefined,
   solidConversions: SolidMaterialConversion[],
   liquidConversions: LiquidMaterialConversion[],
@@ -253,7 +258,10 @@ function createUnstoredManureData(
   const totalApplied = calculateTotalApplied(fieldApplications);
   const totalAnnualManure = getStandardizedAnnualManureAmount(unstoredManure);
   const totalRemaining = totalAnnualManure - totalApplied;
-  const wholePercentApplied = calculateWholePercentApplied(totalApplied, totalAnnualManure);
+  const wholePercentApplied = calculateWholePercentApplied(
+    totalApplied,
+    totalAnnualManure,
+  );
   const wholePercentRemaining = calculateWholePercentRemaining(
     Math.max(0, totalRemaining),
     totalAnnualManure,
