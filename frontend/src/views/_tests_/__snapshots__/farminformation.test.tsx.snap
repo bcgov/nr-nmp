@@ -225,11 +225,12 @@ exports[`FarmInformations component snapshot test 1`] = `
                 </span>
               </span>
               <svg
+                aria-hidden="true"
                 fill="none"
-                height="20"
-                id="chevron-down-icon"
+                focusable="false"
+                height="20px"
                 viewBox="0 0 20 20"
-                width="20"
+                width="20px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -352,11 +353,12 @@ exports[`FarmInformations component snapshot test 1`] = `
                 </span>
               </span>
               <svg
+                aria-hidden="true"
                 fill="none"
-                height="20"
-                id="chevron-down-icon"
+                focusable="false"
+                height="20px"
                 viewBox="0 0 20 20"
-                width="20"
+                width="20px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -431,11 +433,12 @@ exports[`FarmInformations component snapshot test 1`] = `
                 </span>
               </span>
               <svg
+                aria-hidden="true"
                 fill="none"
-                height="20"
-                id="chevron-down-icon"
+                focusable="false"
+                height="20px"
                 viewBox="0 0 20 20"
-                width="20"
+                width="20px"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -489,48 +492,73 @@ exports[`FarmInformations component snapshot test 1`] = `
             <div
               class="bcds-react-aria-RadioGroup--options horizontal flex-wrap-nowrap"
             >
-              <label
+              <div
                 class="bcds-react-aria-Radio"
                 data-rac=""
-                data-react-aria-pressable="true"
               >
-                <span
-                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                <label
+                  class="bcds-react-aria-Radio--Button"
+                  data-rac=""
+                  data-react-aria-pressable="true"
                 >
-                  <input
-                    aria-describedby="react-aria-mocked-id"
-                    data-react-aria-pressable="true"
-                    name="react-aria-mocked-id"
-                    tabindex="-1"
-                    title=""
-                    type="radio"
-                    value="true"
+                  <span
+                    style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                  >
+                    <input
+                      aria-describedby="react-aria-mocked-id"
+                      data-react-aria-pressable="true"
+                      name="react-aria-mocked-id"
+                      tabindex="-1"
+                      title=""
+                      type="radio"
+                      value="true"
+                    />
+                  </span>
+                  <div
+                    class="bcds-react-aria-Radio--Indicator"
                   />
-                </span>
-                Yes
-              </label>
-              <label
+                  <span
+                    class="bcds-react-aria-Radio--Label"
+                  >
+                    Yes
+                  </span>
+                </label>
+              </div>
+              <div
                 class="bcds-react-aria-Radio"
                 data-rac=""
-                data-react-aria-pressable="true"
                 data-selected="true"
               >
-                <span
-                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                <label
+                  class="bcds-react-aria-Radio--Button"
+                  data-rac=""
+                  data-react-aria-pressable="true"
+                  data-selected="true"
                 >
-                  <input
-                    aria-describedby="react-aria-mocked-id"
-                    checked=""
-                    data-react-aria-pressable="true"
-                    name="react-aria-mocked-id"
-                    tabindex="0"
-                    title=""
-                    type="radio"
-                    value="false"
+                  <span
+                    style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                  >
+                    <input
+                      aria-describedby="react-aria-mocked-id"
+                      checked=""
+                      data-react-aria-pressable="true"
+                      name="react-aria-mocked-id"
+                      tabindex="0"
+                      title=""
+                      type="radio"
+                      value="false"
+                    />
+                  </span>
+                  <div
+                    class="bcds-react-aria-Radio--Indicator"
                   />
-                </span>
-                No
-              </label>
+                  <span
+                    class="bcds-react-aria-Radio--Label"
+                  >
+                    No
+                  </span>
+                </label>
+              </div>
               <div
                 class="bcds-react-aria-RadioGroup--label"
                 style="flex-basis: 100%;"
@@ -556,48 +584,73 @@ exports[`FarmInformations component snapshot test 1`] = `
             <div
               class="bcds-react-aria-RadioGroup--options horizontal flex-wrap-nowrap"
             >
-              <label
+              <div
                 class="bcds-react-aria-Radio"
                 data-rac=""
-                data-react-aria-pressable="true"
               >
-                <span
-                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                <label
+                  class="bcds-react-aria-Radio--Button"
+                  data-rac=""
+                  data-react-aria-pressable="true"
                 >
-                  <input
-                    aria-describedby="react-aria-mocked-id"
-                    data-react-aria-pressable="true"
-                    name="react-aria-mocked-id"
-                    tabindex="-1"
-                    title=""
-                    type="radio"
-                    value="true"
+                  <span
+                    style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                  >
+                    <input
+                      aria-describedby="react-aria-mocked-id"
+                      data-react-aria-pressable="true"
+                      name="react-aria-mocked-id"
+                      tabindex="-1"
+                      title=""
+                      type="radio"
+                      value="true"
+                    />
+                  </span>
+                  <div
+                    class="bcds-react-aria-Radio--Indicator"
                   />
-                </span>
-                Yes
-              </label>
-              <label
+                  <span
+                    class="bcds-react-aria-Radio--Label"
+                  >
+                    Yes
+                  </span>
+                </label>
+              </div>
+              <div
                 class="bcds-react-aria-Radio"
                 data-rac=""
-                data-react-aria-pressable="true"
                 data-selected="true"
               >
-                <span
-                  style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                <label
+                  class="bcds-react-aria-Radio--Button"
+                  data-rac=""
+                  data-react-aria-pressable="true"
+                  data-selected="true"
                 >
-                  <input
-                    aria-describedby="react-aria-mocked-id"
-                    checked=""
-                    data-react-aria-pressable="true"
-                    name="react-aria-mocked-id"
-                    tabindex="0"
-                    title=""
-                    type="radio"
-                    value="false"
+                  <span
+                    style="border: 0px; clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px; white-space: nowrap;"
+                  >
+                    <input
+                      aria-describedby="react-aria-mocked-id"
+                      checked=""
+                      data-react-aria-pressable="true"
+                      name="react-aria-mocked-id"
+                      tabindex="0"
+                      title=""
+                      type="radio"
+                      value="false"
+                    />
+                  </span>
+                  <div
+                    class="bcds-react-aria-Radio--Indicator"
                   />
-                </span>
-                No
-              </label>
+                  <span
+                    class="bcds-react-aria-Radio--Label"
+                  >
+                    No
+                  </span>
+                </label>
+              </div>
               <div
                 class="bcds-react-aria-RadioGroup--label"
                 style="flex-basis: 100%;"

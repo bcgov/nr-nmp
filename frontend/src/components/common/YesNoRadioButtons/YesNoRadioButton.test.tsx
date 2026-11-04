@@ -11,8 +11,8 @@ describe('YesNoRadioButton', () => {
         aria-label="test"
       />,
     );
-    const no = screen.getByText('No');
-    expect(no.attributes.getNamedItem('data-selected')?.value).toBe('true');
+    const no: HTMLInputElement = screen.getByLabelText('No');
+    expect(no.checked).toBe(true);
   });
 
   test('True initializes to Yes', () => {
@@ -24,8 +24,8 @@ describe('YesNoRadioButton', () => {
         aria-label="test"
       />,
     );
-    const yes = screen.getByText('Yes');
-    expect(yes.attributes.getNamedItem('data-selected')?.value).toBe('true');
+    const yes: HTMLInputElement = screen.getByLabelText('Yes');
+    expect(yes.checked).toBe(true);
   });
 
   test('onChange called with correct props and not called without change', () => {
