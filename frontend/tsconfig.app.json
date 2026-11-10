@@ -31,8 +31,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@": ["src"],
-      "@/*": ["src/*"]
+      "@": ["./src"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src", "**/**.test.tsx"]

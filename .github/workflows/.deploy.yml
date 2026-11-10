@@ -102,3 +102,6 @@ jobs:
           verification_path: ${{ matrix.verification_path }}
           verification_retry_attempts: "5"
           verification_retry_seconds: "15"
+          timeout-minutes: 1
+          max_attempts: 5
+          retry_on: error
