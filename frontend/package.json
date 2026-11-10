@@ -36,9 +36,9 @@
     "typography": "^0.16.24"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.29.7",
-    "@babel/preset-react": "^7.29.7",
-    "@babel/preset-typescript": "^7.29.7",
+    "@babel/preset-env": "^8.0.0",
+    "@babel/preset-react": "^8.0.0",
+    "@babel/preset-typescript": "^8.0.0",
     "@react-aria/test-utils": "^1.0.0-rc.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
