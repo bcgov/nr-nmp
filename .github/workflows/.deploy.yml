@@ -62,6 +62,9 @@ jobs:
             -p SSO_CLIENT_ID=${{ vars.SSO_CLIENT_ID }}
             -p SSO_CLIENT_SECRET=${{ secrets.SSO_CLIENT_SECRET }}
             -p SSO_AUTH_SERVER_URL=${{ secrets.SSO_AUTH_SERVER_URL }}
+          timeout-minutes: 1
+          max_attempts: 5
+          retry_on: error
   
   deploy:
     name: Deploy
