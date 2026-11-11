@@ -50,7 +50,7 @@
     "@types/typography": "^0.16.9",
     "@typescript-eslint/eslint-plugin": "^8.72.1",
     "@typescript-eslint/parser": "^8.72.1",
-    "@vitejs/plugin-react": "^5.1.4",
+    "@vitejs/plugin-react": "^6.0.0",
     "babel-jest": "^30.5.2",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
@@ -63,7 +63,7 @@
     "prettier": "^3.9.10",
     "ts-jest": "^29.4.15",
     "typescript": "^6.0.3",
-    "vite": "^7.3.7"
+    "vite": "^8.0.0"
   },
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
