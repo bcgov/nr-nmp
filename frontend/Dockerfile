@@ -16,7 +16,7 @@ COPY . /app
 # Ensure TypeScript is installed and compile the project
 RUN npm run build
 
-FROM caddy:2.11.8-alpine
+FROM caddy:2.11.9-alpine
 RUN apk add --no-cache ca-certificates
 
 # Copy static files, verify Caddyfile formatting
