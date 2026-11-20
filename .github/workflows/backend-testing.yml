@@ -13,14 +13,14 @@ defaults:
 
 jobs:
   setup-job:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: "true"
 
   testing:
     needs: setup-job
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     services:
       postgres:
@@ -35,10 +35,10 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.15'
           
